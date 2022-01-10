@@ -687,7 +687,6 @@ describe('AddToCartButton', () => {
 
 				const incomingCPInstance = {
 					cpInstance: {
-						backOrderAllowed: true,
 						purchasable: true,
 						skuId: INTERACTION_PROPS.cpInstance.skuId,
 						stockQuantity: 0,
@@ -738,7 +737,6 @@ describe('AddToCartButton', () => {
 
 				const incomingCPInstance = {
 					cpInstance: {
-						backOrderAllowed: false,
 						purchasable: true,
 						skuId: INTERACTION_PROPS.cpInstance.skuId,
 						stockQuantity: 0,

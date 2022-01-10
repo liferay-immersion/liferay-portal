@@ -12,88 +12,111 @@
  * details.
  */
 
-import {ClayInput} from '@clayui/form';
+import ClayForm, {ClayInput} from '@clayui/form';
+import classNames from 'classnames';
 import {debounce} from 'frontend-js-web';
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import React, {forwardRef, useRef, useState} from 'react';
 
 import {
 	getMinQuantity,
 	getProductMaxQuantity,
 } from '../../utilities/quantities';
+import RulesPopover from './RulesPopover';
 
-function InputQuantitySelector({
-	className,
-	disabled,
-	maxQuantity,
-	minQuantity,
-	multipleQuantity,
-	name,
-	onUpdate,
-	quantity,
-}) {
-	const inputMax = useMemo(
-		() => getProductMaxQuantity(maxQuantity, multipleQuantity),
-		[maxQuantity, multipleQuantity]
-	);
-
-	const inputMin = useMemo(
-		() => getMinQuantity(minQuantity, multipleQuantity),
-		[multipleQuantity, minQuantity]
-	);
-
-	const [typedQuantity, setTypedQuantity] = useState(quantity);
-
-	useEffect(() => {
-		setTypedQuantity(quantity);
-	}, [quantity]);
-
-	const getValidInputNumber = useCallback(
-		(value) => {
-			if (!value || value < inputMin) {
-				return inputMin;
-			}
-
-			if (inputMax && value > inputMax) {
-				return inputMax;
-			}
-
-			if (multipleQuantity > 1) {
-				return value - (value % multipleQuantity);
-			}
-
-			return value;
+const InputQuantitySelector = forwardRef(
+	(
+		{
+			alignment,
+			className,
+			disabled,
+			max,
+			min,
+			name,
+			onUpdate,
+			quantity,
+			step,
 		},
-		[inputMax, inputMin, multipleQuantity]
-	);
+		inputRef
+	) => {
+		const [showPopover, setShowPopover] = useState(false);
+		const [unsatisfiedConstrains, setUnsatisfiedConstrain] = useState([]);
+		const debouncedSetUpdateConstrainsRef = useRef(
+			debounce(setUnsatisfiedConstrain, 500)
+		);
 
-	const debouncedSetFixedValue = useMemo(() => {
-		return debounce((value) => {
-			const validInput = getValidInputNumber(Number(value));
+		const inputMax = getProductMaxQuantity(max, step);
+		const inputMin = getMinQuantity(min, step);
 
-			setTypedQuantity(validInput);
+		const getErrors = (value) => {
+			const errors = [];
 
-			onUpdate(validInput);
-		}, 500);
-	}, [getValidInputNumber, onUpdate]);
+			if (!value || value < min) {
+				errors.push('min');
+			}
 
-	return (
-		<ClayInput
-			className={className}
-			disabled={disabled}
-			max={inputMax || ''}
-			min={inputMin}
-			name={name}
-			onChange={({target}) => {
-				setTypedQuantity(target.value);
+			if (max && value > max) {
+				errors.push('max');
+			}
 
-				debouncedSetFixedValue(target.value);
-			}}
-			step={multipleQuantity > 1 ? multipleQuantity : ''}
-			type="number"
-			value={String(typedQuantity || '')}
-		/>
-	);
-}
+			if (step > 1 && value % step) {
+				errors.push('multiple');
+			}
+
+			return errors;
+		};
+
+		return (
+			<ClayForm.Group
+				className={classNames({
+					'has-error': unsatisfiedConstrains.length,
+					'mb-0': true,
+				})}
+			>
+				<ClayInput
+					className={className}
+					disabled={disabled}
+					max={inputMax}
+					min={inputMin}
+					name={name}
+					onBlur={() => {
+						setShowPopover(false);
+					}}
+					onChange={({target}) => {
+						const numValue = Number(target.value);
+
+						const errors = getErrors(numValue);
+
+						onUpdate({
+							errors,
+							value: numValue,
+						});
+
+						debouncedSetUpdateConstrainsRef.current(errors);
+					}}
+					onFocus={() => setShowPopover(true)}
+					ref={inputRef}
+					step={step > 1 ? step : ''}
+					type="number"
+					value={String(quantity || '')}
+				/>
+
+				{showPopover &&
+					(step > 1 ||
+						min > 1 ||
+						unsatisfiedConstrains.includes('max')) && (
+						<RulesPopover
+							alignment={alignment}
+							inputRef={inputRef}
+							max={max}
+							min={min}
+							multiple={step}
+							unsatisfiedConstrains={unsatisfiedConstrains}
+						/>
+					)}
+			</ClayForm.Group>
+		);
+	}
+);
 
 InputQuantitySelector.defaultProps = {
 	maxQuantity: '',

@@ -78,18 +78,20 @@
 			}
 		}
 
-		&:active .cart-icon::after {
-			animation: addToCartBounce 0.2s ease-out 1 none;
+		&:not(.invalid) {
+			&:active .cart-icon::after {
+				animation: addToCartBounce 0.2s ease-out 1 none;
 
-			@keyframes addToCartBounce {
-				0%,
-				100% {
-					opacity: 0;
-					transform: scale(1);
-				}
-				50% {
-					opacity: 1;
-					transform: scale(1.5);
+				@keyframes addToCartBounce {
+					0%,
+					100% {
+						opacity: 0;
+						transform: scale(1);
+					}
+					50% {
+						opacity: 1;
+						transform: scale(1.5);
+					}
 				}
 			}
 		}

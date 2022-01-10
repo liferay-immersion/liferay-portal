@@ -32,8 +32,8 @@ const commonProps = {
 		quantityDetails: {
 			allowedQuantities: [],
 			maxQuantity: 10000,
-			minQuantity: 1,
-			multipleQuantity: 1,
+			minQuantity: 4,
+			multipleQuantity: 3,
 		},
 	},
 	size: 'sm',

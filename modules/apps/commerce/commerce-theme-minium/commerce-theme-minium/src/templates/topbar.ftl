@@ -42,7 +42,6 @@
 				<div class="minium-topbar__cart-wrapper">
 					<@liferay_commerce_ui["mini-cart"]
 						displayTotalItemsQuantity=mini_cart_display_total_items_count
-						spritemap="${themeDisplay.getPathThemeImages()}/clay/icons.svg"
 						toggleable=!mini_cart_keep_open
 					/>
 				</div>

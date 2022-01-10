@@ -159,20 +159,8 @@ function SkuContent({
 								alignment: 'full-width',
 								iconOnly: true,
 								inline: false,
-								quantityDetails: {
-									allowedQuantities:
-										product.productConfiguration
-											.allowedOrderQuantities,
-									maxQuantity:
-										product.productConfiguration
-											.maxOrderQuantity,
-									minQuantity:
-										product.productConfiguration
-											.minOrderQuantity,
-									multipleQuantity:
-										product.productConfiguration
-											.multipleOrderQuantity,
-								},
+								productConfiguration:
+									product.productConfiguration,
 								size: 'sm',
 							}}
 						/>
