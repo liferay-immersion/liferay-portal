@@ -211,7 +211,7 @@ function DiagramTable({
 									onDelete={handleMappedProductDelete}
 									product={product}
 									quantity={
-										newQuantities[product.skuId] ||
+										newQuantities[product.skuId] ??
 										product.initialQuantity
 									}
 									setMappedProducts={setMappedProducts}

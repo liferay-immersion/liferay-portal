@@ -14,7 +14,7 @@
 
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 
 import ServiceProvider from '../../ServiceProvider/index';
 import {
@@ -30,13 +30,15 @@ import {ALL} from './constants';
 const CartResource = ServiceProvider.DeliveryCartAPI('v1');
 
 function getQuantity(settings) {
-	if (settings?.quantityDetails?.allowedQuantities?.length) {
-		return Math.min(...settings.quantityDetails.allowedQuantities);
+	if (settings?.productConfiguration?.allowedOrderQuantities?.length) {
+		return Math.min(
+			...settings.productConfiguration.allowedOrderQuantities
+		);
 	}
 
 	return getMinQuantity(
-		settings?.quantityDetails?.minQuantity,
-		settings?.quantityDetails?.multipleQuantity
+		settings?.productConfiguration?.minOrderQuantity,
+		settings?.productConfiguration?.multipleOrderQuantity
 	);
 }
 
@@ -57,11 +59,13 @@ function AddToCart({
 		},
 		channel.groupId
 	);
-
 	const [cpInstance, setCpInstance] = useState({
 		...initialCpInstance,
 		quantity: getQuantity(settings),
+		quantityValid: true,
 	});
+	const [showInputErrors, setShowInputErrors] = useState(false);
+	const inputRef = useRef(null);
 
 	const buttonDisabled = useMemo(() => {
 		if (
@@ -81,6 +85,7 @@ function AddToCart({
 		setCpInstance({
 			...initialCpInstance,
 			quantity: getQuantity(settings),
+			quantityValid: true,
 		});
 	}, [initialCpInstance, settings]);
 
@@ -153,13 +158,25 @@ function AddToCart({
 			})}
 		>
 			<QuantitySelector
-				{...settings.quantityDetails}
+				allowedQuantities={
+					settings.productConfiguration.allowedOrderQuantities
+				}
 				disabled={initialDisabled || !account?.id}
-				onUpdate={(quantity) =>
-					setCpInstance({...cpInstance, quantity})
+				max={settings.productConfiguration.maxOrderQuantity}
+				min={settings.productConfiguration.minOrderQuantity}
+				onUpdate={({errors, value: quantity}) =>
+					setCpInstance({
+						...cpInstance,
+						quantity,
+						quantityValid: !errors.length,
+					})
 				}
 				quantity={cpInstance.quantity}
+				ref={inputRef}
+				setShowInputErrors={setShowInputErrors}
+				showInputErrors={showInputErrors}
 				size={settings.size}
+				step={settings.productConfiguration.multipleOrderQuantity}
 			/>
 
 			<AddToCartButton
@@ -169,9 +186,19 @@ function AddToCart({
 				className={`${spaceDirection}-${spacer}`}
 				cpInstances={[cpInstance]}
 				disabled={buttonDisabled}
+				invalid={!cpInstance.quantityValid}
 				onAdd={() => {
 					setCpInstance({...cpInstance, inCart: true});
 				}}
+				onClick={
+					cpInstance.quantityValid
+						? null
+						: (event) => {
+								event.preventDefault();
+
+								inputRef.current.focus();
+						  }
+				}
 				settings={settings}
 			/>
 		</div>
@@ -191,11 +218,11 @@ AddToCart.propTypes = {
 		alignment: PropTypes.oneOf(['center', 'left', 'right', 'full-width']),
 		inline: PropTypes.bool,
 		namespace: PropTypes.string,
-		quantityDetails: PropTypes.shape({
-			allowedQuantities: PropTypes.arrayOf(PropTypes.number),
-			maxQuantity: PropTypes.number,
-			minQuantity: PropTypes.number,
-			multipleQuantity: PropTypes.number,
+		productConfiguration: PropTypes.shape({
+			allowedOrderQuantities: PropTypes.arrayOf(PropTypes.number),
+			maxOrderQuantity: PropTypes.number,
+			minOrderQuantity: PropTypes.number,
+			multipleOrderQuantity: PropTypes.number,
 		}),
 		size: PropTypes.oneOf(['lg', 'md', 'sm']),
 	}),

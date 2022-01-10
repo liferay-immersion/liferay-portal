@@ -31,7 +31,9 @@ function AddToCartButton({
 	cpInstances,
 	disabled,
 	hideIcon,
+	invalid,
 	onAdd,
+	onClick,
 	onError,
 	settings,
 }) {
@@ -42,30 +44,33 @@ function AddToCartButton({
 				[`btn-${settings.size}`]: settings.size,
 				'btn-add-to-cart': true,
 				'icon-only': settings.iconOnly,
+				invalid,
 				'is-added': cpInstances.length === 1 && cpInstances[0].inCart,
 			})}
 			disabled={disabled}
 			displayType="primary"
 			monospaced={settings.iconOnly && settings.inline}
-			onClick={() =>
-				addToCart(cpInstances, cartId, channel, accountId)
-					.then(onAdd)
-					.catch((error) => {
-						console.error(error);
+			onClick={(event) =>
+				onClick
+					? onClick(event, cpInstances, cartId, channel, accountId)
+					: addToCart(cpInstances, cartId, channel, accountId)
+							.then(onAdd)
+							.catch((error) => {
+								console.error(error);
 
-						const errorMessage =
-							cpInstances.length > 1
-								? Liferay.Language.get(
-										'unable-to-add-the-products-to-the-cart'
-								  )
-								: Liferay.Language.get(
-										'unable-to-add-the-product-to-the-cart'
-								  );
+								const errorMessage =
+									cpInstances.length > 1
+										? Liferay.Language.get(
+												'unable-to-add-the-products-to-the-cart'
+										  )
+										: Liferay.Language.get(
+												'unable-to-add-the-product-to-the-cart'
+										  );
 
-						showErrorNotification(errorMessage);
+								showErrorNotification(errorMessage);
 
-						onError(error);
-					})
+								onError(error);
+							})
 			}
 		>
 			{!settings.iconOnly && (
