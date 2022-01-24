@@ -40,7 +40,7 @@ long cpDefinitionId = cpCatalogEntry.getCPDefinitionId();
 			/>
 		</div>
 
-		<div class="col-12 col-md-6 d-flex flex-column justify-content-center">
+		<div class="col-12 col-md-6">
 			<header>
 				<div class="availability d-flex mb-4">
 					<div>
@@ -50,7 +50,7 @@ long cpDefinitionId = cpCatalogEntry.getCPDefinitionId();
 						/>
 					</div>
 
-					<div class="col stock-quantity text-truncate-inline">
+					<div class="ml-3 stock-quantity text-truncate-inline">
 						<span class="text-truncate" data-text-cp-instance-stock-quantity>
 							<span class="<%= ((cpSku != null) && cpSku.isDiscontinued()) ? StringPool.BLANK : "hide" %>">
 								<span class="text-danger">
@@ -129,7 +129,7 @@ long cpDefinitionId = cpCatalogEntry.getCPDefinitionId();
 
 			<p class="mt-3 product-description"><%= cpCatalogEntry.getDescription() %></p>
 
-			<h4 class="commerce-subscription-info mt-3 w-100">
+			<h4 class="commerce-subscription-info mt-3">
 				<c:if test="<%= cpSku != null %>">
 					<commerce-ui:product-subscription-info
 						CPInstanceId="<%= cpSku.getCPInstanceId() %>"
@@ -175,7 +175,7 @@ long cpDefinitionId = cpCatalogEntry.getCPDefinitionId();
 			<liferay-util:dynamic-include key="com.liferay.commerce.product.type.grouped.web#/grouped_product_type.jsp#" />
 
 			<div class="mt-3 price-container row">
-				<div class="col-lg-9 col-sm-12 col-xl-6">
+				<div class="col col-lg-9 col-xl-6">
 					<commerce-ui:price
 						CPCatalogEntry="<%= cpCatalogEntry %>"
 						namespace="<%= liferayPortletResponse.getNamespace() %>"

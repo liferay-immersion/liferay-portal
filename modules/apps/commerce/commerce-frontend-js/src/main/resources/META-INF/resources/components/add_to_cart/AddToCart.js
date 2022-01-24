@@ -91,25 +91,33 @@ function AddToCart({
 
 	const reset = useCallback(
 		({cpInstance: incomingCpInstance}) => {
-			CartResource.getItemsByCartId(cart.id)
-				.then(({items}) =>
-					items.some(({skuId}) => incomingCpInstance.skuId === skuId)
-				)
-				.catch(() => false)
-				.then((inCart) => {
-					setCpInstance((cpInstance) => ({
-						...cpInstance,
-						backOrderAllowed: incomingCpInstance.backOrderAllowed,
-						disabled: incomingCpInstance.disabled,
-						inCart,
-						purchasable: incomingCpInstance.purchasable,
-						skuId: incomingCpInstance.skuId,
-						skuOptions: Array.isArray(incomingCpInstance.skuOptions)
-							? incomingCpInstance.skuOptions
-							: JSON.parse(incomingCpInstance.skuOptions),
-						stockQuantity: incomingCpInstance.stockQuantity,
-					}));
+			function updateInCartState(inCart) {
+				setCpInstance((cpInstance) => ({
+					...cpInstance,
+					backOrderAllowed: incomingCpInstance.backOrderAllowed,
+					disabled: incomingCpInstance.disabled,
+					inCart,
+					purchasable: incomingCpInstance.purchasable,
+					skuId: incomingCpInstance.skuId,
+					skuOptions: Array.isArray(incomingCpInstance.skuOptions)
+						? incomingCpInstance.skuOptions
+						: JSON.parse(incomingCpInstance.skuOptions),
+					stockQuantity: incomingCpInstance.stockQuantity,
+				}));
+			}
+
+			if (cart.id) {
+				CartResource.getItemsByCartId(cart.id).then(({items}) => {
+					const inCart = items.some(
+						({skuId}) => incomingCpInstance.skuId === skuId
+					);
+
+					updateInCartState(inCart);
 				});
+			}
+			else {
+				updateInCartState(false);
+			}
 		},
 		[cart.id]
 	);
@@ -159,11 +167,11 @@ function AddToCart({
 		>
 			<QuantitySelector
 				allowedQuantities={
-					settings.productConfiguration.allowedOrderQuantities
+					settings.productConfiguration?.allowedOrderQuantities
 				}
 				disabled={initialDisabled || !account?.id}
-				max={settings.productConfiguration.maxOrderQuantity}
-				min={settings.productConfiguration.minOrderQuantity}
+				max={settings.productConfiguration?.maxOrderQuantity}
+				min={settings.productConfiguration?.minOrderQuantity}
 				onUpdate={({errors, value: quantity}) =>
 					setCpInstance({
 						...cpInstance,
@@ -176,7 +184,7 @@ function AddToCart({
 				setShowInputErrors={setShowInputErrors}
 				showInputErrors={showInputErrors}
 				size={settings.size}
-				step={settings.productConfiguration.multipleOrderQuantity}
+				step={settings.productConfiguration?.multipleOrderQuantity}
 			/>
 
 			<AddToCartButton
@@ -206,7 +214,7 @@ function AddToCart({
 }
 
 AddToCart.propTypes = {
-	accountId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+	accountId: PropTypes.number.isRequired,
 	cartId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 	cpInstance: PropTypes.shape({
 		skuId: PropTypes.oneOfType([PropTypes.number, PropTypes.string])

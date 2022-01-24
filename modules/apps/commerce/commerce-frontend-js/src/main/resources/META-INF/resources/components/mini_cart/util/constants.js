@@ -22,7 +22,7 @@ export const ORDER_DETAILS_ENDPOINT = '/pending-orders';
 export const ORDER_UUID_PARAMETER = 'commerceOrderUuid';
 export const WORKFLOW_STATUS_APPROVED = 0;
 export const PRODUCT_QUANTITY_NOT_VALID_ERROR = Liferay.Language.get(
-	'product-quantity-is-not-valid'
+	'the-product-quantity-is-not-valid'
 );
 export const UNEXPECTED_ERROR = Liferay.Language.get(
 	'an-unexpected-error-occurred'
