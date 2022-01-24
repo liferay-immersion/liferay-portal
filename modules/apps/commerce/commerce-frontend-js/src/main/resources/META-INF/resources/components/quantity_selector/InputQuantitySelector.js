@@ -107,7 +107,7 @@ const InputQuantitySelector = forwardRef(
 						<RulesPopover
 							alignment={alignment}
 							inputRef={inputRef}
-							max={max}
+							max={max || ''}
 							min={min}
 							multiple={step}
 							unsatisfiedConstrains={unsatisfiedConstrains}
@@ -119,9 +119,9 @@ const InputQuantitySelector = forwardRef(
 );
 
 InputQuantitySelector.defaultProps = {
-	maxQuantity: '',
-	minQuantity: 1,
-	multipleQuantity: 1,
+	max: null,
+	min: 1,
+	step: 1,
 };
 
 export default InputQuantitySelector;
