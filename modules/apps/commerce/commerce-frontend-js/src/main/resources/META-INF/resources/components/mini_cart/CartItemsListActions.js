@@ -17,7 +17,7 @@ import classnames from 'classnames';
 import React, {useContext, useState} from 'react';
 
 import ServiceProvider from '../../ServiceProvider/index';
-import {PRODUCT_REMOVED_FROM_CART} from '../../utilities/eventsDefinitions';
+import {CART_PRODUCT_QUANTITY_CHANGED} from '../../utilities/eventsDefinitions';
 import {liferayNavigate} from '../../utilities/index';
 import {ALL} from '../add_to_cart/constants';
 import MiniCartContext from './MiniCartContext';
@@ -50,7 +50,10 @@ function CartItemsListActions() {
 				setIsAsking(false);
 				setIsUpdating(false);
 
-				Liferay.fire(PRODUCT_REMOVED_FROM_CART, {skuId: ALL});
+				Liferay.fire(CART_PRODUCT_QUANTITY_CHANGED, {
+					quantity: 0,
+					skuId: ALL,
+				});
 			});
 	};
 

@@ -32,8 +32,8 @@ const commonProps = {
 		productConfiguration: {
 			allowedOrderQuantities: [],
 			maxOrderQuantity: 50,
-			minOrderQuantity: 1,
-			multipleOrderQuantity: 1,
+			minOrderQuantity: 4,
+			multipleOrderQuantity: 3,
 		},
 	},
 	size: 'sm',
