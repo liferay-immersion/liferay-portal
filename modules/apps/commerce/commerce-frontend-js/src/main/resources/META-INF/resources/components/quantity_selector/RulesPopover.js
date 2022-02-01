@@ -19,11 +19,11 @@ import React, {useLayoutEffect, useRef, useState} from 'react';
 
 export default function RulesPopover({
 	alignment,
+	errors,
 	inputRef,
 	max,
 	min,
 	multiple,
-	unsatisfiedConstrains,
 }) {
 	const popoverRef = useRef();
 	const [popoverPosition, setPopoverPosition] = useState({});
@@ -33,7 +33,7 @@ export default function RulesPopover({
 			transform: 'translateX(-50%)',
 		};
 
-		if (alignment) {
+		if (alignment || !inputRef?.current) {
 			return setPopoverPosition({
 				...position,
 				alignment,
@@ -84,9 +84,7 @@ export default function RulesPopover({
 					<li className="list-group-item px-0 py-1 text-truncate">
 						<small
 							className={classNames({
-								'text-danger': unsatisfiedConstrains.includes(
-									'min'
-								),
+								'text-danger': errors.includes('min'),
 							})}
 							dangerouslySetInnerHTML={{
 								__html: Liferay.Util.sub(
@@ -104,9 +102,7 @@ export default function RulesPopover({
 					<li className="list-group-item px-0 py-1 text-truncate">
 						<small
 							className={classNames({
-								'text-danger': unsatisfiedConstrains.includes(
-									'max'
-								),
+								'text-danger': errors.includes('max'),
 							})}
 							dangerouslySetInnerHTML={{
 								__html: Liferay.Util.sub(
@@ -124,9 +120,7 @@ export default function RulesPopover({
 					<li className="list-group-item px-0 py-1 text-truncate">
 						<small
 							className={classNames({
-								'text-danger': unsatisfiedConstrains.includes(
-									'multiple'
-								),
+								'text-danger': errors.includes('multiple'),
 							})}
 							dangerouslySetInnerHTML={{
 								__html: Liferay.Util.sub(

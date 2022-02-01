@@ -50,28 +50,36 @@ function AddToCartButton({
 			disabled={disabled}
 			displayType="primary"
 			monospaced={settings.iconOnly && settings.inline}
-			onClick={(event) =>
-				onClick
-					? onClick(event, cpInstances, cartId, channel, accountId)
-					: addToCart(cpInstances, cartId, channel, accountId)
-							.then(onAdd)
-							.catch((error) => {
-								console.error(error);
+			onClick={(event) => {
+				if (onClick) {
+					return onClick(
+						event,
+						cpInstances,
+						cartId,
+						channel,
+						accountId
+					);
+				}
 
-								const errorMessage =
-									cpInstances.length > 1
-										? Liferay.Language.get(
-												'unable-to-add-the-products-to-the-cart'
-										  )
-										: Liferay.Language.get(
-												'unable-to-add-the-product-to-the-cart'
-										  );
+				return addToCart(cpInstances, cartId, channel, accountId)
+					.then(onAdd)
+					.catch((error) => {
+						console.error(error);
 
-								showErrorNotification(errorMessage);
+						const errorMessage =
+							cpInstances.length > 1
+								? Liferay.Language.get(
+										'unable-to-add-the-products-to-the-cart'
+								  )
+								: Liferay.Language.get(
+										'unable-to-add-the-product-to-the-cart'
+								  );
 
-								onError(error);
-							})
-			}
+						showErrorNotification(errorMessage);
+
+						onError(error);
+					});
+			}}
 		>
 			{!settings.iconOnly && (
 				<span className="text-truncate-inline">

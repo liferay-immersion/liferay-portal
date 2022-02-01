@@ -18,8 +18,8 @@ import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 
 import ServiceProvider from '../../ServiceProvider/index';
 import {
+	CART_PRODUCT_QUANTITY_CHANGED,
 	CP_INSTANCE_CHANGED,
-	PRODUCT_REMOVED_FROM_CART,
 } from '../../utilities/eventsDefinitions';
 import {useCommerceAccount, useCommerceCart} from '../../utilities/hooks';
 import {getMinQuantity} from '../../utilities/quantities';
@@ -64,7 +64,6 @@ function AddToCart({
 		quantity: getQuantity(settings),
 		quantityValid: true,
 	});
-	const [showInputErrors, setShowInputErrors] = useState(false);
 	const inputRef = useRef(null);
 
 	const buttonDisabled = useMemo(() => {
@@ -89,7 +88,7 @@ function AddToCart({
 		});
 	}, [initialCpInstance, settings]);
 
-	const reset = useCallback(
+	const handleCPInstanceReplaced = useCallback(
 		({cpInstance: incomingCpInstance}) => {
 			function updateInCartState(inCart) {
 				setCpInstance((cpInstance) => ({
@@ -123,33 +122,39 @@ function AddToCart({
 	);
 
 	useEffect(() => {
-		function remove({skuId: removedSkuId}) {
+		function handleQuantityChanged({quantity, skuId}) {
 			setCpInstance((cpInstance) => ({
 				...cpInstance,
 				inCart:
-					removedSkuId === cpInstance.skuId || removedSkuId === ALL
-						? false
+					skuId === cpInstance.skuId || skuId === ALL
+						? Boolean(quantity)
 						: cpInstance.inCart,
 			}));
 		}
 
-		Liferay.on(PRODUCT_REMOVED_FROM_CART, remove);
+		Liferay.on(CART_PRODUCT_QUANTITY_CHANGED, handleQuantityChanged);
 
 		if (settings.namespace) {
-			Liferay.on(`${settings.namespace}${CP_INSTANCE_CHANGED}`, reset);
+			Liferay.on(
+				`${settings.namespace}${CP_INSTANCE_CHANGED}`,
+				handleCPInstanceReplaced
+			);
 		}
 
 		return () => {
-			Liferay.detach(PRODUCT_REMOVED_FROM_CART, remove);
+			Liferay.detach(
+				CART_PRODUCT_QUANTITY_CHANGED,
+				handleQuantityChanged
+			);
 
 			if (settings.namespace) {
 				Liferay.detach(
 					`${settings.namespace}${CP_INSTANCE_CHANGED}`,
-					reset
+					handleCPInstanceReplaced
 				);
 			}
 		};
-	}, [reset, settings.namespace]);
+	}, [handleCPInstanceReplaced, settings.namespace]);
 
 	const spaceDirection = settings.inline ? 'ml' : 'mt';
 	const spacer = settings.size === 'sm' ? 1 : 3;
@@ -181,8 +186,6 @@ function AddToCart({
 				}
 				quantity={cpInstance.quantity}
 				ref={inputRef}
-				setShowInputErrors={setShowInputErrors}
-				showInputErrors={showInputErrors}
 				size={settings.size}
 				step={settings.productConfiguration?.multipleOrderQuantity}
 			/>

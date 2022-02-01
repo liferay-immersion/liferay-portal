@@ -13,15 +13,34 @@
  */
 
 import ClayForm, {ClayInput} from '@clayui/form';
+import {useIsMounted} from '@liferay/frontend-js-react-web';
 import classNames from 'classnames';
 import {debounce} from 'frontend-js-web';
-import React, {forwardRef, useRef, useState} from 'react';
+import React, {forwardRef, useEffect, useRef, useState} from 'react';
 
 import {
 	getMinQuantity,
 	getProductMaxQuantity,
 } from '../../utilities/quantities';
 import RulesPopover from './RulesPopover';
+
+const getErrors = (value, min, max, step) => {
+	const errors = [];
+
+	if (!value || value < min) {
+		errors.push('min');
+	}
+
+	if (max && value > max) {
+		errors.push('max');
+	}
+
+	if (step > 1 && value % step) {
+		errors.push('multiple');
+	}
+
+	return errors;
+};
 
 const InputQuantitySelector = forwardRef(
 	(
@@ -39,36 +58,31 @@ const InputQuantitySelector = forwardRef(
 		inputRef
 	) => {
 		const [showPopover, setShowPopover] = useState(false);
-		const [unsatisfiedConstrains, setUnsatisfiedConstrain] = useState([]);
-		const debouncedSetUpdateConstrainsRef = useRef(
-			debounce(setUnsatisfiedConstrain, 500)
+		const [visibleErrors, setVisibleErrors] = useState(() =>
+			getErrors(quantity, min, max, step)
 		);
+		const isMounted = useIsMounted();
+		const debouncedSetVisibleErrorsRef = useRef(
+			debounce((newErrors) => {
+				if (isMounted()) {
+					setVisibleErrors(newErrors);
+				}
+			}, 500)
+		);
+
+		useEffect(() => {
+			debouncedSetVisibleErrorsRef.current(() =>
+				getErrors(quantity, min, max, step)
+			);
+		}, [quantity, min, max, step]);
 
 		const inputMax = getProductMaxQuantity(max, step);
 		const inputMin = getMinQuantity(min, step);
 
-		const getErrors = (value) => {
-			const errors = [];
-
-			if (!value || value < min) {
-				errors.push('min');
-			}
-
-			if (max && value > max) {
-				errors.push('max');
-			}
-
-			if (step > 1 && value % step) {
-				errors.push('multiple');
-			}
-
-			return errors;
-		};
-
 		return (
 			<ClayForm.Group
 				className={classNames({
-					'has-error': unsatisfiedConstrains.length,
+					'has-error': visibleErrors.length,
 					'mb-0': true,
 				})}
 			>
@@ -84,14 +98,12 @@ const InputQuantitySelector = forwardRef(
 					onChange={({target}) => {
 						const numValue = Number(target.value);
 
-						const errors = getErrors(numValue);
+						const errors = getErrors(numValue, min, max, step);
 
 						onUpdate({
 							errors,
 							value: numValue,
 						});
-
-						debouncedSetUpdateConstrainsRef.current(errors);
 					}}
 					onFocus={() => setShowPopover(true)}
 					ref={inputRef}
@@ -101,16 +113,14 @@ const InputQuantitySelector = forwardRef(
 				/>
 
 				{showPopover &&
-					(step > 1 ||
-						min > 1 ||
-						unsatisfiedConstrains.includes('max')) && (
+					(step > 1 || min > 1 || visibleErrors.includes('max')) && (
 						<RulesPopover
 							alignment={alignment}
+							errors={visibleErrors}
 							inputRef={inputRef}
 							max={max || ''}
 							min={min}
 							multiple={step}
-							unsatisfiedConstrains={unsatisfiedConstrains}
 						/>
 					)}
 			</ClayForm.Group>

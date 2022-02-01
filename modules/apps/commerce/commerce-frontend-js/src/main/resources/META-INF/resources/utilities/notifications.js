@@ -18,7 +18,7 @@ const titlesMap = {
 	danger: Liferay.Language.get('danger'),
 	success: Liferay.Language.get('success'),
 	warning: Liferay.Language.get('warning'),
-}
+};
 
 export function showNotification(
 	message,

@@ -20,7 +20,7 @@ import React, {useContext, useEffect, useState} from 'react';
 
 import ServiceProvider from '../../ServiceProvider/index';
 import {debouncePromise} from '../../utilities/debounce';
-import {PRODUCT_REMOVED_FROM_CART} from '../../utilities/eventsDefinitions';
+import {CART_PRODUCT_QUANTITY_CHANGED} from '../../utilities/eventsDefinitions';
 import Price from '../price/Price';
 import QuantitySelector from '../quantity_selector/QuantitySelector';
 import ItemInfoView from './CartItemViews/ItemInfoView';
@@ -134,7 +134,8 @@ function CartItem({
 
 								updateCartModel({order: {id: cartState.id}});
 
-								Liferay.fire(PRODUCT_REMOVED_FROM_CART, {
+								Liferay.fire(CART_PRODUCT_QUANTITY_CHANGED, {
+									quantity: 0,
 									skuId,
 								});
 							})
