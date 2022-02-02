@@ -336,7 +336,7 @@ String myWorkflowTasksPortletNamespace = PortalUtil.getPortletNamespace(PortletK
 	</div>
 </div>
 
-<aui:script require="commerce-frontend-js/utilities/debounce as debounce">
+<aui:script require="frontend-js-web/liferay/debounce/debounce.es as debounce">
 	var commerceHeader = document.querySelector('.commerce-header');
 	var pageHeader = document.querySelector('.page-header');
 

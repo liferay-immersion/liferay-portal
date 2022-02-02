@@ -16,7 +16,7 @@
 		],
 		"testPathIgnorePatterns": [
 			"<rootDir>/test/components/MiniCart",
-			"<rootDir>/test/utils/"
+			"<rootDir>/test/tests_utilities/"
 		]
 	},
 	"main": "index.js",

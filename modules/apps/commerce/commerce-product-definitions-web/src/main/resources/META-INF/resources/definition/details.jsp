@@ -337,7 +337,7 @@ if ((cpDefinition != null) && (cpDefinition.getExpirationDate() != null)) {
 </aui:form>
 
 <c:if test="<%= cpDefinition == null %>">
-	<aui:script require="commerce-frontend-js/utilities/debounce as debounce, commerce-frontend-js/utilities/slugify as slugify">
+	<aui:script require="frontend-js-web/liferay/debounce/debounce.es as debounce, commerce-frontend-js/utilities/slugify as slugify">
 		var form = document.getElementById('<portlet:namespace />fm');
 
 		var nameInput = form.querySelector('#<portlet:namespace />nameMapAsXML');

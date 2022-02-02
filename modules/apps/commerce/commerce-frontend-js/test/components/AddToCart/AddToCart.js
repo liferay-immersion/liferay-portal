@@ -12,7 +12,7 @@
  * details.
  */
 
-import '../../utils/polyfills';
+import '../../tests_utilities/polyfills';
 
 import '@testing-library/jest-dom/extend-expect';
 import {cleanup, fireEvent, render} from '@testing-library/react';
