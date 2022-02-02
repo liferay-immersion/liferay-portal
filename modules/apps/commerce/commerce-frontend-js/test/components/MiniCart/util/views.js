@@ -30,13 +30,13 @@ import {
 	DEFAULT_VIEWS,
 	resolveCartViews,
 } from '../../../../src/main/resources/META-INF/resources/components/mini_cart/util/views';
-import * as ModuleUtils from '../../../../src/main/resources/META-INF/resources/utilities/modules';
+import * as Moduletests_utilities from '../../../../src/main/resources/META-INF/resources/utilities/modules';
 
 jest.mock(
 	'../../../../src/main/resources/META-INF/resources/utilities/modules'
 );
 
-describe('MiniCart Utils -> Views', () => {
+describe('MiniCart tests_utilities -> Views', () => {
 	const VIEW_TYPES = [
 		CART,
 		HEADER,
@@ -121,7 +121,7 @@ describe('MiniCart Utils -> Views', () => {
 			});
 
 			it('resolved custom Liferay module component implementations', async () => {
-				jest.spyOn(ModuleUtils, 'getJsModule').mockImplementation(() =>
+				jest.spyOn(Moduletests_utilities, 'getJsModule').mockImplementation(() =>
 					Promise.resolve(CustomView)
 				);
 
@@ -168,7 +168,7 @@ describe('MiniCart Utils -> Views', () => {
 			});
 
 			it('fallback default MiniCart views if Liferay modules fail to resolve', async () => {
-				jest.spyOn(ModuleUtils, 'getJsModule').mockImplementation(() =>
+				jest.spyOn(Moduletests_utilities, 'getJsModule').mockImplementation(() =>
 					Promise.reject()
 				);
 
