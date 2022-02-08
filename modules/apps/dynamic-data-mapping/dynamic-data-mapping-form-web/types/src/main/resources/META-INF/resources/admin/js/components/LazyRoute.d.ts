@@ -14,5 +14,11 @@
 
 /// <reference types="react" />
 
-import './Report.scss';
-export default function Report(): JSX.Element;
+export default function LazyRoute({
+	importPath,
+	...otherProps
+}: {
+	exact?: boolean;
+	importPath: string;
+	path: string;
+}): JSX.Element;

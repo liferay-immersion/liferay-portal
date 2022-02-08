@@ -51,7 +51,7 @@ import {createFormURL} from '../util/form.es';
 import {submitEmailContent} from '../util/submitEmailContent.es';
 import ErrorList from './ErrorList';
 
-export function FormBuilder() {
+export default function FormBuilder() {
 	const {
 		autocompleteUserURL,
 		portletNamespace,

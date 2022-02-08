@@ -12,7 +12,4 @@
  * details.
  */
 
-/// <reference types="react" />
-
-import './Report.scss';
-export default function Report(): JSX.Element;
+declare module 'react-router-dom';

@@ -20,7 +20,7 @@ import React from 'react';
 
 import './Report.scss';
 
-export function Report() {
+export default function Report() {
 	const {formReportDataURL} = useConfig();
 	const {resource} = useResource({link: formReportDataURL});
 	const {
