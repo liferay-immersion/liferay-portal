@@ -26,6 +26,8 @@ definition {
 				AssertElementPresent(locator1 = "Message#SUCCESS");
 
 				AssertElementNotPresent(locator1 = "Message#ERROR");
+
+				AssertElementPresent(locator1 = "Message#Error")
 			}
 		}
 	}
