@@ -28,6 +28,13 @@ definition {
 				AssertElementNotPresent(locator1 = "Message#ERROR");
 
 				AssertElementPresent(locator1 = "Message#Error")
+<<<<<<< HEAD
+=======
+
+				CommerceEntry.clickNoError(menuItem = "Delete");
+
+				AssertElementNotPresent(locator1 = "Message#ERROR");
+>>>>>>> b60a5f2 (Ultimo Commit)
 			}
 		}
 	}
