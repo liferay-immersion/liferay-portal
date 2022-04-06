@@ -27,7 +27,10 @@ import React from 'react';
 
 import ServiceProvider from '../../../src/main/resources/META-INF/resources/ServiceProvider/index';
 import AccountSelector from '../../../src/main/resources/META-INF/resources/components/account_selector/AccountSelector';
-import {accountTemplate, getAccounts} from '../../tests_utilities/fake_data/accounts';
+import {
+	accountTemplate,
+	getAccounts,
+} from '../../tests_utilities/fake_data/accounts';
 import {getOrders} from '../../tests_utilities/fake_data/orders';
 
 const ACCOUNTS_HEADLESS_API_ENDPOINT = ServiceProvider.AdminAccountAPI('v1')

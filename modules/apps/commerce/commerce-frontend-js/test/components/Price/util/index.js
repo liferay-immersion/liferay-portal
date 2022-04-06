@@ -89,7 +89,9 @@ describe('Price tests_utilities', () => {
 
 			const result = ['2.00', '5.40', '3.34', '0.00'];
 
-			expect(Pricetests_utilities.collectDiscountLevels(price)).toEqual(result);
+			expect(Pricetests_utilities.collectDiscountLevels(price)).toEqual(
+				result
+			);
 		});
 	});
 
@@ -98,7 +100,9 @@ describe('Price tests_utilities', () => {
 			expect(Pricetests_utilities.isNonnull('0')).toBe(false);
 			expect(Pricetests_utilities.isNonnull('0', '0.000', 0)).toBe(false);
 			expect(Pricetests_utilities.isNonnull('1')).toBe(true);
-			expect(Pricetests_utilities.isNonnull('1.00', '2.4', '0')).toBe(true);
+			expect(Pricetests_utilities.isNonnull('1.00', '2.4', '0')).toBe(
+				true
+			);
 			expect(Pricetests_utilities.isNonnull(0)).toBe(false);
 			expect(Pricetests_utilities.isNonnull(1)).toBe(true);
 			expect(Pricetests_utilities.isNonnull(1.2, '3.1', 0)).toBe(true);

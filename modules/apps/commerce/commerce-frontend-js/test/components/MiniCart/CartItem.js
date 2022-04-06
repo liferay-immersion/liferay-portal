@@ -179,7 +179,9 @@ describe('MiniCart Item', () => {
 				</MiniCartContext.Provider>
 			);
 
-			expect(MiniCarttests_utilities.parseOptions).toHaveBeenCalledTimes(1);
+			expect(MiniCarttests_utilities.parseOptions).toHaveBeenCalledTimes(
+				1
+			);
 			expect(MiniCarttests_utilities.parseOptions).toHaveBeenCalledWith(
 				BASE_PROPS.item.options
 			);
