@@ -231,7 +231,9 @@ describe('MiniCart Items List Actions', () => {
 					});
 
 					await wait(() => {
-						expect(Basetests_utilities.liferayNavigate).toHaveBeenCalledWith(
+						expect(
+							Basetests_utilities.liferayNavigate
+						).toHaveBeenCalledWith(
 							WITH_ITEMS_CONTEXT_MOCK.actionURLs.orderDetailURL
 						);
 					});

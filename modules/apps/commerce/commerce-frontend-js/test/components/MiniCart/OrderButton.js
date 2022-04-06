@@ -82,7 +82,9 @@ describe('MiniCart Order Button', () => {
 			});
 
 			await wait(() => {
-				expect(Basetests_utilities.liferayNavigate).not.toHaveBeenCalled();
+				expect(
+					Basetests_utilities.liferayNavigate
+				).not.toHaveBeenCalled();
 			});
 		});
 	});
@@ -165,9 +167,9 @@ describe('MiniCart Order Button', () => {
 				});
 
 				await wait(() => {
-					expect(Basetests_utilities.liferayNavigate).toHaveBeenCalledWith(
-						CONTEXT_MOCK.actionURLs.checkoutURL
-					);
+					expect(
+						Basetests_utilities.liferayNavigate
+					).toHaveBeenCalledWith(CONTEXT_MOCK.actionURLs.checkoutURL);
 
 					expect(button.innerHTML).toMatchSnapshot();
 				});
@@ -197,7 +199,9 @@ describe('MiniCart Order Button', () => {
 					});
 
 					await wait(() => {
-						expect(Basetests_utilities.liferayNavigate).toHaveBeenCalledWith(
+						expect(
+							Basetests_utilities.liferayNavigate
+						).toHaveBeenCalledWith(
 							CONTEXT_MOCK.actionURLs.orderDetailURL
 						);
 					});
@@ -233,7 +237,9 @@ describe('MiniCart Order Button', () => {
 					});
 
 					await wait(() => {
-						expect(Basetests_utilities.liferayNavigate).toHaveBeenCalledWith(
+						expect(
+							Basetests_utilities.liferayNavigate
+						).toHaveBeenCalledWith(
 							CONTEXT_MOCK.actionURLs.checkoutURL
 						);
 					});
@@ -267,7 +273,9 @@ describe('MiniCart Order Button', () => {
 					});
 
 					await wait(() => {
-						expect(Basetests_utilities.liferayNavigate).toHaveBeenCalledWith(
+						expect(
+							Basetests_utilities.liferayNavigate
+						).toHaveBeenCalledWith(
 							CONTEXT_MOCK.actionURLs.orderDetailURL
 						);
 					});

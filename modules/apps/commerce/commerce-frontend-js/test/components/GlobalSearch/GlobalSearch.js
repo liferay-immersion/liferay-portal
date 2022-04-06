@@ -21,9 +21,15 @@ import React from 'react';
 
 import ServiceProvider from '../../../src/main/resources/META-INF/resources/ServiceProvider/index';
 import GlobalSearch from '../../../src/main/resources/META-INF/resources/components/global_search/GlobalSearch';
-import {accountTemplate, getAccounts} from '../../tests_utilities/fake_data/accounts';
+import {
+	accountTemplate,
+	getAccounts,
+} from '../../tests_utilities/fake_data/accounts';
 import {getOrders, orderTemplate} from '../../tests_utilities/fake_data/orders';
-import {getProducts, productTemplate} from '../../tests_utilities/fake_data/products';
+import {
+	getProducts,
+	productTemplate,
+} from '../../tests_utilities/fake_data/products';
 
 const accountsEndpointRegexp = new RegExp(
 	ServiceProvider.AdminAccountAPI('v1').baseURL

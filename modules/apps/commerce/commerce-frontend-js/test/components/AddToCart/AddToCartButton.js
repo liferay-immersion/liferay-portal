@@ -55,15 +55,15 @@ describe('Add to Cart Button', () => {
 		cpInstances: [
 			{
 				inCart: false,
-				options: [],
 				quantity: 1,
 				skuId: 123,
+				skuOptions: [],
 			},
 			{
 				inCart: false,
-				options: [],
 				quantity: 3,
 				skuId: 234,
+				skuOptions: [],
 			},
 		],
 		onAdd,
