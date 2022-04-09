@@ -59,8 +59,7 @@ public class PublicationsUserRoleUpgradeProcess extends UpgradeProcess {
 			"resource-actions/default.xml");
 
 		try (PreparedStatement preparedStatement = connection.prepareStatement(
-				"select CTPreferences.companyId from CTPreferences where " +
-					"CTPreferences.userId = 0");
+				"select Company.companyId from Company");
 			ResultSet resultSet = preparedStatement.executeQuery()) {
 
 			while (resultSet.next()) {
