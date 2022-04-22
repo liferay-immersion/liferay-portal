@@ -6,7 +6,6 @@
 
 	<meta content="initial-scale=1.0, width=device-width" name="viewport" />
 
-	<script src="${javascript_folder}/intersection-observer.js" type="text/javascript"></script>
 	<@liferay_util["include"] page=top_head_include />
 </head>
 

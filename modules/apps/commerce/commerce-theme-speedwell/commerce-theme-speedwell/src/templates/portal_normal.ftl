@@ -65,7 +65,6 @@
 			</div>
 		</div>
 
-		<script src="${javascript_folder}/intersection-observer.js" type="text/javascript"></script>
 		<script src="${javascript_folder}/features/accessibility.js" type="text/javascript"></script>
 		<script src="${javascript_folder}/features/scrollHandler.js" type="text/javascript"></script>
 		<script src="${javascript_folder}/features/topbar.js" type="text/javascript"></script>
