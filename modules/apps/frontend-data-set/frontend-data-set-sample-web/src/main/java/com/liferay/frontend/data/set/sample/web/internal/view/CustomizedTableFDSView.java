@@ -43,8 +43,18 @@ public class CustomizedTableFDSView extends BaseTableFDSView {
 		FDSTableSchemaBuilder fdsTableSchemaBuilder =
 			_fdsTableSchemaBuilderFactory.create();
 
-		fdsTableSchemaBuilder.addFDSTableSchemaField("id", "id");
-		fdsTableSchemaBuilder.addFDSTableSchemaField("title", "title");
+		fdsTableSchemaBuilder.addFDSTableSchemaField(
+			"id", "id"
+		).setSortable(
+			true
+		);
+
+		fdsTableSchemaBuilder.addFDSTableSchemaField(
+			"title", "title"
+		).setSortable(
+			true
+		);
+
 		fdsTableSchemaBuilder.addFDSTableSchemaField(
 			"description", "description");
 		fdsTableSchemaBuilder.addFDSTableSchemaField("date", "date");
