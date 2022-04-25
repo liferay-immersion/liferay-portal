@@ -378,6 +378,10 @@ components:
                     items:
                         $ref: "#/components/schemas/ObjectViewColumn"
                     type: array
+                objectViewFilterColumns:
+                    items:
+                        $ref: "#/components/schemas/ObjectViewFilterColumn"
+                    type: array
                 objectViewSortColumns:
                     items:
                         $ref: "#/components/schemas/ObjectViewSortColumn"
@@ -397,6 +401,19 @@ components:
                 priority:
                     format: int32
                     type: integer
+        ObjectViewFilterColumn:
+            properties:
+                definition:
+                    type: string
+                filterType:
+                    enum: [EXCLUDES, INCLUDES]
+                    type: string
+                id:
+                    format: int64
+                    readOnly: true
+                    type: integer
+                objectFieldName:
+                    type: string
         ObjectViewSortColumn:
             properties:
                 id:
