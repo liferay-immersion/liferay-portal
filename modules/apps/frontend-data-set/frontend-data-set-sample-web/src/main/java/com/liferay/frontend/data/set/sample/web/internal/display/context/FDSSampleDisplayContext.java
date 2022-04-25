@@ -17,8 +17,12 @@ package com.liferay.frontend.data.set.sample.web.internal.display.context;
 import com.liferay.frontend.data.set.model.FDSActionDropdownItem;
 import com.liferay.frontend.data.set.sample.web.internal.display.context.helper.FDSRequestHelper;
 import com.liferay.frontend.taglib.clay.servlet.taglib.util.CreationMenu;
+import com.liferay.frontend.taglib.clay.servlet.taglib.util.DropdownItem;
+import com.liferay.petra.portlet.url.builder.PortletURLBuilder;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.portlet.PortletURLUtil;
+import com.liferay.portal.kernel.util.Constants;
+import com.liferay.portal.kernel.util.ListUtil;
 
 import java.util.Arrays;
 import java.util.List;
@@ -35,11 +39,21 @@ import javax.servlet.http.HttpServletRequest;
 public class FDSSampleDisplayContext {
 
 	public FDSSampleDisplayContext(HttpServletRequest httpServletRequest) {
+		_httpServletRequest = httpServletRequest;
+
 		_fdsRequestHelper = new FDSRequestHelper(httpServletRequest);
 	}
 
 	public String getAPIURL() {
 		return "/o/c/fdssamples";
+	}
+
+	public List<DropdownItem> getBulkActionDropdownItems() {
+		return ListUtil.fromArray(
+			new FDSActionDropdownItem(
+				"#", "trash", "sampleBulkAction",
+				LanguageUtil.get(_fdsRequestHelper.getRequest(), "delete"), null,
+				null, null));
 	}
 
 	public CreationMenu getCreationMenu() throws Exception {
@@ -65,5 +79,6 @@ public class FDSSampleDisplayContext {
 	}
 
 	private final FDSRequestHelper _fdsRequestHelper;
+	private final HttpServletRequest _httpServletRequest;
 
 }

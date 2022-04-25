@@ -12,6 +12,8 @@
  * details.
  */
 
+import {openModal} from 'frontend-js-web';
+
 import SampleCustomDataRenderer from './SampleCustomDataRenderer';
 
 export default function propsTransformer({
@@ -26,6 +28,32 @@ export default function propsTransformer({
 		onActionDropdownItemClick({action, itemData}) {
 			if (action.data.id === 'sampleMessage') {
 				alert(`${greeting} ${itemData.title}!`);
+			}
+		},
+		onBulkActionItemClick({action, selectedItemsData}) {
+			if (action.data.id === 'sampleBulkAction') {
+				openModal({
+					bodyHTML: `<ul>${selectedItemsData
+						.map((item) => `<li>${item.id}#${item.title}</li>`)
+						.join('')}</ul>`,
+					buttons: [
+						{
+							label: 'OK',
+							onClick() {
+								Liferay.Util.getOpener().Liferay.fire(
+									'closeModal',
+									{
+										id: 'sampleBulkActionModal',
+									}
+								);
+							},
+						},
+					],
+					center: true,
+					id: 'sampleBulkActionModal',
+					size: 'md',
+					title: 'You selected:',
+				});
 			}
 		},
 	};
