@@ -49,13 +49,15 @@ public class ObjectViewLocalServiceUtil {
 			long userId, long objectDefinitionId, boolean defaultObjectView,
 			Map<java.util.Locale, String> nameMap,
 			List<com.liferay.object.model.ObjectViewColumn> objectViewColumns,
+			List<com.liferay.object.model.ObjectViewFilterColumn>
+				objectViewFilterColumns,
 			List<com.liferay.object.model.ObjectViewSortColumn>
 				objectViewSortColumns)
 		throws PortalException {
 
 		return getService().addObjectView(
 			userId, objectDefinitionId, defaultObjectView, nameMap,
-			objectViewColumns, objectViewSortColumns);
+			objectViewColumns, objectViewFilterColumns, objectViewSortColumns);
 	}
 
 	/**
@@ -344,13 +346,15 @@ public class ObjectViewLocalServiceUtil {
 			long objectViewId, boolean defaultObjectView,
 			Map<java.util.Locale, String> nameMap,
 			List<com.liferay.object.model.ObjectViewColumn> objectViewColumns,
+			List<com.liferay.object.model.ObjectViewFilterColumn>
+				objectViewFilterColumns,
 			List<com.liferay.object.model.ObjectViewSortColumn>
 				objectViewSortColumns)
 		throws PortalException {
 
 		return getService().updateObjectView(
 			objectViewId, defaultObjectView, nameMap, objectViewColumns,
-			objectViewSortColumns);
+			objectViewFilterColumns, objectViewSortColumns);
 	}
 
 	/**

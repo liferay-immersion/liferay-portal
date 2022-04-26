@@ -238,6 +238,21 @@ create table ObjectViewColumn (
 	priority INTEGER
 );
 
+create table ObjectViewFilterColumn (
+	mvccVersion LONG default 0 not null,
+	uuid_ VARCHAR(75) null,
+	objectViewFilterColumnId LONG not null primary key,
+	companyId LONG,
+	userId LONG,
+	userName VARCHAR(75) null,
+	createDate DATE null,
+	modifiedDate DATE null,
+	objectViewId LONG,
+	objectFieldName VARCHAR(75) null,
+	filterType VARCHAR(75) null,
+	definition VARCHAR(75) null
+);
+
 create table ObjectViewSortColumn (
 	mvccVersion LONG default 0 not null,
 	uuid_ VARCHAR(75) null,
