@@ -631,6 +631,16 @@ public abstract class BaseObjectViewResourceTestCase {
 			}
 
 			if (Objects.equals(
+					"objectViewFilterColumns", additionalAssertFieldName)) {
+
+				if (objectView.getObjectViewFilterColumns() == null) {
+					valid = false;
+				}
+
+				continue;
+			}
+
+			if (Objects.equals(
 					"objectViewSortColumns", additionalAssertFieldName)) {
 
 				if (objectView.getObjectViewSortColumns() == null) {
@@ -816,6 +826,19 @@ public abstract class BaseObjectViewResourceTestCase {
 				if (!Objects.deepEquals(
 						objectView1.getObjectViewColumns(),
 						objectView2.getObjectViewColumns())) {
+
+					return false;
+				}
+
+				continue;
+			}
+
+			if (Objects.equals(
+					"objectViewFilterColumns", additionalAssertFieldName)) {
+
+				if (!Objects.deepEquals(
+						objectView1.getObjectViewFilterColumns(),
+						objectView2.getObjectViewFilterColumns())) {
 
 					return false;
 				}
@@ -1022,6 +1045,11 @@ public abstract class BaseObjectViewResourceTestCase {
 		}
 
 		if (entityFieldName.equals("objectViewColumns")) {
+			throw new IllegalArgumentException(
+				"Invalid entity field " + entityFieldName);
+		}
+
+		if (entityFieldName.equals("objectViewFilterColumns")) {
 			throw new IllegalArgumentException(
 				"Invalid entity field " + entityFieldName);
 		}
