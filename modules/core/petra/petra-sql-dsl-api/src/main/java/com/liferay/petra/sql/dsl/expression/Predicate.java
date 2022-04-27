@@ -31,6 +31,10 @@ public interface Predicate extends Expression<Boolean> {
 		return leftPredicate.and(rightPredicate);
 	}
 
+	public static Predicate not(Predicate predicate) {
+		return predicate.not((Expression<Boolean>)withParentheses(predicate));
+	}
+
 	public static Predicate or(
 		Predicate leftPredicate, Predicate rightPredicate) {
 
@@ -52,6 +56,15 @@ public interface Predicate extends Expression<Boolean> {
 	public Predicate and(Expression<Boolean> expression);
 
 	public default <T extends Throwable> Predicate and(
+			UnsafeSupplier<Expression<Boolean>, T> unsafeSupplier)
+		throws T {
+
+		return and(unsafeSupplier.get());
+	}
+
+	public Predicate not(Expression<Boolean> expression);
+
+	public default <T extends Throwable> Predicate not(
 			UnsafeSupplier<Expression<Boolean>, T> unsafeSupplier)
 		throws T {
 
