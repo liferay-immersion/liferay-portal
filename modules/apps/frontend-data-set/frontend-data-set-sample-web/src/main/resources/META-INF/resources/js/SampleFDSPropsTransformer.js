@@ -30,10 +30,10 @@ export default function propsTransformer({
 				alert(`${greeting} ${itemData.title}!`);
 			}
 		},
-		onBulkActionItemClick({action, selectedItemsData}) {
+		onBulkActionItemClick({action, selectedData: {items}}) {
 			if (action.data.id === 'sampleBulkAction') {
 				openModal({
-					bodyHTML: `<ul>${selectedItemsData
+					bodyHTML: `<ul>${items
 						.map((item) => `<li>${item.id}#${item.title}</li>`)
 						.join('')}</ul>`,
 					buttons: [
