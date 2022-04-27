@@ -109,9 +109,10 @@ function BulkActions({
 
 			onBulkActionItemClick({
 				action: actionDefinition,
-				selectedItemsData: selectedItems,
-				selectedItemsKey,
-				selectedItemsValue,
+				selectedData: {
+					items: selectedItems,
+					keyValues: selectedItemsValue,
+				},
 			});
 		}
 		else {
