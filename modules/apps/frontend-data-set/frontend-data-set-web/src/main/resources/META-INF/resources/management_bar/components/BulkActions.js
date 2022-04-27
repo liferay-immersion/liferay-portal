@@ -60,7 +60,10 @@ function BulkActions({
 	selectedItemsValue,
 	total,
 }) {
-	const {actionParameterName} = useContext(DataSetContext);
+	const {actionParameterName, items, onBulkActionItemClick} = useContext(
+		DataSetContext
+	);
+
 	const [
 		currentSidePanelActionPayload,
 		setCurrentSidePanelActionPayload,
@@ -95,6 +98,21 @@ function BulkActions({
 			);
 
 			setCurrentSidePanelActionPayload(sidePanelActionPayload);
+		}
+		else if (
+			onBulkActionItemClick &&
+			typeof onBulkActionItemClick === 'function'
+		) {
+			const selectedItems = items.filter((item) =>
+				selectedItemsValue.includes(item[selectedItemsKey])
+			);
+
+			onBulkActionItemClick({
+				action: actionDefinition,
+				selectedItemsData: selectedItems,
+				selectedItemsKey,
+				selectedItemsValue,
+			});
 		}
 		else {
 			submit({
