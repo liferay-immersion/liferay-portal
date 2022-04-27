@@ -219,6 +219,7 @@ public class ObjectDefinitionsValidationsDisplayContext
 	private enum DDMExpressionFunction {
 
 		CONCAT("concat(parameters)", "concat"),
+		CONDITION("condition(condition, parameter1, parameter2)", "condition"),
 		CONTAINS("contains(field_name, parameter)", "contains"),
 		DOES_NOT_CONTAIN(
 			"NOT(contains(field_name, parameter))", "does-not-contain"),
