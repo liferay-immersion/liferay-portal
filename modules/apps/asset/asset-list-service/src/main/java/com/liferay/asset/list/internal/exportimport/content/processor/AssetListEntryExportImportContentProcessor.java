@@ -170,12 +170,14 @@ public class AssetListEntryExportImportContentProcessor
 						_assetCategoryLocalService.fetchAssetCategory(
 							categoryId);
 
-					if (assetCategory != null) {
-						StagedModelDataHandlerUtil.exportReferenceStagedModel(
-							portletDataContext, stagedModel,
-							_assetCategoryLocalService.getCategory(categoryId),
-							PortletDataContext.REFERENCE_TYPE_DEPENDENCY);
+					if (assetCategory == null) {
+						continue;
 					}
+
+					StagedModelDataHandlerUtil.exportReferenceStagedModel(
+						portletDataContext, stagedModel,
+						_assetCategoryLocalService.getCategory(categoryId),
+						PortletDataContext.REFERENCE_TYPE_DEPENDENCY);
 				}
 			}
 		}
