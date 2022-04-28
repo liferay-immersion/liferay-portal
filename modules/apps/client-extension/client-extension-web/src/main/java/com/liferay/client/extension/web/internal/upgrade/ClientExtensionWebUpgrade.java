@@ -72,12 +72,6 @@ public class ClientExtensionWebUpgrade implements UpgradeStepRegistrator {
 				@Override
 				protected String[][] getRenamePortletIdsArray() {
 					return ArrayUtil.append(
-						_getRenamePortletIdsArray(
-							connection,
-							"com_liferay_remote_app_web_internal_portlet_" +
-								"RemoteAppEntryPortlet_",
-							"com_liferay_client_extension_web_internal_" +
-								"portlet_ClientExtensionEntryPortlet_"),
 						new String[][] {
 							{
 								"com_liferay_remote_app_admin_web_portlet_" +
@@ -85,7 +79,13 @@ public class ClientExtensionWebUpgrade implements UpgradeStepRegistrator {
 								"com_liferay_client_extension_web_internal_" +
 									"portlet_ClientExtensionAdminPortlet"
 							}
-						});
+						},
+						_getRenamePortletIdsArray(
+							connection,
+							"com_liferay_remote_app_web_internal_portlet_" +
+								"RemoteAppEntryPortlet_",
+							"com_liferay_client_extension_web_internal_" +
+								"portlet_ClientExtensionEntryPortlet_"));
 				}
 
 			});
