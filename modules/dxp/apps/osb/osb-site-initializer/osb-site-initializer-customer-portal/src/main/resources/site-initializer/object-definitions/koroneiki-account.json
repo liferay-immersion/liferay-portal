@@ -12,12 +12,6 @@
 				"en-US": "Account Key"
 			},
 			"name": "accountKey",
-			"objectFieldSettings": [
-				{
-					"name": "showCounter",
-					"value": "false"
-				}
-			],
 			"required": true
 		},
 		{
@@ -28,12 +22,6 @@
 				"en-US": "AC Workspace Name"
 			},
 			"name": "acWorkspaceName",
-			"objectFieldSettings": [
-				{
-					"name": "showCounter",
-					"value": "false"
-				}
-			],
 			"required": false
 		},
 		{
@@ -44,12 +32,6 @@
 				"en-US": "Code"
 			},
 			"name": "code",
-			"objectFieldSettings": [
-				{
-					"name": "showCounter",
-					"value": "false"
-				}
-			],
 			"required": false
 		},
 		{
@@ -60,12 +42,6 @@
 				"en-US": "Data Region"
 			},
 			"name": "dataRegion",
-			"objectFieldSettings": [
-				{
-					"name": "showCounter",
-					"value": "false"
-				}
-			],
 			"required": false
 		},
 		{
@@ -76,12 +52,6 @@
 				"en-US": "DXP Version"
 			},
 			"name": "dxpVersion",
-			"objectFieldSettings": [
-				{
-					"name": "showCounter",
-					"value": "false"
-				}
-			],
 			"required": false
 		},
 		{
@@ -102,12 +72,6 @@
 				"en-US": "Name"
 			},
 			"name": "name",
-			"objectFieldSettings": [
-				{
-					"name": "showCounter",
-					"value": "false"
-				}
-			],
 			"required": false
 		},
 		{
@@ -128,12 +92,6 @@
 				"en-US": "Region"
 			},
 			"name": "region",
-			"objectFieldSettings": [
-				{
-					"name": "showCounter",
-					"value": "false"
-				}
-			],
 			"required": false
 		},
 		{
@@ -144,12 +102,6 @@
 				"en-US": "SLA Current"
 			},
 			"name": "slaCurrent",
-			"objectFieldSettings": [
-				{
-					"name": "showCounter",
-					"value": "false"
-				}
-			],
 			"required": false
 		},
 		{
@@ -180,12 +132,6 @@
 				"en-US": "SLA Expired"
 			},
 			"name": "slaExpired",
-			"objectFieldSettings": [
-				{
-					"name": "showCounter",
-					"value": "false"
-				}
-			],
 			"required": false
 		},
 		{
@@ -216,12 +162,6 @@
 				"en-US": "SLA Future"
 			},
 			"name": "slaFuture",
-			"objectFieldSettings": [
-				{
-					"name": "showCounter",
-					"value": "false"
-				}
-			],
 			"required": false
 		},
 		{
@@ -252,12 +192,6 @@
 				"en-US": "Liferay Contact Name"
 			},
 			"name": "liferayContactName",
-			"objectFieldSettings": [
-				{
-					"name": "showCounter",
-					"value": "false"
-				}
-			],
 			"required": false
 		},
 		{
@@ -268,12 +202,6 @@
 				"en-US": "Liferay Contact Role"
 			},
 			"name": "liferayContactRole",
-			"objectFieldSettings": [
-				{
-					"name": "showCounter",
-					"value": "false"
-				}
-			],
 			"required": false
 		},
 		{
@@ -284,12 +212,6 @@
 				"en-US": "Liferay Contact Email Address"
 			},
 			"name": "liferayContactEmailAddress",
-			"objectFieldSettings": [
-				{
-					"name": "showCounter",
-					"value": "false"
-				}
-			],
 			"required": false
 		}
 	],

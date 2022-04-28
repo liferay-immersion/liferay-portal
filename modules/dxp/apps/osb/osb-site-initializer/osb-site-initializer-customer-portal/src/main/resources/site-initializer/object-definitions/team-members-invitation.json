@@ -12,12 +12,6 @@
 				"en-US": "Email"
 			},
 			"name": "email",
-			"objectFieldSettings": [
-				{
-					"name": "showCounter",
-					"value": "false"
-				}
-			],
 			"required": false
 		},
 		{
@@ -28,12 +22,6 @@
 				"en-US": "Role"
 			},
 			"name": "role",
-			"objectFieldSettings": [
-				{
-					"name": "showCounter",
-					"value": "false"
-				}
-			],
 			"required": false
 		}
 	],

@@ -12,12 +12,6 @@
 				"en-US": "Account Key"
 			},
 			"name": "accountKey",
-			"objectFieldSettings": [
-				{
-					"name": "showCounter",
-					"value": "false"
-				}
-			],
 			"required": true
 		},
 		{
@@ -28,12 +22,6 @@
 				"en-US": "Owner Email Address"
 			},
 			"name": "ownerEmailAddress",
-			"objectFieldSettings": [
-				{
-					"name": "showCounter",
-					"value": "false"
-				}
-			],
 			"required": true
 		},
 		{
@@ -44,12 +32,6 @@
 				"en-US": "Workspace Name"
 			},
 			"name": "workspaceName",
-			"objectFieldSettings": [
-				{
-					"name": "showCounter",
-					"value": "false"
-				}
-			],
 			"required": true
 		},
 		{
@@ -60,12 +42,6 @@
 				"en-US": "Data Center Location"
 			},
 			"name": "dataCenterLocation",
-			"objectFieldSettings": [
-				{
-					"name": "showCounter",
-					"value": "false"
-				}
-			],
 			"required": true
 		},
 		{
@@ -76,12 +52,6 @@
 				"en-US": "Workspace Friendly URL"
 			},
 			"name": "workspaceFriendlyUrl",
-			"objectFieldSettings": [
-				{
-					"name": "showCounter",
-					"value": "false"
-				}
-			],
 			"required": false
 		},
 		{
@@ -92,12 +62,6 @@
 				"en-US": "Allowed Email Domains"
 			},
 			"name": "allowedEmailDomains",
-			"objectFieldSettings": [
-				{
-					"name": "showCounter",
-					"value": "false"
-				}
-			],
 			"required": false
 		},
 		{
@@ -108,12 +72,6 @@
 				"en-US": "Time Zone"
 			},
 			"name": "timeZone",
-			"objectFieldSettings": [
-				{
-					"name": "showCounter",
-					"value": "false"
-				}
-			],
 			"required": false
 		},
 		{
@@ -124,12 +82,6 @@
 				"en-US": "Workspace Group ID"
 			},
 			"name": "workspaceGroupId",
-			"objectFieldSettings": [
-				{
-					"name": "showCounter",
-					"value": "false"
-				}
-			],
 			"required": false
 		}
 	],

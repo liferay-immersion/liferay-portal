@@ -12,12 +12,6 @@
 				"en-US": "Account Key"
 			},
 			"name": "accountKey",
-			"objectFieldSettings": [
-				{
-					"name": "showCounter",
-					"value": "false"
-				}
-			],
 			"required": true
 		},
 		{
@@ -28,12 +22,6 @@
 				"en-US": "Data Center Region"
 			},
 			"name": "dataCenterRegion",
-			"objectFieldSettings": [
-				{
-					"name": "showCounter",
-					"value": "false"
-				}
-			],
 			"required": true
 		},
 		{
@@ -44,12 +32,6 @@
 				"en-US": "Project ID"
 			},
 			"name": "projectId",
-			"objectFieldSettings": [
-				{
-					"name": "showCounter",
-					"value": "false"
-				}
-			],
 			"required": true
 		},
 		{
@@ -60,12 +42,6 @@
 				"en-US": "Disaster Data Center Region"
 			},
 			"name": "disasterDataCenterRegion",
-			"objectFieldSettings": [
-				{
-					"name": "showCounter",
-					"value": "false"
-				}
-			],
 			"required": false
 		}
 	],
