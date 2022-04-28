@@ -14,6 +14,7 @@
 
 package com.liferay.portal.tools.rest.builder.internal.yaml.config;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -137,7 +138,9 @@ public class ConfigYAML {
 		_clientMavenGroupId = clientMavenGroupId;
 	}
 
-	public void setDisabledBatchSchemaNames(List<String> disabledBatchSchemaNames) {
+	public void setDisabledBatchSchemaNames(
+		List<String> disabledBatchSchemaNames) {
+
 		_disabledBatchSchemaNames = disabledBatchSchemaNames;
 	}
 
@@ -221,7 +224,7 @@ public class ConfigYAML {
 	private String _author;
 	private String _clientDir;
 	private String _clientMavenGroupId;
-	private List<String> _disabledBatchSchemaNames;
+	private List<String> _disabledBatchSchemaNames = Collections.emptyList();
 	private boolean _forceClientVersionDescription = true;
 	private boolean _forcePredictableContentApplicationXML = true;
 	private boolean _forcePredictableOperationId;

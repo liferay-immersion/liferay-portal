@@ -55,7 +55,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.function.Consumer;
@@ -74,12 +73,6 @@ public class ResourceOpenAPIParser {
 		if (pathItems == null) {
 			return Collections.emptyList();
 		}
-
-		List<String> disabledBatchSchemaNames = Optional.ofNullable(
-			configYAML.getDisabledBatchSchemaNames()
-		).orElseGet(
-			ArrayList::new
-		);
 
 		Map<String, String> javaDataTypeMap =
 			OpenAPIParserUtil.getJavaDataTypeMap(configYAML, openAPIYAML);
@@ -124,8 +117,12 @@ public class ResourceOpenAPIParser {
 
 							javaMethodSignatures.add(javaMethodSignature);
 
+							List<String> disabledBatchSchemaNames =
+								configYAML.getDisabledBatchSchemaNames();
+
 							if (configYAML.isGenerateBatch() &&
-								!disabledBatchSchemaNames.contains(schemaName)) {
+								!disabledBatchSchemaNames.contains(
+									schemaName)) {
 
 								_addBatchJavaMethodSignature(
 									javaMethodSignature, javaMethodSignatures);
