@@ -57,7 +57,7 @@ public class CountryResourceTest extends BaseCountryResourceTestCase {
 				_countryLocalService.getCompanyCountries(
 					TestPropsValues.getCompanyId())) {
 
-			_updateExistingCountryInfo(country.getA2(), country.getA3());
+			_addCountryA2AndA3(country.getA2(), country.getA3());
 		}
 	}
 
@@ -70,7 +70,6 @@ public class CountryResourceTest extends BaseCountryResourceTestCase {
 		long totalCount = page.getTotalCount();
 
 		Country country1 = testGetCountriesPage_addCountry(randomCountry());
-
 		Country country2 = testGetCountriesPage_addCountry(randomCountry());
 
 		page = countryResource.getCountriesPage(
@@ -272,7 +271,7 @@ public class CountryResourceTest extends BaseCountryResourceTestCase {
 				country.getSubjectToVAT(), country.getZipRequired(),
 				ServiceContextTestUtil.getServiceContext());
 
-		_updateExistingCountryInfo(
+		_addCountryA2AndA3(
 			serviceBuilderCountry.getA2(), serviceBuilderCountry.getA3());
 
 		com.liferay.headless.admin.address.dto.v1_0.Country apiCountry =
@@ -293,7 +292,7 @@ public class CountryResourceTest extends BaseCountryResourceTestCase {
 			!existingValues.contains(randomValue);
 	}
 
-	private void _updateExistingCountryInfo(String a2, String a3) {
+	private void _addCountryA2AndA3(String a2, String a3) {
 		_countryA2s.add(StringUtil.toLowerCase(a2));
 		_countryA3s.add(StringUtil.toLowerCase(a3));
 	}
