@@ -66,7 +66,7 @@ public class CountryResourceDTOConverter
 
 		Region[] regionsArray = TransformUtil.transformToArray(
 			_regionService.getRegions(serviceBuilderCountry.getCountryId()),
-			this::_toRegion, Region.class);
+			serviceBuilderRegion -> _toRegion(serviceBuilderRegion), Region.class);
 
 		return new Country() {
 			{
