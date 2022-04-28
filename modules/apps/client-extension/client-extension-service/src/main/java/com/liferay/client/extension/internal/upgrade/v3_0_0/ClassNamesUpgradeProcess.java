@@ -31,7 +31,6 @@ public class ClassNamesUpgradeProcess extends UpgradeKernelPackage {
 			upgradeTable(
 				"ResourcePermission", "primKey", getClassNames(),
 				WildcardMode.LEADING);
-
 			upgradeTable(
 				"ResourcePermission", "primKey", getResourceNames(),
 				WildcardMode.LEADING);

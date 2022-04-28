@@ -34,10 +34,12 @@ public class ClientExtensionEntryUpgradeProcess extends UpgradeProcess {
 	protected void doUpgrade() throws Exception {
 		_insertClientExtensionEntries();
 
-		runSQL("drop table RemoteAppEntry");
 		runSQL(
 			"delete from Release_ where servletContextName = " +
 				"'com.liferay.remote.app.service'");
+
+		runSQL("drop table RemoteAppEntry");
+
 		runSQL(
 			"delete from ServiceComponent where buildNamespace = " +
 				"'RemoteApp'");
