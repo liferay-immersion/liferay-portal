@@ -64,9 +64,6 @@ const DeactivateButton = ({
 		return setDeactivateKeysStatus(ALERT_DOWNLOAD_TYPE.success);
 	};
 
-	// eslint-disable-next-line no-console
-	console.log(isVisibleModal);
-
 	return (
 		<>
 			{isVisibleModal &&
