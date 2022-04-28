@@ -73,13 +73,6 @@ public class CountryResourceDTOConverter
 				groupFilterEnabled =
 					serviceBuilderCountry.getGroupFilterEnabled();
 				id = serviceBuilderCountry.getCountryId();
-
-				String idd = serviceBuilderCountry.getIdd();
-
-				if (Validator.isNotNull(idd)) {
-					setIdd(Integer.valueOf(idd));
-				}
-
 				name = serviceBuilderCountry.getName();
 				number = Integer.valueOf(serviceBuilderCountry.getNumber());
 				position = serviceBuilderCountry.getPosition();
@@ -92,6 +85,12 @@ public class CountryResourceDTOConverter
 				subjectToVAT = serviceBuilderCountry.getSubjectToVAT();
 				title_i18n = serviceBuilderCountry.getLanguageIdToTitleMap();
 				zipRequired = serviceBuilderCountry.getZipRequired();
+
+				String idd = serviceBuilderCountry.getIdd();
+
+				if (Validator.isNotNull(idd)) {
+					setIdd(Integer.valueOf(idd));
+				}
 			}
 		};
 	}
