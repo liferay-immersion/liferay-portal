@@ -100,9 +100,7 @@ public class CountryResourceImpl extends BaseCountryResourceImpl {
 	public EntityModel getEntityModel(MultivaluedMap multivaluedMap)
 		throws Exception {
 
-		return () -> EntityModel.toEntityFieldsMap(
-			new StringEntityField("name", locale -> "name"),
-			new DoubleEntityField("position", locale -> "position"));
+		return _entityModel;
 	}
 
 	private Country _toCountry(
@@ -130,6 +128,11 @@ public class CountryResourceImpl extends BaseCountryResourceImpl {
 			CountryTable.INSTANCE.getTableName(),
 			objects.toArray(new Object[0]));
 	}
+
+	private static final EntityModel _entityModel =
+		() -> EntityModel.toEntityFieldsMap(
+			new StringEntityField("name", locale -> "name"),
+			new DoubleEntityField("position", locale -> "position"));
 
 	@Reference
 	private CountryResourceDTOConverter _countryResourceDTOConverter;
