@@ -16,6 +16,7 @@ package com.liferay.object.admin.rest.internal.dto.v1_0.util;
 
 import com.liferay.object.admin.rest.dto.v1_0.ObjectView;
 import com.liferay.object.admin.rest.dto.v1_0.ObjectViewColumn;
+import com.liferay.object.admin.rest.dto.v1_0.ObjectViewFilterColumn;
 import com.liferay.object.admin.rest.dto.v1_0.ObjectViewSortColumn;
 import com.liferay.object.util.LocalizedMapUtil;
 import com.liferay.portal.vulcan.util.TransformUtil;
@@ -50,6 +51,10 @@ public class ObjectViewUtil {
 					serviceBuilderObjectView.getObjectViewColumns(),
 					ObjectViewUtil::_toObjectViewColumn,
 					ObjectViewColumn.class);
+				objectViewFilterColumns = TransformUtil.transformToArray(
+					serviceBuilderObjectView.getObjectViewFilterColumns(),
+					ObjectViewUtil::_toObjectViewFilterColumn,
+					ObjectViewFilterColumn.class);
 				objectViewSortColumns = TransformUtil.transformToArray(
 					serviceBuilderObjectView.getObjectViewSortColumns(),
 					ObjectViewUtil::_toObjectViewSortColumn,
@@ -78,6 +83,29 @@ public class ObjectViewUtil {
 				objectFieldName =
 					serviceBuilderObjectViewColumn.getObjectFieldName();
 				priority = serviceBuilderObjectViewColumn.getPriority();
+			}
+		};
+	}
+
+	private static ObjectViewFilterColumn _toObjectViewFilterColumn(
+		com.liferay.object.model.ObjectViewFilterColumn
+			serviceBuilderObjectViewFilterColumn) {
+
+		if (serviceBuilderObjectViewFilterColumn == null) {
+			return null;
+		}
+
+		return new ObjectViewFilterColumn() {
+			{
+				definition =
+					serviceBuilderObjectViewFilterColumn.getDefinition();
+				filterType = ObjectViewFilterColumn.FilterType.create(
+					serviceBuilderObjectViewFilterColumn.getFilterType());
+				id =
+					serviceBuilderObjectViewFilterColumn.
+						getObjectViewFilterColumnId();
+				objectFieldName =
+					serviceBuilderObjectViewFilterColumn.getObjectFieldName();
 			}
 		};
 	}
