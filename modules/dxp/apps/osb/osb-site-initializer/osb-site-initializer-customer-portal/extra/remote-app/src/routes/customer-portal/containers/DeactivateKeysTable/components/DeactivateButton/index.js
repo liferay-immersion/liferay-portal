@@ -16,7 +16,7 @@ import {useNavigate} from 'react-router-dom';
 import {useApplicationProvider} from '../../../../../../common/context/AppPropertiesProvider';
 import {putDeactivateKeys} from '../../../../../../common/services/liferay/rest/raysource/LicenseKeys';
 import {ALERT_DOWNLOAD_TYPE, STATUS_CODE} from '../../../../utils/constants';
-import ConfirmationMessageModal  from '../../../ActivationKeysTable/components/Deactivate/ConfirmationMessageModal';
+import ConfirmationMessageModal from '../../../ActivationKeysTable/components/Deactivate/ConfirmationMessageModal';
 import DeactivateKeysModal from '../../../ActivationKeysTable/components/Deactivate/Modal';
 
 const DeactivateButton = ({
