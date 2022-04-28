@@ -280,6 +280,11 @@ public class CountryResourceTest extends BaseCountryResourceTestCase {
 		return Country.toDTO(String.valueOf(apiCountry));
 	}
 
+	private void _addCountryA2AndA3(String a2, String a3) {
+		_countryA2s.add(StringUtil.toLowerCase(a2));
+		_countryA3s.add(StringUtil.toLowerCase(a3));
+	}
+
 	private int _getPageSize() {
 		return _countryA2s.size() + 10;
 	}
@@ -290,11 +295,6 @@ public class CountryResourceTest extends BaseCountryResourceTestCase {
 		return randomValue ->
 			StringUtil.isLowerCase(randomValue) &&
 			!existingValues.contains(randomValue);
-	}
-
-	private void _addCountryA2AndA3(String a2, String a3) {
-		_countryA2s.add(StringUtil.toLowerCase(a2));
-		_countryA3s.add(StringUtil.toLowerCase(a3));
 	}
 
 	private final List<String> _countryA2s = new ArrayList<>();
