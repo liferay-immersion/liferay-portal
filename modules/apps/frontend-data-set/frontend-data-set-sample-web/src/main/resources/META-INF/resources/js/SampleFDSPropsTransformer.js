@@ -18,6 +18,7 @@ import SampleCustomDataRenderer from './SampleCustomDataRenderer';
 
 export default function propsTransformer({
 	additionalProps: {greeting},
+	selectedItemsKey,
 	...otherProps
 }) {
 	return {
@@ -30,12 +31,15 @@ export default function propsTransformer({
 				alert(`${greeting} ${itemData.title}!`);
 			}
 		},
-		onBulkActionItemClick({action, selectedData: {items}}) {
+		onBulkActionItemClick({action, selectedData: {items, keyValues}}) {
 			if (action.data.id === 'sampleBulkAction') {
 				openModal({
-					bodyHTML: `<ul>${items
-						.map((item) => `<li>${item.id}#${item.title}</li>`)
-						.join('')}</ul>`,
+					bodyHTML: `
+						<ul>
+							${items.map((item) => `<li>${item.id}#${item.title}</li>`).join('')}
+						</ul>
+						<p>Item's values (${selectedItemsKey}): ${keyValues.join(', ')}</p>
+					`,
 					buttons: [
 						{
 							label: 'OK',
