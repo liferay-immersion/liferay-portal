@@ -16,6 +16,7 @@ import {useNavigate} from 'react-router-dom';
 import {useApplicationProvider} from '../../../../../../common/context/AppPropertiesProvider';
 import {putDeactivateKeys} from '../../../../../../common/services/liferay/rest/raysource/LicenseKeys';
 import {ALERT_DOWNLOAD_TYPE, STATUS_CODE} from '../../../../utils/constants';
+import ConfirmationMessageModal  from '../../../ActivationKeysTable/components/Deactivate/ConfirmationMessageModal';
 import DeactivateKeysModal from '../../../ActivationKeysTable/components/Deactivate/Modal';
 
 const DeactivateButton = ({
@@ -30,6 +31,7 @@ const DeactivateButton = ({
 	const {licenseKeyDownloadURL} = useApplicationProvider();
 	const [isDeactivating, setIsDeactivating] = useState(false);
 	const [isVisibleModal, setIsVisibleModal] = useState(false);
+	const [alreadyDeactivated, setAlreadyDeactivated] = useState(false);
 	const {observer, onClose} = useModal({
 		onClose: () => {
 			setIsVisibleModal(false);
@@ -49,29 +51,42 @@ const DeactivateButton = ({
 
 		if (response.status === STATUS_CODE.successNoContent) {
 			setIsDeactivating(false);
-			setIsVisibleModal(false);
-			handleDeactivate();
+			setAlreadyDeactivated(true);
 
-			navigate(urlPreviousPage, {state: {deactivateKeyAlert: true}});
-
-			return setDeactivateKeysStatus(ALERT_DOWNLOAD_TYPE.success);
+			return;
 		}
 
 		setIsDeactivating(false);
 		setDeactivateKeysStatus(ALERT_DOWNLOAD_TYPE.danger);
 	};
 
+	const confirmKeyNoLongerVisible = () => {
+		setIsVisibleModal(false);
+		setAlreadyDeactivated(false);
+		handleDeactivate();
+
+		navigate(urlPreviousPage, {state: {deactivateKeyAlert: true}});
+
+		return setDeactivateKeysStatus(ALERT_DOWNLOAD_TYPE.success);
+	};
+
 	return (
 		<>
-			{isVisibleModal && (
-				<DeactivateKeysModal
-					deactivateKeysConfirm={deactivateKeysConfirm}
-					deactivateKeysStatus={deactivateKeysStatus}
-					isDeactivating={isDeactivating}
-					observer={observer}
-					onClose={onClose}
-				/>
-			)}
+			{isVisibleModal &&
+				(alreadyDeactivated ? (
+					<ConfirmationMessageModal
+						confirmKeyNoLongerVisible={confirmKeyNoLongerVisible}
+						observer={observer}
+					/>
+				) : (
+					<DeactivateKeysModal
+						deactivateKeysConfirm={deactivateKeysConfirm}
+						deactivateKeysStatus={deactivateKeysStatus}
+						isDeactivating={isDeactivating}
+						observer={observer}
+						onClose={onClose}
+					/>
+				))}
 
 			<ClayButton
 				className="mx-2 px-3 py-2"
