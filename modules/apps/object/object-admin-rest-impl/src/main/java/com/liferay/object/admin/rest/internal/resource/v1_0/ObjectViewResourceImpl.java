@@ -16,6 +16,7 @@ package com.liferay.object.admin.rest.internal.resource.v1_0;
 
 import com.liferay.object.admin.rest.dto.v1_0.ObjectView;
 import com.liferay.object.admin.rest.dto.v1_0.ObjectViewColumn;
+import com.liferay.object.admin.rest.dto.v1_0.ObjectViewFilterColumn;
 import com.liferay.object.admin.rest.dto.v1_0.ObjectViewSortColumn;
 import com.liferay.object.admin.rest.internal.dto.v1_0.util.ObjectViewUtil;
 import com.liferay.object.admin.rest.resource.v1_0.ObjectViewResource;
@@ -23,6 +24,7 @@ import com.liferay.object.admin.rest.resource.v1_0.util.NameMapUtil;
 import com.liferay.object.model.ObjectDefinition;
 import com.liferay.object.service.ObjectViewService;
 import com.liferay.object.service.persistence.ObjectViewColumnPersistence;
+import com.liferay.object.service.persistence.ObjectViewFilterColumnPersistence;
 import com.liferay.object.service.persistence.ObjectViewSortColumnPersistence;
 import com.liferay.portal.kernel.search.Field;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
@@ -105,6 +107,9 @@ public class ObjectViewResourceImpl extends BaseObjectViewResourceImpl {
 					objectView.getObjectViewColumns(),
 					this::_toObjectViewColumn),
 				transformToList(
+					objectView.getObjectViewFilterColumns(),
+					this::_toObjectViewFilterColumn),
+				transformToList(
 					objectView.getObjectViewSortColumns(),
 					this::_toObjectViewSortColumn)));
 	}
@@ -119,6 +124,7 @@ public class ObjectViewResourceImpl extends BaseObjectViewResourceImpl {
 				objectView.getObjectDefinitionId(), false,
 				NameMapUtil.copy(objectView.getNameMap()),
 				objectView.getObjectViewColumns(),
+				objectView.getObjectViewFilterColumns(),
 				objectView.getObjectViewSortColumns()));
 	}
 
@@ -133,6 +139,9 @@ public class ObjectViewResourceImpl extends BaseObjectViewResourceImpl {
 				transformToList(
 					objectView.getObjectViewColumns(),
 					this::_toObjectViewColumn),
+				transformToList(
+					objectView.getObjectViewFilterColumns(),
+					this::_toObjectViewFilterColumn),
 				transformToList(
 					objectView.getObjectViewSortColumns(),
 					this::_toObjectViewSortColumn)));
@@ -187,6 +196,24 @@ public class ObjectViewResourceImpl extends BaseObjectViewResourceImpl {
 		return serviceBuilderObjectViewColumn;
 	}
 
+	private com.liferay.object.model.ObjectViewFilterColumn
+		_toObjectViewFilterColumn(
+			ObjectViewFilterColumn objectViewFilterColumn) {
+
+		com.liferay.object.model.ObjectViewFilterColumn
+			serviceBuilderObjectViewFilterColumn =
+				_objectViewFilterColumnPersistence.create(0L);
+
+		serviceBuilderObjectViewFilterColumn.setDefinition(
+			objectViewFilterColumn.getDefinition());
+		serviceBuilderObjectViewFilterColumn.setFilterType(
+			objectViewFilterColumn.getFilterTypeAsString());
+		serviceBuilderObjectViewFilterColumn.setObjectFieldName(
+			objectViewFilterColumn.getObjectFieldName());
+
+		return serviceBuilderObjectViewFilterColumn;
+	}
+
 	private com.liferay.object.model.ObjectViewSortColumn
 		_toObjectViewSortColumn(ObjectViewSortColumn objectViewSortColumn) {
 
@@ -206,6 +233,10 @@ public class ObjectViewResourceImpl extends BaseObjectViewResourceImpl {
 
 	@Reference
 	private ObjectViewColumnPersistence _objectViewColumnPersistence;
+
+	@Reference
+	private ObjectViewFilterColumnPersistence
+		_objectViewFilterColumnPersistence;
 
 	@Reference
 	private ObjectViewService _objectViewService;
