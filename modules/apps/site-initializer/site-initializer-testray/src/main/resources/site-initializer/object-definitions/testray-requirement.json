@@ -12,12 +12,6 @@
 				"en_US": "Key"
 			},
 			"name": "key",
-            "objectFieldSettings": [
-                {
-                    "name": "showCounter",
-                    "value": "false"
-                }
-            ],
 			"required": false,
 			"type": "String"
 		},
@@ -29,12 +23,6 @@
 				"en_US": "Summary"
 			},
 			"name": "summary",
-            "objectFieldSettings": [
-                {
-                    "name": "showCounter",
-                    "value": "false"
-                }
-            ],
 			"required": false,
 			"type": "String"
 		},
@@ -46,12 +34,6 @@
 				"en_US": "Components"
 			},
 			"name": "components",
-            "objectFieldSettings": [
-                {
-                    "name": "showCounter",
-                    "value": "false"
-                }
-            ],
 			"required": false,
 			"type": "String"
 		},
@@ -63,12 +45,6 @@
 				"en_US": "Link Title"
 			},
 			"name": "linkTitle",
-            "objectFieldSettings": [
-                {
-                    "name": "showCounter",
-                    "value": "false"
-                }
-            ],
 			"required": false,
 			"type": "String"
 		},
@@ -80,12 +56,6 @@
 				"en_US": "Link URL"
 			},
 			"name": "linkURL",
-            "objectFieldSettings": [
-                {
-                    "name": "showCounter",
-                    "value": "false"
-                }
-            ],
 			"required": false,
 			"type": "String"
 		},
@@ -97,14 +67,8 @@
 				"en_US": "Description"
 			},
 			"name": "description",
-            "objectFieldSettings": [
-                {
-                    "name": "showCounter",
-                    "value": "false"
-                }
-            ],
-            "required": false,
-            "type": "Clob"
+			"required": false,
+			"type": "Clob"
 		},
 		{
 			"DBType": "String",
@@ -114,12 +78,6 @@
 				"en_US": "Description Type"
 			},
 			"name": "descriptionType",
-            "objectFieldSettings": [
-                {
-                    "name": "showCounter",
-                    "value": "false"
-                }
-            ],
 			"required": false,
 			"type": "String"
 		}

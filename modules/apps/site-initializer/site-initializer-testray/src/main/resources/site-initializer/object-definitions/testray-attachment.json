@@ -14,12 +14,6 @@
 				"en_US": "Name"
 			},
 			"name": "name",
-            "objectFieldSettings": [
-                {
-                    "name": "showCounter",
-                    "value": "false"
-                }
-            ],
 			"required": true,
 			"type": "String"
 		},
@@ -33,14 +27,8 @@
 				"en_US": "URL"
 			},
 			"name": "url",
-            "objectFieldSettings": [
-                {
-                    "name": "showCounter",
-                    "value": "false"
-                }
-            ],
-            "required": false,
-            "type": "Clob"
+			"required": false,
+			"type": "Clob"
 		},
 		{
 			"DBType": "Clob",
@@ -52,14 +40,8 @@
 				"en_US": "Value"
 			},
 			"name": "value",
-            "objectFieldSettings": [
-                {
-                    "name": "showCounter",
-                    "value": "false"
-                }
-            ],
-            "required": false,
-            "type": "Clob"
+			"required": false,
+			"type": "Clob"
 		}
 	],
 	"pluralLabel": {

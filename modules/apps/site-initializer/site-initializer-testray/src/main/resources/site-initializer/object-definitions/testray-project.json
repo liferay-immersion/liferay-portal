@@ -13,12 +13,6 @@
 				"en_US": "Name"
 			},
 			"name": "name",
-            "objectFieldSettings": [
-                {
-                    "name": "showCounter",
-                    "value": "false"
-                }
-            ],
 			"required": true,
 			"type": "String"
 		},
@@ -30,12 +24,6 @@
 				"en_US": "Description"
 			},
 			"name": "description",
-            "objectFieldSettings": [
-                {
-                    "name": "showCounter",
-                    "value": "false"
-                }
-            ],
 			"required": false,
 			"type": "String"
 		}
