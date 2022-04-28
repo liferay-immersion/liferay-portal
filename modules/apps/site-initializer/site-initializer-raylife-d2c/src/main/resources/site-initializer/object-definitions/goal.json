@@ -56,14 +56,8 @@
 			},
 			"listTypeDefinitionId": 0,
 			"name": "product",
-            "objectFieldSettings": [
-                {
-                    "name": "showCounter",
-                    "value": "false"
-                }
-            ],
-            "required": false,
-            "type": "String"
+			"required": false,
+			"type": "String"
 		}
 	],
 	"panelAppOrder": "100",

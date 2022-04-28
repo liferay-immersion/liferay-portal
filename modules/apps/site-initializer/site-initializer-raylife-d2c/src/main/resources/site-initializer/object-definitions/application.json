@@ -38,8 +38,8 @@
 			},
 			"listTypeDefinitionId": "[$LIST_TYPE_DEFINITION_ID:ApplicationStatus$]",
 			"name": "applicationStatus",
-            "required": false,
-            "type": "String"
+			"required": false,
+			"type": "String"
 		},
 		{
 			"DBType": "String",
@@ -50,14 +50,8 @@
 				"en_US": "Address Apt"
 			},
 			"name": "addressApt",
-            "objectFieldSettings": [
-                {
-                    "name": "showCounter",
-                    "value": "false"
-                }
-            ],
-            "required": false,
-            "type": "String"
+			"required": false,
+			"type": "String"
 		},
 		{
 			"DBType": "String",
@@ -68,14 +62,8 @@
 				"en_US": "Address"
 			},
 			"name": "address",
-            "objectFieldSettings": [
-                {
-                    "name": "showCounter",
-                    "value": "false"
-                }
-            ],
-            "required": false,
-            "type": "String"
+			"required": false,
+			"type": "String"
 		},
 		{
 			"DBType": "String",
@@ -86,14 +74,8 @@
 				"en_US": "Annual Payroll For Employees"
 			},
 			"name": "annualPayrollForEmployees",
-            "objectFieldSettings": [
-                {
-                    "name": "showCounter",
-                    "value": "false"
-                }
-            ],
-            "required": false,
-            "type": "String"
+			"required": false,
+			"type": "String"
 		},
 		{
 			"DBType": "String",
@@ -104,14 +86,8 @@
 				"en_US": "Annual Payroll For Owner"
 			},
 			"name": "annualPayrollForOwner",
-            "objectFieldSettings": [
-                {
-                    "name": "showCounter",
-                    "value": "false"
-                }
-            ],
-            "required": false,
-            "type": "String"
+			"required": false,
+			"type": "String"
 		},
 		{
 			"DBType": "String",
@@ -122,14 +98,8 @@
 				"en_US": "Application Id"
 			},
 			"name": "applicationId",
-            "objectFieldSettings": [
-                {
-                    "name": "showCounter",
-                    "value": "false"
-                }
-            ],
-            "required": false,
-            "type": "String"
+			"required": false,
+			"type": "String"
 		},
 		{
 			"DBType": "String",
@@ -140,14 +110,8 @@
 				"en_US": "Building Square Feet Occupied"
 			},
 			"name": "buildingSquareFeetOccupied",
-            "objectFieldSettings": [
-                {
-                    "name": "showCounter",
-                    "value": "false"
-                }
-            ],
-            "required": false,
-            "type": "String"
+			"required": false,
+			"type": "String"
 		},
 		{
 			"DBType": "String",
@@ -158,14 +122,8 @@
 				"en_US": "Business Category Id"
 			},
 			"name": "businessCategoryId",
-            "objectFieldSettings": [
-                {
-                    "name": "showCounter",
-                    "value": "false"
-                }
-            ],
-            "required": false,
-            "type": "String"
+			"required": false,
+			"type": "String"
 		},
 		{
 			"DBType": "String",
@@ -176,14 +134,8 @@
 				"en_US": "Business Operates Year Round"
 			},
 			"name": "businessOperatesYearRound",
-            "objectFieldSettings": [
-                {
-                    "name": "showCounter",
-                    "value": "false"
-                }
-            ],
-            "required": false,
-            "type": "String"
+			"required": false,
+			"type": "String"
 		},
 		{
 			"DBType": "String",
@@ -194,14 +146,8 @@
 				"en_US": "Business Search"
 			},
 			"name": "businessSearch",
-            "objectFieldSettings": [
-                {
-                    "name": "showCounter",
-                    "value": "false"
-                }
-            ],
-            "required": false,
-            "type": "String"
+			"required": false,
+			"type": "String"
 		},
 		{
 			"DBType": "String",
@@ -212,14 +158,8 @@
 				"en_US": "City"
 			},
 			"name": "city",
-            "objectFieldSettings": [
-                {
-                    "name": "showCounter",
-                    "value": "false"
-                }
-            ],
-            "required": false,
-            "type": "String"
+			"required": false,
+			"type": "String"
 		},
 		{
 			"DBType": "String",
@@ -230,14 +170,8 @@
 				"en_US": "Do Own Building at Address"
 			},
 			"name": "doOwnBuildingAtAddress",
-            "objectFieldSettings": [
-                {
-                    "name": "showCounter",
-                    "value": "false"
-                }
-            ],
-            "required": false,
-            "type": "String"
+			"required": false,
+			"type": "String"
 		},
 		{
 			"DBType": "String",
@@ -248,14 +182,8 @@
 				"en_US": "Email"
 			},
 			"name": "email",
-            "objectFieldSettings": [
-                {
-                    "name": "showCounter",
-                    "value": "false"
-                }
-            ],
-            "required": false,
-            "type": "String"
+			"required": false,
+			"type": "String"
 		},
 		{
 			"DBType": "String",
@@ -266,14 +194,8 @@
 				"en_US": "Estimated Annual Gross Revenue"
 			},
 			"name": "estimatedAnnualGrossRevenue",
-            "objectFieldSettings": [
-                {
-                    "name": "showCounter",
-                    "value": "false"
-                }
-            ],
-            "required": false,
-            "type": "String"
+			"required": false,
+			"type": "String"
 		},
 		{
 			"DBType": "String",
@@ -284,14 +206,8 @@
 				"en_US": "Fein"
 			},
 			"name": "fein",
-            "objectFieldSettings": [
-                {
-                    "name": "showCounter",
-                    "value": "false"
-                }
-            ],
-            "required": false,
-            "type": "String"
+			"required": false,
+			"type": "String"
 		},
 		{
 			"DBType": "String",
@@ -302,14 +218,8 @@
 				"en_US": "First name"
 			},
 			"name": "firstName",
-            "objectFieldSettings": [
-                {
-                    "name": "showCounter",
-                    "value": "false"
-                }
-            ],
-            "required": false,
-            "type": "String"
+			"required": false,
+			"type": "String"
 		},
 		{
 			"DBType": "String",
@@ -320,14 +230,8 @@
 				"en_US": "Has Auto Policy"
 			},
 			"name": "hasAutoPolicy",
-            "objectFieldSettings": [
-                {
-                    "name": "showCounter",
-                    "value": "false"
-                }
-            ],
-            "required": false,
-            "type": "String"
+			"required": false,
+			"type": "String"
 		},
 		{
 			"DBType": "String",
@@ -338,14 +242,8 @@
 				"en_US": "Has Fein"
 			},
 			"name": "hasFein",
-            "objectFieldSettings": [
-                {
-                    "name": "showCounter",
-                    "value": "false"
-                }
-            ],
-            "required": false,
-            "type": "String"
+			"required": false,
+			"type": "String"
 		},
 		{
 			"DBType": "String",
@@ -356,14 +254,8 @@
 				"en_US": "Has SellProductsUnderOwnBrand"
 			},
 			"name": "hasSellProductsUnderOwnBrand",
-            "objectFieldSettings": [
-                {
-                    "name": "showCounter",
-                    "value": "false"
-                }
-            ],
-            "required": false,
-            "type": "String"
+			"required": false,
+			"type": "String"
 		},
 		{
 			"DBType": "String",
@@ -374,14 +266,8 @@
 				"en_US": "Has StoredCustomerInformation"
 			},
 			"name": "hasStoredCustomerInformation",
-            "objectFieldSettings": [
-                {
-                    "name": "showCounter",
-                    "value": "false"
-                }
-            ],
-            "required": false,
-            "type": "String"
+			"required": false,
+			"type": "String"
 		},
 		{
 			"DBType": "String",
@@ -392,14 +278,8 @@
 				"en_US": "Is Primary Business Location"
 			},
 			"name": "isPrimaryBusinessLocation",
-            "objectFieldSettings": [
-                {
-                    "name": "showCounter",
-                    "value": "false"
-                }
-            ],
-            "required": false,
-            "type": "String"
+			"required": false,
+			"type": "String"
 		},
 		{
 			"DBType": "String",
@@ -410,14 +290,8 @@
 				"en_US": "Is There Diving Boards"
 			},
 			"name": "isThereDivingBoards",
-            "objectFieldSettings": [
-                {
-                    "name": "showCounter",
-                    "value": "false"
-                }
-            ],
-            "required": false,
-            "type": "String"
+			"required": false,
+			"type": "String"
 		},
 		{
 			"DBType": "String",
@@ -428,14 +302,8 @@
 				"en_US": "Is There Swimming"
 			},
 			"name": "isThereSwimming",
-            "objectFieldSettings": [
-                {
-                    "name": "showCounter",
-                    "value": "false"
-                }
-            ],
-            "required": false,
-            "type": "String"
+			"required": false,
+			"type": "String"
 		},
 		{
 			"DBType": "String",
@@ -446,14 +314,8 @@
 				"en_US": "Issues"
 			},
 			"name": "issues",
-            "objectFieldSettings": [
-                {
-                    "name": "showCounter",
-                    "value": "false"
-                }
-            ],
-            "required": false,
-            "type": "String"
+			"required": false,
+			"type": "String"
 		},
 		{
 			"DBType": "String",
@@ -464,14 +326,8 @@
 				"en_US": "Legal Entity"
 			},
 			"name": "legalEntity",
-            "objectFieldSettings": [
-                {
-                    "name": "showCounter",
-                    "value": "false"
-                }
-            ],
-            "required": false,
-            "type": "String"
+			"required": false,
+			"type": "String"
 		},
 		{
 			"DBType": "String",
@@ -482,14 +338,8 @@
 				"en_US": "Naics"
 			},
 			"name": "naics",
-            "objectFieldSettings": [
-                {
-                    "name": "showCounter",
-                    "value": "false"
-                }
-            ],
-            "required": false,
-            "type": "String"
+			"required": false,
+			"type": "String"
 		},
 		{
 			"DBType": "String",
@@ -500,14 +350,8 @@
 				"en_US": "Overall Sales"
 			},
 			"name": "overallSales",
-            "objectFieldSettings": [
-                {
-                    "name": "showCounter",
-                    "value": "false"
-                }
-            ],
-            "required": false,
-            "type": "String"
+			"required": false,
+			"type": "String"
 		},
 		{
 			"DBType": "String",
@@ -518,14 +362,8 @@
 				"en_US": "Part Time Employees"
 			},
 			"name": "partTimeEmployees",
-            "objectFieldSettings": [
-                {
-                    "name": "showCounter",
-                    "value": "false"
-                }
-            ],
-            "required": false,
-            "type": "String"
+			"required": false,
+			"type": "String"
 		},
 		{
 			"DBType": "String",
@@ -536,14 +374,8 @@
 				"en_US": "Phone"
 			},
 			"name": "phone",
-            "objectFieldSettings": [
-                {
-                    "name": "showCounter",
-                    "value": "false"
-                }
-            ],
-            "required": false,
-            "type": "String"
+			"required": false,
+			"type": "String"
 		},
 		{
 			"DBType": "String",
@@ -554,14 +386,8 @@
 				"en_US": "Product Quote"
 			},
 			"name": "productQuote",
-            "objectFieldSettings": [
-                {
-                    "name": "showCounter",
-                    "value": "false"
-                }
-            ],
-            "required": false,
-            "type": "String"
+			"required": false,
+			"type": "String"
 		},
 		{
 			"DBType": "String",
@@ -572,14 +398,8 @@
 				"en_US": "Product Category"
 			},
 			"name": "productCategory",
-            "objectFieldSettings": [
-                {
-                    "name": "showCounter",
-                    "value": "false"
-                }
-            ],
-            "required": false,
-            "type": "String"
+			"required": false,
+			"type": "String"
 		},
 		{
 			"DBType": "String",
@@ -590,14 +410,8 @@
 				"en_US": "Product"
 			},
 			"name": "product",
-            "objectFieldSettings": [
-                {
-                    "name": "showCounter",
-                    "value": "false"
-                }
-            ],
-            "required": false,
-            "type": "String"
+			"required": false,
+			"type": "String"
 		},
 		{
 			"DBType": "String",
@@ -608,14 +422,8 @@
 				"en_US": "Sales Merchandise"
 			},
 			"name": "salesMerchandise",
-            "objectFieldSettings": [
-                {
-                    "name": "showCounter",
-                    "value": "false"
-                }
-            ],
-            "required": false,
-            "type": "String"
+			"required": false,
+			"type": "String"
 		},
 		{
 			"DBType": "String",
@@ -626,14 +434,8 @@
 				"en_US": "Segment"
 			},
 			"name": "segment",
-            "objectFieldSettings": [
-                {
-                    "name": "showCounter",
-                    "value": "false"
-                }
-            ],
-            "required": false,
-            "type": "String"
+			"required": false,
+			"type": "String"
 		},
 		{
 			"DBType": "String",
@@ -644,14 +446,8 @@
 				"en_US": "Sources"
 			},
 			"name": "sources",
-            "objectFieldSettings": [
-                {
-                    "name": "showCounter",
-                    "value": "false"
-                }
-            ],
-            "required": false,
-            "type": "String"
+			"required": false,
+			"type": "String"
 		},
 		{
 			"DBType": "String",
@@ -662,14 +458,8 @@
 				"en_US": "Start Business at Year"
 			},
 			"name": "startBusinessAtYear",
-            "objectFieldSettings": [
-                {
-                    "name": "showCounter",
-                    "value": "false"
-                }
-            ],
-            "required": false,
-            "type": "String"
+			"required": false,
+			"type": "String"
 		},
 		{
 			"DBType": "String",
@@ -680,14 +470,8 @@
 				"en_US": "State"
 			},
 			"name": "state",
-            "objectFieldSettings": [
-                {
-                    "name": "showCounter",
-                    "value": "false"
-                }
-            ],
-            "required": false,
-            "type": "String"
+			"required": false,
+			"type": "String"
 		},
 		{
 			"DBType": "String",
@@ -698,14 +482,8 @@
 				"en_US": "Stories"
 			},
 			"name": "stories",
-            "objectFieldSettings": [
-                {
-                    "name": "showCounter",
-                    "value": "false"
-                }
-            ],
-            "required": false,
-            "type": "String"
+			"required": false,
+			"type": "String"
 		},
 		{
 			"DBType": "String",
@@ -716,14 +494,8 @@
 				"en_US": "Total Building Square Feet"
 			},
 			"name": "totalBuildingSquareFeet",
-            "objectFieldSettings": [
-                {
-                    "name": "showCounter",
-                    "value": "false"
-                }
-            ],
-            "required": false,
-            "type": "String"
+			"required": false,
+			"type": "String"
 		},
 		{
 			"DBType": "String",
@@ -734,14 +506,8 @@
 				"en_US": "Website"
 			},
 			"name": "website",
-            "objectFieldSettings": [
-                {
-                    "name": "showCounter",
-                    "value": "false"
-                }
-            ],
-            "required": false,
-            "type": "String"
+			"required": false,
+			"type": "String"
 		},
 		{
 			"DBType": "String",
@@ -752,14 +518,8 @@
 				"en_US": "Year Building"
 			},
 			"name": "yearBuilding",
-            "objectFieldSettings": [
-                {
-                    "name": "showCounter",
-                    "value": "false"
-                }
-            ],
-            "required": false,
-            "type": "String"
+			"required": false,
+			"type": "String"
 		},
 		{
 			"DBType": "String",
@@ -770,14 +530,8 @@
 				"en_US": "Years of Experience"
 			},
 			"name": "yearsOfExperience",
-            "objectFieldSettings": [
-                {
-                    "name": "showCounter",
-                    "value": "false"
-                }
-            ],
-            "required": false,
-            "type": "String"
+			"required": false,
+			"type": "String"
 		},
 		{
 			"DBType": "String",
@@ -788,14 +542,8 @@
 				"en_US": "Zip"
 			},
 			"name": "zip",
-            "objectFieldSettings": [
-                {
-                    "name": "showCounter",
-                    "value": "false"
-                }
-            ],
-            "required": false,
-            "type": "String"
+			"required": false,
+			"type": "String"
 		},
 		{
 			"DBType": "String",
@@ -806,14 +554,8 @@
 				"en_US": "Last name"
 			},
 			"name": "lastName",
-            "objectFieldSettings": [
-                {
-                    "name": "showCounter",
-                    "value": "false"
-                }
-            ],
-            "required": false,
-            "type": "String"
+			"required": false,
+			"type": "String"
 		}
 	],
 	"panelAppOrder": "100",
