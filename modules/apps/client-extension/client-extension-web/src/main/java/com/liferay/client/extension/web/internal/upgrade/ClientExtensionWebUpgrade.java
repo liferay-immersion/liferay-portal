@@ -99,7 +99,7 @@ public class ClientExtensionWebUpgrade implements UpgradeStepRegistrator {
 
 		try (Statement statement = connection.createStatement();
 			ResultSet resultSet = statement.executeQuery(
-				"select clientExtensionEntryId FROM ClientExtensionEntry ")) {
+				"select clientExtensionEntryId from ClientExtensionEntry ")) {
 
 			while (resultSet.next()) {
 				long clientExtensionEntryId = resultSet.getLong(
