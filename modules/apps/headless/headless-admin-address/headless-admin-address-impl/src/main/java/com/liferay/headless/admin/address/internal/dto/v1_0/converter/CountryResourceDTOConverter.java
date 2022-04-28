@@ -64,10 +64,6 @@ public class CountryResourceDTOConverter
 			com.liferay.portal.kernel.model.Country serviceBuilderCountry)
 		throws Exception {
 
-		Region[] regionsArray = TransformUtil.transformToArray(
-			_regionService.getRegions(serviceBuilderCountry.getCountryId()),
-			serviceBuilderRegion -> _toRegion(serviceBuilderRegion), Region.class);
-
 		return new Country() {
 			{
 				setA2(serviceBuilderCountry.getA2());
@@ -87,7 +83,12 @@ public class CountryResourceDTOConverter
 				setName(serviceBuilderCountry.getName());
 				setNumber(Integer.valueOf(serviceBuilderCountry.getNumber()));
 				setPosition(serviceBuilderCountry.getPosition());
-				setRegions(regionsArray);
+				setRegions(
+					TransformUtil.transformToArray(
+						_regionService.getRegions(
+							serviceBuilderCountry.getCountryId()),
+						serviceBuilderRegion -> _toRegion(serviceBuilderRegion),
+						Region.class));
 				setShippingAllowed(serviceBuilderCountry.getShippingAllowed());
 				setSubjectToVAT(serviceBuilderCountry.getSubjectToVAT());
 				setTitle_i18n(serviceBuilderCountry.getLanguageIdToTitleMap());
