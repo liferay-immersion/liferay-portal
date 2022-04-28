@@ -86,11 +86,14 @@ public class CountryResourceDTOConverter
 				title_i18n = serviceBuilderCountry.getLanguageIdToTitleMap();
 				zipRequired = serviceBuilderCountry.getZipRequired();
 
-				String idd = serviceBuilderCountry.getIdd();
+				setIdd(
+					() -> {
+						if (Validator.isNull(serviceBuilderCountry.getIdd())) {
+							return null;
+						}
 
-				if (Validator.isNotNull(idd)) {
-					setIdd(Integer.valueOf(idd));
-				}
+						return Integer.valueOf(serviceBuilderCountry.getIdd());
+					});
 			}
 		};
 	}
