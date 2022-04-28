@@ -91,6 +91,7 @@ openapi: 3.0.1
 paths:
     "/countries":
         get:
+            operationId: getCountriesPage
             parameters:
                 - in: query
                   name: active
@@ -128,6 +129,7 @@ paths:
             tags: ["Country"]
     "/countries/by-a2/{a2}":
         get:
+            operationId: getCountryByA2
             parameters:
                 - in: path
                   name: a2
@@ -147,6 +149,7 @@ paths:
             tags: ["Country"]
     "/countries/by-a3/{a3}":
         get:
+            operationId: getCountryByA3
             parameters:
                 - in: path
                   name: a3
@@ -166,6 +169,7 @@ paths:
             tags: ["Country"]
     "/countries/by-name/{name}":
         get:
+            operationId: getCountryByName
             parameters:
                 - in: path
                   name: name
@@ -184,6 +188,7 @@ paths:
             tags: ["Country"]
     "/countries/by-number/{number}":
         get:
+            operationId: getCountryByNumber
             parameters:
                 - in: path
                   name: number
@@ -202,6 +207,7 @@ paths:
             tags: ["Country"]
     "/countries/{countryId}":
         get:
+            operationId: getCountry
             parameters:
                 - in: path
                   name: countryId
