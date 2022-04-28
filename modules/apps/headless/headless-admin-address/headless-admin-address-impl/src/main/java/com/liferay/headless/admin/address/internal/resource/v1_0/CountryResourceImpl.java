@@ -55,14 +55,14 @@ public class CountryResourceImpl extends BaseCountryResourceImpl {
 		throws Exception {
 
 		BaseModelSearchResult<com.liferay.portal.kernel.model.Country>
-			countries = _countryService.searchCountries(
+			baseModelSearchResult = _countryService.searchCountries(
 				contextCompany.getCompanyId(), active, search,
 				pagination.getStartPosition(), pagination.getEndPosition(),
 				_toOrderByComparator(sorts));
 
 		return Page.of(
-			transform(countries.getBaseModels(), this::_toCountry), pagination,
-			countries.getLength());
+			transform(baseModelSearchResult.getBaseModels(), this::_toCountry),
+			pagination, baseModelSearchResult.getLength());
 	}
 
 	@Override
