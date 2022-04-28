@@ -45,8 +45,8 @@ public class ConfigYAML {
 		return _clientMavenGroupId;
 	}
 
-	public List<String> getDisabledBatchEntities() {
-		return _disabledBatchEntities;
+	public List<String> getDisabledBatchSchemaNames() {
+		return _disabledBatchSchemaNames;
 	}
 
 	public String getGraphQLNamespace() {
@@ -137,8 +137,8 @@ public class ConfigYAML {
 		_clientMavenGroupId = clientMavenGroupId;
 	}
 
-	public void setDisabledBatchEntities(List<String> disabledBatchEntities) {
-		_disabledBatchEntities = disabledBatchEntities;
+	public void setDisabledBatchSchemaNames(List<String> disabledBatchSchemaNames) {
+		_disabledBatchSchemaNames = disabledBatchSchemaNames;
 	}
 
 	public void setForceClientVersionDescription(
@@ -221,7 +221,7 @@ public class ConfigYAML {
 	private String _author;
 	private String _clientDir;
 	private String _clientMavenGroupId;
-	private List<String> _disabledBatchEntities;
+	private List<String> _disabledBatchSchemaNames;
 	private boolean _forceClientVersionDescription = true;
 	private boolean _forcePredictableContentApplicationXML = true;
 	private boolean _forcePredictableOperationId;

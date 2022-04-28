@@ -75,8 +75,8 @@ public class ResourceOpenAPIParser {
 			return Collections.emptyList();
 		}
 
-		List<String> disabledBatchEntities = Optional.ofNullable(
-			configYAML.getDisabledBatchEntities()
+		List<String> disabledBatchSchemaNames = Optional.ofNullable(
+			configYAML.getDisabledBatchSchemaNames()
 		).orElseGet(
 			ArrayList::new
 		);
@@ -125,7 +125,7 @@ public class ResourceOpenAPIParser {
 							javaMethodSignatures.add(javaMethodSignature);
 
 							if (configYAML.isGenerateBatch() &&
-								!disabledBatchEntities.contains(schemaName)) {
+								!disabledBatchSchemaNames.contains(schemaName)) {
 
 								_addBatchJavaMethodSignature(
 									javaMethodSignature, javaMethodSignatures);
