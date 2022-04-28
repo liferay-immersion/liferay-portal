@@ -66,13 +66,13 @@ public class CountryResourceDTOConverter
 
 		return new Country() {
 			{
-				setA2(serviceBuilderCountry.getA2());
-				setA3(serviceBuilderCountry.getA3());
-				setActive(serviceBuilderCountry.getActive());
-				setBillingAllowed(serviceBuilderCountry.getBillingAllowed());
-				setGroupFilterEnabled(
-					serviceBuilderCountry.getGroupFilterEnabled());
-				setId(serviceBuilderCountry.getCountryId());
+				a2 = serviceBuilderCountry.getA2();
+				a3 = serviceBuilderCountry.getA3();
+				active = serviceBuilderCountry.getActive();
+				billingAllowed = serviceBuilderCountry.getBillingAllowed();
+				groupFilterEnabled =
+					serviceBuilderCountry.getGroupFilterEnabled();
+				id = serviceBuilderCountry.getCountryId();
 
 				String idd = serviceBuilderCountry.getIdd();
 
@@ -80,19 +80,18 @@ public class CountryResourceDTOConverter
 					setIdd(Integer.valueOf(idd));
 				}
 
-				setName(serviceBuilderCountry.getName());
-				setNumber(Integer.valueOf(serviceBuilderCountry.getNumber()));
-				setPosition(serviceBuilderCountry.getPosition());
-				setRegions(
-					TransformUtil.transformToArray(
-						_regionService.getRegions(
-							serviceBuilderCountry.getCountryId()),
-						serviceBuilderRegion -> _toRegion(serviceBuilderRegion),
-						Region.class));
-				setShippingAllowed(serviceBuilderCountry.getShippingAllowed());
-				setSubjectToVAT(serviceBuilderCountry.getSubjectToVAT());
-				setTitle_i18n(serviceBuilderCountry.getLanguageIdToTitleMap());
-				setZipRequired(serviceBuilderCountry.getZipRequired());
+				name = serviceBuilderCountry.getName();
+				number = Integer.valueOf(serviceBuilderCountry.getNumber());
+				position = serviceBuilderCountry.getPosition();
+				regions = TransformUtil.transformToArray(
+					_regionService.getRegions(
+						serviceBuilderCountry.getCountryId()),
+					serviceBuilderRegion -> _toRegion(serviceBuilderRegion),
+					Region.class);
+				shippingAllowed = serviceBuilderCountry.getShippingAllowed();
+				subjectToVAT = serviceBuilderCountry.getSubjectToVAT();
+				title_i18n = serviceBuilderCountry.getLanguageIdToTitleMap();
+				zipRequired = serviceBuilderCountry.getZipRequired();
 			}
 		};
 	}
@@ -102,12 +101,12 @@ public class CountryResourceDTOConverter
 
 		return new Region() {
 			{
-				setActive(serviceBuilderRegion.getActive());
-				setCountryId(serviceBuilderRegion.getCountryId());
-				setId(serviceBuilderRegion.getRegionId());
-				setName(serviceBuilderRegion.getName());
-				setRegionCode(serviceBuilderRegion.getRegionCode());
-				setTitle_i18n(serviceBuilderRegion.getLanguageIdToTitleMap());
+				active = serviceBuilderRegion.getActive();
+				countryId = serviceBuilderRegion.getCountryId();
+				id = serviceBuilderRegion.getRegionId();
+				name = serviceBuilderRegion.getName();
+				regionCode = serviceBuilderRegion.getRegionCode();
+				title_i18n = serviceBuilderRegion.getLanguageIdToTitleMap();
 			}
 		};
 	}
