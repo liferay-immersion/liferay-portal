@@ -1323,19 +1323,19 @@ public class BundleSiteInitializer implements SiteInitializer {
 		KnowledgeBaseArticle knowledgeBaseArticle = _addKnowledgeBaseArticle(
 			folder, jsonObject, parentResourcePrimKey, serviceContext);
 
-		_addKnowledgeBaseEntries(
+		_addKnowledgeBaseObjects(
 			false, knowledgeBaseArticle.getId(), resourcePath, serviceContext);
 	}
 
 	private void _addKnowledgeBaseArticles(ServiceContext serviceContext)
 		throws Exception {
 
-		_addKnowledgeBaseEntries(
+		_addKnowledgeBaseObjects(
 			true, 0, "/site-initializer/knowledge-base-articles",
 			serviceContext);
 	}
 
-	private void _addKnowledgeBaseEntries(
+	private void _addKnowledgeBaseObjects(
 			boolean folder, long parentResourcePrimKey,
 			String parentResourcePath, ServiceContext serviceContext)
 		throws Exception {
@@ -1413,7 +1413,7 @@ public class BundleSiteInitializer implements SiteInitializer {
 		KnowledgeBaseFolder knowledgeBaseFolder = _addKnowledgeBaseFolder(
 			jsonObject, parentResourcePrimKey, serviceContext);
 
-		_addKnowledgeBaseEntries(
+		_addKnowledgeBaseObjects(
 			true, knowledgeBaseFolder.getId(), resourcePath, serviceContext);
 	}
 
