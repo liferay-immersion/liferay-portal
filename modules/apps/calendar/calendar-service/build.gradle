@@ -5,7 +5,7 @@ buildService {
 
 dependencies {
 	compileInclude group: "backport-util-concurrent", name: "backport-util-concurrent", version: "3.1"
-	compileInclude group: "com.liferay", name: "net.fortuna.ical4j", version: "1.0"
+	compileInclude group: "org.mnode.ical4j", name: "ical4j", version: "3.2.2"
 
 	compileOnly group: "com.liferay", name: "com.google.ical", version: "20110304"
 	compileOnly group: "com.liferay.portal", name: "com.liferay.portal.impl", version: "default"
