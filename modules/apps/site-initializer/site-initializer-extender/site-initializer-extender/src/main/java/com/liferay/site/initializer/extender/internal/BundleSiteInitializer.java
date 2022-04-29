@@ -1335,6 +1335,45 @@ public class BundleSiteInitializer implements SiteInitializer {
 			serviceContext);
 	}
 
+	private KnowledgeBaseFolder _addKnowledgeBaseFolder(
+			JSONObject jsonObject, long parentResourcePrimKey,
+			ServiceContext serviceContext)
+		throws Exception {
+
+		KnowledgeBaseFolderResource.Builder knowledgeBaseFolderResourceBuilder =
+			_knowledgeBaseFolderResourceFactory.create();
+
+		KnowledgeBaseFolderResource knowledgeBaseFolderResource =
+			knowledgeBaseFolderResourceBuilder.httpServletRequest(
+				serviceContext.getRequest()
+			).user(
+				serviceContext.fetchUser()
+			).build();
+
+		if (parentResourcePrimKey == 0) {
+			return knowledgeBaseFolderResource.postSiteKnowledgeBaseFolder(
+				serviceContext.getScopeGroupId(),
+				KnowledgeBaseFolder.toDTO(jsonObject.toString()));
+		}
+
+		return knowledgeBaseFolderResource.
+			postKnowledgeBaseFolderKnowledgeBaseFolder(
+				parentResourcePrimKey,
+				KnowledgeBaseFolder.toDTO(jsonObject.toString()));
+	}
+
+	private void _addKnowledgeBaseFolder(
+			JSONObject jsonObject, long parentResourcePrimKey,
+			String resourcePath, ServiceContext serviceContext)
+		throws Exception {
+
+		KnowledgeBaseFolder knowledgeBaseFolder = _addKnowledgeBaseFolder(
+			jsonObject, parentResourcePrimKey, serviceContext);
+
+		_addKnowledgeBaseObjects(
+			true, knowledgeBaseFolder.getId(), resourcePath, serviceContext);
+	}
+
 	private void _addKnowledgeBaseObjects(
 			boolean folder, long parentResourcePrimKey,
 			String parentResourcePath, ServiceContext serviceContext)
@@ -1376,45 +1415,6 @@ public class BundleSiteInitializer implements SiteInitializer {
 					serviceContext);
 			}
 		}
-	}
-
-	private KnowledgeBaseFolder _addKnowledgeBaseFolder(
-			JSONObject jsonObject, long parentResourcePrimKey,
-			ServiceContext serviceContext)
-		throws Exception {
-
-		KnowledgeBaseFolderResource.Builder knowledgeBaseFolderResourceBuilder =
-			_knowledgeBaseFolderResourceFactory.create();
-
-		KnowledgeBaseFolderResource knowledgeBaseFolderResource =
-			knowledgeBaseFolderResourceBuilder.httpServletRequest(
-				serviceContext.getRequest()
-			).user(
-				serviceContext.fetchUser()
-			).build();
-
-		if (parentResourcePrimKey == 0) {
-			return knowledgeBaseFolderResource.postSiteKnowledgeBaseFolder(
-				serviceContext.getScopeGroupId(),
-				KnowledgeBaseFolder.toDTO(jsonObject.toString()));
-		}
-
-		return knowledgeBaseFolderResource.
-			postKnowledgeBaseFolderKnowledgeBaseFolder(
-				parentResourcePrimKey,
-				KnowledgeBaseFolder.toDTO(jsonObject.toString()));
-	}
-
-	private void _addKnowledgeBaseFolder(
-			JSONObject jsonObject, long parentResourcePrimKey,
-			String resourcePath, ServiceContext serviceContext)
-		throws Exception {
-
-		KnowledgeBaseFolder knowledgeBaseFolder = _addKnowledgeBaseFolder(
-			jsonObject, parentResourcePrimKey, serviceContext);
-
-		_addKnowledgeBaseObjects(
-			true, knowledgeBaseFolder.getId(), resourcePath, serviceContext);
 	}
 
 	private Layout _addLayout(
