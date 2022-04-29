@@ -1283,8 +1283,8 @@ public class BundleSiteInitializer implements SiteInitializer {
 	}
 
 	private KnowledgeBaseArticle _addKnowledgeBaseArticle(
-			boolean folder, JSONObject jsonObject, long parentKnowledgeBaseObjectId,
-			ServiceContext serviceContext)
+			boolean folder, JSONObject jsonObject,
+			long parentKnowledgeBaseObjectId, ServiceContext serviceContext)
 		throws Exception {
 
 		KnowledgeBaseArticleResource.Builder
@@ -1316,8 +1316,9 @@ public class BundleSiteInitializer implements SiteInitializer {
 	}
 
 	private void _addKnowledgeBaseArticle(
-			boolean folder, JSONObject jsonObject, long parentKnowledgeBaseObjectId,
-			String resourcePath, ServiceContext serviceContext)
+			boolean folder, JSONObject jsonObject,
+			long parentKnowledgeBaseObjectId, String resourcePath,
+			ServiceContext serviceContext)
 		throws Exception {
 
 		KnowledgeBaseArticle knowledgeBaseArticle = _addKnowledgeBaseArticle(
