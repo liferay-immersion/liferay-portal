@@ -56,11 +56,12 @@ function BulkActions({
 	bulkActions,
 	fluid,
 	selectAllItems,
+	selectedItems,
 	selectedItemsKey,
 	selectedItemsValue,
 	total,
 }) {
-	const {actionParameterName, items, onBulkActionItemClick} = useContext(
+	const {actionParameterName, onBulkActionItemClick} = useContext(
 		DataSetContext
 	);
 
@@ -103,10 +104,6 @@ function BulkActions({
 			onBulkActionItemClick &&
 			typeof onBulkActionItemClick === 'function'
 		) {
-			const selectedItems = items.filter((item) =>
-				selectedItemsValue.includes(item[selectedItemsKey])
-			);
-
 			onBulkActionItemClick({
 				action: actionDefinition,
 				selectedData: {
