@@ -48,8 +48,8 @@ public class FDSSampleDisplayContext {
 		return ListUtil.fromArray(
 			new FDSActionDropdownItem(
 				"#", "document", "sampleBulkAction",
-				LanguageUtil.get(_fdsRequestHelper.getRequest(), "sampleBulkAction"),
-				null, null, null));
+				LanguageUtil.get(_fdsRequestHelper.getRequest(), "label"), null,
+				null, null));
 	}
 
 	public CreationMenu getCreationMenu() throws Exception {

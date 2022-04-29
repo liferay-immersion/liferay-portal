@@ -35,26 +35,26 @@ export default function propsTransformer({
 			if (action.data.id === 'sampleBulkAction') {
 				openModal({
 					bodyHTML: `
-						<ul>
-							${items.map((item) => `<li>${item.id}#${item.title}</li>`).join('')}
-						</ul>
-						<p>Item's values (${selectedItemsKey}): ${keyValues.join(', ')}</p>
+						<ol>
+							${items.map((item) => `<li>${item.title}</li>`).join('')}
+						</ol>
+
+						<p>
+							Key field: <code>${selectedItemsKey}</code> <br>
+							Values of key fields of selected items:
+							<ol>
+								${keyValues.map((keyValue) => `<li>${keyValue}</li>`).join('')}
+							</ol>
+						</p>
 					`,
 					buttons: [
 						{
 							label: 'OK',
-							onClick() {
-								Liferay.Util.getOpener().Liferay.fire(
-									'closeModal',
-									{
-										id: 'sampleBulkActionModal',
-									}
-								);
+							onClick: ({processClose}) => {
+								processClose();
 							},
 						},
 					],
-					center: true,
-					id: 'sampleBulkActionModal',
 					size: 'md',
 					title: 'You selected:',
 				});
