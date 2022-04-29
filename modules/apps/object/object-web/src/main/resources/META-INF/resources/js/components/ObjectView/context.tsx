@@ -34,7 +34,7 @@ interface IViewContextProps extends Array<TState | Function> {
 
 const ViewContext = createContext({} as IViewContextProps);
 
-const METADATAS = [
+export const METADATAS = [
 	{
 		businessType: 'Author',
 		checked: false,
