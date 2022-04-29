@@ -83,7 +83,7 @@ public class CISystemStatusReportUtil {
 							}
 							catch (Exception exception) {
 								System.out.println(
-									"Unable to get build result for testray " +
+									"Unable to get build result for Testray " +
 										"build: " + testrayBuild.getURL());
 								exception.printStackTrace();
 							}
