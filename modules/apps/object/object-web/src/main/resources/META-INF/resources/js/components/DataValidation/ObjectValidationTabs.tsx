@@ -12,22 +12,26 @@
  * details.
  */
 
+import ClayIcon from '@clayui/icon';
 import React, {ChangeEventHandler, useState} from 'react';
 
 import Card from '../Card/Card';
 import Editor from '../Editor/Editor';
+import Sidebar from '../Editor/Sidebar/Sidebar';
+import {useChannel} from '../Editor/Sidebar/useChannel';
 import InputLocalized from '../Form/InputLocalized/InputLocalized';
 import Select from '../Form/Select';
 import ObjectValidationFormBase, {
 	ObjectValidationErrors,
 } from '../ObjectValidationFormBase';
 
+import {useFeatureFlag} from 'data-engine-js-components-web';
+
 function BasicInfo({
 	componentLabel,
 	defaultLocale,
 	disabled,
 	errors,
-	handleChange,
 	locales,
 	setValues,
 	values,
@@ -57,10 +61,9 @@ function BasicInfo({
 				<ObjectValidationFormBase
 					disabled={disabled}
 					errors={errors}
-					handleChange={handleChange}
 					objectValidationTypes={[
 						{
-							label: 'Groovy',
+							label: values.engineLabel,
 						},
 					]}
 					setValues={setValues}
@@ -81,6 +84,7 @@ function Conditions({
 	disabled,
 	errors,
 	locales,
+	objectValidationRuleElements,
 	setValues,
 	values,
 }: IConditions) {
@@ -90,16 +94,48 @@ function Conditions({
 			symbol: string;
 		}
 	);
+	const inputChannel = useChannel();
+	const flags = useFeatureFlag();
 
 	return (
 		<>
-			<Card title={Liferay.Language.get('groovy')}>
-				<Editor
-					content={values.script}
-					disabled={disabled}
-					setValues={setValues}
-				/>
-			</Card>
+			<div className="lfr-objects__object-data-validation-alt-sheet">
+				<div className="lfr-objects__object-data-validation-title-container">
+					<h2 className="sheet-title">{values.engineLabel}</h2>
+					&nbsp;
+					{values.engine === 'ddm' && (
+						<span
+							data-tooltip-align="top"
+							title={Liferay.Language.get(
+								'use-the-expression-builder-to-define-the-format-of-a-valid-entry'
+							)}
+						>
+							<ClayIcon
+								className="lfr-objects__edit-object-field-tooltip-icon"
+								symbol="question-circle-full"
+							/>
+						</span>
+					)}
+				</div>
+
+				<div className="lfr-objects__object-data-validation-editor-container">
+					<Editor
+						content={values.script}
+						disabled={disabled}
+						inputChannel={inputChannel}
+						setValues={setValues}
+					/>
+
+					{flags['LPS-147651'] && (
+						<Sidebar
+							inputChannel={inputChannel}
+							objectValidationRuleElements={
+								objectValidationRuleElements
+							}
+						/>
+					)}
+				</div>
+			</div>
 
 			<Card title={Liferay.Language.get('error-message')}>
 				<InputLocalized
@@ -155,6 +191,7 @@ interface IConditions {
 	errors: ObjectValidationErrors;
 	handleChange: ChangeEventHandler<HTMLInputElement>;
 	locales: Array<any>;
+	objectValidationRuleElements: ObjectValidationRuleElement[];
 	setValues: (values: Partial<ObjectValidation>) => void;
 	values: Partial<ObjectValidation>;
 }
