@@ -24,27 +24,33 @@ export function DefaultFilterScreen() {
 
 	const {objectViewFilterColumns} = objectView;
 
+	const [editingObjectFieldName, setEditingObjectFieldName] = useState('');
 	const [editingFilter, setEditingFilter] = useState(false);
 
 	const [visibleModal, setVisibleModal] = useState(false);
 
 	const {observer, onClose} = useModal({
-		onClose: () => setVisibleModal(false),
+		onClose: () => {
+			setEditingFilter(false);
+			setVisibleModal(false);
+		},
 	});
 
 	return (
 		<>
 			<BuilderScreen
+				defaultFilter
 				emptyState={{
 					buttonText: Liferay.Language.get('new-default-filter'),
 					description: Liferay.Language.get(
-						'start-creating-a-filter-to-dipslay-a-specifc-data'
+						'start-creating-a-filter-to-display-specific-data'
 					),
 					title: Liferay.Language.get('no-filter-was-created-yet'),
 				}}
 				firstColumnHeader={Liferay.Language.get('filter-by')}
 				objectColumns={objectViewFilterColumns ?? []}
 				onEditing={setEditingFilter}
+				onEditingObjectFieldName={setEditingObjectFieldName}
 				onVisibleEditModal={setVisibleModal}
 				onVisibleModal={setVisibleModal}
 				secondColumnHeader={Liferay.Language.get('type')}
@@ -55,6 +61,7 @@ export function DefaultFilterScreen() {
 			{visibleModal && (
 				<ModalAddDefaultFilterColumn
 					editingFilter={editingFilter}
+					editingObjectFieldName={editingObjectFieldName}
 					header={Liferay.Language.get('new-default-filter')}
 					observer={observer}
 					onClose={onClose}

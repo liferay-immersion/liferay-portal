@@ -20,10 +20,15 @@ export declare type TWorkflowStatus = {
 	label: string;
 	value: string;
 };
+export declare type TLabelValueObject = {
+	label: string;
+	value: string;
+};
 export declare type TObjectField = {
 	businessType: string;
 	checked: boolean;
-	filtered?: boolean | undefined;
+	filtered?: boolean;
+	hasFilter?: boolean;
 	id: number;
 	indexed: boolean;
 	indexedAsKeyword: boolean;
@@ -39,12 +44,13 @@ export declare type TObjectColumn = {
 	filterBy?: string;
 	isDefaultSort?: boolean;
 	label: TName;
+	objectFieldBusinessType?: string;
 	objectFieldName: string;
 	priority?: number;
 	sortOrder?: string;
 	type?: string;
 	value?: string;
-	valueList?: string[];
+	valueList?: TLabelValueObject[];
 };
 export declare type TObjectViewColumn = {
 	fieldLabel: string;
@@ -61,13 +67,17 @@ export declare type TObjectViewSortColumn = {
 	sortOrder?: string;
 };
 export declare type TObjectViewFilterColumn = {
+	definition: {
+		[key: string]: string[];
+	};
 	fieldLabel: string;
 	filterBy: string;
+	filterType: string;
 	label: TName;
+	objectFieldBusinessType?: string;
 	objectFieldName: string;
-	type: string;
 	value?: string;
-	valueList?: string[];
+	valueList?: TLabelValueObject[];
 };
 export declare type TObjectView = {
 	defaultObjectView: boolean;
