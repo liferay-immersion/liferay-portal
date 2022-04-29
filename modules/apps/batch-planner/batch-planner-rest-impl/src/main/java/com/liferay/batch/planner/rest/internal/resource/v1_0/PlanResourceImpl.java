@@ -218,7 +218,7 @@ public class PlanResourceImpl extends BasePlanResourceImpl {
 		).header(
 			"content-disposition",
 			"attachment; filename=" + StringUtil.toLowerCase(dtoEntityName) +
-				"-import-template.csv"
+				"-" + StringUtil.randomString() + ".csv"
 		).build();
 	}
 
