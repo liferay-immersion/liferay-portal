@@ -30,6 +30,8 @@ import BuilderListItem from './BuilderListItem';
 import './BuilderScreen.scss';
 
 interface IProps {
+	defaultFilter?: boolean;
+	defaultSort?: boolean;
 	emptyState: {
 		buttonText: string;
 		description: string;
@@ -37,7 +39,6 @@ interface IProps {
 	};
 	firstColumnHeader: string;
 	hasDragAndDrop?: boolean;
-	isDefaultSort?: boolean;
 	objectColumns: TObjectColumn[];
 	onEditing?: (boolean: boolean) => void;
 	onEditingObjectFieldName?: (objectFieldName: string) => void;
@@ -49,10 +50,11 @@ interface IProps {
 }
 
 export function BuilderScreen({
+	defaultFilter,
+	defaultSort,
 	emptyState,
 	firstColumnHeader,
 	hasDragAndDrop,
-	isDefaultSort,
 	objectColumns,
 	onEditing,
 	onEditingObjectFieldName,
@@ -142,7 +144,7 @@ export function BuilderScreen({
 											</ClayList.ItemTitle>
 										</ClayList.ItemField>
 
-										{isDefaultSort && (
+										{defaultSort && (
 											<ClayList.ItemField
 												className="lfr-object__object-builder-screen-sort-order"
 												expand
@@ -222,7 +224,7 @@ export function BuilderScreen({
 									<DndProvider backend={HTML5Backend}>
 										<BuilderListItem
 											aliasColumnText={
-												isDefaultSort
+												defaultSort
 													? viewColumn.sortOrder ===
 													  'asc'
 														? Liferay.Language.get(
@@ -231,13 +233,16 @@ export function BuilderScreen({
 														: Liferay.Language.get(
 																'descending'
 														  )
+													: defaultFilter
+													? viewColumn.objectFieldBusinessType
 													: viewColumn.label[
 															defaultLanguageId
 													  ]
 											}
+											defaultFilter={defaultFilter}
+											defaultSort={defaultSort}
 											hasDragAndDrop={hasDragAndDrop}
 											index={index}
-											isDefaultSort={isDefaultSort}
 											label={viewColumn.fieldLabel}
 											objectFieldName={
 												viewColumn.objectFieldName

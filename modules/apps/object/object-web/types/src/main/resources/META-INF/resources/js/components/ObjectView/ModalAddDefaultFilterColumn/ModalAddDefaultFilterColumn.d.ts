@@ -16,12 +16,14 @@
 
 export declare function ModalAddDefaultFilterColumn({
 	editingFilter,
+	editingObjectFieldName,
 	header,
 	observer,
 	onClose,
 }: IProps): JSX.Element;
 interface IProps {
 	editingFilter: boolean;
+	editingObjectFieldName: string;
 	header: string;
 	observer: any;
 	onClose: () => void;
