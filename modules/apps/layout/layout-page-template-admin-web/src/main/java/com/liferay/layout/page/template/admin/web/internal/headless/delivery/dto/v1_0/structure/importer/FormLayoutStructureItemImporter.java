@@ -76,7 +76,8 @@ public class FormLayoutStructureItemImporter
 					contextSource)) {
 
 				formStyledLayoutStructureItem.setFormConfig(
-					FormStyledLayoutStructureItem.DISPLAY_PAGE_ITEM_TYPE);
+					FormStyledLayoutStructureItem.
+						FORM_CONFIG_DISPLAY_PAGE_ITEM_TYPE);
 			}
 			else {
 				long classNameId = _portal.getClassNameId(

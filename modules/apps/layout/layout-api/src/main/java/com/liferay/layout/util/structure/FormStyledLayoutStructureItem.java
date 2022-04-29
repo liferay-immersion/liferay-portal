@@ -25,9 +25,9 @@ import java.util.Objects;
  */
 public class FormStyledLayoutStructureItem extends StyledLayoutStructureItem {
 
-	public static final int DISPLAY_PAGE_ITEM_TYPE = 1;
+	public static final int FORM_CONFIG_DISPLAY_PAGE_ITEM_TYPE = 1;
 
-	public static final int OTHER_ITEM_TYPE = 2;
+	public static final int FORM_CONFIG_OTHER_ITEM_TYPE = 2;
 
 	public FormStyledLayoutStructureItem(String parentItemId) {
 		super(parentItemId);
@@ -139,7 +139,7 @@ public class FormStyledLayoutStructureItem extends StyledLayoutStructureItem {
 
 	private long _classNameId;
 	private long _classTypeId;
-	private int _formConfig = DISPLAY_PAGE_ITEM_TYPE;
+	private int _formConfig = FORM_CONFIG_DISPLAY_PAGE_ITEM_TYPE;
 	private boolean _indexed = true;
 
 }

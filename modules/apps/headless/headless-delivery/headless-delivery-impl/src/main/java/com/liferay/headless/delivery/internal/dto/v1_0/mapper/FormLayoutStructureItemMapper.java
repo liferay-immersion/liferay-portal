@@ -85,7 +85,7 @@ public class FormLayoutStructureItemMapper
 		FormStyledLayoutStructureItem formStyledLayoutStructureItem) {
 
 		if (formStyledLayoutStructureItem.getFormConfig() ==
-				FormStyledLayoutStructureItem.OTHER_ITEM_TYPE) {
+				FormStyledLayoutStructureItem.FORM_CONFIG_OTHER_ITEM_TYPE) {
 
 			return new ClassTypeReference() {
 				{
