@@ -61,6 +61,9 @@ import {getViewContentRenderer} from './views/index';
 const DEFAULT_PAGINATION_DELTA = 20;
 const DEFAULT_PAGINATION_PAGE_NUMBER = 1;
 
+const getSelectedItems = ({items, key, values}) =>
+	items?.filter((item) => values.includes(item[key])) || [];
+
 const DataSet = ({
 	actionParameterName,
 	bulkActions,
@@ -82,7 +85,7 @@ const DataSet = ({
 	onBulkActionItemClick,
 	overrideEmptyResultView,
 	pagination,
-	selectedItems,
+	selectedItems: initialSelectedItemsValues,
 	selectedItemsKey,
 	selectionType,
 	showManagementBar,
@@ -130,7 +133,14 @@ const DataSet = ({
 	);
 	const [searchParam, setSearchParam] = useState('');
 	const [selectedItemsValue, setSelectedItemsValue] = useState(
-		selectedItems || []
+		initialSelectedItemsValues || []
+	);
+	const [selectedItems, setSelectedItems] = useState(() =>
+		getSelectedItems({
+			items,
+			key: selectedItemsKey,
+			values: selectedItemsValue,
+		})
 	);
 	const [sorting, setSorting] = useState(sortingProp);
 	const [total, setTotal] = useState(0);
@@ -290,6 +300,17 @@ const DataSet = ({
 	}
 
 	useEffect(() => {
+		setSelectedItems(
+			getSelectedItems({
+				items,
+				key: selectedItemsKey,
+				values: selectedItemsValue,
+			})
+		);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [selectedItemsValue]);
+
+	useEffect(() => {
 		setComponentLoading(true);
 
 		requestComponent().then((component) => {
@@ -374,6 +395,7 @@ const DataSet = ({
 				selectAllItems={() =>
 					selectItems(items.map((item) => item[selectedItemsKey]))
 				}
+				selectedItems={selectedItems}
 				selectedItemsKey={selectedItemsKey}
 				selectedItemsValue={selectedItemsValue}
 				selectionType={selectionType}
@@ -636,7 +658,6 @@ const DataSet = ({
 				id,
 				inlineAddingSettings,
 				inlineEditingSettings,
-				items,
 				itemsActions,
 				itemsChanges,
 				loadData: refreshData,
@@ -728,6 +749,7 @@ DataSet.propTypes = {
 	formId: PropTypes.string,
 	formName: PropTypes.string,
 	id: PropTypes.string.isRequired,
+	initialSelectedItemsValues: PropTypes.array,
 	inlineAddingSettings: PropTypes.shape({
 		apiURL: PropTypes.string.isRequired,
 		defaultBodyContent: PropTypes.object,
@@ -754,7 +776,6 @@ DataSet.propTypes = {
 		),
 		initialDelta: PropTypes.number.isRequired,
 	}),
-	selectedItems: PropTypes.array,
 	selectedItemsKey: PropTypes.string,
 	selectionType: PropTypes.oneOf(['single', 'multiple']),
 	showManagementBar: PropTypes.bool,
