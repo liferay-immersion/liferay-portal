@@ -16,6 +16,7 @@ import ClayAlert from '@clayui/alert';
 import ClayButton from '@clayui/button';
 import ClayForm from '@clayui/form';
 import ClayModal, {ClayModalProvider, useModal} from '@clayui/modal';
+import {useFeatureFlag} from 'data-engine-js-components-web';
 import {fetch} from 'frontend-js-web';
 import React, {FormEvent, useEffect, useState} from 'react';
 
@@ -36,9 +37,13 @@ function ModalAddObjectValidation({
 	observer,
 	onClose,
 }: IModal) {
-	objectValidationRuleEngines = objectValidationRuleEngines.filter(
-		(type) => type.name === 'groovy'
-	);
+	const flags = useFeatureFlag();
+
+	if (!flags['LPS-147651']) {
+		objectValidationRuleEngines = objectValidationRuleEngines.filter(
+			(type) => type.name === 'groovy'
+		);
+	}
 
 	const [typeSelection, setTypeSelection] = useState<ObjectValidationType>({
 		label: '',
