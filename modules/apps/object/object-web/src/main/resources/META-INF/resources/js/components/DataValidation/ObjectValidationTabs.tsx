@@ -13,6 +13,7 @@
  */
 
 import ClayIcon from '@clayui/icon';
+import {useFeatureFlag} from 'data-engine-js-components-web';
 import React, {ChangeEventHandler, useState} from 'react';
 
 import Card from '../Card/Card';
@@ -25,7 +26,7 @@ import ObjectValidationFormBase, {
 	ObjectValidationErrors,
 } from '../ObjectValidationFormBase';
 
-import {useFeatureFlag} from 'data-engine-js-components-web';
+import '../Editor/Editor.scss';
 
 function BasicInfo({
 	componentLabel,
