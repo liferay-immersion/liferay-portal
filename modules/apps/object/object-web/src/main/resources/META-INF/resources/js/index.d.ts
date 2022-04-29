@@ -30,7 +30,6 @@ interface ObjectActionParameters {
 }
 
 type ObjectFieldBusinessType = 'Attachment' | 'LongText' | 'Picklist' | 'Text';
-
 interface ObjectFieldType {
 	businessType: ObjectFieldBusinessType;
 	dbType: string;
@@ -69,7 +68,8 @@ type ObjectFieldSettingName =
 interface ObjectValidation {
 	active: boolean;
 	description?: string;
-	engine: ObjectValidationType;
+	engine: string;
+	engineLabel: string;
 	errorLabel: LocalizedValue<string>;
 	id: number;
 	name: any;
@@ -82,11 +82,11 @@ interface ObjectValidationRuleElement {
 }
 
 interface ObjectValidationRuleElementItem {
-	content: string;
+	content?: string;
 	label: string;
 	tooltip: string;
 }
 
 interface ObjectValidationType {
-	label: string;
+	label?: string;
 }
