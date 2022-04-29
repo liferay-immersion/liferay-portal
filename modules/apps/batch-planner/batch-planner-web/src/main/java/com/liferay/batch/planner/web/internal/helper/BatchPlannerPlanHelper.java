@@ -101,9 +101,6 @@ public class BatchPlannerPlanHelper {
 			portletRequest, "externalType", "CSV");
 		String internalClassName = ParamUtil.getString(
 			portletRequest, "internalClassName");
-		String taskItemDelegateName = ParamUtil.getString(
-			portletRequest, "taskItemDelegateName");
-		boolean template = ParamUtil.getBoolean(portletRequest, "template");
 
 		int size = 0;
 
@@ -112,6 +109,10 @@ public class BatchPlannerPlanHelper {
 
 			size = (int)file.length();
 		}
+
+		String taskItemDelegateName = ParamUtil.getString(
+			portletRequest, "taskItemDelegateName");
+		boolean template = ParamUtil.getBoolean(portletRequest, "template");
 
 		BatchPlannerPlan batchPlannerPlan =
 			_batchPlannerPlanService.addBatchPlannerPlan(
