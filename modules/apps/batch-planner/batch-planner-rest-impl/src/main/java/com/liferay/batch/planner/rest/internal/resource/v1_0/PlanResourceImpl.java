@@ -217,8 +217,9 @@ public class PlanResourceImpl extends BasePlanResourceImpl {
 				headerSB.toString(), System.lineSeparator(), lineSB.toString())
 		).header(
 			"content-disposition",
-			"attachment; filename=" + StringUtil.toLowerCase(dtoEntityName) +
-				"-" + StringUtil.randomString() + ".csv"
+			StringBundler.concat(
+				"attachment; filename=", StringUtil.toLowerCase(dtoEntityName),
+				"-", StringUtil.randomString(), ".csv")
 		).build();
 	}
 
