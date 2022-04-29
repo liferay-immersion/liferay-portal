@@ -97,6 +97,7 @@ public class PoshiContext {
 		_filePaths.clear();
 		_functionFileNames.clear();
 		_functionLocatorCounts.clear();
+		_liferaySeleniumMethods.clear();
 		_macroFileNames.clear();
 		_namespacedClassCommandNamePropertiesMap.clear();
 		_namespaces.clear();
@@ -106,7 +107,6 @@ public class PoshiContext {
 		_poshiPropertyNames.clear();
 		_rootElements.clear();
 		_rootVarElements.clear();
-		_liferaySeleniumMethods.clear();
 		_testCaseDescriptions.clear();
 		_testCaseNamespacedClassCommandNames.clear();
 		_testCaseNamespacedClassNames.clear();
