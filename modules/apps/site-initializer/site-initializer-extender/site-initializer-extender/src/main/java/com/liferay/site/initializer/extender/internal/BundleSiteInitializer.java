@@ -1283,7 +1283,7 @@ public class BundleSiteInitializer implements SiteInitializer {
 	}
 
 	private KnowledgeBaseArticle _addKnowledgeBaseArticle(
-			boolean folder, JSONObject jsonObject, long parentResourcePrimKey,
+			boolean folder, JSONObject jsonObject, long parentKnowledgeBaseObjectId,
 			ServiceContext serviceContext)
 		throws Exception {
 
@@ -1299,11 +1299,11 @@ public class BundleSiteInitializer implements SiteInitializer {
 		if (!folder) {
 			return knowledgeBaseArticleResource.
 				postKnowledgeBaseArticleKnowledgeBaseArticle(
-					parentResourcePrimKey,
+					parentKnowledgeBaseObjectId,
 					KnowledgeBaseArticle.toDTO(jsonObject.toString()));
 		}
 
-		if (parentResourcePrimKey == 0) {
+		if (parentKnowledgeBaseObjectId == 0) {
 			return knowledgeBaseArticleResource.postSiteKnowledgeBaseArticle(
 				serviceContext.getScopeGroupId(),
 				KnowledgeBaseArticle.toDTO(jsonObject.toString()));
@@ -1311,17 +1311,17 @@ public class BundleSiteInitializer implements SiteInitializer {
 
 		return knowledgeBaseArticleResource.
 			postKnowledgeBaseFolderKnowledgeBaseArticle(
-				parentResourcePrimKey,
+				parentKnowledgeBaseObjectId,
 				KnowledgeBaseArticle.toDTO(jsonObject.toJSONString()));
 	}
 
 	private void _addKnowledgeBaseArticle(
-			boolean folder, JSONObject jsonObject, long parentResourcePrimKey,
+			boolean folder, JSONObject jsonObject, long parentKnowledgeBaseObjectId,
 			String resourcePath, ServiceContext serviceContext)
 		throws Exception {
 
 		KnowledgeBaseArticle knowledgeBaseArticle = _addKnowledgeBaseArticle(
-			folder, jsonObject, parentResourcePrimKey, serviceContext);
+			folder, jsonObject, parentKnowledgeBaseObjectId, serviceContext);
 
 		_addKnowledgeBaseObjects(
 			false, knowledgeBaseArticle.getId(), resourcePath, serviceContext);
@@ -1336,7 +1336,7 @@ public class BundleSiteInitializer implements SiteInitializer {
 	}
 
 	private KnowledgeBaseFolder _addKnowledgeBaseFolder(
-			JSONObject jsonObject, long parentResourcePrimKey,
+			JSONObject jsonObject, long parentKnowledgeBaseObjectId,
 			ServiceContext serviceContext)
 		throws Exception {
 
@@ -1350,7 +1350,7 @@ public class BundleSiteInitializer implements SiteInitializer {
 				serviceContext.fetchUser()
 			).build();
 
-		if (parentResourcePrimKey == 0) {
+		if (parentKnowledgeBaseObjectId == 0) {
 			return knowledgeBaseFolderResource.postSiteKnowledgeBaseFolder(
 				serviceContext.getScopeGroupId(),
 				KnowledgeBaseFolder.toDTO(jsonObject.toString()));
@@ -1358,24 +1358,24 @@ public class BundleSiteInitializer implements SiteInitializer {
 
 		return knowledgeBaseFolderResource.
 			postKnowledgeBaseFolderKnowledgeBaseFolder(
-				parentResourcePrimKey,
+				parentKnowledgeBaseObjectId,
 				KnowledgeBaseFolder.toDTO(jsonObject.toString()));
 	}
 
 	private void _addKnowledgeBaseFolder(
-			JSONObject jsonObject, long parentResourcePrimKey,
+			JSONObject jsonObject, long parentKnowledgeBaseObjectId,
 			String resourcePath, ServiceContext serviceContext)
 		throws Exception {
 
 		KnowledgeBaseFolder knowledgeBaseFolder = _addKnowledgeBaseFolder(
-			jsonObject, parentResourcePrimKey, serviceContext);
+			jsonObject, parentKnowledgeBaseObjectId, serviceContext);
 
 		_addKnowledgeBaseObjects(
 			true, knowledgeBaseFolder.getId(), resourcePath, serviceContext);
 	}
 
 	private void _addKnowledgeBaseObjects(
-			boolean folder, long parentResourcePrimKey,
+			boolean folder, long parentKnowledgeBaseObjectId,
 			String parentResourcePath, ServiceContext serviceContext)
 		throws Exception {
 
@@ -1402,14 +1402,14 @@ public class BundleSiteInitializer implements SiteInitializer {
 
 			if (jsonObject.has("articleBody")) {
 				_addKnowledgeBaseArticle(
-					folder, jsonObject, parentResourcePrimKey,
+					folder, jsonObject, parentKnowledgeBaseObjectId,
 					resourcePath.substring(
 						0, resourcePath.indexOf(".metadata.json")),
 					serviceContext);
 			}
 			else {
 				_addKnowledgeBaseFolder(
-					jsonObject, parentResourcePrimKey,
+					jsonObject, parentKnowledgeBaseObjectId,
 					resourcePath.substring(
 						0, resourcePath.indexOf(".metadata.json")),
 					serviceContext);
