@@ -846,10 +846,10 @@ public class PoshiRunnerExecutor {
 
 		String selenium = executeElement.attributeValue("selenium");
 
-		LiferaySeleniumMethod seleniumMethod = PoshiContext.getSeleniumMethod(
-			selenium);
+		LiferaySeleniumMethod liferaySeleniumMethod =
+			PoshiContext.getLiferaySeleniumMethod(selenium);
 
-		int parameterCount = seleniumMethod.getParameterCount();
+		int parameterCount = liferaySeleniumMethod.getParameterCount();
 
 		for (int i = 0; i < parameterCount; i++) {
 			String argument = executeElement.attributeValue(
@@ -857,7 +857,7 @@ public class PoshiRunnerExecutor {
 
 			if (argument == null) {
 				List<String> parameterNames =
-					seleniumMethod.getParameterNames();
+					liferaySeleniumMethod.getParameterNames();
 
 				String parameterName = parameterNames.get(i);
 
