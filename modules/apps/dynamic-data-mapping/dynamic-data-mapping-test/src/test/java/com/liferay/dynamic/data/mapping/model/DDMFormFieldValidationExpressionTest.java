@@ -19,8 +19,11 @@ import com.liferay.dynamic.data.mapping.test.util.DDMFormValuesTestUtil;
 import com.liferay.portal.json.JSONFactoryImpl;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONUtil;
+import com.liferay.portal.kernel.test.ReflectionTestUtil;
+import com.liferay.portal.kernel.util.DateFormatFactoryUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.test.rule.LiferayUnitTestRule;
+import com.liferay.portal.util.DateFormatFactoryImpl;
 
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -40,6 +43,7 @@ public class DDMFormFieldValidationExpressionTest {
 
 	@BeforeClass
 	public static void setUpClass() {
+		_setUpDateFormatFactory();
 		_setUpJSONFactoryUtil();
 	}
 
@@ -136,6 +140,12 @@ public class DDMFormFieldValidationExpressionTest {
 					)
 				).toString(),
 				null));
+	}
+
+	private static void _setUpDateFormatFactory() {
+		ReflectionTestUtil.setFieldValue(
+			DateFormatFactoryUtil.class, "_fastDateFormatFactory",
+			new DateFormatFactoryImpl());
 	}
 
 	private static void _setUpJSONFactoryUtil() {

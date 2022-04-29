@@ -45,6 +45,7 @@ import com.liferay.portal.kernel.resource.bundle.ResourceBundleLoaderUtil;
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.test.util.RandomTestUtil;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
+import com.liferay.portal.kernel.util.DateFormatFactoryUtil;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.Portal;
@@ -52,6 +53,7 @@ import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.ResourceBundleUtil;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.test.rule.LiferayUnitTestRule;
+import com.liferay.portal.util.DateFormatFactoryImpl;
 import com.liferay.portal.util.PropsImpl;
 
 import java.util.Collections;
@@ -86,6 +88,7 @@ public class AddFormInstanceRecordMVCCommandHelperTest {
 	public static void setUpClass() {
 		PropsUtil.setProps(new PropsImpl());
 
+		_setUpDateFormatFactory();
 		_setUpLanguageUtil();
 		_setUpResourceBundleUtil();
 	}
@@ -193,6 +196,12 @@ public class AddFormInstanceRecordMVCCommandHelperTest {
 			new UnlocalizedValue(_STRING_VALUE));
 
 		_assertDDMFormFields(required, new UnlocalizedValue(_STRING_VALUE));
+	}
+
+	private static void _setUpDateFormatFactory() {
+		ReflectionTestUtil.setFieldValue(
+			DateFormatFactoryUtil.class, "_fastDateFormatFactory",
+			new DateFormatFactoryImpl());
 	}
 
 	private static void _setUpLanguageUtil() {
