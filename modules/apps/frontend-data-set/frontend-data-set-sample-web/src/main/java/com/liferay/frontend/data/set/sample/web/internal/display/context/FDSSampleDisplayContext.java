@@ -47,8 +47,8 @@ public class FDSSampleDisplayContext {
 	public List<DropdownItem> getBulkActionDropdownItems() {
 		return ListUtil.fromArray(
 			new FDSActionDropdownItem(
-				"#", "trash", "sampleBulkAction",
-				LanguageUtil.get(_fdsRequestHelper.getRequest(), "delete"),
+				"#", "document", "sampleBulkAction",
+				LanguageUtil.get(_fdsRequestHelper.getRequest(), "sampleBulkAction"),
 				null, null, null));
 	}
 
