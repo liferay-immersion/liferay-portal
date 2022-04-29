@@ -81,7 +81,9 @@ function ModalAddObjectValidation({
 						[defaultLanguageId]: labelInput[defaultLanguageId],
 					},
 					script:
-						'<#-- Insert a Groovy Script to define your validation. -->',
+						typeSelection.name === 'groovy'
+							? '<#-- Insert a Groovy Script to define your validation. -->'
+							: '<#-- Add elements from the sidebar to define your validation. -->',
 				}),
 				headers,
 				method: 'POST',
