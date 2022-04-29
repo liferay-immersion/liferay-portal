@@ -91,13 +91,10 @@ public class OnDemandAdminTicketGeneratorImpl
 		throws PortalException {
 
 		User requestorUser = _userLocalService.getUser(userId);
-
+		String password = PwdGenerator.getPassword(20);
 		Date date = new Date();
-
 		Role role = _roleLocalService.getRole(
 			company.getCompanyId(), RoleConstants.ADMINISTRATOR);
-
-		String password = PwdGenerator.getPassword(20);
 
 		User user = _userLocalService.addUser(
 			requestorUser.getUserId(), company.getCompanyId(), false, password,
