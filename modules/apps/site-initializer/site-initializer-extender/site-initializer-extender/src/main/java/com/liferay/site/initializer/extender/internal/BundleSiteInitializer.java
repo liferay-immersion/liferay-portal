@@ -1283,7 +1283,7 @@ public class BundleSiteInitializer implements SiteInitializer {
 	}
 
 	private KnowledgeBaseArticle _addKnowledgeBaseArticle(
-			boolean folder, long parentResourcePrimKey, JSONObject jsonObject,
+			boolean folder, JSONObject jsonObject, long parentResourcePrimKey,
 			ServiceContext serviceContext)
 		throws Exception {
 
@@ -1316,12 +1316,12 @@ public class BundleSiteInitializer implements SiteInitializer {
 	}
 
 	private void _addKnowledgeBaseArticle(
-			boolean folder, long parentResourcePrimKey, String resourcePath,
-			JSONObject jsonObject, ServiceContext serviceContext)
+			boolean folder, JSONObject jsonObject, long parentResourcePrimKey,
+			String resourcePath, ServiceContext serviceContext)
 		throws Exception {
 
 		KnowledgeBaseArticle knowledgeBaseArticle = _addKnowledgeBaseArticle(
-			folder, parentResourcePrimKey, jsonObject, serviceContext);
+			folder, jsonObject, parentResourcePrimKey, serviceContext);
 
 		_addKnowledgeBaseEntries(
 			false, knowledgeBaseArticle.getId(), resourcePath, serviceContext);
@@ -1363,23 +1363,23 @@ public class BundleSiteInitializer implements SiteInitializer {
 
 			if (jsonObject.has("articleBody")) {
 				_addKnowledgeBaseArticle(
-					folder, parentResourcePrimKey,
+					folder, jsonObject, parentResourcePrimKey,
 					resourcePath.substring(
 						0, resourcePath.indexOf(".metadata.json")),
-					jsonObject, serviceContext);
+					serviceContext);
 			}
 			else {
 				_addKnowledgeBaseFolder(
-					parentResourcePrimKey,
+					jsonObject, parentResourcePrimKey,
 					resourcePath.substring(
 						0, resourcePath.indexOf(".metadata.json")),
-					jsonObject, serviceContext);
+					serviceContext);
 			}
 		}
 	}
 
 	private KnowledgeBaseFolder _addKnowledgeBaseFolder(
-			long parentResourcePrimKey, JSONObject jsonObject,
+			JSONObject jsonObject, long parentResourcePrimKey,
 			ServiceContext serviceContext)
 		throws Exception {
 
@@ -1406,12 +1406,12 @@ public class BundleSiteInitializer implements SiteInitializer {
 	}
 
 	private void _addKnowledgeBaseFolder(
-			long parentResourcePrimKey, String resourcePath,
-			JSONObject jsonObject, ServiceContext serviceContext)
+			JSONObject jsonObject, long parentResourcePrimKey,
+			String resourcePath, ServiceContext serviceContext)
 		throws Exception {
 
 		KnowledgeBaseFolder knowledgeBaseFolder = _addKnowledgeBaseFolder(
-			parentResourcePrimKey, jsonObject, serviceContext);
+			jsonObject, parentResourcePrimKey, serviceContext);
 
 		_addKnowledgeBaseEntries(
 			true, knowledgeBaseFolder.getId(), resourcePath, serviceContext);
