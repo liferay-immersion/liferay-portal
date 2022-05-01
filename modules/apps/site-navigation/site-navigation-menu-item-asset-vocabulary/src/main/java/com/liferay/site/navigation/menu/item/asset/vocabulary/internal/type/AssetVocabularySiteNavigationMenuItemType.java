@@ -484,12 +484,12 @@ public class AssetVocabularySiteNavigationMenuItemType
 			return Collections.emptyList();
 		}
 
+		List<SiteNavigationMenuItem> siteNavigationMenuItems =
+			new ArrayList<>();
+
 		SiteNavigationMenuItem vocabularySiteNavigationMenuItem =
 			_siteNavigationMenuItemLocalService.getSiteNavigationMenuItem(
 				vocabularySiteNavigationMenuItemId);
-
-		List<SiteNavigationMenuItem> siteNavigationMenuItems =
-			new ArrayList<>();
 
 		for (AssetCategory assetCategory :
 				_assetCategoryLocalService.getVocabularyCategories(
