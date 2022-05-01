@@ -838,12 +838,10 @@ public class FragmentsImporterImpl implements FragmentsImporter {
 			PortletFileRepositoryUtil.fetchPortletRepository(
 				groupId, FragmentPortletKeys.FRAGMENT);
 
-		long folderId = fragmentCollection.getResourcesFolderId();
-
 		if (repository != null) {
 			for (FileEntry fileEntry :
 					PortletFileRepositoryUtil.getPortletFileEntries(
-						groupId, folderId)) {
+						groupId, fragmentCollection.getResourcesFolderId())) {
 
 				if (zipEntryNames.containsKey(fileEntry.getFileName())) {
 					PortletFileRepositoryUtil.deletePortletFileEntry(
@@ -861,8 +859,9 @@ public class FragmentsImporterImpl implements FragmentsImporter {
 			PortletFileRepositoryUtil.addPortletFileEntry(
 				groupId, userId, FragmentCollection.class.getName(),
 				fragmentCollection.getFragmentCollectionId(),
-				FragmentPortletKeys.FRAGMENT, folderId, inputStream, fileName,
-				MimeTypesUtil.getContentType(fileName), false);
+				FragmentPortletKeys.FRAGMENT,
+				fragmentCollection.getResourcesFolderId(), inputStream,
+				fileName, MimeTypesUtil.getContentType(fileName), false);
 		}
 	}
 
