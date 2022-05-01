@@ -858,8 +858,8 @@ public class FragmentsImporterImpl implements FragmentsImporter {
 				fragmentCollection.getFragmentCollectionId(),
 				FragmentPortletKeys.FRAGMENT,
 				fragmentCollection.getResourcesFolderId(),
-				_getInputStream(zipFile, entry.getValue()),
-				fileName, MimeTypesUtil.getContentType(fileName), false);
+				_getInputStream(zipFile, entry.getValue()), fileName,
+				MimeTypesUtil.getContentType(fileName), false);
 		}
 	}
 
