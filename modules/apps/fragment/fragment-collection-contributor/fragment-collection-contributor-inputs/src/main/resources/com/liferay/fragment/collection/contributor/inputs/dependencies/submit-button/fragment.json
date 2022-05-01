@@ -3,6 +3,6 @@
 	"fragmentEntryKey": "submit-button",
 	"icon": "button",
 	"name": "submit-button",
-	"thumbnail": "submit-button.png",
+	"thumbnail": "submit_button.png",
 	"type": "component"
 }
