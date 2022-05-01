@@ -851,16 +851,14 @@ public class FragmentsImporterImpl implements FragmentsImporter {
 		}
 
 		for (Map.Entry<String, String> entry : zipEntryNames.entrySet()) {
-			InputStream inputStream = _getInputStream(
-				zipFile, entry.getValue());
-
 			String fileName = entry.getKey();
 
 			PortletFileRepositoryUtil.addPortletFileEntry(
 				groupId, userId, FragmentCollection.class.getName(),
 				fragmentCollection.getFragmentCollectionId(),
 				FragmentPortletKeys.FRAGMENT,
-				fragmentCollection.getResourcesFolderId(), inputStream,
+				fragmentCollection.getResourcesFolderId(),
+				_getInputStream(zipFile, entry.getValue()),
 				fileName, MimeTypesUtil.getContentType(fileName), false);
 		}
 	}
