@@ -179,9 +179,10 @@ public class ObjectDefinitionsValidationsDisplayContext
 	private List<Map<String, Object>> _createObjectValidationRuleElements(
 		String engine) {
 
-		List<Map<String, Object>> elements = new ArrayList<>();
+		List<Map<String, Object>> objectValidationRuleElements =
+		new ArrayList<>();
 
-		elements.add(
+		objectValidationRuleElements.add(
 			_createObjectValidationRuleElement(
 				ListUtil.toList(
 					ObjectFieldLocalServiceUtil.getObjectFields(
@@ -197,19 +198,19 @@ public class ObjectDefinitionsValidationsDisplayContext
 				"fields"));
 
 		if (engine.equals(ObjectValidationRuleConstants.ENGINE_TYPE_DDM)) {
-			elements.add(
+			objectValidationRuleElements.add(
 				_createObjectValidationRuleElement(
 					DDMExpressionOperator.getItems(
 						objectRequestHelper.getLocale()),
 					"operators"));
-			elements.add(
+			objectValidationRuleElements.add(
 				_createObjectValidationRuleElement(
 					DDMExpressionFunction.getItems(
 						objectRequestHelper.getLocale()),
 					"functions"));
 		}
 
-		return elements;
+		return objectValidationRuleElements;
 	}
 
 	private final ObjectValidationRuleEngineServicesTracker
