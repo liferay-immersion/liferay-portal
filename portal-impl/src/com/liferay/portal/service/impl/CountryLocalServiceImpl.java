@@ -67,24 +67,24 @@ public class CountryLocalServiceImpl extends CountryLocalServiceBaseImpl {
 
 		if (fetchCountryByA2(serviceContext.getCompanyId(), a2) != null) {
 			throw new DuplicateCountryException(
-				"a2 belongs to another country");
+				"A2 belongs to another country");
 		}
 
 		if (fetchCountryByA3(serviceContext.getCompanyId(), a3) != null) {
 			throw new DuplicateCountryException(
-				"a3 belongs to another country");
+				"A3 belongs to another country");
 		}
 
 		if (fetchCountryByName(serviceContext.getCompanyId(), name) != null) {
 			throw new DuplicateCountryException(
-				"name belongs to another country");
+				"Name belongs to another country");
 		}
 
 		if (fetchCountryByNumber(serviceContext.getCompanyId(), number) !=
 				null) {
 
 			throw new DuplicateCountryException(
-				"number belongs to another country");
+				"Number belongs to another country");
 		}
 
 		validate(a2, a3, idd, name, number);
@@ -319,19 +319,19 @@ public class CountryLocalServiceImpl extends CountryLocalServiceBaseImpl {
 		throws PortalException {
 
 		if (Validator.isNull(a2)) {
-			throw new CountryA2Exception("Missing a2");
+			throw new CountryA2Exception("Missing A2");
 		}
 
 		if (a2.length() != 2) {
-			throw new CountryA2Exception("a2 must be exactly two characters");
+			throw new CountryA2Exception("A2 must be exactly two characters");
 		}
 
 		if (Validator.isNull(a3)) {
-			throw new CountryA3Exception("Missing a3");
+			throw new CountryA3Exception("Missing A3");
 		}
 
 		if (a3.length() != 3) {
-			throw new CountryA3Exception("a3 must be exactly three characters");
+			throw new CountryA3Exception("A3 must be exactly three characters");
 		}
 
 		if (Validator.isNull(name)) {
