@@ -63,27 +63,27 @@ public class ApplicationsMenuLiferayLogoMVCResourceCommand
 			ResourceRequest resourceRequest, ResourceResponse resourceResponse)
 		throws Exception {
 
-		String imageDefaultLiferayLogo =
+		String applicationsMenuDefaultLiferayLogo =
 			_getApplicationsMenuDefaultLiferayLogo();
-
 		ClassLoader classLoader = ImageTool.class.getClassLoader();
-
 		InputStream inputStream = null;
 
 		try {
-			int index = imageDefaultLiferayLogo.indexOf(CharPool.SEMICOLON);
+			int index = applicationsMenuDefaultLiferayLogo.indexOf(
+				CharPool.SEMICOLON);
 
 			if (index == -1) {
 				inputStream = classLoader.getResourceAsStream(
-					imageDefaultLiferayLogo);
+					applicationsMenuDefaultLiferayLogo);
 			}
 			else {
-				String bundleIdString = imageDefaultLiferayLogo.substring(
-					0, index);
+				String bundleIdString =
+					applicationsMenuDefaultLiferayLogo.substring(0, index);
 
 				int bundleId = GetterUtil.getInteger(bundleIdString, -1);
 
-				String name = imageDefaultLiferayLogo.substring(index + 1);
+				String name = applicationsMenuDefaultLiferayLogo.substring(
+					index + 1);
 
 				if (bundleId < 0) {
 					if (_log.isDebugEnabled()) {
@@ -124,7 +124,8 @@ public class ApplicationsMenuLiferayLogoMVCResourceCommand
 		}
 
 		resourceResponse.setContentType(
-			MimeTypesUtil.getExtensionContentType(imageDefaultLiferayLogo));
+			MimeTypesUtil.getExtensionContentType(
+				applicationsMenuDefaultLiferayLogo));
 
 		PortletResponseUtil.write(resourceResponse, inputStream);
 	}
