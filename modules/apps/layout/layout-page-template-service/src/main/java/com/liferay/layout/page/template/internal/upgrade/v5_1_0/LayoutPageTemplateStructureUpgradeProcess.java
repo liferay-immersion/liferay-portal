@@ -45,16 +45,16 @@ public class LayoutPageTemplateStructureUpgradeProcess extends UpgradeProcess {
 	@Override
 	protected void doUpgrade() throws Exception {
 		try (PreparedStatement preparedStatement1 = connection.prepareStatement(
-				"select layoutPageTemplateStructureId, companyId, classPK," +
-					"userId from LayoutPageTemplateStructure")) {
+				"select layoutPageTemplateStructureId, companyId, userId," +
+					"classPK from LayoutPageTemplateStructure")) {
 
 			try (ResultSet resultSet = preparedStatement1.executeQuery()) {
 				while (resultSet.next()) {
 					long layoutPageTemplateStructureId = resultSet.getLong(
 						"layoutPageTemplateStructureId");
 					long companyId = resultSet.getLong("companyId");
-					long classPK = resultSet.getLong("classPK");
 					long userId = resultSet.getLong("userId");
+					long classPK = resultSet.getLong("classPK");
 
 					_addDefaultSegmentsExperience(
 						classPK, companyId, layoutPageTemplateStructureId,
