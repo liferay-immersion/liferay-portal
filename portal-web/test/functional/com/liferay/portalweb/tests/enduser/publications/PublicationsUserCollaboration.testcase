@@ -429,4 +429,32 @@ definition {
 		PublicationsPermissions.assertViewerPermissions(publicationName = "Publication Name");
 	}
 
+	@description = "This is a use case for LPS-150313."
+	@priority = "4"
+	test VerifyPublicationsUserPermissions {
+		ApplicationsMenu.gotoPortlet(
+			category = "Users",
+			panel = "Control Panel",
+			portlet = "Roles");
+
+		AssertClick(
+			key_itemName = "Publications User",
+			locator1 = "ListGroupItem#ITEM_NAME_LINK",
+			value1 = "Publications User");
+
+		Navigator.gotoNavItem(navItem = "Define Permissions");
+
+		Role.viewPermissionCP(
+			permissionDefinitionValue = "Access in Control Panel",
+			permissionNavigationValue = "Publications");
+
+		Role.viewPermissionCP(
+			permissionDefinitionValue = "View",
+			permissionNavigationValue = "Publications");
+
+		Role.viewPermissionCP(
+			permissionDefinitionValue = "View Control Panel Menu",
+			permissionNavigationValue = "Portal");
+	}
+
 }
