@@ -179,14 +179,14 @@ public class BatchPlannerPlanHelper {
 			long batchPlannerPlanId, PortletRequest portletRequest)
 		throws Exception {
 
-		for (Map.Entry<String, String> policyNameType :
+		for (Map.Entry<String, String> entry :
 				BatchPlannerPolicyConstants.nameTypes.entrySet()) {
 
-			String name = policyNameType.getKey();
+			String name = entry.getKey();
 
 			String value = ParamUtil.getString(portletRequest, name);
 
-			if (Objects.equals(policyNameType.getValue(), "checkbox")) {
+			if (Objects.equals(entry.getValue(), "checkbox")) {
 				value = _getCheckboxValue(portletRequest, name);
 			}
 
@@ -368,14 +368,14 @@ public class BatchPlannerPlanHelper {
 			long batchPlannerPlanId, PortletRequest portletRequest)
 		throws PortalException {
 
-		for (Map.Entry<String, String> policyNameType :
+		for (Map.Entry<String, String> entry :
 				BatchPlannerPolicyConstants.nameTypes.entrySet()) {
 
-			String name = policyNameType.getKey();
+			String name = entry.getKey();
 
 			String value = ParamUtil.getString(portletRequest, name);
 
-			if (Objects.equals(policyNameType.getValue(), "checkbox")) {
+			if (Objects.equals(entry.getValue(), "checkbox")) {
 				value = _getCheckboxValue(portletRequest, name);
 			}
 
