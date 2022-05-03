@@ -10,6 +10,16 @@
 	}
 }
 
+.ddm-translation-manager {
+	.lfr-translationmanager {
+		width: 70%;
+		z-index: 0;
+		@media screen and (max-width: 1180px) {
+			width: 50%;
+		}
+	}
+}
+
 .error-icon {
 	color: #da1414;
 	margin-right: 5px;
