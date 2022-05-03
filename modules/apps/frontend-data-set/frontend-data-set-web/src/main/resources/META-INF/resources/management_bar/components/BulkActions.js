@@ -100,10 +100,7 @@ function BulkActions({
 
 			setCurrentSidePanelActionPayload(sidePanelActionPayload);
 		}
-		else if (
-			onBulkActionItemClick &&
-			typeof onBulkActionItemClick === 'function'
-		) {
+		else if (onBulkActionItemClick) {
 			onBulkActionItemClick({
 				action: actionDefinition,
 				selectedData: {
