@@ -71,8 +71,8 @@ boolean limitToOneSubmissionPerUser = DDMFormInstanceSubmissionLimitStatusUtil.i
 
 		boolean expired = DDMFormInstanceExpirationStatusUtil.isFormExpired(formInstance, timeZone);
 
-		boolean isFormAvailable = ddmFormDisplayContext.isFormAvailable();
-		boolean isFormShared = ddmFormDisplayContext.isFormShared();
+		boolean formAvailable = ddmFormDisplayContext.isFormAvailable();
+		boolean formShared = ddmFormDisplayContext.isFormShared();
 		boolean preview = ddmFormDisplayContext.isPreview();
 		boolean showSuccessPage = ddmFormDisplayContext.isShowSuccessPage();
 
@@ -123,7 +123,7 @@ boolean limitToOneSubmissionPerUser = DDMFormInstanceSubmissionLimitStatusUtil.i
 					%>'
 				/>
 			</c:when>
-			<c:when test="<%= isFormAvailable || preview %>">
+			<c:when test="<%= formAvailable || preview %>">
 				<portlet:actionURL name="/dynamic_data_mapping_form/add_form_instance_record" var="addFormInstanceRecordActionURL" />
 
 				<div class="portlet-forms">
@@ -199,7 +199,7 @@ boolean limitToOneSubmissionPerUser = DDMFormInstanceSubmissionLimitStatusUtil.i
 
 						<liferay-ui:error-principal />
 
-						<c:if test="<%= isFormShared || preview %>">
+						<c:if test="<%= formShared || preview %>">
 							<clay:container-fluid>
 								<div class="locale-actions">
 									<liferay-ui:language
@@ -304,7 +304,7 @@ boolean limitToOneSubmissionPerUser = DDMFormInstanceSubmissionLimitStatusUtil.i
 
 					Liferay.on('destroyPortlet', <portlet:namespace />clearPortletHandlers);
 
-					<c:if test="<%= isFormShared %>">
+					<c:if test="<%= formShared %>">
 						document.title =
 							'<%= HtmlUtil.escapeJS(formInstance.getName(displayLocale)) %>';
 					</c:if>
