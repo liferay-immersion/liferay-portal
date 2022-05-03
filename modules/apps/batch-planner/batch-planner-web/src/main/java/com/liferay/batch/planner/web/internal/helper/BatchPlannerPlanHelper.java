@@ -379,18 +379,18 @@ public class BatchPlannerPlanHelper {
 				value = _getCheckboxValue(portletRequest, name);
 			}
 
-			BatchPlannerPolicy currBatchPlannerPolicy =
+			BatchPlannerPolicy batchPlannerPolicy =
 				_batchPlannerPolicyLocalService.fetchBatchPlannerPolicy(
 					batchPlannerPlanId, name);
 
-			if (Validator.isNull(value) && (currBatchPlannerPolicy != null)) {
+			if (Validator.isNull(value) && (batchPlannerPolicy != null)) {
 				_batchPlannerPolicyService.deleteBatchPlannerPolicy(
 					batchPlannerPlanId, name);
 
 				continue;
 			}
 
-			if (currBatchPlannerPolicy != null) {
+			if (batchPlannerPolicy != null) {
 				_batchPlannerPolicyService.updateBatchPlannerPolicy(
 					batchPlannerPlanId, name, value);
 
