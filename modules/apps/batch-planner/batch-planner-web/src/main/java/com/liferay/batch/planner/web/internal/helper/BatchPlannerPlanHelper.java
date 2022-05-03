@@ -180,7 +180,7 @@ public class BatchPlannerPlanHelper {
 		throws Exception {
 
 		for (Map.Entry<String, String> policyNameType :
-				BatchPlannerPolicyConstants.policyNameTypes.entrySet()) {
+				BatchPlannerPolicyConstants.nameTypes.entrySet()) {
 
 			String name = policyNameType.getKey();
 
@@ -369,7 +369,7 @@ public class BatchPlannerPlanHelper {
 		throws PortalException {
 
 		for (Map.Entry<String, String> policyNameType :
-				BatchPlannerPolicyConstants.policyNameTypes.entrySet()) {
+				BatchPlannerPolicyConstants.nameTypes.entrySet()) {
 
 			String name = policyNameType.getKey();
 

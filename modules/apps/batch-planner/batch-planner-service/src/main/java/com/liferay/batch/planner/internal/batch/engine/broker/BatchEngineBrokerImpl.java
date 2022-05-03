@@ -153,7 +153,7 @@ public class BatchEngineBrokerImpl implements BatchEngineBroker {
 		BatchPlannerUriInfo.Builder builder = new BatchPlannerUriInfo.Builder();
 
 		for (String name :
-				BatchPlannerPolicyConstants.policyNameTypes.keySet()) {
+				BatchPlannerPolicyConstants.nameTypes.keySet()) {
 
 			builder.queryParameter(
 				name,
