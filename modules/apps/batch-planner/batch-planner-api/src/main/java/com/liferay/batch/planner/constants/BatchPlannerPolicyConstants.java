@@ -24,7 +24,7 @@ import java.util.Map;
  */
 public class BatchPlannerPolicyConstants {
 
-	public static final Map<String, String> policyNameTypes =
+	public static final Map<String, String> nameTypes =
 		Collections.unmodifiableMap(
 			HashMapBuilder.put(
 				"allowUpdate", "checkbox"
