@@ -53,6 +53,8 @@ import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.json.JSONUtil;
 import com.liferay.portal.kernel.language.LanguageUtil;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.ResourceAction;
 import com.liferay.portal.kernel.model.ResourcePermission;
 import com.liferay.portal.kernel.service.ResourceActionLocalService;
@@ -913,7 +915,6 @@ public class PollsToDDMUpgradeProcess extends UpgradeProcess {
 				_availableLocales = SetUtil.fromArray(
 					LocaleUtil.fromLanguageIds(
 						LocalizationUtil.getAvailableLanguageIds(title)));
-
 				_defaultLocale = LocaleUtil.fromLanguageId(
 					LocalizationUtil.getDefaultLanguageId(title));
 
@@ -923,6 +924,9 @@ public class PollsToDDMUpgradeProcess extends UpgradeProcess {
 					lastPublishDate = resultSet.getTimestamp("lastPublishDate");
 				}
 				catch (Exception exception) {
+					if (_log.isDebugEnabled()) {
+						_log.debug(exception);
+					}
 				}
 
 				_upgradePollsQuestion(
@@ -1043,6 +1047,9 @@ public class PollsToDDMUpgradeProcess extends UpgradeProcess {
 
 	private static final String _CLASS_NAME_POLLS =
 		"com.liferay.polls.model.PollsQuestion";
+
+	private static final Log _log = LogFactoryUtil.getLog(
+		PollsToDDMUpgradeProcess.class);
 
 	private static final Map<String, String> _resourceActionIds =
 		ConcurrentHashMapBuilder.put(
