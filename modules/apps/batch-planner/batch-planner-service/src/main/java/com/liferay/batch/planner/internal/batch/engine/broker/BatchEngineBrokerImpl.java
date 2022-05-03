@@ -152,9 +152,7 @@ public class BatchEngineBrokerImpl implements BatchEngineBroker {
 	private UriInfo _getImportTaskUriInfo(BatchPlannerPlan batchPlannerPlan) {
 		BatchPlannerUriInfo.Builder builder = new BatchPlannerUriInfo.Builder();
 
-		for (String name :
-				BatchPlannerPolicyConstants.nameTypes.keySet()) {
-
+		for (String name : BatchPlannerPolicyConstants.nameTypes.keySet()) {
 			builder.queryParameter(
 				name,
 				_getValue(batchPlannerPlan.fetchBatchPlannerPolicy(name)));
