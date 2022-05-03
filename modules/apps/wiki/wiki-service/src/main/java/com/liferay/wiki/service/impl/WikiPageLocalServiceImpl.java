@@ -2975,6 +2975,7 @@ public class WikiPageLocalServiceImpl extends WikiPageLocalServiceBaseImpl {
 			title, CharPool.NO_BREAK_SPACE, CharPool.SPACE);
 
 		title = title.trim();
+
 		title = title.replaceAll("\\s+", " ");
 
 		return title;
