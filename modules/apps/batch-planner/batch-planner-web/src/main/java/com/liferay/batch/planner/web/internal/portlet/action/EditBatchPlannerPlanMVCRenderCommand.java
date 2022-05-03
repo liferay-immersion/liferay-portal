@@ -76,11 +76,11 @@ public class EditBatchPlannerPlanMVCRenderCommand implements MVCRenderCommand {
 	}
 
 	private String _render(RenderRequest renderRequest) throws PortalException {
-		long batchPlannerPlanId = ParamUtil.getLong(
-			renderRequest, "batchPlannerPlanId");
-
 		Set<String> entityClassNames =
 			_vulcanBatchEngineTaskItemDelegateRegistry.getEntityClassNames();
+
+		long batchPlannerPlanId = ParamUtil.getLong(
+			renderRequest, "batchPlannerPlanId");
 
 		if (batchPlannerPlanId == 0) {
 			if (_isExport(ParamUtil.getString(renderRequest, "navigation"))) {
