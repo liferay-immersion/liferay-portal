@@ -216,11 +216,6 @@ export default function ModalWithProvider({
 	);
 }
 
-type ObjectValidationType = {
-	label: string;
-	name: string;
-};
-
 interface IModal extends IProps {
 	observer: any;
 	onClose: () => void;

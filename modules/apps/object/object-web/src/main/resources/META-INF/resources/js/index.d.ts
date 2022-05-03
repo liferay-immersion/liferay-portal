@@ -87,6 +87,7 @@ interface ObjectValidationRuleElementItem {
 	tooltip: string;
 }
 
-interface ObjectValidationType {
-	label?: string;
-}
+type ObjectValidationType = {
+	label: string;
+	name: string;
+};

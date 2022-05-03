@@ -16,7 +16,7 @@ import React from 'react';
 import {FormError} from '../hooks/useForm';
 export default function ObjectValidationFormBase({
 	disabled,
-	objectValidationTypes,
+	objectValidationTypeLabel,
 	setValues,
 	values,
 }: IProps): JSX.Element;
@@ -37,7 +37,7 @@ interface IUseObjectValidationForm {
 interface IProps {
 	disabled: boolean;
 	errors: ObjectValidationErrors;
-	objectValidationTypes: ObjectValidationType[];
+	objectValidationTypeLabel: string;
 	setValues: (values: Partial<ObjectValidation>) => void;
 	values: Partial<ObjectValidation>;
 }

@@ -18,10 +18,6 @@ export default function ModalWithProvider({
 	apiURL,
 	objectValidationRuleEngines,
 }: IProps): JSX.Element;
-declare type ObjectValidationType = {
-	label: string;
-	name: string;
-};
 interface IProps {
 	apiURL: string;
 	objectValidationRuleEngines: ObjectValidationType[];

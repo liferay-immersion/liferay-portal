@@ -33,8 +33,7 @@ declare function Conditions({
 	setValues,
 	values,
 }: IConditions): JSX.Element;
-interface IBasicInfo {
-	componentLabel: string;
+interface ITabs {
 	defaultLocale: {
 		label: string;
 		symbol: string;
@@ -46,17 +45,10 @@ interface IBasicInfo {
 	setValues: (values: Partial<ObjectValidation>) => void;
 	values: Partial<ObjectValidation>;
 }
-interface IConditions {
-	defaultLocale: {
-		label: string;
-		symbol: string;
-	};
-	disabled: boolean;
-	errors: ObjectValidationErrors;
-	handleChange: ChangeEventHandler<HTMLInputElement>;
-	locales: Array<any>;
+interface IBasicInfo extends ITabs {
+	componentLabel: string;
+}
+interface IConditions extends ITabs {
 	objectValidationRuleElements: ObjectValidationRuleElement[];
-	setValues: (values: Partial<ObjectValidation>) => void;
-	values: Partial<ObjectValidation>;
 }
 export {BasicInfo, Conditions};
