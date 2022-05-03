@@ -61,8 +61,23 @@ import {getViewContentRenderer} from './views/index';
 const DEFAULT_PAGINATION_DELTA = 20;
 const DEFAULT_PAGINATION_PAGE_NUMBER = 1;
 
-const getSelectedItems = ({items, key, values}) =>
-	items?.filter((item) => values.includes(item[key])) || [];
+const getSelectedItems = ({items, key, initialSelection = [], values}) => {
+	return values.reduce((updatedItems, value) => {
+		const alreadyAddedItem = updatedItems.find(
+			(item) => item[key] === value
+		);
+		if (alreadyAddedItem) {
+			return updatedItems.filter((item) => values.includes(item[key]));
+		}
+
+		const newSelectedItem = items.find((item) => item[key] === value);
+		if (newSelectedItem) {
+			updatedItems.push(newSelectedItem);
+		}
+
+		return updatedItems;
+	}, initialSelection);
+};
 
 const DataSet = ({
 	actionParameterName,
@@ -302,6 +317,7 @@ const DataSet = ({
 	useEffect(() => {
 		setSelectedItems(
 			getSelectedItems({
+				initialSelection: selectedItems,
 				items,
 				key: selectedItemsKey,
 				values: selectedItemsValue,
