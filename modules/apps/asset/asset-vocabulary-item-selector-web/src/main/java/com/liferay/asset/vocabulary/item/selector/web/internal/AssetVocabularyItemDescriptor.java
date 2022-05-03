@@ -89,11 +89,11 @@ public class AssetVocabularyItemDescriptor
 
 	@Override
 	public String getTitle(Locale locale) {
+		StringBundler sb = new StringBundler(5);
+
 		ThemeDisplay themeDisplay =
 			(ThemeDisplay)_httpServletRequest.getAttribute(
 				WebKeys.THEME_DISPLAY);
-
-		StringBundler sb = new StringBundler(5);
 
 		sb.append(
 			HtmlUtil.escape(
