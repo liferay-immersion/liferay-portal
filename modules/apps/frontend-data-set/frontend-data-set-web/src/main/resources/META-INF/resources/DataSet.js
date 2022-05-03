@@ -61,24 +61,6 @@ import {getViewContentRenderer} from './views/index';
 const DEFAULT_PAGINATION_DELTA = 20;
 const DEFAULT_PAGINATION_PAGE_NUMBER = 1;
 
-const getSelectedItems = ({items, key, initialSelection = [], values}) => {
-	return values.reduce((updatedItems, value) => {
-		const alreadyAddedItem = updatedItems.find(
-			(item) => item[key] === value
-		);
-		if (alreadyAddedItem) {
-			return updatedItems.filter((item) => values.includes(item[key]));
-		}
-
-		const newSelectedItem = items.find((item) => item[key] === value);
-		if (newSelectedItem) {
-			updatedItems.push(newSelectedItem);
-		}
-
-		return updatedItems;
-	}, initialSelection);
-};
-
 const DataSet = ({
 	actionParameterName,
 	bulkActions,
@@ -140,7 +122,7 @@ const DataSet = ({
 	});
 
 	const [highlightedItemsValue, setHighlightedItemsValue] = useState([]);
-	const [items, setItems] = useState(itemsProp);
+	const [items, setItems] = useState(itemsProp || []);
 	const [itemsChanges, setItemsChanges] = useState({});
 	const [pageNumber, setPageNumber] = useState(
 		showPagination &&
@@ -150,13 +132,7 @@ const DataSet = ({
 	const [selectedItemsValue, setSelectedItemsValue] = useState(
 		initialSelectedItemsValues || []
 	);
-	const [selectedItems, setSelectedItems] = useState(() =>
-		getSelectedItems({
-			items,
-			key: selectedItemsKey,
-			values: selectedItemsValue,
-		})
-	);
+	const [selectedItems, setSelectedItems] = useState([]);
 	const [sorting, setSorting] = useState(sortingProp);
 	const [total, setTotal] = useState(0);
 	const [{activeView}, dispatch] = useContext(ViewsContext);
@@ -315,16 +291,22 @@ const DataSet = ({
 	}
 
 	useEffect(() => {
-		setSelectedItems(
-			getSelectedItems({
-				initialSelection: selectedItems,
-				items,
-				key: selectedItemsKey,
-				values: selectedItemsValue,
-			})
-		);
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [selectedItemsValue]);
+		setSelectedItems((selectedItems) => {
+			return selectedItemsValue.map((value) => {
+				let selectedItem = items.find(
+					(item) => item[selectedItemsKey] === value
+				);
+
+				if (!selectedItem) {
+					selectedItem = selectedItems.find(
+						(item) => item[selectedItemsKey] === value
+					);
+				}
+
+				return selectedItem;
+			});
+		});
+	}, [selectedItemsValue, items, selectedItemsKey]);
 
 	useEffect(() => {
 		setComponentLoading(true);
