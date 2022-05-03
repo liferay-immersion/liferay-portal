@@ -358,7 +358,7 @@ public class SegmentsExperienceLocalServiceTest {
 	}
 
 	@Test
-	public void testDeleteSegmentsExperienceWithHighestPrioritized()
+	public void testDeleteSegmentsExperienceWithHighestPriority()
 		throws Exception {
 
 		SegmentsEntry segmentsEntry = SegmentsTestUtil.addSegmentsEntry(
