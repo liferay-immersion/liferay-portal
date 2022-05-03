@@ -62,7 +62,7 @@ release {
 }
 
 test {
-	systemProperty "webdriver.chrome.driver", "$buildDir/webdriver/chromedriver"
+	systemProperty "webdriver.chrome.driver", "${buildDir}/webdriver/chromedriver"
 
 	dependsOn downloadChromeDriver
 }
