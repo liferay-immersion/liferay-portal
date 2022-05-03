@@ -124,6 +124,8 @@
 					"priority": 1
 				}
 			],
+			"objectViewFilterColumns": [
+			],
 			"objectViewSortColumns": [
 				{
 					"objectFieldName": "textField1",
