@@ -419,8 +419,8 @@ definition {
 		task ("Select the Bordered List in Collection Display") {
 			PageEditor.editCollectionDisplay(
 				fragmentName = "Collection Display",
-				listStyle = "Bordered List",
-				selectedName = "Dynamic Collection Test");
+				selectedName = "Dynamic Collection Test",
+				styleDisplay = "Bordered List");
 		}
 
 		task ("Preview the Page and Assert the list of Blog Entries") {
@@ -452,8 +452,8 @@ definition {
 
 			PageEditor.editCollectionDisplay(
 				fragmentName = "Collection Display",
-				listStyle = "Bordered List",
-				selectedName = "Dynamic Collection Test");
+				selectedName = "Dynamic Collection Test",
+				styleDisplay = "Bordered List");
 		}
 
 		task ("Preview the Page and Assert the list of Members") {
