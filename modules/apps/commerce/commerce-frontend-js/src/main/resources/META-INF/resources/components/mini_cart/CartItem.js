@@ -270,21 +270,23 @@ function CartItem({
 				className={classnames({
 					'active': isGettingRemoved,
 					'canceled': isRemovalCanceled,
-					'mini-cart-item-removing': true,
+					'mini-cart-item-is-removing-wrapper': true,
 				})}
 			>
-				<span>{Liferay.Language.get('the-item-has-been-removed')}</span>
+				<div className="mini-cart-item-is-removing">
+					<span>{Liferay.Language.get('the-item-has-been-removed')}</span>
 
-				<span>
-					<ClayButton
-						displayType="link"
-						onClick={cancelRemoveItem}
-						small
-						type="button"
-					>
-						{Liferay.Language.get('undo')}
-					</ClayButton>
-				</span>
+					<span>
+						<ClayButton
+							displayType="link"
+							onClick={cancelRemoveItem}
+							small
+							type="button"
+						>
+							{Liferay.Language.get('undo')}
+						</ClayButton>
+					</span>
+				</div>
 			</div>
 		</div>
 	);
