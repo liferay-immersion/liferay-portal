@@ -177,6 +177,8 @@ export default function DiagramBuilder() {
 	);
 
 	const onLoad = (reactFlowInstance) => {
+		reactFlowInstance.fitView();
+		reactFlowInstance.zoomTo(1);
 		setReactFlowInstance(reactFlowInstance);
 	};
 
