@@ -71,7 +71,7 @@ public class ObjectRelationshipModelListener
 		}
 	}
 
-	protected void _route(
+	private void _route(
 			String eventType, ObjectRelationship objectRelationship)
 		throws ModelListenerException {
 

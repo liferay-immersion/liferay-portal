@@ -71,7 +71,7 @@ public class ObjectFieldSettingModelListener
 		}
 	}
 
-	protected void _route(
+	private void _route(
 			String eventType, ObjectFieldSetting objectFieldSetting)
 		throws ModelListenerException {
 

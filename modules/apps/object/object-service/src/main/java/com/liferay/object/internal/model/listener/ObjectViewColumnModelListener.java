@@ -71,7 +71,7 @@ public class ObjectViewColumnModelListener
 		}
 	}
 
-	protected void _route(
+	private void _route(
 			String eventType, ObjectViewColumn objectViewColumn)
 		throws ModelListenerException {
 
