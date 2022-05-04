@@ -86,6 +86,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>ADD_TO_CART_BUTTON_INVALID</td>
+	<td>//p[@title='${key_productName}']//../..//button[contains(@class,'add-to-cart invalid')]</td>
+	<td></td>
+</tr>
+<tr>
 	<td>ADD_TO_CART_BUTTON_PRODUCT_DETAILS_PAGE</td>
 	<td>//h2[@class='product-header-title']//../..//button[contains(@class,'add-to-cart')]</td>
 	<td></td>
@@ -188,6 +193,11 @@
 <tr>
 	<td>GENERAL_QUANTITY_SELECTOR_INPUT_FIELD_ENABLED</td>
 	<td>//input[contains(@class,"quantity-selector") and not(@disabled)]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>PRODUCT_CARD_QUANTITY_SELECTOR_INPUT_FIELD_HAS_ERROR</td>
+	<td>//p[@title='${key_productName}']//..//..//div[contains(@class,'has-error')]/input[contains(@class,"quantity-selector")]</td>
 	<td></td>
 </tr>
 <tr>
@@ -424,8 +434,18 @@
 	<td></td>
 </tr>
 <tr>
+	<td>MINI_CART_ITEM_QUANTITY_SELECTOR_HAS_ERROR</td>
+	<td>//p[@class='item-sku' and contains(.,'${key_cartItemSku}')]/../../../../div[@class='mini-cart-item-quantity']/div[contains(@class,'has-error')]/input</td>
+	<td></td>
+</tr>
+<tr>
 	<td>MINI_CART_ITEM_PRICE_VALUE</td>
 	<td>//p[@class='item-sku' and contains(.,'${key_cartItemSku}')]/../../../..//span[@class='price-value']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>MINI_CART_ITEM_ERROR_THE_PRODUCT_QUANTITY_IS_NOT_VALID</td>
+	<td>//p[@class='item-sku' and contains(.,'${key_cartItemSku}')]/../../../../div[@class='mini-cart-item-errors row']//div[text()='The product quantity is not valid.']</td>
 	<td></td>
 </tr>
 <tr>

@@ -66,8 +66,13 @@
 	<td></td>
 </tr>
 <tr>
-	<td>PRODUCT_DETAILS_QUANTITY_INPUT</td>
-	<td>//header//h2[text()="${key_productName}"]//..//following-sibling::div[4]//input</td>
+	<td>PRODUCT_DETAILS_QUANTITY_SELECTOR</td>
+	<td>//h2[text()='${key_productName}']/../..//input[contains(@class,'quantity-selector')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>PRODUCT_DETAILS_QUANTITY_SELECTOR_HAS_ERROR</td>
+	<td>//h2[text()='${key_productName}']/../..//div[contains(@class,'has-error')]/input[contains(@class,'quantity-selector')]</td>
 	<td></td>
 </tr>
 <tr>
@@ -128,6 +133,16 @@
 <tr>
 	<td>PRODUCT_CARD_IMAGE</td>
 	<td>//a[contains(@href,'${key_productName}')]//*[(contains(@style,'image')) or (contains(@class,'img'))]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>QUANTITY_SELECTOR_POPOVER_LIST_ITEM</td>
+	<td>//div[contains(@class,'quantity-selector-popover')]//small[text()='${key_quantityConfigurationText}']/b[text()='${key_quantity}']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>QUANTITY_SELECTOR_POPOVER_LIST_ITEM_ERROR</td>
+	<td>//div[contains(@class,'quantity-selector-popover')]//small[(@class='text-danger') and (text()='${key_quantityConfigurationText}')]/b[text()='${key_quantity}']</td>
 	<td></td>
 </tr>
 </tbody>
