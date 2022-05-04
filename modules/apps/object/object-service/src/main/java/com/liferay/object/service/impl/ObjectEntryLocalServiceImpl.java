@@ -32,7 +32,7 @@ import com.liferay.object.constants.ObjectFieldConstants;
 import com.liferay.object.constants.ObjectRelationshipConstants;
 import com.liferay.object.exception.NoSuchObjectFieldException;
 import com.liferay.object.exception.ObjectDefinitionScopeException;
-import com.liferay.object.exception.ObjectEntrySubmissionLimitException;
+import com.liferay.object.exception.ObjectEntryCountException;
 import com.liferay.object.exception.ObjectEntryValuesException;
 import com.liferay.object.internal.petra.sql.dsl.DynamicObjectDefinitionTable;
 import com.liferay.object.internal.petra.sql.dsl.DynamicObjectRelationshipMappingTable;
@@ -2018,7 +2018,7 @@ public class ObjectEntryLocalServiceImpl
 				maximumNumberOfGuestUserSubmissionsPerObjectDefinition();
 
 		if (count >= maximumNumberOfGuestUserSubmissionsPerObjectDefinition) {
-			throw new ObjectEntrySubmissionLimitException(
+			throw new ObjectEntryCountException(
 				StringBundler.concat(
 					"Unable to exceed ",
 					maximumNumberOfGuestUserSubmissionsPerObjectDefinition,
