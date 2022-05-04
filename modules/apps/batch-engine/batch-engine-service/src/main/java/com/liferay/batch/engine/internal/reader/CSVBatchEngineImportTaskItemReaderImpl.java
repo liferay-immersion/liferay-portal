@@ -51,13 +51,13 @@ public class CSVBatchEngineImportTaskItemReaderImpl
 				(String)parameters.getOrDefault("delimiter", delimiter),
 				(String)parameters.getOrDefault("enclosingCharacter", null)));
 
-		_csvRecordIterator = _csvParser.iterator();
+		_iterator = _csvParser.iterator();
 
 		_fieldNames = _getFieldNames(
 			Boolean.valueOf(
 				(String)parameters.getOrDefault(
 					"containsHeaders", StringPool.TRUE)),
-			_csvRecordIterator);
+			_iterator);
 	}
 
 	@Override
@@ -67,13 +67,13 @@ public class CSVBatchEngineImportTaskItemReaderImpl
 
 	@Override
 	public Map<String, Object> read() throws Exception {
-		if (!_csvRecordIterator.hasNext()) {
+		if (!_iterator.hasNext()) {
 			return null;
 		}
 
 		Map<String, Object> fieldNameValueMap = new HashMap<>();
 
-		CSVRecord csvRecord = _csvRecordIterator.next();
+		CSVRecord csvRecord = _iterator.next();
 
 		List<String> values = csvRecord.toList();
 
@@ -134,7 +134,7 @@ public class CSVBatchEngineImportTaskItemReaderImpl
 	}
 
 	private final CSVParser _csvParser;
-	private final Iterator<CSVRecord> _csvRecordIterator;
 	private final String[] _fieldNames;
+	private final Iterator<CSVRecord> _iterator;
 
 }
