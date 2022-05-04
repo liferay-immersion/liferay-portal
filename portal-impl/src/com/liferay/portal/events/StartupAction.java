@@ -67,6 +67,9 @@ public class StartupAction extends SimpleAction {
 	}
 
 	protected void doRun(String[] ids) throws Exception {
+
+		// Check Tomcat's lib/ext directory
+
 		if (ServerDetector.isTomcat()) {
 			File libExtDir = new File(
 				PropsValues.LIFERAY_LIB_GLOBAL_SHARED_DIR, "ext");
@@ -77,11 +80,13 @@ public class StartupAction extends SimpleAction {
 				if (extJarFiles.length != 0) {
 					_log.error(
 						StringBundler.concat(
-							"Found files ", Arrays.toString(extJarFiles),
-							" in ", libExtDir, ". Please move to ",
+							"Files ", Arrays.toString(extJarFiles),
+							" in ", libExtDir, " are no longer read. Move ",
+							"them to ",
 							PropsValues.LIFERAY_LIB_GLOBAL_SHARED_DIR, " or ",
 							PropsValues.
-								LIFERAY_SHIELDED_CONTAINER_LIB_PORTAL_DIR));
+								LIFERAY_SHIELDED_CONTAINER_LIB_PORTAL_DIR,
+							"."));
 				}
 			}
 		}
