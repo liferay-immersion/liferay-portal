@@ -830,21 +830,8 @@ public class PropsValues {
 			PropsUtil.get(
 				PropsKeys.FACEBOOK_CONNECT_VERIFIED_ACCOUNT_REQUIRED));
 
-	public static final String FEATURE_FLAGS_JSON_OBJECT = String.valueOf(
-		new JSONObjectImpl() {
-			{
-				Properties properties = PropsUtil.getProperties(
-					"feature.flag.", true);
-
-				for (Map.Entry<Object, Object> property :
-						properties.entrySet()) {
-
-					put(
-						GetterUtil.getString(property.getKey()),
-						GetterUtil.getBoolean(property.getValue()));
-				}
-			}
-		});
+	public static final String FEATURE_FLAGS_JSON = String.valueOf(
+		new JSONObjectImpl(PropsUtil.getProperties("feature.flag.", true)));
 
 	public static final String[] FIELD_EDITABLE_DOMAINS = PropsUtil.getArray(
 		PropsKeys.FIELD_EDITABLE_DOMAINS);

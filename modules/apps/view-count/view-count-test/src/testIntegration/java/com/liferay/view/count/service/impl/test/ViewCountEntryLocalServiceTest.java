@@ -73,7 +73,6 @@ public class ViewCountEntryLocalServiceTest {
 	public void setUp() {
 		_className = _classNameLocalService.getClassName(
 			ViewCountEntryLocalServiceTest.class.getName());
-
 		_db = DBManagerUtil.getDB();
 	}
 
@@ -93,17 +92,15 @@ public class ViewCountEntryLocalServiceTest {
 		Assert.assertNull(
 			_viewCountEntryLocalService.fetchViewCountEntry(viewCountEntryPK));
 
+		CountDownLatch countDownLatch = new CountDownLatch(2);
 		SessionFactory sessionFactory = ReflectionTestUtil.getFieldValue(
 			_viewCountEntryFinder, "_sessionFactory");
-
-		CountDownLatch countDownLatch = new CountDownLatch(2);
-
 		List<ViewCountEntry> viewCountEntries = new CopyOnWriteArrayList<>();
 
 		ReflectionTestUtil.setFieldValue(
 			_viewCountEntryFinder, "_sessionFactory",
 			_createSessionFactoryProxy(
-				sessionFactory, countDownLatch, viewCountEntries));
+				countDownLatch, sessionFactory, viewCountEntries));
 
 		try (LogCapture logCapture1 = LoggerTestUtil.configureLog4JLogger(
 				SqlExceptionHelper.class.getName(), LoggerTestUtil.OFF);
@@ -149,7 +146,7 @@ public class ViewCountEntryLocalServiceTest {
 	}
 
 	private Object _createSessionFactoryProxy(
-		SessionFactory sessionFactory, CountDownLatch countDownLatch,
+		CountDownLatch countDownLatch, SessionFactory sessionFactory,
 		List<ViewCountEntry> viewCountEntries) {
 
 		return ProxyUtil.newProxyInstance(
@@ -158,7 +155,7 @@ public class ViewCountEntryLocalServiceTest {
 			(proxy, method, args) -> {
 				if (Objects.equals("openSession", method.getName())) {
 					return _createSessionProxy(
-						sessionFactory.openSession(), countDownLatch,
+						countDownLatch, sessionFactory.openSession(),
 						viewCountEntries);
 				}
 
@@ -167,7 +164,7 @@ public class ViewCountEntryLocalServiceTest {
 	}
 
 	private Object _createSessionProxy(
-		Session session, CountDownLatch countDownLatch,
+		CountDownLatch countDownLatch, Session session,
 		List<ViewCountEntry> viewCountEntries) {
 
 		return ProxyUtil.newProxyInstance(
