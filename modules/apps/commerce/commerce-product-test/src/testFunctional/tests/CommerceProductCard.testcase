@@ -314,17 +314,18 @@ definition {
 	@description = "COMMERCE-6162. As a buyer, I want to be able to select the quantity of a product by multiple value, if set"
 	@priority = "3"
 	test AssertOnlyMultipleValuesAreSelectableQuantities {
-		property portal.acceptance = "Intern Test";
+		property portal.acceptance = "false";
 
 		// TODO Review
+
+		var multipleQuantity = "3";
+		var product = "U-Joint";
 
 		CommerceAccelerators.initializeNewSiteViaAccelerator(siteName = "Minium");
 
 		CommerceNavigator.gotoPortlet(
 			category = "Product Management",
 			portlet = "Products");
-
-		var product = "U-Joint";
 
 		CommerceNavigator.searchEntry(entryName = "${product}");
 
@@ -335,7 +336,7 @@ definition {
 		Type(
 			key_text = "Multiple Order Quantity",
 			locator1 = "TextInput#ANY",
-			value1 = "3");
+			value1 = "${multipleQuantity}");
 
 		Button.clickPublish();
 
@@ -347,24 +348,41 @@ definition {
 
 		CommerceNavigator.gotoMiniumSidebarItem(menuItem = "Catalog");
 
-		for (var quantity : list "1,3,4,6,9,12,15,18") {
+		AssertTextEquals(
+			key_productName = "${product}",
+			locator1 = "CommerceAccelerators#PRODUCT_CARD_QUANTITY_SELECTOR_INPUT_FIELD",
+			value1 = "${multipleQuantity}");
+
+		for (var quantity : list "1,3,4,6,300") {
 			Type(
 				key_productName = "${product}",
 				locator1 = "CommerceAccelerators#PRODUCT_CARD_QUANTITY_SELECTOR_INPUT_FIELD",
 				value1 = "${quantity}");
 
+			AssertTextEquals(
+				key_productName = "${product}",
+				locator1 = "CommerceAccelerators#PRODUCT_CARD_QUANTITY_SELECTOR_INPUT_FIELD",
+				value1 = "${quantity}");
+
 			if (("${quantity}" == "1") || ("${quantity}" == "4")) {
-				AssertTextEquals(
+				var conditionNotSatisfied = "true";
+
+				AssertElementPresent(
 					key_productName = "${product}",
-					locator1 = "CommerceAccelerators#PRODUCT_CARD_QUANTITY_SELECTOR_INPUT_FIELD",
-					value1 = "3");
+					locator1 = "CommerceAccelerators#PRODUCT_CARD_QUANTITY_SELECTOR_INPUT_FIELD_HAS_ERROR");
 			}
 			else {
-				AssertTextEquals(
+				var conditionNotSatisfied = "false";
+
+				AssertElementNotPresent(
 					key_productName = "${product}",
-					locator1 = "CommerceAccelerators#PRODUCT_CARD_QUANTITY_SELECTOR_INPUT_FIELD",
-					value1 = "${quantity}");
+					locator1 = "CommerceAccelerators#PRODUCT_CARD_QUANTITY_SELECTOR_INPUT_FIELD_HAS_ERROR");
 			}
+
+			FrontStore.viewQuantitySelectorPopoverListItem(
+				conditionNotSatisfied = "${conditionNotSatisfied}",
+				quantityConfiguration = "multiple",
+				quantity = "${multipleQuantity}");
 		}
 	}
 
@@ -708,79 +726,25 @@ definition {
 	test AssertQuantityCanBeSelectedUpToAMaximumQuantitySet {
 		property portal.acceptance = "true";
 
-		CommerceAccelerators.initializeNewSiteViaAccelerator(siteName = "Minium");
-
-		CommerceNavigator.gotoPortlet(
-			category = "Product Management",
-			portlet = "Products");
-
-		CommerceProducts.searchProduct(search = "U-Joint");
-
-		CommerceNavigator.gotoEntry(entryName = "U-Joint");
-
-		CommerceEntry.gotoMenuTab(menuTab = "Configuration");
-
-		Type(
-			key_fieldLabel = "Maximum Order Quantity",
-			locator1 = "TextInput#GENERIC_TEXT_INPUT",
-			value1 = "4");
-
-		Button.clickPublish();
-
-		ApplicationsMenu.gotoSite(site = "Minium");
-
-		CommerceNavigator.gotoMiniumSidebarItem(menuItem = "Account Management");
-
-		CommerceAcceleratorsInitializer.createNewAccountViaFront(accountName = "Commerce Account");
-
-		ApplicationsMenu.gotoSite(site = "Minium");
-
-		Type(
-			key_productName = "U-Joint",
-			locator1 = "CommerceAccelerators#PRODUCT_CARD_QUANTITY_SELECTOR_INPUT_FIELD",
-			value1 = "10");
-
-		KeyPress(
-			key_productName = "U-Joint",
-			locator1 = "CommerceAccelerators#PRODUCT_CARD_QUANTITY_SELECTOR_INPUT_FIELD",
-			value1 = "\TAB");
-
-		WaitForElementNotPresent(
-			key_optionValue = "10",
-			key_productName = "U-Joint",
-			locator1 = "CommerceAccelerators#PRODUCT_CARD_QUANTITY_SELECTOR_INPUT_FIELD_OPTION_VALUE");
-
-		AssertElementPresent(
-			key_optionValue = "4",
-			key_productName = "U-Joint",
-			locator1 = "CommerceAccelerators#PRODUCT_CARD_QUANTITY_SELECTOR_INPUT_FIELD_OPTION_VALUE");
-	}
-
-	@description = "COMMERCE-6161. As a buyer, I want to be able to select the quantity of a product starting from a minimum quantity, if set"
-	@priority = "3"
-	test AssertSelectableQuantitiesStartFromMinimumQuantitySet {
-		property portal.acceptance = "Intern Test";
-
-		// TODO Review
-
-		CommerceAccelerators.initializeNewSiteViaAccelerator(siteName = "Minium");
-
-		CommerceNavigator.gotoPortlet(
-			category = "Product Management",
-			portlet = "Products");
-
+		var maximumQuantity = "4";
 		var product = "U-Joint";
 
-		CommerceNavigator.searchEntry(entryName = "${product}");
+		CommerceAccelerators.initializeNewSiteViaAccelerator(siteName = "Minium");
+
+		CommerceNavigator.gotoPortlet(
+			category = "Product Management",
+			portlet = "Products");
+
+		CommerceProducts.searchProduct(search = "${product}");
 
 		CommerceNavigator.gotoEntry(entryName = "${product}");
 
 		CommerceEntry.gotoMenuTab(menuTab = "Configuration");
 
 		Type(
-			key_text = "Minimum Order Quantity",
-			locator1 = "TextInput#ANY",
-			value1 = "3");
+			key_fieldLabel = "Maximum Order Quantity",
+			locator1 = "TextInput#GENERIC_TEXT_INPUT",
+			value1 = "${maximumQuantity}");
 
 		Button.clickPublish();
 
@@ -792,6 +756,81 @@ definition {
 
 		CommerceNavigator.gotoMiniumSidebarItem(menuItem = "Catalog");
 
+		AssertTextEquals(
+			key_productName = "${product}",
+			locator1 = "CommerceAccelerators#PRODUCT_CARD_QUANTITY_SELECTOR_INPUT_FIELD",
+			value1 = "1");
+
+		for (var quantity : list "4,5,10") {
+			Type(
+				key_productName = "${product}",
+				locator1 = "CommerceAccelerators#PRODUCT_CARD_QUANTITY_SELECTOR_INPUT_FIELD",
+				value1 = "${quantity}");
+
+			AssertTextEquals(
+				key_productName = "${product}",
+				locator1 = "CommerceAccelerators#PRODUCT_CARD_QUANTITY_SELECTOR_INPUT_FIELD",
+				value1 = "${quantity}");
+
+			if (("${quantity}" == "5") || ("${quantity}" == "10")) {
+				AssertElementPresent(
+					key_productName = "${product}",
+					locator1 = "CommerceAccelerators#PRODUCT_CARD_QUANTITY_SELECTOR_INPUT_FIELD_HAS_ERROR");
+				
+				FrontStore.viewQuantitySelectorPopoverListItem(
+					conditionNotSatisfied = "true",
+					quantityConfiguration = "max",
+					quantity = "${maximumQuantity}");
+			} else {
+				AssertElementNotPresent(
+					key_productName = "${product}",
+					locator1 = "CommerceAccelerators#PRODUCT_CARD_QUANTITY_SELECTOR_INPUT_FIELD_HAS_ERROR");
+			}
+		}
+	}
+
+	@description = "COMMERCE-6161. As a buyer, I want to be able to select the quantity of a product starting from a minimum quantity, if set"
+	@priority = "3"
+	test AssertSelectableQuantitiesStartFromMinimumQuantitySet {
+		property portal.acceptance = "false";
+
+		// TODO Review
+
+		var minimumQuantity = "3";
+		var product = "U-Joint";
+
+		CommerceAccelerators.initializeNewSiteViaAccelerator(siteName = "Minium");
+
+		CommerceNavigator.gotoPortlet(
+			category = "Product Management",
+			portlet = "Products");
+
+		CommerceNavigator.searchEntry(entryName = "${product}");
+
+		CommerceNavigator.gotoEntry(entryName = "${product}");
+
+		CommerceEntry.gotoMenuTab(menuTab = "Configuration");
+
+		Type(
+			key_text = "Minimum Order Quantity",
+			locator1 = "TextInput#ANY",
+			value1 = "${minimumQuantity}");
+
+		Button.clickPublish();
+
+		ApplicationsMenu.gotoSite(site = "Minium");
+
+		CommerceNavigator.gotoMiniumSidebarItem(menuItem = "Account Management");
+
+		CommerceAcceleratorsInitializer.createNewAccountViaFront(accountName = "Commerce Account");
+
+		CommerceNavigator.gotoMiniumSidebarItem(menuItem = "Catalog");
+
+		AssertTextEquals(
+			key_productName = "${product}",
+			locator1 = "CommerceAccelerators#PRODUCT_CARD_QUANTITY_SELECTOR_INPUT_FIELD",
+			value1 = "${minimumQuantity}");
+
 		for (var quantity : list "1,2,3") {
 			Type(
 				key_productName = "${product}",
@@ -801,7 +840,26 @@ definition {
 			AssertTextEquals(
 				key_productName = "${product}",
 				locator1 = "CommerceAccelerators#PRODUCT_CARD_QUANTITY_SELECTOR_INPUT_FIELD",
-				value1 = "3");
+				value1 = "${quantity}");
+			
+			if (("${quantity}" == "1") || ("${quantity}" == "2")) {
+				var conditionNotSatisfied = "true";
+
+				AssertElementPresent(
+					key_productName = "${product}",
+					locator1 = "CommerceAccelerators#PRODUCT_CARD_QUANTITY_SELECTOR_INPUT_FIELD_HAS_ERROR");
+			} else {
+				var conditionNotSatisfied = "false";
+
+				AssertElementNotPresent(
+					key_productName = "${product}",
+					locator1 = "CommerceAccelerators#PRODUCT_CARD_QUANTITY_SELECTOR_INPUT_FIELD_HAS_ERROR");
+			}
+
+			FrontStore.viewQuantitySelectorPopoverListItem(
+				conditionNotSatisfied = "${conditionNotSatisfied}",
+				quantityConfiguration = "min",
+				quantity = "${minimumQuantity}");
 		}
 	}
 
