@@ -71,6 +71,22 @@ public class ObjectValidationRuleModelListener
 		}
 	}
 
+	private List<Attribute> _getModifiedAttributes(
+		ObjectValidationRule originalObjectValidationRule,
+		ObjectValidationRule objectValidationRule) {
+
+		AttributesBuilder attributesBuilder = new AttributesBuilder(
+			objectValidationRule, originalObjectValidationRule);
+
+		attributesBuilder.add("active");
+		attributesBuilder.add("engine");
+		attributesBuilder.add("errorLabelMap");
+		attributesBuilder.add("nameMap");
+		attributesBuilder.add("script");
+
+		return attributesBuilder.getAttributes();
+	}
+
 	private void _route(
 			String eventType, ObjectValidationRule objectValidationRule)
 		throws ModelListenerException {
@@ -100,22 +116,6 @@ public class ObjectValidationRuleModelListener
 		catch (Exception exception) {
 			throw new ModelListenerException(exception);
 		}
-	}
-
-	private List<Attribute> _getModifiedAttributes(
-		ObjectValidationRule originalObjectValidationRule,
-		ObjectValidationRule objectValidationRule) {
-
-		AttributesBuilder attributesBuilder = new AttributesBuilder(
-			objectValidationRule, originalObjectValidationRule);
-
-		attributesBuilder.add("active");
-		attributesBuilder.add("engine");
-		attributesBuilder.add("errorLabelMap");
-		attributesBuilder.add("nameMap");
-		attributesBuilder.add("script");
-
-		return attributesBuilder.getAttributes();
 	}
 
 	@Reference

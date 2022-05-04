@@ -71,8 +71,22 @@ public class ObjectLayoutBoxModelListener
 		}
 	}
 
-	private void _route(
-			String eventType, ObjectLayoutBox objectLayoutBox)
+	private List<Attribute> _getModifiedAttributes(
+		ObjectLayoutBox originalObjectLayoutBox,
+		ObjectLayoutBox objectLayoutBox) {
+
+		AttributesBuilder attributesBuilder = new AttributesBuilder(
+			objectLayoutBox, originalObjectLayoutBox);
+
+		attributesBuilder.add("collapsable");
+		attributesBuilder.add("nameMap");
+		attributesBuilder.add("objectLayoutTabId");
+		attributesBuilder.add("priority");
+
+		return attributesBuilder.getAttributes();
+	}
+
+	private void _route(String eventType, ObjectLayoutBox objectLayoutBox)
 		throws ModelListenerException {
 
 		try {
@@ -98,21 +112,6 @@ public class ObjectLayoutBoxModelListener
 		catch (Exception exception) {
 			throw new ModelListenerException(exception);
 		}
-	}
-
-	private List<Attribute> _getModifiedAttributes(
-		ObjectLayoutBox originalObjectLayoutBox,
-		ObjectLayoutBox objectLayoutBox) {
-
-		AttributesBuilder attributesBuilder = new AttributesBuilder(
-			objectLayoutBox, originalObjectLayoutBox);
-
-		attributesBuilder.add("collapsable");
-		attributesBuilder.add("nameMap");
-		attributesBuilder.add("objectLayoutTabId");
-		attributesBuilder.add("priority");
-
-		return attributesBuilder.getAttributes();
 	}
 
 	@Reference

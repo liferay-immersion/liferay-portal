@@ -71,8 +71,22 @@ public class ObjectLayoutColumnModelListener
 		}
 	}
 
-	private void _route(
-			String eventType, ObjectLayoutColumn objectLayoutColumn)
+	private List<Attribute> _getModifiedAttributes(
+		ObjectLayoutColumn originalObjectLayoutColumn,
+		ObjectLayoutColumn objectLayoutColumn) {
+
+		AttributesBuilder attributesBuilder = new AttributesBuilder(
+			objectLayoutColumn, originalObjectLayoutColumn);
+
+		attributesBuilder.add("objectFieldId");
+		attributesBuilder.add("objectLayoutRowId");
+		attributesBuilder.add("priority");
+		attributesBuilder.add("size");
+
+		return attributesBuilder.getAttributes();
+	}
+
+	private void _route(String eventType, ObjectLayoutColumn objectLayoutColumn)
 		throws ModelListenerException {
 
 		try {
@@ -98,21 +112,6 @@ public class ObjectLayoutColumnModelListener
 		catch (Exception exception) {
 			throw new ModelListenerException(exception);
 		}
-	}
-
-	private List<Attribute> _getModifiedAttributes(
-		ObjectLayoutColumn originalObjectLayoutColumn,
-		ObjectLayoutColumn objectLayoutColumn) {
-
-		AttributesBuilder attributesBuilder = new AttributesBuilder(
-			objectLayoutColumn, originalObjectLayoutColumn);
-
-		attributesBuilder.add("objectFieldId");
-		attributesBuilder.add("objectLayoutRowId");
-		attributesBuilder.add("priority");
-		attributesBuilder.add("size");
-
-		return attributesBuilder.getAttributes();
 	}
 
 	@Reference
