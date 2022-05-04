@@ -71,8 +71,22 @@ public class ObjectLayoutTabModelListener
 		}
 	}
 
-	private void _route(
-			String eventType, ObjectLayoutTab objectLayoutTab)
+	private List<Attribute> _getModifiedAttributes(
+		ObjectLayoutTab originalObjectLayoutTab,
+		ObjectLayoutTab objectLayoutTab) {
+
+		AttributesBuilder attributesBuilder = new AttributesBuilder(
+			objectLayoutTab, originalObjectLayoutTab);
+
+		attributesBuilder.add("nameMap");
+		attributesBuilder.add("objectLayoutId");
+		attributesBuilder.add("objectRelationshipId");
+		attributesBuilder.add("priority");
+
+		return attributesBuilder.getAttributes();
+	}
+
+	private void _route(String eventType, ObjectLayoutTab objectLayoutTab)
 		throws ModelListenerException {
 
 		try {
@@ -99,21 +113,6 @@ public class ObjectLayoutTabModelListener
 		catch (Exception exception) {
 			throw new ModelListenerException(exception);
 		}
-	}
-
-	private List<Attribute> _getModifiedAttributes(
-		ObjectLayoutTab originalObjectLayoutTab,
-		ObjectLayoutTab objectLayoutTab) {
-
-		AttributesBuilder attributesBuilder = new AttributesBuilder(
-			objectLayoutTab, originalObjectLayoutTab);
-
-		attributesBuilder.add("nameMap");
-		attributesBuilder.add("objectLayoutId");
-		attributesBuilder.add("objectRelationshipId");
-		attributesBuilder.add("priority");
-
-		return attributesBuilder.getAttributes();
 	}
 
 	@Reference

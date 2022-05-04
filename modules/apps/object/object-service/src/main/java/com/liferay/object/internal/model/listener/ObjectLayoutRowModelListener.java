@@ -71,8 +71,20 @@ public class ObjectLayoutRowModelListener
 		}
 	}
 
-	private void _route(
-			String eventType, ObjectLayoutRow objectLayoutRow)
+	private List<Attribute> _getModifiedAttributes(
+		ObjectLayoutRow originalObjectLayoutRow,
+		ObjectLayoutRow objectLayoutRow) {
+
+		AttributesBuilder attributesBuilder = new AttributesBuilder(
+			objectLayoutRow, originalObjectLayoutRow);
+
+		attributesBuilder.add("objectLayoutBoxId");
+		attributesBuilder.add("priority");
+
+		return attributesBuilder.getAttributes();
+	}
+
+	private void _route(String eventType, ObjectLayoutRow objectLayoutRow)
 		throws ModelListenerException {
 
 		try {
@@ -94,19 +106,6 @@ public class ObjectLayoutRowModelListener
 		catch (Exception exception) {
 			throw new ModelListenerException(exception);
 		}
-	}
-
-	private List<Attribute> _getModifiedAttributes(
-		ObjectLayoutRow originalObjectLayoutRow,
-		ObjectLayoutRow objectLayoutRow) {
-
-		AttributesBuilder attributesBuilder = new AttributesBuilder(
-			objectLayoutRow, originalObjectLayoutRow);
-
-		attributesBuilder.add("objectLayoutBoxId");
-		attributesBuilder.add("priority");
-
-		return attributesBuilder.getAttributes();
 	}
 
 	@Reference

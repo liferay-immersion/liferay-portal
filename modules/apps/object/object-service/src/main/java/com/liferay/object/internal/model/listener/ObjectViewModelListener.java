@@ -68,8 +68,19 @@ public class ObjectViewModelListener extends BaseModelListener<ObjectView> {
 		}
 	}
 
-	private void _route(
-			String eventType, ObjectView objectView)
+	private List<Attribute> _getModifiedAttributes(
+		ObjectView originalObjectView, ObjectView objectView) {
+
+		AttributesBuilder attributesBuilder = new AttributesBuilder(
+			objectView, originalObjectView);
+
+		attributesBuilder.add("defaultObjectView");
+		attributesBuilder.add("nameMap");
+
+		return attributesBuilder.getAttributes();
+	}
+
+	private void _route(String eventType, ObjectView objectView)
 		throws ModelListenerException {
 
 		try {
@@ -91,18 +102,6 @@ public class ObjectViewModelListener extends BaseModelListener<ObjectView> {
 		catch (Exception exception) {
 			throw new ModelListenerException(exception);
 		}
-	}
-
-	private List<Attribute> _getModifiedAttributes(
-		ObjectView originalObjectView, ObjectView objectView) {
-
-		AttributesBuilder attributesBuilder = new AttributesBuilder(
-			objectView, originalObjectView);
-
-		attributesBuilder.add("defaultObjectView");
-		attributesBuilder.add("nameMap");
-
-		return attributesBuilder.getAttributes();
 	}
 
 	@Reference

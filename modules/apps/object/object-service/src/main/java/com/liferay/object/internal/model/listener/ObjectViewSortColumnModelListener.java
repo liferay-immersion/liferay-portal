@@ -71,6 +71,20 @@ public class ObjectViewSortColumnModelListener
 		}
 	}
 
+	private List<Attribute> _getModifiedAttributes(
+		ObjectViewSortColumn originalObjectViewSortColumn,
+		ObjectViewSortColumn objectViewSortColumn) {
+
+		AttributesBuilder attributesBuilder = new AttributesBuilder(
+			objectViewSortColumn, originalObjectViewSortColumn);
+
+		attributesBuilder.add("objectFieldName");
+		attributesBuilder.add("priority");
+		attributesBuilder.add("sortOrder");
+
+		return attributesBuilder.getAttributes();
+	}
+
 	private void _route(
 			String eventType, ObjectViewSortColumn objectViewSortColumn)
 		throws ModelListenerException {
@@ -96,20 +110,6 @@ public class ObjectViewSortColumnModelListener
 		catch (Exception exception) {
 			throw new ModelListenerException(exception);
 		}
-	}
-
-	private List<Attribute> _getModifiedAttributes(
-		ObjectViewSortColumn originalObjectViewSortColumn,
-		ObjectViewSortColumn objectViewSortColumn) {
-
-		AttributesBuilder attributesBuilder = new AttributesBuilder(
-			objectViewSortColumn, originalObjectViewSortColumn);
-
-		attributesBuilder.add("objectFieldName");
-		attributesBuilder.add("priority");
-		attributesBuilder.add("sortOrder");
-
-		return attributesBuilder.getAttributes();
 	}
 
 	@Reference

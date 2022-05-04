@@ -68,8 +68,27 @@ public class ObjectFieldModelListener extends BaseModelListener<ObjectField> {
 		}
 	}
 
-	private void _route(
-			String eventType, ObjectField objectField)
+	private List<Attribute> _getModifiedAttributes(
+		ObjectField originalObjectField, ObjectField objectField) {
+
+		AttributesBuilder attributesBuilder = new AttributesBuilder(
+			objectField, originalObjectField);
+
+		attributesBuilder.add("businessType");
+		attributesBuilder.add("DBColumnName");
+		attributesBuilder.add("DBType");
+		attributesBuilder.add("indexed");
+		attributesBuilder.add("indexedAsKeyword");
+		attributesBuilder.add("indexedLanguageId");
+		attributesBuilder.add("labelMap");
+		attributesBuilder.add("listTypeDefinitionId");
+		attributesBuilder.add("name");
+		attributesBuilder.add("required");
+
+		return attributesBuilder.getAttributes();
+	}
+
+	private void _route(String eventType, ObjectField objectField)
 		throws ModelListenerException {
 
 		try {
@@ -107,26 +126,6 @@ public class ObjectFieldModelListener extends BaseModelListener<ObjectField> {
 		catch (Exception exception) {
 			throw new ModelListenerException(exception);
 		}
-	}
-
-	private List<Attribute> _getModifiedAttributes(
-		ObjectField originalObjectField, ObjectField objectField) {
-
-		AttributesBuilder attributesBuilder = new AttributesBuilder(
-			objectField, originalObjectField);
-
-		attributesBuilder.add("businessType");
-		attributesBuilder.add("DBColumnName");
-		attributesBuilder.add("DBType");
-		attributesBuilder.add("indexed");
-		attributesBuilder.add("indexedAsKeyword");
-		attributesBuilder.add("indexedLanguageId");
-		attributesBuilder.add("labelMap");
-		attributesBuilder.add("listTypeDefinitionId");
-		attributesBuilder.add("name");
-		attributesBuilder.add("required");
-
-		return attributesBuilder.getAttributes();
 	}
 
 	@Reference

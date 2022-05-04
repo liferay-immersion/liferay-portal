@@ -71,8 +71,21 @@ public class ObjectViewColumnModelListener
 		}
 	}
 
-	private void _route(
-			String eventType, ObjectViewColumn objectViewColumn)
+	private List<Attribute> _getModifiedAttributes(
+		ObjectViewColumn originalObjectViewColumn,
+		ObjectViewColumn objectViewColumn) {
+
+		AttributesBuilder attributesBuilder = new AttributesBuilder(
+			objectViewColumn, originalObjectViewColumn);
+
+		attributesBuilder.add("labelMap");
+		attributesBuilder.add("objectFieldName");
+		attributesBuilder.add("priority");
+
+		return attributesBuilder.getAttributes();
+	}
+
+	private void _route(String eventType, ObjectViewColumn objectViewColumn)
 		throws ModelListenerException {
 
 		try {
@@ -96,20 +109,6 @@ public class ObjectViewColumnModelListener
 		catch (Exception exception) {
 			throw new ModelListenerException(exception);
 		}
-	}
-
-	private List<Attribute> _getModifiedAttributes(
-		ObjectViewColumn originalObjectViewColumn,
-		ObjectViewColumn objectViewColumn) {
-
-		AttributesBuilder attributesBuilder = new AttributesBuilder(
-			objectViewColumn, originalObjectViewColumn);
-
-		attributesBuilder.add("labelMap");
-		attributesBuilder.add("objectFieldName");
-		attributesBuilder.add("priority");
-
-		return attributesBuilder.getAttributes();
 	}
 
 	@Reference

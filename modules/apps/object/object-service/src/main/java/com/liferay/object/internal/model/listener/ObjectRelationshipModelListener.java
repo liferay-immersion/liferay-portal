@@ -71,8 +71,20 @@ public class ObjectRelationshipModelListener
 		}
 	}
 
-	private void _route(
-			String eventType, ObjectRelationship objectRelationship)
+	private List<Attribute> _getModifiedAttributes(
+		ObjectRelationship originalObjectRelationship,
+		ObjectRelationship objectRelationship) {
+
+		AttributesBuilder attributesBuilder = new AttributesBuilder(
+			objectRelationship, originalObjectRelationship);
+
+		attributesBuilder.add("deletionType");
+		attributesBuilder.add("labelMap");
+
+		return attributesBuilder.getAttributes();
+	}
+
+	private void _route(String eventType, ObjectRelationship objectRelationship)
 		throws ModelListenerException {
 
 		try {
@@ -94,19 +106,6 @@ public class ObjectRelationshipModelListener
 		catch (Exception exception) {
 			throw new ModelListenerException(exception);
 		}
-	}
-
-	private List<Attribute> _getModifiedAttributes(
-		ObjectRelationship originalObjectRelationship,
-		ObjectRelationship objectRelationship) {
-
-		AttributesBuilder attributesBuilder = new AttributesBuilder(
-			objectRelationship, originalObjectRelationship);
-
-		attributesBuilder.add("deletionType");
-		attributesBuilder.add("labelMap");
-
-		return attributesBuilder.getAttributes();
 	}
 
 	@Reference

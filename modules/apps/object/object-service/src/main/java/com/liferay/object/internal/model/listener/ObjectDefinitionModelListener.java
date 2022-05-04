@@ -71,8 +71,28 @@ public class ObjectDefinitionModelListener
 		}
 	}
 
-	private void _route(
-			String eventType, ObjectDefinition objectDefinition)
+	private List<Attribute> _getModifiedAttributes(
+		ObjectDefinition originalObjectDefinition,
+		ObjectDefinition objectDefinition) {
+
+		AttributesBuilder attributesBuilder = new AttributesBuilder(
+			objectDefinition, originalObjectDefinition);
+
+		attributesBuilder.add("active");
+		attributesBuilder.add("descriptionObjectFieldId");
+		attributesBuilder.add("labelMap");
+		attributesBuilder.add("name");
+		attributesBuilder.add("panelAppOrder");
+		attributesBuilder.add("panelCategoryKey");
+		attributesBuilder.add("pluralLabelMap");
+		attributesBuilder.add("portlet");
+		attributesBuilder.add("scope");
+		attributesBuilder.add("titleObjectFieldId");
+
+		return attributesBuilder.getAttributes();
+	}
+
+	private void _route(String eventType, ObjectDefinition objectDefinition)
 		throws ModelListenerException {
 
 		try {
@@ -98,27 +118,6 @@ public class ObjectDefinitionModelListener
 		catch (Exception exception) {
 			throw new ModelListenerException(exception);
 		}
-	}
-
-	private List<Attribute> _getModifiedAttributes(
-		ObjectDefinition originalObjectDefinition,
-		ObjectDefinition objectDefinition) {
-
-		AttributesBuilder attributesBuilder = new AttributesBuilder(
-			objectDefinition, originalObjectDefinition);
-
-		attributesBuilder.add("active");
-		attributesBuilder.add("descriptionObjectFieldId");
-		attributesBuilder.add("labelMap");
-		attributesBuilder.add("name");
-		attributesBuilder.add("panelAppOrder");
-		attributesBuilder.add("panelCategoryKey");
-		attributesBuilder.add("pluralLabelMap");
-		attributesBuilder.add("portlet");
-		attributesBuilder.add("scope");
-		attributesBuilder.add("titleObjectFieldId");
-
-		return attributesBuilder.getAttributes();
 	}
 
 	@Reference

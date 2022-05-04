@@ -69,8 +69,20 @@ public class ObjectActionModelListener extends BaseModelListener<ObjectAction> {
 		}
 	}
 
-	private void _route(
-			String eventType, ObjectAction objectAction)
+	private List<Attribute> _getModifiedAttributes(
+		ObjectAction originalObjectAction, ObjectAction objectAction) {
+
+		AttributesBuilder attributesBuilder = new AttributesBuilder(
+			objectAction, originalObjectAction);
+
+		attributesBuilder.add("active");
+		attributesBuilder.add("name");
+		attributesBuilder.add("parameters");
+
+		return attributesBuilder.getAttributes();
+	}
+
+	private void _route(String eventType, ObjectAction objectAction)
 		throws ModelListenerException {
 
 		try {
@@ -94,19 +106,6 @@ public class ObjectActionModelListener extends BaseModelListener<ObjectAction> {
 		catch (Exception exception) {
 			throw new ModelListenerException(exception);
 		}
-	}
-
-	private List<Attribute> _getModifiedAttributes(
-		ObjectAction originalObjectAction, ObjectAction objectAction) {
-
-		AttributesBuilder attributesBuilder = new AttributesBuilder(
-			objectAction, originalObjectAction);
-
-		attributesBuilder.add("active");
-		attributesBuilder.add("name");
-		attributesBuilder.add("parameters");
-
-		return attributesBuilder.getAttributes();
 	}
 
 	@Reference

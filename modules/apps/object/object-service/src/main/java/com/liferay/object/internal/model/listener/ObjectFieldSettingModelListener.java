@@ -71,8 +71,21 @@ public class ObjectFieldSettingModelListener
 		}
 	}
 
-	private void _route(
-			String eventType, ObjectFieldSetting objectFieldSetting)
+	private List<Attribute> _getModifiedAttributes(
+		ObjectFieldSetting originalObjectFieldSetting,
+		ObjectFieldSetting objectFieldSetting) {
+
+		AttributesBuilder attributesBuilder = new AttributesBuilder(
+			objectFieldSetting, originalObjectFieldSetting);
+
+		attributesBuilder.add("objectFieldId");
+		attributesBuilder.add("name");
+		attributesBuilder.add("value");
+
+		return attributesBuilder.getAttributes();
+	}
+
+	private void _route(String eventType, ObjectFieldSetting objectFieldSetting)
 		throws ModelListenerException {
 
 		try {
@@ -96,20 +109,6 @@ public class ObjectFieldSettingModelListener
 		catch (Exception exception) {
 			throw new ModelListenerException(exception);
 		}
-	}
-
-	private List<Attribute> _getModifiedAttributes(
-		ObjectFieldSetting originalObjectFieldSetting,
-		ObjectFieldSetting objectFieldSetting) {
-
-		AttributesBuilder attributesBuilder = new AttributesBuilder(
-			objectFieldSetting, originalObjectFieldSetting);
-
-		attributesBuilder.add("objectFieldId");
-		attributesBuilder.add("name");
-		attributesBuilder.add("value");
-
-		return attributesBuilder.getAttributes();
 	}
 
 	@Reference

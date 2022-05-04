@@ -69,8 +69,19 @@ public class ObjectLayoutModelListener extends BaseModelListener<ObjectLayout> {
 		}
 	}
 
-	private void _route(
-			String eventType, ObjectLayout objectLayout)
+	private List<Attribute> _getModifiedAttributes(
+		ObjectLayout originalObjectLayout, ObjectLayout objectLayout) {
+
+		AttributesBuilder attributesBuilder = new AttributesBuilder(
+			objectLayout, originalObjectLayout);
+
+		attributesBuilder.add("defaultObjectLayout");
+		attributesBuilder.add("nameMap");
+
+		return attributesBuilder.getAttributes();
+	}
+
+	private void _route(String eventType, ObjectLayout objectLayout)
 		throws ModelListenerException {
 
 		try {
@@ -92,18 +103,6 @@ public class ObjectLayoutModelListener extends BaseModelListener<ObjectLayout> {
 		catch (Exception exception) {
 			throw new ModelListenerException(exception);
 		}
-	}
-
-	private List<Attribute> _getModifiedAttributes(
-		ObjectLayout originalObjectLayout, ObjectLayout objectLayout) {
-
-		AttributesBuilder attributesBuilder = new AttributesBuilder(
-			objectLayout, originalObjectLayout);
-
-		attributesBuilder.add("defaultObjectLayout");
-		attributesBuilder.add("nameMap");
-
-		return attributesBuilder.getAttributes();
 	}
 
 	@Reference
