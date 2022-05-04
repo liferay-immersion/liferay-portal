@@ -25,6 +25,7 @@ import com.liferay.object.internal.upgrade.v2_4_0.util.ObjectViewSortColumnTable
 import com.liferay.object.internal.upgrade.v2_5_0.util.ObjectViewColumnUpgradeProcess;
 import com.liferay.object.internal.upgrade.v3_0_0.ObjectFieldSettingUpgradeProcess;
 import com.liferay.object.internal.upgrade.v3_2_0.ObjectValidationRuleUpgradeProcess;
+import com.liferay.object.internal.upgrade.v3_3_0.util.ObjectViewFilterColumnTable;
 import com.liferay.portal.upgrade.registry.UpgradeStepRegistrator;
 
 import org.osgi.service.component.annotations.Component;
@@ -68,6 +69,9 @@ public class ObjectServiceUpgrade implements UpgradeStepRegistrator {
 
 		registry.register(
 			"3.1.0", "3.2.0", new ObjectValidationRuleUpgradeProcess());
+
+		registry.register(
+			"3.2.0", "3.3.0", ObjectViewFilterColumnTable.create());
 	}
 
 }
