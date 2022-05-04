@@ -193,8 +193,8 @@ definition {
 
 			FrontStore.viewQuantitySelectorPopoverListItem(
 				conditionNotSatisfied = "${conditionNotSatisfied}",
-				quantityConfiguration = "multiple",
-				quantity = "${multipleQuantity}");
+				quantity = "${multipleQuantity}",
+				quantityConfiguration = "multiple");
 		}
 	}
 
@@ -417,11 +417,12 @@ definition {
 
 			if (("${quantity}" == "1") || ("${quantity}" == "2")) {
 				var conditionNotSatisfied = "true";
-				
+
 				AssertElementPresent(
 					key_productName = "${product}",
 					locator1 = "CommerceFrontStore#PRODUCT_DETAILS_QUANTITY_SELECTOR_HAS_ERROR");
-			} else {
+			}
+			else {
 				var conditionNotSatisfied = "false";
 
 				AssertElementNotPresent(
@@ -431,8 +432,8 @@ definition {
 
 			FrontStore.viewQuantitySelectorPopoverListItem(
 				conditionNotSatisfied = "${conditionNotSatisfied}",
-				quantityConfiguration = "min",
-				quantity = "${minimumQuantity}");
+				quantity = "${minimumQuantity}",
+				quantityConfiguration = "min");
 		}
 	}
 
@@ -974,7 +975,8 @@ definition {
 				AssertElementPresent(
 					key_productName = "${product}",
 					locator1 = "CommerceFrontStore#PRODUCT_DETAILS_QUANTITY_SELECTOR_HAS_ERROR");
-			} else {
+			}
+			else {
 				var minimumConditionNotSatisfied = "false";
 				var multipleConditionNotSatisfied = "false";
 
@@ -985,13 +987,13 @@ definition {
 
 			FrontStore.viewQuantitySelectorPopoverListItem(
 				conditionNotSatisfied = "${minimumConditionNotSatisfied}",
-				quantityConfiguration = "min",
-				quantity = "${minimumQuantity}");
-				
+				quantity = "${minimumQuantity}",
+				quantityConfiguration = "min");
+
 			FrontStore.viewQuantitySelectorPopoverListItem(
 				conditionNotSatisfied = "${multipleConditionNotSatisfied}",
-				quantityConfiguration = "multiple",
-				quantity = "${multipleQuantity}");
+				quantity = "${multipleQuantity}",
+				quantityConfiguration = "multiple");
 		}
 	}
 
@@ -1063,14 +1065,16 @@ definition {
 
 				if ("${quantity}" == "1") {
 					var minimumConditionNotSatisfied = "true";
-				} else {
+				}
+				else {
 					var minimumConditionNotSatisfied = "false";
 				}
 
 				AssertElementPresent(
 					key_productName = "${product}",
 					locator1 = "CommerceFrontStore#PRODUCT_DETAILS_QUANTITY_SELECTOR_HAS_ERROR");
-			} else {
+			}
+			else {
 				var minimumConditionNotSatisfied = "false";
 				var multipleConditionNotSatisfied = "false";
 
@@ -1081,13 +1085,13 @@ definition {
 
 			FrontStore.viewQuantitySelectorPopoverListItem(
 				conditionNotSatisfied = "${minimumConditionNotSatisfied}",
-				quantityConfiguration = "min",
-				quantity = "${minimumQuantity}");
-				
+				quantity = "${minimumQuantity}",
+				quantityConfiguration = "min");
+
 			FrontStore.viewQuantitySelectorPopoverListItem(
 				conditionNotSatisfied = "${multipleConditionNotSatisfied}",
-				quantityConfiguration = "multiple",
-				quantity = "${multipleQuantity}");
+				quantity = "${multipleQuantity}",
+				quantityConfiguration = "multiple");
 		}
 	}
 
