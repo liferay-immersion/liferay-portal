@@ -32,11 +32,11 @@ public interface ObjectConfiguration {
 
 	@Meta.AD(
 		deflt = "100",
-		description = "maximum-number-of-guest-user-submissions-per-object-definition-help",
-		name = "maximum-number-of-guest-user-submissions-per-object-definition",
+		description = "maximum-number-of-guest-user-object-entries-per-object-definition-help",
+		name = "maximum-number-of-guest-user-object-entries-per-object-definition",
 		required = false
 	)
-	public int maximumNumberOfGuestUserSubmissionsPerObjectDefinition();
+	public int maximumNumberOfGuestUserObjectEntriesPerObjectDefinition();
 
 	@Meta.AD(
 		deflt = "25", description = "maximum-file-size-for-guest-users-help",

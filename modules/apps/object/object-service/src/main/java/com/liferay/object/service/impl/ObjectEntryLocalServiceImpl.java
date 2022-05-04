@@ -2013,15 +2013,15 @@ public class ObjectEntryLocalServiceImpl
 
 		int count = objectEntryPersistence.countByU_ODI(
 			user.getUserId(), objectDefinitionId);
-		long maximumNumberOfGuestUserSubmissionsPerObjectDefinition =
+		long maximumNumberOfGuestUserObjectEntriesPerObjectDefinition =
 			_objectConfiguration.
-				maximumNumberOfGuestUserSubmissionsPerObjectDefinition();
+				maximumNumberOfGuestUserObjectEntriesPerObjectDefinition();
 
-		if (count >= maximumNumberOfGuestUserSubmissionsPerObjectDefinition) {
+		if (count >= maximumNumberOfGuestUserObjectEntriesPerObjectDefinition) {
 			throw new ObjectEntryCountException(
 				StringBundler.concat(
 					"Unable to exceed ",
-					maximumNumberOfGuestUserSubmissionsPerObjectDefinition,
+					maximumNumberOfGuestUserObjectEntriesPerObjectDefinition,
 					" guest object entries for object definition ",
 					objectDefinitionId));
 		}
