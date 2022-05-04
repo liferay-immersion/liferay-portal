@@ -42,14 +42,14 @@ public class ObjectFieldSettingModelListener
 	public void onBeforeCreate(ObjectFieldSetting objectFieldSetting)
 		throws ModelListenerException {
 
-		auditOnCreateOrRemove(EventTypes.ADD, objectFieldSetting);
+		_route(EventTypes.ADD, objectFieldSetting);
 	}
 
 	@Override
 	public void onBeforeRemove(ObjectFieldSetting objectFieldSetting)
 		throws ModelListenerException {
 
-		auditOnCreateOrRemove(EventTypes.DELETE, objectFieldSetting);
+		_route(EventTypes.DELETE, objectFieldSetting);
 	}
 
 	@Override
@@ -71,7 +71,7 @@ public class ObjectFieldSettingModelListener
 		}
 	}
 
-	protected void auditOnCreateOrRemove(
+	protected void _route(
 			String eventType, ObjectFieldSetting objectFieldSetting)
 		throws ModelListenerException {
 

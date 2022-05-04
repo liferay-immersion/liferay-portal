@@ -42,14 +42,14 @@ public class ObjectLayoutTabModelListener
 	public void onBeforeCreate(ObjectLayoutTab objectLayoutTab)
 		throws ModelListenerException {
 
-		auditOnCreateOrRemove(EventTypes.ADD, objectLayoutTab);
+		_route(EventTypes.ADD, objectLayoutTab);
 	}
 
 	@Override
 	public void onBeforeRemove(ObjectLayoutTab objectLayoutTab)
 		throws ModelListenerException {
 
-		auditOnCreateOrRemove(EventTypes.DELETE, objectLayoutTab);
+		_route(EventTypes.DELETE, objectLayoutTab);
 	}
 
 	@Override
@@ -71,7 +71,7 @@ public class ObjectLayoutTabModelListener
 		}
 	}
 
-	protected void auditOnCreateOrRemove(
+	protected void _route(
 			String eventType, ObjectLayoutTab objectLayoutTab)
 		throws ModelListenerException {
 

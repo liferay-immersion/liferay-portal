@@ -42,14 +42,14 @@ public class ObjectRelationshipModelListener
 	public void onBeforeCreate(ObjectRelationship objectRelationship)
 		throws ModelListenerException {
 
-		auditOnCreateOrRemove(EventTypes.ADD, objectRelationship);
+		_route(EventTypes.ADD, objectRelationship);
 	}
 
 	@Override
 	public void onBeforeRemove(ObjectRelationship objectRelationship)
 		throws ModelListenerException {
 
-		auditOnCreateOrRemove(EventTypes.DELETE, objectRelationship);
+		_route(EventTypes.DELETE, objectRelationship);
 	}
 
 	@Override
@@ -71,7 +71,7 @@ public class ObjectRelationshipModelListener
 		}
 	}
 
-	protected void auditOnCreateOrRemove(
+	protected void _route(
 			String eventType, ObjectRelationship objectRelationship)
 		throws ModelListenerException {
 

@@ -41,14 +41,14 @@ public class ObjectFieldModelListener extends BaseModelListener<ObjectField> {
 	public void onBeforeCreate(ObjectField objectField)
 		throws ModelListenerException {
 
-		auditOnCreateOrRemove(EventTypes.ADD, objectField);
+		_route(EventTypes.ADD, objectField);
 	}
 
 	@Override
 	public void onBeforeRemove(ObjectField objectField)
 		throws ModelListenerException {
 
-		auditOnCreateOrRemove(EventTypes.DELETE, objectField);
+		_route(EventTypes.DELETE, objectField);
 	}
 
 	@Override
@@ -68,7 +68,7 @@ public class ObjectFieldModelListener extends BaseModelListener<ObjectField> {
 		}
 	}
 
-	protected void auditOnCreateOrRemove(
+	protected void _route(
 			String eventType, ObjectField objectField)
 		throws ModelListenerException {
 

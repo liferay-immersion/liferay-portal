@@ -42,14 +42,14 @@ public class ObjectValidationRuleModelListener
 	public void onBeforeCreate(ObjectValidationRule objectValidationRule)
 		throws ModelListenerException {
 
-		auditOnCreateOrRemove(EventTypes.ADD, objectValidationRule);
+		_route(EventTypes.ADD, objectValidationRule);
 	}
 
 	@Override
 	public void onBeforeRemove(ObjectValidationRule objectValidationRule)
 		throws ModelListenerException {
 
-		auditOnCreateOrRemove(EventTypes.DELETE, objectValidationRule);
+		_route(EventTypes.DELETE, objectValidationRule);
 	}
 
 	@Override
@@ -71,7 +71,7 @@ public class ObjectValidationRuleModelListener
 		}
 	}
 
-	protected void auditOnCreateOrRemove(
+	protected void _route(
 			String eventType, ObjectValidationRule objectValidationRule)
 		throws ModelListenerException {
 

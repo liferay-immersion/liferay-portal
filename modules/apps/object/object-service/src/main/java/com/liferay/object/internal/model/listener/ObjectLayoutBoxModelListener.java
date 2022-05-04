@@ -42,14 +42,14 @@ public class ObjectLayoutBoxModelListener
 	public void onBeforeCreate(ObjectLayoutBox objectLayoutBox)
 		throws ModelListenerException {
 
-		auditOnCreateOrRemove(EventTypes.ADD, objectLayoutBox);
+		_route(EventTypes.ADD, objectLayoutBox);
 	}
 
 	@Override
 	public void onBeforeRemove(ObjectLayoutBox objectLayoutBox)
 		throws ModelListenerException {
 
-		auditOnCreateOrRemove(EventTypes.DELETE, objectLayoutBox);
+		_route(EventTypes.DELETE, objectLayoutBox);
 	}
 
 	@Override
@@ -71,7 +71,7 @@ public class ObjectLayoutBoxModelListener
 		}
 	}
 
-	protected void auditOnCreateOrRemove(
+	protected void _route(
 			String eventType, ObjectLayoutBox objectLayoutBox)
 		throws ModelListenerException {
 

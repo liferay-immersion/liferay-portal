@@ -41,14 +41,14 @@ public class ObjectViewModelListener extends BaseModelListener<ObjectView> {
 	public void onBeforeCreate(ObjectView objectView)
 		throws ModelListenerException {
 
-		auditOnCreateOrRemove(EventTypes.ADD, objectView);
+		_route(EventTypes.ADD, objectView);
 	}
 
 	@Override
 	public void onBeforeRemove(ObjectView objectView)
 		throws ModelListenerException {
 
-		auditOnCreateOrRemove(EventTypes.DELETE, objectView);
+		_route(EventTypes.DELETE, objectView);
 	}
 
 	@Override
@@ -68,7 +68,7 @@ public class ObjectViewModelListener extends BaseModelListener<ObjectView> {
 		}
 	}
 
-	protected void auditOnCreateOrRemove(
+	protected void _route(
 			String eventType, ObjectView objectView)
 		throws ModelListenerException {
 
