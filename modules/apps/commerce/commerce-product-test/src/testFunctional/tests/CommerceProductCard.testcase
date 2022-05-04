@@ -381,8 +381,8 @@ definition {
 
 			FrontStore.viewQuantitySelectorPopoverListItem(
 				conditionNotSatisfied = "${conditionNotSatisfied}",
-				quantityConfiguration = "multiple",
-				quantity = "${multipleQuantity}");
+				quantity = "${multipleQuantity}",
+				quantityConfiguration = "multiple");
 		}
 	}
 
@@ -776,12 +776,13 @@ definition {
 				AssertElementPresent(
 					key_productName = "${product}",
 					locator1 = "CommerceAccelerators#PRODUCT_CARD_QUANTITY_SELECTOR_INPUT_FIELD_HAS_ERROR");
-				
+
 				FrontStore.viewQuantitySelectorPopoverListItem(
 					conditionNotSatisfied = "true",
-					quantityConfiguration = "max",
-					quantity = "${maximumQuantity}");
-			} else {
+					quantity = "${maximumQuantity}",
+					quantityConfiguration = "max");
+			}
+			else {
 				AssertElementNotPresent(
 					key_productName = "${product}",
 					locator1 = "CommerceAccelerators#PRODUCT_CARD_QUANTITY_SELECTOR_INPUT_FIELD_HAS_ERROR");
@@ -841,14 +842,15 @@ definition {
 				key_productName = "${product}",
 				locator1 = "CommerceAccelerators#PRODUCT_CARD_QUANTITY_SELECTOR_INPUT_FIELD",
 				value1 = "${quantity}");
-			
+
 			if (("${quantity}" == "1") || ("${quantity}" == "2")) {
 				var conditionNotSatisfied = "true";
 
 				AssertElementPresent(
 					key_productName = "${product}",
 					locator1 = "CommerceAccelerators#PRODUCT_CARD_QUANTITY_SELECTOR_INPUT_FIELD_HAS_ERROR");
-			} else {
+			}
+			else {
 				var conditionNotSatisfied = "false";
 
 				AssertElementNotPresent(
@@ -858,8 +860,8 @@ definition {
 
 			FrontStore.viewQuantitySelectorPopoverListItem(
 				conditionNotSatisfied = "${conditionNotSatisfied}",
-				quantityConfiguration = "min",
-				quantity = "${minimumQuantity}");
+				quantity = "${minimumQuantity}",
+				quantityConfiguration = "min");
 		}
 	}
 
