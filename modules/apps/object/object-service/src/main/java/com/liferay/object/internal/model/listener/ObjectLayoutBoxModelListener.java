@@ -71,7 +71,7 @@ public class ObjectLayoutBoxModelListener
 		}
 	}
 
-	protected void _route(
+	private void _route(
 			String eventType, ObjectLayoutBox objectLayoutBox)
 		throws ModelListenerException {
 

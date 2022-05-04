@@ -68,7 +68,7 @@ public class ObjectFieldModelListener extends BaseModelListener<ObjectField> {
 		}
 	}
 
-	protected void _route(
+	private void _route(
 			String eventType, ObjectField objectField)
 		throws ModelListenerException {
 

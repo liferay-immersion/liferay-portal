@@ -71,7 +71,7 @@ public class ObjectDefinitionModelListener
 		}
 	}
 
-	protected void _route(
+	private void _route(
 			String eventType, ObjectDefinition objectDefinition)
 		throws ModelListenerException {
 

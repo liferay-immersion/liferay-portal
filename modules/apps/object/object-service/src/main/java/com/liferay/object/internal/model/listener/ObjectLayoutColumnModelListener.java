@@ -71,7 +71,7 @@ public class ObjectLayoutColumnModelListener
 		}
 	}
 
-	protected void _route(
+	private void _route(
 			String eventType, ObjectLayoutColumn objectLayoutColumn)
 		throws ModelListenerException {
 

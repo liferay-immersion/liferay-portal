@@ -71,7 +71,7 @@ public class ObjectValidationRuleModelListener
 		}
 	}
 
-	protected void _route(
+	private void _route(
 			String eventType, ObjectValidationRule objectValidationRule)
 		throws ModelListenerException {
 

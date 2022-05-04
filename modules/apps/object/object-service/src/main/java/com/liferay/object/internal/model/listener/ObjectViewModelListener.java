@@ -68,7 +68,7 @@ public class ObjectViewModelListener extends BaseModelListener<ObjectView> {
 		}
 	}
 
-	protected void _route(
+	private void _route(
 			String eventType, ObjectView objectView)
 		throws ModelListenerException {
 

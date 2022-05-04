@@ -69,7 +69,7 @@ public class ObjectActionModelListener extends BaseModelListener<ObjectAction> {
 		}
 	}
 
-	protected void _route(
+	private void _route(
 			String eventType, ObjectAction objectAction)
 		throws ModelListenerException {
 

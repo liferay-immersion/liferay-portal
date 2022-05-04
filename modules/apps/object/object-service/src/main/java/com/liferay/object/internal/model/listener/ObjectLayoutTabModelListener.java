@@ -71,7 +71,7 @@ public class ObjectLayoutTabModelListener
 		}
 	}
 
-	protected void _route(
+	private void _route(
 			String eventType, ObjectLayoutTab objectLayoutTab)
 		throws ModelListenerException {
 

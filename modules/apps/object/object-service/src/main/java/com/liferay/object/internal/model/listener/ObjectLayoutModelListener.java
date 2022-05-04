@@ -69,7 +69,7 @@ public class ObjectLayoutModelListener extends BaseModelListener<ObjectLayout> {
 		}
 	}
 
-	protected void _route(
+	private void _route(
 			String eventType, ObjectLayout objectLayout)
 		throws ModelListenerException {
 
