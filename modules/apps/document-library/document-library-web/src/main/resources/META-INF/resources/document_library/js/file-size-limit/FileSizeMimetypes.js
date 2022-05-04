@@ -99,7 +99,7 @@ const FileSizeField = ({
 );
 
 const FileSizePerMimeType = ({
-	description = Liferay.Language.get('file-size-mimetype-description'),
+	description = Liferay.Language.get('file-size-mime-type-description'),
 	portletNamespace,
 	sizeList: initialSizeList,
 }) => {
