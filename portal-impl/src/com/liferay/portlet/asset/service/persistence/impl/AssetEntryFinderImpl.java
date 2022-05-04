@@ -510,14 +510,14 @@ public class AssetEntryFinderImpl
 					sb.append("THEN 0 ELSE ");
 					sb.append("TEMP_TABLE_ASSET_ENTRY.averageScore END");
 				}
+				else if (orderByCol2.equals("title")) {
+					sb.append(", CAST_CLOB_TEXT(AssetEntry.title)");
+				}
 				else if (orderByCol2.equals("viewCount")) {
 					sb.append(", CASE WHEN ");
 					sb.append("TEMP_TABLE_ASSET_ENTRY.viewCount IS NULL ");
 					sb.append("THEN 0 ELSE ");
 					sb.append("TEMP_TABLE_ASSET_ENTRY.viewCount END");
-				}
-				else if (orderByCol2.equals("title")) {
-					sb.append(", CAST_CLOB_TEXT(AssetEntry.title)");
 				}
 				else {
 					sb.append(", AssetEntry.");
