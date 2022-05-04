@@ -42,14 +42,14 @@ public class ObjectViewSortColumnModelListener
 	public void onBeforeCreate(ObjectViewSortColumn objectViewSortColumn)
 		throws ModelListenerException {
 
-		auditOnCreateOrRemove(EventTypes.ADD, objectViewSortColumn);
+		_route(EventTypes.ADD, objectViewSortColumn);
 	}
 
 	@Override
 	public void onBeforeRemove(ObjectViewSortColumn objectViewSortColumn)
 		throws ModelListenerException {
 
-		auditOnCreateOrRemove(EventTypes.DELETE, objectViewSortColumn);
+		_route(EventTypes.DELETE, objectViewSortColumn);
 	}
 
 	@Override
@@ -71,7 +71,7 @@ public class ObjectViewSortColumnModelListener
 		}
 	}
 
-	protected void auditOnCreateOrRemove(
+	protected void _route(
 			String eventType, ObjectViewSortColumn objectViewSortColumn)
 		throws ModelListenerException {
 

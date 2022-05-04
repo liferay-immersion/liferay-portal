@@ -42,14 +42,14 @@ public class ObjectDefinitionModelListener
 	public void onBeforeCreate(ObjectDefinition objectDefinition)
 		throws ModelListenerException {
 
-		auditOnCreateOrRemove(EventTypes.ADD, objectDefinition);
+		_route(EventTypes.ADD, objectDefinition);
 	}
 
 	@Override
 	public void onBeforeRemove(ObjectDefinition objectDefinition)
 		throws ModelListenerException {
 
-		auditOnCreateOrRemove(EventTypes.DELETE, objectDefinition);
+		_route(EventTypes.DELETE, objectDefinition);
 	}
 
 	@Override
@@ -71,7 +71,7 @@ public class ObjectDefinitionModelListener
 		}
 	}
 
-	protected void auditOnCreateOrRemove(
+	protected void _route(
 			String eventType, ObjectDefinition objectDefinition)
 		throws ModelListenerException {
 

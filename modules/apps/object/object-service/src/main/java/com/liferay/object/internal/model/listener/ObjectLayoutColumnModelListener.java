@@ -42,14 +42,14 @@ public class ObjectLayoutColumnModelListener
 	public void onBeforeCreate(ObjectLayoutColumn objectLayoutColumn)
 		throws ModelListenerException {
 
-		auditOnCreateOrRemove(EventTypes.ADD, objectLayoutColumn);
+		_route(EventTypes.ADD, objectLayoutColumn);
 	}
 
 	@Override
 	public void onBeforeRemove(ObjectLayoutColumn objectLayoutColumn)
 		throws ModelListenerException {
 
-		auditOnCreateOrRemove(EventTypes.DELETE, objectLayoutColumn);
+		_route(EventTypes.DELETE, objectLayoutColumn);
 	}
 
 	@Override
@@ -71,7 +71,7 @@ public class ObjectLayoutColumnModelListener
 		}
 	}
 
-	protected void auditOnCreateOrRemove(
+	protected void _route(
 			String eventType, ObjectLayoutColumn objectLayoutColumn)
 		throws ModelListenerException {
 

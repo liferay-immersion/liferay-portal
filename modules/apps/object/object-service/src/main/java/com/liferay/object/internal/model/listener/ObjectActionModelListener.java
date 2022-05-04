@@ -41,14 +41,14 @@ public class ObjectActionModelListener extends BaseModelListener<ObjectAction> {
 	public void onBeforeCreate(ObjectAction objectAction)
 		throws ModelListenerException {
 
-		auditOnCreateOrRemove(EventTypes.ADD, objectAction);
+		_route(EventTypes.ADD, objectAction);
 	}
 
 	@Override
 	public void onBeforeRemove(ObjectAction objectAction)
 		throws ModelListenerException {
 
-		auditOnCreateOrRemove(EventTypes.DELETE, objectAction);
+		_route(EventTypes.DELETE, objectAction);
 	}
 
 	@Override
@@ -69,7 +69,7 @@ public class ObjectActionModelListener extends BaseModelListener<ObjectAction> {
 		}
 	}
 
-	protected void auditOnCreateOrRemove(
+	protected void _route(
 			String eventType, ObjectAction objectAction)
 		throws ModelListenerException {
 

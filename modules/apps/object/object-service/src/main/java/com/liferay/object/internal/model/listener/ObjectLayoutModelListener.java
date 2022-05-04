@@ -41,14 +41,14 @@ public class ObjectLayoutModelListener extends BaseModelListener<ObjectLayout> {
 	public void onBeforeCreate(ObjectLayout objectLayout)
 		throws ModelListenerException {
 
-		auditOnCreateOrRemove(EventTypes.ADD, objectLayout);
+		_route(EventTypes.ADD, objectLayout);
 	}
 
 	@Override
 	public void onBeforeRemove(ObjectLayout objectLayout)
 		throws ModelListenerException {
 
-		auditOnCreateOrRemove(EventTypes.DELETE, objectLayout);
+		_route(EventTypes.DELETE, objectLayout);
 	}
 
 	@Override
@@ -69,7 +69,7 @@ public class ObjectLayoutModelListener extends BaseModelListener<ObjectLayout> {
 		}
 	}
 
-	protected void auditOnCreateOrRemove(
+	protected void _route(
 			String eventType, ObjectLayout objectLayout)
 		throws ModelListenerException {
 
