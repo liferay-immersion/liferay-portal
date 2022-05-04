@@ -19,22 +19,22 @@ import com.liferay.portal.kernel.exception.PortalException;
 /**
  * @author Marco Leo
  */
-public class ObjectEntrySubmissionLimitException extends PortalException {
+public class ObjectEntryCountException extends PortalException {
 
-	public ObjectEntrySubmissionLimitException() {
+	public ObjectEntryCountException() {
 	}
 
-	public ObjectEntrySubmissionLimitException(String msg) {
+	public ObjectEntryCountException(String msg) {
 		super(msg);
 	}
 
-	public ObjectEntrySubmissionLimitException(
+	public ObjectEntryCountException(
 		String msg, Throwable throwable) {
 
 		super(msg, throwable);
 	}
 
-	public ObjectEntrySubmissionLimitException(Throwable throwable) {
+	public ObjectEntryCountException(Throwable throwable) {
 		super(throwable);
 	}
 
