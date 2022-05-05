@@ -20,7 +20,6 @@ import com.liferay.frontend.data.set.view.table.BaseTableFDSView;
 import com.liferay.frontend.data.set.view.table.FDSTableSchema;
 import com.liferay.frontend.data.set.view.table.FDSTableSchemaBuilder;
 import com.liferay.frontend.data.set.view.table.FDSTableSchemaBuilderFactory;
-import com.liferay.frontend.data.set.view.table.FDSTableSchemaField;
 
 import java.util.Locale;
 
@@ -59,17 +58,17 @@ public class CustomizedTableFDSView extends BaseTableFDSView {
 			"description", "description");
 		fdsTableSchemaBuilder.addFDSTableSchemaField("date", "date");
 
-		FDSTableSchemaField statusFDSTableSchemaField =
-			fdsTableSchemaBuilder.addFDSTableSchemaField("status", "status");
+		fdsTableSchemaBuilder.addFDSTableSchemaField(
+			"status", "status"
+		).setContentRenderer(
+			"status"
+		);
 
-		statusFDSTableSchemaField.setContentRenderer("status");
-
-		FDSTableSchemaField authorFDSTableSchemaField =
-			fdsTableSchemaBuilder.addFDSTableSchemaField(
-				"creator.name", "author");
-
-		authorFDSTableSchemaField.setContentRenderer(
-			"sampleCustomDataRenderer");
+		fdsTableSchemaBuilder.addFDSTableSchemaField(
+			"creator.name", "author"
+		).setContentRenderer(
+			"sampleCustomDataRenderer"
+		);
 
 		return fdsTableSchemaBuilder.build();
 	}
