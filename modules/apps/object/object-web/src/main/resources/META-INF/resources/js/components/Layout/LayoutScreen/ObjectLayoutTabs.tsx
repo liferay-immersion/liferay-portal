@@ -83,7 +83,7 @@ const ObjectLayoutTabs: React.FC<React.HTMLAttributes<HTMLElement>> = () => {
 										)}
 
 										<HeaderDropdown
-											onClick={() => {
+											deleteElement={() => {
 												dispatch({
 													payload: {
 														tabIndex,

@@ -12,6 +12,10 @@
  * details.
  */
 
-import React from 'react';
-declare const HeaderDropdown: React.FC<React.HTMLAttributes<HTMLElement>>;
+import {FC, MouseEventHandler} from 'react';
+declare const HeaderDropdown: FC<IHeaderDropdown>;
+interface IHeaderDropdown {
+	addCategorization?: MouseEventHandler;
+	deleteElement: MouseEventHandler;
+}
 export default HeaderDropdown;
