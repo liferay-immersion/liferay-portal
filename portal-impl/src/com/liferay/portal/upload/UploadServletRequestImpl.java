@@ -97,7 +97,7 @@ public class UploadServletRequestImpl
 				location,
 				UploadServletRequestConfigurationHelperUtil.getTempDir());
 
-			List<FileItem> fileItemList = _servletFileUpload.parseRequest(
+			List<FileItem> fileItemsList = _servletFileUpload.parseRequest(
 				liferayServletRequest, maxRequestSize, maxFileSize, location,
 				fileSizeThreshold);
 
@@ -111,10 +111,10 @@ public class UploadServletRequestImpl
 				((contentLength == -1) ||
 				 (contentLength > uploadServletRequestImplMaxSize))) {
 
-				fileItemList = _sort(fileItemList);
+				fileItemsList = _sort(fileItemsList);
 			}
 
-			for (FileItem fileItem : fileItemList) {
+			for (FileItem fileItem : fileItemsList) {
 				if (uploadServletRequestImplMaxSize > 0) {
 					long itemSize = fileItem.getSize();
 
