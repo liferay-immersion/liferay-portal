@@ -30,7 +30,6 @@ import BuilderListItem from './BuilderListItem';
 import './BuilderScreen.scss';
 
 interface IProps {
-	defaultFilter?: boolean;
 	defaultSort?: boolean;
 	emptyState: {
 		buttonText: string;
@@ -51,7 +50,6 @@ interface IProps {
 }
 
 export function BuilderScreen({
-	defaultFilter,
 	defaultSort,
 	emptyState,
 	filter,
@@ -188,9 +186,11 @@ export function BuilderScreen({
 										<ClayList.Item flex>
 											<ClayList.ItemField expand>
 												<ClayList.ItemField
-													className={classNames({
-														'lfr-object__object-builder-screen-first-column': hasDragAndDrop,
-													})}
+													className={classNames(
+														'lfr-object__object-builder-screen-first-column',
+														!hasDragAndDrop &&
+															'lfr-object__object-builder-screen-first-column--not-draggable'
+													)}
 													expand
 												>
 													{firstColumnHeader}
@@ -198,9 +198,11 @@ export function BuilderScreen({
 											</ClayList.ItemField>
 
 											<ClayList.ItemField
-												className={classNames({
-													'lfr-object__object-builder-screen-second-column': hasDragAndDrop,
-												})}
+												className={classNames(
+													'lfr-object__object-builder-screen-second-column',
+													!hasDragAndDrop &&
+														'lfr-object__object-builder-screen-second-column--not-draggable'
+												)}
 												expand
 											>
 												<ClayList.ItemField>
@@ -210,9 +212,11 @@ export function BuilderScreen({
 
 											{thirdColumnHeader && (
 												<ClayList.ItemField
-													className={classNames({
-														'lfr-object__object-builder-screen-third-column': hasDragAndDrop,
-													})}
+													className={classNames(
+														'lfr-object__object-builder-screen-third-column',
+														!hasDragAndDrop &&
+															'lfr-object__object-builder-screen-third-column--not-draggable'
+													)}
 													expand
 												>
 													<ClayList.ItemField>
@@ -242,6 +246,12 @@ export function BuilderScreen({
 													  ]
 											}
 											defaultSort={defaultSort}
+											disableEdit={
+												viewColumn.objectFieldBusinessType !==
+													'Picklist' &&
+												viewColumn.objectFieldBusinessType !==
+													'Workflow Status'
+											}
 											filter={filter}
 											hasDragAndDrop={hasDragAndDrop}
 											index={index}

@@ -16,8 +16,9 @@ import React from 'react';
 import './BuilderListItem.scss';
 interface IProps {
 	aliasColumnText?: string;
-	defaultFilter?: boolean;
 	defaultSort?: boolean;
+	disableEdit?: boolean;
+	filter?: boolean;
 	hasDragAndDrop?: boolean;
 	index: number;
 	label?: string;
