@@ -83,7 +83,7 @@ const ObjectLayoutBox: React.FC<IObjectLayoutBoxProps> = ({
 							</ClayButton>
 
 							<HeaderDropdown
-								onClick={() => {
+								deleteElement={() => {
 									dispatch({
 										payload: {
 											boxIndex,
