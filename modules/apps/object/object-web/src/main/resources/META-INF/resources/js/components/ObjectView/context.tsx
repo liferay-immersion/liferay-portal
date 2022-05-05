@@ -267,7 +267,7 @@ const viewReducer = (state: TState, action: TAction) => {
 
 			objectViewColumns.forEach((viewColumn) => {
 				if (viewColumn.objectFieldName === objectFieldName) {
-					viewColumn.isDefaultSort = true;
+					viewColumn.defaultSort = true;
 				}
 			});
 
@@ -373,8 +373,8 @@ const viewReducer = (state: TState, action: TAction) => {
 					if (objectField.name === viewColumn.objectFieldName) {
 						newObjectViewColumns.push({
 							...viewColumn,
+							defaultSort: false,
 							fieldLabel: objectField.label[defaultLanguageId],
-							isDefaultSort: false,
 							label: viewColumn.label,
 						});
 					}
@@ -400,7 +400,7 @@ const viewReducer = (state: TState, action: TAction) => {
 								sortColumn.objectFieldName ===
 								viewColumn.objectFieldName
 							) {
-								viewColumn.isDefaultSort = true;
+								viewColumn.defaultSort = true;
 							}
 						}
 					);
@@ -552,7 +552,7 @@ const viewReducer = (state: TState, action: TAction) => {
 
 			objectViewColumns.forEach((viewColumn) => {
 				if (viewColumn.objectFieldName === objectFieldName) {
-					viewColumn.isDefaultSort = false;
+					viewColumn.defaultSort = false;
 				}
 			});
 

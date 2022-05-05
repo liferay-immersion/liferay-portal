@@ -23,6 +23,7 @@ import SidePanelContent, {closeSidePanel, openToast} from '../SidePanelContent';
 import BasicInfoScreen from './BasicInfoScreen/BasicInfoScreen';
 import {DefaultFilterScreen} from './DefaultFilterScreen/DefaultFilterScreen';
 import {DefaultSortScreen} from './DefaultSortScreen/DefaultSortScreen';
+import {FilterScreen} from './FilterScreen/FilterScreen';
 import ViewBuilderScreen from './ViewBuilderScreen/ViewBuilderScreen';
 import ViewContext, {TYPES, ViewContextProvider} from './context';
 import {TObjectField, TObjectView, TWorkflowStatus} from './types';
@@ -59,8 +60,8 @@ const CustomView: React.FC<React.HTMLAttributes<HTMLElement>> = () => {
 
 	if (TABS.length < 4 && flags['LPS-144957']) {
 		TABS.push({
-			Component: DefaultFilterScreen,
-			label: Liferay.Language.get('default-filters'),
+			Component: FilterScreen,
+			label: Liferay.Language.get('filters'),
 		});
 	}
 

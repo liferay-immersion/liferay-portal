@@ -45,9 +45,9 @@ export type TObjectField = {
 };
 
 export type TObjectColumn = {
+	defaultSort?: boolean;
 	fieldLabel?: string;
 	filterBy?: string;
-	isDefaultSort?: boolean;
 	label: TName;
 	objectFieldBusinessType?: string;
 	objectFieldName: string;
@@ -59,8 +59,8 @@ export type TObjectColumn = {
 };
 
 export type TObjectViewColumn = {
+	defaultSort: boolean;
 	fieldLabel: string;
-	isDefaultSort: boolean;
 	label: TName;
 	objectFieldName: string;
 	priority?: number;

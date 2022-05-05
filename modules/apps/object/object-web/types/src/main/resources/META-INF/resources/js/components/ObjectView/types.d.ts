@@ -40,9 +40,9 @@ export declare type TObjectField = {
 	type: string;
 };
 export declare type TObjectColumn = {
+	defaultSort?: boolean;
 	fieldLabel?: string;
 	filterBy?: string;
-	isDefaultSort?: boolean;
 	label: TName;
 	objectFieldBusinessType?: string;
 	objectFieldName: string;
@@ -53,8 +53,8 @@ export declare type TObjectColumn = {
 	valueList?: TLabelValueObject[];
 };
 export declare type TObjectViewColumn = {
+	defaultSort: boolean;
 	fieldLabel: string;
-	isDefaultSort: boolean;
 	label: TName;
 	objectFieldName: string;
 	priority?: number;
