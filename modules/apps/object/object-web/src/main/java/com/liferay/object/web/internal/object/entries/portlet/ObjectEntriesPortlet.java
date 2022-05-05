@@ -21,6 +21,7 @@ import com.liferay.object.service.ObjectFieldLocalService;
 import com.liferay.object.service.ObjectViewLocalService;
 import com.liferay.object.web.internal.constants.ObjectWebKeys;
 import com.liferay.object.web.internal.object.entries.display.context.ViewObjectEntriesDisplayContext;
+import com.liferay.object.web.internal.object.entries.frontend.data.set.filter.factory.ObjectEntryFieldFDSFilterFactoryServicesTracker;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 import com.liferay.portal.kernel.security.permission.resource.PortletResourcePermission;
 import com.liferay.portal.kernel.util.Portal;
@@ -41,6 +42,8 @@ public class ObjectEntriesPortlet extends MVCPortlet {
 	public ObjectEntriesPortlet(
 		long objectDefinitionId,
 		ObjectDefinitionLocalService objectDefinitionLocalService,
+		ObjectEntryFieldFDSFilterFactoryServicesTracker
+			objectEntryFieldFDSFilterFactoryServicesTracker,
 		ObjectFieldLocalService objectFieldLocalService,
 		ObjectScopeProviderRegistry objectScopeProviderRegistry,
 		ObjectViewLocalService objectViewLocalService, Portal portal,
@@ -48,6 +51,8 @@ public class ObjectEntriesPortlet extends MVCPortlet {
 
 		_objectDefinitionId = objectDefinitionId;
 		_objectDefinitionLocalService = objectDefinitionLocalService;
+		_objectEntryFieldFDSFilterFactoryServicesTracker =
+			objectEntryFieldFDSFilterFactoryServicesTracker;
 		_objectFieldLocalService = objectFieldLocalService;
 		_objectScopeProviderRegistry = objectScopeProviderRegistry;
 		_objectViewLocalService = objectViewLocalService;
@@ -71,6 +76,7 @@ public class ObjectEntriesPortlet extends MVCPortlet {
 			WebKeys.PORTLET_DISPLAY_CONTEXT,
 			new ViewObjectEntriesDisplayContext(
 				_portal.getHttpServletRequest(renderRequest),
+				_objectEntryFieldFDSFilterFactoryServicesTracker,
 				_objectFieldLocalService,
 				_objectScopeProviderRegistry.getObjectScopeProvider(
 					objectDefinition.getScope()),
@@ -82,6 +88,8 @@ public class ObjectEntriesPortlet extends MVCPortlet {
 
 	private final long _objectDefinitionId;
 	private final ObjectDefinitionLocalService _objectDefinitionLocalService;
+	private final ObjectEntryFieldFDSFilterFactoryServicesTracker
+		_objectEntryFieldFDSFilterFactoryServicesTracker;
 	private final ObjectFieldLocalService _objectFieldLocalService;
 	private final ObjectScopeProviderRegistry _objectScopeProviderRegistry;
 	private final ObjectViewLocalService _objectViewLocalService;
