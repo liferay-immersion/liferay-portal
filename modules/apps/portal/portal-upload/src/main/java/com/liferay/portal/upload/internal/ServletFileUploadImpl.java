@@ -52,16 +52,16 @@ public class ServletFileUploadImpl implements ServletFileUpload {
 		servletFileUpload.setFileSizeMax(fileSizeMax);
 		servletFileUpload.setSizeMax(sizeMax);
 
-		List<FileItem> fileItemList = new ArrayList<>();
+		List<FileItem> fileItems = new ArrayList<>();
 
 		try {
 			for (org.apache.commons.fileupload.FileItem fileItem :
 					servletFileUpload.parseRequest(httpServletRequest)) {
 
-				fileItemList.add((FileItem)fileItem);
+				fileItems.add((FileItem)fileItem);
 			}
 
-			return fileItemList;
+			return fileItems;
 		}
 		catch (FileUploadException fileUploadException) {
 			UploadException uploadException = new UploadException(
