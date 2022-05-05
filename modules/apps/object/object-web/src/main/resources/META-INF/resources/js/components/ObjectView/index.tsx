@@ -21,7 +21,6 @@ import {invalidateRequired} from '../../hooks/useForm';
 import {defaultLanguageId} from '../../utils/locale';
 import SidePanelContent, {closeSidePanel, openToast} from '../SidePanelContent';
 import BasicInfoScreen from './BasicInfoScreen/BasicInfoScreen';
-import {DefaultFilterScreen} from './DefaultFilterScreen/DefaultFilterScreen';
 import {DefaultSortScreen} from './DefaultSortScreen/DefaultSortScreen';
 import {FilterScreen} from './FilterScreen/FilterScreen';
 import ViewBuilderScreen from './ViewBuilderScreen/ViewBuilderScreen';
@@ -80,6 +79,7 @@ const CustomView: React.FC<React.HTMLAttributes<HTMLElement>> = () => {
 				name,
 				objectDefinitionId,
 				objectViewColumns,
+				objectViewFilterColumns,
 				objectViewSortColumns,
 			} = (await objectViewResponse.json()) as any;
 
@@ -96,6 +96,7 @@ const CustomView: React.FC<React.HTMLAttributes<HTMLElement>> = () => {
 				name,
 				objectDefinitionId,
 				objectViewColumns,
+				objectViewFilterColumns,
 				objectViewSortColumns,
 			};
 
@@ -129,7 +130,11 @@ const CustomView: React.FC<React.HTMLAttributes<HTMLElement>> = () => {
 	const removeUnnecessaryPropertiesFromObjectView = (
 		objectView: TObjectView
 	) => {
-		const {objectViewColumns, objectViewSortColumns} = objectView;
+		const {
+			objectViewColumns,
+			objectViewFilterColumns,
+			objectViewSortColumns,
+		} = objectView;
 
 		const newObjectViewColumns = objectViewColumns.map((viewColumn) => {
 			return {
@@ -138,6 +143,16 @@ const CustomView: React.FC<React.HTMLAttributes<HTMLElement>> = () => {
 				priority: viewColumn.priority,
 			};
 		});
+
+		const newObjectViewFilterColumns = objectViewFilterColumns.map(
+			(filterColumn) => {
+				return {
+					filterType: filterColumn.filterType,
+					json: JSON.stringify(filterColumn.definition),
+					objectFieldName: filterColumn.objectFieldName,
+				};
+			}
+		);
 
 		const newObjectViewSortColumns = objectViewSortColumns.map(
 			(sortColumn) => {
@@ -152,6 +167,7 @@ const CustomView: React.FC<React.HTMLAttributes<HTMLElement>> = () => {
 		const newObjectView = {
 			...objectView,
 			objectViewColumns: newObjectViewColumns,
+			objectViewFilterColumns: newObjectViewFilterColumns,
 			objectViewSortColumns: newObjectViewSortColumns,
 		};
 
