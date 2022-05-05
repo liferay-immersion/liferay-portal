@@ -20,7 +20,7 @@ import {ModalAddFilterColumn} from '../ModalAddFilterColumn/ModalAddFilterColumn
 import ViewContext from '../context';
 
 export function FilterScreen() {
-	const [{objectFields, objectView}] = useContext(ViewContext);
+	const [{objectView}] = useContext(ViewContext);
 
 	const {objectViewFilterColumns} = objectView;
 
@@ -48,7 +48,7 @@ export function FilterScreen() {
 				}}
 				filter
 				firstColumnHeader={Liferay.Language.get('filter-by')}
-				objectColumns={newObjectViewFilterColumns ?? []}
+				objectColumns={objectViewFilterColumns ?? []}
 				onEditing={setEditingFilter}
 				onEditingObjectFieldName={setEditingObjectFieldName}
 				onVisibleEditModal={setVisibleModal}

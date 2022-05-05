@@ -75,10 +75,10 @@ export type TObjectViewSortColumn = {
 };
 
 export type TObjectViewFilterColumn = {
-	definition: {[key: string]: string[]};
+	definition: {[key: string]: string[]} | null;
 	fieldLabel: string;
 	filterBy: string;
-	filterType: string;
+	filterType: string | null;
 	label: TName;
 	objectFieldBusinessType?: string;
 	objectFieldName: string;
