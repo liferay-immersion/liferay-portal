@@ -20,7 +20,7 @@ import React, {useContext, useState} from 'react';
 import Panel from '../../Panel/Panel';
 import LayoutContext, {TYPES} from '../context';
 import {TObjectLayoutRow} from '../types';
-import DropdownWithDeleteButton from './DropdownWithDeleteButton';
+import HeaderDropdown from './HeaderDropdown';
 import ModalAddObjectLayoutField from './ModalAddObjectLayoutField';
 import ObjectLayoutRows from './ObjectLayoutRows';
 
@@ -82,7 +82,7 @@ const ObjectLayoutBox: React.FC<IObjectLayoutBoxProps> = ({
 								{Liferay.Language.get('add-field')}
 							</ClayButton>
 
-							<DropdownWithDeleteButton
+							<HeaderDropdown
 								onClick={() => {
 									dispatch({
 										payload: {
