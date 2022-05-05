@@ -177,22 +177,26 @@ definition {
 
 		// TODO Review
 
+		var maximumQuantity = "4";
+		var product = "U-Joint";
+		var productSku = "MIN55861";
+
 		CommerceAccelerators.initializeNewSiteViaAccelerator(siteName = "Minium");
 
 		CommerceNavigator.gotoPortlet(
 			category = "Product Management",
 			portlet = "Products");
 
-		CommerceProducts.searchProduct(search = "U-Joint");
+		CommerceProducts.searchProduct(search = "${product}");
 
-		CommerceNavigator.gotoEntry(entryName = "U-Joint");
+		CommerceNavigator.gotoEntry(entryName = "${product}");
 
 		CommerceEntry.gotoMenuTab(menuTab = "Configuration");
 
 		Type(
 			key_fieldLabel = "Maximum Order Quantity",
 			locator1 = "TextInput#GENERIC_TEXT_INPUT",
-			value1 = "4");
+			value1 = "${maximumQuantity}");
 
 		Button.clickPublish();
 
@@ -204,29 +208,50 @@ definition {
 
 		CommerceNavigator.gotoMiniumSidebarItem(menuItem = "Catalog");
 
+		FrontStore.addToCartProductWithInvalidQuantityValue(
+			productName = "${product}",
+			productQuantity = "10");
+
 		FrontStore.addInitializerProductToCart(
-			productName = "U-Joint",
+			productName = "${product}",
 			productQuantity = "1");
 
 		CommerceNavigator.gotoMiniCart();
 
-		for (var iterator : list "1,2,3,4,5") {
-			Type(
-				key_cartItemSku = "MIN55861",
-				locator1 = "CommerceAccelerators#MINI_CART_ITEM_QUANTITY",
-				value1 = "${iterator}");
+		AssertTextEquals(
+			key_cartItemSku = "${productSku}",
+			locator1 = "CommerceAccelerators#MINI_CART_ITEM_QUANTITY",
+			value1 = "1");
 
-			if ("${iterator}" == "5") {
-				AssertTextNotEquals(
-					key_summaryTableItem = "Quantity",
-					locator1 = "CommerceAccelerators#MINI_CART_SUMMARY_TABLE_ITEM",
-					value1 = "${iterator}");
+		for (var quantity : list "4,5,10") {
+			Type(
+				key_cartItemSku = "${productSku}",
+				locator1 = "CommerceAccelerators#MINI_CART_ITEM_QUANTITY",
+				value1 = "${quantity}");
+
+			AssertTextEquals(
+				key_cartItemSku = "${productSku}",
+				locator1 = "CommerceAccelerators#MINI_CART_ITEM_QUANTITY",
+				value1 = "${quantity}");
+
+			if (("${quantity}" == "5") || ("${quantity}" == "10")) {	
+				AssertElementPresent(
+					key_cartItemSku = "${productSku}",
+					locator1 = "CommerceAccelerators#MINI_CART_ITEM_QUANTITY_SELECTOR_HAS_ERROR");
+
+				AssertElementPresent(
+					key_cartItemSku = "${productSku}",
+					locator1 = "CommerceAccelerators#MINI_CART_ITEM_ERROR_THE_PRODUCT_QUANTITY_IS_NOT_VALID");
+
+				FrontStore.viewQuantitySelectorPopoverListItem(
+					conditionNotSatisfied = "true",
+					quantity = "${maximumQuantity}",
+					quantityConfiguration = "max");
 			}
 			else {
-				AssertTextEquals(
-					key_summaryTableItem = "Quantity",
-					locator1 = "CommerceAccelerators#MINI_CART_SUMMARY_TABLE_ITEM",
-					value1 = "${iterator}");
+				AssertElementNotPresent(
+					key_cartItemSku = "${productSku}",
+					locator1 = "CommerceAccelerators#MINI_CART_ITEM_QUANTITY_SELECTOR_HAS_ERROR");
 			}
 		}
 	}
@@ -809,7 +834,7 @@ definition {
 		var product = "U-Joint";
 		var productSku = "MIN55861";
 
-		/*		CommerceAccelerators.initializeNewSiteViaAccelerator(siteName = "Minium");
+		CommerceAccelerators.initializeNewSiteViaAccelerator(siteName = "Minium");
 
 		CommerceNavigator.gotoPortlet(
 			category = "Product Management",
@@ -832,7 +857,6 @@ definition {
 			value1 = "${multipleQuantity}");
 
 		Button.clickPublish();
-*/
 
 		ApplicationsMenu.gotoSite(site = "Minium");
 
@@ -959,7 +983,7 @@ definition {
 			locator1 = "CommerceAccelerators#MINI_CART_ITEM_QUANTITY",
 			value1 = "${multipleQuantity}");
 
-		for (var quantity : list "1,4,5") {
+		for (var quantity : list "1,4,5,20") {
 			Type(
 				key_cartItemSku = "${productSku}",
 				locator1 = "CommerceAccelerators#MINI_CART_ITEM_QUANTITY",
