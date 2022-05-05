@@ -62,34 +62,6 @@ public class ObjectViewFilterColumn implements Serializable {
 	}
 
 	@Schema
-	public String getDefinition() {
-		return definition;
-	}
-
-	public void setDefinition(String definition) {
-		this.definition = definition;
-	}
-
-	@JsonIgnore
-	public void setDefinition(
-		UnsafeSupplier<String, Exception> definitionUnsafeSupplier) {
-
-		try {
-			definition = definitionUnsafeSupplier.get();
-		}
-		catch (RuntimeException re) {
-			throw re;
-		}
-		catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
-
-	@GraphQLField
-	@JsonProperty(access = JsonProperty.Access.READ_WRITE)
-	protected String definition;
-
-	@Schema
 	@Valid
 	public FilterType getFilterType() {
 		return filterType;
@@ -154,6 +126,32 @@ public class ObjectViewFilterColumn implements Serializable {
 	protected Long id;
 
 	@Schema
+	public String getJson() {
+		return json;
+	}
+
+	public void setJson(String json) {
+		this.json = json;
+	}
+
+	@JsonIgnore
+	public void setJson(UnsafeSupplier<String, Exception> jsonUnsafeSupplier) {
+		try {
+			json = jsonUnsafeSupplier.get();
+		}
+		catch (RuntimeException re) {
+			throw re;
+		}
+		catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	@GraphQLField
+	@JsonProperty(access = JsonProperty.Access.READ_WRITE)
+	protected String json;
+
+	@Schema
 	public String getObjectFieldName() {
 		return objectFieldName;
 	}
@@ -209,20 +207,6 @@ public class ObjectViewFilterColumn implements Serializable {
 
 		sb.append("{");
 
-		if (definition != null) {
-			if (sb.length() > 1) {
-				sb.append(", ");
-			}
-
-			sb.append("\"definition\": ");
-
-			sb.append("\"");
-
-			sb.append(_escape(definition));
-
-			sb.append("\"");
-		}
-
 		if (filterType != null) {
 			if (sb.length() > 1) {
 				sb.append(", ");
@@ -245,6 +229,20 @@ public class ObjectViewFilterColumn implements Serializable {
 			sb.append("\"id\": ");
 
 			sb.append(id);
+		}
+
+		if (json != null) {
+			if (sb.length() > 1) {
+				sb.append(", ");
+			}
+
+			sb.append("\"json\": ");
+
+			sb.append("\"");
+
+			sb.append(_escape(json));
+
+			sb.append("\"");
 		}
 
 		if (objectFieldName != null) {

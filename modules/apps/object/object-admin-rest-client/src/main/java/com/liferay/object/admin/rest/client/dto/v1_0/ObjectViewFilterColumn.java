@@ -34,27 +34,6 @@ public class ObjectViewFilterColumn implements Cloneable, Serializable {
 		return ObjectViewFilterColumnSerDes.toDTO(json);
 	}
 
-	public String getDefinition() {
-		return definition;
-	}
-
-	public void setDefinition(String definition) {
-		this.definition = definition;
-	}
-
-	public void setDefinition(
-		UnsafeSupplier<String, Exception> definitionUnsafeSupplier) {
-
-		try {
-			definition = definitionUnsafeSupplier.get();
-		}
-		catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
-
-	protected String definition;
-
 	public FilterType getFilterType() {
 		return filterType;
 	}
@@ -102,6 +81,25 @@ public class ObjectViewFilterColumn implements Cloneable, Serializable {
 	}
 
 	protected Long id;
+
+	public String getJson() {
+		return json;
+	}
+
+	public void setJson(String json) {
+		this.json = json;
+	}
+
+	public void setJson(UnsafeSupplier<String, Exception> jsonUnsafeSupplier) {
+		try {
+			json = jsonUnsafeSupplier.get();
+		}
+		catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	protected String json;
 
 	public String getObjectFieldName() {
 		return objectFieldName;

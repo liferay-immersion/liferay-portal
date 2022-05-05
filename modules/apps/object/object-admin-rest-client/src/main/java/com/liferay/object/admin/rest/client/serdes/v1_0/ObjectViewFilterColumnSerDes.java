@@ -55,20 +55,6 @@ public class ObjectViewFilterColumnSerDes {
 
 		sb.append("{");
 
-		if (objectViewFilterColumn.getDefinition() != null) {
-			if (sb.length() > 1) {
-				sb.append(", ");
-			}
-
-			sb.append("\"definition\": ");
-
-			sb.append("\"");
-
-			sb.append(_escape(objectViewFilterColumn.getDefinition()));
-
-			sb.append("\"");
-		}
-
 		if (objectViewFilterColumn.getFilterType() != null) {
 			if (sb.length() > 1) {
 				sb.append(", ");
@@ -91,6 +77,20 @@ public class ObjectViewFilterColumnSerDes {
 			sb.append("\"id\": ");
 
 			sb.append(objectViewFilterColumn.getId());
+		}
+
+		if (objectViewFilterColumn.getJson() != null) {
+			if (sb.length() > 1) {
+				sb.append(", ");
+			}
+
+			sb.append("\"json\": ");
+
+			sb.append("\"");
+
+			sb.append(_escape(objectViewFilterColumn.getJson()));
+
+			sb.append("\"");
 		}
 
 		if (objectViewFilterColumn.getObjectFieldName() != null) {
@@ -128,15 +128,6 @@ public class ObjectViewFilterColumnSerDes {
 
 		Map<String, String> map = new TreeMap<>();
 
-		if (objectViewFilterColumn.getDefinition() == null) {
-			map.put("definition", null);
-		}
-		else {
-			map.put(
-				"definition",
-				String.valueOf(objectViewFilterColumn.getDefinition()));
-		}
-
 		if (objectViewFilterColumn.getFilterType() == null) {
 			map.put("filterType", null);
 		}
@@ -151,6 +142,13 @@ public class ObjectViewFilterColumnSerDes {
 		}
 		else {
 			map.put("id", String.valueOf(objectViewFilterColumn.getId()));
+		}
+
+		if (objectViewFilterColumn.getJson() == null) {
+			map.put("json", null);
+		}
+		else {
+			map.put("json", String.valueOf(objectViewFilterColumn.getJson()));
 		}
 
 		if (objectViewFilterColumn.getObjectFieldName() == null) {
@@ -183,13 +181,7 @@ public class ObjectViewFilterColumnSerDes {
 			ObjectViewFilterColumn objectViewFilterColumn,
 			String jsonParserFieldName, Object jsonParserFieldValue) {
 
-			if (Objects.equals(jsonParserFieldName, "definition")) {
-				if (jsonParserFieldValue != null) {
-					objectViewFilterColumn.setDefinition(
-						(String)jsonParserFieldValue);
-				}
-			}
-			else if (Objects.equals(jsonParserFieldName, "filterType")) {
+			if (Objects.equals(jsonParserFieldName, "filterType")) {
 				if (jsonParserFieldValue != null) {
 					objectViewFilterColumn.setFilterType(
 						ObjectViewFilterColumn.FilterType.create(
@@ -200,6 +192,12 @@ public class ObjectViewFilterColumnSerDes {
 				if (jsonParserFieldValue != null) {
 					objectViewFilterColumn.setId(
 						Long.valueOf((String)jsonParserFieldValue));
+				}
+			}
+			else if (Objects.equals(jsonParserFieldName, "json")) {
+				if (jsonParserFieldValue != null) {
+					objectViewFilterColumn.setJson(
+						(String)jsonParserFieldValue);
 				}
 			}
 			else if (Objects.equals(jsonParserFieldName, "objectFieldName")) {
