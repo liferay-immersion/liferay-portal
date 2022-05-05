@@ -322,22 +322,25 @@ definition {
 
 		// TODO Review
 
+		var maximumQuantity = "4";
+		var product = "U-Joint";
+
 		CommerceAccelerators.initializeNewSiteViaAccelerator(siteName = "Minium");
 
 		CommerceNavigator.gotoPortlet(
 			category = "Product Management",
 			portlet = "Products");
 
-		CommerceProducts.searchProduct(search = "U-Joint");
+		CommerceProducts.searchProduct(search = "${product}");
 
-		CommerceNavigator.gotoEntry(entryName = "U-Joint");
+		CommerceNavigator.gotoEntry(entryName = "${product}");
 
 		CommerceEntry.gotoMenuTab(menuTab = "Configuration");
 
 		Type(
 			key_fieldLabel = "Maximum Order Quantity",
 			locator1 = "TextInput#GENERIC_TEXT_INPUT",
-			value1 = "4");
+			value1 = "${maximumQuantity}");
 
 		Button.clickPublish();
 
@@ -350,12 +353,40 @@ definition {
 		CommerceNavigator.gotoMiniumSidebarItem(menuItem = "Catalog");
 
 		Click(
-			key_productName = "U-Joint",
+			key_productName = "${product}",
 			locator1 = "CommerceAccelerators#PRODUCT_CARD_NAME");
 
-		AssertElementPresent(
-			key_value = "4",
-			locator1 = "CommerceFrontStore#MAX_QUANTITY_SELECTOR_PRODUCT_DETAILS");
+		AssertTextEquals(
+			key_productName = "${product}",
+			locator1 = "CommerceFrontStore#PRODUCT_DETAILS_QUANTITY_SELECTOR",
+			value1 = "1");
+
+		for (var quantity : list "4,5,10") {
+			Type(
+				key_productName = "${product}",
+				locator1 = "CommerceFrontStore#PRODUCT_DETAILS_QUANTITY_SELECTOR",
+				value1 = "${quantity}");
+
+			AssertTextEquals(
+				key_productName = "${product}",
+				locator1 = "CommerceFrontStore#PRODUCT_DETAILS_QUANTITY_SELECTOR",
+				value1 = "${quantity}");
+
+			if (("${quantity}" == "5") || ("${quantity}" == "10")) {
+				AssertElementPresent(
+					key_productName = "${product}",
+					locator1 = "CommerceFrontStore#PRODUCT_DETAILS_QUANTITY_SELECTOR_HAS_ERROR");
+
+				FrontStore.viewQuantitySelectorPopoverListItem(
+					conditionNotSatisfied = "true",
+					quantity = "${maximumQuantity}",
+					quantityConfiguration = "max");
+			} else {
+				AssertElementNotPresent(
+					key_productName = "${product}",
+					locator1 = "CommerceFrontStore#PRODUCT_DETAILS_QUANTITY_SELECTOR_HAS_ERROR");
+			}
+		}
 	}
 
 	@description = "COMMERCE-6360. As a buyer, I want to be able to select the quantity of a product in Product Details starting from a minimum quantity, if set"
@@ -967,7 +998,7 @@ definition {
 			locator1 = "CommerceFrontStore#PRODUCT_DETAILS_QUANTITY_SELECTOR",
 			value1 = "10");
 
-		for (var quantity : list "5,10") {
+		for (var quantity : list "5,20") {
 			Type(
 				key_productName = "${product}",
 				locator1 = "CommerceFrontStore#PRODUCT_DETAILS_QUANTITY_SELECTOR",
@@ -1058,7 +1089,7 @@ definition {
 			locator1 = "CommerceFrontStore#PRODUCT_DETAILS_QUANTITY_SELECTOR",
 			value1 = "${multipleQuantity}");
 
-		for (var quantity : list "1,4,5") {
+		for (var quantity : list "1,4,5,20") {
 			Type(
 				key_productName = "${product}",
 				locator1 = "CommerceFrontStore#PRODUCT_DETAILS_QUANTITY_SELECTOR",
