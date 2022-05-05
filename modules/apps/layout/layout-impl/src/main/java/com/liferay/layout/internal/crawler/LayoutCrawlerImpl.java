@@ -87,8 +87,8 @@ public class LayoutCrawlerImpl implements LayoutCrawler {
 		options.setCookies(new Cookie[] {cookie});
 
 		ThemeDisplay themeDisplay = _getThemeDisplay(
-			layout, locale, inetAddress, company,
-			layoutCrawlerClientConfiguration);
+			company, layout, layoutCrawlerClientConfiguration, locale,
+			inetAddress);
 
 		options.setLocation(
 			HttpComponentsUtil.addParameter(
@@ -117,9 +117,9 @@ public class LayoutCrawlerImpl implements LayoutCrawler {
 	}
 
 	private ThemeDisplay _getThemeDisplay(
-			Layout layout, Locale locale, InetAddress inetAddress,
 			Company company,
-			LayoutCrawlerClientConfiguration layoutCrawlerClientConfiguration)
+			LayoutCrawlerClientConfiguration layoutCrawlerClientConfiguration,
+			Layout layout, Locale locale, InetAddress inetAddress)
 		throws Exception {
 
 		ThemeDisplay themeDisplay = new ThemeDisplay();
