@@ -12,10 +12,10 @@
  * details.
  */
 
-package com.liferay.object.internal.field.filter.definition.parser;
+package com.liferay.object.internal.field.filter.parser;
 
-import com.liferay.object.field.filter.definition.parser.ObjectFieldFilterDefinitionParser;
-import com.liferay.object.field.filter.definition.parser.ObjectFieldFilterDefinitionParserServicesTracker;
+import com.liferay.object.field.filter.parser.ObjectFieldFilterParser;
+import com.liferay.object.field.filter.parser.ObjectFieldFilterParserServicesTracker;
 import com.liferay.osgi.service.tracker.collections.map.ServiceTrackerMap;
 import com.liferay.osgi.service.tracker.collections.map.ServiceTrackerMapFactory;
 
@@ -28,23 +28,20 @@ import org.osgi.service.component.annotations.Deactivate;
  * @author Feliphe Marinho
  */
 @Component(
-	immediate = true,
-	service = ObjectFieldFilterDefinitionParserServicesTracker.class
+	immediate = true, service = ObjectFieldFilterParserServicesTracker.class
 )
-public class ObjectFieldFilterDefinitionParserServicesTrackerImpl
-	implements ObjectFieldFilterDefinitionParserServicesTracker {
+public class ObjectFieldFilterParserServicesTrackerImpl
+	implements ObjectFieldFilterParserServicesTracker {
 
 	@Override
-	public ObjectFieldFilterDefinitionParser
-		getObjectFieldFilterDefinitionParser(String key) {
-
+	public ObjectFieldFilterParser getObjectFieldFilterParser(String key) {
 		return _serviceTrackerMap.getService(key);
 	}
 
 	@Activate
 	protected void activate(BundleContext bundleContext) {
 		_serviceTrackerMap = ServiceTrackerMapFactory.openSingleValueMap(
-			bundleContext, ObjectFieldFilterDefinitionParser.class,
+			bundleContext, ObjectFieldFilterParser.class,
 			"object.field.filter.type.key");
 	}
 
@@ -53,7 +50,7 @@ public class ObjectFieldFilterDefinitionParserServicesTrackerImpl
 		_serviceTrackerMap.close();
 	}
 
-	private ServiceTrackerMap<String, ObjectFieldFilterDefinitionParser>
+	private ServiceTrackerMap<String, ObjectFieldFilterParser>
 		_serviceTrackerMap;
 
 }

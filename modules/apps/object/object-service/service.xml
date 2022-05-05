@@ -563,9 +563,9 @@
 		<!-- Other fields -->
 
 		<column name="objectViewId" type="long" />
-		<column name="objectFieldName" type="String" />
 		<column name="filterType" type="String" />
-		<column name="definition" type="String" />
+		<column name="json" type="String" />
+		<column name="objectFieldName" type="String" />
 
 		<!-- Finder methods -->
 
@@ -639,6 +639,7 @@
 		<exception>ObjectValidationRuleName</exception>
 		<exception>ObjectValidationRuleScript</exception>
 		<exception>ObjectViewColumnFieldName</exception>
+		<exception>ObjectViewFilterColumn</exception>
 		<exception>ObjectViewSortColumn</exception>
 		<exception>RequiredObjectDefinition</exception>
 		<exception>RequiredObjectField</exception>

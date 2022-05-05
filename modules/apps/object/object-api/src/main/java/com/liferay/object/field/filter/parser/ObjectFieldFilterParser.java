@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.object.field.filter.definition.parser;
+package com.liferay.object.field.filter.parser;
 
 import com.liferay.object.model.ObjectViewFilterColumn;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -23,7 +23,7 @@ import java.util.Map;
 /**
  * @author Feliphe Marinho
  */
-public interface ObjectFieldFilterDefinitionParser {
+public interface ObjectFieldFilterParser {
 
 	public Map<String, Object> parse(
 			long listTypeDefinitionId, Locale locale,

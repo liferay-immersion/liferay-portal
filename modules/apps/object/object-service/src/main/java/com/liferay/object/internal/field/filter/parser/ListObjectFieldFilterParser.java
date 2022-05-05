@@ -12,13 +12,13 @@
  * details.
  */
 
-package com.liferay.object.internal.field.filter.definition.parser;
+package com.liferay.object.internal.field.filter.parser;
 
 import com.liferay.list.type.model.ListTypeEntry;
 import com.liferay.list.type.service.ListTypeEntryLocalService;
 import com.liferay.object.constants.ObjectViewFilterConstants;
 import com.liferay.object.exception.ObjectViewFilterColumnException;
-import com.liferay.object.field.filter.definition.parser.ObjectFieldFilterDefinitionParser;
+import com.liferay.object.field.filter.parser.ObjectFieldFilterParser;
 import com.liferay.object.model.ObjectViewFilterColumn;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.json.JSONArray;
@@ -47,13 +47,9 @@ import org.osgi.service.component.annotations.Reference;
 		"object.field.filter.type.key=" + ObjectViewFilterConstants.FILTER_TYPE_EXCLUDES,
 		"object.field.filter.type.key=" + ObjectViewFilterConstants.FILTER_TYPE_INCLUDES
 	},
-	service = {
-		ListObjectFieldFilterDefinitionParser.class,
-		ObjectFieldFilterDefinitionParser.class
-	}
+	service = {ListObjectFieldFilterParser.class, ObjectFieldFilterParser.class}
 )
-public class ListObjectFieldFilterDefinitionParser
-	implements ObjectFieldFilterDefinitionParser {
+public class ListObjectFieldFilterParser implements ObjectFieldFilterParser {
 
 	@Override
 	public Map<String, Object> parse(
@@ -69,7 +65,7 @@ public class ListObjectFieldFilterDefinitionParser
 			"itemsValues",
 			() -> {
 				JSONObject jsonObject = JSONFactoryUtil.createJSONObject(
-					objectViewFilterColumn.getDefinition());
+					objectViewFilterColumn.getJson());
 
 				JSONArray jsonArray = jsonObject.getJSONArray(
 					StringUtil.toLowerCase(
@@ -95,7 +91,7 @@ public class ListObjectFieldFilterDefinitionParser
 		throws PortalException {
 
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject(
-			objectViewFilterColumn.getDefinition());
+			objectViewFilterColumn.getJson());
 
 		JSONArray jsonArray = jsonObject.getJSONArray(
 			StringUtil.toLowerCase(objectViewFilterColumn.getFilterType()));
@@ -168,7 +164,7 @@ public class ListObjectFieldFilterDefinitionParser
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
-		ListObjectFieldFilterDefinitionParser.class);
+		ListObjectFieldFilterParser.class);
 
 	@Reference
 	private ListTypeEntryLocalService _listTypeEntryLocalService;

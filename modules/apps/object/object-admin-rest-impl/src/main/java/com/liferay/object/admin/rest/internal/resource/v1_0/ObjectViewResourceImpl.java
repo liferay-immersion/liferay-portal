@@ -220,10 +220,10 @@ public class ObjectViewResourceImpl extends BaseObjectViewResourceImpl {
 			serviceBuilderObjectViewFilterColumn =
 				_objectViewFilterColumnPersistence.create(0L);
 
-		serviceBuilderObjectViewFilterColumn.setDefinition(
-			objectViewFilterColumn.getDefinition());
 		serviceBuilderObjectViewFilterColumn.setFilterType(
 			objectViewFilterColumn.getFilterTypeAsString());
+		serviceBuilderObjectViewFilterColumn.setJson(
+			objectViewFilterColumn.getJson());
 		serviceBuilderObjectViewFilterColumn.setObjectFieldName(
 			objectViewFilterColumn.getObjectFieldName());
 
