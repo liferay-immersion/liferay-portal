@@ -21,7 +21,7 @@ import React, {useContext, useState} from 'react';
 import {defaultLanguageId} from '../../../utils/locale';
 import Panel from '../../Panel/Panel';
 import LayoutContext, {TYPES} from '../context';
-import DropdownWithDeleteButton from './DropdownWithDeleteButton';
+import HeaderDropdown from './HeaderDropdown';
 import ModalAddObjectLayoutBox from './ModalAddObjectLayoutBox';
 import ObjectLayoutBox from './ObjectLayoutBox';
 import ObjectLayoutRelationship from './ObjectLayoutRelationship';
@@ -82,7 +82,7 @@ const ObjectLayoutTabs: React.FC<React.HTMLAttributes<HTMLElement>> = () => {
 											</ClayButton>
 										)}
 
-										<DropdownWithDeleteButton
+										<HeaderDropdown
 											onClick={() => {
 												dispatch({
 													payload: {
