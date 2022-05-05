@@ -18,7 +18,7 @@ import React, {useContext, useState} from 'react';
 
 import LayoutContext from '../context';
 
-const DropdownWithDeleteButton: React.FC<React.HTMLAttributes<HTMLElement>> = ({
+const HeaderDropdown: React.FC<React.HTMLAttributes<HTMLElement>> = ({
 	onClick,
 }) => {
 	const [active, setActive] = useState<boolean>(false);
@@ -44,4 +44,4 @@ const DropdownWithDeleteButton: React.FC<React.HTMLAttributes<HTMLElement>> = ({
 	);
 };
 
-export default DropdownWithDeleteButton;
+export default HeaderDropdown;
