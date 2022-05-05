@@ -234,16 +234,14 @@ public class RegionResourceTest extends BaseRegionResourceTestCase {
 	}
 
 	private Region _addRegion(Region region) throws Exception {
-		com.liferay.portal.kernel.model.Region serviceBuilderRegion =
-			_regionLocalService.addRegion(
-				region.getCountryId(), region.getActive(), region.getName(),
-				region.getPosition(), region.getRegionCode(),
-				ServiceContextTestUtil.getServiceContext());
-
-		com.liferay.headless.admin.address.dto.v1_0.Region apiRegion =
-			_regionResourceDTOConverter.toDTO(serviceBuilderRegion);
-
-		return Region.toDTO(String.valueOf(apiRegion));
+		return Region.toDTO(
+			String.valueOf(
+				_regionResourceDTOConverter.toDTO(
+					_regionLocalService.addRegion(
+						region.getCountryId(), region.getActive(),
+						region.getName(), region.getPosition(),
+						region.getRegionCode(),
+						ServiceContextTestUtil.getServiceContext()))));
 	}
 
 	private Region _addRegion(String keyword) throws Exception {
