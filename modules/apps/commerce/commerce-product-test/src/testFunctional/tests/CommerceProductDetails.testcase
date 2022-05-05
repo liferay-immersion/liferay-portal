@@ -381,7 +381,8 @@ definition {
 					conditionNotSatisfied = "true",
 					quantity = "${maximumQuantity}",
 					quantityConfiguration = "max");
-			} else {
+			}
+			else {
 				AssertElementNotPresent(
 					key_productName = "${product}",
 					locator1 = "CommerceFrontStore#PRODUCT_DETAILS_QUANTITY_SELECTOR_HAS_ERROR");
