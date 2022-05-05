@@ -72,7 +72,6 @@ public class RegionResourceTest extends BaseRegionResourceTestCase {
 		long totalCount = page.getTotalCount();
 
 		Region region1 = _addRegion(keywords);
-
 		Region region2 = _addRegion(keywords);
 
 		page = regionResource.getRegionsPage(
