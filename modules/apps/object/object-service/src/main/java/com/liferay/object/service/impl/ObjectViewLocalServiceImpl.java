@@ -440,6 +440,8 @@ public class ObjectViewLocalServiceImpl extends ObjectViewLocalServiceBaseImpl {
 					"Object field name must not be null");
 			}
 
+			long listTypeDefinitionId = 0L;
+
 			if (ArrayUtil.contains(
 					metadata, objectViewFilterColumn.getObjectFieldName())) {
 
@@ -467,6 +469,8 @@ public class ObjectViewLocalServiceImpl extends ObjectViewLocalServiceBaseImpl {
 							"The field \"%s\" is not allowed to be a filter",
 							objectViewFilterColumn.getObjectFieldName()));
 				}
+
+				listTypeDefinitionId = objectField.getObjectDefinitionId();
 			}
 
 			if (Validator.isNull(objectViewFilterColumn.getDefinition()) &&
@@ -493,7 +497,8 @@ public class ObjectViewLocalServiceImpl extends ObjectViewLocalServiceBaseImpl {
 						getObjectFieldFilterDefinitionParser(
 							objectViewFilterColumn.getFilterType());
 
-			objectFieldFilterDefinitionParser.parse(objectViewFilterColumn);
+			objectFieldFilterDefinitionParser.validate(
+				listTypeDefinitionId, objectViewFilterColumn);
 		}
 	}
 
