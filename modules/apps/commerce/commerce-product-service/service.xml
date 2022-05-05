@@ -1080,6 +1080,7 @@
 		<exception>DuplicateCommerceChannelRel</exception>
 		<exception>DuplicateCPAttachmentFileEntry</exception>
 		<exception>DuplicateCPDefinitionOptionRelKey</exception>
+		<exception>DuplicateCPMeasurementUnit</exception>
 		<exception>DuplicateCProduct</exception>
 		<exception>DuplicateCPSpecificationOptionKey</exception>
 		<exception>InvalidCommerceChannelType</exception>
