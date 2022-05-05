@@ -172,7 +172,7 @@ definition {
 
 		WebContentNavigator.gotoEntryMenuItem(
 			entry = "${folderName}",
-			menuItem = "Move to Recycle Bin");
+			menuItem = "Delete");
 
 		VerifyElementPresent(locator1 = "Message#SUCCESS");
 	}
