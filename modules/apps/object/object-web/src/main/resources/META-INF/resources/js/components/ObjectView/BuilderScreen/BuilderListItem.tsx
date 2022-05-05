@@ -26,8 +26,8 @@ import './BuilderListItem.scss';
 
 interface IProps {
 	aliasColumnText?: string;
-	defaultFilter?: boolean;
 	defaultSort?: boolean;
+	disableEdit?: boolean;
 	filter?: boolean;
 	hasDragAndDrop?: boolean;
 	index: number;
@@ -56,8 +56,8 @@ type TDraggedOffset = {
 
 const BuilderListItem: React.FC<IProps> = ({
 	aliasColumnText,
-	defaultFilter,
 	defaultSort,
+	disableEdit,
 	filter,
 	hasDragAndDrop,
 	index,
@@ -182,28 +182,33 @@ const BuilderListItem: React.FC<IProps> = ({
 			)}
 
 			<ClayList.ItemField
-				className={classNames({
-					'lfr-object__object-builder-list-item-first-column--not-draggable': !hasDragAndDrop,
-				})}
+				className={classNames(
+					'lfr-object__object-builder-list-item-first-column',
+					!hasDragAndDrop &&
+						'lfr-object__object-builder-list-item-first-column--not-draggable'
+				)}
 				expand
 			>
 				<ClayList.ItemTitle>{label}</ClayList.ItemTitle>
 			</ClayList.ItemField>
 
 			<ClayList.ItemField
-				className={classNames({
-					'lfr-object__object-builder-list-item-second-column': hasDragAndDrop,
-					'lfr-object__object-builder-list-item-second-column--not-draggable': !hasDragAndDrop,
-				})}
+				className={classNames(
+					'lfr-object__object-builder-list-item-second-column',
+					!hasDragAndDrop &&
+						'lfr-object__object-builder-list-item-second-column--not-draggable'
+				)}
 				expand
 			>
 				<ClayList.ItemText>{aliasColumnText}</ClayList.ItemText>
 			</ClayList.ItemField>
 
 			<ClayList.ItemField
-				className={classNames({
-					'lfr-object__object-builder-list-item-third-column--not-draggable': !hasDragAndDrop,
-				})}
+				className={classNames(
+					'lfr-object__object-builder-list-item-third-column',
+					!hasDragAndDrop &&
+						'lfr-object__object-builder-list-item-third-column--not-draggable'
+				)}
 				expand
 			>
 				<ClayList.ItemText>
@@ -230,6 +235,7 @@ const BuilderListItem: React.FC<IProps> = ({
 			>
 				<ClayDropDown.ItemList>
 					<ClayDropDown.Item
+						disabled={disableEdit}
 						onClick={() => handleEnableEditModal(objectFieldName)}
 					>
 						<ClayIcon
