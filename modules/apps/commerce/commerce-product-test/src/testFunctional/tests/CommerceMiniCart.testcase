@@ -234,7 +234,7 @@ definition {
 				locator1 = "CommerceAccelerators#MINI_CART_ITEM_QUANTITY",
 				value1 = "${quantity}");
 
-			if (("${quantity}" == "5") || ("${quantity}" == "10")) {	
+			if (("${quantity}" == "5") || ("${quantity}" == "10")) {
 				AssertElementPresent(
 					key_cartItemSku = "${productSku}",
 					locator1 = "CommerceAccelerators#MINI_CART_ITEM_QUANTITY_SELECTOR_HAS_ERROR");
