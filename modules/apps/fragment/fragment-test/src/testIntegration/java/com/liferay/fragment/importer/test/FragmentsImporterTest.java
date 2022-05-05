@@ -616,13 +616,13 @@ public class FragmentsImporterTest {
 
 		FragmentEntry fragmentEntry = fragmentEntries.get(0);
 
-		String html = fragmentEntry.getHtml();
-
-		Assert.assertTrue(html, html.contains(resourceReference));
-
 		String css = fragmentEntry.getCss();
 
 		Assert.assertTrue(css, css.contains(resourceReference));
+
+		String html = fragmentEntry.getHtml();
+
+		Assert.assertTrue(html, html.contains(resourceReference));
 	}
 
 	private static final String _PATH_DEPENDENCIES =
