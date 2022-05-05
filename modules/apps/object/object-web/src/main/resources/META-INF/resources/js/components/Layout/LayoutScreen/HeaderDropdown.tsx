@@ -14,12 +14,13 @@
 
 import {ClayButtonWithIcon} from '@clayui/button';
 import ClayDropDown from '@clayui/drop-down';
-import React, {useContext, useState} from 'react';
+import React, {FC, MouseEventHandler, useContext, useState} from 'react';
 
 import LayoutContext from '../context';
 
-const HeaderDropdown: React.FC<React.HTMLAttributes<HTMLElement>> = ({
-	onClick,
+const HeaderDropdown: FC<IHeaderDropdown> = ({
+	addCategorization,
+	deleteElement,
 }) => {
 	const [active, setActive] = useState<boolean>(false);
 	const [{isViewOnly}] = useContext(LayoutContext);
@@ -36,12 +37,29 @@ const HeaderDropdown: React.FC<React.HTMLAttributes<HTMLElement>> = ({
 			}
 		>
 			<ClayDropDown.ItemList>
-				<ClayDropDown.Item disabled={isViewOnly} onClick={onClick}>
+				<ClayDropDown.Item
+					disabled={isViewOnly}
+					onClick={deleteElement}
+				>
 					{Liferay.Language.get('delete')}
 				</ClayDropDown.Item>
+
+				{addCategorization && (
+					<ClayDropDown.Item
+						disabled={isViewOnly}
+						onClick={addCategorization}
+					>
+						{Liferay.Language.get('add-categorization')}
+					</ClayDropDown.Item>
+				)}
 			</ClayDropDown.ItemList>
 		</ClayDropDown>
 	);
 };
+
+interface IHeaderDropdown {
+	addCategorization?: MouseEventHandler;
+	deleteElement: MouseEventHandler;
+}
 
 export default HeaderDropdown;

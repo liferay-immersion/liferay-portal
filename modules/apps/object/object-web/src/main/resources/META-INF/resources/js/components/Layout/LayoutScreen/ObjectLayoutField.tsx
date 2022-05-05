@@ -55,7 +55,7 @@ const ObjectLayoutField: React.FC<IObjectLayoutFieldProps> = ({
 				<Panel.SimpleBody
 					contentRight={
 						<HeaderDropdown
-							onClick={() => {
+							deleteElement={() => {
 								dispatch({
 									payload: {
 										boxIndex,
