@@ -46,15 +46,15 @@ public class LiferayFileItem extends DiskFileItem implements FileItem {
 
 	public LiferayFileItem(
 		String fieldName, String contentType, boolean formField,
-		String fileName, int sizeThreshold, File repository, String encoding) {
+		String fileName, int sizeThreshold, File tempDir, String encoding) {
 
 		super(
 			fieldName, contentType, formField, fileName, sizeThreshold,
-			repository);
+			tempDir);
 
 		_fileName = fileName;
 		_sizeThreshold = sizeThreshold;
-		_repository = repository;
+		_tempDir = tempDir;
 		_encoding = encoding;
 	}
 
@@ -177,7 +177,7 @@ public class LiferayFileItem extends DiskFileItem implements FileItem {
 			tempFileName += "." + extension;
 		}
 
-		File tempFile = new File(_repository, tempFileName);
+		File tempFile = new File(_tempDir, tempFileName);
 
 		FinalizeManager.register(
 			tempFile, new DeleteFileFinalizeAction(tempFile.getAbsolutePath()),
@@ -209,7 +209,7 @@ public class LiferayFileItem extends DiskFileItem implements FileItem {
 
 	private final String _encoding;
 	private final String _fileName;
-	private final File _repository;
 	private final int _sizeThreshold;
+	private final File _tempDir;
 
 }
