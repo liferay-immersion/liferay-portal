@@ -117,9 +117,9 @@ public class LayoutCrawlerImpl implements LayoutCrawler {
 	}
 
 	private ThemeDisplay _getThemeDisplay(
-			Company company,
+			Company company, Layout layout,
 			LayoutCrawlerClientConfiguration layoutCrawlerClientConfiguration,
-			Layout layout, Locale locale, InetAddress inetAddress)
+			Locale locale, InetAddress inetAddress)
 		throws Exception {
 
 		ThemeDisplay themeDisplay = new ThemeDisplay();
