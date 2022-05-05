@@ -55,9 +55,9 @@ public class ObjectViewFilterColumnWrapper
 		attributes.put("createDate", getCreateDate());
 		attributes.put("modifiedDate", getModifiedDate());
 		attributes.put("objectViewId", getObjectViewId());
-		attributes.put("objectFieldName", getObjectFieldName());
 		attributes.put("filterType", getFilterType());
-		attributes.put("definition", getDefinition());
+		attributes.put("json", getJson());
+		attributes.put("objectFieldName", getObjectFieldName());
 
 		return attributes;
 	}
@@ -119,22 +119,22 @@ public class ObjectViewFilterColumnWrapper
 			setObjectViewId(objectViewId);
 		}
 
-		String objectFieldName = (String)attributes.get("objectFieldName");
-
-		if (objectFieldName != null) {
-			setObjectFieldName(objectFieldName);
-		}
-
 		String filterType = (String)attributes.get("filterType");
 
 		if (filterType != null) {
 			setFilterType(filterType);
 		}
 
-		String definition = (String)attributes.get("definition");
+		String json = (String)attributes.get("json");
 
-		if (definition != null) {
-			setDefinition(definition);
+		if (json != null) {
+			setJson(json);
+		}
+
+		String objectFieldName = (String)attributes.get("objectFieldName");
+
+		if (objectFieldName != null) {
+			setObjectFieldName(objectFieldName);
 		}
 	}
 
@@ -164,16 +164,6 @@ public class ObjectViewFilterColumnWrapper
 	}
 
 	/**
-	 * Returns the definition of this object view filter column.
-	 *
-	 * @return the definition of this object view filter column
-	 */
-	@Override
-	public String getDefinition() {
-		return model.getDefinition();
-	}
-
-	/**
 	 * Returns the filter type of this object view filter column.
 	 *
 	 * @return the filter type of this object view filter column
@@ -181,6 +171,16 @@ public class ObjectViewFilterColumnWrapper
 	@Override
 	public String getFilterType() {
 		return model.getFilterType();
+	}
+
+	/**
+	 * Returns the json of this object view filter column.
+	 *
+	 * @return the json of this object view filter column
+	 */
+	@Override
+	public String getJson() {
+		return model.getJson();
 	}
 
 	/**
@@ -304,16 +304,6 @@ public class ObjectViewFilterColumnWrapper
 	}
 
 	/**
-	 * Sets the definition of this object view filter column.
-	 *
-	 * @param definition the definition of this object view filter column
-	 */
-	@Override
-	public void setDefinition(String definition) {
-		model.setDefinition(definition);
-	}
-
-	/**
 	 * Sets the filter type of this object view filter column.
 	 *
 	 * @param filterType the filter type of this object view filter column
@@ -321,6 +311,16 @@ public class ObjectViewFilterColumnWrapper
 	@Override
 	public void setFilterType(String filterType) {
 		model.setFilterType(filterType);
+	}
+
+	/**
+	 * Sets the json of this object view filter column.
+	 *
+	 * @param json the json of this object view filter column
+	 */
+	@Override
+	public void setJson(String json) {
+		model.setJson(json);
 	}
 
 	/**

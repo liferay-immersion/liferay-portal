@@ -139,12 +139,12 @@ public class ObjectViewFilterColumnPersistenceTest {
 
 		newObjectViewFilterColumn.setObjectViewId(RandomTestUtil.nextLong());
 
-		newObjectViewFilterColumn.setObjectFieldName(
-			RandomTestUtil.randomString());
-
 		newObjectViewFilterColumn.setFilterType(RandomTestUtil.randomString());
 
-		newObjectViewFilterColumn.setDefinition(RandomTestUtil.randomString());
+		newObjectViewFilterColumn.setJson(RandomTestUtil.randomString());
+
+		newObjectViewFilterColumn.setObjectFieldName(
+			RandomTestUtil.randomString());
 
 		_objectViewFilterColumns.add(
 			_persistence.update(newObjectViewFilterColumn));
@@ -184,14 +184,14 @@ public class ObjectViewFilterColumnPersistenceTest {
 			existingObjectViewFilterColumn.getObjectViewId(),
 			newObjectViewFilterColumn.getObjectViewId());
 		Assert.assertEquals(
-			existingObjectViewFilterColumn.getObjectFieldName(),
-			newObjectViewFilterColumn.getObjectFieldName());
-		Assert.assertEquals(
 			existingObjectViewFilterColumn.getFilterType(),
 			newObjectViewFilterColumn.getFilterType());
 		Assert.assertEquals(
-			existingObjectViewFilterColumn.getDefinition(),
-			newObjectViewFilterColumn.getDefinition());
+			existingObjectViewFilterColumn.getJson(),
+			newObjectViewFilterColumn.getJson());
+		Assert.assertEquals(
+			existingObjectViewFilterColumn.getObjectFieldName(),
+			newObjectViewFilterColumn.getObjectFieldName());
 	}
 
 	@Test
@@ -259,8 +259,8 @@ public class ObjectViewFilterColumnPersistenceTest {
 			"ObjectViewFilterColumn", "mvccVersion", true, "uuid", true,
 			"objectViewFilterColumnId", true, "companyId", true, "userId", true,
 			"userName", true, "createDate", true, "modifiedDate", true,
-			"objectViewId", true, "objectFieldName", true, "filterType", true,
-			"definition", true);
+			"objectViewId", true, "filterType", true, "json", true,
+			"objectFieldName", true);
 	}
 
 	@Test
@@ -495,12 +495,12 @@ public class ObjectViewFilterColumnPersistenceTest {
 
 		objectViewFilterColumn.setObjectViewId(RandomTestUtil.nextLong());
 
-		objectViewFilterColumn.setObjectFieldName(
-			RandomTestUtil.randomString());
-
 		objectViewFilterColumn.setFilterType(RandomTestUtil.randomString());
 
-		objectViewFilterColumn.setDefinition(RandomTestUtil.randomString());
+		objectViewFilterColumn.setJson(RandomTestUtil.randomString());
+
+		objectViewFilterColumn.setObjectFieldName(
+			RandomTestUtil.randomString());
 
 		_objectViewFilterColumns.add(
 			_persistence.update(objectViewFilterColumn));

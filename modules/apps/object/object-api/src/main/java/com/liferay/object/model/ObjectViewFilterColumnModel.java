@@ -219,21 +219,6 @@ public interface ObjectViewFilterColumnModel
 	public void setObjectViewId(long objectViewId);
 
 	/**
-	 * Returns the object field name of this object view filter column.
-	 *
-	 * @return the object field name of this object view filter column
-	 */
-	@AutoEscape
-	public String getObjectFieldName();
-
-	/**
-	 * Sets the object field name of this object view filter column.
-	 *
-	 * @param objectFieldName the object field name of this object view filter column
-	 */
-	public void setObjectFieldName(String objectFieldName);
-
-	/**
 	 * Returns the filter type of this object view filter column.
 	 *
 	 * @return the filter type of this object view filter column
@@ -249,19 +234,34 @@ public interface ObjectViewFilterColumnModel
 	public void setFilterType(String filterType);
 
 	/**
-	 * Returns the definition of this object view filter column.
+	 * Returns the json of this object view filter column.
 	 *
-	 * @return the definition of this object view filter column
+	 * @return the json of this object view filter column
 	 */
 	@AutoEscape
-	public String getDefinition();
+	public String getJson();
 
 	/**
-	 * Sets the definition of this object view filter column.
+	 * Sets the json of this object view filter column.
 	 *
-	 * @param definition the definition of this object view filter column
+	 * @param json the json of this object view filter column
 	 */
-	public void setDefinition(String definition);
+	public void setJson(String json);
+
+	/**
+	 * Returns the object field name of this object view filter column.
+	 *
+	 * @return the object field name of this object view filter column
+	 */
+	@AutoEscape
+	public String getObjectFieldName();
+
+	/**
+	 * Sets the object field name of this object view filter column.
+	 *
+	 * @param objectFieldName the object field name of this object view filter column
+	 */
+	public void setObjectFieldName(String objectFieldName);
 
 	@Override
 	public ObjectViewFilterColumn cloneWithOriginalValues();

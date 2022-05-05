@@ -248,9 +248,9 @@ create table ObjectViewFilterColumn (
 	createDate DATE null,
 	modifiedDate DATE null,
 	objectViewId LONG,
-	objectFieldName VARCHAR(75) null,
 	filterType VARCHAR(75) null,
-	definition VARCHAR(75) null
+	json VARCHAR(75) null,
+	objectFieldName VARCHAR(75) null
 );
 
 create table ObjectViewSortColumn (
