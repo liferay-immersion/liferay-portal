@@ -404,6 +404,15 @@ definition {
 			locator1 = "CommerceFrontStore#PRODUCT_DETAILS_QUANTITY_SELECTOR",
 			value1 = "${minimumQuantity}");
 
+		task ("On the product details page, assert that the add to cart button is disabled if the quantity selector is empty") {
+			Type(
+				key_productName = "${product}",
+				locator1 = "CommerceFrontStore#PRODUCT_DETAILS_QUANTITY_SELECTOR",
+				value1 = "");
+
+			AssertElementPresent(locator1 = "CommerceAccelerators#ADD_TO_CART_BUTTON_PRODUCT_DETAILS_PAGE_DISABLED");
+		}
+
 		for (var quantity : list "1,2,3,4") {
 			Type(
 				key_productName = "${product}",
