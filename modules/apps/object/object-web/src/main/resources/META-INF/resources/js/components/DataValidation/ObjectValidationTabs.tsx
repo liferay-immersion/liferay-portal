@@ -104,7 +104,7 @@ function Conditions({
 						<span
 							data-tooltip-align="top"
 							title={Liferay.Language.get(
-								'use-the-expression-builder-to-define-the-format-of-a-valid-entry'
+								'use-the-expression-builder-to-define-the-format-of-a-valid-object-entry'
 							)}
 						>
 							<ClayIcon
