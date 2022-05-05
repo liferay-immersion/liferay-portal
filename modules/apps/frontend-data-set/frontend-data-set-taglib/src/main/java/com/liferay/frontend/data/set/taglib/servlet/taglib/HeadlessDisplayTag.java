@@ -14,6 +14,7 @@
 
 package com.liferay.frontend.data.set.taglib.servlet.taglib;
 
+import com.liferay.frontend.data.set.filter.FDSFilter;
 import com.liferay.frontend.data.set.filter.FDSFilterSerializer;
 import com.liferay.frontend.data.set.model.FDSActionDropdownItem;
 import com.liferay.frontend.data.set.model.FDSPaginationEntry;
@@ -92,6 +93,10 @@ public class HeadlessDisplayTag extends BaseDisplayTag {
 
 	public CreationMenu getCreationMenu() {
 		return _creationMenu;
+	}
+
+	public List<FDSFilter> getDynamicFDSFilters() {
+		return _dynamicFDSFilters;
 	}
 
 	public List<FDSActionDropdownItem> getFdsActionDropdownItems() {
@@ -178,6 +183,10 @@ public class HeadlessDisplayTag extends BaseDisplayTag {
 		_customViewsEnabled = customViewsEnabled;
 	}
 
+	public void setDynamicFDSFilters(List<FDSFilter> dynamicFDSFilters) {
+		_dynamicFDSFilters = dynamicFDSFilters;
+	}
+
 	public void setFdsActionDropdownItems(
 		List<FDSActionDropdownItem> fdsActionDropdownItems) {
 
@@ -262,6 +271,7 @@ public class HeadlessDisplayTag extends BaseDisplayTag {
 		_bulkActionDropdownItems = new ArrayList<>();
 		_creationMenu = new CreationMenu();
 		_customViewsEnabled = false;
+		_dynamicFDSFilters = new ArrayList<>();
 		_fdsActionDropdownItems = new ArrayList<>();
 		_fdsFiltersContext = null;
 		_fdsFilterSerializer = null;
@@ -383,7 +393,8 @@ public class HeadlessDisplayTag extends BaseDisplayTag {
 
 	private void _setFDSFiltersContext() {
 		_fdsFiltersContext = _fdsFilterSerializer.serialize(
-			getId(), PortalUtil.getLocale(getRequest()));
+			getDynamicFDSFilters(), getId(),
+			PortalUtil.getLocale(getRequest()));
 	}
 
 	private void _setFDSPaginationEntries() {
@@ -425,6 +436,7 @@ public class HeadlessDisplayTag extends BaseDisplayTag {
 	private List<DropdownItem> _bulkActionDropdownItems = new ArrayList<>();
 	private CreationMenu _creationMenu = new CreationMenu();
 	private boolean _customViewsEnabled;
+	private List<FDSFilter> _dynamicFDSFilters = new ArrayList<>();
 	private List<FDSActionDropdownItem> _fdsActionDropdownItems =
 		new ArrayList<>();
 	private Object _fdsFiltersContext;

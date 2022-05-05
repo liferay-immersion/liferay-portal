@@ -24,6 +24,7 @@ import com.liferay.portal.kernel.json.JSONFactory;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.json.JSONUtil;
 import com.liferay.portal.kernel.language.LanguageUtil;
+import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.ResourceBundleUtil;
 
 import java.util.List;
@@ -41,13 +42,16 @@ import org.osgi.service.component.annotations.Reference;
 public class FDSFilterSerializerImpl implements FDSFilterSerializer {
 
 	@Override
-	public JSONArray serialize(String fdsName, Locale locale) {
+	public JSONArray serialize(
+		List<FDSFilter> dynamicFDSFilters, String fdsName, Locale locale) {
+
 		JSONArray jsonArray = _jsonFactory.createJSONArray();
 
 		ResourceBundle resourceBundle = ResourceBundleUtil.getBundle(
 			"content.Language", locale, getClass());
 
-		List<FDSFilter> fdsFilters = _fdsFilterRegistry.getFDSFilters(fdsName);
+		List<FDSFilter> fdsFilters = ListUtil.concat(
+			dynamicFDSFilters, _fdsFilterRegistry.getFDSFilters(fdsName));
 
 		for (FDSFilter fdsFilter : fdsFilters) {
 			String label = LanguageUtil.get(
