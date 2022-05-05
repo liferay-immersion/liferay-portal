@@ -28,6 +28,7 @@ interface IProps {
 	aliasColumnText?: string;
 	defaultFilter?: boolean;
 	defaultSort?: boolean;
+	filter?: boolean;
 	hasDragAndDrop?: boolean;
 	index: number;
 	label?: string;
@@ -57,6 +58,7 @@ const BuilderListItem: React.FC<IProps> = ({
 	aliasColumnText,
 	defaultFilter,
 	defaultSort,
+	filter,
 	hasDragAndDrop,
 	index,
 	label,
@@ -126,7 +128,7 @@ const BuilderListItem: React.FC<IProps> = ({
 
 	const handleDeleteColumn = (
 		objectFieldName: string,
-		defaultFilter?: boolean,
+		filter?: boolean,
 		defaultSort?: boolean
 	) => {
 		if (defaultSort) {
@@ -135,7 +137,7 @@ const BuilderListItem: React.FC<IProps> = ({
 				type: TYPES.DELETE_OBJECT_VIEW_SORT_COLUMN,
 			});
 		}
-		else if (defaultFilter) {
+		else if (filter) {
 			dispatch({
 				payload: {objectFieldName},
 				type: TYPES.DELETE_OBJECT_VIEW_FILTER_COLUMN,
@@ -242,7 +244,7 @@ const BuilderListItem: React.FC<IProps> = ({
 						onClick={() =>
 							handleDeleteColumn(
 								objectFieldName,
-								defaultFilter,
+								filter,
 								defaultSort
 							)
 						}

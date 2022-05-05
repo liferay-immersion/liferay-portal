@@ -37,6 +37,7 @@ interface IProps {
 		description: string;
 		title: string;
 	};
+	filter?: boolean;
 	firstColumnHeader: string;
 	hasDragAndDrop?: boolean;
 	objectColumns: TObjectColumn[];
@@ -53,6 +54,7 @@ export function BuilderScreen({
 	defaultFilter,
 	defaultSort,
 	emptyState,
+	filter,
 	firstColumnHeader,
 	hasDragAndDrop,
 	objectColumns,
@@ -233,14 +235,14 @@ export function BuilderScreen({
 														: Liferay.Language.get(
 																'descending'
 														  )
-													: defaultFilter
+													: filter
 													? viewColumn.objectFieldBusinessType
 													: viewColumn.label[
 															defaultLanguageId
 													  ]
 											}
-											defaultFilter={defaultFilter}
 											defaultSort={defaultSort}
+											filter={filter}
 											hasDragAndDrop={hasDragAndDrop}
 											index={index}
 											label={viewColumn.fieldLabel}

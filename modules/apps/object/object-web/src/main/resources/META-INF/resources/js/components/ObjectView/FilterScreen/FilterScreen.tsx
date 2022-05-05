@@ -16,11 +16,11 @@ import {useModal} from '@clayui/modal';
 import React, {useContext, useState} from 'react';
 
 import {BuilderScreen} from '../BuilderScreen/BuilderScreen';
-import {ModalAddDefaultFilterColumn} from '../ModalAddDefaultFilterColumn/ModalAddDefaultFilterColumn';
+import {ModalAddFilterColumn} from '../ModalAddFilterColumn/ModalAddFilterColumn';
 import ViewContext from '../context';
 
-export function DefaultFilterScreen() {
-	const [{objectView}] = useContext(ViewContext);
+export function FilterScreen() {
+	const [{objectFields, objectView}] = useContext(ViewContext);
 
 	const {objectViewFilterColumns} = objectView;
 
@@ -39,30 +39,30 @@ export function DefaultFilterScreen() {
 	return (
 		<>
 			<BuilderScreen
-				defaultFilter
 				emptyState={{
-					buttonText: Liferay.Language.get('new-default-filter'),
+					buttonText: Liferay.Language.get('new-filter'),
 					description: Liferay.Language.get(
 						'start-creating-a-filter-to-display-specific-data'
 					),
 					title: Liferay.Language.get('no-filter-was-created-yet'),
 				}}
+				filter
 				firstColumnHeader={Liferay.Language.get('filter-by')}
-				objectColumns={objectViewFilterColumns ?? []}
+				objectColumns={newObjectViewFilterColumns ?? []}
 				onEditing={setEditingFilter}
 				onEditingObjectFieldName={setEditingObjectFieldName}
 				onVisibleEditModal={setVisibleModal}
 				onVisibleModal={setVisibleModal}
 				secondColumnHeader={Liferay.Language.get('type')}
 				thirdColumnHeader={Liferay.Language.get('value')}
-				title={Liferay.Language.get('default-filters')}
+				title={Liferay.Language.get('filters')}
 			/>
 
 			{visibleModal && (
-				<ModalAddDefaultFilterColumn
+				<ModalAddFilterColumn
 					editingFilter={editingFilter}
 					editingObjectFieldName={editingObjectFieldName}
-					header={Liferay.Language.get('new-default-filter')}
+					header={Liferay.Language.get('new-filter')}
 					observer={observer}
 					onClose={onClose}
 				/>

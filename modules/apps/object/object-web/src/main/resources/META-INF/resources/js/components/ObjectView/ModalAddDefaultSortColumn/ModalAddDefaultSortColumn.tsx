@@ -73,7 +73,7 @@ export function ModalAddDefaultSortColumn({
 
 	useEffect(() => {
 		const newAvailableViewColumns = objectViewColumns.filter(
-			(viewColumn) => !viewColumn.isDefaultSort
+			(viewColumn) => !viewColumn.defaultSort
 		);
 
 		setAvailableViewColumns(newAvailableViewColumns);

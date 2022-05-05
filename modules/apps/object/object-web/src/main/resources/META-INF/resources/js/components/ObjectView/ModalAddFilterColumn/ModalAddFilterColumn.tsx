@@ -14,7 +14,6 @@
 
 import ClayButton from '@clayui/button';
 import ClayDropDown from '@clayui/drop-down';
-import ClayForm from '@clayui/form';
 import ClayModal from '@clayui/modal';
 import {fetch} from 'frontend-js-web';
 import React, {
@@ -55,7 +54,7 @@ const PICKLIST_OPERATORS: TLabelValueObject[] = [
 	},
 ];
 
-export function ModalAddDefaultFilterColumn({
+export function ModalAddFilterColumn({
 	editingFilter,
 	editingObjectFieldName,
 	header,
@@ -98,34 +97,43 @@ export function ModalAddDefaultFilterColumn({
 	): IItem[] => {
 		let newItemsValues: IItem[] = [];
 
-		objectViewFilterColumns.map((objectViewFilterColumn) => {
-			const definition = objectViewFilterColumn.definition;
-
-			const valuesArray = definition[objectViewFilterColumn.filterType];
-
-			const [editingFilterType] = PICKLIST_OPERATORS.filter(
-				(filterType) =>
-					filterType.value === objectViewFilterColumn.filterType
-			);
-
-			setSelectedFilterType({
-				label: editingFilterType?.label,
-				value: editingFilterType?.value,
-			});
-
-			newItemsValues = itemValues.map((itemValue) => {
-				const item = {
-					checked: false,
-					label: itemValue.label,
-					value: itemValue.value,
-				};
-
-				if (valuesArray.includes(itemValue.value)) {
-					item.checked = true;
+		const currentFilterColumn = objectViewFilterColumns.find(
+			(filterColumn) => {
+				if (filterColumn.objectFieldName === editingObjectFieldName) {
+					return filterColumn;
 				}
+			}
+		);
 
-				return item;
+		const definition = currentFilterColumn?.definition;
+		const filterType = currentFilterColumn?.filterType;
+
+		const valuesArray =
+			definition && filterType ? definition[filterType] : null;
+
+		const editingFilterType = PICKLIST_OPERATORS.find(
+			(filterType) => filterType.value === currentFilterColumn?.filterType
+		);
+
+		if (editingFilterType) {
+			setSelectedFilterType({
+				label: editingFilterType.label,
+				value: editingFilterType.value,
 			});
+		}
+
+		newItemsValues = itemValues.map((itemValue) => {
+			const item = {
+				checked: false,
+				label: itemValue.label,
+				value: itemValue.value,
+			};
+
+			if (valuesArray?.includes(itemValue.value)) {
+				item.checked = true;
+			}
+
+			return item;
 		});
 
 		return newItemsValues;
@@ -134,34 +142,43 @@ export function ModalAddDefaultFilterColumn({
 	const getCheckedPickListItems = (itemValues: TPickListValue[]): IItem[] => {
 		let newItemsValues: IItem[] = [];
 
-		objectViewFilterColumns.map((objectViewFilterColumn) => {
-			const definition = objectViewFilterColumn.definition;
+		const currentFilterColumn = objectViewFilterColumns.find(
+			(filterColumn) => {
+				if (filterColumn.objectFieldName === editingObjectFieldName) {
+					return filterColumn;
+				}
+			}
+		);
 
-			const valuesArray = definition[objectViewFilterColumn.filterType];
+		const definition = currentFilterColumn?.definition;
+		const filterType = currentFilterColumn?.filterType;
 
-			const [editingFilterType] = PICKLIST_OPERATORS.filter(
-				(filterType) =>
-					filterType.value === objectViewFilterColumn.filterType
-			);
+		const valuesArray =
+			definition && filterType ? definition[filterType] : null;
 
+		const editingFilterType = PICKLIST_OPERATORS.find(
+			(filterType) => filterType.value === currentFilterColumn?.filterType
+		);
+
+		if (editingFilterType) {
 			setSelectedFilterType({
 				label: editingFilterType.label,
 				value: editingFilterType.value,
 			});
+		}
 
-			newItemsValues = itemValues.map((itemValue) => {
-				const item = {
-					checked: false,
-					label: itemValue.name,
-					value: itemValue.key,
-				};
+		newItemsValues = itemValues.map((itemValue) => {
+			const item = {
+				checked: false,
+				label: itemValue.name,
+				value: itemValue.key,
+			};
 
-				if (valuesArray.includes(itemValue.key)) {
-					item.checked = true;
-				}
+			if (valuesArray?.includes(itemValue.key)) {
+				item.checked = true;
+			}
 
-				return item;
-			});
+			return item;
 		});
 
 		return newItemsValues;
@@ -239,29 +256,33 @@ export function ModalAddDefaultFilterColumn({
 	}, [objectFields]);
 
 	useEffect(() => {
-		if (!selectedFilterBy) {
+		if (!selectedFilterBy && !editingObjectFieldName) {
 			setItems([]);
 		}
 		else {
-			setFieldValues(selectedFilterBy);
-		}
-	}, [setFieldValues, selectedFilterBy, workflowStatusJSONArray]);
+			if (selectedFilterBy) {
+				setFieldValues(selectedFilterBy);
+			}
+			else {
+				const objectField = objectFields.find((objectField) => {
+					if (objectField.name === editingObjectFieldName) {
+						return objectField;
+					}
+				});
 
-	useEffect(() => {
-		if (editingFilter) {
-			const objectField = objectFields.find((objectField) => {
-				if (objectField.name === editingObjectFieldName) {
-					return objectField;
-				}
-			});
-
-			objectField && setFieldValues(objectField);
+				objectField && setFieldValues(objectField);
+			}
 		}
 
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [editingFilter]);
+	}, [
+		editingFilter,
+		setFieldValues,
+		selectedFilterBy,
+		workflowStatusJSONArray,
+	]);
 
-	const onSubmit = (event: FormEvent) => {
+	const onSave = (event: FormEvent) => {
 		event.preventDefault();
 
 		const checkedItems = items.filter((item) => item.checked);
@@ -292,106 +313,120 @@ export function ModalAddDefaultFilterColumn({
 
 	return (
 		<ClayModal observer={observer}>
-			<ClayForm onSubmit={onSubmit}>
-				<ClayModal.Header>{header}</ClayModal.Header>
+			<ClayModal.Header>{header}</ClayModal.Header>
 
-				<ClayModal.Body>
-					{!editingFilter && (
-						<AutoComplete
-							emptyStateMessage="there-are-no-columns-available"
-							items={filteredAvailableFields}
-							label={Liferay.Language.get('filter-by')}
-							onChangeQuery={setQuery}
-							onSelectItem={setSelectedFilterBy}
-							query={query}
-							required
-							value={selectedFilterBy?.label[defaultLanguageId]}
-						>
-							{({label}) => (
-								<div className="d-flex justify-content-between">
-									<div>{label[defaultLanguageId]}</div>
-								</div>
-							)}
-						</AutoComplete>
-					)}
-
-					<CustomSelect
-						label={Liferay.Language.get('filter-type')}
-						onChange={(target: TLabelValueObject) =>
-							setSelectedFilterType(target)
-						}
-						options={PICKLIST_OPERATORS}
-						value={selectedFilterType?.label}
-					/>
-
-					<ClayDropDown
-						active={active}
-						onActiveChange={setActive}
-						trigger={
-							<Input
-								label={Liferay.Language.get('value')}
-								placeholder={Liferay.Language.get(
-									'choose-an-option'
-								)}
-								value={items
-									.reduce<string[]>((acc, value) => {
-										if (value.checked) {
-											acc.push(value.label);
-										}
-
-										return acc;
-									}, [])
-									.join(', ')}
-							/>
-						}
+			<ClayModal.Body>
+				{!editingFilter && (
+					<AutoComplete
+						emptyStateMessage={Liferay.Language.get(
+							'there-are-no-columns-available'
+						)}
+						items={filteredAvailableFields}
+						label={Liferay.Language.get('filter-by')}
+						onChangeQuery={setQuery}
+						onSelectItem={setSelectedFilterBy}
+						query={query}
+						required
+						value={selectedFilterBy?.label[defaultLanguageId]}
 					>
-						<ClayDropDown.ItemList>
-							{items.map(({checked, label, value}) => (
-								<CheckboxItem
-									checked={checked}
-									key={value}
-									label={label}
-									onChange={({target: {checked}}) => {
-										setItems(
-											items.map((item) =>
-												item.label === label
-													? {
-															...item,
-															checked,
-													  }
-													: item
-											)
-										);
-									}}
-								/>
-							))}
-						</ClayDropDown.ItemList>
-					</ClayDropDown>
-				</ClayModal.Body>
+						{({label}) => (
+							<div className="d-flex justify-content-between">
+								<div>{label[defaultLanguageId]}</div>
+							</div>
+						)}
+					</AutoComplete>
+				)}
 
-				<ClayModal.Footer
-					last={
-						<ClayButton.Group spaced>
-							<ClayButton
-								displayType="secondary"
-								onClick={() => onClose()}
-							>
-								{Liferay.Language.get('cancel')}
-							</ClayButton>
-
-							<ClayButton
-								disabled={
-									!selectedFilterBy && !editingObjectFieldName
-								}
-								displayType="primary"
-								type="submit"
-							>
-								{Liferay.Language.get('save')}
-							</ClayButton>
-						</ClayButton.Group>
+				<CustomSelect
+					disabled={
+						!editingFilter &&
+						(!selectedFilterBy ||
+							(selectedFilterBy.businessType !==
+								'Workflow Status' &&
+								selectedFilterBy.businessType !== 'Picklist'))
 					}
+					label={Liferay.Language.get('filter-type')}
+					onChange={(target: TLabelValueObject) =>
+						setSelectedFilterType(target)
+					}
+					options={PICKLIST_OPERATORS}
+					value={selectedFilterType?.label}
 				/>
-			</ClayForm>
+
+				<ClayDropDown
+					active={active}
+					onActiveChange={setActive}
+					trigger={
+						<Input
+							disabled={
+								!editingFilter &&
+								(!selectedFilterType ||
+									!selectedFilterBy ||
+									(selectedFilterBy.businessType !==
+										'Workflow Status' &&
+										selectedFilterBy.businessType !==
+											'Picklist'))
+							}
+							label={Liferay.Language.get('value')}
+							placeholder={Liferay.Language.get(
+								'choose-an-option'
+							)}
+							value={items
+								.reduce<string[]>((acc, value) => {
+									if (value.checked) {
+										acc.push(value.label);
+									}
+
+									return acc;
+								}, [])
+								.join(', ')}
+						/>
+					}
+				>
+					<ClayDropDown.ItemList>
+						{items.map(({checked, label, value}) => (
+							<CheckboxItem
+								checked={checked}
+								key={value}
+								label={label}
+								onChange={({target: {checked}}) => {
+									setItems(
+										items.map((item) =>
+											item.label === label
+												? {
+														...item,
+														checked,
+												  }
+												: item
+										)
+									);
+								}}
+							/>
+						))}
+					</ClayDropDown.ItemList>
+				</ClayDropDown>
+			</ClayModal.Body>
+
+			<ClayModal.Footer
+				last={
+					<ClayButton.Group spaced>
+						<ClayButton
+							displayType="secondary"
+							onClick={() => onClose()}
+						>
+							{Liferay.Language.get('cancel')}
+						</ClayButton>
+
+						<ClayButton
+							disabled={!selectedFilterBy && !editingFilter}
+							displayType="primary"
+							onClick={onSave}
+						>
+							{Liferay.Language.get('save')}
+						</ClayButton>
+					</ClayButton.Group>
+				}
+			/>
 		</ClayModal>
 	);
 }
