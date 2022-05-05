@@ -42,6 +42,8 @@ public class ServletFileUploadImpl implements ServletFileUpload {
 			long fileSizeMax, String location, int fileSizeThreshold)
 		throws UploadException {
 
+		List<FileItem> fileItems = new ArrayList<>();
+
 		org.apache.commons.fileupload.servlet.ServletFileUpload
 			servletFileUpload =
 				new org.apache.commons.fileupload.servlet.ServletFileUpload(
@@ -51,8 +53,6 @@ public class ServletFileUploadImpl implements ServletFileUpload {
 
 		servletFileUpload.setFileSizeMax(fileSizeMax);
 		servletFileUpload.setSizeMax(sizeMax);
-
-		List<FileItem> fileItems = new ArrayList<>();
 
 		try {
 			for (org.apache.commons.fileupload.FileItem fileItem :
