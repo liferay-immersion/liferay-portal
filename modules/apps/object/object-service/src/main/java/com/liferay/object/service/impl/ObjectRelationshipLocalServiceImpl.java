@@ -508,7 +508,6 @@ public class ObjectRelationshipLocalServiceImpl
 
 		ObjectDefinition objectDefinition1 =
 			_objectDefinitionPersistence.fetchByPrimaryKey(objectDefinitionId1);
-
 		ObjectDefinition objectDefinition2 =
 			_objectDefinitionPersistence.fetchByPrimaryKey(objectDefinitionId2);
 
