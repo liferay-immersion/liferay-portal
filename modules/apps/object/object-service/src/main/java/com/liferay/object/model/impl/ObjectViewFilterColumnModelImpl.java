@@ -78,8 +78,8 @@ public class ObjectViewFilterColumnModelImpl
 		{"objectViewFilterColumnId", Types.BIGINT}, {"companyId", Types.BIGINT},
 		{"userId", Types.BIGINT}, {"userName", Types.VARCHAR},
 		{"createDate", Types.TIMESTAMP}, {"modifiedDate", Types.TIMESTAMP},
-		{"objectViewId", Types.BIGINT}, {"objectFieldName", Types.VARCHAR},
-		{"filterType", Types.VARCHAR}, {"definition", Types.VARCHAR}
+		{"objectViewId", Types.BIGINT}, {"filterType", Types.VARCHAR},
+		{"json", Types.VARCHAR}, {"objectFieldName", Types.VARCHAR}
 	};
 
 	public static final Map<String, Integer> TABLE_COLUMNS_MAP =
@@ -95,13 +95,13 @@ public class ObjectViewFilterColumnModelImpl
 		TABLE_COLUMNS_MAP.put("createDate", Types.TIMESTAMP);
 		TABLE_COLUMNS_MAP.put("modifiedDate", Types.TIMESTAMP);
 		TABLE_COLUMNS_MAP.put("objectViewId", Types.BIGINT);
-		TABLE_COLUMNS_MAP.put("objectFieldName", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("filterType", Types.VARCHAR);
-		TABLE_COLUMNS_MAP.put("definition", Types.VARCHAR);
+		TABLE_COLUMNS_MAP.put("json", Types.VARCHAR);
+		TABLE_COLUMNS_MAP.put("objectFieldName", Types.VARCHAR);
 	}
 
 	public static final String TABLE_SQL_CREATE =
-		"create table ObjectViewFilterColumn (mvccVersion LONG default 0 not null,uuid_ VARCHAR(75) null,objectViewFilterColumnId LONG not null primary key,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,objectViewId LONG,objectFieldName VARCHAR(75) null,filterType VARCHAR(75) null,definition VARCHAR(75) null)";
+		"create table ObjectViewFilterColumn (mvccVersion LONG default 0 not null,uuid_ VARCHAR(75) null,objectViewFilterColumnId LONG not null primary key,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,objectViewId LONG,filterType VARCHAR(75) null,json VARCHAR(75) null,objectFieldName VARCHAR(75) null)";
 
 	public static final String TABLE_SQL_DROP =
 		"drop table ObjectViewFilterColumn";
@@ -319,23 +319,22 @@ public class ObjectViewFilterColumnModelImpl
 			(BiConsumer<ObjectViewFilterColumn, Long>)
 				ObjectViewFilterColumn::setObjectViewId);
 		attributeGetterFunctions.put(
-			"objectFieldName", ObjectViewFilterColumn::getObjectFieldName);
-		attributeSetterBiConsumers.put(
-			"objectFieldName",
-			(BiConsumer<ObjectViewFilterColumn, String>)
-				ObjectViewFilterColumn::setObjectFieldName);
-		attributeGetterFunctions.put(
 			"filterType", ObjectViewFilterColumn::getFilterType);
 		attributeSetterBiConsumers.put(
 			"filterType",
 			(BiConsumer<ObjectViewFilterColumn, String>)
 				ObjectViewFilterColumn::setFilterType);
-		attributeGetterFunctions.put(
-			"definition", ObjectViewFilterColumn::getDefinition);
+		attributeGetterFunctions.put("json", ObjectViewFilterColumn::getJson);
 		attributeSetterBiConsumers.put(
-			"definition",
+			"json",
 			(BiConsumer<ObjectViewFilterColumn, String>)
-				ObjectViewFilterColumn::setDefinition);
+				ObjectViewFilterColumn::setJson);
+		attributeGetterFunctions.put(
+			"objectFieldName", ObjectViewFilterColumn::getObjectFieldName);
+		attributeSetterBiConsumers.put(
+			"objectFieldName",
+			(BiConsumer<ObjectViewFilterColumn, String>)
+				ObjectViewFilterColumn::setObjectFieldName);
 
 		_attributeGetterFunctions = Collections.unmodifiableMap(
 			attributeGetterFunctions);
@@ -541,6 +540,46 @@ public class ObjectViewFilterColumnModelImpl
 
 	@JSON
 	@Override
+	public String getFilterType() {
+		if (_filterType == null) {
+			return "";
+		}
+		else {
+			return _filterType;
+		}
+	}
+
+	@Override
+	public void setFilterType(String filterType) {
+		if (_columnOriginalValues == Collections.EMPTY_MAP) {
+			_setColumnOriginalValues();
+		}
+
+		_filterType = filterType;
+	}
+
+	@JSON
+	@Override
+	public String getJson() {
+		if (_json == null) {
+			return "";
+		}
+		else {
+			return _json;
+		}
+	}
+
+	@Override
+	public void setJson(String json) {
+		if (_columnOriginalValues == Collections.EMPTY_MAP) {
+			_setColumnOriginalValues();
+		}
+
+		_json = json;
+	}
+
+	@JSON
+	@Override
 	public String getObjectFieldName() {
 		if (_objectFieldName == null) {
 			return "";
@@ -566,46 +605,6 @@ public class ObjectViewFilterColumnModelImpl
 	@Deprecated
 	public String getOriginalObjectFieldName() {
 		return getColumnOriginalValue("objectFieldName");
-	}
-
-	@JSON
-	@Override
-	public String getFilterType() {
-		if (_filterType == null) {
-			return "";
-		}
-		else {
-			return _filterType;
-		}
-	}
-
-	@Override
-	public void setFilterType(String filterType) {
-		if (_columnOriginalValues == Collections.EMPTY_MAP) {
-			_setColumnOriginalValues();
-		}
-
-		_filterType = filterType;
-	}
-
-	@JSON
-	@Override
-	public String getDefinition() {
-		if (_definition == null) {
-			return "";
-		}
-		else {
-			return _definition;
-		}
-	}
-
-	@Override
-	public void setDefinition(String definition) {
-		if (_columnOriginalValues == Collections.EMPTY_MAP) {
-			_setColumnOriginalValues();
-		}
-
-		_definition = definition;
 	}
 
 	@Override
@@ -682,9 +681,9 @@ public class ObjectViewFilterColumnModelImpl
 		objectViewFilterColumnImpl.setCreateDate(getCreateDate());
 		objectViewFilterColumnImpl.setModifiedDate(getModifiedDate());
 		objectViewFilterColumnImpl.setObjectViewId(getObjectViewId());
-		objectViewFilterColumnImpl.setObjectFieldName(getObjectFieldName());
 		objectViewFilterColumnImpl.setFilterType(getFilterType());
-		objectViewFilterColumnImpl.setDefinition(getDefinition());
+		objectViewFilterColumnImpl.setJson(getJson());
+		objectViewFilterColumnImpl.setObjectFieldName(getObjectFieldName());
 
 		objectViewFilterColumnImpl.resetOriginalValues();
 
@@ -714,12 +713,12 @@ public class ObjectViewFilterColumnModelImpl
 			this.<Date>getColumnOriginalValue("modifiedDate"));
 		objectViewFilterColumnImpl.setObjectViewId(
 			this.<Long>getColumnOriginalValue("objectViewId"));
-		objectViewFilterColumnImpl.setObjectFieldName(
-			this.<String>getColumnOriginalValue("objectFieldName"));
 		objectViewFilterColumnImpl.setFilterType(
 			this.<String>getColumnOriginalValue("filterType"));
-		objectViewFilterColumnImpl.setDefinition(
-			this.<String>getColumnOriginalValue("definition"));
+		objectViewFilterColumnImpl.setJson(
+			this.<String>getColumnOriginalValue("json"));
+		objectViewFilterColumnImpl.setObjectFieldName(
+			this.<String>getColumnOriginalValue("objectFieldName"));
 
 		return objectViewFilterColumnImpl;
 	}
@@ -845,15 +844,6 @@ public class ObjectViewFilterColumnModelImpl
 
 		objectViewFilterColumnCacheModel.objectViewId = getObjectViewId();
 
-		objectViewFilterColumnCacheModel.objectFieldName = getObjectFieldName();
-
-		String objectFieldName =
-			objectViewFilterColumnCacheModel.objectFieldName;
-
-		if ((objectFieldName != null) && (objectFieldName.length() == 0)) {
-			objectViewFilterColumnCacheModel.objectFieldName = null;
-		}
-
 		objectViewFilterColumnCacheModel.filterType = getFilterType();
 
 		String filterType = objectViewFilterColumnCacheModel.filterType;
@@ -862,12 +852,21 @@ public class ObjectViewFilterColumnModelImpl
 			objectViewFilterColumnCacheModel.filterType = null;
 		}
 
-		objectViewFilterColumnCacheModel.definition = getDefinition();
+		objectViewFilterColumnCacheModel.json = getJson();
 
-		String definition = objectViewFilterColumnCacheModel.definition;
+		String json = objectViewFilterColumnCacheModel.json;
 
-		if ((definition != null) && (definition.length() == 0)) {
-			objectViewFilterColumnCacheModel.definition = null;
+		if ((json != null) && (json.length() == 0)) {
+			objectViewFilterColumnCacheModel.json = null;
+		}
+
+		objectViewFilterColumnCacheModel.objectFieldName = getObjectFieldName();
+
+		String objectFieldName =
+			objectViewFilterColumnCacheModel.objectFieldName;
+
+		if ((objectFieldName != null) && (objectFieldName.length() == 0)) {
+			objectViewFilterColumnCacheModel.objectFieldName = null;
 		}
 
 		return objectViewFilterColumnCacheModel;
@@ -974,9 +973,9 @@ public class ObjectViewFilterColumnModelImpl
 	private Date _modifiedDate;
 	private boolean _setModifiedDate;
 	private long _objectViewId;
-	private String _objectFieldName;
 	private String _filterType;
-	private String _definition;
+	private String _json;
+	private String _objectFieldName;
 
 	public <T> T getColumnValue(String columnName) {
 		columnName = _attributeNames.getOrDefault(columnName, columnName);
@@ -1017,9 +1016,9 @@ public class ObjectViewFilterColumnModelImpl
 		_columnOriginalValues.put("createDate", _createDate);
 		_columnOriginalValues.put("modifiedDate", _modifiedDate);
 		_columnOriginalValues.put("objectViewId", _objectViewId);
-		_columnOriginalValues.put("objectFieldName", _objectFieldName);
 		_columnOriginalValues.put("filterType", _filterType);
-		_columnOriginalValues.put("definition", _definition);
+		_columnOriginalValues.put("json", _json);
+		_columnOriginalValues.put("objectFieldName", _objectFieldName);
 	}
 
 	private static final Map<String, String> _attributeNames;
@@ -1061,11 +1060,11 @@ public class ObjectViewFilterColumnModelImpl
 
 		columnBitmasks.put("objectViewId", 256L);
 
-		columnBitmasks.put("objectFieldName", 512L);
+		columnBitmasks.put("filterType", 512L);
 
-		columnBitmasks.put("filterType", 1024L);
+		columnBitmasks.put("json", 1024L);
 
-		columnBitmasks.put("definition", 2048L);
+		columnBitmasks.put("objectFieldName", 2048L);
 
 		_columnBitmasks = Collections.unmodifiableMap(columnBitmasks);
 	}

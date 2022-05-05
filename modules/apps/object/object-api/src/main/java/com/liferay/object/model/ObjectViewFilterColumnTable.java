@@ -60,16 +60,15 @@ public class ObjectViewFilterColumnTable
 	public final Column<ObjectViewFilterColumnTable, Long> objectViewId =
 		createColumn(
 			"objectViewId", Long.class, Types.BIGINT, Column.FLAG_DEFAULT);
+	public final Column<ObjectViewFilterColumnTable, String> filterType =
+		createColumn(
+			"filterType", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
+	public final Column<ObjectViewFilterColumnTable, String> json =
+		createColumn("json", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
 	public final Column<ObjectViewFilterColumnTable, String> objectFieldName =
 		createColumn(
 			"objectFieldName", String.class, Types.VARCHAR,
 			Column.FLAG_DEFAULT);
-	public final Column<ObjectViewFilterColumnTable, String> filterType =
-		createColumn(
-			"filterType", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
-	public final Column<ObjectViewFilterColumnTable, String> definition =
-		createColumn(
-			"definition", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
 
 	private ObjectViewFilterColumnTable() {
 		super("ObjectViewFilterColumn", ObjectViewFilterColumnTable::new);

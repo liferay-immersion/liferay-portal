@@ -98,12 +98,12 @@ public class ObjectViewFilterColumnCacheModel
 		sb.append(modifiedDate);
 		sb.append(", objectViewId=");
 		sb.append(objectViewId);
-		sb.append(", objectFieldName=");
-		sb.append(objectFieldName);
 		sb.append(", filterType=");
 		sb.append(filterType);
-		sb.append(", definition=");
-		sb.append(definition);
+		sb.append(", json=");
+		sb.append(json);
+		sb.append(", objectFieldName=");
+		sb.append(objectFieldName);
 		sb.append("}");
 
 		return sb.toString();
@@ -151,13 +151,6 @@ public class ObjectViewFilterColumnCacheModel
 
 		objectViewFilterColumnImpl.setObjectViewId(objectViewId);
 
-		if (objectFieldName == null) {
-			objectViewFilterColumnImpl.setObjectFieldName("");
-		}
-		else {
-			objectViewFilterColumnImpl.setObjectFieldName(objectFieldName);
-		}
-
 		if (filterType == null) {
 			objectViewFilterColumnImpl.setFilterType("");
 		}
@@ -165,11 +158,18 @@ public class ObjectViewFilterColumnCacheModel
 			objectViewFilterColumnImpl.setFilterType(filterType);
 		}
 
-		if (definition == null) {
-			objectViewFilterColumnImpl.setDefinition("");
+		if (json == null) {
+			objectViewFilterColumnImpl.setJson("");
 		}
 		else {
-			objectViewFilterColumnImpl.setDefinition(definition);
+			objectViewFilterColumnImpl.setJson(json);
+		}
+
+		if (objectFieldName == null) {
+			objectViewFilterColumnImpl.setObjectFieldName("");
+		}
+		else {
+			objectViewFilterColumnImpl.setObjectFieldName(objectFieldName);
 		}
 
 		objectViewFilterColumnImpl.resetOriginalValues();
@@ -192,9 +192,9 @@ public class ObjectViewFilterColumnCacheModel
 		modifiedDate = objectInput.readLong();
 
 		objectViewId = objectInput.readLong();
-		objectFieldName = objectInput.readUTF();
 		filterType = objectInput.readUTF();
-		definition = objectInput.readUTF();
+		json = objectInput.readUTF();
+		objectFieldName = objectInput.readUTF();
 	}
 
 	@Override
@@ -226,13 +226,6 @@ public class ObjectViewFilterColumnCacheModel
 
 		objectOutput.writeLong(objectViewId);
 
-		if (objectFieldName == null) {
-			objectOutput.writeUTF("");
-		}
-		else {
-			objectOutput.writeUTF(objectFieldName);
-		}
-
 		if (filterType == null) {
 			objectOutput.writeUTF("");
 		}
@@ -240,11 +233,18 @@ public class ObjectViewFilterColumnCacheModel
 			objectOutput.writeUTF(filterType);
 		}
 
-		if (definition == null) {
+		if (json == null) {
 			objectOutput.writeUTF("");
 		}
 		else {
-			objectOutput.writeUTF(definition);
+			objectOutput.writeUTF(json);
+		}
+
+		if (objectFieldName == null) {
+			objectOutput.writeUTF("");
+		}
+		else {
+			objectOutput.writeUTF(objectFieldName);
 		}
 	}
 
@@ -257,8 +257,8 @@ public class ObjectViewFilterColumnCacheModel
 	public long createDate;
 	public long modifiedDate;
 	public long objectViewId;
-	public String objectFieldName;
 	public String filterType;
-	public String definition;
+	public String json;
+	public String objectFieldName;
 
 }

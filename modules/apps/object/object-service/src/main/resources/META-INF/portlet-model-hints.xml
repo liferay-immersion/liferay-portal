@@ -247,9 +247,9 @@
 		<field name="createDate" type="Date" />
 		<field name="modifiedDate" type="Date" />
 		<field name="objectViewId" type="long" />
-		<field name="objectFieldName" type="String" />
 		<field name="filterType" type="String" />
-		<field name="definition" type="String" />
+		<field name="json" type="String" />
+		<field name="objectFieldName" type="String" />
 	</model>
 	<model name="com.liferay.object.model.ObjectViewSortColumn">
 		<field name="mvccVersion" type="long" />
