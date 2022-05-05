@@ -447,9 +447,9 @@ public class FragmentsImporterTest {
 
 		String entryPath = path + StringPool.FORWARD_SLASH + key;
 
-		String zipPath = StringUtil.removeSubstring(entryPath, _FRAGMENTS_PATH);
+		String zipPath = StringUtil.removeSubstring(entryPath, _PATH_FRAGMENTS);
 
-		zipPath = StringUtil.removeSubstring(zipPath, _DEPENDENCIES_PATH);
+		zipPath = StringUtil.removeSubstring(zipPath, _PATH_DEPENDENCIES);
 
 		URL url = _bundle.getEntry(entryPath);
 
@@ -460,11 +460,11 @@ public class FragmentsImporterTest {
 		ZipWriter zipWriter = ZipWriterFactoryUtil.getZipWriter();
 
 		_addZipWriterEntry(
-			zipWriter, _DEPENDENCIES_PATH + "resources-collection",
+			zipWriter, _PATH_DEPENDENCIES + "resources-collection",
 			"collection.json");
 		_addZipWriterEntry(
-			zipWriter, _RESOURCE_FRAGMENTS_PATH + "resources", "image.png");
-		_populateZipWriter(_RESOURCE_FRAGMENTS_PATH, zipWriter, false);
+			zipWriter, _PATH_RESOURCES_COLLECTION + "resources", "image.png");
+		_populateZipWriter(_PATH_RESOURCES_COLLECTION, zipWriter, false);
 
 		return zipWriter.getFile();
 	}
@@ -473,14 +473,14 @@ public class FragmentsImporterTest {
 		ZipWriter zipWriter = ZipWriterFactoryUtil.getZipWriter();
 
 		URL collectionURL = _bundle.getEntry(
-			_FRAGMENTS_PATH +
+			_PATH_FRAGMENTS +
 				FragmentExportImportConstants.FILE_NAME_COLLECTION);
 
 		zipWriter.addEntry(
 			FragmentExportImportConstants.FILE_NAME_COLLECTION,
 			collectionURL.openStream());
 
-		_populateZipWriter(_FRAGMENTS_PATH, zipWriter, true);
+		_populateZipWriter(_PATH_FRAGMENTS, zipWriter, true);
 
 		return zipWriter.getFile();
 	}
@@ -625,14 +625,14 @@ public class FragmentsImporterTest {
 		Assert.assertTrue(css, css.contains(resourceReference));
 	}
 
-	private static final String _DEPENDENCIES_PATH =
+	private static final String _PATH_DEPENDENCIES =
 		"com/liferay/fragment/dependencies/";
 
-	private static final String _FRAGMENTS_PATH =
-		_DEPENDENCIES_PATH + "fragments/";
+	private static final String _PATH_FRAGMENTS =
+		_PATH_DEPENDENCIES + "fragments/";
 
-	private static final String _RESOURCE_FRAGMENTS_PATH =
-		_DEPENDENCIES_PATH + "resources-collection/";
+	private static final String _PATH_RESOURCES_COLLECTION =
+		_PATH_DEPENDENCIES + "resources-collection/";
 
 	private Bundle _bundle;
 
