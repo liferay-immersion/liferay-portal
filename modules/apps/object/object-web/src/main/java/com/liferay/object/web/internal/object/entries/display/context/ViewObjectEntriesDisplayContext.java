@@ -14,6 +14,7 @@
 
 package com.liferay.object.web.internal.object.entries.display.context;
 
+import com.liferay.frontend.data.set.filter.FDSFilter;
 import com.liferay.frontend.data.set.model.FDSActionDropdownItem;
 import com.liferay.frontend.data.set.model.FDSSortItemBuilder;
 import com.liferay.frontend.data.set.model.FDSSortItemList;
@@ -23,12 +24,15 @@ import com.liferay.object.constants.ObjectRelationshipConstants;
 import com.liferay.object.model.ObjectDefinition;
 import com.liferay.object.model.ObjectField;
 import com.liferay.object.model.ObjectView;
+import com.liferay.object.model.ObjectViewFilterColumn;
 import com.liferay.object.model.ObjectViewSortColumn;
 import com.liferay.object.scope.ObjectScopeProvider;
 import com.liferay.object.service.ObjectFieldLocalService;
 import com.liferay.object.service.ObjectViewLocalService;
 import com.liferay.object.web.internal.constants.ObjectWebKeys;
 import com.liferay.object.web.internal.display.context.helper.ObjectRequestHelper;
+import com.liferay.object.web.internal.object.entries.frontend.data.set.filter.factory.ObjectEntryFieldFDSFilterFactory;
+import com.liferay.object.web.internal.object.entries.frontend.data.set.filter.factory.ObjectEntryFieldFDSFilterFactoryServicesTracker;
 import com.liferay.petra.portlet.url.builder.PortletURLBuilder;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
@@ -64,6 +68,8 @@ public class ViewObjectEntriesDisplayContext {
 
 	public ViewObjectEntriesDisplayContext(
 		HttpServletRequest httpServletRequest,
+		ObjectEntryFieldFDSFilterFactoryServicesTracker
+			objectEntryFieldFDSFilterFactoryServicesTracker,
 		ObjectFieldLocalService objectFieldLocalService,
 		ObjectScopeProvider objectScopeProvider,
 		ObjectViewLocalService objectViewLocalService,
@@ -71,6 +77,8 @@ public class ViewObjectEntriesDisplayContext {
 		String restContextPath) {
 
 		_httpServletRequest = httpServletRequest;
+		_objectEntryFieldFDSFilterFactoryServicesTracker =
+			objectEntryFieldFDSFilterFactoryServicesTracker;
 		_objectFieldLocalService = objectFieldLocalService;
 		_objectScopeProvider = objectScopeProvider;
 		_objectViewLocalService = objectViewLocalService;
@@ -132,6 +140,34 @@ public class ViewObjectEntriesDisplayContext {
 			});
 
 		return creationMenu;
+	}
+
+	public List<FDSFilter> getDynamicFDSFilters() throws PortalException {
+		ObjectView objectView = _objectViewLocalService.fetchDefaultObjectView(
+			_objectDefinition.getObjectDefinitionId());
+
+		List<FDSFilter> fdsFilters = new ArrayList<>();
+
+		if (objectView == null) {
+			return fdsFilters;
+		}
+
+		for (ObjectViewFilterColumn objectViewFilterColumn :
+				objectView.getObjectViewFilterColumns()) {
+
+			ObjectEntryFieldFDSFilterFactory objectEntryFieldFDSFilterFactory =
+				_objectEntryFieldFDSFilterFactoryServicesTracker.
+					getObjectEntryFieldFDSFilterFactory(
+						objectViewFilterColumn.getFilterType());
+
+			fdsFilters.add(
+				objectEntryFieldFDSFilterFactory.create(
+					_objectRequestHelper.getLocale(),
+					_objectDefinition.getObjectDefinitionId(),
+					objectViewFilterColumn));
+		}
+
+		return fdsFilters;
 	}
 
 	public List<FDSActionDropdownItem> getFDSActionDropdownItems()
@@ -311,6 +347,8 @@ public class ViewObjectEntriesDisplayContext {
 	private final String _apiURL;
 	private final HttpServletRequest _httpServletRequest;
 	private ObjectDefinition _objectDefinition;
+	private final ObjectEntryFieldFDSFilterFactoryServicesTracker
+		_objectEntryFieldFDSFilterFactoryServicesTracker;
 	private final ObjectFieldLocalService _objectFieldLocalService;
 	private final ObjectRequestHelper _objectRequestHelper;
 	private final ObjectScopeProvider _objectScopeProvider;
