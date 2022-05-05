@@ -14,28 +14,73 @@
 
 package com.liferay.frontend.data.set.view.table;
 
+import com.liferay.petra.function.UnsafeConsumer;
+
+import org.osgi.annotation.versioning.ProviderType;
+
 /**
  * @author Marco Leo
  */
+@ProviderType
 public interface FDSTableSchemaBuilder {
 
+	public FDSTableSchemaBuilder add(String fieldName);
+
+	public FDSTableSchemaBuilder add(String fieldName, String label);
+
+	public FDSTableSchemaBuilder add(
+		String fieldName, String label,
+		UnsafeConsumer<FDSTableSchemaField, Throwable> unsafeConsumer);
+
+	public FDSTableSchemaBuilder add(
+		String fieldName,
+		UnsafeConsumer<FDSTableSchemaField, Throwable> unsafeConsumer);
+
+	/**
+	 * @deprecated As of Cavanaugh (7.4.x)
+	 */
+	@Deprecated
 	public <T extends FDSTableSchemaField> T addFDSTableSchemaField(
 		Class<T> clazz, String fieldName);
 
+	/**
+	 * @deprecated As of Cavanaugh (7.4.x)
+	 */
+	@Deprecated
 	public <T extends FDSTableSchemaField> T addFDSTableSchemaField(
 		Class<T> clazz, String fieldName, String label);
 
+	/**
+	 * @deprecated As of Cavanaugh (7.4.x)
+	 */
+	@Deprecated
 	public void addFDSTableSchemaField(FDSTableSchemaField fdsTableSchemaField);
 
+	/**
+	 * @deprecated As of Cavanaugh (7.4.x)
+	 */
+	@Deprecated
 	public FDSTableSchemaField addFDSTableSchemaField(String fieldName);
 
+	/**
+	 * @deprecated As of Cavanaugh (7.4.x)
+	 */
+	@Deprecated
 	public FDSTableSchemaField addFDSTableSchemaField(
 		String fieldName, String label);
 
 	public FDSTableSchema build();
 
+	/**
+	 * @deprecated As of Cavanaugh (7.4.x)
+	 */
+	@Deprecated
 	public void removeFDSTableSchemaField(String fieldName);
 
+	/**
+	 * @deprecated As of Cavanaugh (7.4.x)
+	 */
+	@Deprecated
 	public void setFDSTableSchema(FDSTableSchema fdsTableSchema);
 
 }
