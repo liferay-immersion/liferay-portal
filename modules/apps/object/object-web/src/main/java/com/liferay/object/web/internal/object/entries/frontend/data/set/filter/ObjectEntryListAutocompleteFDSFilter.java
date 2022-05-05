@@ -25,12 +25,12 @@ public class ObjectEntryListAutocompleteFDSFilter
 	extends BaseAutocompleteFDSFilter {
 
 	public ObjectEntryListAutocompleteFDSFilter(
-		long listTypeDefinitionId, String id, String label,
+		String id, String label, long listTypeDefinitionId,
 		Map<String, Object> preloadedData) {
 
-		_listTypeDefinitionId = listTypeDefinitionId;
 		_id = id;
 		_label = label;
+		_listTypeDefinitionId = listTypeDefinitionId;
 		_preloadedData = preloadedData;
 	}
 
