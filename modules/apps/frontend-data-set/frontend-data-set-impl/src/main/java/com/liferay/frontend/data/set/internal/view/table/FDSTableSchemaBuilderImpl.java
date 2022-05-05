@@ -17,6 +17,8 @@ package com.liferay.frontend.data.set.internal.view.table;
 import com.liferay.frontend.data.set.view.table.FDSTableSchema;
 import com.liferay.frontend.data.set.view.table.FDSTableSchemaBuilder;
 import com.liferay.frontend.data.set.view.table.FDSTableSchemaField;
+import com.liferay.petra.function.UnsafeConsumer;
+import com.liferay.petra.reflect.ReflectionUtil;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -25,6 +27,56 @@ import java.util.Map;
  * @author Marco Leo
  */
 public class FDSTableSchemaBuilderImpl implements FDSTableSchemaBuilder {
+
+	@Override
+	public FDSTableSchemaBuilder add(String fieldName) {
+		addFDSTableSchemaField(fieldName);
+
+		return this;
+	}
+
+	@Override
+	public FDSTableSchemaBuilder add(String fieldName, String label) {
+		addFDSTableSchemaField(fieldName, label);
+
+		return this;
+	}
+
+	@Override
+	public FDSTableSchemaBuilder add(
+		String fieldName, String label,
+		UnsafeConsumer<FDSTableSchemaField, Throwable> unsafeConsumer) {
+
+		FDSTableSchemaField fdsTableSchemaField = addFDSTableSchemaField(
+			fieldName, label);
+
+		try {
+			unsafeConsumer.accept(fdsTableSchemaField);
+		}
+		catch (Throwable throwable) {
+			return ReflectionUtil.throwException(throwable);
+		}
+
+		return this;
+	}
+
+	@Override
+	public FDSTableSchemaBuilder add(
+		String fieldName,
+		UnsafeConsumer<FDSTableSchemaField, Throwable> unsafeConsumer) {
+
+		FDSTableSchemaField fdsTableSchemaField = addFDSTableSchemaField(
+			fieldName);
+
+		try {
+			unsafeConsumer.accept(fdsTableSchemaField);
+		}
+		catch (Throwable throwable) {
+			return ReflectionUtil.throwException(throwable);
+		}
+
+		return this;
+	}
 
 	@Override
 	public <T extends FDSTableSchemaField> T addFDSTableSchemaField(
