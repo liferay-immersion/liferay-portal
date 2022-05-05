@@ -19,8 +19,8 @@ import com.liferay.object.exception.DefaultObjectViewException;
 import com.liferay.object.exception.ObjectViewColumnFieldNameException;
 import com.liferay.object.exception.ObjectViewFilterColumnException;
 import com.liferay.object.exception.ObjectViewSortColumnException;
-import com.liferay.object.field.filter.definition.parser.ObjectFieldFilterDefinitionParser;
-import com.liferay.object.field.filter.definition.parser.ObjectFieldFilterDefinitionParserServicesTracker;
+import com.liferay.object.field.filter.parser.ObjectFieldFilterParser;
+import com.liferay.object.field.filter.parser.ObjectFieldFilterParserServicesTracker;
 import com.liferay.object.model.ObjectDefinition;
 import com.liferay.object.model.ObjectField;
 import com.liferay.object.model.ObjectView;
@@ -317,12 +317,12 @@ public class ObjectViewLocalServiceImpl extends ObjectViewLocalServiceBaseImpl {
 				newObjectViewFilterColumn.setUserName(user.getFullName());
 				newObjectViewFilterColumn.setObjectViewId(
 					objectView.getObjectViewId());
-				newObjectViewFilterColumn.setObjectFieldName(
-					objectViewFilterColumn.getObjectFieldName());
 				newObjectViewFilterColumn.setFilterType(
 					objectViewFilterColumn.getFilterType());
-				newObjectViewFilterColumn.setDefinition(
-					objectViewFilterColumn.getDefinition());
+				newObjectViewFilterColumn.setJson(
+					objectViewFilterColumn.getJson());
+				newObjectViewFilterColumn.setObjectFieldName(
+					objectViewFilterColumn.getObjectFieldName());
 
 				return _objectViewFilterColumnPersistence.update(
 					newObjectViewFilterColumn);
@@ -473,15 +473,15 @@ public class ObjectViewLocalServiceImpl extends ObjectViewLocalServiceBaseImpl {
 				listTypeDefinitionId = objectField.getObjectDefinitionId();
 			}
 
-			if (Validator.isNull(objectViewFilterColumn.getDefinition()) &&
+			if (Validator.isNull(objectViewFilterColumn.getJson()) &&
 				Validator.isNull(objectViewFilterColumn.getFilterType())) {
 
 				continue;
 			}
 
-			if ((Validator.isNull(objectViewFilterColumn.getDefinition()) &&
+			if ((Validator.isNull(objectViewFilterColumn.getJson()) &&
 				 Validator.isNotNull(objectViewFilterColumn.getFilterType())) ||
-				(Validator.isNotNull(objectViewFilterColumn.getDefinition()) &&
+				(Validator.isNotNull(objectViewFilterColumn.getJson()) &&
 				 Validator.isNull(objectViewFilterColumn.getFilterType()))) {
 
 				throw new ObjectViewFilterColumnException(
@@ -491,13 +491,12 @@ public class ObjectViewLocalServiceImpl extends ObjectViewLocalServiceBaseImpl {
 						objectViewFilterColumn.getObjectFieldName()));
 			}
 
-			ObjectFieldFilterDefinitionParser
-				objectFieldFilterDefinitionParser =
-					_objectFieldFilterDefinitionParserServicesTracker.
-						getObjectFieldFilterDefinitionParser(
-							objectViewFilterColumn.getFilterType());
+			ObjectFieldFilterParser objectFieldFilterParser =
+				_objectFieldFilterParserServicesTracker.
+					getObjectFieldFilterParser(
+						objectViewFilterColumn.getFilterType());
 
-			objectFieldFilterDefinitionParser.validate(
+			objectFieldFilterParser.validate(
 				listTypeDefinitionId, objectViewFilterColumn);
 		}
 	}
@@ -540,8 +539,8 @@ public class ObjectViewLocalServiceImpl extends ObjectViewLocalServiceBaseImpl {
 	private ObjectDefinitionPersistence _objectDefinitionPersistence;
 
 	@Reference
-	private ObjectFieldFilterDefinitionParserServicesTracker
-		_objectFieldFilterDefinitionParserServicesTracker;
+	private ObjectFieldFilterParserServicesTracker
+		_objectFieldFilterParserServicesTracker;
 
 	@Reference
 	private ObjectFieldPersistence _objectFieldPersistence;

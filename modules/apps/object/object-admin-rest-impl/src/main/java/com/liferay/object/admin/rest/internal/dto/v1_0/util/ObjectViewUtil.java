@@ -97,13 +97,12 @@ public class ObjectViewUtil {
 
 		return new ObjectViewFilterColumn() {
 			{
-				definition =
-					serviceBuilderObjectViewFilterColumn.getDefinition();
 				filterType = ObjectViewFilterColumn.FilterType.create(
 					serviceBuilderObjectViewFilterColumn.getFilterType());
 				id =
 					serviceBuilderObjectViewFilterColumn.
 						getObjectViewFilterColumnId();
+				json = serviceBuilderObjectViewFilterColumn.getJson();
 				objectFieldName =
 					serviceBuilderObjectViewFilterColumn.getObjectFieldName();
 			}

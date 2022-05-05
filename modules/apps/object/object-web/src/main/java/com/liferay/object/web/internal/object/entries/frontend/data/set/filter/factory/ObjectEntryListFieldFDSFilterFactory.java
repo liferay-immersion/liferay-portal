@@ -18,10 +18,10 @@ import com.liferay.frontend.data.set.filter.FDSFilter;
 import com.liferay.list.type.model.ListTypeDefinition;
 import com.liferay.list.type.service.ListTypeDefinitionLocalService;
 import com.liferay.object.constants.ObjectViewFilterConstants;
-import com.liferay.object.field.filter.definition.parser.ObjectFieldFilterDefinitionParser;
+import com.liferay.object.field.filter.parser.ObjectFieldFilterParser;
 import com.liferay.object.model.ObjectField;
 import com.liferay.object.model.ObjectViewFilterColumn;
-import com.liferay.object.service.persistence.ObjectFieldPersistence;
+import com.liferay.object.service.ObjectFieldLocalService;
 import com.liferay.object.web.internal.object.entries.frontend.data.set.filter.ObjectEntryListAutocompleteFDSFilter;
 import com.liferay.object.web.internal.object.entries.frontend.data.set.filter.ObjectEntryStatusCheckBoxFDSFilter;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -55,11 +55,11 @@ public class ObjectEntryListFieldFDSFilterFactory
 				objectViewFilterColumn.getObjectFieldName(), "status")) {
 
 			return new ObjectEntryStatusCheckBoxFDSFilter(
-				_objectFieldFilterDefinitionParser.parse(
+				_objectFieldFilterParser.parse(
 					0L, locale, objectViewFilterColumn));
 		}
 
-		ObjectField objectField = _objectFieldPersistence.findByODI_N(
+		ObjectField objectField = _objectFieldLocalService.fetchObjectField(
 			objectDefinitionId, objectViewFilterColumn.getObjectFieldName());
 
 		ListTypeDefinition listTypeDefinition =
@@ -67,9 +67,9 @@ public class ObjectEntryListFieldFDSFilterFactory
 				objectField.getListTypeDefinitionId());
 
 		return new ObjectEntryListAutocompleteFDSFilter(
-			objectField.getListTypeDefinitionId(), objectField.getName(),
-			listTypeDefinition.getName(locale),
-			_objectFieldFilterDefinitionParser.parse(
+			objectField.getName(), listTypeDefinition.getName(locale),
+			objectField.getListTypeDefinitionId(),
+			_objectFieldFilterParser.parse(
 				objectField.getListTypeDefinitionId(), locale,
 				objectViewFilterColumn));
 	}
@@ -80,10 +80,9 @@ public class ObjectEntryListFieldFDSFilterFactory
 	@Reference(
 		target = "(object.field.filter.type.key=" + ObjectViewFilterConstants.FILTER_TYPE_EXCLUDES + ")"
 	)
-	private ObjectFieldFilterDefinitionParser
-		_objectFieldFilterDefinitionParser;
+	private ObjectFieldFilterParser _objectFieldFilterParser;
 
 	@Reference
-	private ObjectFieldPersistence _objectFieldPersistence;
+	private ObjectFieldLocalService _objectFieldLocalService;
 
 }

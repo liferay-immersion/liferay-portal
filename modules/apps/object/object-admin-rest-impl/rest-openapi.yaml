@@ -403,8 +403,6 @@ components:
                     type: integer
         ObjectViewFilterColumn:
             properties:
-                definition:
-                    type: string
                 filterType:
                     enum: [EXCLUDES, INCLUDES]
                     type: string
@@ -412,6 +410,8 @@ components:
                     format: int64
                     readOnly: true
                     type: integer
+                json:
+                    type: string
                 objectFieldName:
                     type: string
         ObjectViewSortColumn:

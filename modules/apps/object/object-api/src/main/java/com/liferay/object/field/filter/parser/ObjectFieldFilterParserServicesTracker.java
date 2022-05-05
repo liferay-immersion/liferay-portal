@@ -12,14 +12,13 @@
  * details.
  */
 
-package com.liferay.object.field.filter.definition.parser;
+package com.liferay.object.field.filter.parser;
 
 /**
  * @author Feliphe Marinho
  */
-public interface ObjectFieldFilterDefinitionParserServicesTracker {
+public interface ObjectFieldFilterParserServicesTracker {
 
-	public ObjectFieldFilterDefinitionParser
-		getObjectFieldFilterDefinitionParser(String key);
+	public ObjectFieldFilterParser getObjectFieldFilterParser(String key);
 
 }
