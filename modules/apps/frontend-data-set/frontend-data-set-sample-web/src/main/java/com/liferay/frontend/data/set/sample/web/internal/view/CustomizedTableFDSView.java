@@ -42,35 +42,25 @@ public class CustomizedTableFDSView extends BaseTableFDSView {
 		FDSTableSchemaBuilder fdsTableSchemaBuilder =
 			_fdsTableSchemaBuilderFactory.create();
 
-		fdsTableSchemaBuilder.addFDSTableSchemaField(
-			"id", "id"
-		).setSortable(
-			true
-		);
-
-		fdsTableSchemaBuilder.addFDSTableSchemaField(
-			"title", "title"
-		).setSortable(
-			true
-		);
-
-		fdsTableSchemaBuilder.addFDSTableSchemaField(
-			"description", "description");
-		fdsTableSchemaBuilder.addFDSTableSchemaField("date", "date");
-
-		fdsTableSchemaBuilder.addFDSTableSchemaField(
-			"status", "status"
-		).setContentRenderer(
-			"status"
-		);
-
-		fdsTableSchemaBuilder.addFDSTableSchemaField(
-			"creator.name", "author"
-		).setContentRenderer(
-			"sampleCustomDataRenderer"
-		);
-
-		return fdsTableSchemaBuilder.build();
+		return fdsTableSchemaBuilder.add(
+			"id", "id",
+			fdsTableSchemaField -> fdsTableSchemaField.setSortable(true)
+		).add(
+			"title", "title",
+			fdsTableSchemaField -> fdsTableSchemaField.setSortable(true)
+		).add(
+			"description", "description"
+		).add(
+			"date", "date"
+		).add(
+			"status", "status",
+			fdsTableSchemaField -> fdsTableSchemaField.setContentRenderer(
+				"status")
+		).add(
+			"creator.name", "author",
+			fdsTableSchemaField -> fdsTableSchemaField.setContentRenderer(
+				"sampleCustomDataRenderer")
+		).build();
 	}
 
 	@Reference

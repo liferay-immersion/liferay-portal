@@ -20,7 +20,6 @@ import com.liferay.frontend.data.set.view.table.BaseTableFDSView;
 import com.liferay.frontend.data.set.view.table.FDSTableSchema;
 import com.liferay.frontend.data.set.view.table.FDSTableSchemaBuilder;
 import com.liferay.frontend.data.set.view.table.FDSTableSchemaBuilderFactory;
-import com.liferay.frontend.data.set.view.table.FDSTableSchemaField;
 
 import java.util.Locale;
 
@@ -42,20 +41,21 @@ public class MinimumTableFDSView extends BaseTableFDSView {
 		FDSTableSchemaBuilder fdsTableSchemaBuilder =
 			_fdsTableSchemaBuilderFactory.create();
 
-		fdsTableSchemaBuilder.addFDSTableSchemaField("id", "id");
-		fdsTableSchemaBuilder.addFDSTableSchemaField("title", "title");
-		fdsTableSchemaBuilder.addFDSTableSchemaField(
-			"description", "description");
-		fdsTableSchemaBuilder.addFDSTableSchemaField("date", "date");
-
-		FDSTableSchemaField statusFDSTableSchemaField =
-			fdsTableSchemaBuilder.addFDSTableSchemaField("status", "status");
-
-		statusFDSTableSchemaField.setContentRenderer("status");
-
-		fdsTableSchemaBuilder.addFDSTableSchemaField("creator.name", "author");
-
-		return fdsTableSchemaBuilder.build();
+		return fdsTableSchemaBuilder.add(
+			"id", "id"
+		).add(
+			"title", "title"
+		).add(
+			"description", "description"
+		).add(
+			"date", "date"
+		).add(
+			"status", "status",
+			fdsTableSchemaField -> fdsTableSchemaField.setContentRenderer(
+				"status")
+		).add(
+			"creator.name", "author"
+		).build();
 	}
 
 	@Reference
