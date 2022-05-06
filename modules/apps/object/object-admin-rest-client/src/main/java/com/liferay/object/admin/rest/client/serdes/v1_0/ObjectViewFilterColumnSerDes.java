@@ -107,6 +107,20 @@ public class ObjectViewFilterColumnSerDes {
 			sb.append("\"");
 		}
 
+		if (objectViewFilterColumn.getValueSummary() != null) {
+			if (sb.length() > 1) {
+				sb.append(", ");
+			}
+
+			sb.append("\"valueSummary\": ");
+
+			sb.append("\"");
+
+			sb.append(_escape(objectViewFilterColumn.getValueSummary()));
+
+			sb.append("\"");
+		}
+
 		sb.append("}");
 
 		return sb.toString();
@@ -160,6 +174,15 @@ public class ObjectViewFilterColumnSerDes {
 				String.valueOf(objectViewFilterColumn.getObjectFieldName()));
 		}
 
+		if (objectViewFilterColumn.getValueSummary() == null) {
+			map.put("valueSummary", null);
+		}
+		else {
+			map.put(
+				"valueSummary",
+				String.valueOf(objectViewFilterColumn.getValueSummary()));
+		}
+
 		return map;
 	}
 
@@ -203,6 +226,12 @@ public class ObjectViewFilterColumnSerDes {
 			else if (Objects.equals(jsonParserFieldName, "objectFieldName")) {
 				if (jsonParserFieldValue != null) {
 					objectViewFilterColumn.setObjectFieldName(
+						(String)jsonParserFieldValue);
+				}
+			}
+			else if (Objects.equals(jsonParserFieldName, "valueSummary")) {
+				if (jsonParserFieldValue != null) {
+					objectViewFilterColumn.setValueSummary(
 						(String)jsonParserFieldValue);
 				}
 			}
