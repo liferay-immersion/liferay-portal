@@ -1,11 +1,11 @@
+@import 'atlas-variables';
 .base-node {
 	position: relative;
 }
-
 .node {
 	align-items: center;
 	background: #fff;
-	border: 1px solid #cdced9;
+	border: 1px $light-l1 solid;
 	border-radius: 8px;
 	display: flex;
 	height: 74px;
