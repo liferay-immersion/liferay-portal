@@ -122,6 +122,27 @@ public class ObjectViewFilterColumn implements Cloneable, Serializable {
 
 	protected String objectFieldName;
 
+	public String getValueSummary() {
+		return valueSummary;
+	}
+
+	public void setValueSummary(String valueSummary) {
+		this.valueSummary = valueSummary;
+	}
+
+	public void setValueSummary(
+		UnsafeSupplier<String, Exception> valueSummaryUnsafeSupplier) {
+
+		try {
+			valueSummary = valueSummaryUnsafeSupplier.get();
+		}
+		catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	protected String valueSummary;
+
 	@Override
 	public ObjectViewFilterColumn clone() throws CloneNotSupportedException {
 		return (ObjectViewFilterColumn)super.clone();

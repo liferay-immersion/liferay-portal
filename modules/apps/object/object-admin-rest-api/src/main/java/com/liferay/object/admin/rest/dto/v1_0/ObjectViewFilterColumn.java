@@ -179,6 +179,34 @@ public class ObjectViewFilterColumn implements Serializable {
 	@JsonProperty(access = JsonProperty.Access.READ_WRITE)
 	protected String objectFieldName;
 
+	@Schema
+	public String getValueSummary() {
+		return valueSummary;
+	}
+
+	public void setValueSummary(String valueSummary) {
+		this.valueSummary = valueSummary;
+	}
+
+	@JsonIgnore
+	public void setValueSummary(
+		UnsafeSupplier<String, Exception> valueSummaryUnsafeSupplier) {
+
+		try {
+			valueSummary = valueSummaryUnsafeSupplier.get();
+		}
+		catch (RuntimeException re) {
+			throw re;
+		}
+		catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	@GraphQLField
+	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
+	protected String valueSummary;
+
 	@Override
 	public boolean equals(Object object) {
 		if (this == object) {
@@ -255,6 +283,20 @@ public class ObjectViewFilterColumn implements Serializable {
 			sb.append("\"");
 
 			sb.append(_escape(objectFieldName));
+
+			sb.append("\"");
+		}
+
+		if (valueSummary != null) {
+			if (sb.length() > 1) {
+				sb.append(", ");
+			}
+
+			sb.append("\"valueSummary\": ");
+
+			sb.append("\"");
+
+			sb.append(_escape(valueSummary));
 
 			sb.append("\"");
 		}
