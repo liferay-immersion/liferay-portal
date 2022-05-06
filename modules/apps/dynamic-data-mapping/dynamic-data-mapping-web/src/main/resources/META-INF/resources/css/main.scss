@@ -4,6 +4,12 @@
 	display: none;
 }
 
+.portlet-content-container {
+	.button-holder {
+		margin-top: 1em;
+	}
+}
+
 .portlet-document-library,
 .portlet-dynamic-data-mapping {
 	.field-labels-inline {
@@ -320,13 +326,29 @@ textarea.script {
 }
 
 .lfr-ddm-link-to-page-modal {
+	.collapse.navbar-collapse {
+		.active {
+			border-bottom: 4px solid #80ACFF;
+		}
+		li.public,
+		li.private,
+		span.public {
+			padding: 1.5em;
+		}
+	}
 	.lfr-ddm-breadcrumb {
 		padding-left: 0;
 		padding-right: 0;
 	}
 
+	.lfr-ddm-link-to-page-modal-content {
+		.modal-body {
+			height: auto !important;
+		}
+	}
+
 	.lfr-ddm-pages-container {
-		height: 283px;
+		height: auto;
 		margin-right: -23px;
 		overflow: auto;
 		padding-left: 5px;
@@ -334,6 +356,17 @@ textarea.script {
 
 		&.top-ended {
 			padding-top: 0;
+		}
+
+		.lfr-ddm-link {
+			align-items: center;
+			display: flex;
+			margin-bottom: 16px;
+			margin-bottom: 1em;
+
+			span {
+				margin-left: 1em;
+			}
 		}
 
 		.loading-icon {
@@ -344,11 +377,6 @@ textarea.script {
 
 		&.nav {
 			> li {
-				> a {
-					margin-left: 20px;
-					padding-left: 0;
-				}
-
 				.loading-icon {
 					font-size: 18px;
 					position: absolute;
@@ -358,11 +386,18 @@ textarea.script {
 			}
 
 			.lfr-ddm-page-radio {
-				position: absolute;
-				top: 10px;
+				position: relative;
+			}
+			.modal-body {
+				height: auto !important;
 			}
 		}
 	}
+}
+
+.modal-dialog.lfr-ddm-link-to-page-modal {
+	height: auto !important;
+	position: fixed !important;
 }
 
 .form-builder-field {
