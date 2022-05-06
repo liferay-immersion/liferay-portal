@@ -66,7 +66,7 @@ public class StructuredContentResourceTest
 	public void setUp() throws Exception {
 		super.setUp();
 
-		_ddmLocalizedStructure = _addDDMStructure(
+		_localizedDDMStructure = _addDDMStructure(
 			testGroup, "test-localized-ddm-structure.json");
 
 		StructuredContentResource.Builder builder =
@@ -484,7 +484,7 @@ public class StructuredContentResourceTest
 		structuredContent.setTitle_i18n(title_i18n);
 
 		structuredContent.setContentStructureId(
-			_ddmLocalizedStructure.getStructureId());
+			_localizedDDMStructure.getStructureId());
 
 		return structuredContent;
 	}
@@ -534,7 +534,7 @@ public class StructuredContentResourceTest
 	@Inject(filter = "ddm.form.deserializer.type=json")
 	private static DDMFormDeserializer _jsonDDMFormDeserializer;
 
-	private DDMStructure _ddmLocalizedStructure;
+	private DDMStructure _localizedDDMStructure;
 	private DDMStructure _ddmStructure;
 	private DDMStructure _irrelevantDDMStructure;
 	private StructuredContentResource _structuredContentResource;

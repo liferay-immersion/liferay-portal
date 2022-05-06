@@ -119,7 +119,7 @@ public class StructuredContentResourceTest
 
 		_ddmComplexStructure = _addDDMStructure(
 			testGroup, "test-ddm-complex-structure.json");
-		_ddmLocalizedStructure = _addDDMStructure(
+		_localizedDDMStructure = _addDDMStructure(
 			testGroup, "test-localized-ddm-structure.json");
 
 		_ddmStructure = _addDDMStructure(testGroup, "test-ddm-structure.json");
@@ -1001,7 +1001,7 @@ public class StructuredContentResourceTest
 		structuredContent.setTitle_i18n(title_i18n);
 
 		structuredContent.setContentStructureId(
-			_ddmLocalizedStructure.getStructureId());
+			_localizedDDMStructure.getStructureId());
 
 		return structuredContent;
 	}
@@ -1023,7 +1023,7 @@ public class StructuredContentResourceTest
 	private static DDMFormDeserializer _jsonDDMFormDeserializer;
 
 	private DDMStructure _ddmComplexStructure;
-	private DDMStructure _ddmLocalizedStructure;
+	private DDMStructure _localizedDDMStructure;
 	private DDMStructure _ddmStructure;
 	private DDMTemplate _ddmTemplate;
 	private DDMStructure _depotDDMStructure;
