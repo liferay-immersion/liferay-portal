@@ -88,7 +88,7 @@ export default function SourceBuilder() {
 	function loadFile(event) {
 		var files = event.target.files;
 
-		if (files) {
+		if (files[0].type === 'text/xml') {
 			var reader = new FileReader();
 
 			reader.onloadend = (event) => {
