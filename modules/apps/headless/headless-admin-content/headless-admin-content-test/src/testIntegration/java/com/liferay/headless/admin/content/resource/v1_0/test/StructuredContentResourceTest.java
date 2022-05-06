@@ -424,24 +424,23 @@ public class StructuredContentResourceTest
 
 		String defaultW3cLanguageId = LocaleUtil.toW3cLanguageId(defaultLocale);
 
-		Map<String, ContentFieldValue> contentFieldValues =
-			HashMapBuilder.put(
-				"en-US",
-				(ContentFieldValue)new ContentFieldValue() {
+		Map<String, ContentFieldValue> contentFieldValues = HashMapBuilder.put(
+			"en-US",
+			(ContentFieldValue)new ContentFieldValue() {
 
-					{
-						data = RandomTestUtil.randomString(10);
-					}
+				{
+					data = RandomTestUtil.randomString(10);
 				}
-			).put(
-				"es-ES",
-				(ContentFieldValue)new ContentFieldValue() {
+			}
+		).put(
+			"es-ES",
+			(ContentFieldValue)new ContentFieldValue() {
 
-					{
-						data = RandomTestUtil.randomString(10);
-					}
+				{
+					data = RandomTestUtil.randomString(10);
 				}
-			).build();
+			}
+		).build();
 
 		structuredContent.setContentFields(
 			new ContentField[] {
