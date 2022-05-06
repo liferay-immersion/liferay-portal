@@ -455,6 +455,9 @@ public class StructuredContentResourceTest
 				}
 			});
 
+		structuredContent.setContentStructureId(
+			_localizedDDMStructure.getStructureId());
+
 		Map<String, String> description_i18n = HashMapBuilder.put(
 			"en-US", RandomTestUtil.randomString()
 		).put(
@@ -483,9 +486,6 @@ public class StructuredContentResourceTest
 
 		structuredContent.setTitle(title_i18n.get(defaultW3cLanguageId));
 		structuredContent.setTitle_i18n(title_i18n);
-
-		structuredContent.setContentStructureId(
-			_localizedDDMStructure.getStructureId());
 
 		return structuredContent;
 	}
