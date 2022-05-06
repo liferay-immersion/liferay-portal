@@ -149,9 +149,10 @@ public class DDMFormValuesUtil {
 			return ddmForm.getAvailableLocales();
 		}
 
+		Set<Locale> locales = new HashSet<>();
+
 		Set<Locale> siteAvailableLocales = LanguageUtil.getAvailableLocales(
 			groupId);
-		Set<Locale> locales = new HashSet<>();
 
 		for (Locale availableLocale : availableLocales) {
 			if (siteAvailableLocales.contains(availableLocale)) {
