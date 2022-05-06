@@ -424,7 +424,7 @@ public class StructuredContentResourceTest
 
 		String defaultW3cLanguageId = LocaleUtil.toW3cLanguageId(defaultLocale);
 
-		Map<String, ContentFieldValue> contentFieldValueMap =
+		Map<String, ContentFieldValue> contentFieldValues =
 			HashMapBuilder.put(
 				"en-US",
 				(ContentFieldValue)new ContentFieldValue() {
@@ -447,9 +447,9 @@ public class StructuredContentResourceTest
 			new ContentField[] {
 				new ContentField() {
 					{
-						contentFieldValue = contentFieldValueMap.get(
+						contentFieldValue = contentFieldValues.get(
 							defaultW3cLanguageId);
-						contentFieldValue_i18n = contentFieldValueMap;
+						contentFieldValue_i18n = contentFieldValues;
 						name = "MyText";
 					}
 				}
