@@ -434,7 +434,7 @@ public class StructuredContentResourceTest
 				randomLocalizedStructuredContent1);
 
 		_assertLocalizedValues(
-			LocaleUtil.toW3cLanguageId(locale), postStructuredContent1);
+			postStructuredContent1, LocaleUtil.toW3cLanguageId(locale));
 		assertEquals(randomLocalizedStructuredContent1, postStructuredContent1);
 		assertValid(postStructuredContent1);
 
@@ -455,7 +455,7 @@ public class StructuredContentResourceTest
 				randomLocalizedStructuredContent2);
 
 		_assertLocalizedValues(
-			LocaleUtil.toW3cLanguageId(locale), postStructuredContent2);
+			postStructuredContent2, LocaleUtil.toW3cLanguageId(locale));
 		assertEquals(randomLocalizedStructuredContent2, postStructuredContent2);
 		assertValid(postStructuredContent2);
 	}
@@ -651,15 +651,15 @@ public class StructuredContentResourceTest
 	}
 
 	private void _assertLocalizedValue(
-		String w3cLanguageId, Set<String> w3cLanguageIds,
-		Map<String, String> localizedValues, String value) {
+		Map<String, String> localizedValues, String value, String w3cLanguageId,
+		Set<String> w3cLanguageIds) {
 
 		Assert.assertEquals(w3cLanguageIds, localizedValues.keySet());
 		Assert.assertEquals(value, localizedValues.get(w3cLanguageId));
 	}
 
 	private void _assertLocalizedValues(
-		String w3cLanguageId, StructuredContent structuredContent) {
+		StructuredContent structuredContent, String w3cLanguageId) {
 
 		Set<String> w3cLanguageIds = SetUtil.fromArray("es-ES", "en-US");
 
@@ -668,20 +668,18 @@ public class StructuredContentResourceTest
 			SetUtil.fromArray(structuredContent.getAvailableLanguages()));
 
 		_assertLocalizedValue(
-			w3cLanguageId, w3cLanguageIds,
 			structuredContent.getDescription_i18n(),
-			structuredContent.getDescription());
+			structuredContent.getDescription(), w3cLanguageId, w3cLanguageIds);
 		_assertLocalizedValue(
-			w3cLanguageId, w3cLanguageIds, structuredContent.getTitle_i18n(),
-			structuredContent.getTitle());
+			structuredContent.getTitle_i18n(), structuredContent.getTitle(),
+			w3cLanguageId, w3cLanguageIds);
 		_assertLocalizedValue(
-			w3cLanguageId, w3cLanguageIds,
 			structuredContent.getFriendlyUrlPath_i18n(),
-			structuredContent.getFriendlyUrlPath());
+			structuredContent.getFriendlyUrlPath(), w3cLanguageId,
+			w3cLanguageIds);
 		_assertLocalizedValue(
-			w3cLanguageId, w3cLanguageIds,
 			structuredContent.getDescription_i18n(),
-			structuredContent.getDescription());
+			structuredContent.getDescription(), w3cLanguageId, w3cLanguageIds);
 
 		for (ContentField contentField : structuredContent.getContentFields()) {
 			Map<String, ContentFieldValue> contentFieldValue_i18n =
