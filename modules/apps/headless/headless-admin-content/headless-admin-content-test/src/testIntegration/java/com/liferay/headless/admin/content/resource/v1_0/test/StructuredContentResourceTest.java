@@ -534,9 +534,9 @@ public class StructuredContentResourceTest
 	@Inject(filter = "ddm.form.deserializer.type=json")
 	private static DDMFormDeserializer _jsonDDMFormDeserializer;
 
-	private DDMStructure _localizedDDMStructure;
 	private DDMStructure _ddmStructure;
 	private DDMStructure _irrelevantDDMStructure;
+	private DDMStructure _localizedDDMStructure;
 	private StructuredContentResource _structuredContentResource;
 
 }
