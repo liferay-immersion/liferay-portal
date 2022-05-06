@@ -89,14 +89,74 @@ definition {
 		}
 	}
 
-	@description = "[Please Update]"
-	@ignore = "Test Stub"
+	@description = "This is a test for COMMERCE-8293. Assert payment term priority using different field types."
 	@priority = "4"
 	test AssertPaymentTermPriority {
 		property portal.acceptance = "false";
 
-		// TODO COMMERCE-8293 AssertPaymentTermPriority pending implementation
+		task ("Given I am present on the Terms and Conditions") {
+			CommerceNavigator.gotoPortlet(
+				category = "Order Management",
+				portlet = "Terms and Conditions");
+		}
 
+		task ("When I add a new entry and compile the priority field with a number") {
+			CommercePaymentTerms.addTermsAndCondition(
+				termsAndConditionName = "Terms and Condition Entry 1",
+				termsAndConditionType = "Payment Terms",
+				valuePosition = "1");
+		}
+
+		task ("Then I redirected to the details page, and the value of the priority field is correctly shown") {
+			CommercePaymentTerms.assertTermsAndConditionEntry(
+				termsAndConditionName = "Terms and Condition Entry 1",
+				valuePosition = "1.0");
+		}
+
+		task ("When I add a new entry and compile the priority field with a decimal number") {
+			Click(locator1 = "Button#BACK");
+
+			CommercePaymentTerms.addTermsAndCondition(
+				termsAndConditionName = "Terms and Condition Entry 2",
+				termsAndConditionType = "Payment Terms",
+				valuePosition = "1.2");
+		}
+
+		task ("Then I redirected to the details page, and the value of the priority field is correctly shown") {
+			CommercePaymentTerms.assertTermsAndConditionEntry(
+				termsAndConditionName = "Terms and Condition Entry 2",
+				valuePosition = "1.2");
+		}
+
+		task ("When I add a new entry and compile the priority field with a negative number") {
+			Click(locator1 = "Button#BACK");
+
+			CommercePaymentTerms.addTermsAndCondition(
+				termsAndConditionName = "Terms and Condition Entry 3",
+				termsAndConditionType = "Payment Terms",
+				valuePosition = "-1");
+		}
+
+		task ("Then I redirected to the details page, and the value of the priority field is correctly shown") {
+			CommercePaymentTerms.assertTermsAndConditionEntry(
+				termsAndConditionName = "Terms and Condition Entry 3",
+				valuePosition = "-1.0");
+		}
+
+		task ("When I add a new entry and compile the priority field without change") {
+			Click(locator1 = "Button#BACK");
+
+			CommercePaymentTerms.addTermsAndCondition(
+				termsAndConditionName = "Terms and Condition Entry 4",
+				termsAndConditionType = "Payment Terms",
+				valuePosition = "");
+		}
+
+		task ("Then I redirected to the details page, and the value of the priority field defaults to 0") {
+			CommercePaymentTerms.assertTermsAndConditionEntry(
+				termsAndConditionName = "Terms and Condition Entry 4",
+				valuePosition = "0.0");
+		}
 	}
 
 	@description = "This is a test for COMMERCE-8296. Payment Term Priority needs to be unique"
