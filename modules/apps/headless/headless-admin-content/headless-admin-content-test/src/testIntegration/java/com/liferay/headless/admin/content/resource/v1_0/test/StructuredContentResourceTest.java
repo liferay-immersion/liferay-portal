@@ -67,7 +67,7 @@ public class StructuredContentResourceTest
 		super.setUp();
 
 		_ddmLocalizedStructure = _addDDMStructure(
-			testGroup, "test-ddm-localized-structure.json");
+			testGroup, "test-localized-ddm-structure.json");
 
 		StructuredContentResource.Builder builder =
 			StructuredContentResource.builder();

@@ -120,7 +120,7 @@ public class StructuredContentResourceTest
 		_ddmComplexStructure = _addDDMStructure(
 			testGroup, "test-ddm-complex-structure.json");
 		_ddmLocalizedStructure = _addDDMStructure(
-			testGroup, "test-ddm-localized-structure.json");
+			testGroup, "test-localized-ddm-structure.json");
 
 		_ddmStructure = _addDDMStructure(testGroup, "test-ddm-structure.json");
 
