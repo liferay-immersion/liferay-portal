@@ -1023,7 +1023,6 @@ public class StructuredContentResourceTest
 	private static DDMFormDeserializer _jsonDDMFormDeserializer;
 
 	private DDMStructure _ddmComplexStructure;
-	private DDMStructure _localizedDDMStructure;
 	private DDMStructure _ddmStructure;
 	private DDMTemplate _ddmTemplate;
 	private DDMStructure _depotDDMStructure;
@@ -1036,6 +1035,8 @@ public class StructuredContentResourceTest
 	@Inject
 	private LayoutPageTemplateEntryLocalService
 		_layoutPageTemplateEntryLocalService;
+
+	private DDMStructure _localizedDDMStructure;
 
 	@Inject
 	private Portal _portal;
