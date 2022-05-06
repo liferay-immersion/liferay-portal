@@ -418,7 +418,7 @@ public class StructuredContentResourceTest
 	public void testPostSiteStructuredContent() throws Exception {
 		super.testPostSiteStructuredContent();
 
-		// Localized Structured Content with the default language
+		// Localized structured content with the default language
 
 		Locale locale = LocaleUtil.getDefault();
 
@@ -438,7 +438,8 @@ public class StructuredContentResourceTest
 		assertEquals(randomLocalizedStructuredContent1, postStructuredContent1);
 		assertValid(postStructuredContent1);
 
-		// Localized Structured Content with a different language from default
+		// Localized structured content with a different language from the
+		// default language
 
 		locale = LocaleUtil.fromLanguageId("es-ES");
 
