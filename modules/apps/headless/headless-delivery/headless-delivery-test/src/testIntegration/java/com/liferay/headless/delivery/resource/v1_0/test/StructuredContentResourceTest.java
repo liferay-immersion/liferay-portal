@@ -119,8 +119,6 @@ public class StructuredContentResourceTest
 
 		_complexDDMStructure = _addDDMStructure(
 			testGroup, "test-complex-ddm-structure.json");
-		_localizedDDMStructure = _addDDMStructure(
-			testGroup, "test-localized-ddm-structure.json");
 
 		_ddmStructure = _addDDMStructure(testGroup, "test-ddm-structure.json");
 
@@ -142,8 +140,9 @@ public class StructuredContentResourceTest
 			irrelevantGroup.getGroupId(), RandomTestUtil.randomString());
 		_journalFolder = JournalTestUtil.addFolder(
 			testGroup.getGroupId(), RandomTestUtil.randomString());
-
 		_layout = LayoutTestUtil.addTypeContentLayout(testGroup);
+		_localizedDDMStructure = _addDDMStructure(
+			testGroup, "test-localized-ddm-structure.json");
 	}
 
 	@Override

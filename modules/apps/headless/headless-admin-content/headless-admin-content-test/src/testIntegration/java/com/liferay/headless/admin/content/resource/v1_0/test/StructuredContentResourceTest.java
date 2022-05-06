@@ -66,6 +66,12 @@ public class StructuredContentResourceTest
 	public void setUp() throws Exception {
 		super.setUp();
 
+		_ddmStructure = _addDDMStructure(testGroup, "test-ddm-structure.json");
+
+		_addDDMTemplate(_ddmStructure);
+
+		_irrelevantDDMStructure = _addDDMStructure(
+			irrelevantGroup, "test-ddm-structure.json");
 		_localizedDDMStructure = _addDDMStructure(
 			testGroup, "test-localized-ddm-structure.json");
 
@@ -77,12 +83,6 @@ public class StructuredContentResourceTest
 		).locale(
 			LocaleUtil.getDefault()
 		).build();
-
-		_ddmStructure = _addDDMStructure(testGroup, "test-ddm-structure.json");
-		_irrelevantDDMStructure = _addDDMStructure(
-			irrelevantGroup, "test-ddm-structure.json");
-
-		_addDDMTemplate(_ddmStructure);
 	}
 
 	@Override
