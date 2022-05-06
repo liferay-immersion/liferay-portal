@@ -143,7 +143,7 @@ public class DDMFormValuesUtil {
 	}
 
 	private static Set<Locale> _getAvailableLocales(
-		Set<Locale> availableLocales, DDMForm ddmForm, Long groupId) {
+		Set<Locale> availableLocales, DDMForm ddmForm, long groupId) {
 
 		if (SetUtil.isEmpty(availableLocales)) {
 			return ddmForm.getAvailableLocales();
