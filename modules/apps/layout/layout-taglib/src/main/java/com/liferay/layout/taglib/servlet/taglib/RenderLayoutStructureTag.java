@@ -793,9 +793,10 @@ public class RenderLayoutStructureTag extends IncludeTag {
 									fragmentEntryLink.getFragmentEntryLinkId()),
 						true)) {
 
-					_writeStyledDiv(
-						jspWriter, renderLayoutStructureDisplayContext,
-						fragmentStyledLayoutStructureItem, fragmentEntryLink);
+					_write(
+						jspWriter, fragmentEntryLink,
+						fragmentStyledLayoutStructureItem,
+						renderLayoutStructureDisplayContext);
 				}
 				else {
 					jspWriter.write("<div>");
@@ -1083,12 +1084,11 @@ public class RenderLayoutStructureTag extends IncludeTag {
 		return (LayoutTypePortlet)layout.getLayoutType();
 	}
 
-	private void _writeStyledDiv(
-			JspWriter jspWriter,
-			RenderLayoutStructureDisplayContext
-				renderLayoutStructureDisplayContext,
+	private void _write(
+			JspWriter jspWriter, FragmentEntryLink fragmentEntryLink,
 			FragmentStyledLayoutStructureItem fragmentStyledLayoutStructureItem,
-			FragmentEntryLink fragmentEntryLink)
+			RenderLayoutStructureDisplayContext
+				renderLayoutStructureDisplayContext)
 		throws Exception {
 
 		jspWriter.write("<div class=\"");
