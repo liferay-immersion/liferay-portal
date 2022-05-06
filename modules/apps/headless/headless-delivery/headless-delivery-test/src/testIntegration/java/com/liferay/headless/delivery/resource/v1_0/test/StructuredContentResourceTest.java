@@ -433,7 +433,7 @@ public class StructuredContentResourceTest
 				testGetSiteStructuredContentsPage_getSiteId(),
 				randomLocalizedStructuredContent1);
 
-		_assertLocalizedFields(
+		_assertLocalizedValues(
 			LocaleUtil.toW3cLanguageId(locale), postStructuredContent1);
 		assertEquals(randomLocalizedStructuredContent1, postStructuredContent1);
 		assertValid(postStructuredContent1);
@@ -453,7 +453,7 @@ public class StructuredContentResourceTest
 				testGetSiteStructuredContentsPage_getSiteId(),
 				randomLocalizedStructuredContent2);
 
-		_assertLocalizedFields(
+		_assertLocalizedValues(
 			LocaleUtil.toW3cLanguageId(locale), postStructuredContent2);
 		assertEquals(randomLocalizedStructuredContent2, postStructuredContent2);
 		assertValid(postStructuredContent2);
@@ -649,7 +649,7 @@ public class StructuredContentResourceTest
 			_read("test-structured-content-template.vm"), LocaleUtil.US);
 	}
 
-	private void _assertLocalizedField(
+	private void _assertLocalizedValue(
 		String defaultW3cLanguageId, Set<String> w3cLanguageIds,
 		Map<String, String> localizedValues, String value) {
 
@@ -657,7 +657,7 @@ public class StructuredContentResourceTest
 		Assert.assertEquals(value, localizedValues.get(defaultW3cLanguageId));
 	}
 
-	private void _assertLocalizedFields(
+	private void _assertLocalizedValues(
 		String defaultW3cLanguageId, StructuredContent structuredContent) {
 
 		Set<String> w3cLanguageIds = SetUtil.fromArray("es-ES", "en-US");
@@ -666,18 +666,18 @@ public class StructuredContentResourceTest
 			w3cLanguageIds,
 			SetUtil.fromArray(structuredContent.getAvailableLanguages()));
 
-		_assertLocalizedField(
+		_assertLocalizedValue(
 			defaultW3cLanguageId, w3cLanguageIds,
 			structuredContent.getDescription_i18n(),
 			structuredContent.getDescription());
-		_assertLocalizedField(
+		_assertLocalizedValue(
 			defaultW3cLanguageId, w3cLanguageIds,
 			structuredContent.getTitle_i18n(), structuredContent.getTitle());
-		_assertLocalizedField(
+		_assertLocalizedValue(
 			defaultW3cLanguageId, w3cLanguageIds,
 			structuredContent.getFriendlyUrlPath_i18n(),
 			structuredContent.getFriendlyUrlPath());
-		_assertLocalizedField(
+		_assertLocalizedValue(
 			defaultW3cLanguageId, w3cLanguageIds,
 			structuredContent.getDescription_i18n(),
 			structuredContent.getDescription());
