@@ -650,41 +650,41 @@ public class StructuredContentResourceTest
 	}
 
 	private void _assertLocalizedField(
-		String defaultLanguage, Set<String> languages,
+		String defaultW3cLanguageId, Set<String> w3cLanguageIds,
 		Map<String, String> localizedValues, String value) {
 
-		Assert.assertEquals(languages, localizedValues.keySet());
-		Assert.assertEquals(value, localizedValues.get(defaultLanguage));
+		Assert.assertEquals(w3cLanguageIds, localizedValues.keySet());
+		Assert.assertEquals(value, localizedValues.get(defaultW3cLanguageId));
 	}
 
 	private void _assertLocalizedFields(
-		String defaultLanguage, StructuredContent structuredContent) {
+		String defaultW3cLanguageId, StructuredContent structuredContent) {
 
-		Set<String> languages = SetUtil.fromArray("es-ES", "en-US");
+		Set<String> w3cLanguageIds = SetUtil.fromArray("es-ES", "en-US");
 
 		Assert.assertEquals(
-			languages,
+			w3cLanguageIds,
 			SetUtil.fromArray(structuredContent.getAvailableLanguages()));
 
 		_assertLocalizedField(
-			defaultLanguage, languages, structuredContent.getDescription_i18n(),
+			defaultW3cLanguageId, w3cLanguageIds, structuredContent.getDescription_i18n(),
 			structuredContent.getDescription());
 		_assertLocalizedField(
-			defaultLanguage, languages, structuredContent.getTitle_i18n(),
+			defaultW3cLanguageId, w3cLanguageIds, structuredContent.getTitle_i18n(),
 			structuredContent.getTitle());
 		_assertLocalizedField(
-			defaultLanguage, languages,
+			defaultW3cLanguageId, w3cLanguageIds,
 			structuredContent.getFriendlyUrlPath_i18n(),
 			structuredContent.getFriendlyUrlPath());
 		_assertLocalizedField(
-			defaultLanguage, languages, structuredContent.getDescription_i18n(),
+			defaultW3cLanguageId, w3cLanguageIds, structuredContent.getDescription_i18n(),
 			structuredContent.getDescription());
 
 		for (ContentField contentField : structuredContent.getContentFields()) {
 			Map<String, ContentFieldValue> contentFieldValue_i18n =
 				contentField.getContentFieldValue_i18n();
 
-			Assert.assertEquals(languages, contentFieldValue_i18n.keySet());
+			Assert.assertEquals(w3cLanguageIds, contentFieldValue_i18n.keySet());
 		}
 	}
 
@@ -935,7 +935,7 @@ public class StructuredContentResourceTest
 
 		StructuredContent structuredContent = super.randomStructuredContent();
 
-		String defaultLanguage = LocaleUtil.toW3cLanguageId(defaultLocale);
+		String defaultW3cLanguageId = LocaleUtil.toW3cLanguageId(defaultLocale);
 
 		ContentFieldValue randomEnglishContentFieldValue =
 			new ContentFieldValue() {
@@ -962,7 +962,7 @@ public class StructuredContentResourceTest
 							).build();
 
 						contentFieldValue = contentFieldValueMap.get(
-							defaultLanguage);
+							defaultW3cLanguageId);
 
 						contentFieldValue_i18n = contentFieldValueMap;
 
@@ -977,7 +977,7 @@ public class StructuredContentResourceTest
 			"es-ES", RandomTestUtil.randomString()
 		).build();
 
-		structuredContent.setDescription(description_i18n.get(defaultLanguage));
+		structuredContent.setDescription(description_i18n.get(defaultW3cLanguageId));
 		structuredContent.setDescription_i18n(description_i18n);
 
 		Map<String, String> friendlyUrlPath_i18n = HashMapBuilder.put(
@@ -987,7 +987,7 @@ public class StructuredContentResourceTest
 		).build();
 
 		structuredContent.setFriendlyUrlPath(
-			friendlyUrlPath_i18n.get(defaultLanguage));
+			friendlyUrlPath_i18n.get(defaultW3cLanguageId));
 		structuredContent.setFriendlyUrlPath_i18n(friendlyUrlPath_i18n);
 
 		Map<String, String> title_i18n = HashMapBuilder.put(
@@ -996,7 +996,7 @@ public class StructuredContentResourceTest
 			"es-ES", RandomTestUtil.randomString()
 		).build();
 
-		structuredContent.setTitle(title_i18n.get(defaultLanguage));
+		structuredContent.setTitle(title_i18n.get(defaultW3cLanguageId));
 		structuredContent.setTitle_i18n(title_i18n);
 
 		structuredContent.setContentStructureId(
