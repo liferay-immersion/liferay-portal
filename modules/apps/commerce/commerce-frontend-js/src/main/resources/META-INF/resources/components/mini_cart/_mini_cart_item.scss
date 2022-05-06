@@ -5,14 +5,12 @@
 	border-bottom: 1px solid rgba(180, 187, 201, 0.2);
 	display: grid;
 	font-size: 12px;
-	grid-column-gap: 15px;
 	max-height: 200px;
 	grid-template-areas:
 		'info quantity price delete'
 		'errors errors errors errors';
 	grid-template-columns: auto 90px minmax(min-content, 100px) min-content;
 	overflow: visible;
-	padding: 10px;
 	position: relative;
 	transition: height 0.2s ease-in, padding 0.1s ease-in;
 	width: 100%;
@@ -22,6 +20,7 @@
 		color: inherit;
 		display: flex;
 		grid-area: info;
+		padding: 1rem;
 		text-decoration: inherit;
 	}
 
@@ -92,6 +91,7 @@
 
 	.mini-cart-item-price {
 		grid-area: price;
+		padding: 1rem;
 		text-align: right;
 
 		.price {
@@ -108,7 +108,7 @@
 	.mini-cart-item-delete {
 		font-size: 1rem;
 		grid-area: delete;
-		margin: 10px 0;
+		padding-right: 1rem;
 	}
 
 	&.is-removed {
@@ -122,6 +122,7 @@
 	.mini-cart-item-is-removing-wrapper {
 		bottom: 0;
 		left: 0;
+		overflow: hidden;
 		pointer-events: none;
 		position: absolute;
 		right: 0;
@@ -213,8 +214,9 @@
 		color: $danger-primary;
 		font-weight: 600;
 		grid-area: errors;
-		margin: 12px -12px -12px;
-		padding: 12px;
+		max-width: 100%;
+		overflow: hidden;
+		padding: 1rem;
 
 		span {
 			margin-left: 10px;

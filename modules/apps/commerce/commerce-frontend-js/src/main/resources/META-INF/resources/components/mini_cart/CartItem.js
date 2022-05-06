@@ -253,15 +253,17 @@ function CartItem({
 			</div>
 
 			{!!errorMessages.length && (
-				<div className="mini-cart-item-errors row">
-					<div className="col-auto">
-						<ClayIcon symbol="exclamation-circle" />
-					</div>
+				<div className="mini-cart-item-errors">
+					<div className="row">
+						<div className="col-auto">
+							<ClayIcon symbol="exclamation-circle" />
+						</div>
 
-					<div className="col">
-						{errorMessages.map((errorMessage) => (
-							<div key={errorMessage}>{errorMessage}</div>
-						))}
+						<div className="col">
+							{errorMessages.map((errorMessage) => (
+								<div key={errorMessage}>{errorMessage}</div>
+							))}
+						</div>
 					</div>
 				</div>
 			)}
@@ -274,7 +276,9 @@ function CartItem({
 				})}
 			>
 				<div className="mini-cart-item-is-removing">
-					<span>{Liferay.Language.get('the-item-has-been-removed')}</span>
+					<span>
+						{Liferay.Language.get('the-item-has-been-removed')}
+					</span>
 
 					<span>
 						<ClayButton
