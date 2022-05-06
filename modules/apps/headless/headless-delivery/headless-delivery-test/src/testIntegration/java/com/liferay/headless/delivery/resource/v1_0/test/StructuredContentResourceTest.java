@@ -953,22 +953,20 @@ public class StructuredContentResourceTest
 				}
 			};
 
+		Map<String, ContentFieldValue> contentFieldValueMap =
+			HashMapBuilder.put(
+				"en-US", randomEnglishContentFieldValue
+			).put(
+				"es-ES", randomSpanishContentFieldValue
+			).build();
+
 		structuredContent.setContentFields(
 			new ContentField[] {
 				new ContentField() {
 					{
-						Map<String, ContentFieldValue> contentFieldValueMap =
-							HashMapBuilder.put(
-								"en-US", randomEnglishContentFieldValue
-							).put(
-								"es-ES", randomSpanishContentFieldValue
-							).build();
-
 						contentFieldValue = contentFieldValueMap.get(
 							defaultW3cLanguageId);
-
 						contentFieldValue_i18n = contentFieldValueMap;
-
 						name = "MyText";
 					}
 				}
