@@ -158,14 +158,59 @@ definition {
 
 	}
 
-	@description = "[Please Update]"
-	@ignore = "Test Stub"
+	@description = "COMMERCE-8265. Breadcrumb widget can be worked with Product Details widget."
 	@priority = "4"
 	test VerifyBreadcrumbWidget {
 		property portal.acceptance = "false";
 
-		// TODO COMMERCE-8265 VerifyBreadcrumbWidget pending implementation
+		task ("Given a Diagram with the "Type" set to "Default", a png image uploaded as "Diagram File" and 1 pin linked to an SKU within the image") {
+			CommerceProducts.openProductsAdmin();
 
+			CPCommerceCatalog.newProductsEntry(
+				productCatalog = "Master",
+				productName = "Diagram Test",
+				productType = "Diagram");
+
+			CommerceEntry.gotoMenuTab(menuTab = "Diagram");
+
+			CommerceProductImages.addDiagramImages(
+				imageTitles = "Black",
+				productType = "Diagram");
+
+			CommerceDiagram.addPin(
+				pinNumber = "1",
+				quantity = "1",
+				selectType = "Linked to a SKU",
+				sku = "MIN93015");
+
+			Button.clickPublish();
+
+			Alert.viewSuccessMessage();
+		}
+
+		task ("When I go on Minium catalog page") {
+			ApplicationsMenu.gotoSite(site = "Minium");
+
+			CommerceNavigator.gotoMiniumSidebarItem(menuItem = "Catalog");
+		}
+
+		task ("And open the Diagram that was created before") {
+			CommerceAcceleratorsInitializer.gotoMiniumProductDetailsPage(productName = "Diagram Test");
+		}
+
+		task ("Then I can see the DXP Breadcrumb widget") {
+			AssertVisible(locator1 = "BreadcrumbPortlet#BREADCRUMB");
+		}
+
+		task ("And if I click on "Catalog"") {
+			Click(
+				key_breadcrumbName = "Catalog",
+				locator1 = "BreadcrumbPortlet#BREADCRUMB_SPECIFIC_ENTRY");
+		}
+
+		task ("Then I will be redirected to the Minium Catalog page") {
+			AssertLocation.assertPartialLocation(value1 = "/minium/catalog");
+		}
 	}
 
 	@description = "[Please Update]"
