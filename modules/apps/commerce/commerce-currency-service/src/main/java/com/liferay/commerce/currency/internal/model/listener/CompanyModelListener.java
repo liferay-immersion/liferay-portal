@@ -14,6 +14,7 @@
 
 package com.liferay.commerce.currency.internal.model.listener;
 
+import com.liferay.commerce.currency.internal.model.listener.util.ImportDefaultValuesUtil;
 import com.liferay.commerce.currency.service.CommerceCurrencyLocalService;
 import com.liferay.portal.kernel.model.BaseModelListener;
 import com.liferay.portal.kernel.model.Company;
