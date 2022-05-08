@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.commerce.currency.internal.model.listener;
+package com.liferay.commerce.currency.internal.model.listener.util;
 
 import com.liferay.commerce.currency.service.CommerceCurrencyLocalService;
 import com.liferay.portal.kernel.model.Company;
