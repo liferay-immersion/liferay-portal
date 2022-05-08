@@ -18,7 +18,7 @@ import com.liferay.object.admin.rest.dto.v1_0.ObjectView;
 import com.liferay.object.admin.rest.dto.v1_0.ObjectViewColumn;
 import com.liferay.object.admin.rest.dto.v1_0.ObjectViewFilterColumn;
 import com.liferay.object.admin.rest.dto.v1_0.ObjectViewSortColumn;
-import com.liferay.object.admin.rest.internal.dto.v1_0.util.ObjectViewUtil;
+import com.liferay.object.admin.rest.internal.dto.v1_0.converter.ObjectViewDTOConverter;
 import com.liferay.object.admin.rest.resource.v1_0.ObjectViewResource;
 import com.liferay.object.admin.rest.resource.v1_0.util.NameMapUtil;
 import com.liferay.object.model.ObjectDefinition;
@@ -32,6 +32,7 @@ import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.PropsUtil;
+import com.liferay.portal.vulcan.dto.converter.DefaultDTOConverterContext;
 import com.liferay.portal.vulcan.pagination.Page;
 import com.liferay.portal.vulcan.pagination.Pagination;
 import com.liferay.portal.vulcan.util.LocalizedMapUtil;
@@ -162,34 +163,39 @@ public class ObjectViewResourceImpl extends BaseObjectViewResourceImpl {
 	}
 
 	private ObjectView _toObjectView(
-		com.liferay.object.model.ObjectView serviceBuilderObjectView) {
+			com.liferay.object.model.ObjectView serviceBuilderObjectView)
+		throws Exception {
 
-		return ObjectViewUtil.toObjectView(
-			HashMapBuilder.put(
-				"copy",
-				addAction(
-					ActionKeys.UPDATE, "postObjectViewCopy",
-					ObjectDefinition.class.getName(),
-					serviceBuilderObjectView.getObjectDefinitionId())
-			).put(
-				"delete",
-				addAction(
-					ActionKeys.DELETE, "deleteObjectView",
-					ObjectDefinition.class.getName(),
-					serviceBuilderObjectView.getObjectDefinitionId())
-			).put(
-				"get",
-				addAction(
-					ActionKeys.VIEW, "getObjectView",
-					ObjectDefinition.class.getName(),
-					serviceBuilderObjectView.getObjectDefinitionId())
-			).put(
-				"update",
-				addAction(
-					ActionKeys.UPDATE, "putObjectView",
-					ObjectDefinition.class.getName(),
-					serviceBuilderObjectView.getObjectDefinitionId())
-			).build(),
+		return _objectViewDTOConverter.toDTO(
+			new DefaultDTOConverterContext(
+				false,
+				HashMapBuilder.put(
+					"copy",
+					addAction(
+						ActionKeys.UPDATE, "postObjectViewCopy",
+						ObjectDefinition.class.getName(),
+						serviceBuilderObjectView.getObjectDefinitionId())
+				).put(
+					"delete",
+					addAction(
+						ActionKeys.DELETE, "deleteObjectView",
+						ObjectDefinition.class.getName(),
+						serviceBuilderObjectView.getObjectDefinitionId())
+				).put(
+					"get",
+					addAction(
+						ActionKeys.VIEW, "getObjectView",
+						ObjectDefinition.class.getName(),
+						serviceBuilderObjectView.getObjectDefinitionId())
+				).put(
+					"update",
+					addAction(
+						ActionKeys.UPDATE, "putObjectView",
+						ObjectDefinition.class.getName(),
+						serviceBuilderObjectView.getObjectDefinitionId())
+				).build(),
+				null, null, contextAcceptLanguage.getPreferredLocale(), null,
+				null),
 			serviceBuilderObjectView);
 	}
 
@@ -247,6 +253,9 @@ public class ObjectViewResourceImpl extends BaseObjectViewResourceImpl {
 
 	@Reference
 	private ObjectViewColumnPersistence _objectViewColumnPersistence;
+
+	@Reference
+	private ObjectViewDTOConverter _objectViewDTOConverter;
 
 	@Reference
 	private ObjectViewFilterColumnPersistence
