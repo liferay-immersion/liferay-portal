@@ -20,10 +20,10 @@ import com.liferay.object.admin.rest.dto.v1_0.ObjectField;
 import com.liferay.object.admin.rest.dto.v1_0.ObjectLayout;
 import com.liferay.object.admin.rest.dto.v1_0.ObjectView;
 import com.liferay.object.admin.rest.dto.v1_0.Status;
+import com.liferay.object.admin.rest.internal.dto.v1_0.converter.ObjectViewDTOConverter;
 import com.liferay.object.admin.rest.internal.dto.v1_0.util.ObjectActionUtil;
 import com.liferay.object.admin.rest.internal.dto.v1_0.util.ObjectFieldUtil;
 import com.liferay.object.admin.rest.internal.dto.v1_0.util.ObjectLayoutUtil;
-import com.liferay.object.admin.rest.internal.dto.v1_0.util.ObjectViewUtil;
 import com.liferay.object.admin.rest.internal.odata.entity.v1_0.ObjectDefinitionEntityModel;
 import com.liferay.object.admin.rest.resource.v1_0.ObjectDefinitionResource;
 import com.liferay.object.constants.ObjectActionKeys;
@@ -49,6 +49,7 @@ import com.liferay.portal.language.LanguageResources;
 import com.liferay.portal.odata.entity.EntityModel;
 import com.liferay.portal.util.PropsUtil;
 import com.liferay.portal.vulcan.aggregation.Aggregation;
+import com.liferay.portal.vulcan.dto.converter.DefaultDTOConverterContext;
 import com.liferay.portal.vulcan.pagination.Page;
 import com.liferay.portal.vulcan.pagination.Pagination;
 import com.liferay.portal.vulcan.resource.EntityModelResource;
@@ -282,7 +283,12 @@ public class ObjectDefinitionResourceImpl
 				objectViews = transformToArray(
 					_objectViewLocalService.getObjectViews(
 						objectDefinition.getObjectDefinitionId()),
-					objectView -> ObjectViewUtil.toObjectView(null, objectView),
+					objectView -> _objectViewDTOConverter.toDTO(
+						new DefaultDTOConverterContext(
+							false, null, null, null,
+							contextAcceptLanguage.getPreferredLocale(), null,
+							null),
+						objectView),
 					ObjectView.class);
 				panelCategoryKey = objectDefinition.getPanelCategoryKey();
 				pluralLabel = LocalizedMapUtil.getLanguageIdMap(
@@ -324,6 +330,9 @@ public class ObjectDefinitionResourceImpl
 
 	@Reference
 	private ObjectLayoutLocalService _objectLayoutLocalService;
+
+	@Reference
+	private ObjectViewDTOConverter _objectViewDTOConverter;
 
 	@Reference
 	private ObjectViewLocalService _objectViewLocalService;
