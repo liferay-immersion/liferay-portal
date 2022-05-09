@@ -91,7 +91,6 @@ public class WikiPagesManagementToolbarDisplayContext {
 				dropdownItem.setIcon("trash");
 				dropdownItem.setLabel(
 					LanguageUtil.get(_httpServletRequest, "delete"));
-
 				dropdownItem.setQuickAction(true);
 			}
 		).build();

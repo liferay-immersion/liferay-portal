@@ -83,7 +83,6 @@ public class BlogEntriesManagementToolbarDisplayContext
 				dropdownItem.setIcon("trash");
 				dropdownItem.setLabel(
 					LanguageUtil.get(httpServletRequest, "delete"));
-
 				dropdownItem.setQuickAction(true);
 			}
 		).build();
