@@ -157,7 +157,8 @@ public class ViewObjectEntriesDisplayContext {
 				ObjectFieldFDSFilterFactory objectFieldFDSFilterFactory =
 					_objectFieldFDSFilterFactoryServicesTracker.
 						getObjectFieldFDSFilterFactory(
-							objectViewFilterColumn.getFilterType());
+							objectView.getObjectDefinitionId(),
+							objectViewFilterColumn);
 
 				return objectFieldFDSFilterFactory.create(
 					_objectRequestHelper.getLocale(),

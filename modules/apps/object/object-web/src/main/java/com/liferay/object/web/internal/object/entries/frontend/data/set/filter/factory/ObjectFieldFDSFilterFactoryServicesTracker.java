@@ -14,13 +14,23 @@
 
 package com.liferay.object.web.internal.object.entries.frontend.data.set.filter.factory;
 
+import com.liferay.object.constants.ObjectFieldConstants;
+import com.liferay.object.model.ObjectField;
+import com.liferay.object.model.ObjectViewFilterColumn;
+import com.liferay.object.service.ObjectFieldLocalService;
 import com.liferay.osgi.service.tracker.collections.map.ServiceTrackerMap;
 import com.liferay.osgi.service.tracker.collections.map.ServiceTrackerMapFactory;
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.util.ArrayUtil;
+import com.liferay.portal.kernel.util.Validator;
+
+import java.util.Objects;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
+import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Feliphe Marinho
@@ -31,24 +41,63 @@ import org.osgi.service.component.annotations.Deactivate;
 public class ObjectFieldFDSFilterFactoryServicesTracker {
 
 	public ObjectFieldFDSFilterFactory getObjectFieldFDSFilterFactory(
-		String key) {
+			long objectDefinitionId,
+			ObjectViewFilterColumn objectViewFilterColumn)
+		throws PortalException {
 
-		return _serviceTrackerMap.getService(key);
+		if (Validator.isNotNull(objectViewFilterColumn.getFilterType())) {
+			return _serviceTrackerMapByObjectFieldFilterTypeKey.getService(
+				objectViewFilterColumn.getFilterType());
+		}
+
+		if (ArrayUtil.contains(
+				new String[] {"dateCreated", "dateModified"},
+				objectViewFilterColumn.getObjectFieldName())) {
+
+			return _serviceTrackerMapByObjectFieldBusinessTypeKey.getService(
+				ObjectFieldConstants.BUSINESS_TYPE_DATE);
+		}
+
+		if (Objects.equals(
+				objectViewFilterColumn.getObjectFieldName(), "status")) {
+
+			return _serviceTrackerMapByObjectFieldBusinessTypeKey.getService(
+				ObjectFieldConstants.BUSINESS_TYPE_PICKLIST);
+		}
+
+		ObjectField objectField = _objectFieldLocalService.getObjectField(
+			objectDefinitionId, objectViewFilterColumn.getObjectFieldName());
+
+		return _serviceTrackerMapByObjectFieldBusinessTypeKey.getService(
+			objectField.getBusinessType());
 	}
 
 	@Activate
 	protected void activate(BundleContext bundleContext) {
-		_serviceTrackerMap = ServiceTrackerMapFactory.openSingleValueMap(
-			bundleContext, ObjectFieldFDSFilterFactory.class,
-			"object.field.filter.type.key");
+		_serviceTrackerMapByObjectFieldBusinessTypeKey =
+			ServiceTrackerMapFactory.openSingleValueMap(
+				bundleContext, ObjectFieldFDSFilterFactory.class,
+				"object.field.business.type.key");
+
+		_serviceTrackerMapByObjectFieldFilterTypeKey =
+			ServiceTrackerMapFactory.openSingleValueMap(
+				bundleContext, ObjectFieldFDSFilterFactory.class,
+				"object.field.filter.type.key");
 	}
 
 	@Deactivate
 	protected void deactivate() {
-		_serviceTrackerMap.close();
+		_serviceTrackerMapByObjectFieldBusinessTypeKey.close();
+
+		_serviceTrackerMapByObjectFieldFilterTypeKey.close();
 	}
 
+	@Reference
+	private ObjectFieldLocalService _objectFieldLocalService;
+
 	private ServiceTrackerMap<String, ObjectFieldFDSFilterFactory>
-		_serviceTrackerMap;
+		_serviceTrackerMapByObjectFieldBusinessTypeKey;
+	private ServiceTrackerMap<String, ObjectFieldFDSFilterFactory>
+		_serviceTrackerMapByObjectFieldFilterTypeKey;
 
 }
