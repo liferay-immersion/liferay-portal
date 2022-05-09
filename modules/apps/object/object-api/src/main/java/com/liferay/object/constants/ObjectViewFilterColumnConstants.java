@@ -19,6 +19,8 @@ package com.liferay.object.constants;
  */
 public class ObjectViewFilterColumnConstants {
 
+	public static final String FILTER_TYPE_DATE_RANGE = "date_range";
+
 	public static final String FILTER_TYPE_EXCLUDES = "excludes";
 
 	public static final String FILTER_TYPE_INCLUDES = "includes";
