@@ -25,19 +25,23 @@ import org.osgi.service.component.annotations.Component;
  */
 @Component(
 	enabled = false, immediate = true,
-	property = "frontend.data.set.name=" + CommercePricingFDSNames.PRICE_LISTS,
+	property = {
+		"frontend.data.set.name=" + CommercePricingFDSNames.DISCOUNTS,
+		"frontend.data.set.name=" + CommercePricingFDSNames.PRICE_LISTS
+	},
 	service = FDSFilter.class
 )
-public class CommerceCatalogFDSFilter extends BaseAutocompleteFDSFilter {
+public class CommerceChannelAutocompleteFDSFilter
+	extends BaseAutocompleteFDSFilter {
 
 	@Override
 	public String getAPIURL() {
-		return "/o/headless-commerce-admin-catalog/v1.0/catalogs?sort=name:asc";
+		return "/o/headless-commerce-admin-channel/v1.0/channels?sort=name:asc";
 	}
 
 	@Override
 	public String getId() {
-		return "catalogId";
+		return "channelId";
 	}
 
 	@Override
@@ -52,7 +56,7 @@ public class CommerceCatalogFDSFilter extends BaseAutocompleteFDSFilter {
 
 	@Override
 	public String getLabel() {
-		return "catalog";
+		return "channel";
 	}
 
 	@Override
