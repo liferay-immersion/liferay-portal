@@ -14,7 +14,7 @@ definition {
 		CommerceConfiguration.commerceTearDown();
 	}
 
-	@description = "This is a test for COMMERCE-8332. Assert can add default delivery term"
+	@description = "This is a test for COMMERCE-8332. Assert default delivery term can be added"
 	@priority = "4"
 	test AddADefaultDeliveryTerm {
 		property portal.acceptance = "false";
@@ -25,26 +25,26 @@ definition {
 					accountEntryName = "Test Account ${entryNumber}",
 					accountEntryType = "Business");
 			}
+		}
 
-			task ("Given that I created two Delivery terms entries with different priorities into Terms and Conditions") {
-				CommerceNavigator.gotoPortlet(
-					category = "Order Management",
-					portlet = "Terms and Conditions");
+		task ("Given that I created two Delivery terms entries with different priorities into Terms and Conditions") {
+			CommerceNavigator.gotoPortlet(
+				category = "Order Management",
+				portlet = "Terms and Conditions");
 
-				CommercePaymentTerms.addTermsAndCondition(
-					active = "true",
-					termsAndConditionName = "AA Terms and Condition Entry",
-					termsAndConditionType = "Delivery Terms",
-					valuePosition = "1");
+			CommercePaymentTerms.addTermsAndCondition(
+				active = "true",
+				termsAndConditionName = "AA Terms and Condition Entry",
+				termsAndConditionType = "Delivery Terms",
+				valuePosition = "1");
 
-				Click(locator1 = "Icon#BACK");
+			Click(locator1 = "Icon#BACK");
 
-				CommercePaymentTerms.addTermsAndCondition(
-					active = "true",
-					termsAndConditionName = "ZZ Terms and Condition Entry",
-					termsAndConditionType = "Delivery Terms",
-					valuePosition = "2");
-			}
+			CommercePaymentTerms.addTermsAndCondition(
+				active = "true",
+				termsAndConditionName = "ZZ Terms and Condition Entry",
+				termsAndConditionType = "Delivery Terms",
+				valuePosition = "2");
 		}
 
 		task ("When I go into the "Order Defaults" tab inside the Account and click on the Set Default Delivery Commerce Term Entry") {
@@ -101,12 +101,12 @@ definition {
 
 		task ("And when I select one entry") {
 			Accounts.setDefaultDeliveryCommerceTermsEntry(termEntry = "aa-terms-and-condition-entry");
+		}
 
-			task ("And click on the "Remove" button we will have "Use Priority Settings" instead of the entry") {
-				Accounts.gotoAssigneeTab(assigneeTab = "Order Defaults");
+		task ("And Remove the default delivery terms, "Use Priority Settings" is displayed instead of the T&C entry") {
+			Accounts.gotoAssigneeTab(assigneeTab = "Order Defaults");
 
-				Accounts.removeDefaultDeliveryCommerceTerms();
-			}
+			Accounts.removeDefaultDeliveryCommerceTerms();
 		}
 	}
 

@@ -158,7 +158,7 @@ definition {
 
 	}
 
-	@description = "COMMERCE-8265. Breadcrumb widget can be worked with Product Details widget."
+	@description = "COMMERCE-8265. Breadcrumb widget works with Product Details widget."
 	@priority = "4"
 	test VerifyBreadcrumbWidget {
 		property portal.acceptance = "false";
