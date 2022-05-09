@@ -440,9 +440,11 @@ public class ObjectViewLocalServiceImpl extends ObjectViewLocalServiceBaseImpl {
 			if (_objectFieldNames.contains(
 					objectViewFilterColumn.getObjectFieldName())) {
 
-				if (!Objects.equals(
+				if (Objects.equals(
 						objectViewFilterColumn.getObjectFieldName(),
-						"status")) {
+						"creator") ||
+					Objects.equals(
+						objectViewFilterColumn.getObjectFieldName(), "id")) {
 
 					throw new ObjectViewFilterColumnException(
 						StringBundler.concat(
@@ -485,7 +487,7 @@ public class ObjectViewLocalServiceImpl extends ObjectViewLocalServiceBaseImpl {
 					StringBundler.concat(
 						"Object field name \"",
 						objectViewFilterColumn.getObjectFieldName(),
-						"\" needs to have the fitler type and JSON specified"));
+						"\" needs to have the filter type and JSON specified"));
 			}
 
 			ObjectFieldFilterParser objectFieldFilterParser =
