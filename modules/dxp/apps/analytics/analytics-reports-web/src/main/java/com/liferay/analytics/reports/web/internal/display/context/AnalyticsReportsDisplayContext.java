@@ -60,6 +60,8 @@ public class AnalyticsReportsDisplayContext<T> {
 		ResourceURL resourceURL = _renderResponse.createResourceURL();
 
 		resourceURL.setParameter(
+			"redirect", ParamUtil.getString(_renderRequest, "redirect"));
+		resourceURL.setParameter(
 			"className", _infoItemReference.getClassName());
 
 		if (_infoItemReference.getInfoItemIdentifier() instanceof
@@ -89,9 +91,6 @@ public class AnalyticsReportsDisplayContext<T> {
 				"classPK",
 				String.valueOf(classPKInfoItemIdentifier.getClassPK()));
 		}
-
-		resourceURL.setParameter(
-			"redirect", ParamUtil.getString(_renderRequest, "redirect"));
 
 		resourceURL.setResourceID(resourceID);
 
