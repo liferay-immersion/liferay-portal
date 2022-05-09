@@ -24,10 +24,7 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.HashMapBuilder;
-import com.liferay.portal.kernel.util.StringUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,8 +65,7 @@ public class ListObjectFieldFilterParser implements ObjectFieldFilterParser {
 					objectViewFilterColumn.getJson());
 
 				JSONArray jsonArray = jsonObject.getJSONArray(
-					StringUtil.toLowerCase(
-						objectViewFilterColumn.getFilterType()));
+					objectViewFilterColumn.getFilterType());
 
 				if (Objects.equals(
 						objectViewFilterColumn.getObjectFieldName(),
@@ -78,8 +74,22 @@ public class ListObjectFieldFilterParser implements ObjectFieldFilterParser {
 					return _toIntegerArray(jsonArray);
 				}
 
-				return _toLabelValuePairs(
-					jsonArray, locale, listTypeDefinitionId);
+				List<Map<String, String>> map = new ArrayList<>();
+
+				for (int i = 0; i < jsonArray.length(); i++) {
+					ListTypeEntry listTypeEntry =
+						_listTypeEntryLocalService.fetchListTypeEntry(
+							listTypeDefinitionId, jsonArray.getString(i));
+
+					map.add(
+						HashMapBuilder.put(
+							"label", listTypeEntry.getName(locale)
+						).put(
+							"value", jsonArray.getString(i)
+						).build());
+				}
+
+				return map;
 			}
 		).build();
 	}
@@ -94,41 +104,28 @@ public class ListObjectFieldFilterParser implements ObjectFieldFilterParser {
 			objectViewFilterColumn.getJson());
 
 		JSONArray jsonArray = jsonObject.getJSONArray(
-			StringUtil.toLowerCase(objectViewFilterColumn.getFilterType()));
+			objectViewFilterColumn.getFilterType());
 
 		if (jsonArray == null) {
 			throw new ObjectViewFilterColumnException(
-				String.format(
-					"No such property %s",
-					StringUtil.toLowerCase(
-						objectViewFilterColumn.getFilterType())));
+				"JSON array is null for filter type " +
+					objectViewFilterColumn.getFilterType());
 		}
 
-		try {
-			if (Objects.equals(
-					objectViewFilterColumn.getObjectFieldName(), "status")) {
+		if (Objects.equals(
+				objectViewFilterColumn.getObjectFieldName(), "status")) {
 
-				_toIntegerArray(jsonArray);
+			for (int i = 0; i < jsonArray.length(); i++) {
+				try {
+					_toIntegerArray(jsonArray);
+				}
+				catch (Exception exception) {
+					throw new ObjectViewFilterColumnException(
+						"JSON array is invalid for filter type " +
+							objectViewFilterColumn.getFilterType(),
+						exception);
+				}
 			}
-		}
-		catch (Exception exception) {
-			if (_log.isDebugEnabled()) {
-				_log.debug(exception);
-			}
-
-			String message = String.format(
-				"For \"%s\" field, the value of property \"%s\" needs to be " +
-					"an array of ",
-				objectViewFilterColumn.getObjectFieldName(),
-				StringUtil.toLowerCase(objectViewFilterColumn.getFilterType()));
-
-			if (Objects.equals(
-					objectViewFilterColumn.getObjectFieldName(), "status")) {
-
-				throw new ObjectViewFilterColumnException(message + "numbers.");
-			}
-
-			throw new ObjectViewFilterColumnException(message + "strings.");
 		}
 	}
 
@@ -141,30 +138,6 @@ public class ListObjectFieldFilterParser implements ObjectFieldFilterParser {
 
 		return newArray;
 	}
-
-	private List<Map<String, String>> _toLabelValuePairs(
-		JSONArray jsonArray, Locale locale, long listTypeDefinitionId) {
-
-		List<Map<String, String>> preloadedValues = new ArrayList<>();
-
-		for (int i = 0; i < jsonArray.length(); i++) {
-			ListTypeEntry listTypeEntry =
-				_listTypeEntryLocalService.fetchListTypeEntry(
-					listTypeDefinitionId, jsonArray.getString(i));
-
-			preloadedValues.add(
-				HashMapBuilder.put(
-					"label", listTypeEntry.getName(locale)
-				).put(
-					"value", jsonArray.getString(i)
-				).build());
-		}
-
-		return preloadedValues;
-	}
-
-	private static final Log _log = LogFactoryUtil.getLog(
-		ListObjectFieldFilterParser.class);
 
 	@Reference
 	private ListTypeEntryLocalService _listTypeEntryLocalService;
