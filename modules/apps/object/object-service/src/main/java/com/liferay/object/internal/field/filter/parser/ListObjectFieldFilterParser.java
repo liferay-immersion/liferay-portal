@@ -44,7 +44,7 @@ import org.osgi.service.component.annotations.Reference;
 		"object.field.filter.type.key=" + ObjectViewFilterColumnConstants.FILTER_TYPE_EXCLUDES,
 		"object.field.filter.type.key=" + ObjectViewFilterColumnConstants.FILTER_TYPE_INCLUDES
 	},
-	service = {ListObjectFieldFilterParser.class, ObjectFieldFilterParser.class}
+	service = ObjectFieldFilterParser.class
 )
 public class ListObjectFieldFilterParser implements ObjectFieldFilterParser {
 
