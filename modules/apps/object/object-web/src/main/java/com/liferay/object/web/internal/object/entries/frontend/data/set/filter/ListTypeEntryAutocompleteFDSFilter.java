@@ -21,10 +21,10 @@ import java.util.Map;
 /**
  * @author Feliphe Marinho
  */
-public class ObjectEntryListAutocompleteFDSFilter
+public class ListTypeEntryAutocompleteFDSFilter
 	extends BaseAutocompleteFDSFilter {
 
-	public ObjectEntryListAutocompleteFDSFilter(
+	public ListTypeEntryAutocompleteFDSFilter(
 		String id, String label, long listTypeDefinitionId,
 		Map<String, Object> preloadedData) {
 
