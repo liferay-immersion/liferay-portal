@@ -14,14 +14,100 @@ definition {
 		CommerceConfiguration.commerceTearDown();
 	}
 
-	@description = "[Please Update]"
-	@ignore = "Test Stub"
+	@description = "This is a test for COMMERCE-8332. Assert can add default delivery term"
 	@priority = "4"
 	test AddADefaultDeliveryTerm {
 		property portal.acceptance = "false";
 
-		// TODO COMMERCE-8332 AddADefaultDeliveryTerm pending implementation
+		task ("Given I create two accounts") {
+			for (var entryNumber : list "1,2") {
+				JSONAccountEntry.addAccountEntry(
+					accountEntryName = "Test Account ${entryNumber}",
+					accountEntryType = "Business");
+			}
 
+			task ("Given that I created two Delivery terms entries with different priorities into Terms and Conditions") {
+				CommerceNavigator.gotoPortlet(
+					category = "Order Management",
+					portlet = "Terms and Conditions");
+
+				CommercePaymentTerms.addTermsAndCondition(
+					active = "true",
+					termsAndConditionName = "AA Terms and Condition Entry",
+					termsAndConditionType = "Delivery Terms",
+					valuePosition = "1");
+
+				Click(locator1 = "Icon#BACK");
+
+				CommercePaymentTerms.addTermsAndCondition(
+					active = "true",
+					termsAndConditionName = "ZZ Terms and Condition Entry",
+					termsAndConditionType = "Delivery Terms",
+					valuePosition = "2");
+			}
+		}
+
+		task ("When I go into the "Order Defaults" tab inside the Account and click on the Set Default Delivery Commerce Term Entry") {
+			Accounts.openAccountsAdmin();
+
+			LexiconEntry.gotoEntry(rowEntry = "Test Account 1");
+
+			Accounts.gotoAssigneeTab(assigneeTab = "Order Defaults");
+
+			AssertClick(
+				locator1 = "Account#DEFAULT_ACCOUNT_TERMS_AND_CONDITION_SET_DEFAULT_DELIVERY",
+				value1 = "Set Default Delivery Commerce Terms Entry");
+		}
+
+		task ("Then a dropdown appears with all the delivery term entries we created before, and the entries are sorted alphanumerically by localized name") {
+			SelectFrame(locator1 = "IFrame#MODAL_BODY");
+
+			LexiconList.viewListEntrySpecific(
+				listEntry = "aa-terms-and-condition-entry",
+				position = "1");
+
+			LexiconList.viewListEntrySpecific(
+				listEntry = "zz-terms-and-condition-entry",
+				position = "2");
+		}
+
+		task ("When I go into the "Order Defaults" tab inside the Account and click on the Set Default Delivery Commerce Term Entry") {
+			Accounts.openAccountsAdmin();
+
+			LexiconEntry.gotoEntry(rowEntry = "Test Account 1");
+
+			Accounts.gotoAssigneeTab(assigneeTab = "Order Defaults");
+		}
+
+		task ("Then I can select one single entry") {
+			Accounts.setDefaultDeliveryCommerceTermsEntry(termEntry = "aa-terms-and-condition-entry");
+
+			Accounts.gotoAssigneeTab(assigneeTab = "Order Defaults");
+
+			Accounts.viewDefaultDeliveryCommerceTermsEntry(termEntry = "aa-terms-and-condition-entry");
+		}
+
+		task ("When I go into the "Order Defaults" tab inside the Account") {
+			Accounts.openAccountsAdmin();
+
+			LexiconEntry.gotoEntry(rowEntry = "Test Account 2");
+
+			Accounts.gotoAssigneeTab(assigneeTab = "Order Defaults");
+		}
+
+		task ("Then the default entry that is already selected is Use Priority Settings") {
+			Accounts.viewDefaultDeliveryCommerceTermsEntry();
+		}
+
+		task ("And when I select one entry") {
+			Accounts.setDefaultDeliveryCommerceTermsEntry(termEntry = "aa-terms-and-condition-entry");
+
+			task ("And click on the "Remove" button we will have "Use Priority Settings" instead of the entry") {
+				Accounts.gotoAssigneeTab(assigneeTab = "Order Defaults");
+
+				Accounts.removeDefaultDeliveryCommerceTerms();
+			}
+		}
 	}
 
 	@description = "[Please Update]"
