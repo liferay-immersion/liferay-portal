@@ -50,6 +50,7 @@ import com.liferay.portal.kernel.util.Validator;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -146,11 +147,11 @@ public class ViewObjectEntriesDisplayContext {
 		ObjectView objectView = _objectViewLocalService.fetchDefaultObjectView(
 			_objectDefinition.getObjectDefinitionId());
 
-		List<FDSFilter> fdsFilters = new ArrayList<>();
-
 		if (objectView == null) {
-			return fdsFilters;
+			return Collections.emptyList();
 		}
+
+		List<FDSFilter> fdsFilters = new ArrayList<>();
 
 		for (ObjectViewFilterColumn objectViewFilterColumn :
 				objectView.getObjectViewFilterColumns()) {
