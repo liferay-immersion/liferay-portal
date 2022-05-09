@@ -31,16 +31,17 @@ import org.osgi.service.component.annotations.Component;
 	},
 	service = FDSFilter.class
 )
-public class CommerceChannelFDSFilter extends BaseAutocompleteFDSFilter {
+public class CommerceAccountAutocompleteFDSFilter
+	extends BaseAutocompleteFDSFilter {
 
 	@Override
 	public String getAPIURL() {
-		return "/o/headless-commerce-admin-channel/v1.0/channels?sort=name:asc";
+		return "/o/headless-commerce-admin-account/v1.0/accounts?sort=name:asc";
 	}
 
 	@Override
 	public String getId() {
-		return "channelId";
+		return "accountId";
 	}
 
 	@Override
@@ -55,7 +56,7 @@ public class CommerceChannelFDSFilter extends BaseAutocompleteFDSFilter {
 
 	@Override
 	public String getLabel() {
-		return "channel";
+		return "account";
 	}
 
 	@Override
