@@ -1,9 +1,9 @@
-@component-name = "portal-headless-fi"
+@component-name = "portal-headless-frontend-infrastructure"
 definition {
 
 	property portal.release = "true";
 	property portal.upstream = "true";
-	property testray.main.component.name = "Headless FI";
+	property testray.main.component.name = "Headless Frontend Infrastructure";
 
 	setUp {
 		TestCase.setUpPortalInstance();
