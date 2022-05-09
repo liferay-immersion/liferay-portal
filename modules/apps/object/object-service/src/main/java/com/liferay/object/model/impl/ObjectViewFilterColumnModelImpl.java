@@ -22,7 +22,6 @@ import com.liferay.object.model.ObjectViewFilterColumnModel;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.bean.AutoEscapeBeanHandler;
 import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.json.JSON;
 import com.liferay.portal.kernel.model.CacheModel;
 import com.liferay.portal.kernel.model.ModelWrapper;
 import com.liferay.portal.kernel.model.User;
@@ -61,7 +60,6 @@ import java.util.function.Function;
  * @see ObjectViewFilterColumnImpl
  * @generated
  */
-@JSON(strict = true)
 public class ObjectViewFilterColumnModelImpl
 	extends BaseModelImpl<ObjectViewFilterColumn>
 	implements ObjectViewFilterColumnModel {
@@ -342,7 +340,6 @@ public class ObjectViewFilterColumnModelImpl
 			(Map)attributeSetterBiConsumers);
 	}
 
-	@JSON
 	@Override
 	public long getMvccVersion() {
 		return _mvccVersion;
@@ -357,7 +354,6 @@ public class ObjectViewFilterColumnModelImpl
 		_mvccVersion = mvccVersion;
 	}
 
-	@JSON
 	@Override
 	public String getUuid() {
 		if (_uuid == null) {
@@ -386,7 +382,6 @@ public class ObjectViewFilterColumnModelImpl
 		return getColumnOriginalValue("uuid_");
 	}
 
-	@JSON
 	@Override
 	public long getObjectViewFilterColumnId() {
 		return _objectViewFilterColumnId;
@@ -401,7 +396,6 @@ public class ObjectViewFilterColumnModelImpl
 		_objectViewFilterColumnId = objectViewFilterColumnId;
 	}
 
-	@JSON
 	@Override
 	public long getCompanyId() {
 		return _companyId;
@@ -426,7 +420,6 @@ public class ObjectViewFilterColumnModelImpl
 			this.<Long>getColumnOriginalValue("companyId"));
 	}
 
-	@JSON
 	@Override
 	public long getUserId() {
 		return _userId;
@@ -457,7 +450,6 @@ public class ObjectViewFilterColumnModelImpl
 	public void setUserUuid(String userUuid) {
 	}
 
-	@JSON
 	@Override
 	public String getUserName() {
 		if (_userName == null) {
@@ -477,7 +469,6 @@ public class ObjectViewFilterColumnModelImpl
 		_userName = userName;
 	}
 
-	@JSON
 	@Override
 	public Date getCreateDate() {
 		return _createDate;
@@ -492,7 +483,6 @@ public class ObjectViewFilterColumnModelImpl
 		_createDate = createDate;
 	}
 
-	@JSON
 	@Override
 	public Date getModifiedDate() {
 		return _modifiedDate;
@@ -513,7 +503,6 @@ public class ObjectViewFilterColumnModelImpl
 		_modifiedDate = modifiedDate;
 	}
 
-	@JSON
 	@Override
 	public long getObjectViewId() {
 		return _objectViewId;
@@ -538,7 +527,6 @@ public class ObjectViewFilterColumnModelImpl
 			this.<Long>getColumnOriginalValue("objectViewId"));
 	}
 
-	@JSON
 	@Override
 	public String getFilterType() {
 		if (_filterType == null) {
@@ -558,7 +546,6 @@ public class ObjectViewFilterColumnModelImpl
 		_filterType = filterType;
 	}
 
-	@JSON
 	@Override
 	public String getJson() {
 		if (_json == null) {
@@ -578,7 +565,6 @@ public class ObjectViewFilterColumnModelImpl
 		_json = json;
 	}
 
-	@JSON
 	@Override
 	public String getObjectFieldName() {
 		if (_objectFieldName == null) {
