@@ -33,6 +33,7 @@ import com.liferay.object.service.persistence.ObjectFieldPersistence;
 import com.liferay.object.service.persistence.ObjectViewColumnPersistence;
 import com.liferay.object.service.persistence.ObjectViewFilterColumnPersistence;
 import com.liferay.object.service.persistence.ObjectViewSortColumnPersistence;
+import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.aop.AopService;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.SystemEventConstants;
@@ -431,7 +432,7 @@ public class ObjectViewLocalServiceImpl extends ObjectViewLocalServiceBaseImpl {
 
 			if (Validator.isNull(objectViewFilterColumn.getObjectFieldName())) {
 				throw new ObjectViewFilterColumnException(
-					"Object field name must not be null");
+					"Object field name is null");
 			}
 
 			long listTypeDefinitionId = 0L;
@@ -444,9 +445,10 @@ public class ObjectViewLocalServiceImpl extends ObjectViewLocalServiceBaseImpl {
 						"status")) {
 
 					throw new ObjectViewFilterColumnException(
-						String.format(
-							"The field \"%s\" is not allowed to be a filter",
-							objectViewFilterColumn.getObjectFieldName()));
+						StringBundler.concat(
+							"Object field name \"",
+							objectViewFilterColumn.getObjectFieldName(),
+							"\" cannot be filtered"));
 				}
 			}
 			else {
@@ -459,30 +461,31 @@ public class ObjectViewLocalServiceImpl extends ObjectViewLocalServiceBaseImpl {
 						ObjectFieldConstants.BUSINESS_TYPE_PICKLIST)) {
 
 					throw new ObjectViewFilterColumnException(
-						String.format(
-							"The field \"%s\" is not allowed to be a filter",
-							objectViewFilterColumn.getObjectFieldName()));
+						StringBundler.concat(
+							"Object field name \"",
+							objectViewFilterColumn.getObjectFieldName(),
+							"\" cannot be filtered"));
 				}
 
 				listTypeDefinitionId = objectField.getObjectDefinitionId();
 			}
 
-			if (Validator.isNull(objectViewFilterColumn.getJson()) &&
-				Validator.isNull(objectViewFilterColumn.getFilterType())) {
+			if (Validator.isNull(objectViewFilterColumn.getFilterType()) &&
+				Validator.isNull(objectViewFilterColumn.getJson())) {
 
 				continue;
 			}
 
-			if ((Validator.isNull(objectViewFilterColumn.getJson()) &&
-				 Validator.isNotNull(objectViewFilterColumn.getFilterType())) ||
-				(Validator.isNotNull(objectViewFilterColumn.getJson()) &&
-				 Validator.isNull(objectViewFilterColumn.getFilterType()))) {
+			if ((Validator.isNull(objectViewFilterColumn.getFilterType()) &&
+				 Validator.isNotNull(objectViewFilterColumn.getJson())) ||
+				(Validator.isNotNull(objectViewFilterColumn.getFilterType()) &&
+				 Validator.isNull(objectViewFilterColumn.getJson()))) {
 
 				throw new ObjectViewFilterColumnException(
-					String.format(
-						"To define a predefined filter for \"%s\" field the " +
-							"definition and the filterType needs to be set.",
-						objectViewFilterColumn.getObjectFieldName()));
+					StringBundler.concat(
+						"Object field name \"",
+						objectViewFilterColumn.getObjectFieldName(),
+						"\" needs to have the fitler type and JSON specified"));
 			}
 
 			ObjectFieldFilterParser objectFieldFilterParser =
