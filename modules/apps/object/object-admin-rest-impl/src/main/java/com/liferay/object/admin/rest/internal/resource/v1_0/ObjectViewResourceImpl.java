@@ -103,8 +103,7 @@ public class ObjectViewResourceImpl extends BaseObjectViewResourceImpl {
 		if (ArrayUtil.isNotEmpty(objectView.getObjectViewFilterColumns()) &&
 			!GetterUtil.getBoolean(PropsUtil.get("feature.flag.LPS-144957"))) {
 
-			throw new UnsupportedOperationException(
-				"ObjectViewFilterColumns is not yet supported");
+			throw new UnsupportedOperationException();
 		}
 
 		return _toObjectView(
@@ -144,8 +143,7 @@ public class ObjectViewResourceImpl extends BaseObjectViewResourceImpl {
 		if (ArrayUtil.isNotEmpty(objectView.getObjectViewFilterColumns()) &&
 			!GetterUtil.getBoolean(PropsUtil.get("feature.flag.LPS-144957"))) {
 
-			throw new UnsupportedOperationException(
-				"ObjectViewFilterColumns is not yet supported");
+			throw new UnsupportedOperationException();
 		}
 
 		return _toObjectView(
