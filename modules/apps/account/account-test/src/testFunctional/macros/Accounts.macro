@@ -997,6 +997,14 @@ definition {
 			value1 = "Not Set");
 	}
 
+	macro removeDefaultDeliveryCommerceTerms {
+		Click(locator1 = "Account#DEFAULT_ACCOUNT_TERMS_AND_CONDITION_REMOVE_DEFAULT_DELIVERY");
+
+		AssertElementPresent(
+			locator1 = "Account#DEFAULT_ACCOUNT_TERMS_AND_CONDITION_DEFAULT_DELIVERY_USE_PRIORITY_SETTINGS",
+			value1 = "Use Priority Settings");
+	}
+
 	macro removeDefaultShippingAddress {
 		Click(locator1 = "Account#DEFAULT_ACCOUNT_ADDRESSES_REMOVE_DEFAULT_SHIPPING");
 
