@@ -28,6 +28,7 @@ definition {
 		}
 	}
 
+	@description = "Verifying if all Cookies are saved with true as value"
 	macro checkAllCookieAreAcceptedAndSaved {
 		CookieHelper._checkSelectedCookieValue(
 			cookieName = "CONSENT_TYPE_PERFORMANCE",
@@ -46,6 +47,7 @@ definition {
 			expectedCookieValue = "true");
 	}
 
+	@description = "Verifying if all Cookies are saved with false as value"
 	macro checkAllCookieAreDeclinedAndSaved {
 		CookieHelper._checkSelectedCookieValue(
 			cookieName = "CONSENT_TYPE_PERFORMANCE",
@@ -117,6 +119,7 @@ definition {
 		}
 	}
 
+	@description = "Adding site with Cookie Banner Configuration portlet"
 	macro createSitePageWithCookieBannerConfigurationPortlet {
 		JSONLayout.addPublicLayout(
 			groupName = "Guest",
@@ -132,6 +135,7 @@ definition {
 			siteName = "Guest");
 	}
 
+	@description = "Delete all cookies and Refresh page"
 	macro deleteAllCookiesAndRefreshPage {
 		var javascript = '''var allCookies = document.cookie.split(';');
     							for (var i = 0; i < allCookies.length; i++)
@@ -143,6 +147,25 @@ definition {
 		echo("${deleted}");
 
 		Refresh();
+	}
+
+	@description = "Navigate to home page"
+	macro siteVisit {
+		if (isSet(virtualHostsURL)) {
+			Navigator.openSpecificURL(
+				domain = "${domain}",
+				url = "${virtualHostsURL}");
+		}
+		else {
+			Navigator.openURL();
+		}
+	}
+
+	@description = "Verify if Policy Page is visible"
+	macro verifyPolicyPageIsVisible {
+		Variables.assertDefined(parameterList = "${cookiePolicyLink}");
+
+		AssertElementPresent(locator1 = "//h2[contains(.,'Type Facet')]");
 	}
 
 }
