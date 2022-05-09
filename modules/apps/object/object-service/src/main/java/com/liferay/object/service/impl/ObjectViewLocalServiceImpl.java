@@ -448,7 +448,7 @@ public class ObjectViewLocalServiceImpl extends ObjectViewLocalServiceBaseImpl {
 						StringBundler.concat(
 							"Object field name \"",
 							objectViewFilterColumn.getObjectFieldName(),
-							"\" cannot be filtered"));
+							"\" is not filterable"));
 				}
 			}
 			else {
@@ -464,7 +464,7 @@ public class ObjectViewLocalServiceImpl extends ObjectViewLocalServiceBaseImpl {
 						StringBundler.concat(
 							"Object field name \"",
 							objectViewFilterColumn.getObjectFieldName(),
-							"\" cannot be filtered"));
+							"\" is not filterable"));
 				}
 
 				listTypeDefinitionId = objectField.getObjectDefinitionId();
