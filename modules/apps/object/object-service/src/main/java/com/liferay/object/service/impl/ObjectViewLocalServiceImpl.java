@@ -41,12 +41,13 @@ import com.liferay.portal.kernel.search.Indexable;
 import com.liferay.portal.kernel.search.IndexableType;
 import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.systemevent.SystemEvent;
-import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.SetUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.vulcan.util.TransformUtil;
 
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
@@ -391,8 +392,7 @@ public class ObjectViewLocalServiceImpl extends ObjectViewLocalServiceBaseImpl {
 			_objectFieldPersistence.findByObjectDefinitionId(
 				objectView.getObjectDefinitionId());
 
-		Set<String> objectFieldNames = SetUtil.fromArray(
-			"creator", "dateCreated", "dateModified", "id", "status");
+		Set<String> objectFieldNames = new HashSet<>(_objectFieldNames);
 
 		objectFields.forEach(
 			objectField -> objectFieldNames.add(objectField.getName()));
@@ -426,10 +426,6 @@ public class ObjectViewLocalServiceImpl extends ObjectViewLocalServiceBaseImpl {
 			List<ObjectViewFilterColumn> objectViewFilterColumns)
 		throws PortalException {
 
-		String[] metadata = {
-			"creator", "dateCreated", "dateModified", "id", "status"
-		};
-
 		for (ObjectViewFilterColumn objectViewFilterColumn :
 				objectViewFilterColumns) {
 
@@ -440,8 +436,8 @@ public class ObjectViewLocalServiceImpl extends ObjectViewLocalServiceBaseImpl {
 
 			long listTypeDefinitionId = 0L;
 
-			if (ArrayUtil.contains(
-					metadata, objectViewFilterColumn.getObjectFieldName())) {
+			if (_objectFieldNames.contains(
+					objectViewFilterColumn.getObjectFieldName())) {
 
 				if (!Objects.equals(
 						objectViewFilterColumn.getObjectFieldName(),
@@ -539,6 +535,10 @@ public class ObjectViewLocalServiceImpl extends ObjectViewLocalServiceBaseImpl {
 	@Reference
 	private ObjectFieldFilterParserServicesTracker
 		_objectFieldFilterParserServicesTracker;
+
+	private final Set<String> _objectFieldNames = Collections.unmodifiableSet(
+		SetUtil.fromArray(
+			"creator", "dateCreated", "dateModified", "id", "status"));
 
 	@Reference
 	private ObjectFieldPersistence _objectFieldPersistence;
