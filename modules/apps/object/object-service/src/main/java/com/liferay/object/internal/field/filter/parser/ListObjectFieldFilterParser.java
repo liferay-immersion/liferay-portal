@@ -71,7 +71,7 @@ public class ListObjectFieldFilterParser implements ObjectFieldFilterParser {
 						objectViewFilterColumn.getObjectFieldName(),
 						"status")) {
 
-					return _toIntegerArray(jsonArray);
+					return _toIntegerList(jsonArray);
 				}
 
 				List<Map<String, String>> map = new ArrayList<>();
@@ -117,7 +117,7 @@ public class ListObjectFieldFilterParser implements ObjectFieldFilterParser {
 
 			for (int i = 0; i < jsonArray.length(); i++) {
 				try {
-					_toIntegerArray(jsonArray);
+					_toIntegerList(jsonArray);
 				}
 				catch (Exception exception) {
 					throw new ObjectViewFilterColumnException(
@@ -129,14 +129,14 @@ public class ListObjectFieldFilterParser implements ObjectFieldFilterParser {
 		}
 	}
 
-	private Integer[] _toIntegerArray(JSONArray jsonArray) {
-		Integer[] newArray = new Integer[jsonArray.length()];
+	private List<Integer> _toIntegerList(JSONArray jsonArray) {
+		List<Integer> statuses = new ArrayList<>();
 
 		for (int i = 0; i < jsonArray.length(); i++) {
-			newArray[i] = (Integer)jsonArray.get(i);
+			statuses.add((Integer)jsonArray.get(i));
 		}
 
-		return newArray;
+		return statuses;
 	}
 
 	@Reference
