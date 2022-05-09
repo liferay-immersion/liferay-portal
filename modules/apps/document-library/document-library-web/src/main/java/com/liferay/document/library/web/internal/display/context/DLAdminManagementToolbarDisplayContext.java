@@ -192,7 +192,6 @@ public class DLAdminManagementToolbarDisplayContext
 				dropdownItem.setIcon("trash");
 				dropdownItem.setLabel(
 					LanguageUtil.get(_httpServletRequest, "delete"));
-
 				dropdownItem.setQuickAction(true);
 			}
 		).add(

@@ -93,7 +93,6 @@ public class MBEntriesManagementToolbarDisplayContext {
 				dropdownItem.setIcon("trash");
 				dropdownItem.setLabel(
 					LanguageUtil.get(_httpServletRequest, "delete"));
-
 				dropdownItem.setQuickAction(true);
 			}
 		).add(
@@ -102,7 +101,6 @@ public class MBEntriesManagementToolbarDisplayContext {
 				dropdownItem.setIcon("lock");
 				dropdownItem.setLabel(
 					LanguageUtil.get(_httpServletRequest, "lock"));
-
 				dropdownItem.setQuickAction(true);
 			}
 		).add(
