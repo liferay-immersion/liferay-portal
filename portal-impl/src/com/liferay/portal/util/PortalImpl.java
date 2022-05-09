@@ -2910,8 +2910,8 @@ public class PortalImpl implements Portal {
 
 		return new LayoutFriendlyURLSeparatorComposite(
 			layoutQueryStringComposite.getLayout(),
-			layoutQueryStringComposite.getFriendlyURL(),
-			FRIENDLY_URL_SEPARATOR);
+			layoutQueryStringComposite.getFriendlyURL(), FRIENDLY_URL_SEPARATOR,
+			false);
 	}
 
 	@Override
