@@ -14,10 +14,7 @@ import ClayIcon from '@clayui/icon';
 import PropTypes from 'prop-types';
 import React, {useEffect} from 'react';
 
-import {limitValue, sortElements} from '../utils';
-
-const DEFAULT_LIMIT = 1;
-const MIN_PRIORITY = 1;
+import {sortElements} from '../utils';
 
 const BaseActionsInfo = ({
 	description,
@@ -199,16 +196,8 @@ const BaseActionsInfo = ({
 				<ClayInput
 					aria-label="Select"
 					id="priority"
-					min={MIN_PRIORITY}
 					onBlur={({target}) => {
-						let {value: newValue} = target;
-
-						newValue = limitValue({
-							defaultValue: DEFAULT_LIMIT,
-							min: MIN_PRIORITY,
-							value: newValue,
-						});
-
+						const {value: newValue} = target;
 						setPriority(newValue);
 
 						updateActionInfo({
@@ -220,11 +209,7 @@ const BaseActionsInfo = ({
 						});
 					}}
 					onChange={({target}) => {
-						let {value: newValue} = target;
-						newValue = newValue.includes('-')
-							? newValue.replace('-', '')
-							: newValue;
-
+						const {value: newValue} = target;
 						setPriority(newValue);
 					}}
 					type="number"
