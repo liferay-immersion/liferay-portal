@@ -274,7 +274,7 @@ public class ObjectViewFilterColumn implements Serializable {
 	@GraphQLName("FilterType")
 	public static enum FilterType {
 
-		EXCLUDES("EXCLUDES"), INCLUDES("INCLUDES");
+		EXCLUDES("excludes"), INCLUDES("includes");
 
 		@JsonCreator
 		public static FilterType create(String value) {
