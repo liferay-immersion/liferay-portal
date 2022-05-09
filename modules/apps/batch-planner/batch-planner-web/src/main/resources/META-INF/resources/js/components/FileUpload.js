@@ -34,6 +34,14 @@ function updateExtensionInputValue(namespace, value) {
 	}
 }
 
+function updateNameInput(namespace, fileName) {
+	const nameInput = document.getElementById(`${namespace}name`);
+
+	if (!nameInput.value) {
+		nameInput.value = fileName.substring(0, fileName.lastIndexOf('.'));
+	}
+}
+
 const acceptedExtensions = IMPORT_FILE_FORMATS.map(
 	(format) => `.${format}`
 ).join(', ');
@@ -47,7 +55,6 @@ function FileUpload({portletNamespace}) {
 	const inputDelimiterId = `${portletNamespace}delimiter`;
 	const inputEnclosingCharacterId = `${portletNamespace}enclosingCharacter`;
 	const inputFileId = `${portletNamespace}importFile`;
-	const inputNameId = `${portletNamespace}name`;
 
 	const [parserOptions, setParserOptions] = useState({
 		CSVContainsHeaders: true,
@@ -102,6 +109,12 @@ function FileUpload({portletNamespace}) {
 		parserOptions,
 		portletNamespace,
 	]);
+
+	useEffect(() => {
+		if (fileToBeUploaded?.name) {
+			updateNameInput(portletNamespace, fileToBeUploaded.name);
+		}
+	}, [portletNamespace, fileToBeUploaded]);
 
 	return (
 		<>
@@ -205,23 +218,6 @@ function FileUpload({portletNamespace}) {
 						</div>
 					</div>
 				</>
-			)}
-
-			{fileToBeUploaded && (
-				<ClayForm.Group>
-					<label htmlFor={inputNameId}>
-						{Liferay.Language.get('name')}
-					</label>
-
-					<ClayInput
-						defaultValue={fileToBeUploaded.name.substring(
-							0,
-							fileToBeUploaded.name.lastIndexOf('.')
-						)}
-						id={inputNameId}
-						name={inputNameId}
-					/>
-				</ClayForm.Group>
 			)}
 		</>
 	);

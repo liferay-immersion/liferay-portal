@@ -44,10 +44,18 @@ renderResponse.setTitle(editable ? LanguageUtil.get(request, "edit-template") : 
 
 					<div class="card-body">
 						<liferay-frontend:edit-form-body>
-							<div id="<portlet:namespace />templateSelect"></div>
+							<aui:input name="name" />
 
 							<clay:row>
-								<clay:col>
+								<clay:col
+									md="6"
+								>
+									<div id="<portlet:namespace />templateSelect"></div>
+								</clay:col>
+
+								<clay:col
+									md="6"
+								>
 									<clay:select
 										id='<%= liferayPortletResponse.getNamespace() + "internalClassName" %>'
 										label='<%= LanguageUtil.get(request, "entity-type") %>'
