@@ -156,7 +156,7 @@ public class ObjectViewFilterColumn implements Cloneable, Serializable {
 
 	public static enum FilterType {
 
-		EXCLUDES("EXCLUDES"), INCLUDES("INCLUDES");
+		EXCLUDES("excludes"), INCLUDES("includes");
 
 		public static FilterType create(String value) {
 			for (FilterType filterType : values()) {
