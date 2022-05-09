@@ -17,7 +17,7 @@ package com.liferay.object.web.internal.object.entries.frontend.data.set.filter.
 import com.liferay.frontend.data.set.filter.FDSFilter;
 import com.liferay.list.type.model.ListTypeDefinition;
 import com.liferay.list.type.service.ListTypeDefinitionLocalService;
-import com.liferay.object.constants.ObjectViewFilterConstants;
+import com.liferay.object.constants.ObjectViewFilterColumnConstants;
 import com.liferay.object.field.filter.parser.ObjectFieldFilterParser;
 import com.liferay.object.model.ObjectField;
 import com.liferay.object.model.ObjectViewFilterColumn;
@@ -38,8 +38,8 @@ import org.osgi.service.component.annotations.Reference;
 @Component(
 	immediate = true,
 	property = {
-		"object.field.filter.type.key=" + ObjectViewFilterConstants.FILTER_TYPE_EXCLUDES,
-		"object.field.filter.type.key=" + ObjectViewFilterConstants.FILTER_TYPE_INCLUDES
+		"object.field.filter.type.key=" + ObjectViewFilterColumnConstants.FILTER_TYPE_EXCLUDES,
+		"object.field.filter.type.key=" + ObjectViewFilterColumnConstants.FILTER_TYPE_INCLUDES
 	},
 	service = ObjectFieldFDSFilterFactory.class
 )
@@ -78,7 +78,7 @@ public class ListTypeEntryObjectFieldFDSFilterFactory
 	private ListTypeDefinitionLocalService _listTypeDefinitionLocalService;
 
 	@Reference(
-		target = "(object.field.filter.type.key=" + ObjectViewFilterConstants.FILTER_TYPE_EXCLUDES + ")"
+		target = "(object.field.filter.type.key=" + ObjectViewFilterColumnConstants.FILTER_TYPE_EXCLUDES + ")"
 	)
 	private ObjectFieldFilterParser _objectFieldFilterParser;
 

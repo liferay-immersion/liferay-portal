@@ -17,7 +17,7 @@ package com.liferay.object.constants;
 /**
  * @author Feliphe Marinho
  */
-public class ObjectViewFilterConstants {
+public class ObjectViewFilterColumnConstants {
 
 	public static final String FILTER_TYPE_EXCLUDES = "excludes";
 
