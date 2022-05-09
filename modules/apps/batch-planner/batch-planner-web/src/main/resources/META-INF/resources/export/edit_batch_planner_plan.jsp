@@ -68,18 +68,14 @@ renderResponse.setTitle(editable ? LanguageUtil.get(request, "edit-template") : 
 						</clay:col>
 					</clay:row>
 
-					<clay:row>
-						<clay:col
-							md="6"
-						>
-							<clay:checkbox
-								checked="<%= true %>"
-								id='<%= liferayPortletResponse.getNamespace() + "containsHeaders" %>'
-								label="include-headers"
-								name='<%= liferayPortletResponse.getNamespace() + "containsHeaders" %>'
-							/>
-						</clay:col>
-					</clay:row>
+					<div class="contains-headers-wrapper">
+						<clay:checkbox
+							checked="<%= true %>"
+							id='<%= liferayPortletResponse.getNamespace() + "containsHeaders" %>'
+							label="include-headers"
+							name='<%= liferayPortletResponse.getNamespace() + "containsHeaders" %>'
+						/>
+					</div>
 				</liferay-frontend:edit-form-body>
 			</div>
 		</div>
