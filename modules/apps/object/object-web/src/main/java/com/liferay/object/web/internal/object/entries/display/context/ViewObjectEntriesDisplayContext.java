@@ -24,7 +24,6 @@ import com.liferay.object.constants.ObjectRelationshipConstants;
 import com.liferay.object.model.ObjectDefinition;
 import com.liferay.object.model.ObjectField;
 import com.liferay.object.model.ObjectView;
-import com.liferay.object.model.ObjectViewFilterColumn;
 import com.liferay.object.model.ObjectViewSortColumn;
 import com.liferay.object.scope.ObjectScopeProvider;
 import com.liferay.object.service.ObjectFieldLocalService;
@@ -47,6 +46,7 @@ import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.vulcan.util.TransformUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -151,24 +151,19 @@ public class ViewObjectEntriesDisplayContext {
 			return Collections.emptyList();
 		}
 
-		List<FDSFilter> fdsFilters = new ArrayList<>();
+		return TransformUtil.transform(
+			objectView.getObjectViewFilterColumns(),
+			objectViewFilterColumn -> {
+				ObjectFieldFDSFilterFactory objectFieldFDSFilterFactory =
+					_objectFieldFDSFilterFactoryServicesTracker.
+						getObjectFieldFDSFilterFactory(
+							objectViewFilterColumn.getFilterType());
 
-		for (ObjectViewFilterColumn objectViewFilterColumn :
-				objectView.getObjectViewFilterColumns()) {
-
-			ObjectFieldFDSFilterFactory objectFieldFDSFilterFactory =
-				_objectFieldFDSFilterFactoryServicesTracker.
-					getObjectFieldFDSFilterFactory(
-						objectViewFilterColumn.getFilterType());
-
-			fdsFilters.add(
-				objectFieldFDSFilterFactory.create(
+				return objectFieldFDSFilterFactory.create(
 					_objectRequestHelper.getLocale(),
 					_objectDefinition.getObjectDefinitionId(),
-					objectViewFilterColumn));
-		}
-
-		return fdsFilters;
+					objectViewFilterColumn);
+			});
 	}
 
 	public List<FDSActionDropdownItem> getFDSActionDropdownItems()
