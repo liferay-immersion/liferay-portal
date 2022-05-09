@@ -17,6 +17,7 @@ package com.liferay.object.web.internal.object.entries.frontend.data.set.filter.
 import com.liferay.frontend.data.set.filter.FDSFilter;
 import com.liferay.list.type.model.ListTypeDefinition;
 import com.liferay.list.type.service.ListTypeDefinitionLocalService;
+import com.liferay.object.constants.ObjectFieldConstants;
 import com.liferay.object.constants.ObjectViewFilterColumnConstants;
 import com.liferay.object.field.filter.parser.ObjectFieldFilterParser;
 import com.liferay.object.model.ObjectField;
@@ -25,8 +26,10 @@ import com.liferay.object.service.ObjectFieldLocalService;
 import com.liferay.object.web.internal.object.entries.frontend.data.set.filter.ListTypeEntryAutocompleteFDSFilter;
 import com.liferay.object.web.internal.object.entries.frontend.data.set.filter.ObjectEntryStatusCheckBoxFDSFilter;
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.util.Validator;
 
 import java.util.Locale;
+import java.util.Map;
 import java.util.Objects;
 
 import org.osgi.service.component.annotations.Component;
@@ -38,6 +41,7 @@ import org.osgi.service.component.annotations.Reference;
 @Component(
 	immediate = true,
 	property = {
+		"object.field.business.type.key=" + ObjectFieldConstants.BUSINESS_TYPE_PICKLIST,
 		"object.field.filter.type.key=" + ObjectViewFilterColumnConstants.FILTER_TYPE_EXCLUDES,
 		"object.field.filter.type.key=" + ObjectViewFilterColumnConstants.FILTER_TYPE_INCLUDES
 	},
@@ -51,16 +55,27 @@ public class ListTypeEntryObjectFieldFDSFilterFactory
 			ObjectViewFilterColumn objectViewFilterColumn)
 		throws PortalException {
 
+		Map<String, Object> preloadedData = null;
+
 		if (Objects.equals(
 				objectViewFilterColumn.getObjectFieldName(), "status")) {
 
-			return new ObjectEntryStatusCheckBoxFDSFilter(
-				_objectFieldFilterParser.parse(
-					0L, locale, objectViewFilterColumn));
+			if (Validator.isNotNull(objectViewFilterColumn.getFilterType())) {
+				preloadedData = _objectFieldFilterParser.parse(
+					0L, locale, objectViewFilterColumn);
+			}
+
+			return new ObjectEntryStatusCheckBoxFDSFilter(preloadedData);
 		}
 
 		ObjectField objectField = _objectFieldLocalService.fetchObjectField(
 			objectDefinitionId, objectViewFilterColumn.getObjectFieldName());
+
+		if (Validator.isNotNull(objectViewFilterColumn.getFilterType())) {
+			preloadedData = _objectFieldFilterParser.parse(
+				objectField.getListTypeDefinitionId(), locale,
+				objectViewFilterColumn);
+		}
 
 		ListTypeDefinition listTypeDefinition =
 			_listTypeDefinitionLocalService.getListTypeDefinition(
@@ -68,10 +83,7 @@ public class ListTypeEntryObjectFieldFDSFilterFactory
 
 		return new ListTypeEntryAutocompleteFDSFilter(
 			objectField.getName(), listTypeDefinition.getName(locale),
-			objectField.getListTypeDefinitionId(),
-			_objectFieldFilterParser.parse(
-				objectField.getListTypeDefinitionId(), locale,
-				objectViewFilterColumn));
+			objectField.getListTypeDefinitionId(), preloadedData);
 	}
 
 	@Reference
