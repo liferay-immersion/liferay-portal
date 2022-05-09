@@ -330,8 +330,10 @@ public class ImportTaskResourceImpl extends BaseImportTaskResourceImpl {
 			BatchEngineTaskExecuteStatus.valueOf(
 				batchEngineImportTask.getExecuteStatus());
 
-		if (batchEngineTaskExecuteStatus !=
-				BatchEngineTaskExecuteStatus.COMPLETED) {
+		if ((batchEngineTaskExecuteStatus !=
+				BatchEngineTaskExecuteStatus.COMPLETED) &&
+			(batchEngineTaskExecuteStatus !=
+				BatchEngineTaskExecuteStatus.FAILED)) {
 
 			return Response.status(
 				Response.Status.NOT_FOUND
