@@ -19,8 +19,8 @@ package com.liferay.object.constants;
  */
 public class ObjectViewFilterConstants {
 
-	public static final String FILTER_TYPE_EXCLUDES = "EXCLUDES";
+	public static final String FILTER_TYPE_EXCLUDES = "excludes";
 
-	public static final String FILTER_TYPE_INCLUDES = "INCLUDES";
+	public static final String FILTER_TYPE_INCLUDES = "includes";
 
 }
