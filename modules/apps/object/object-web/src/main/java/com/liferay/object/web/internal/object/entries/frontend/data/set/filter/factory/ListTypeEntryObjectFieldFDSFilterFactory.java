@@ -22,7 +22,7 @@ import com.liferay.object.field.filter.parser.ObjectFieldFilterParser;
 import com.liferay.object.model.ObjectField;
 import com.liferay.object.model.ObjectViewFilterColumn;
 import com.liferay.object.service.ObjectFieldLocalService;
-import com.liferay.object.web.internal.object.entries.frontend.data.set.filter.ObjectEntryListAutocompleteFDSFilter;
+import com.liferay.object.web.internal.object.entries.frontend.data.set.filter.ListTypeEntryAutocompleteFDSFilter;
 import com.liferay.object.web.internal.object.entries.frontend.data.set.filter.ObjectEntryStatusCheckBoxFDSFilter;
 import com.liferay.portal.kernel.exception.PortalException;
 
@@ -41,10 +41,10 @@ import org.osgi.service.component.annotations.Reference;
 		"object.field.filter.type.key=" + ObjectViewFilterConstants.FILTER_TYPE_EXCLUDES,
 		"object.field.filter.type.key=" + ObjectViewFilterConstants.FILTER_TYPE_INCLUDES
 	},
-	service = ObjectEntryFieldFDSFilterFactory.class
+	service = ObjectFieldFDSFilterFactory.class
 )
-public class ObjectEntryListFieldFDSFilterFactory
-	implements ObjectEntryFieldFDSFilterFactory {
+public class ListTypeEntryObjectFieldFDSFilterFactory
+	implements ObjectFieldFDSFilterFactory {
 
 	public FDSFilter create(
 			Locale locale, long objectDefinitionId,
@@ -66,7 +66,7 @@ public class ObjectEntryListFieldFDSFilterFactory
 			_listTypeDefinitionLocalService.getListTypeDefinition(
 				objectField.getListTypeDefinitionId());
 
-		return new ObjectEntryListAutocompleteFDSFilter(
+		return new ListTypeEntryAutocompleteFDSFilter(
 			objectField.getName(), listTypeDefinition.getName(locale),
 			objectField.getListTypeDefinitionId(),
 			_objectFieldFilterParser.parse(

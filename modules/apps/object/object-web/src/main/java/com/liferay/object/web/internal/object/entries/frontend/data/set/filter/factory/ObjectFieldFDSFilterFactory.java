@@ -23,7 +23,7 @@ import java.util.Locale;
 /**
  * @author Feliphe Marinho
  */
-public interface ObjectEntryFieldFDSFilterFactory {
+public interface ObjectFieldFDSFilterFactory {
 
 	public FDSFilter create(
 			Locale locale, long objectDefinitionId,

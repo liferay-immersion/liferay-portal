@@ -26,12 +26,11 @@ import org.osgi.service.component.annotations.Deactivate;
  * @author Feliphe Marinho
  */
 @Component(
-	immediate = true,
-	service = ObjectEntryFieldFDSFilterFactoryServicesTracker.class
+	immediate = true, service = ObjectFieldFDSFilterFactoryServicesTracker.class
 )
-public class ObjectEntryFieldFDSFilterFactoryServicesTracker {
+public class ObjectFieldFDSFilterFactoryServicesTracker {
 
-	public ObjectEntryFieldFDSFilterFactory getObjectEntryFieldFDSFilterFactory(
+	public ObjectFieldFDSFilterFactory getObjectFieldFDSFilterFactory(
 		String key) {
 
 		return _serviceTrackerMap.getService(key);
@@ -40,7 +39,7 @@ public class ObjectEntryFieldFDSFilterFactoryServicesTracker {
 	@Activate
 	protected void activate(BundleContext bundleContext) {
 		_serviceTrackerMap = ServiceTrackerMapFactory.openSingleValueMap(
-			bundleContext, ObjectEntryFieldFDSFilterFactory.class,
+			bundleContext, ObjectFieldFDSFilterFactory.class,
 			"object.field.filter.type.key");
 	}
 
@@ -49,7 +48,7 @@ public class ObjectEntryFieldFDSFilterFactoryServicesTracker {
 		_serviceTrackerMap.close();
 	}
 
-	private ServiceTrackerMap<String, ObjectEntryFieldFDSFilterFactory>
+	private ServiceTrackerMap<String, ObjectFieldFDSFilterFactory>
 		_serviceTrackerMap;
 
 }

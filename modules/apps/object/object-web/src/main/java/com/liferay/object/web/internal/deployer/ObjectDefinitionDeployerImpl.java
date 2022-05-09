@@ -57,7 +57,7 @@ import com.liferay.object.web.internal.item.selector.ObjectEntryItemSelectorView
 import com.liferay.object.web.internal.layout.display.page.ObjectEntryLayoutDisplayPageProvider;
 import com.liferay.object.web.internal.object.entries.application.list.ObjectEntriesPanelApp;
 import com.liferay.object.web.internal.object.entries.display.context.ObjectEntryDisplayContextFactory;
-import com.liferay.object.web.internal.object.entries.frontend.data.set.filter.factory.ObjectEntryFieldFDSFilterFactoryServicesTracker;
+import com.liferay.object.web.internal.object.entries.frontend.data.set.filter.factory.ObjectFieldFDSFilterFactoryServicesTracker;
 import com.liferay.object.web.internal.object.entries.frontend.data.set.view.table.ObjectEntriesTableFDSView;
 import com.liferay.object.web.internal.object.entries.portlet.ObjectEntriesPortlet;
 import com.liferay.object.web.internal.object.entries.portlet.action.EditObjectEntryMVCActionCommand;
@@ -216,7 +216,7 @@ public class ObjectDefinitionDeployerImpl implements ObjectDefinitionDeployer {
 				new ObjectEntriesPortlet(
 					objectDefinition.getObjectDefinitionId(),
 					_objectDefinitionLocalService,
-					_objectEntryFieldFDSFilterFactoryServicesTracker,
+					_objectFieldFDSFilterFactoryServicesTracker,
 					_objectFieldLocalService, _objectScopeProviderRegistry,
 					_objectViewLocalService, _portal,
 					_getPortletResourcePermission(
@@ -378,10 +378,6 @@ public class ObjectDefinitionDeployerImpl implements ObjectDefinitionDeployer {
 	private ObjectEntryDisplayContextFactory _objectEntryDisplayContextFactory;
 
 	@Reference
-	private ObjectEntryFieldFDSFilterFactoryServicesTracker
-		_objectEntryFieldFDSFilterFactoryServicesTracker;
-
-	@Reference
 	private ObjectEntryLocalService _objectEntryLocalService;
 
 	@Reference
@@ -389,6 +385,10 @@ public class ObjectDefinitionDeployerImpl implements ObjectDefinitionDeployer {
 
 	@Reference
 	private ObjectEntryService _objectEntryService;
+
+	@Reference
+	private ObjectFieldFDSFilterFactoryServicesTracker
+		_objectFieldFDSFilterFactoryServicesTracker;
 
 	@Reference
 	private ObjectFieldLocalService _objectFieldLocalService;
