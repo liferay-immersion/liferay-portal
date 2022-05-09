@@ -168,11 +168,9 @@ public class ObjectViewLocalServiceImpl extends ObjectViewLocalServiceBaseImpl {
 		objectView.setObjectViewColumns(
 			_objectViewColumnPersistence.findByObjectViewId(
 				objectView.getObjectViewId()));
-
 		objectView.setObjectViewFilterColumns(
 			_objectViewFilterColumnPersistence.findByObjectViewId(
 				objectView.getObjectViewId()));
-
 		objectView.setObjectViewSortColumns(
 			_objectViewSortColumnPersistence.findByObjectViewId(
 				objectView.getObjectViewId()));
