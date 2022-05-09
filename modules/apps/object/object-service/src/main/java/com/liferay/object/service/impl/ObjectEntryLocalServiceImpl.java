@@ -513,31 +513,33 @@ public class ObjectEntryLocalServiceImpl
 
 		BaseModel<?> baseModel = baseModels.get(0);
 
-		Map<String, Object> modelAttributes = baseModel.getModelAttributes();
+		Map<String, Object> baseModelAttributes =
+			baseModel.getModelAttributes();
 
-		Map<String, Object> attributes = HashMapBuilder.<String, Object>put(
-			"createDate", modelAttributes.get("createDate")
-		).put(
-			"externalReferenceCode",
-			modelAttributes.get("externalReferenceCode")
-		).put(
-			"modifiedDate", modelAttributes.get("modifiedDate")
-		).put(
-			"objectDefinitionId", objectDefinition.getObjectDefinitionId()
-		).put(
-			"uuid", modelAttributes.get("uuid")
-		).build();
+		Map<String, Object> modelAttributes =
+			HashMapBuilder.<String, Object>put(
+				"createDate", baseModelAttributes.get("createDate")
+			).put(
+				"externalReferenceCode",
+				baseModelAttributes.get("externalReferenceCode")
+			).put(
+				"modifiedDate", baseModelAttributes.get("modifiedDate")
+			).put(
+				"objectDefinitionId", objectDefinition.getObjectDefinitionId()
+			).put(
+				"uuid", baseModelAttributes.get("uuid")
+			).build();
 
 		for (ObjectField objectField :
 				_objectFieldLocalService.getObjectFields(
 					objectDefinition.getObjectDefinitionId())) {
 
-			attributes.put(
+			modelAttributes.put(
 				objectField.getName(),
-				modelAttributes.get(objectField.getDBColumnName()));
+				baseModelAttributes.get(objectField.getDBColumnName()));
 		}
 
-		return attributes;
+		return modelAttributes;
 	}
 
 	@Override
