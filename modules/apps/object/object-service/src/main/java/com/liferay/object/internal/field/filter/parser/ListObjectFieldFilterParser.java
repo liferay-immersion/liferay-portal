@@ -16,7 +16,7 @@ package com.liferay.object.internal.field.filter.parser;
 
 import com.liferay.list.type.model.ListTypeEntry;
 import com.liferay.list.type.service.ListTypeEntryLocalService;
-import com.liferay.object.constants.ObjectViewFilterConstants;
+import com.liferay.object.constants.ObjectViewFilterColumnConstants;
 import com.liferay.object.exception.ObjectViewFilterColumnException;
 import com.liferay.object.field.filter.parser.ObjectFieldFilterParser;
 import com.liferay.object.model.ObjectViewFilterColumn;
@@ -44,8 +44,8 @@ import org.osgi.service.component.annotations.Reference;
 @Component(
 	immediate = true,
 	property = {
-		"object.field.filter.type.key=" + ObjectViewFilterConstants.FILTER_TYPE_EXCLUDES,
-		"object.field.filter.type.key=" + ObjectViewFilterConstants.FILTER_TYPE_INCLUDES
+		"object.field.filter.type.key=" + ObjectViewFilterColumnConstants.FILTER_TYPE_EXCLUDES,
+		"object.field.filter.type.key=" + ObjectViewFilterColumnConstants.FILTER_TYPE_INCLUDES
 	},
 	service = {ListObjectFieldFilterParser.class, ObjectFieldFilterParser.class}
 )
@@ -59,7 +59,7 @@ public class ListObjectFieldFilterParser implements ObjectFieldFilterParser {
 
 		return HashMapBuilder.<String, Object>put(
 			"exclude",
-			ObjectViewFilterConstants.FILTER_TYPE_EXCLUDES.equals(
+			ObjectViewFilterColumnConstants.FILTER_TYPE_EXCLUDES.equals(
 				objectViewFilterColumn.getFilterType())
 		).put(
 			"itemsValues",
