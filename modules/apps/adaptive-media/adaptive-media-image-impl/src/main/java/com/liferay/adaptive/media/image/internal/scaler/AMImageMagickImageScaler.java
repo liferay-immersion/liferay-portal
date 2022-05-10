@@ -72,7 +72,7 @@ public class AMImageMagickImageScaler implements AMImageScaler {
 			imageFile = _getFile(fileVersion);
 
 			scaledImageFile = _scaleAndConvertToPNG(
-				imageFile, amImageConfigurationEntry);
+				amImageConfigurationEntry, imageFile);
 
 			ImageBag imageBag = _imageTool.read(scaledImageFile);
 
@@ -127,7 +127,7 @@ public class AMImageMagickImageScaler implements AMImageScaler {
 	}
 
 	private File _scaleAndConvertToPNG(
-			File imageFile, AMImageConfigurationEntry amImageConfigurationEntry)
+			AMImageConfigurationEntry amImageConfigurationEntry, File imageFile)
 		throws Exception {
 
 		File scaledImageFile = FileUtil.createTempFile(ImageTool.TYPE_PNG);
