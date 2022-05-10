@@ -100,7 +100,7 @@ public final class AMImageProcessorImpl implements AMImageProcessor {
 			fileVersion.getFileVersionId());
 
 		try {
-			if (!_isUpdateImageEntry(fileVersion, amImageEntry)) {
+			if (!_isUpdateImageEntry(amImageEntry, fileVersion)) {
 				return;
 			}
 
@@ -125,7 +125,7 @@ public final class AMImageProcessorImpl implements AMImageProcessor {
 
 				_amImageEntryLocalService.addAMImageEntry(
 					amImageConfigurationEntry,
-					_getScaledFileVersion(fileVersion, amImageScaledImage),
+					_getScaledFileVersion(amImageScaledImage, fileVersion),
 					amImageScaledImage.getHeight(),
 					amImageScaledImage.getWidth(), inputStream,
 					amImageScaledImage.getSize());
@@ -137,7 +137,7 @@ public final class AMImageProcessorImpl implements AMImageProcessor {
 	}
 
 	private FileVersion _getScaledFileVersion(
-		FileVersion fileVersion, AMImageScaledImage amImageScaledImage) {
+		AMImageScaledImage amImageScaledImage, FileVersion fileVersion) {
 
 		String mimeType = amImageScaledImage.getMimeType();
 
@@ -158,7 +158,7 @@ public final class AMImageProcessorImpl implements AMImageProcessor {
 	}
 
 	private boolean _isUpdateImageEntry(
-			FileVersion fileVersion, AMImageEntry amImageEntry)
+			AMImageEntry amImageEntry, FileVersion fileVersion)
 		throws PortalException {
 
 		if (amImageEntry == null) {
