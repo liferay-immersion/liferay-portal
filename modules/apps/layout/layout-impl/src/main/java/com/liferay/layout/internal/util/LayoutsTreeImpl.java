@@ -284,17 +284,10 @@ public class LayoutsTreeImpl implements LayoutsTree {
 			layout.getPlid());
 
 		if (_log.isDebugEnabled()) {
-			StringBundler sb = new StringBundler(7);
-
-			sb.append("_getAncestorLayouts(plid=");
-			sb.append(layout.getPlid());
-			sb.append(", ancestorLayouts=");
-			sb.append(ancestorLayouts);
-			sb.append(", layout=");
-			sb.append(layout);
-			sb.append(StringPool.CLOSE_PARENTHESIS);
-
-			_log.debug(sb.toString());
+			_log.debug(
+				StringBundler.concat(
+					"Get ancestor layouts ", ancestorLayouts, " for layout ",
+					layout));
 		}
 
 		ancestorLayouts.add(layout);
