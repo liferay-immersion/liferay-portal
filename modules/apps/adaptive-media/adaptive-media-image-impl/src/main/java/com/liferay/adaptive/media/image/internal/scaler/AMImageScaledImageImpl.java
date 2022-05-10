@@ -25,20 +25,16 @@ import java.io.InputStream;
 public class AMImageScaledImageImpl implements AMImageScaledImage {
 
 	public AMImageScaledImageImpl(byte[] bytes, int height, int width) {
-		_bytes = bytes;
-		_height = height;
-		_width = width;
-
-		_mimeType = null;
+		this(bytes, height, null, width);
 	}
 
 	public AMImageScaledImageImpl(
-		byte[] bytes, int height, int width, String mimeType) {
+		byte[] bytes, int height, String mimeType, int width) {
 
 		_bytes = bytes;
 		_height = height;
-		_width = width;
 		_mimeType = mimeType;
+		_width = width;
 	}
 
 	@Override

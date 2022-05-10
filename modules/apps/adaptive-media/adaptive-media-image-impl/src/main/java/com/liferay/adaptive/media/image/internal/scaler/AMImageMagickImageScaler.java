@@ -80,8 +80,8 @@ public class AMImageMagickImageScaler implements AMImageScaler {
 
 			return new AMImageScaledImageImpl(
 				_imageTool.getBytes(renderedImage, imageBag.getType()),
-				renderedImage.getHeight(), renderedImage.getWidth(),
-				ContentTypes.IMAGE_PNG);
+				renderedImage.getHeight(), ContentTypes.IMAGE_PNG,
+				renderedImage.getWidth());
 		}
 		catch (Exception exception) {
 			throw new AMRuntimeException.IOException(

@@ -139,12 +139,10 @@ public final class AMImageProcessorImpl implements AMImageProcessor {
 	private FileVersion _getScaledFileVersion(
 		FileVersion fileVersion, AMImageScaledImage amImageScaledImage) {
 
-		String amImageScaledImageMimeType = amImageScaledImage.getMimeType();
+		String mimeType = amImageScaledImage.getMimeType();
 
-		if ((amImageScaledImageMimeType == null) ||
-			!amImageScaledImageMimeType.equals(fileVersion.getMimeType()) ||
-			amImageScaledImageMimeType.equals(
-				ContentTypes.APPLICATION_OCTET_STREAM)) {
+		if ((mimeType == null) || !mimeType.equals(fileVersion.getMimeType()) ||
+			mimeType.equals(ContentTypes.APPLICATION_OCTET_STREAM)) {
 
 			return fileVersion;
 		}
@@ -153,7 +151,7 @@ public final class AMImageProcessorImpl implements AMImageProcessor {
 
 			@Override
 			public String getMimeType() {
-				return amImageScaledImageMimeType;
+				return mimeType;
 			}
 
 		};
