@@ -15,6 +15,10 @@ definition {
 			locator1 = "PortalSettingsAuthentication#AUTHENTICATION_LDAP_ADD_BUTTON",
 			value1 = "Add");
 
+		if (!(isSet(ldapServerName))) {
+			var ldapServerName = "ApacheDS Server";
+		}
+
 		Type(
 			locator1 = "PortalSettingsAuthentication#LDAP_SERVER_SERVER_NAME",
 			value1 = "${ldapServerName}");
@@ -470,6 +474,10 @@ definition {
 			configurationName = "Servers",
 			configurationScope = "Virtual Instance Scope");
 
+		if (!(isSet(ldapServerName))) {
+			var ldapServerName = "ApacheDS Server";
+		}
+
 		var key_ldapServerName = "${ldapServerName}";
 
 		Click(locator1 = "PortalSettingsAuthentication#LDAP_SERVERS_TABLE_EDIT");
@@ -651,6 +659,21 @@ definition {
 			configurationScope = "Virtual Instance Scope");
 
 		PortalSettings.configureCurrentLanguagesCP(defaultPortalLanguage = "${newLanguage}");
+	}
+
+	macro setImportIntervalTime {
+		Variables.assertDefined(parameterList = "${importIntervalTime}");
+
+		PortalSettings.gotoConfiguration(
+			configurationCategory = "LDAP",
+			configurationName = "Import",
+			configurationScope = "Virtual Instance Scope");
+
+		Type(
+			locator1 = "PortalSettingsAuthentication#LDAP_IMPORT_INTERVAL",
+			value1 = "${importIntervalTime}");
+
+		PortletEntry.save();
 	}
 
 	macro tearDownAuthenticationCP {
