@@ -17,11 +17,11 @@ import ClayLayout from '@clayui/layout';
 import ClayPopover from '@clayui/popover';
 import classNames from 'classnames';
 import {ALIGN_POSITIONS, align} from 'frontend-js-web';
-import React, {useContext, useLayoutEffect, useRef, useState} from 'react';
+import React, {useLayoutEffect, useRef, useState} from 'react';
 
 import PreviewSelector from './PreviewSelector';
 import PublishButton from './PublishButton';
-import {StyleBookContext, usePreviewLayout} from './StyleBookContext';
+import {useDraftStatus, usePreviewLayout} from './StyleBookContext';
 import Undo from './Undo';
 import UndoHistory from './UndoHistory';
 import {config} from './config';
@@ -82,7 +82,7 @@ export default function Toolbar() {
 }
 
 function DraftStatus() {
-	const {draftStatus} = useContext(StyleBookContext);
+	const draftStatus = useDraftStatus();
 
 	return (
 		<div>
