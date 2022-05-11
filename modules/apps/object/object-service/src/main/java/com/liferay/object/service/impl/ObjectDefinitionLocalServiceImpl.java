@@ -706,7 +706,7 @@ public class ObjectDefinitionLocalServiceImpl
 		objectDefinition.setPluralLabelMap(pluralLabelMap);
 		objectDefinition.setScope(scope);
 		objectDefinition.setStorageType(
-			(storageType != null) ? storageType :
+			Validator.isNotNull(storageType) ? storageType :
 				ObjectDefinitionConstants.STORAGE_TYPE_DEFAULT);
 		objectDefinition.setSystem(system);
 		objectDefinition.setVersion(version);
