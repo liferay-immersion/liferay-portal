@@ -48,12 +48,12 @@ public class ForkNodeValidator extends BaseNodeValidator<Fork> {
 
 		if (fork.getIncomingTransitionsCount() == 0) {
 			throw new KaleoDefinitionValidationException.
-				MustSetIncomingTransition(fork.getName());
+				MustSetIncomingTransition(fork.getLabelName());
 		}
 
 		if (fork.getOutgoingTransitionsCount() < 2) {
 			throw new KaleoDefinitionValidationException.
-				MustSetMultipleOutgoingTransition(fork.getName());
+				MustSetMultipleOutgoingTransition(fork.getLabelName());
 		}
 
 		_traverse(fork);
@@ -120,7 +120,8 @@ public class ForkNodeValidator extends BaseNodeValidator<Fork> {
 			!sourceNodes.containsAll(targetNodes)) {
 
 			throw new KaleoDefinitionValidationException.
-				UnbalancedForkAndJoinNode(fork.getName(), join.getName());
+				UnbalancedForkAndJoinNode(
+					fork.getLabelName(), join.getLabelName());
 		}
 	}
 
@@ -163,7 +164,7 @@ public class ForkNodeValidator extends BaseNodeValidator<Fork> {
 				else if (!Objects.equals(join, targetNode)) {
 					throw new KaleoDefinitionValidationException.
 						MustPairedForkAndJoinNodes(
-							fork.getName(), targetNode.getName());
+							fork.getLabelName(), targetNode.getLabelName());
 				}
 			}
 			else {
@@ -176,7 +177,7 @@ public class ForkNodeValidator extends BaseNodeValidator<Fork> {
 
 		if (join == null) {
 			throw new KaleoDefinitionValidationException.MustSetJoinNode(
-				fork.getName());
+				fork.getLabelName());
 		}
 
 		_reverseTraverse(fork, join, targetNodes, joinForkMap);

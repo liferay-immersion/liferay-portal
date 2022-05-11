@@ -15,6 +15,7 @@
 package com.liferay.portal.workflow.kaleo.definition;
 
 import com.liferay.portal.kernel.util.ListUtil;
+import com.liferay.portal.kernel.util.LocaleUtil;
 
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -87,6 +88,12 @@ public abstract class Node implements ActionAware, NotificationAware {
 
 	public Map<Locale, String> getLabelMap() {
 		return _labelMap;
+	}
+
+	public String getLabelName() {
+		Locale locale = LocaleUtil.getDefault();
+
+		return _labelMap.get(locale);
 	}
 
 	public String getMetadata() {

@@ -42,7 +42,7 @@ public class StateNodeValidator extends BaseNodeValidator<State> {
 		}
 		else if (state.getIncomingTransitionsCount() == 0) {
 			throw new KaleoDefinitionValidationException.
-				MustSetIncomingTransition(state.getName());
+				MustSetIncomingTransition(state.getLabelName());
 		}
 	}
 
@@ -54,17 +54,17 @@ public class StateNodeValidator extends BaseNodeValidator<State> {
 		if (!Objects.equals(initialState, state)) {
 			throw new KaleoDefinitionValidationException.
 				MultipleInitialStateNodes(
-					state.getName(), initialState.getName());
+					state.getLabelName(), initialState.getLabelName());
 		}
 
 		if (state.getIncomingTransitionsCount() > 0) {
 			throw new KaleoDefinitionValidationException.
-				MustNotSetIncomingTransition(state.getName());
+				MustNotSetIncomingTransition(state.getLabelName());
 		}
 
 		if (state.getOutgoingTransitionsCount() == 0) {
 			throw new KaleoDefinitionValidationException.
-				MustSetOutgoingTransition(state.getName());
+				MustSetOutgoingTransition(state.getLabelName());
 		}
 	}
 
