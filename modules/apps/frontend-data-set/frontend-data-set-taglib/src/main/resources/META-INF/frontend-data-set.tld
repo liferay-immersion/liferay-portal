@@ -186,13 +186,13 @@
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
-			<name>dynamicFDSFilters</name>
+			<name>fdsActionDropdownItems</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 			<type>java.util.List</type>
 		</attribute>
 		<attribute>
-			<name>fdsActionDropdownItems</name>
+			<name>fdsFilters</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 			<type>java.util.List</type>

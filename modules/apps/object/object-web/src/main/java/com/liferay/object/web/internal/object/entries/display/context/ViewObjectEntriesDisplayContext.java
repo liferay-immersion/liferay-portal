@@ -143,30 +143,6 @@ public class ViewObjectEntriesDisplayContext {
 		return creationMenu;
 	}
 
-	public List<FDSFilter> getDynamicFDSFilters() throws PortalException {
-		ObjectView objectView = _objectViewLocalService.fetchDefaultObjectView(
-			_objectDefinition.getObjectDefinitionId());
-
-		if (objectView == null) {
-			return Collections.emptyList();
-		}
-
-		return TransformUtil.transform(
-			objectView.getObjectViewFilterColumns(),
-			objectViewFilterColumn -> {
-				ObjectFieldFDSFilterFactory objectFieldFDSFilterFactory =
-					_objectFieldFDSFilterFactoryServicesTracker.
-						getObjectFieldFDSFilterFactory(
-							objectView.getObjectDefinitionId(),
-							objectViewFilterColumn);
-
-				return objectFieldFDSFilterFactory.create(
-					_objectRequestHelper.getLocale(),
-					_objectDefinition.getObjectDefinitionId(),
-					objectViewFilterColumn);
-			});
-	}
-
 	public List<FDSActionDropdownItem> getFDSActionDropdownItems()
 		throws Exception {
 
@@ -194,6 +170,30 @@ public class ViewObjectEntriesDisplayContext {
 				LanguageUtil.get(
 					_objectRequestHelper.getRequest(), "permissions"),
 				"get", "permissions", "modal-permissions"));
+	}
+
+	public List<FDSFilter> getFDSFilters() {
+		ObjectView objectView = _objectViewLocalService.fetchDefaultObjectView(
+			_objectDefinition.getObjectDefinitionId());
+
+		if (objectView == null) {
+			return Collections.emptyList();
+		}
+
+		return TransformUtil.transform(
+			objectView.getObjectViewFilterColumns(),
+			objectViewFilterColumn -> {
+				ObjectFieldFDSFilterFactory objectFieldFDSFilterFactory =
+					_objectFieldFDSFilterFactoryServicesTracker.
+						getObjectFieldFDSFilterFactory(
+							objectView.getObjectDefinitionId(),
+							objectViewFilterColumn);
+
+				return objectFieldFDSFilterFactory.create(
+					_objectRequestHelper.getLocale(),
+					_objectDefinition.getObjectDefinitionId(),
+					objectViewFilterColumn);
+			});
 	}
 
 	public String getFDSId() {

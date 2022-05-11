@@ -95,12 +95,12 @@ public class HeadlessDisplayTag extends BaseDisplayTag {
 		return _creationMenu;
 	}
 
-	public List<FDSFilter> getDynamicFDSFilters() {
-		return _dynamicFDSFilters;
-	}
-
 	public List<FDSActionDropdownItem> getFdsActionDropdownItems() {
 		return _fdsActionDropdownItems;
+	}
+
+	public List<FDSFilter> getFdsFilters() {
+		return _fdsFilters;
 	}
 
 	public List<FDSSortItem> getFdsSortItemList() {
@@ -183,14 +183,14 @@ public class HeadlessDisplayTag extends BaseDisplayTag {
 		_customViewsEnabled = customViewsEnabled;
 	}
 
-	public void setDynamicFDSFilters(List<FDSFilter> dynamicFDSFilters) {
-		_dynamicFDSFilters = dynamicFDSFilters;
-	}
-
 	public void setFdsActionDropdownItems(
 		List<FDSActionDropdownItem> fdsActionDropdownItems) {
 
 		_fdsActionDropdownItems = fdsActionDropdownItems;
+	}
+
+	public void setFdsFilters(List<FDSFilter> fdsFilters) {
+		_fdsFilters = fdsFilters;
 	}
 
 	public void setFdsSortItemList(FDSSortItemList fdsSortItemList) {
@@ -271,8 +271,8 @@ public class HeadlessDisplayTag extends BaseDisplayTag {
 		_bulkActionDropdownItems = new ArrayList<>();
 		_creationMenu = new CreationMenu();
 		_customViewsEnabled = false;
-		_dynamicFDSFilters = new ArrayList<>();
 		_fdsActionDropdownItems = new ArrayList<>();
+		_fdsFilters = new ArrayList<>();
 		_fdsFiltersContext = null;
 		_fdsFilterSerializer = null;
 		_fdsPaginationEntries = null;
@@ -393,8 +393,7 @@ public class HeadlessDisplayTag extends BaseDisplayTag {
 
 	private void _setFDSFiltersContext() {
 		_fdsFiltersContext = _fdsFilterSerializer.serialize(
-			getDynamicFDSFilters(), getId(),
-			PortalUtil.getLocale(getRequest()));
+			getFdsFilters(), getId(), PortalUtil.getLocale(getRequest()));
 	}
 
 	private void _setFDSPaginationEntries() {
@@ -436,9 +435,9 @@ public class HeadlessDisplayTag extends BaseDisplayTag {
 	private List<DropdownItem> _bulkActionDropdownItems = new ArrayList<>();
 	private CreationMenu _creationMenu = new CreationMenu();
 	private boolean _customViewsEnabled;
-	private List<FDSFilter> _dynamicFDSFilters = new ArrayList<>();
 	private List<FDSActionDropdownItem> _fdsActionDropdownItems =
 		new ArrayList<>();
+	private List<FDSFilter> _fdsFilters = new ArrayList<>();
 	private Object _fdsFiltersContext;
 	private FDSFilterSerializer _fdsFilterSerializer;
 	private List<FDSPaginationEntry> _fdsPaginationEntries;
