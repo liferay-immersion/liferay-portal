@@ -589,7 +589,6 @@ public abstract class Base${schemaName}ResourceImpl
 							<#elseif stringUtil.equals(javaMethodParameter.parameterName, schemaVarName)>
 								${schemaVarName}
 							<#elseif stringUtil.equals(javaMethodParameter.parameterName, schemaVarName + "Id") || stringUtil.equals(javaMethodParameter.parameterName, "id")>
-
 								<#if properties?keys?seq_contains("id")>
 									${schemaVarName}.getId() != null ? ${schemaVarName}.getId() :
 								<#elseif properties?keys?seq_contains(schemaVarName + "Id")>
