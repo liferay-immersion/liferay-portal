@@ -14,7 +14,7 @@
 
 import ClayTabs from '@clayui/tabs';
 import {fetch} from 'frontend-js-web';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 
 import {
 	availableLocales,
@@ -78,6 +78,13 @@ export default function EditObjectValidation({
 		setValues,
 		values,
 	} = useObjectValidationForm({initialValues, onSubmit});
+
+	useEffect(() => {
+		if (initialValues.script === 'script_placeholder') {
+			initialValues.script = '';
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
 	return (
 		<SidePanelForm
