@@ -59,6 +59,7 @@ export function useObjectValidationForm({
 
 		const label = validation.name?.[defaultLanguageId];
 		const errorMessage = validation.errorLabel?.[defaultLanguageId];
+		const script = validation.script;
 
 		if (invalidateRequired(label)) {
 			errors.name = REQUIRED_MSG;
@@ -66,6 +67,10 @@ export function useObjectValidationForm({
 
 		if (invalidateRequired(errorMessage)) {
 			errors.errorLabel = REQUIRED_MSG;
+		}
+
+		if (invalidateRequired(script)) {
+			errors.script = REQUIRED_MSG;
 		}
 
 		return errors;
