@@ -14,7 +14,7 @@
 
 import 'codemirror/mode/groovy/groovy';
 import ClayIcon from '@clayui/icon';
-import {useFeatureFlag} from 'data-engine-js-components-web';
+import {FieldFeedback, useFeatureFlag} from 'data-engine-js-components-web';
 import React, {ChangeEventHandler, useRef, useState} from 'react';
 
 import Card from '../Card/Card';
@@ -127,6 +127,10 @@ function Conditions({
 							value: values.script ?? '',
 						}}
 					/>
+
+					<div className="has-error mb-3">
+						<FieldFeedback errorMessage={errors.script} />
+					</div>
 
 					{flags['LPS-147651'] && (
 						<Sidebar
