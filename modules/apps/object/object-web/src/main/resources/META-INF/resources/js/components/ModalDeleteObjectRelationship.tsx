@@ -47,7 +47,7 @@ function ModalDeleteObjectRelationship({
 	) : (
 		<DangerModal
 			errorMessage={Liferay.Language.get(
-				'input-and-relationship-name-does-not-match'
+				'input-and-relationship-name-do-not-match'
 			)}
 			observer={observer}
 			onClose={onClose}
