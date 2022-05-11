@@ -547,34 +547,33 @@ public abstract class Base${schemaName}ResourceImpl
 
 			<#if generatePartialUpdateStrategy>
 				if ("PARTIAL_UPDATE".equalsIgnoreCase(updateStrategy)) {
-					${schemaVarName}UnsafeConsumer =
-						${schemaVarName} -> patch${schemaName}(
+					${schemaVarName}UnsafeConsumer = ${schemaVarName} -> patch${schemaName}(
 
-						<#list patchBatchJavaMethodSignature.javaMethodParameters as javaMethodParameter>
-							<#if stringUtil.equals(javaMethodParameter.parameterName, schemaVarName)>
-								${schemaVarName}
-							<#elseif stringUtil.equals(javaMethodParameter.parameterName, schemaVarName + "Id") || stringUtil.equals(javaMethodParameter.parameterName, "id")>
+					<#list patchBatchJavaMethodSignature.javaMethodParameters as javaMethodParameter>
+						<#if stringUtil.equals(javaMethodParameter.parameterName, schemaVarName)>
+							${schemaVarName}
+						<#elseif stringUtil.equals(javaMethodParameter.parameterName, schemaVarName + "Id") || stringUtil.equals(javaMethodParameter.parameterName, "id")>
 
-								<#if properties?keys?seq_contains("id")>
-									${schemaVarName}.getId() != null ? ${schemaVarName}.getId() :
-								<#elseif properties?keys?seq_contains(schemaVarName + "Id")>
-									(${schemaVarName}.get${schemaName}Id() != null) ? ${schemaVarName}.get${schemaName}Id() :
-								</#if>
-
-								<@castParameters
-									type=javaMethodParameter.parameterType
-									value="${schemaVarName}Id"
-								/>
-							<#elseif stringUtil.equals(javaMethodParameter.parameterName, "multipartBody")>
-								null
-							<#else>
-								${javaMethodParameter.parameterName}
+							<#if properties?keys?seq_contains("id")>
+								${schemaVarName}.getId() != null ? ${schemaVarName}.getId() :
+							<#elseif properties?keys?seq_contains(schemaVarName + "Id")>
+								(${schemaVarName}.get${schemaName}Id() != null) ? ${schemaVarName}.get${schemaName}Id() :
 							</#if>
 
-							<#sep>, </#sep>
-						</#list>
+							<@castParameters
+								type=javaMethodParameter.parameterType
+								value="${schemaVarName}Id"
+							/>
+						<#elseif stringUtil.equals(javaMethodParameter.parameterName, "multipartBody")>
+							null
+						<#else>
+							${javaMethodParameter.parameterName}
+						</#if>
 
-						);
+						<#sep>, </#sep>
+					</#list>
+
+					);
 				}
 			</#if>
 
