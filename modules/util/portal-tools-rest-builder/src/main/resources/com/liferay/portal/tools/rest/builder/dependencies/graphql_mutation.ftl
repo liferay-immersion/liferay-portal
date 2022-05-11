@@ -131,7 +131,7 @@ public class Mutation {
 			${freeMarkerTool.getSchemaVarName(schemaName)}Resource.setRoleLocalService(_roleLocalService);
 
 			<#if generateBatch>
-				<#assign anyGenerateBatch = true />
+				<#assign useVulcanBatchEngineImportTaskResource = true />
 
 				${freeMarkerTool.getSchemaVarName(schemaName)}Resource.setVulcanBatchEngineImportTaskResource(_vulcanBatchEngineImportTaskResource);
 			</#if>
@@ -152,7 +152,7 @@ public class Mutation {
 	private UriInfo _uriInfo;
 	private com.liferay.portal.kernel.model.User _user;
 
-	<#if anyGenerateBatch??>
+	<#if useVulcanBatchEngineImportTaskResource??>
 		private VulcanBatchEngineImportTaskResource _vulcanBatchEngineImportTaskResource;
 	</#if>
 
