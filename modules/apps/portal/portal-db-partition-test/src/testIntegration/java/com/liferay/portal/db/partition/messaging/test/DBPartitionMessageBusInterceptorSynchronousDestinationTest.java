@@ -15,7 +15,6 @@
 package com.liferay.portal.db.partition.messaging.test;
 
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
-import com.liferay.portal.db.partition.messaging.test.util.BaseDBPartitionMessageBusInterceptorTestCase;
 import com.liferay.portal.kernel.messaging.DestinationConfiguration;
 
 import org.junit.BeforeClass;
