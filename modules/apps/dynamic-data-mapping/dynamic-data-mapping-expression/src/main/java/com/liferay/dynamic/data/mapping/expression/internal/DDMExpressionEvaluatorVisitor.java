@@ -84,7 +84,6 @@ public class DDMExpressionEvaluatorVisitor
 		@NotNull AdditionExpressionContext context) {
 
 		BigDecimal bigDecimal1 = _getBigDecimal(visitChild(context, 0));
-
 		BigDecimal bigDecimal2 = _getBigDecimal(visitChild(context, 2));
 
 		return bigDecimal1.add(bigDecimal2);
@@ -116,13 +115,13 @@ public class DDMExpressionEvaluatorVisitor
 	public Object visitDivisionExpression(
 		@NotNull DivisionExpressionContext context) {
 
-		BigDecimal bigDecimal1 = _getBigDecimal(visitChild(context, 0));
-
 		BigDecimal bigDecimal2 = _getBigDecimal(visitChild(context, 2));
 
 		if (bigDecimal2.compareTo(BigDecimal.ZERO) == 0) {
 			return "NaN";
 		}
+
+		BigDecimal bigDecimal1 = _getBigDecimal(visitChild(context, 0));
 
 		return bigDecimal1.divide(bigDecimal2, 2, RoundingMode.FLOOR);
 	}
