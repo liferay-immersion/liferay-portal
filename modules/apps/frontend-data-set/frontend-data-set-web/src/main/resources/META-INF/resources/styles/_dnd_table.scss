@@ -4,6 +4,12 @@
 
 .dnd-tbody {
 	display: table-row-group;
+
+	&.with-hover {
+		.dnd-tr:hover {
+			background-color: $primary-l3;
+		}
+	}
 }
 
 .dnd-td,
