@@ -377,6 +377,7 @@ public abstract class Base${schemaName}ResourceImpl
 						<#if postAssetLibraryBatchJavaMethodSignature??>
 							else
 						</#if>
+
 						if (parameters.containsKey("siteId")) {
 							${schemaVarName}UnsafeConsumer = ${schemaVarName} -> ${postSiteBatchJavaMethodSignature.methodName}(
 								<@getPOSTBatchJavaMethodParameters
@@ -397,7 +398,6 @@ public abstract class Base${schemaName}ResourceImpl
 						<#if stringUtil.equals(javaMethodParameter.parameterName, "externalReferenceCode")>
 							${schemaVarName}.get${javaMethodParameter.parameterName?cap_first}()
 						<#elseif putByERCBatchJavaMethodSignature.parentSchemaName?? && stringUtil.equals(javaMethodParameter.parameterName, putByERCBatchJavaMethodSignature.parentSchemaName!?uncap_first + "Id")>
-
 							<#if properties?keys?seq_contains(javaMethodParameter.parameterName)>
 								${schemaVarName}.get${javaMethodParameter.parameterName?cap_first}() != null ?
 								${schemaVarName}.get${javaMethodParameter.parameterName?cap_first}() :
@@ -422,7 +422,7 @@ public abstract class Base${schemaName}ResourceImpl
 
 			<#if generateInsertStrategy || generateUpsertStrategy>
 				if (${schemaVarName}UnsafeConsumer == null) {
-					throw new NotSupportedException("Create strategy \"" + createStrategy + "\" not supported for ${schemaVarName?cap_first}");
+					throw new NotSupportedException("Create strategy \"" + createStrategy + "\" is not supported for ${schemaVarName?cap_first}");
 				}
 
 				if (contextBatchUnsafeConsumer != null) {
@@ -620,9 +620,8 @@ public abstract class Base${schemaName}ResourceImpl
 			</#if>
 
 			<#if generatePartialUpdateStrategy || generateUpdateStrategy>
-
 				if (${schemaVarName}UnsafeConsumer == null) {
-					throw new NotSupportedException("Update strategy \"" + updateStrategy + "\" not supported for ${schemaVarName?cap_first}");
+					throw new NotSupportedException("Update strategy \"" + updateStrategy + "\" is not supported for ${schemaVarName?cap_first}");
 				}
 
 				if (contextBatchUnsafeConsumer != null) {
