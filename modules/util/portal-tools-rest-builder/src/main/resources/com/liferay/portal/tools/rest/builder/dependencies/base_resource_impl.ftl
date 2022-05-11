@@ -88,7 +88,6 @@ public abstract class Base${schemaName}ResourceImpl
 	<#assign
 		generateGetPermissionCheckerMethods = false
 		generatePatchMethods = false
-
 	/>
 
 	<#list javaMethodSignatures as javaMethodSignature>
@@ -610,7 +609,6 @@ public abstract class Base${schemaName}ResourceImpl
 	}
 
 	<#if generateBatch>
-
 		public void setVulcanBatchEngineImportTaskResource(VulcanBatchEngineImportTaskResource vulcanBatchEngineImportTaskResource) {
 			this.vulcanBatchEngineImportTaskResource = vulcanBatchEngineImportTaskResource;
 		}

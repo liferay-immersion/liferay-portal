@@ -132,6 +132,7 @@ public class Mutation {
 
 			<#if generateBatch>
 				<#assign anyGenerateBatch = true />
+
 				${freeMarkerTool.getSchemaVarName(schemaName)}Resource.setVulcanBatchEngineImportTaskResource(_vulcanBatchEngineImportTaskResource);
 			</#if>
 		}
