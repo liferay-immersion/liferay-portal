@@ -24,12 +24,12 @@ import org.junit.runner.RunWith;
  * @author Luis Ortiz
  */
 @RunWith(Arquillian.class)
-public class DBPartitionMessageBusInterceptorParallelDestinationTest
+public class SynchronousDestinationDBPartitionMessageBusInterceptorTest
 	extends BaseDBPartitionMessageBusInterceptorTestCase {
 
 	@BeforeClass
 	public static void setUpClass() throws Exception {
-		setUpClass(DestinationConfiguration.DESTINATION_TYPE_PARALLEL);
+		setUpClass(DestinationConfiguration.DESTINATION_TYPE_SYNCHRONOUS);
 	}
 
 }
