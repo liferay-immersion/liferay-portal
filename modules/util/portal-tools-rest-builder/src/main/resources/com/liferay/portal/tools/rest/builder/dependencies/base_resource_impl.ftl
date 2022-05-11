@@ -579,41 +579,39 @@ public abstract class Base${schemaName}ResourceImpl
 			<#if generateUpdateStrategy>
 
 				if ("UPDATE".equalsIgnoreCase(updateStrategy)) {
+					${schemaVarName}UnsafeConsumer = ${schemaVarName} -> put${schemaName}(
 
-					${schemaVarName}UnsafeConsumer =
-						${schemaVarName} -> put${schemaName}(
-
-						<#list putBatchJavaMethodSignature.javaMethodParameters as javaMethodParameter>
-							<#if stringUtil.equals(javaMethodParameter.parameterName, "flatten")>
-								(Boolean)parameters.get("flatten")
-							<#elseif stringUtil.equals(javaMethodParameter.parameterName, schemaVarName)>
-								${schemaVarName}
-							<#elseif stringUtil.equals(javaMethodParameter.parameterName, schemaVarName + "Id") || stringUtil.equals(javaMethodParameter.parameterName, "id")>
-								<#if properties?keys?seq_contains("id")>
-									${schemaVarName}.getId() != null ? ${schemaVarName}.getId() :
-								<#elseif properties?keys?seq_contains(schemaVarName + "Id")>
-									(${schemaVarName}.get${schemaName}Id() != null) ? ${schemaVarName}.get${schemaName}Id() :
-								</#if>
-
-								<@castParameters
-									type=javaMethodParameter.parameterType
-									value="${schemaVarName}Id"
-								/>
-							<#elseif putBatchJavaMethodSignature.parentSchemaName?? && stringUtil.equals(javaMethodParameter.parameterName, putBatchJavaMethodSignature.parentSchemaName?uncap_first + "Id")>
-								<@castParameters
-									type=javaMethodParameter.parameterType
-									value="${javaMethodSignature.parentSchemaName?uncap_first}Id"
-								/>
-							<#elseif stringUtil.equals(javaMethodParameter.parameterName, "multipartBody")>
-								null
-							<#else>
-								${javaMethodParameter.parameterName}
+					<#list putBatchJavaMethodSignature.javaMethodParameters as javaMethodParameter>
+						<#if stringUtil.equals(javaMethodParameter.parameterName, "flatten")>
+							(Boolean)parameters.get("flatten")
+						<#elseif stringUtil.equals(javaMethodParameter.parameterName, schemaVarName)>
+							${schemaVarName}
+						<#elseif stringUtil.equals(javaMethodParameter.parameterName, schemaVarName + "Id") || stringUtil.equals(javaMethodParameter.parameterName, "id")>
+							<#if properties?keys?seq_contains("id")>
+								${schemaVarName}.getId() != null ? ${schemaVarName}.getId() :
+							<#elseif properties?keys?seq_contains(schemaVarName + "Id")>
+								(${schemaVarName}.get${schemaName}Id() != null) ? ${schemaVarName}.get${schemaName}Id() :
 							</#if>
 
-							<#sep>, </#sep>
-						</#list>
+							<@castParameters
+								type=javaMethodParameter.parameterType
+								value="${schemaVarName}Id"
+							/>
+						<#elseif putBatchJavaMethodSignature.parentSchemaName?? && stringUtil.equals(javaMethodParameter.parameterName, putBatchJavaMethodSignature.parentSchemaName?uncap_first + "Id")>
+							<@castParameters
+								type=javaMethodParameter.parameterType
+								value="${javaMethodSignature.parentSchemaName?uncap_first}Id"
+							/>
+						<#elseif stringUtil.equals(javaMethodParameter.parameterName, "multipartBody")>
+							null
+						<#else>
+							${javaMethodParameter.parameterName}
+						</#if>
 
-						);
+						<#sep>, </#sep>
+					</#list>
+
+					);
 				}
 			</#if>
 
