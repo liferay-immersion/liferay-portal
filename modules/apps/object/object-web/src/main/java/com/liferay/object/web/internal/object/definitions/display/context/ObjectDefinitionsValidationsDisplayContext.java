@@ -238,7 +238,7 @@ public class ObjectDefinitionsValidationsDisplayContext
 		IS_LESS_THAN_OR_EQUAL_TO(
 			"field_name <= parameter", "is-less-than-or-equal-to"),
 		IS_NOT_EQUAL_TO("field_name != parameter", "is-not-equal-to"),
-		MATCHES("match(field_name, parameter)", "matches"),
+		MATCH("match(field_name, parameter)", "match"),
 		PAST_DATES("pastDates(field_name, parameter)", "past-dates"),
 		RANGE(
 			"futureDates(field_name, parameter) AND pastDates(" +
