@@ -103,33 +103,33 @@ public class ViewJournalArticleContentDashboardItemActionProviderTest {
 				layoutPageTemplateEntry.getLayoutPageTemplateEntryId(),
 				AssetDisplayPageConstants.TYPE_DEFAULT, serviceContext);
 
-			MockHttpServletRequest mockHttpServletRequest =
-				new MockHttpServletRequest();
-
 			ThemeDisplay themeDisplay = _getThemeDisplay(LocaleUtil.US);
 
-			themeDisplay.setRequest(mockHttpServletRequest);
-
-			themeDisplay.setURLCurrent("http://localhost:8080/currentURL");
+			themeDisplay.setCompany(
+				_companyLocalService.fetchCompany(
+					TestPropsValues.getCompanyId()));
 
 			LayoutSetImpl layoutSetImpl = new LayoutSetImpl();
 
 			layoutSetImpl.setCompanyFallbackVirtualHostname(null);
 
-			themeDisplay.setCompany(
-				_companyLocalService.fetchCompany(
-					TestPropsValues.getCompanyId()));
 			themeDisplay.setLayoutSet(layoutSetImpl);
+
+			MockHttpServletRequest mockHttpServletRequest =
+				new MockHttpServletRequest();
 
 			mockHttpServletRequest.setAttribute(
 				WebKeys.THEME_DISPLAY, themeDisplay);
-
 			mockHttpServletRequest.setAttribute(
 				"LAYOUT_DISPLAY_PAGE_OBJECT_PROVIDER",
 				_layoutDisplayPageProvider.getLayoutDisplayPageObjectProvider(
 					new InfoItemReference(
 						JournalArticle.class.getName(),
 						journalArticle.getResourcePrimKey())));
+
+			themeDisplay.setRequest(mockHttpServletRequest);
+
+			themeDisplay.setURLCurrent("http://localhost:8080/currentURL");
 
 			serviceContext.setRequest(mockHttpServletRequest);
 
@@ -205,31 +205,31 @@ public class ViewJournalArticleContentDashboardItemActionProviderTest {
 				layoutPageTemplateEntry.getLayoutPageTemplateEntryId(),
 				AssetDisplayPageConstants.TYPE_DEFAULT, serviceContext);
 
-			MockHttpServletRequest mockHttpServletRequest =
-				new MockHttpServletRequest();
-
 			ThemeDisplay themeDisplay = _getThemeDisplay(LocaleUtil.US);
 
-			themeDisplay.setRequest(mockHttpServletRequest);
+			themeDisplay.setCompany(
+				_companyLocalService.fetchCompany(
+					TestPropsValues.getCompanyId()));
 
 			LayoutSetImpl layoutSetImpl = new LayoutSetImpl();
 
 			layoutSetImpl.setCompanyFallbackVirtualHostname(null);
 
-			themeDisplay.setCompany(
-				_companyLocalService.fetchCompany(
-					TestPropsValues.getCompanyId()));
 			themeDisplay.setLayoutSet(layoutSetImpl);
+
+			MockHttpServletRequest mockHttpServletRequest =
+				new MockHttpServletRequest();
 
 			mockHttpServletRequest.setAttribute(
 				WebKeys.THEME_DISPLAY, themeDisplay);
-
 			mockHttpServletRequest.setAttribute(
 				"LAYOUT_DISPLAY_PAGE_OBJECT_PROVIDER",
 				_layoutDisplayPageProvider.getLayoutDisplayPageObjectProvider(
 					new InfoItemReference(
 						JournalArticle.class.getName(),
 						journalArticle.getResourcePrimKey())));
+
+			themeDisplay.setRequest(mockHttpServletRequest);
 
 			serviceContext.setRequest(mockHttpServletRequest);
 
@@ -296,27 +296,28 @@ public class ViewJournalArticleContentDashboardItemActionProviderTest {
 				layoutPageTemplateEntry.getLayoutPageTemplateEntryId(),
 				AssetDisplayPageConstants.TYPE_DEFAULT, serviceContext);
 
-			MockHttpServletRequest mockHttpServletRequest =
-				new MockHttpServletRequest();
-
 			ThemeDisplay themeDisplay = _getThemeDisplay(LocaleUtil.US);
 
 			themeDisplay.setCompany(
 				_companyLocalService.fetchCompany(
 					TestPropsValues.getCompanyId()));
 			themeDisplay.setLayoutSet(new LayoutSetImpl());
-			themeDisplay.setRequest(mockHttpServletRequest);
-			themeDisplay.setURLCurrent("http://localhost:8080/currentURL");
+
+			MockHttpServletRequest mockHttpServletRequest =
+				new MockHttpServletRequest();
 
 			mockHttpServletRequest.setAttribute(
 				WebKeys.THEME_DISPLAY, themeDisplay);
-
 			mockHttpServletRequest.setAttribute(
 				"LAYOUT_DISPLAY_PAGE_OBJECT_PROVIDER",
 				_layoutDisplayPageProvider.getLayoutDisplayPageObjectProvider(
 					new InfoItemReference(
 						JournalArticle.class.getName(),
 						journalArticle.getResourcePrimKey())));
+
+			themeDisplay.setRequest(mockHttpServletRequest);
+
+			themeDisplay.setURLCurrent("http://localhost:8080/currentURL");
 
 			serviceContext.setRequest(mockHttpServletRequest);
 
