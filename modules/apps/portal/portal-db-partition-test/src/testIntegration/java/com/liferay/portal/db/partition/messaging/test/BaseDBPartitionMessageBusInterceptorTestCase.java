@@ -284,12 +284,12 @@ public abstract class BaseDBPartitionMessageBusInterceptorTestCase
 
 			_countDownLatch.await(1, TimeUnit.MINUTES);
 
-			ArrayList<Long> receivedCompanyIds = new ArrayList<>(_companyIds);
+			List<Long> companyIdsList = new ArrayList<>(_companyIds);
 
-			Collections.sort(receivedCompanyIds);
+			Collections.sort(companyIdsList);
 
 			Assert.assertArrayEquals(
-				companyIds, receivedCompanyIds.toArray(new Long[0]));
+				companyIds, companyIdsList.toArray(new Long[0]));
 
 			_companyIds.clear();
 		}
