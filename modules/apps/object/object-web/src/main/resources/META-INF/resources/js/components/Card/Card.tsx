@@ -12,6 +12,7 @@
  * details.
  */
 
+import ClayIcon from '@clayui/icon';
 import classNames from 'classnames';
 import React from 'react';
 
@@ -21,6 +22,7 @@ export default function Card({
 	children,
 	className,
 	title,
+	tooltip,
 	...otherProps
 }: IProps) {
 	return (
@@ -30,6 +32,19 @@ export default function Card({
 		>
 			<div className="lfr-objects__card-header">
 				<h3 className="lfr-objects__card-title">{title}</h3>
+
+				{tooltip && (
+					<span
+						className="ml-2"
+						data-tooltip-align="top"
+						title={tooltip.content}
+					>
+						<ClayIcon
+							className="lfr-objects__card-header-tooltip-icon"
+							symbol={tooltip.symbol}
+						/>
+					</span>
+				)}
 			</div>
 
 			<div className={classNames(className, 'lfr-objects__card-body')}>
@@ -41,4 +56,10 @@ export default function Card({
 
 interface IProps extends React.HTMLAttributes<HTMLDivElement> {
 	title: string;
+	tooltip?: ITooltip | null;
+}
+
+interface ITooltip {
+	content: string;
+	symbol: string;
 }

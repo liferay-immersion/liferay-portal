@@ -18,9 +18,15 @@ export default function Card({
 	children,
 	className,
 	title,
+	tooltip,
 	...otherProps
 }: IProps): JSX.Element;
 interface IProps extends React.HTMLAttributes<HTMLDivElement> {
 	title: string;
+	tooltip?: ITooltip | null;
+}
+interface ITooltip {
+	content: string;
+	symbol: string;
 }
 export {};

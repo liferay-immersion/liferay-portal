@@ -11,11 +11,27 @@
 	}
 
 	&-header {
+		align-items: baseline;
 		border-bottom: 1px solid $gray-300;
+		display: flex;
 		padding: 1.5rem;
+
+		&-tooltip-icon {
+			color: $secondary-l1;
+		}
+
+		&-tooltip-icon:hover {
+			color: $secondary-d1;
+		}
 	}
 
 	&-title {
 		margin: 0;
+	}
+}
+
+.lfr-objects__no-padding-card {
+	.lfr-objects__card-body {
+		padding: 0 !important;
 	}
 }
