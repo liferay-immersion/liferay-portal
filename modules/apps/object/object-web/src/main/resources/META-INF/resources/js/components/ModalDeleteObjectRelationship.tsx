@@ -109,7 +109,7 @@ export default function ModalWithProvider({isApproved}: {isApproved: boolean}) {
 		if (response.ok) {
 			Liferay.Util.openToast({
 				message: Liferay.Language.get(
-					'relationship-deleted-successfully'
+					'relationship-was-deleted-successfully'
 				),
 				type: 'success',
 			});
