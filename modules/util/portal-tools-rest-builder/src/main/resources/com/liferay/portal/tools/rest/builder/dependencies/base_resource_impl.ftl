@@ -391,33 +391,32 @@ public abstract class Base${schemaName}ResourceImpl
 
 			<#if generateUpsertStrategy>
 				if ("UPSERT".equalsIgnoreCase(createStrategy)) {
-					${schemaVarName}UnsafeConsumer =
-						${schemaVarName} -> ${putByERCBatchJavaMethodSignature.methodName}(
+					${schemaVarName}UnsafeConsumer = ${schemaVarName} -> ${putByERCBatchJavaMethodSignature.methodName}(
 
-						<#list putByERCBatchJavaMethodSignature.javaMethodParameters as javaMethodParameter>
-							<#if stringUtil.equals(javaMethodParameter.parameterName, "externalReferenceCode")>
-								${schemaVarName}.get${javaMethodParameter.parameterName?cap_first}()
-							<#elseif putByERCBatchJavaMethodSignature.parentSchemaName?? && stringUtil.equals(javaMethodParameter.parameterName, putByERCBatchJavaMethodSignature.parentSchemaName!?uncap_first + "Id")>
+					<#list putByERCBatchJavaMethodSignature.javaMethodParameters as javaMethodParameter>
+						<#if stringUtil.equals(javaMethodParameter.parameterName, "externalReferenceCode")>
+							${schemaVarName}.get${javaMethodParameter.parameterName?cap_first}()
+						<#elseif putByERCBatchJavaMethodSignature.parentSchemaName?? && stringUtil.equals(javaMethodParameter.parameterName, putByERCBatchJavaMethodSignature.parentSchemaName!?uncap_first + "Id")>
 
-								<#if properties?keys?seq_contains(javaMethodParameter.parameterName)>
-									${schemaVarName}.get${javaMethodParameter.parameterName?cap_first}() != null ?
-									${schemaVarName}.get${javaMethodParameter.parameterName?cap_first}() :
-								</#if>
-
-								<@castParameters
-									type=javaMethodParameter.parameterType
-									value="${javaMethodParameter.parameterName}"
-								/>
-							<#elseif stringUtil.equals(javaMethodParameter.parameterName, schemaVarName)>
-								${schemaVarName}
-							<#else>
-								null
+							<#if properties?keys?seq_contains(javaMethodParameter.parameterName)>
+								${schemaVarName}.get${javaMethodParameter.parameterName?cap_first}() != null ?
+								${schemaVarName}.get${javaMethodParameter.parameterName?cap_first}() :
 							</#if>
 
-							<#sep>, </#sep>
-						</#list>
+							<@castParameters
+								type=javaMethodParameter.parameterType
+								value="${javaMethodParameter.parameterName}"
+							/>
+						<#elseif stringUtil.equals(javaMethodParameter.parameterName, schemaVarName)>
+							${schemaVarName}
+						<#else>
+							null
+						</#if>
 
-						);
+						<#sep>, </#sep>
+					</#list>
+
+					);
 				}
 			</#if>
 
