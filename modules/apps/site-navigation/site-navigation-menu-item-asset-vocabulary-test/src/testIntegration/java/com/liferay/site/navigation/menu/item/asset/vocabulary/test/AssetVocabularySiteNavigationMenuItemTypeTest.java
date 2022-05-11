@@ -628,6 +628,58 @@ public class AssetVocabularySiteNavigationMenuItemTypeTest {
 			siteNavigationMenuItemType.isBrowsable(siteNavigationMenuItem));
 	}
 
+	private AssetCategory _addAssetCategory(long parentAssetCategoryId)
+		throws Exception {
+
+		return _assetCategoryLocalService.addCategory(
+			null, TestPropsValues.getUserId(), _group.getGroupId(),
+			parentAssetCategoryId, RandomTestUtil.randomLocaleStringMap(),
+			RandomTestUtil.randomLocaleStringMap(),
+			_assetVocabulary.getVocabularyId(), null, _serviceContext);
+	}
+
+	private SiteNavigationMenuItem _addSiteNavigationMenuItem(
+			Locale defaultLocale, String localizedNames,
+			boolean showAssetVocabularyLevel)
+		throws Exception {
+
+		SiteNavigationMenu siteNavigationMenu =
+			_siteNavigationMenuLocalService.addSiteNavigationMenu(
+				TestPropsValues.getUserId(), _group.getGroupId(),
+				RandomTestUtil.randomString(),
+				SiteNavigationConstants.TYPE_DEFAULT, true, _serviceContext);
+
+		return _siteNavigationMenuItemLocalService.addSiteNavigationMenuItem(
+			TestPropsValues.getUserId(), _group.getGroupId(),
+			siteNavigationMenu.getSiteNavigationMenuId(), 0,
+			SiteNavigationMenuItemTypeConstants.ASSET_VOCABULARY,
+			UnicodePropertiesBuilder.create(
+				true
+			).put(
+				Field.DEFAULT_LANGUAGE_ID,
+				LocaleUtil.toLanguageId(defaultLocale)
+			).put(
+				"classPK", String.valueOf(_assetVocabulary.getVocabularyId())
+			).put(
+				"groupId", String.valueOf(_assetVocabulary.getGroupId())
+			).put(
+				"localizedNames", localizedNames
+			).put(
+				"showAssetVocabularyLevel",
+				String.valueOf(showAssetVocabularyLevel)
+			).put(
+				"title", _assetVocabulary.getTitle(defaultLocale)
+			).put(
+				"type", "asset-vocabulary"
+			).put(
+				"useCustomName",
+				String.valueOf(!Objects.equals("{}", localizedNames))
+			).put(
+				"uuid", _assetVocabulary.getUuid()
+			).buildString(),
+			_serviceContext);
+	}
+
 	private void _assertAssetCategorySiteNavigationMenuItem(
 		AssetCategory assetCategory, Locale locale,
 		SiteNavigationMenuItem assetCategorySiteNavigationMenuItem) {
@@ -694,58 +746,6 @@ public class AssetVocabularySiteNavigationMenuItemTypeTest {
 				locale, assetCategory.getCategoryId(),
 				childrenSiteNavigationMenuItem);
 		}
-	}
-
-	private AssetCategory _addAssetCategory(long parentAssetCategoryId)
-		throws Exception {
-
-		return _assetCategoryLocalService.addCategory(
-			null, TestPropsValues.getUserId(), _group.getGroupId(),
-			parentAssetCategoryId, RandomTestUtil.randomLocaleStringMap(),
-			RandomTestUtil.randomLocaleStringMap(),
-			_assetVocabulary.getVocabularyId(), null, _serviceContext);
-	}
-
-	private SiteNavigationMenuItem _addSiteNavigationMenuItem(
-			Locale defaultLocale, String localizedNames,
-			boolean showAssetVocabularyLevel)
-		throws Exception {
-
-		SiteNavigationMenu siteNavigationMenu =
-			_siteNavigationMenuLocalService.addSiteNavigationMenu(
-				TestPropsValues.getUserId(), _group.getGroupId(),
-				RandomTestUtil.randomString(),
-				SiteNavigationConstants.TYPE_DEFAULT, true, _serviceContext);
-
-		return _siteNavigationMenuItemLocalService.addSiteNavigationMenuItem(
-			TestPropsValues.getUserId(), _group.getGroupId(),
-			siteNavigationMenu.getSiteNavigationMenuId(), 0,
-			SiteNavigationMenuItemTypeConstants.ASSET_VOCABULARY,
-			UnicodePropertiesBuilder.create(
-				true
-			).put(
-				Field.DEFAULT_LANGUAGE_ID,
-				LocaleUtil.toLanguageId(defaultLocale)
-			).put(
-				"classPK", String.valueOf(_assetVocabulary.getVocabularyId())
-			).put(
-				"groupId", String.valueOf(_assetVocabulary.getGroupId())
-			).put(
-				"localizedNames", localizedNames
-			).put(
-				"showAssetVocabularyLevel",
-				String.valueOf(showAssetVocabularyLevel)
-			).put(
-				"title", _assetVocabulary.getTitle(defaultLocale)
-			).put(
-				"type", "asset-vocabulary"
-			).put(
-				"useCustomName",
-				String.valueOf(!Objects.equals("{}", localizedNames))
-			).put(
-				"uuid", _assetVocabulary.getUuid()
-			).buildString(),
-			_serviceContext);
 	}
 
 	private SiteNavigationMenuItem _getAssetCategorySiteNavigationMenuItem(
