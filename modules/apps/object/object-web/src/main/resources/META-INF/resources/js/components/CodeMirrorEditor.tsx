@@ -16,6 +16,8 @@ import 'codemirror/addon/fold/foldgutter';
 
 import 'codemirror/addon/fold/foldgutter.css';
 
+import 'codemirror/addon/display/placeholder';
+
 import 'codemirror/lib/codemirror.css';
 import classNames from 'classnames';
 import CodeMirror from 'codemirror';
@@ -29,6 +31,7 @@ export default function CodeMirrorEditor({
 	fixed,
 	onChange,
 	options,
+	placeholder,
 }: IProps) {
 	const editorWrapperRef = useRef<HTMLDivElement>(null);
 	const codeMirrorRef = useRef<CodeMirror.Editor>();
@@ -39,6 +42,7 @@ export default function CodeMirrorEditor({
 			gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter'],
 			inputStyle: 'contenteditable',
 			lineNumbers: true,
+			placeholder,
 			...options,
 		});
 
@@ -77,4 +81,5 @@ interface IProps {
 	fixed?: boolean;
 	onChange: (value?: string) => void;
 	options?: CodeMirror.EditorConfiguration;
+	placeholder?: string;
 }
