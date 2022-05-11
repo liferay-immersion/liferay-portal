@@ -96,32 +96,32 @@ public class AssetVocabularySiteNavigationMenuItemTypeTest {
 
 	@Test
 	public void testGetChildrenSiteNavigationMenuItems() throws Exception {
-		_createAssetCategory(0);
-		_createAssetCategory(0);
+		_addAssetCategory(0);
+		_addAssetCategory(0);
 
-		AssetCategory rootAssetCategory = _createAssetCategory(0);
+		AssetCategory rootAssetCategory = _addAssetCategory(0);
 
-		_createAssetCategory(rootAssetCategory.getCategoryId());
-		_createAssetCategory(rootAssetCategory.getCategoryId());
+		_addAssetCategory(rootAssetCategory.getCategoryId());
+		_addAssetCategory(rootAssetCategory.getCategoryId());
 
-		AssetCategory firstLevelAssetCategory = _createAssetCategory(
+		AssetCategory firstLevelAssetCategory = _addAssetCategory(
 			rootAssetCategory.getCategoryId());
 
-		_createAssetCategory(firstLevelAssetCategory.getCategoryId());
-		_createAssetCategory(firstLevelAssetCategory.getCategoryId());
+		_addAssetCategory(firstLevelAssetCategory.getCategoryId());
+		_addAssetCategory(firstLevelAssetCategory.getCategoryId());
 
-		AssetCategory secondLevelAssetCategory = _createAssetCategory(
+		AssetCategory secondLevelAssetCategory = _addAssetCategory(
 			firstLevelAssetCategory.getCategoryId());
 
-		_createAssetCategory(secondLevelAssetCategory.getCategoryId());
-		_createAssetCategory(secondLevelAssetCategory.getCategoryId());
+		_addAssetCategory(secondLevelAssetCategory.getCategoryId());
+		_addAssetCategory(secondLevelAssetCategory.getCategoryId());
 
-		AssetCategory thirdLevelAssetCategory = _createAssetCategory(
+		AssetCategory thirdLevelAssetCategory = _addAssetCategory(
 			secondLevelAssetCategory.getCategoryId());
 
-		_createAssetCategory(thirdLevelAssetCategory.getCategoryId());
-		_createAssetCategory(thirdLevelAssetCategory.getCategoryId());
-		_createAssetCategory(thirdLevelAssetCategory.getCategoryId());
+		_addAssetCategory(thirdLevelAssetCategory.getCategoryId());
+		_addAssetCategory(thirdLevelAssetCategory.getCategoryId());
+		_addAssetCategory(thirdLevelAssetCategory.getCategoryId());
 
 		Assert.assertEquals(
 			15,
@@ -147,7 +147,7 @@ public class AssetVocabularySiteNavigationMenuItemTypeTest {
 		Locale locale = _portal.getSiteDefaultLocale(_group.getGroupId());
 
 		_assertGetChildrenSiteNavigationMenuItems(
-			locale, 0, _createSiteNavigationMenuItem(locale, "{}", false));
+			locale, 0, _addSiteNavigationMenuItem(locale, "{}", false));
 	}
 
 	@Test
@@ -162,7 +162,7 @@ public class AssetVocabularySiteNavigationMenuItemTypeTest {
 		Locale locale = _portal.getSiteDefaultLocale(_group.getGroupId());
 
 		_assertGetChildrenSiteNavigationMenuItems(
-			locale, 0, _createSiteNavigationMenuItem(locale, "{}", false));
+			locale, 0, _addSiteNavigationMenuItem(locale, "{}", false));
 	}
 
 	@Test
@@ -176,7 +176,7 @@ public class AssetVocabularySiteNavigationMenuItemTypeTest {
 			LayoutPageTemplateEntryTypeConstants.TYPE_DISPLAY_PAGE, 0, true, 0,
 			0, 0, 0, _serviceContext);
 
-		AssetCategory assetCategory = _createAssetCategory(0);
+		AssetCategory assetCategory = _addAssetCategory(0);
 
 		MockHttpServletRequest mockHttpServletRequest =
 			new MockHttpServletRequest();
@@ -244,7 +244,7 @@ public class AssetVocabularySiteNavigationMenuItemTypeTest {
 			StringPool.BLANK,
 			siteNavigationMenuItemType.getRegularURL(
 				mockHttpServletRequest,
-				_createSiteNavigationMenuItem(
+				_addSiteNavigationMenuItem(
 					_portal.getSiteDefaultLocale(_group.getGroupId()), "{}",
 					false)));
 	}
@@ -286,9 +286,9 @@ public class AssetVocabularySiteNavigationMenuItemTypeTest {
 	public void testGetSiteNavigationMenuItemsAssetVocabularyTypeShowAssetVocabularyLevelDisabled()
 		throws Exception {
 
-		_createAssetCategory(0);
-		_createAssetCategory(0);
-		_createAssetCategory(0);
+		_addAssetCategory(0);
+		_addAssetCategory(0);
+		_addAssetCategory(0);
 
 		List<AssetCategory> assetCategories =
 			_assetCategoryLocalService.getVocabularyCategories(
@@ -311,7 +311,7 @@ public class AssetVocabularySiteNavigationMenuItemTypeTest {
 				SiteNavigationMenuItemTypeConstants.ASSET_VOCABULARY);
 
 		SiteNavigationMenuItem assetVocabularySiteNavigationMenuItem =
-			_createSiteNavigationMenuItem(locale, "{}", false);
+			_addSiteNavigationMenuItem(locale, "{}", false);
 
 		List<SiteNavigationMenuItem> siteNavigationMenuItems =
 			siteNavigationMenuItemType.getSiteNavigationMenuItems(
@@ -336,9 +336,9 @@ public class AssetVocabularySiteNavigationMenuItemTypeTest {
 	public void testGetSiteNavigationMenuItemsAssetVocabularyTypeShowAssetVocabularyLevelEnabled()
 		throws Exception {
 
-		_createAssetCategory(0);
-		_createAssetCategory(0);
-		_createAssetCategory(0);
+		_addAssetCategory(0);
+		_addAssetCategory(0);
+		_addAssetCategory(0);
 
 		Assert.assertEquals(
 			3,
@@ -356,7 +356,7 @@ public class AssetVocabularySiteNavigationMenuItemTypeTest {
 				SiteNavigationMenuItemTypeConstants.ASSET_VOCABULARY);
 
 		SiteNavigationMenuItem assetVocabularySiteNavigationMenuItem =
-			_createSiteNavigationMenuItem(
+			_addSiteNavigationMenuItem(
 				_portal.getSiteDefaultLocale(_group.getGroupId()), "{}", true);
 
 		List<SiteNavigationMenuItem> siteNavigationMenuItems =
@@ -386,14 +386,14 @@ public class AssetVocabularySiteNavigationMenuItemTypeTest {
 		Assert.assertEquals(
 			"warning-full",
 			siteNavigationMenuItemType.getStatusIcon(
-				_createSiteNavigationMenuItem(
+				_addSiteNavigationMenuItem(
 					_portal.getSiteDefaultLocale(_group.getGroupId()), "{}",
 					false)));
 	}
 
 	@Test
 	public void testGetStatusIconNotEmptyAssetVocabulary() throws Exception {
-		_createAssetCategory(0);
+		_addAssetCategory(0);
 
 		Assert.assertEquals(
 			1,
@@ -407,7 +407,7 @@ public class AssetVocabularySiteNavigationMenuItemTypeTest {
 		Assert.assertEquals(
 			StringPool.BLANK,
 			siteNavigationMenuItemType.getStatusIcon(
-				_createSiteNavigationMenuItem(
+				_addSiteNavigationMenuItem(
 					_portal.getSiteDefaultLocale(_group.getGroupId()), "{}",
 					false)));
 	}
@@ -420,7 +420,7 @@ public class AssetVocabularySiteNavigationMenuItemTypeTest {
 		mockHttpServletRequest.setAttribute(
 			WebKeys.THEME_DISPLAY, _getThemeDisplay());
 
-		AssetCategory assetCategory = _createAssetCategory(0);
+		AssetCategory assetCategory = _addAssetCategory(0);
 
 		SiteNavigationMenuItemType siteNavigationMenuItemType =
 			_siteNavigationMenuItemTypeRegistry.getSiteNavigationMenuItemType(
@@ -448,7 +448,7 @@ public class AssetVocabularySiteNavigationMenuItemTypeTest {
 		Locale locale = _portal.getSiteDefaultLocale(_group.getGroupId());
 
 		SiteNavigationMenuItem assetVocabularySiteNavigationMenuItem =
-			_createSiteNavigationMenuItem(locale, "{}", false);
+			_addSiteNavigationMenuItem(locale, "{}", false);
 
 		Assert.assertEquals(
 			_assetVocabulary.getTitle(locale),
@@ -469,7 +469,7 @@ public class AssetVocabularySiteNavigationMenuItemTypeTest {
 		String expectedTitle = RandomTestUtil.randomString();
 
 		SiteNavigationMenuItem assetVocabularySiteNavigationMenuItem =
-			_createSiteNavigationMenuItem(
+			_addSiteNavigationMenuItem(
 				locale,
 				JSONUtil.put(
 					LocaleUtil.toLanguageId(locale), expectedTitle
@@ -495,7 +495,7 @@ public class AssetVocabularySiteNavigationMenuItemTypeTest {
 		String expectedTitle = RandomTestUtil.randomString();
 
 		SiteNavigationMenuItem assetVocabularySiteNavigationMenuItem =
-			_createSiteNavigationMenuItem(
+			_addSiteNavigationMenuItem(
 				locale,
 				JSONUtil.put(
 					LocaleUtil.toLanguageId(locale),
@@ -524,7 +524,7 @@ public class AssetVocabularySiteNavigationMenuItemTypeTest {
 		String expectedTitle = RandomTestUtil.randomString();
 
 		SiteNavigationMenuItem assetVocabularySiteNavigationMenuItem =
-			_createSiteNavigationMenuItem(
+			_addSiteNavigationMenuItem(
 				locale,
 				JSONUtil.put(
 					LocaleUtil.toLanguageId(locale), expectedTitle
@@ -621,7 +621,7 @@ public class AssetVocabularySiteNavigationMenuItemTypeTest {
 				SiteNavigationMenuItemTypeConstants.ASSET_VOCABULARY);
 
 		SiteNavigationMenuItem siteNavigationMenuItem =
-			_createSiteNavigationMenuItem(
+			_addSiteNavigationMenuItem(
 				_portal.getSiteDefaultLocale(_group.getGroupId()), "{}", false);
 
 		Assert.assertFalse(
@@ -696,7 +696,7 @@ public class AssetVocabularySiteNavigationMenuItemTypeTest {
 		}
 	}
 
-	private AssetCategory _createAssetCategory(long parentAssetCategoryId)
+	private AssetCategory _addAssetCategory(long parentAssetCategoryId)
 		throws Exception {
 
 		return _assetCategoryLocalService.addCategory(
@@ -706,7 +706,7 @@ public class AssetVocabularySiteNavigationMenuItemTypeTest {
 			_assetVocabulary.getVocabularyId(), null, _serviceContext);
 	}
 
-	private SiteNavigationMenuItem _createSiteNavigationMenuItem(
+	private SiteNavigationMenuItem _addSiteNavigationMenuItem(
 			Locale defaultLocale, String localizedNames,
 			boolean showAssetVocabularyLevel)
 		throws Exception {
@@ -755,7 +755,7 @@ public class AssetVocabularySiteNavigationMenuItemTypeTest {
 		throws Exception {
 
 		SiteNavigationMenuItem assetVocabularySiteNavigationMenuItem =
-			_createSiteNavigationMenuItem(locale, "{}", false);
+			_addSiteNavigationMenuItem(locale, "{}", false);
 
 		List<SiteNavigationMenuItem> childrenSiteNavigationMenuItems =
 			siteNavigationMenuItemType.getChildrenSiteNavigationMenuItems(
@@ -779,7 +779,7 @@ public class AssetVocabularySiteNavigationMenuItemTypeTest {
 			SiteNavigationMenuItemType siteNavigationMenuItemType)
 		throws Exception {
 
-		AssetCategory assetCategory = _createAssetCategory(0);
+		AssetCategory assetCategory = _addAssetCategory(0);
 
 		return _getAssetCategorySiteNavigationMenuItem(
 			assetCategory, mockHttpServletRequest, locale,
