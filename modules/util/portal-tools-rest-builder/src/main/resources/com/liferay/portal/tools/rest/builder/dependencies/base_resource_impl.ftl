@@ -577,7 +577,6 @@ public abstract class Base${schemaName}ResourceImpl
 			</#if>
 
 			<#if generateUpdateStrategy>
-
 				if ("UPDATE".equalsIgnoreCase(updateStrategy)) {
 					${schemaVarName}UnsafeConsumer = ${schemaVarName} -> put${schemaName}(
 
