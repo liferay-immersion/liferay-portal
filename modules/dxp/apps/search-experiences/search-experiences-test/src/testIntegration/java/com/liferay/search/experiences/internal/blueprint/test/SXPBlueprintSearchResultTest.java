@@ -964,14 +964,14 @@ public class SXPBlueprintSearchResultTest {
 
 	@Test
 	public void testHideComments() throws Exception {
-		JournalArticle article = _addJournalArticle(
+		JournalArticle journalArticle = _addJournalArticle(
 			_group.getGroupId(), 0, "Article", StringPool.BLANK, false, true);
 
-		_journalArticles.add(article);
+		_journalArticles.add(journalArticle);
 
 		CommentManagerUtil.addComment(
 			_user.getUserId(), _serviceContext.getScopeGroupId(),
-			JournalArticle.class.getName(), article.getResourcePrimKey(),
+			JournalArticle.class.getName(), journalArticle.getResourcePrimKey(),
 			"Article Comment",
 			new IdentityServiceContextFunction(_serviceContext));
 
