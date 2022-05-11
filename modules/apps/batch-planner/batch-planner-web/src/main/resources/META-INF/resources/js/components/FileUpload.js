@@ -37,7 +37,7 @@ function updateExtensionInputValue(namespace, value) {
 function updateNameInput(namespace, fileName) {
 	const nameInput = document.getElementById(`${namespace}name`);
 
-	if (!nameInput.value) {
+	if (nameInput && !nameInput.value) {
 		nameInput.value = fileName.substring(0, fileName.lastIndexOf('.'));
 	}
 }
