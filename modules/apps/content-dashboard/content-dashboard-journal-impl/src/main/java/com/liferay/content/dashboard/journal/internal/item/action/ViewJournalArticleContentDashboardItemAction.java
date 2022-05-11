@@ -153,7 +153,7 @@ public class ViewJournalArticleContentDashboardItemAction
 	}
 
 	private String _getLocalizedURL(
-		List<LayoutSEOLink> localizedLayoutSEOLinks, Locale locale) {
+		Locale locale, List<LayoutSEOLink> localizedLayoutSEOLinks) {
 
 		List<LayoutSEOLink> result = new ArrayList<>();
 
@@ -213,7 +213,7 @@ public class ViewJournalArticleContentDashboardItemAction
 										Collections.singleton(locale));
 
 							return _getLocalizedURL(
-								localizedLayoutSEOLinks, locale);
+								locale, localizedLayoutSEOLinks);
 						}
 						catch (PortalException portalException) {
 							_log.error(portalException);
