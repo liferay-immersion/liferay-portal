@@ -988,7 +988,7 @@ public class SXPBlueprintSearchResultTest {
 		_updateSXPBlueprint();
 
 		_updateElementInstancesJSON(
-			new Object[] {_getDefaultValuesForTextMatchOverMultipleFields()},
+			new Object[] {_getTextMatchOverMultipleFields()},
 			new String[] {"Text Match Over Multiple Fields"});
 
 		_keywords = "Article";
@@ -996,9 +996,7 @@ public class SXPBlueprintSearchResultTest {
 		_assertSearchIgnoreRelevance("[Article, Article Comment]");
 
 		_updateElementInstancesJSON(
-			new Object[] {
-				_getDefaultValuesForTextMatchOverMultipleFields(), null
-			},
+			new Object[] {_getTextMatchOverMultipleFields(), null},
 			new String[] {"Text Match Over Multiple Fields", "Hide Comments"});
 
 		_assertSearchIgnoreRelevance("[Article]");
@@ -1080,7 +1078,7 @@ public class SXPBlueprintSearchResultTest {
 					SXPBlueprintSearchResultTestUtil.getMatchQueryJSONObject(
 						200, "los angeles")
 				).build(),
-				_getDefaultValuesForTextMatchOverMultipleFields(), null
+				_getTextMatchOverMultipleFields(), null
 			},
 			new String[] {
 				"Paste Any Elasticsearch Query",
@@ -1100,7 +1098,7 @@ public class SXPBlueprintSearchResultTest {
 					SXPBlueprintSearchResultTestUtil.getMatchQueryJSONObject(
 						200, "orange county")
 				).build(),
-				_getDefaultValuesForTextMatchOverMultipleFields(), null
+				_getTextMatchOverMultipleFields(), null
 			},
 			new String[] {
 				"Paste Any Elasticsearch Query",
@@ -1194,7 +1192,7 @@ public class SXPBlueprintSearchResultTest {
 				_journalArticles.get(0), "Article 1.2"));
 
 		_updateElementInstancesJSON(
-			new Object[] {_getDefaultValuesForTextMatchOverMultipleFields()},
+			new Object[] {_getTextMatchOverMultipleFields()},
 			new String[] {"Text Match Over Multiple Fields"});
 
 		_keywords = "Article";
@@ -1202,9 +1200,7 @@ public class SXPBlueprintSearchResultTest {
 		_assertSearchIgnoreRelevance("[Article 1.0, Article 1.1, Article 1.2]");
 
 		_updateElementInstancesJSON(
-			new Object[] {
-				_getDefaultValuesForTextMatchOverMultipleFields(), null
-			},
+			new Object[] {_getTextMatchOverMultipleFields(), null},
 			new String[] {
 				"Text Match Over Multiple Fields",
 				"Limit Search to Head Version"
@@ -1311,7 +1307,7 @@ public class SXPBlueprintSearchResultTest {
 				false));
 
 		_updateElementInstancesJSON(
-			new Object[] {_getDefaultValuesForTextMatchOverMultipleFields()},
+			new Object[] {_getTextMatchOverMultipleFields()},
 			new String[] {"Text Match Over Multiple Fields"});
 
 		_keywords = "Article";
@@ -1319,9 +1315,7 @@ public class SXPBlueprintSearchResultTest {
 		_assertSearchIgnoreRelevance("[Article 1, Article 2, Draft Article]");
 
 		_updateElementInstancesJSON(
-			new Object[] {
-				_getDefaultValuesForTextMatchOverMultipleFields(), null
-			},
+			new Object[] {_getTextMatchOverMultipleFields(), null},
 			new String[] {
 				"Text Match Over Multiple Fields",
 				"Limit Search to Published Contents"
@@ -1514,7 +1508,7 @@ public class SXPBlueprintSearchResultTest {
 				true, _serviceContext));
 
 		Map<String, Object> textMatchOverMultipleFields =
-			_getDefaultValuesForTextMatchOverMultipleFields();
+			_getTextMatchOverMultipleFields();
 
 		textMatchOverMultipleFields.replace(
 			"fields", new String[] {"title_${context.language_id}^2"});
@@ -1552,7 +1546,7 @@ public class SXPBlueprintSearchResultTest {
 					SXPBlueprintSearchResultTestUtil.getMatchQueryJSONObject(
 						200, "los angeles")
 				).build(),
-				_getDefaultValuesForTextMatchOverMultipleFields()
+				_getTextMatchOverMultipleFields()
 			},
 			new String[] {
 				"Paste Any Elasticsearch Query",
@@ -1621,7 +1615,7 @@ public class SXPBlueprintSearchResultTest {
 				StringPool.BLANK, false, true));
 
 		Map<String, Object> textMatchOverMultipleFields =
-			_getDefaultValuesForTextMatchOverMultipleFields();
+			_getTextMatchOverMultipleFields();
 
 		textMatchOverMultipleFields.replace(
 			"fields", new String[] {"title_${context.language_id}^2"});
@@ -1653,10 +1647,10 @@ public class SXPBlueprintSearchResultTest {
 				"fruit punch", "sprite"
 			});
 
-		_getDefaultValuesForTextMatchOverMultipleFields();
+		_getTextMatchOverMultipleFields();
 
 		_updateElementInstancesJSON(
-			new Object[] {_getDefaultValuesForTextMatchOverMultipleFields()},
+			new Object[] {_getTextMatchOverMultipleFields()},
 			new String[] {"Text Match Over Multiple Fields"});
 
 		_keywords = "coca cola";
@@ -1670,7 +1664,7 @@ public class SXPBlueprintSearchResultTest {
 			new String[] {"lorem ipsum dolor", "lorem ipsum sit", "nunquis"});
 
 		_updateElementInstancesJSON(
-			new Object[] {_getDefaultValuesForTextMatchOverMultipleFields()},
+			new Object[] {_getTextMatchOverMultipleFields()},
 			new String[] {"Text Match Over Multiple Fields"});
 
 		_keywords = "ipsum sit sit";
@@ -1690,7 +1684,7 @@ public class SXPBlueprintSearchResultTest {
 			});
 
 		Map<String, Object> textMatchOverMultipleFields =
-			_getDefaultValuesForTextMatchOverMultipleFields();
+			_getTextMatchOverMultipleFields();
 
 		textMatchOverMultipleFields.replace("fuzziness", "0");
 		textMatchOverMultipleFields.replace("operator", "and");
@@ -1770,7 +1764,7 @@ public class SXPBlueprintSearchResultTest {
 			});
 
 		Map<String, Object> textMatchOverMultipleFields =
-			_getDefaultValuesForTextMatchOverMultipleFields();
+			_getTextMatchOverMultipleFields();
 
 		textMatchOverMultipleFields.replace("fuzziness", "0");
 		textMatchOverMultipleFields.replace("operator", "and");
@@ -2016,28 +2010,6 @@ public class SXPBlueprintSearchResultTest {
 			).build());
 	}
 
-	private Map<String, Object>
-		_getDefaultValuesForTextMatchOverMultipleFields() {
-
-		return HashMapBuilder.<String, Object>put(
-			"boost", 1
-		).put(
-			"fields", SXPBlueprintSearchResultTestUtil.FIELDS
-		).put(
-			"fuzziness", "AUTO"
-		).put(
-			"keywords", "${keywords}"
-		).put(
-			"minimum_should_match", 0
-		).put(
-			"operator", "or"
-		).put(
-			"slop", 0
-		).put(
-			"type", "best_fields"
-		).build();
-	}
-
 	private SearchResponse _getSearchResponsePreview(
 			Consumer<SearchRequestBuilder>... searchRequestBuilderConsumer)
 		throws Exception {
@@ -2103,6 +2075,26 @@ public class SXPBlueprintSearchResultTest {
 			).withSearchRequestBuilder(
 				searchRequestBuilderConsumer
 			).build());
+	}
+
+	private Map<String, Object> _getTextMatchOverMultipleFields() {
+		return HashMapBuilder.<String, Object>put(
+			"boost", 1
+		).put(
+			"fields", SXPBlueprintSearchResultTestUtil.FIELDS
+		).put(
+			"fuzziness", "AUTO"
+		).put(
+			"keywords", "${keywords}"
+		).put(
+			"minimum_should_match", 0
+		).put(
+			"operator", "or"
+		).put(
+			"slop", 0
+		).put(
+			"type", "best_fields"
+		).build();
 	}
 
 	private String[] _getTimeOfDayAndNextTimeOfDay(LocalTime localTime) {
