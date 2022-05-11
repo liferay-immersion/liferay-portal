@@ -334,7 +334,6 @@ public abstract class Base${schemaName}ResourceImpl
 		@Override
 		@SuppressWarnings("PMD.UnusedLocalVariable")
 		public void create(java.util.Collection<${javaDataType}> ${schemaVarNames}, Map<String, Serializable> parameters) throws Exception {
-
 			<#assign
 				properties = freeMarkerTool.getDTOProperties(configYAML, openAPIYAML, schema)
 
@@ -349,10 +348,9 @@ public abstract class Base${schemaName}ResourceImpl
 			</#if>
 
 			<#if generateInsertStrategy>
-
 				if ("INSERT".equalsIgnoreCase(createStrategy)) {
-
 					${schemaVarName}UnsafeConsumer =
+
 					<#if postBatchJavaMethodSignature??>
 						${schemaVarName} -> ${postBatchJavaMethodSignature.methodName}(
 							<@getPOSTBatchJavaMethodParameters
@@ -392,9 +390,7 @@ public abstract class Base${schemaName}ResourceImpl
 			</#if>
 
 			<#if generateUpsertStrategy>
-
 				if ("UPSERT".equalsIgnoreCase(createStrategy)) {
-
 					${schemaVarName}UnsafeConsumer =
 						${schemaVarName} -> ${putByERCBatchJavaMethodSignature.methodName}(
 						<#list putByERCBatchJavaMethodSignature.javaMethodParameters as javaMethodParameter>
@@ -424,7 +420,6 @@ public abstract class Base${schemaName}ResourceImpl
 			</#if>
 
 			<#if generateInsertStrategy || generateUpsertStrategy>
-
 				if (${schemaVarName}UnsafeConsumer == null) {
 					throw new NotSupportedException("Create strategy \"" + createStrategy + "\" not supported for ${schemaVarName?cap_first}");
 				}
