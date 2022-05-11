@@ -255,11 +255,11 @@ public class RegionLocalServiceImpl extends RegionLocalServiceBaseImpl {
 		throws PortalException {
 
 		if (Validator.isNull(name)) {
-			throw new RegionNameException("Missing name");
+			throw new RegionNameException("Name is null");
 		}
 
 		if (Validator.isNull(regionCode)) {
-			throw new RegionCodeException("Missing region code");
+			throw new RegionCodeException("Region code is null");
 		}
 	}
 
