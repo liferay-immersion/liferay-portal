@@ -43,17 +43,17 @@ public class FDSFilterSerializerImpl implements FDSFilterSerializer {
 
 	@Override
 	public JSONArray serialize(
-		List<FDSFilter> dynamicFDSFilters, String fdsName, Locale locale) {
+		List<FDSFilter> fdsFilters, String fdsName, Locale locale) {
 
 		JSONArray jsonArray = _jsonFactory.createJSONArray();
 
 		ResourceBundle resourceBundle = ResourceBundleUtil.getBundle(
 			"content.Language", locale, getClass());
 
-		List<FDSFilter> fdsFilters = ListUtil.concat(
-			dynamicFDSFilters, _fdsFilterRegistry.getFDSFilters(fdsName));
+		for (FDSFilter fdsFilter :
+				ListUtil.concat(
+					fdsFilters, _fdsFilterRegistry.getFDSFilters(fdsName))) {
 
-		for (FDSFilter fdsFilter : fdsFilters) {
 			String label = LanguageUtil.get(
 				resourceBundle, fdsFilter.getLabel());
 
