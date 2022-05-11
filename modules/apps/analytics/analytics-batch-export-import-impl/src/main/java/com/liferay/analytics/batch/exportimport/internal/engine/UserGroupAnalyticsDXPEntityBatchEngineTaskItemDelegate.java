@@ -55,7 +55,7 @@ public class UserGroupAnalyticsDXPEntityBatchEngineTaskItemDelegate
 			com.liferay.portal.vulcan.pagination.Pagination.of(
 				pagination.getPage(), pagination.getPageSize());
 
-		com.liferay.portal.vulcan.pagination.Page<DXPEntity> dxpEntitiesPage =
+		com.liferay.portal.vulcan.pagination.Page<DXPEntity> page =
 			SearchUtil.search(
 				null, booleanQuery -> booleanQuery.getPreBooleanFilter(),
 				filter, UserGroup.class.getName(), null, vulcanPagination,
@@ -70,9 +70,9 @@ public class UserGroupAnalyticsDXPEntityBatchEngineTaskItemDelegate
 							document.get(Field.ENTRY_CLASS_PK)))));
 
 		return Page.of(
-			dxpEntitiesPage.getItems(),
+			page.getItems(),
 			Pagination.of(pagination.getPage(), pagination.getPageSize()),
-			dxpEntitiesPage.getTotalCount());
+			page.getTotalCount());
 	}
 
 	@Reference
