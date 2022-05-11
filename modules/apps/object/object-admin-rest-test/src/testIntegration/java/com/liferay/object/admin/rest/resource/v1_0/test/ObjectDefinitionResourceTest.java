@@ -132,10 +132,6 @@ public class ObjectDefinitionResourceTest
 			Problem problem = problemException.getProblem();
 
 			Assert.assertEquals("BAD_REQUEST", problem.getStatus());
-
-			Assert.assertEquals(
-				"StorageType property cannot be changed",
-				problemException.getMessage());
 		}
 	}
 
@@ -152,10 +148,6 @@ public class ObjectDefinitionResourceTest
 	@Override
 	protected ObjectDefinition randomObjectDefinition() throws Exception {
 		ObjectDefinition objectDefinition = super.randomObjectDefinition();
-
-		if (!GetterUtil.getBoolean(PropsUtil.get("feature.flag.LPS-135430"))) {
-			objectDefinition.setStorageType(StringPool.BLANK);
-		}
 
 		objectDefinition.setActive(false);
 		objectDefinition.setLabel(
@@ -177,6 +169,11 @@ public class ObjectDefinitionResourceTest
 				}
 			});
 		objectDefinition.setScope(ObjectDefinitionConstants.SCOPE_COMPANY);
+
+		if (!GetterUtil.getBoolean(PropsUtil.get("feature.flag.LPS-135430"))) {
+			objectDefinition.setStorageType(StringPool.BLANK);
+		}
+
 		objectDefinition.setTitleObjectFieldId(Long.valueOf(0));
 
 		return objectDefinition;

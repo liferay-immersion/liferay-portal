@@ -135,8 +135,7 @@ public class ObjectDefinitionResourceImpl
 		if (!Validator.isBlank(objectDefinition.getStorageType()) &&
 			!GetterUtil.getBoolean(PropsUtil.get("feature.flag.LPS-135430"))) {
 
-			throw new ObjectDefinitionStorageTypeException(
-				"StorageType is not yet supported");
+			throw new ObjectDefinitionStorageTypeException();
 		}
 
 		return _toObjectDefinition(
@@ -168,8 +167,7 @@ public class ObjectDefinitionResourceImpl
 		throws Exception {
 
 		if (!Validator.isBlank(objectDefinition.getStorageType())) {
-			throw new ObjectDefinitionStorageTypeException(
-				"StorageType property cannot be changed");
+			throw new ObjectDefinitionStorageTypeException();
 		}
 
 		com.liferay.object.model.ObjectDefinition
