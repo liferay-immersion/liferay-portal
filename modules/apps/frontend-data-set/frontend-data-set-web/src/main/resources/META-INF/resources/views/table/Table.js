@@ -131,7 +131,7 @@ function Table({dataLoading, items, itemsActions, schema, style}) {
 							updateSorting={updateSorting}
 						/>
 
-						<DndTable.Body>
+						<DndTable.Body className="with-hover">
 							{inlineAddingSettings && (
 								<TableInlineAddingRow
 									fields={visibleFields}
