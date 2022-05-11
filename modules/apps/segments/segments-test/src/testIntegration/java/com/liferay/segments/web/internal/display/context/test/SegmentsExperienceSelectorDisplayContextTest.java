@@ -72,12 +72,10 @@ public class SegmentsExperienceSelectorDisplayContextTest {
 			SegmentsTestUtil.addSegmentsExperience(
 				_group.getGroupId(), SegmentsEntryConstants.ID_DEFAULT,
 				_portal.getClassNameId(Layout.class), _layout.getPlid());
-
 		SegmentsExperience segmentsExperience2 =
 			SegmentsTestUtil.addSegmentsExperience(
 				_group.getGroupId(), _portal.getClassNameId(Layout.class),
 				_layout.getPlid());
-
 		SegmentsExperience segmentsExperience3 =
 			SegmentsTestUtil.addSegmentsExperience(
 				_group.getGroupId(), _portal.getClassNameId(Layout.class),
