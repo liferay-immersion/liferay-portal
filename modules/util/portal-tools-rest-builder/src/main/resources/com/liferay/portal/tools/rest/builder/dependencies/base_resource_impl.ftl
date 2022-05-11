@@ -106,6 +106,8 @@ public abstract class Base${schemaName}ResourceImpl
 			<#elseif !getBatchJavaMethodSignature??>
 				<#assign getBatchJavaMethodSignature = javaMethodSignature />
 			</#if>
+		<#elseif stringUtil.equals(javaMethodSignature.methodName, "patch" + schemaName)>
+			<#assign patchBatchJavaMethodSignature = javaMethodSignature />
 		<#elseif stringUtil.equals(javaMethodSignature.methodName, "post" + parentSchemaName + schemaName)>
 			<#if stringUtil.equals(javaMethodSignature.methodName, "postAssetLibrary" + schemaName)>
 				<#assign postAssetLibraryBatchJavaMethodSignature = javaMethodSignature />
@@ -116,8 +118,6 @@ public abstract class Base${schemaName}ResourceImpl
 			</#if>
 		<#elseif stringUtil.equals(javaMethodSignature.methodName, "put" + schemaName)>
 			<#assign putBatchJavaMethodSignature = javaMethodSignature />
-		<#elseif stringUtil.equals(javaMethodSignature.methodName, "patch" + schemaName)>
-			<#assign patchBatchJavaMethodSignature = javaMethodSignature />
 		<#elseif stringUtil.equals(javaMethodSignature.methodName, "put" + parentSchemaName + schemaName + "ByExternalReferenceCode")>
 			<#assign putByERCBatchJavaMethodSignature = javaMethodSignature />
 		</#if>
