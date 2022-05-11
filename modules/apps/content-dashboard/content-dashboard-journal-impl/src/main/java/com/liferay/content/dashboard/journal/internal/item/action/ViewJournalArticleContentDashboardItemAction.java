@@ -167,82 +167,72 @@ public class ViewJournalArticleContentDashboardItemAction
 		return localizedLayoutSEOLink.getHref();
 	}
 
-	private String _getViewURL(Locale locale, ThemeDisplay themeDisplayParam) {
-		return Optional.of(
-			themeDisplayParam
-		).map(
-			themeDisplay -> {
-				Optional<Layout> layoutOptional = _getLayoutOptional(
+	private String _getViewURL(Locale locale, ThemeDisplay themeDisplay) {
+		if (themeDisplay == null) {
+			return StringPool.BLANK;
+		}
+
+		Optional<Layout> layoutOptional = _getLayoutOptional(
+			_getLayoutDisplayPageObjectProvider(_journalArticle));
+
+		return layoutOptional.map(
+			layout -> {
+				HttpServletRequest httpServletRequest =
+					themeDisplay.getRequest();
+
+				LayoutDisplayPageObjectProvider<?>
+					initialLayoutDisplayPageObjectProvider =
+						(LayoutDisplayPageObjectProvider<?>)
+							httpServletRequest.getAttribute(
+								LayoutDisplayPageWebKeys.
+									LAYOUT_DISPLAY_PAGE_OBJECT_PROVIDER);
+
+				httpServletRequest.setAttribute(
+					LayoutDisplayPageWebKeys.
+						LAYOUT_DISPLAY_PAGE_OBJECT_PROVIDER,
 					_getLayoutDisplayPageObjectProvider(_journalArticle));
 
-				return layoutOptional.map(
-					layout -> {
-						HttpServletRequest httpServletRequest =
-							themeDisplay.getRequest();
+				String completeURL = _portal.getCurrentCompleteURL(
+					httpServletRequest);
 
-						LayoutDisplayPageObjectProvider<?>
-							initialLayoutDisplayPageObjectProvider =
-								(LayoutDisplayPageObjectProvider<?>)
-									httpServletRequest.getAttribute(
-										LayoutDisplayPageWebKeys.
-											LAYOUT_DISPLAY_PAGE_OBJECT_PROVIDER);
+				try {
+					String canonicalURL = _portal.getCanonicalURL(
+						completeURL, themeDisplay, layout, false, false);
 
-						httpServletRequest.setAttribute(
-							LayoutDisplayPageWebKeys.
-								LAYOUT_DISPLAY_PAGE_OBJECT_PROVIDER,
-							_getLayoutDisplayPageObjectProvider(
-								_journalArticle));
+					Locale siteDefaultLocale = _portal.getSiteDefaultLocale(
+						_portal.getScopeGroupId(_httpServletRequest));
 
-						String completeURL = _portal.getCurrentCompleteURL(
-							httpServletRequest);
+					List<LayoutSEOLink> localizedLayoutSEOLinks =
+						_layoutSEOLinkManager.getLocalizedLayoutSEOLinks(
+							layout, siteDefaultLocale, canonicalURL,
+							Collections.singleton(locale));
 
-						try {
-							String canonicalURL = _portal.getCanonicalURL(
-								completeURL, themeDisplay, layout, false,
-								false);
+					return _getLocalizedURL(locale, localizedLayoutSEOLinks);
+				}
+				catch (PortalException portalException) {
+					_log.error(portalException);
 
-							Locale siteDefaultLocale =
-								_portal.getSiteDefaultLocale(
-									_portal.getScopeGroupId(
-										_httpServletRequest));
+					return StringPool.BLANK;
+				}
+				finally {
+					httpServletRequest.setAttribute(
+						LayoutDisplayPageWebKeys.
+							LAYOUT_DISPLAY_PAGE_OBJECT_PROVIDER,
+						initialLayoutDisplayPageObjectProvider);
+				}
+			}
+		).map(
+			url -> {
+				String backURL = ParamUtil.getString(
+					_httpServletRequest, "backURL");
 
-							List<LayoutSEOLink> localizedLayoutSEOLinks =
-								_layoutSEOLinkManager.
-									getLocalizedLayoutSEOLinks(
-										layout, siteDefaultLocale, canonicalURL,
-										Collections.singleton(locale));
+				if (Validator.isNotNull(backURL)) {
+					return HttpComponentsUtil.setParameter(
+						url, "p_l_back_url", backURL);
+				}
 
-							return _getLocalizedURL(
-								locale, localizedLayoutSEOLinks);
-						}
-						catch (PortalException portalException) {
-							_log.error(portalException);
-
-							return StringPool.BLANK;
-						}
-						finally {
-							httpServletRequest.setAttribute(
-								LayoutDisplayPageWebKeys.
-									LAYOUT_DISPLAY_PAGE_OBJECT_PROVIDER,
-								initialLayoutDisplayPageObjectProvider);
-						}
-					}
-				).map(
-					url -> {
-						String backURL = ParamUtil.getString(
-							_httpServletRequest, "backURL");
-
-						if (Validator.isNotNull(backURL)) {
-							return HttpComponentsUtil.setParameter(
-								url, "p_l_back_url", backURL);
-						}
-
-						return HttpComponentsUtil.setParameter(
-							url, "p_l_back_url", themeDisplay.getURLCurrent());
-					}
-				).orElse(
-					StringPool.BLANK
-				);
+				return HttpComponentsUtil.setParameter(
+					url, "p_l_back_url", themeDisplay.getURLCurrent());
 			}
 		).orElse(
 			StringPool.BLANK
