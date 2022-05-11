@@ -18,7 +18,6 @@ import {FieldFeedback, useFeatureFlag} from 'data-engine-js-components-web';
 import React, {ChangeEventHandler, useRef, useState} from 'react';
 
 import Card from '../Card/Card';
-import CodeMirrorEditor from '../CodeMirrorEditor';
 import Sidebar from '../Editor/Sidebar/Sidebar';
 import InputLocalized from '../Form/InputLocalized/InputLocalized';
 import Select from '../Form/Select';
@@ -27,6 +26,7 @@ import ObjectValidationFormBase, {
 } from '../ObjectValidationFormBase';
 
 import './ObjectValidationTabs.scss';
+import CodeMirrorEditor from '../CodeMirrorEditor';
 
 function BasicInfo({
 	componentLabel,
@@ -94,6 +94,22 @@ function Conditions({
 	);
 	const editorRef = useRef<CodeMirror.Editor>();
 	const flags = useFeatureFlag();
+	const engine = values.engine;
+	let placeholder;
+
+	if (engine === 'groovy') {
+		placeholder = Liferay.Language.get(
+			'insert-a-groovy-script-to-define-your-validation'
+		);
+	}
+	else if (engine === 'ddm') {
+		placeholder = Liferay.Language.get(
+			'add-elements-from-the-sidebar-to-define-your-validation'
+		);
+	}
+	else {
+		placeholder = '';
+	}
 
 	return (
 		<>
@@ -101,7 +117,7 @@ function Conditions({
 				<div className="lfr-objects__object-validation-tabs-title-container">
 					<h2 className="sheet-title">{values.engineLabel}</h2>
 					&nbsp;
-					{values.engine === 'ddm' && (
+					{engine === 'ddm' && (
 						<span
 							data-tooltip-align="top"
 							title={Liferay.Language.get(
@@ -122,10 +138,11 @@ function Conditions({
 						editorRef={editorRef}
 						onChange={(script) => setValues({script})}
 						options={{
-							mode: 'groovy',
+							mode: engine === 'groovy' ? 'groovy' : 'null',
 							readOnly: disabled,
 							value: values.script ?? '',
 						}}
+						placeholder={placeholder}
 					/>
 
 					<div className="has-error mb-3">
