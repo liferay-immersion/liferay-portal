@@ -461,12 +461,12 @@ public class ImportTaskResourceImpl extends BaseImportTaskResourceImpl {
 		Map<String, Serializable> parameters = ParametersUtil.toParameters(
 			contextUriInfo, _ignoredParameters);
 
-		if (updateStrategy != null) {
-			parameters.put("updateStrategy", updateStrategy);
-		}
-
 		if (createStrategy != null) {
 			parameters.put("createStrategy", createStrategy);
+		}
+
+		if (updateStrategy != null) {
+			parameters.put("updateStrategy", updateStrategy);
 		}
 
 		BatchEngineImportTask batchEngineImportTask =
