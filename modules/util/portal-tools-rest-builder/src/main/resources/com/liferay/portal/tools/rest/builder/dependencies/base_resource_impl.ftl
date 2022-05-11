@@ -393,6 +393,7 @@ public abstract class Base${schemaName}ResourceImpl
 				if ("UPSERT".equalsIgnoreCase(createStrategy)) {
 					${schemaVarName}UnsafeConsumer =
 						${schemaVarName} -> ${putByERCBatchJavaMethodSignature.methodName}(
+
 						<#list putByERCBatchJavaMethodSignature.javaMethodParameters as javaMethodParameter>
 							<#if stringUtil.equals(javaMethodParameter.parameterName, "externalReferenceCode")>
 								${schemaVarName}.get${javaMethodParameter.parameterName?cap_first}()
@@ -415,7 +416,8 @@ public abstract class Base${schemaName}ResourceImpl
 
 							<#sep>, </#sep>
 						</#list>
-					);
+
+						);
 				}
 			</#if>
 
@@ -545,11 +547,10 @@ public abstract class Base${schemaName}ResourceImpl
 			</#if>
 
 			<#if generatePartialUpdateStrategy>
-
 				if ("PARTIAL_UPDATE".equalsIgnoreCase(updateStrategy)) {
-
 					${schemaVarName}UnsafeConsumer =
 						${schemaVarName} -> patch${schemaName}(
+
 						<#list patchBatchJavaMethodSignature.javaMethodParameters as javaMethodParameter>
 							<#if stringUtil.equals(javaMethodParameter.parameterName, schemaVarName)>
 								${schemaVarName}
@@ -573,6 +574,7 @@ public abstract class Base${schemaName}ResourceImpl
 
 							<#sep>, </#sep>
 						</#list>
+
 						);
 				}
 			</#if>
@@ -583,6 +585,7 @@ public abstract class Base${schemaName}ResourceImpl
 
 					${schemaVarName}UnsafeConsumer =
 						${schemaVarName} -> put${schemaName}(
+
 						<#list putBatchJavaMethodSignature.javaMethodParameters as javaMethodParameter>
 							<#if stringUtil.equals(javaMethodParameter.parameterName, "flatten")>
 								(Boolean)parameters.get("flatten")
@@ -613,6 +616,7 @@ public abstract class Base${schemaName}ResourceImpl
 
 							<#sep>, </#sep>
 						</#list>
+
 						);
 				}
 			</#if>
