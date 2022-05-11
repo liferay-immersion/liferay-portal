@@ -32,7 +32,9 @@ import com.liferay.portal.kernel.test.util.CompanyTestUtil;
 import com.liferay.portal.test.rule.Inject;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
@@ -300,7 +302,7 @@ public abstract class BaseDBPartitionMessageBusInterceptorTestCase
 			_countDownLatch.countDown();
 		}
 
-		private final CopyOnWriteArraySet<Long> _companyIds =
+		private final Collection<Long> _companyIds =
 			new CopyOnWriteArraySet<>();
 
 	}
