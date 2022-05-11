@@ -155,14 +155,14 @@ public class ViewJournalArticleContentDashboardItemAction
 	private String _getLocalizedURL(
 		Locale locale, List<LayoutSEOLink> localizedLayoutSEOLinks) {
 
-		List<LayoutSEOLink> result = new ArrayList<>();
+		List<LayoutSEOLink> layoutSEOLinks = new ArrayList<>();
 
 		ListUtil.filter(
-			localizedLayoutSEOLinks, result,
+			localizedLayoutSEOLinks, layoutSEOLinks,
 			seoLink -> Objects.equals(
 				LocaleUtil.toW3cLanguageId(locale), seoLink.getHrefLang()));
 
-		LayoutSEOLink localizedLayoutSEOLink = result.get(0);
+		LayoutSEOLink localizedLayoutSEOLink = layoutSEOLinks.get(0);
 
 		return localizedLayoutSEOLink.getHref();
 	}
