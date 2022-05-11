@@ -104,7 +104,6 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -1693,11 +1692,9 @@ public class SXPBlueprintSearchResultTest {
 		Map<String, Object> textMatchOverMultipleFields =
 			_getDefaultValuesForTextMatchOverMultipleFields();
 
-		textMatchOverMultipleFields.replace("operator", "and");
-
-		textMatchOverMultipleFields.replace("type", "bool_prefix");
-
 		textMatchOverMultipleFields.replace("fuzziness", "0");
+		textMatchOverMultipleFields.replace("operator", "and");
+		textMatchOverMultipleFields.replace("type", "bool_prefix");
 
 		_updateElementInstancesJSON(
 			new Object[] {textMatchOverMultipleFields},
@@ -1775,11 +1772,9 @@ public class SXPBlueprintSearchResultTest {
 		Map<String, Object> textMatchOverMultipleFields =
 			_getDefaultValuesForTextMatchOverMultipleFields();
 
-		textMatchOverMultipleFields.replace("operator", "and");
-
-		textMatchOverMultipleFields.replace("type", "most_fields");
-
 		textMatchOverMultipleFields.replace("fuzziness", "0");
+		textMatchOverMultipleFields.replace("operator", "and");
+		textMatchOverMultipleFields.replace("type", "most_fields");
 
 		_updateElementInstancesJSON(
 			new Object[] {textMatchOverMultipleFields},
