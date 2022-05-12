@@ -1,23 +1,46 @@
 @import 'atlas-variables';
 
-.lfr-objects__object-validation-tabs {
+.lfr-objects__object-validation {
+	&-editor-sidebar-container {
+		display: flex;
+		height: 472px;
+		justify-content: space-between;
+		width: 100%;
+	}
+
 	&-editor-container {
-		border-top: 1px solid $gray-300;
 		display: flex;
-		height: 450px;
-	}
+		flex-direction: column;
+		height: 400px;
+		padding: 1.5rem;
+		width: 100%;
 
-	&-title-container {
-		align-items: baseline;
-		display: flex;
-		padding-left: 1.5rem;
-	}
+		.lfr-objects__editor {
+			border: 1px solid #e7e7ed;
+			border-radius: 0.25rem;
+			height: 400px;
+			width: 100%;
 
-	&-tooltip-icon {
-		color: $secondary-l1;
+			> .CodeMirror {
+				border-radius: 0.25rem;
+				height: 398px;
+				width: 100%;
+			}
 
-		&:hover {
-			color: $secondary-d1;
+			&--error {
+				border: 1px solid #f48989;
+				> .CodeMirror {
+					background-color: #feefef;
+				}
+			}
+
+			.CodeMirror-wrap pre {
+				word-break: break-word;
+			}
+
+			.CodeMirror-empty {
+				color: #a7a9bc;
+			}
 		}
 	}
 }
