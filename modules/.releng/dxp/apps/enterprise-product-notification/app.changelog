@@ -228,3 +228,14 @@ app.artifacts-2.0.20=\
 app.change.log-2.0.20=LPS-105380 LPS-140393 LPS-140403 LPS-150970
 
 app.git.id-2.0.20=4454f467a146855dbef167c0f1fa980b5646ee77
+
+#
+# Liferay App Version 2.0.21
+#
+
+app.artifacts-2.0.21=\
+	
+
+app.change.log-2.0.21=LPS-105380 LPS-140393 LPS-140403 LPS-150970
+
+app.git.id-2.0.21=123837e1514eeac77e868826a07f0dd2297bb404
