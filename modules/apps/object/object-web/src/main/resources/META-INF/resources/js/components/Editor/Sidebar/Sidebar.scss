@@ -1,17 +1,4 @@
 .lfr-objects {
-	&__object-data-validation-alt-sheet {
-		background-color: #fff;
-		border-color: #e7e7ed;
-		border-radius: 0.25rem;
-		border-style: solid;
-		border-width: 0.0625rem;
-		display: flex;
-		flex-direction: column;
-		height: 524px;
-		margin: 1.5rem;
-		padding-top: 1.5rem;
-	}
-
 	&__object-editor-sidebar-element-button {
 		align-items: center;
 		border-radius: 4px;
@@ -57,7 +44,7 @@
 	&__object-editor-sidebar {
 		border-left: 1px solid #e7e7ed;
 		overflow-x: hidden;
-		width: 365px;
+		width: 280px;
 	}
 
 	&__object-editor-sidebar-collapsable-button-list {
