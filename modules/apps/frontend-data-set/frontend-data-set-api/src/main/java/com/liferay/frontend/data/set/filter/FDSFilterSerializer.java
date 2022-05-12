@@ -25,6 +25,6 @@ import java.util.Locale;
 public interface FDSFilterSerializer {
 
 	public JSONArray serialize(
-		List<FDSFilter> fdsFilters, String fdsDisplayName, Locale locale);
+		String fdsDisplayName, List<FDSFilter> fdsFilters, Locale locale);
 
 }

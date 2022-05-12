@@ -393,7 +393,7 @@ public class HeadlessDisplayTag extends BaseDisplayTag {
 
 	private void _setFDSFiltersContext() {
 		_fdsFiltersContext = _fdsFilterSerializer.serialize(
-			getFdsFilters(), getId(), PortalUtil.getLocale(getRequest()));
+			getId(), getFdsFilters(), PortalUtil.getLocale(getRequest()));
 	}
 
 	private void _setFDSPaginationEntries() {
