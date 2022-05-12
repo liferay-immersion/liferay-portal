@@ -62,7 +62,7 @@ function AddToCart({
 	const [cpInstance, setCpInstance] = useState({
 		...initialCpInstance,
 		quantity: getQuantity(settings),
-		quantityValid: true,
+		validQuantity: true,
 	});
 	const inputRef = useRef(null);
 
@@ -84,7 +84,7 @@ function AddToCart({
 		setCpInstance({
 			...initialCpInstance,
 			quantity: getQuantity(settings),
-			quantityValid: true,
+			validQuantity: true,
 		});
 	}, [initialCpInstance, settings]);
 
@@ -181,7 +181,7 @@ function AddToCart({
 					setCpInstance({
 						...cpInstance,
 						quantity,
-						quantityValid: !errors.length,
+						validQuantity: !errors.length,
 					})
 				}
 				quantity={cpInstance.quantity}
@@ -197,12 +197,12 @@ function AddToCart({
 				className={`${spaceDirection}-${spacer}`}
 				cpInstances={[cpInstance]}
 				disabled={buttonDisabled}
-				invalid={!cpInstance.quantityValid}
+				notAllowed={!cpInstance.validQuantity}
 				onAdd={() => {
 					setCpInstance({...cpInstance, inCart: true});
 				}}
 				onClick={
-					cpInstance.quantityValid
+					cpInstance.validQuantity
 						? null
 						: (event) => {
 								event.preventDefault();
