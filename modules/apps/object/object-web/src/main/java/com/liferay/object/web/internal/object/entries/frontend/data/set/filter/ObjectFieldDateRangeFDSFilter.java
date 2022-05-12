@@ -22,9 +22,9 @@ import java.util.Calendar;
 /**
  * @author Feliphe Marinho
  */
-public class DateRangeFDSFilter extends BaseDateRangeFDSFilter {
+public class ObjectFieldDateRangeFDSFilter extends BaseDateRangeFDSFilter {
 
-	public DateRangeFDSFilter(String id, String label) {
+	public ObjectFieldDateRangeFDSFilter(String id, String label) {
 		_id = id;
 		_label = label;
 	}
