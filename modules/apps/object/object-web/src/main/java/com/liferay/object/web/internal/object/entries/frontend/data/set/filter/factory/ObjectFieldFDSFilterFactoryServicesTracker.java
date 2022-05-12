@@ -79,7 +79,6 @@ public class ObjectFieldFDSFilterFactoryServicesTracker {
 			ServiceTrackerMapFactory.openSingleValueMap(
 				bundleContext, ObjectFieldFDSFilterFactory.class,
 				"object.field.business.type.key");
-
 		_objectFieldFilterTypeKeyServiceTrackerMap =
 			ServiceTrackerMapFactory.openSingleValueMap(
 				bundleContext, ObjectFieldFDSFilterFactory.class,
@@ -89,7 +88,6 @@ public class ObjectFieldFDSFilterFactoryServicesTracker {
 	@Deactivate
 	protected void deactivate() {
 		_objectFieldBusinessTypeKeyServiceTrackerMap.close();
-
 		_objectFieldFilterTypeKeyServiceTrackerMap.close();
 	}
 
