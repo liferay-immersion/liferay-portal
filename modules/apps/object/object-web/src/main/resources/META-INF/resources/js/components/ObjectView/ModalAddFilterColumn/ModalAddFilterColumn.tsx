@@ -25,7 +25,7 @@ import React, {
 	useState,
 } from 'react';
 
-import {defaultLanguageId} from '../../../utils/locale';
+import {defaultLanguageId, locale} from '../../../utils/locale';
 import AutoComplete from '../../Form/AutoComplete';
 import {CheckboxItem} from '../../Form/CheckBoxItem';
 import CustomSelect from '../../Form/CustomSelect/CustomSelect';
@@ -40,6 +40,7 @@ import {
 
 const headers = new Headers({
 	'Accept': 'application/json',
+	'Accept-Language': locale!.symbol,
 	'Content-Type': 'application/json',
 });
 
