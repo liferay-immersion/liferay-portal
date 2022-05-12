@@ -46,6 +46,10 @@ const headers = new Headers({
 
 const PICKLIST_OPERATORS: TLabelValueObject[] = [
 	{
+		label: Liferay.Language.get('choose-an-option'),
+		value: '',
+	},
+	{
 		label: Liferay.Language.get('includes'),
 		value: 'includes',
 	},
@@ -359,15 +363,7 @@ export function ModalAddFilterColumn({
 					onActiveChange={setActive}
 					trigger={
 						<Input
-							disabled={
-								!editingFilter &&
-								(!selectedFilterType ||
-									!selectedFilterBy ||
-									(selectedFilterBy.businessType !==
-										'Workflow Status' &&
-										selectedFilterBy.businessType !==
-											'Picklist'))
-							}
+							disabled={!selectedFilterType?.value}
 							label={Liferay.Language.get('value')}
 							placeholder={Liferay.Language.get(
 								'choose-an-option'
