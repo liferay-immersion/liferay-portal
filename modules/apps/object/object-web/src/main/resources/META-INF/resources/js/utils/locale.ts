@@ -29,6 +29,12 @@ export const defaultLocale = availableLocales.find(
 	(locale) => locale.label === defaultLanguageId
 );
 
+export const languageId = Liferay.ThemeDisplay.getLanguageId() as Locale;
+
+export const locale = availableLocales.find(
+	(locale) => locale.label === languageId
+);
+
 type TLocale = {
 	label: string;
 	symbol: string;
