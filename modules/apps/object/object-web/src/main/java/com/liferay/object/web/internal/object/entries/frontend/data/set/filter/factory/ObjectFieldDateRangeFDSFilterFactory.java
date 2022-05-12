@@ -20,7 +20,7 @@ import com.liferay.object.constants.ObjectViewFilterColumnConstants;
 import com.liferay.object.model.ObjectField;
 import com.liferay.object.model.ObjectViewFilterColumn;
 import com.liferay.object.service.ObjectFieldLocalService;
-import com.liferay.object.web.internal.object.entries.frontend.data.set.filter.DateRangeFDSFilter;
+import com.liferay.object.web.internal.object.entries.frontend.data.set.filter.ObjectFieldDateRangeFDSFilter;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.language.Language;
 
@@ -41,7 +41,8 @@ import org.osgi.service.component.annotations.Reference;
 	},
 	service = ObjectFieldFDSFilterFactory.class
 )
-public class DateRangeFDSFilterFactory implements ObjectFieldFDSFilterFactory {
+public class ObjectFieldDateRangeFDSFilterFactory
+	implements ObjectFieldFDSFilterFactory {
 
 	@Override
 	public FDSFilter create(
@@ -49,7 +50,7 @@ public class DateRangeFDSFilterFactory implements ObjectFieldFDSFilterFactory {
 			ObjectViewFilterColumn objectViewFilterColumn)
 		throws PortalException {
 
-		return new DateRangeFDSFilter(
+		return new ObjectFieldDateRangeFDSFilter(
 			objectViewFilterColumn.getObjectFieldName(),
 			_getLabel(
 				locale, objectDefinitionId,
