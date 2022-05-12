@@ -2399,16 +2399,18 @@ public abstract class BaseMessageBoardSectionResourceTestCase {
 			for (java.lang.reflect.Field field :
 					sourceClass.getDeclaredFields()) {
 
-				if (!field.isSynthetic()) {
-					Method getMethod = _getMethod(
-						sourceClass, field.getName(), "get");
-
-					Method setMethod = _getMethod(
-						targetClass, field.getName(), "set",
-						getMethod.getReturnType());
-
-					setMethod.invoke(target, getMethod.invoke(source));
+				if (field.isSynthetic()) {
+					continue;
 				}
+
+				Method getMethod = _getMethod(
+					sourceClass, field.getName(), "get");
+
+				Method setMethod = _getMethod(
+					targetClass, field.getName(), "set",
+					getMethod.getReturnType());
+
+				setMethod.invoke(target, getMethod.invoke(source));
 			}
 		}
 
