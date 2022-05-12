@@ -146,7 +146,7 @@ const ModalAddObjectDefinition: React.FC<IProps> = ({
 					/>
 
 					<Input
-						error={errors.name || errors.label}
+						error={errors.name}
 						id="objectDefinitionName"
 						label={Liferay.Language.get('object-name')}
 						name="name"
