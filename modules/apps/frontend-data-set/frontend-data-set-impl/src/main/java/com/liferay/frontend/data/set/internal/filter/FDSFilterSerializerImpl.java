@@ -24,7 +24,6 @@ import com.liferay.portal.kernel.json.JSONFactory;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.json.JSONUtil;
 import com.liferay.portal.kernel.language.LanguageUtil;
-import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.ResourceBundleUtil;
 
 import java.util.List;
@@ -43,24 +42,29 @@ public class FDSFilterSerializerImpl implements FDSFilterSerializer {
 
 	@Override
 	public JSONArray serialize(
-		List<FDSFilter> fdsFilters, String fdsName, Locale locale) {
+		String fdsDisplayName, List<FDSFilter> fdsFilters, Locale locale) {
 
 		JSONArray jsonArray = _jsonFactory.createJSONArray();
+
+		_serialize(fdsFilters, jsonArray, locale);
+		_serialize(
+			_fdsFilterRegistry.getFDSFilters(fdsDisplayName), jsonArray,
+			locale);
+
+		return jsonArray;
+	}
+
+	private void _serialize(
+		List<FDSFilter> fdsFilters, JSONArray jsonArray, Locale locale) {
 
 		ResourceBundle resourceBundle = ResourceBundleUtil.getBundle(
 			"content.Language", locale, getClass());
 
-		for (FDSFilter fdsFilter :
-				ListUtil.concat(
-					fdsFilters, _fdsFilterRegistry.getFDSFilters(fdsName))) {
-
-			String label = LanguageUtil.get(
-				resourceBundle, fdsFilter.getLabel());
-
+		for (FDSFilter fdsFilter : fdsFilters) {
 			JSONObject jsonObject = JSONUtil.put(
 				"id", fdsFilter.getId()
 			).put(
-				"label", label
+				"label", LanguageUtil.get(resourceBundle, fdsFilter.getLabel())
 			).put(
 				"preloadedData", fdsFilter.getPreloadedData()
 			).put(
@@ -91,8 +95,6 @@ public class FDSFilterSerializerImpl implements FDSFilterSerializer {
 
 			jsonArray.put(jsonObject);
 		}
-
-		return jsonArray;
 	}
 
 	@Reference
