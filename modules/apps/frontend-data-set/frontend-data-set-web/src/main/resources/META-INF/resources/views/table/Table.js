@@ -105,8 +105,6 @@ function Table({dataLoading, items, itemsActions, schema, style}) {
 		viewContent = <ClayLoadingIndicator className="mt-7" />;
 	}
 	else {
-		let mainRowsCounter = 0;
-
 		viewContent = (
 			<>
 				{(inlineAddingSettings ||
@@ -131,7 +129,7 @@ function Table({dataLoading, items, itemsActions, schema, style}) {
 							updateSorting={updateSorting}
 						/>
 
-						<DndTable.Body className="with-hover">
+						<DndTable.Body>
 							{inlineAddingSettings && (
 								<TableInlineAddingRow
 									fields={visibleFields}
@@ -148,17 +146,13 @@ function Table({dataLoading, items, itemsActions, schema, style}) {
 										nestedItemsReferenceKey &&
 										item[nestedItemsReferenceKey];
 
-									const hasBackground =
-										mainRowsCounter++ % 2 === 0;
-
 									return (
 										<React.Fragment key={itemId}>
 											<DndTable.Row
 												className={classNames(
 													highlightedItemsValue.includes(
 														itemId
-													) && 'active',
-													hasBackground && 'with-bg'
+													) && 'active'
 												)}
 											>
 												{selectable && (

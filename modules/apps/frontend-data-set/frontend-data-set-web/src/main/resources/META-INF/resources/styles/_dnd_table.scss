@@ -5,9 +5,13 @@
 .dnd-tbody {
 	display: table-row-group;
 
-	&.with-hover {
-		.dnd-tr:hover {
+	.dnd-tr {
+		&:hover {
 			background-color: $primary-l3;
+		}
+
+		&:nth-child(odd):not(:hover) {
+			background-color: $table-accent-bg;
 		}
 	}
 }
@@ -50,10 +54,6 @@
 
 	.dnd-tbody &:last-child {
 		border-bottom: none;
-	}
-
-	&.with-bg {
-		background-color: $table-accent-bg;
 	}
 
 	&::before {
