@@ -18,7 +18,7 @@ import {fetch} from 'frontend-js-web';
 import React, {useContext, useEffect, useState} from 'react';
 
 import {invalidateRequired} from '../../hooks/useForm';
-import {defaultLanguageId} from '../../utils/locale';
+import {defaultLanguageId, locale} from '../../utils/locale';
 import SidePanelContent, {closeSidePanel, openToast} from '../SidePanelContent';
 import BasicInfoScreen from './BasicInfoScreen/BasicInfoScreen';
 import {DefaultSortScreen} from './DefaultSortScreen/DefaultSortScreen';
@@ -44,6 +44,7 @@ const TABS = [
 
 const HEADERS = new Headers({
 	'Accept': 'application/json',
+	'Accept-Language': locale!.symbol,
 	'Content-Type': 'application/json',
 });
 
