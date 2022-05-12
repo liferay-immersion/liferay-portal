@@ -170,12 +170,13 @@ public class ObjectViewDTOConverter
 							getObjectFieldName(),
 						"status")) {
 
-					Map<String, Object> map = objectFieldFilterParser.parse(
-						0L, locale, serviceBuilderObjectViewFilterColumn);
+					Map<String, Object> preloadedData =
+						objectFieldFilterParser.parse(
+							0L, locale, serviceBuilderObjectViewFilterColumn);
 
 					return StringUtil.merge(
 						ListUtil.toList(
-							(List<Integer>)map.get("itemsValues"),
+							(List<Integer>)preloadedData.get("itemsValues"),
 							itemValue -> _language.get(
 								locale,
 								WorkflowConstants.getStatusLabel(itemValue))),
@@ -187,13 +188,15 @@ public class ObjectViewDTOConverter
 						objectDefinitionId,
 						objectViewFilterColumn.getObjectFieldName());
 
-				Map<String, Object> map = objectFieldFilterParser.parse(
-					objectField.getListTypeDefinitionId(), locale,
-					serviceBuilderObjectViewFilterColumn);
+				Map<String, Object> preloadedData =
+					objectFieldFilterParser.parse(
+						objectField.getListTypeDefinitionId(), locale,
+						serviceBuilderObjectViewFilterColumn);
 
 				return StringUtil.merge(
 					ListUtil.toList(
-						(List<Map<String, String>>)map.get("itemsValues"),
+						(List<Map<String, String>>)preloadedData.get(
+							"itemsValues"),
 						itemValue -> itemValue.get("label")),
 					StringPool.COMMA_AND_SPACE);
 			});
