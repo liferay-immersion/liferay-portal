@@ -292,9 +292,10 @@ public class DXPEntityDTOConverterImpl implements DXPEntityDTOConverter {
 
 			Field field = new Field();
 
-			Organization organization = (Organization)baseModel;
-
 			field.setName("parentOrganizationName");
+
+			Organization organization = (Organization)baseModel;
+			
 			field.setValue(organization.getParentOrganizationName());
 
 			fields.add(field);

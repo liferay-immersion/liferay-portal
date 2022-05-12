@@ -93,9 +93,10 @@ public class SearchUtil {
 			UnsafeFunction<Document, T, Exception> transformUnsafeFunction)
 		throws Exception {
 
-		if (actions == null) {
-			actions = Collections.emptyMap();
-		}
+		Hits hits = null;
+		long totalCount = 0;
+
+		Indexer<?> indexer = IndexerRegistryUtil.getIndexer(indexerClassName);
 
 		if (sorts == null) {
 			sorts = new Sort[] {
@@ -109,14 +110,6 @@ public class SearchUtil {
 
 		searchContextUnsafeConsumer.accept(searchContext);
 
-		List<T> items = new ArrayList<>();
-
-		long totalCount = 0;
-
-		Hits hits = null;
-
-		Indexer<?> indexer = IndexerRegistryUtil.getIndexer(indexerClassName);
-
 		if (searchContext.isVulcanCheckPermissions()) {
 			hits = indexer.search(searchContext);
 			totalCount = indexer.searchCount(searchContext);
@@ -125,10 +118,11 @@ public class SearchUtil {
 			Query query = indexer.getFullQuery(searchContext);
 
 			hits = IndexSearcherHelperUtil.search(searchContext, query);
-
 			totalCount = IndexSearcherHelperUtil.searchCount(
 				searchContext, query);
 		}
+
+		List<T> items = new ArrayList<>();
 
 		for (Document document : hits.getDocs()) {
 			T item = transformUnsafeFunction.apply(document);
@@ -139,7 +133,8 @@ public class SearchUtil {
 		}
 
 		return Page.of(
-			actions, _getFacets(searchContext), items, pagination, totalCount);
+			(actions != null) ? actions : Collections.emptyMap(),
+			_getFacets(searchContext), items, pagination, totalCount);
 	}
 
 	public static class SearchContext
