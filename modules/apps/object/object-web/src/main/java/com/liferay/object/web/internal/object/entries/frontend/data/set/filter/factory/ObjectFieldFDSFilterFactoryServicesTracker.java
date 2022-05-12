@@ -50,9 +50,10 @@ public class ObjectFieldFDSFilterFactoryServicesTracker {
 				objectViewFilterColumn.getFilterType());
 		}
 
-		if (ArrayUtil.contains(
-				new String[] {"dateCreated", "dateModified"},
-				objectViewFilterColumn.getObjectFieldName())) {
+		if (Objects.equals(
+				objectViewFilterColumn.getObjectFieldName(), "dateCreated") ||
+			Objects.equals(
+				objectViewFilterColumn.getObjectFieldName(), "dateModified")) {
 
 			return _objectFieldBusinessTypeKeyServiceTrackerMap.getService(
 				ObjectFieldConstants.BUSINESS_TYPE_DATE);
