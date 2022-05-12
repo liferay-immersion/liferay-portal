@@ -2579,32 +2579,26 @@ public abstract class Base${schemaName}ResourceTestCase {
 
 	protected static class BeanTestUtil {
 
-		public static void copyProperties(Object source, Object target)
-			throws Exception {
-
+		public static void copyProperties(Object source, Object target) throws Exception {
 			Class<?> sourceClass = _getSuperClass(source.getClass());
 
 			Class<?> targetClass = target.getClass();
 
-			for (java.lang.reflect.Field field :
-					sourceClass.getDeclaredFields()) {
-
-				if (!field.isSynthetic()) {
-					Method getMethod = _getMethod(
-						sourceClass, field.getName(), "get");
-
-					Method setMethod = _getMethod(
-						targetClass, field.getName(), "set",
-						getMethod.getReturnType());
-
-					setMethod.invoke(target, getMethod.invoke(source));
+			for (java.lang.reflect.Field field : sourceClass.getDeclaredFields()) {
+				if (field.isSynthetic()) {
+					continue;
 				}
+
+				Method getMethod = _getMethod(sourceClass, field.getName(), "get");
+
+				Method setMethod = _getMethod(targetClass, field.getName(), "set", getMethod.getReturnType());
+
+				setMethod.invoke(target, getMethod.invoke(source));
 			}
 		}
 
 		public static boolean hasProperty(Object bean, String name) {
-			Method setMethod = _getMethod(
-				bean.getClass(), "set" + StringUtil.upperCaseFirstLetter(name));
+			Method setMethod = _getMethod(bean.getClass(), "set" + StringUtil.upperCaseFirstLetter(name));
 
 			if (setMethod != null) {
 				return true;
@@ -2613,13 +2607,10 @@ public abstract class Base${schemaName}ResourceTestCase {
 			return false;
 		}
 
-		public static void setProperty(Object bean, String name, Object value)
-			throws Exception {
-
+		public static void setProperty(Object bean, String name, Object value) throws Exception {
 			Class<?> clazz = bean.getClass();
 
-			Method setMethod = _getMethod(
-				clazz, "set" + StringUtil.upperCaseFirstLetter(name));
+			Method setMethod = _getMethod(clazz, "set" + StringUtil.upperCaseFirstLetter(name));
 
 			if (setMethod == null) {
 				throw new NoSuchMethodException();
@@ -2643,14 +2634,8 @@ public abstract class Base${schemaName}ResourceTestCase {
 			return null;
 		}
 
-		private static Method _getMethod(
-				Class<?> clazz, String fieldName, String prefix,
-				Class<?>... parameterTypes)
-			throws Exception {
-
-			return clazz.getMethod(
-				prefix + StringUtil.upperCaseFirstLetter(fieldName),
-				parameterTypes);
+		private static Method _getMethod(Class<?> clazz, String fieldName, String prefix, Class<?>... parameterTypes) throws Exception {
+			return clazz.getMethod(prefix + StringUtil.upperCaseFirstLetter(fieldName), parameterTypes);
 		}
 
 		private static Class<?> _getSuperClass(Class<?> clazz) {
@@ -2663,9 +2648,7 @@ public abstract class Base${schemaName}ResourceTestCase {
 			return superClass;
 		}
 
-		private static Object _translateValue(
-			Class<?> parameterType, Object value) {
-
+		private static Object _translateValue(Class<?> parameterType, Object value) {
 			if ((value instanceof Integer) && parameterType.equals(Long.class)) {
 				Integer intValue = (Integer)value;
 
@@ -2675,10 +2658,7 @@ public abstract class Base${schemaName}ResourceTestCase {
 			return value;
 		}
 
-		private static final Set<Class<?>> _parameterTypes = new HashSet<>(
-			Arrays.asList(
-				Boolean.class, Date.class, Double.class, Integer.class, Long.class,
-				Map.class, String.class));
+		private static final Set<Class<?>> _parameterTypes = new HashSet<>(Arrays.asList(Boolean.class, Date.class, Double.class, Integer.class, Long.class, Map.class, String.class));
 
 	}
 
