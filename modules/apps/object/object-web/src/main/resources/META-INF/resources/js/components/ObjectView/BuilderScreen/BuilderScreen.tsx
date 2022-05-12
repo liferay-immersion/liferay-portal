@@ -78,6 +78,8 @@ export function BuilderScreen({
 				.includes(query.toLowerCase())
 	);
 
+	const tableItems = query ? newFilteredItems : objectColumns;
+
 	return (
 		<Card title={title}>
 			<ManagementToolbar.Container>
@@ -97,185 +99,102 @@ export function BuilderScreen({
 				</ManagementToolbar.ItemList>
 			</ManagementToolbar.Container>
 
-			{objectColumns?.length > 0 ? (
+			{tableItems.length > 0 ? (
 				<ClayList>
-					{query ? (
-						newFilteredItems.length > 0 ? (
-							newFilteredItems.map((viewColumn, index) => (
-								<React.Fragment
-									key={viewColumn.objectFieldName}
-								>
-									{index === 0 && (
-										<ClayList.Item flex>
-											<ClayList.ItemField
-												className={classNames(
-													'lfr-object__object-builder-screen-first-column',
-													{
-														'drag-and-drop': hasDragAndDrop,
-													}
-												)}
-												expand
-											>
-												{firstColumnHeader}
-											</ClayList.ItemField>
-
-											<ClayList.ItemField
-												className="lfr-object__object-builder-screen-second-column"
-												expand
-											>
-												<ClayList.ItemField>
-													{secondColumnHeader}
-												</ClayList.ItemField>
-											</ClayList.ItemField>
-										</ClayList.Item>
-									)}
-
-									<ClayList.Item flex>
-										<ClayList.ItemField>
-											<ClayButtonWithIcon
-												displayType={null}
-												symbol="drag"
-											/>
-										</ClayList.ItemField>
-
-										<ClayList.ItemField expand>
-											<ClayList.ItemTitle>
-												{viewColumn.fieldLabel}
-											</ClayList.ItemTitle>
-										</ClayList.ItemField>
-
-										{defaultSort && (
-											<ClayList.ItemField
-												className="lfr-object__object-builder-screen-sort-order"
-												expand
-											>
-												<ClayList.ItemText>
-													{viewColumn.sortOrder ===
-													'asc'
-														? Liferay.Language.get(
-																'ascending'
-														  )
-														: Liferay.Language.get(
-																'descending'
-														  )}
-												</ClayList.ItemText>
-											</ClayList.ItemField>
+					{tableItems.map((viewColumn, index) => (
+						<React.Fragment key={viewColumn.objectFieldName}>
+							{index === 0 && (
+								<ClayList.Item flex>
+									<ClayList.ItemField
+										className={classNames(
+											'lfr-object__object-builder-screen-first-column',
+											!hasDragAndDrop &&
+												'lfr-object__object-builder-screen-first-column--not-draggable'
 										)}
-									</ClayList.Item>
-								</React.Fragment>
-							))
-						) : (
-							<div className="lfr-object__object-builder-screen-empty-state">
-								<ClayEmptyState
-									description={Liferay.Language.get(
-										'sorry,-no-results-were-found'
-									)}
-									title={Liferay.Language.get(
-										'no-results-found'
-									)}
-								></ClayEmptyState>
-							</div>
-						)
-					) : (
-						objectColumns.map((viewColumn, index) => {
-							return (
-								<React.Fragment
-									key={viewColumn.objectFieldName}
-								>
-									{index === 0 && (
-										<ClayList.Item flex>
-											<ClayList.ItemField expand>
-												<ClayList.ItemField
-													className={classNames(
-														'lfr-object__object-builder-screen-first-column',
-														!hasDragAndDrop &&
-															'lfr-object__object-builder-screen-first-column--not-draggable'
-													)}
-													expand
-												>
-													{firstColumnHeader}
-												</ClayList.ItemField>
-											</ClayList.ItemField>
+										expand
+									>
+										{firstColumnHeader}
+									</ClayList.ItemField>
 
-											<ClayList.ItemField
-												className={classNames(
-													'lfr-object__object-builder-screen-second-column',
-													!hasDragAndDrop &&
-														'lfr-object__object-builder-screen-second-column--not-draggable'
-												)}
-												expand
-											>
-												<ClayList.ItemField>
-													{secondColumnHeader}
-												</ClayList.ItemField>
-											</ClayList.ItemField>
+									<ClayList.ItemField
+										className={classNames(
+											'lfr-object__object-builder-screen-second-column',
+											!hasDragAndDrop &&
+												'lfr-object__object-builder-screen-second-column--not-draggable'
+										)}
+										expand
+									>
+										<ClayList.ItemField>
+											{secondColumnHeader}
+										</ClayList.ItemField>
+									</ClayList.ItemField>
 
-											{thirdColumnHeader && (
-												<ClayList.ItemField
-													className={classNames(
-														'lfr-object__object-builder-screen-third-column',
-														!hasDragAndDrop &&
-															'lfr-object__object-builder-screen-third-column--not-draggable'
-													)}
-													expand
-												>
-													<ClayList.ItemField>
-														{thirdColumnHeader}
-													</ClayList.ItemField>
-												</ClayList.ItemField>
+									{thirdColumnHeader && (
+										<ClayList.ItemField
+											className={classNames(
+												'lfr-object__object-builder-screen-third-column',
+												!hasDragAndDrop &&
+													'lfr-object__object-builder-screen-third-column--not-draggable'
 											)}
-										</ClayList.Item>
+											expand
+										>
+											<ClayList.ItemField>
+												{thirdColumnHeader}
+											</ClayList.ItemField>
+										</ClayList.ItemField>
 									)}
+								</ClayList.Item>
+							)}
 
-									<DndProvider backend={HTML5Backend}>
-										<BuilderListItem
-											aliasColumnText={
-												defaultSort
-													? viewColumn.sortOrder ===
-													  'asc'
-														? Liferay.Language.get(
-																'ascending'
-														  )
-														: Liferay.Language.get(
-																'descending'
-														  )
-													: filter
-													? viewColumn.objectFieldBusinessType
-													: viewColumn.label[
-															defaultLanguageId
-													  ]
-											}
-											defaultSort={defaultSort}
-											disableEdit={
-												viewColumn.objectFieldBusinessType !==
-													'Picklist' &&
-												viewColumn.objectFieldBusinessType !==
-													'Workflow Status'
-											}
-											filter={filter}
-											hasDragAndDrop={hasDragAndDrop}
-											index={index}
-											label={viewColumn.fieldLabel}
-											objectFieldName={
-												viewColumn.objectFieldName
-											}
-											onEditing={onEditing}
-											onEditingObjectFieldName={
-												onEditingObjectFieldName
-											}
-											onVisibleEditModal={
-												onVisibleEditModal
-											}
-											thirdColumnValues={
-												viewColumn.valueList
-											}
-										/>
-									</DndProvider>
-								</React.Fragment>
-							);
-						})
-					)}
+							<DndProvider backend={HTML5Backend}>
+								<BuilderListItem
+									aliasColumnText={
+										defaultSort
+											? viewColumn.sortOrder === 'asc'
+												? Liferay.Language.get(
+														'ascending'
+												  )
+												: Liferay.Language.get(
+														'descending'
+												  )
+											: filter
+											? viewColumn.objectFieldBusinessType
+											: viewColumn.label[
+													defaultLanguageId
+											  ]
+									}
+									defaultSort={defaultSort}
+									disableEdit={
+										viewColumn.objectFieldBusinessType !==
+											'Picklist' &&
+										viewColumn.objectFieldBusinessType !==
+											'Workflow Status'
+									}
+									filter={filter}
+									hasDragAndDrop={hasDragAndDrop}
+									index={index}
+									label={viewColumn.fieldLabel}
+									objectFieldName={viewColumn.objectFieldName}
+									onEditing={onEditing}
+									onEditingObjectFieldName={
+										onEditingObjectFieldName
+									}
+									onVisibleEditModal={onVisibleEditModal}
+									thirdColumnValues={viewColumn.valueList}
+								/>
+							</DndProvider>
+						</React.Fragment>
+					))}
 				</ClayList>
+			) : query ? (
+				<div className="lfr-object__object-builder-screen-empty-state">
+					<ClayEmptyState
+						description={Liferay.Language.get(
+							'sorry,-no-results-were-found'
+						)}
+						title={Liferay.Language.get('no-results-found')}
+					/>
+				</div>
 			) : (
 				<div className="lfr-object__object-builder-screen-empty-state">
 					<ClayEmptyState
