@@ -46,7 +46,7 @@ public class ObjectFieldFDSFilterFactoryServicesTracker {
 		throws PortalException {
 
 		if (Validator.isNotNull(objectViewFilterColumn.getFilterType())) {
-			return _serviceTrackerMapByObjectFieldFilterTypeKey.getService(
+			return _objectFieldFilterTypeKeyServiceTrackerMap.getService(
 				objectViewFilterColumn.getFilterType());
 		}
 
@@ -54,32 +54,32 @@ public class ObjectFieldFDSFilterFactoryServicesTracker {
 				new String[] {"dateCreated", "dateModified"},
 				objectViewFilterColumn.getObjectFieldName())) {
 
-			return _serviceTrackerMapByObjectFieldBusinessTypeKey.getService(
+			return _objectFieldBusinessTypeKeyServiceTrackerMap.getService(
 				ObjectFieldConstants.BUSINESS_TYPE_DATE);
 		}
 
 		if (Objects.equals(
 				objectViewFilterColumn.getObjectFieldName(), "status")) {
 
-			return _serviceTrackerMapByObjectFieldBusinessTypeKey.getService(
+			return _objectFieldBusinessTypeKeyServiceTrackerMap.getService(
 				ObjectFieldConstants.BUSINESS_TYPE_PICKLIST);
 		}
 
 		ObjectField objectField = _objectFieldLocalService.getObjectField(
 			objectDefinitionId, objectViewFilterColumn.getObjectFieldName());
 
-		return _serviceTrackerMapByObjectFieldBusinessTypeKey.getService(
+		return _objectFieldBusinessTypeKeyServiceTrackerMap.getService(
 			objectField.getBusinessType());
 	}
 
 	@Activate
 	protected void activate(BundleContext bundleContext) {
-		_serviceTrackerMapByObjectFieldBusinessTypeKey =
+		_objectFieldBusinessTypeKeyServiceTrackerMap =
 			ServiceTrackerMapFactory.openSingleValueMap(
 				bundleContext, ObjectFieldFDSFilterFactory.class,
 				"object.field.business.type.key");
 
-		_serviceTrackerMapByObjectFieldFilterTypeKey =
+		_objectFieldFilterTypeKeyServiceTrackerMap =
 			ServiceTrackerMapFactory.openSingleValueMap(
 				bundleContext, ObjectFieldFDSFilterFactory.class,
 				"object.field.filter.type.key");
@@ -87,17 +87,17 @@ public class ObjectFieldFDSFilterFactoryServicesTracker {
 
 	@Deactivate
 	protected void deactivate() {
-		_serviceTrackerMapByObjectFieldBusinessTypeKey.close();
+		_objectFieldBusinessTypeKeyServiceTrackerMap.close();
 
-		_serviceTrackerMapByObjectFieldFilterTypeKey.close();
+		_objectFieldFilterTypeKeyServiceTrackerMap.close();
 	}
+
+	private ServiceTrackerMap<String, ObjectFieldFDSFilterFactory>
+		_objectFieldBusinessTypeKeyServiceTrackerMap;
+	private ServiceTrackerMap<String, ObjectFieldFDSFilterFactory>
+		_objectFieldFilterTypeKeyServiceTrackerMap;
 
 	@Reference
 	private ObjectFieldLocalService _objectFieldLocalService;
-
-	private ServiceTrackerMap<String, ObjectFieldFDSFilterFactory>
-		_serviceTrackerMapByObjectFieldBusinessTypeKey;
-	private ServiceTrackerMap<String, ObjectFieldFDSFilterFactory>
-		_serviceTrackerMapByObjectFieldFilterTypeKey;
 
 }
