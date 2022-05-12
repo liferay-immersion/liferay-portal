@@ -581,7 +581,7 @@ public class DefaultCommerceCheckoutStepHttpHelper
 		}
 
 		try {
-			CommerceOrder updateCommerceOrder = TransactionInvokerUtil.invoke(
+			CommerceOrder updatedCommerceOrder = TransactionInvokerUtil.invoke(
 				_transactionConfig,
 				() -> {
 					long commerceShippingMethodId = 0;
@@ -608,9 +608,9 @@ public class DefaultCommerceCheckoutStepHttpHelper
 				});
 
 			httpServletRequest.setAttribute(
-				CommerceCheckoutWebKeys.COMMERCE_ORDER, updateCommerceOrder);
+				CommerceCheckoutWebKeys.COMMERCE_ORDER, updatedCommerceOrder);
 
-			return updateCommerceOrder;
+			return updatedCommerceOrder;
 		}
 		catch (Throwable throwable) {
 			throw new PortalException(throwable);
