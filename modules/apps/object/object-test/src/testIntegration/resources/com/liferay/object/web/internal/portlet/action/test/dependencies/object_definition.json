@@ -126,6 +126,18 @@
 				}
 			],
 			"objectViewFilterColumns": [
+				{
+					"objectFieldName": "dateCreated"
+				},
+				{
+					"objectFieldName": "dateModified"
+				},
+				{
+					"filterType": "excludes",
+					"json": "{ \"excludes\": [0, 1]}",
+					"objectFieldName": "status",
+					"valueSummary": "Approved, Pending"
+				}
 			],
 			"objectViewSortColumns": [
 				{
