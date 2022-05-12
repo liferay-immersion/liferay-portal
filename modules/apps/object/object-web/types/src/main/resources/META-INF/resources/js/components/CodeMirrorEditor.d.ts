@@ -22,6 +22,7 @@ import './CodeMirrorEditor.scss';
 export default function CodeMirrorEditor({
 	className,
 	editorRef,
+	error,
 	fixed,
 	onChange,
 	options,
@@ -30,6 +31,7 @@ export default function CodeMirrorEditor({
 interface IProps {
 	className?: string;
 	editorRef?: React.MutableRefObject<CodeMirror.Editor | undefined>;
+	error?: string;
 	fixed?: boolean;
 	onChange: (value?: string) => void;
 	options?: CodeMirror.EditorConfiguration;

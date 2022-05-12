@@ -28,6 +28,7 @@ import './CodeMirrorEditor.scss';
 export default function CodeMirrorEditor({
 	className,
 	editorRef,
+	error,
 	fixed,
 	onChange,
 	options,
@@ -66,6 +67,7 @@ export default function CodeMirrorEditor({
 			className={classNames(
 				'lfr-objects__editor',
 				{
+					'lfr-objects__editor--error': error,
 					'lfr-objects__editor--fixed': fixed,
 				},
 				className
@@ -78,6 +80,7 @@ export default function CodeMirrorEditor({
 interface IProps {
 	className?: string;
 	editorRef?: React.MutableRefObject<CodeMirror.Editor | undefined>;
+	error?: string;
 	fixed?: boolean;
 	onChange: (value?: string) => void;
 	options?: CodeMirror.EditorConfiguration;
