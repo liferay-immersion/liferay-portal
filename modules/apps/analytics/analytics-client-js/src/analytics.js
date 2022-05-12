@@ -27,6 +27,7 @@ import {
 	QUEUE_PRIORITY_IDENTITY,
 	STORAGE_KEY_EVENTS,
 	STORAGE_KEY_IDENTITY,
+	STORAGE_KEY_IDENTITY_LAST_UPDATED_DATE,
 	STORAGE_KEY_MESSAGES,
 	STORAGE_KEY_MESSAGE_IDENTITY,
 	STORAGE_KEY_USER_ID,
@@ -34,6 +35,7 @@ import {
 	VALIDATION_CONTEXT_VALUE_MAXIMUM_LENGTH,
 } from './utils/constants';
 import {getContexts, setContexts} from './utils/contexts';
+import {isExpired} from './utils/date';
 import {normalizeEvent} from './utils/events';
 import hash from './utils/hash';
 import {getItem, setItem} from './utils/storage';
@@ -52,6 +54,7 @@ let instance;
  * and flushes it to the defined endpoint at regular intervals.
  */
 class Analytics {
+
 	/**
 	 * Returns an Analytics instance and triggers the automatic flush loop
 	 * @param {Object} config object to instantiate the Analytics tool
@@ -448,14 +451,22 @@ class Analytics {
 			userId
 		);
 		const storedIdentityHash = getItem(STORAGE_KEY_IDENTITY);
+		const identityLastUpdatedDate = getItem(
+			STORAGE_KEY_IDENTITY_LAST_UPDATED_DATE
+		);
 
 		let identityHash = Promise.resolve(storedIdentityHash);
 
-		if (newIdentityHash !== storedIdentityHash) {
+		if (
+			!identityLastUpdatedDate ||
+			isExpired(Number(identityLastUpdatedDate)) ||
+			newIdentityHash !== storedIdentityHash
+		) {
 			const {channelId} = this._getContext();
 			const {emailAddressHashed} = identity;
 
 			setItem(STORAGE_KEY_IDENTITY, newIdentityHash);
+			setItem(STORAGE_KEY_IDENTITY_LAST_UPDATED_DATE, Date.now());
 
 			instance[STORAGE_KEY_MESSAGE_IDENTITY].addItem({
 				channelId,
