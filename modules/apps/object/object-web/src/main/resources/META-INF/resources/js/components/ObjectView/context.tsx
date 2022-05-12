@@ -213,22 +213,25 @@ const viewReducer = (state: TState, action: TAction) => {
 
 			const [label] = labels;
 
+			let filterTypeValue = filterType || null;
+
+			if (valueList.length === 0) {
+				filterTypeValue = null;
+			}
+
 			const newFilterColumnItem: TObjectViewFilterColumn = {
-				definition: filterType
-					? {
-							[filterType]: valueList.map(
-								(item: {label: string; value: string}) =>
-									item.value
-							),
-					  }
-					: null,
+				definition: filterTypeValue && {
+					[filterTypeValue]: valueList.map(
+						(item: {label: string; value: string}) => item.value
+					),
+				},
 				fieldLabel: label[defaultLanguageId],
 				filterBy: label[defaultLanguageId],
-				filterType,
+				filterType: filterTypeValue,
 				label,
 				objectFieldBusinessType,
 				objectFieldName,
-				valueList,
+				valueList: filterTypeValue ? valueList : [],
 			};
 
 			const objectView = {...state.objectView};
@@ -675,18 +678,24 @@ const viewReducer = (state: TState, action: TAction) => {
 
 			const {objectViewFilterColumns} = state.objectView;
 
+			let filterTypeValue = filterType || null;
+
+			if (valueList.length === 0) {
+				filterTypeValue = null;
+			}
+
 			const newObjectFilterColumns = objectViewFilterColumns.map(
 				(filterColumn) => {
 					if (filterColumn.objectFieldName === objectFieldName) {
 						return {
 							...filterColumn,
-							definition: {
-								[filterType]: valueList.map(
+							definition: filterTypeValue && {
+								[filterTypeValue]: valueList.map(
 									(item: TLabelValueObject) => item.value
 								),
 							},
-							filterType,
-							valueList,
+							filterType: filterTypeValue,
+							valueList: filterTypeValue ? valueList : [],
 						};
 					}
 					else {
