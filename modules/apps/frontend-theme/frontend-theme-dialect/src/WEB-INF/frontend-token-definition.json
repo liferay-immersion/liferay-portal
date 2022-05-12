@@ -1509,7 +1509,7 @@
 							],
 							"name": "fontFamilySansSerif",
 							"type": "String"
-						}	
+						}
 					],
 					"label": "font-family",
 					"name": "fontFamily"
@@ -3931,7 +3931,6 @@
 							"name": "formInputLabelReferenceMarkColor",
 							"type": "String"
 						}
-						
 					],
 					"label": "form-input-label",
 					"name": "formInputLabel"
