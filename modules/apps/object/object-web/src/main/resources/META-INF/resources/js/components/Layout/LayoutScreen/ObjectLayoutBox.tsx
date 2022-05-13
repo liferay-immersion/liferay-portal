@@ -27,6 +27,7 @@ import ObjectLayoutRows from './ObjectLayoutRows';
 interface IObjectLayoutBoxProps extends React.HTMLAttributes<HTMLElement> {
 	boxIndex: number;
 	collapsable: boolean;
+	displayAddButton?: boolean;
 	label: string;
 	objectLayoutRows?: TObjectLayoutRow[];
 	tabIndex: number;
@@ -35,6 +36,7 @@ interface IObjectLayoutBoxProps extends React.HTMLAttributes<HTMLElement> {
 const ObjectLayoutBox: React.FC<IObjectLayoutBoxProps> = ({
 	boxIndex,
 	collapsable,
+	displayAddButton,
 	label,
 	objectLayoutRows,
 	tabIndex,
@@ -72,15 +74,17 @@ const ObjectLayoutBox: React.FC<IObjectLayoutBoxProps> = ({
 								toggled={collapsable}
 							/>
 
-							<ClayButton
-								className="ml-4"
-								disabled={isViewOnly}
-								displayType="secondary"
-								onClick={() => setVisibleModal(true)}
-								small
-							>
-								{Liferay.Language.get('add-field')}
-							</ClayButton>
+							{displayAddButton && (
+								<ClayButton
+									className="ml-4"
+									disabled={isViewOnly}
+									displayType="secondary"
+									onClick={() => setVisibleModal(true)}
+									small
+								>
+									{Liferay.Language.get('add-field')}
+								</ClayButton>
+							)}
 
 							<HeaderDropdown
 								deleteElement={() => {
