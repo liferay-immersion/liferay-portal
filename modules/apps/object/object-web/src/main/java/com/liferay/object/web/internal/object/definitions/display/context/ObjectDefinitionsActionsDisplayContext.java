@@ -104,8 +104,10 @@ public class ObjectDefinitionsActionsDisplayContext
 		List<ObjectActionExecutor> objectActionExecutors =
 			_objectActionExecutorRegistry.getObjectActionExecutors();
 
-		objectActionExecutors.forEach(
-			objectActionExecutor -> objectActionExecutorsJSONArray.put(
+		for (ObjectActionExecutor objectActionExecutor :
+				objectActionExecutors) {
+
+			objectActionExecutorsJSONArray.put(
 				JSONUtil.put(
 					"description",
 					LanguageUtil.get(
@@ -120,7 +122,8 @@ public class ObjectDefinitionsActionsDisplayContext
 							objectActionExecutor.getKey() + "]")
 				).put(
 					"value", objectActionExecutor.getKey()
-				)));
+				));
+		}
 
 		return objectActionExecutorsJSONArray;
 	}
