@@ -18,6 +18,7 @@
 
 <%
 String redirect = ParamUtil.getString(request, "redirect");
+String workflowTaskURL = ParamUtil.getString(request, "workflowTaskURL");
 
 long assigneeUserId = ParamUtil.getLong(renderRequest, "assigneeUserId");
 
@@ -85,14 +86,29 @@ boolean hasAssignableUsers = workflowTaskDisplayContext.hasAssignableUsers(workf
 			Liferay.Util.fetch('<%= assignURL.toString() %>', {
 				body: data,
 				method: 'POST',
-			}).then(() => {
-				Liferay.Util.getOpener().<portlet:namespace />refreshPortlet(
-					'<%= PortalUtil.escapeRedirect(redirect.toString()) %>'
-				);
-				Liferay.Util.getWindow(
-					'<portlet:namespace />assignToDialog'
-				).destroy();
-			});
+			})
+				.then((response) => response.json())
+				.then((json) => {
+					const assignMode =
+						'<%= ParamUtil.getString(request, "assignMode") %>';
+
+					if (assignMode === 'assignToMe') {
+						Liferay.Util.getOpener().<portlet:namespace />refreshPortlet(
+							'<%= PortalUtil.escapeRedirect(redirect) %>'
+						);
+					}
+					else {
+						Liferay.Util.getOpener().<portlet:namespace />refreshPortlet(
+							json.hasPermission
+								? '<%= PortalUtil.escapeRedirect(workflowTaskURL) %>'
+								: '<%= PortalUtil.escapeRedirect(redirect) %>'
+						);
+					}
+
+					Liferay.Util.getWindow(
+						'<portlet:namespace />assignToDialog'
+					).destroy();
+				});
 		});
 	}
 </aui:script>

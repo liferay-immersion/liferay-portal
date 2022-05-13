@@ -81,6 +81,7 @@ PortletURL redirectURL = PortletURLBuilder.createRenderURL(
 					<portlet:param name="redirect" value='<%= Validator.isNull(request.getParameter("workflowTaskId")) ? redirectURL.toString() : currentURL %>' />
 					<portlet:param name="workflowTaskId" value="<%= String.valueOf(workflowTask.getWorkflowTaskId()) %>" />
 					<portlet:param name="assigneeUserId" value="<%= String.valueOf(user.getUserId()) %>" />
+					<portlet:param name="assignMode" value="assignToMe" />
 				</liferay-portlet:renderURL>
 
 				<liferay-ui:icon
@@ -93,8 +94,9 @@ PortletURL redirectURL = PortletURLBuilder.createRenderURL(
 
 		<liferay-portlet:renderURL copyCurrentRenderParameters="<%= false %>" var="assignURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>">
 			<portlet:param name="mvcPath" value="/workflow_task_assign.jsp" />
-			<portlet:param name="redirect" value="<%= currentURL %>" />
+			<portlet:param name="redirect" value="<%= redirectURL.toString() %>" />
 			<portlet:param name="workflowTaskId" value="<%= String.valueOf(workflowTask.getWorkflowTaskId()) %>" />
+			<portlet:param name="workflowTaskURL" value="<%= currentURL %>" />
 		</liferay-portlet:renderURL>
 
 		<liferay-ui:icon
