@@ -59,7 +59,7 @@ public class PublicationsUserRoleUpgradeProcess extends UpgradeProcess {
 			"resource-actions/default.xml");
 
 		try (PreparedStatement preparedStatement = connection.prepareStatement(
-				"select Company.companyId from Company");
+				"select companyId from Company");
 			ResultSet resultSet = preparedStatement.executeQuery()) {
 
 			while (resultSet.next()) {
