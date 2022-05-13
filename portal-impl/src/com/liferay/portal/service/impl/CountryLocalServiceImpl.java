@@ -65,7 +65,7 @@ public class CountryLocalServiceImpl extends CountryLocalServiceBaseImpl {
 			ServiceContext serviceContext)
 		throws PortalException {
 
-		_validate(-1, serviceContext.getCompanyId(), a2, a3, name, number);
+		_validate(0, serviceContext.getCompanyId(), a2, a3, name, number);
 
 		long countryId = counterLocalService.increment();
 
