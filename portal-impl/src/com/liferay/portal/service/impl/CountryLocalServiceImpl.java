@@ -354,8 +354,8 @@ public class CountryLocalServiceImpl extends CountryLocalServiceBaseImpl {
 			});
 	}
 
-	private boolean _isConflictingCountry(Country country, long curCountryId) {
-		if ((country != null) && (country.getCountryId() != curCountryId)) {
+	private boolean _isConflictingCountry(Country country, long countryId) {
+		if ((country != null) && (country.getCountryId() != countryId)) {
 			return true;
 		}
 
