@@ -354,7 +354,7 @@ public class CountryLocalServiceImpl extends CountryLocalServiceBaseImpl {
 			});
 	}
 
-	private boolean _isConflictingCountry(Country country, long countryId) {
+	private boolean _isDuplicateCountry(Country country, long countryId) {
 		if ((country != null) && (country.getCountryId() != countryId)) {
 			return true;
 		}
@@ -413,24 +413,24 @@ public class CountryLocalServiceImpl extends CountryLocalServiceBaseImpl {
 			throw new CountryNumberException("Missing number");
 		}
 
-		if (_isConflictingCountry(fetchCountryByA2(companyId, a2), countryId)) {
+		if (_isDuplicateCountry(fetchCountryByA2(companyId, a2), countryId)) {
 			throw new DuplicateCountryException(
 				"A2 belongs to another country");
 		}
 
-		if (_isConflictingCountry(fetchCountryByA3(companyId, a3), countryId)) {
+		if (_isDuplicateCountry(fetchCountryByA3(companyId, a3), countryId)) {
 			throw new DuplicateCountryException(
 				"A3 belongs to another country");
 		}
 
-		if (_isConflictingCountry(
+		if (_isDuplicateCountry(
 				fetchCountryByName(companyId, name), countryId)) {
 
 			throw new DuplicateCountryException(
 				"Name belongs to another country");
 		}
 
-		if (_isConflictingCountry(
+		if (_isDuplicateCountry(
 				fetchCountryByNumber(companyId, number), countryId)) {
 
 			throw new DuplicateCountryException(
