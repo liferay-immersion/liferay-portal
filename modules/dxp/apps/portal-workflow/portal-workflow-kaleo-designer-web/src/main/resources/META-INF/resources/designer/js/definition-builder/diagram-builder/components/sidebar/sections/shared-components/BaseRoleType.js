@@ -14,8 +14,9 @@ import ClayButton, {ClayButtonWithIcon} from '@clayui/button';
 import {useResource} from '@clayui/data-provider';
 import ClayDropDown from '@clayui/drop-down';
 import ClayForm, {ClayCheckbox} from '@clayui/form';
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 
+import {DefinitionBuilderContext} from '../../../../../DefinitionBuilderContext';
 import {
 	headers,
 	retrieveAccountRoles,
@@ -70,10 +71,10 @@ const BaseRoleType = ({
 		},
 	});
 
-	const userId = Liferay.ThemeDisplay.getUserId();
+	const {accountEntryId} = useContext(DefinitionBuilderContext);
 
 	useEffect(() => {
-		retrieveAccountRoles(userId)
+		retrieveAccountRoles(accountEntryId)
 			.then((response) => response.json())
 			.then(({items}) => {
 				const roles = items.map((item) => {
