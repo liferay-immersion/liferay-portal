@@ -338,12 +338,12 @@ public class DDMFormDisplayContext {
 					_ddmFormInstance.setSettings(
 						latestApprovedDDMFormInstanceVersion.getSettings());
 
-					DDMStructureVersion structureVersion =
+					DDMStructureVersion ddmStructureVersion =
 						latestApprovedDDMFormInstanceVersion.
 							getStructureVersion();
 
 					_ddmFormInstance.setStructureId(
-						structureVersion.getStructureId());
+						ddmStructureVersion.getStructureId());
 				}
 			}
 		}
@@ -822,13 +822,13 @@ public class DDMFormDisplayContext {
 			ddmForm = latestStructureVersion.getDDMForm();
 		}
 		else {
-			DDMFormInstanceVersion latestFormInstanceVersion =
+			DDMFormInstanceVersion latestDDMFormInstanceVersion =
 				_getLatestApprovedDDMFormInstanceVersion();
 
-			DDMStructureVersion structureVersion =
-				latestFormInstanceVersion.getStructureVersion();
+			DDMStructureVersion ddmStructureVersion =
+				latestDDMFormInstanceVersion.getStructureVersion();
 
-			ddmForm = structureVersion.getDDMForm();
+			ddmForm = ddmStructureVersion.getDDMForm();
 		}
 
 		if (requireCaptcha) {
@@ -859,13 +859,13 @@ public class DDMFormDisplayContext {
 			ddmFormLayout = latestStructureVersion.getDDMFormLayout();
 		}
 		else {
-			DDMFormInstanceVersion latestFormInstanceVersion =
+			DDMFormInstanceVersion latestDDMFormInstanceVersion =
 				_getLatestApprovedDDMFormInstanceVersion();
 
-			DDMStructureVersion structureVersion =
-				latestFormInstanceVersion.getStructureVersion();
+			DDMStructureVersion ddmStructureVersion =
+				latestDDMFormInstanceVersion.getStructureVersion();
 
-			ddmFormLayout = structureVersion.getDDMFormLayout();
+			ddmFormLayout = ddmStructureVersion.getDDMFormLayout();
 		}
 
 		if (requireCaptcha) {
