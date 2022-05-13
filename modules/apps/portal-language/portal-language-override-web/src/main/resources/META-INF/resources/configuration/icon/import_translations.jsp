@@ -35,10 +35,6 @@ renderResponse.setTitle(LanguageUtil.get(request, "import-translations"));
 	cssClass="container-view"
 >
 	<aui:form action="<%= importTranslationsURL %>" cssClass="sheet sheet-lg" enctype="multipart/form-data" method="post" name="fm">
-		<liferay-ui:error key="fileEmpty" message="file-does-not-contain-any-translations" />
-		<liferay-ui:error key="fileExtensionInvalid" message='<%= LanguageUtil.format(request, "please-upload-a-file-with-a-valid-extension-x", "properties", false) %>' />
-		<liferay-ui:error key="fileInvalid" message="please-select-a-valid-file" />
-
 		<liferay-ui:error exception="<%= PLOEntryKeyException.MustBeShorter.class %>">
 
 			<%
@@ -50,6 +46,10 @@ renderResponse.setTitle(LanguageUtil.get(request, "import-translations"));
 
 		<liferay-ui:error exception="<%= PLOEntryKeyException.MustNotBeNull.class %>" message="empty-keys-are-not-allowed" />
 		<liferay-ui:error exception="<%= PLOEntryValueException.MustNotBeNull.class %>" message="empty-values-are-not-allowed" />
+
+		<liferay-ui:error key="fileEmpty" message="file-does-not-contain-any-translations" />
+		<liferay-ui:error key="fileExtensionInvalid" message='<%= LanguageUtil.format(request, "please-upload-a-file-with-a-valid-extension-x", "properties", false) %>' />
+		<liferay-ui:error key="fileInvalid" message="please-select-a-valid-file" />
 
 		<h5><liferay-ui:message key="import-file" /></h5>
 
