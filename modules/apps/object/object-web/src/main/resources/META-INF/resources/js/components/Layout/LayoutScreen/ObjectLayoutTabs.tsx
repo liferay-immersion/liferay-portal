@@ -115,6 +115,7 @@ const ObjectLayoutTabs: React.FC<React.HTMLAttributes<HTMLElement>> = () => {
 												<ObjectLayoutBox
 													boxIndex={boxIndex}
 													collapsable={collapsable}
+													displayAddButton
 													key={`box_${boxIndex}`}
 													label={
 														name[defaultLanguageId]
