@@ -215,48 +215,43 @@ AUI.add(
 
 				var overlay = instance._overlay;
 
-				if (!overlay) {
-					var MenuOverlay = A.Component.create({
-						AUGMENTS: [
-							A.WidgetCssClass,
-							A.WidgetPosition,
-							A.WidgetStdMod,
-							A.WidgetModality,
-							A.WidgetPositionAlign,
-							A.WidgetPositionConstrain,
-							A.WidgetStack,
-						],
+				var MenuOverlay = A.Component.create({
+					AUGMENTS: [
+						A.WidgetCssClass,
+						A.WidgetPosition,
+						A.WidgetStdMod,
+						A.WidgetModality,
+						A.WidgetPositionAlign,
+						A.WidgetPositionConstrain,
+						A.WidgetStack,
+					],
 
-						CSS_PREFIX: 'overlay',
+					CSS_PREFIX: 'overlay',
 
-						EXTENDS: A.Widget,
+					EXTENDS: A.Widget,
 
-						NAME: 'overlay',
-					});
+					NAME: 'overlay',
+				});
 
-					overlay = new MenuOverlay({
-						align: {
-							node: trigger,
-							points: DEFAULT_ALIGN_POINTS,
-						},
-						constrain: true,
-						hideClass: false,
-						modal: Util.isPhone() || Util.isTablet(),
-						preventOverlap: true,
-						zIndex: Liferay.zIndex.MENU,
-					}).render();
+				overlay = new MenuOverlay({
+					align: {
+						node: trigger,
+						points: DEFAULT_ALIGN_POINTS,
+					},
+					constrain: true,
+					hideClass: false,
+					modal: Util.isPhone() || Util.isTablet(),
+					preventOverlap: true,
+					zIndex: Liferay.zIndex.MENU,
+				}).render();
 
-					Liferay.once('beforeScreenFlip', () => {
-						overlay.destroy();
+				Liferay.once('beforeScreenFlip', () => {
+					overlay.destroy();
 
-						instance._overlay = null;
-					});
+					instance._overlay = null;
+				});
 
-					instance._overlay = overlay;
-				}
-				else {
-					overlay.set('align.node', trigger);
-				}
+				instance._overlay = overlay;
 
 				var listContainer = trigger.getData('menuListContainer');
 				var menu = trigger.getData('menu');
