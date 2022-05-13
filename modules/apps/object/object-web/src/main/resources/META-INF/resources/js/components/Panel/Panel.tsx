@@ -108,16 +108,18 @@ const PanelHeader: React.FC<IPanelHeaderProps> = ({
 					</span>
 				)}
 
-				{displayCollapseIcon && <ClayButtonWithIcon
-					displayType="unstyled"
-					onClick={() =>
-						dispatch({
-							payload: {expanded: !expanded},
-							type: TYPES.CHANGE_PANEL_EXPANDED,
-						})
-					}
-					symbol={expanded ? 'angle-down' : 'angle-right'}
-				/>}
+				{displayCollapseIcon && (
+					<ClayButtonWithIcon
+						displayType="unstyled"
+						onClick={() =>
+							dispatch({
+								payload: {expanded: !expanded},
+								type: TYPES.CHANGE_PANEL_EXPANDED,
+							})
+						}
+						symbol={expanded ? 'angle-down' : 'angle-right'}
+					/>
+				)}
 			</div>
 		</div>
 	);
