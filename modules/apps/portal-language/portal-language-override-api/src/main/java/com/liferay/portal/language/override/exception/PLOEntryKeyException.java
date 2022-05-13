@@ -26,7 +26,7 @@ public class PLOEntryKeyException extends PortalException {
 		public MustBeShorter(long maxLength) {
 			super(
 				String.format(
-					"Key should not have more than %s characters", maxLength));
+					"Key must not have more than %s characters", maxLength));
 
 			this.maxLength = maxLength;
 		}
