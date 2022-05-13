@@ -95,6 +95,8 @@ const ObjectLayoutTabs: React.FC<React.HTMLAttributes<HTMLElement>> = () => {
 										/>
 									</>
 								}
+								displayCollapseIcon
+								displayDragIcon
 								title={name[defaultLanguageId]}
 							/>
 
