@@ -39,6 +39,10 @@ export function FilterScreen() {
 	return (
 		<>
 			<BuilderScreen
+				disableEdit={(businessType: string) =>
+					businessType !== 'Picklist' &&
+					businessType !== 'Workflow Status'
+				}
 				emptyState={{
 					buttonText: Liferay.Language.get('new-filter'),
 					description: Liferay.Language.get(

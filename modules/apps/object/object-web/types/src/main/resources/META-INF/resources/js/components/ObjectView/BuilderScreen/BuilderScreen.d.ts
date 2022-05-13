@@ -18,6 +18,7 @@ import {TObjectColumn} from '../types';
 import './BuilderScreen.scss';
 interface IProps {
 	defaultSort?: boolean;
+	disableEdit?: (businessType: string) => boolean;
 	emptyState: {
 		buttonText: string;
 		description: string;
@@ -37,6 +38,7 @@ interface IProps {
 }
 export declare function BuilderScreen({
 	defaultSort,
+	disableEdit,
 	emptyState,
 	filter,
 	firstColumnHeader,

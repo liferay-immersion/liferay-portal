@@ -31,6 +31,7 @@ import './BuilderScreen.scss';
 
 interface IProps {
 	defaultSort?: boolean;
+	disableEdit?: (businessType: string) => boolean;
 	emptyState: {
 		buttonText: string;
 		description: string;
@@ -51,6 +52,7 @@ interface IProps {
 
 export function BuilderScreen({
 	defaultSort,
+	disableEdit,
 	emptyState,
 	filter,
 	firstColumnHeader,
@@ -165,10 +167,10 @@ export function BuilderScreen({
 									}
 									defaultSort={defaultSort}
 									disableEdit={
-										viewColumn.objectFieldBusinessType !==
-											'Picklist' &&
-										viewColumn.objectFieldBusinessType !==
-											'Workflow Status'
+										disableEdit &&
+										disableEdit(
+											viewColumn.objectFieldBusinessType!
+										)
 									}
 									filter={filter}
 									hasDragAndDrop={hasDragAndDrop}
