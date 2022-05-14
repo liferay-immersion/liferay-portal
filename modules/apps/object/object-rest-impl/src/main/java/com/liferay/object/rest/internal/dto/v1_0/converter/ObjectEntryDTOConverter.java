@@ -145,17 +145,13 @@ public class ObjectEntryDTOConverter
 							objectRelationship, false);
 			}
 
-			Pagination pagination = Pagination.of(
-				QueryUtil.ALL_POS, QueryUtil.ALL_POS);
-
 			return _mapRelationshipObjectEntries(
 				dtoConverterContext, nestedFieldsDepth,
 				_objectEntryLocalService.getManyToManyRelatedObjectEntries(
 					objectEntry.getGroupId(),
 					objectRelationship.getObjectRelationshipId(),
 					objectEntry.getObjectEntryId(), reverse,
-					pagination.getStartPosition(),
-					pagination.getEndPosition()));
+					QueryUtil.ALL_POS, QueryUtil.ALL_POS));
 		}
 		catch (PortalException portalException) {
 			if (_log.isWarnEnabled()) {
