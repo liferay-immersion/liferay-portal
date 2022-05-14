@@ -52,8 +52,8 @@ import com.liferay.portal.search.suggestions.SuggestionBuilderFactory;
 import com.liferay.portal.search.suggestions.SuggestionsContributorResults;
 import com.liferay.portal.search.suggestions.SuggestionsContributorResultsBuilderFactory;
 import com.liferay.portal.search.web.constants.SearchResultsPortletKeys;
+import com.liferay.portal.vulcan.util.TransformUtil;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -301,19 +301,15 @@ public class BasicSuggestionsContributor implements SuggestionsContributor {
 				searchContext.getAttribute(
 					"search.suggestions.destination.friendly.url")));
 
-		List<Suggestion> suggestions = new ArrayList<>();
-
-		searchHits.forEach(
-			searchHit -> suggestions.add(
-				_getSuggestion(
-					liferayPortletRequest, liferayPortletResponse,
-					searchContext.getLocale(), searchHit, searchLayout)));
-
 		return _suggestionsContributorResultsBuilderFactory.builder(
 		).displayGroupName(
 			displayGroupName
 		).suggestions(
-			suggestions
+			TransformUtil.transform(
+				searchHits,
+				searchHit -> _getSuggestion(
+					liferayPortletRequest, liferayPortletResponse,
+					searchContext.getLocale(), searchHit, searchLayout))
 		).build();
 	}
 
