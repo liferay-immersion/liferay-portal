@@ -51,6 +51,7 @@ import com.liferay.portal.search.suggestions.SuggestionBuilder;
 import com.liferay.portal.search.suggestions.SuggestionBuilderFactory;
 import com.liferay.portal.search.suggestions.SuggestionsContributorResults;
 import com.liferay.portal.search.suggestions.SuggestionsContributorResultsBuilderFactory;
+import com.liferay.portal.search.web.constants.SearchResultsPortletKeys;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,7 +81,8 @@ public class BasicSuggestionsContributor implements SuggestionsContributor {
 		LiferayPortletRequest liferayPortletRequest,
 		LiferayPortletResponse liferayPortletResponse,
 		SearchContext searchContext,
-		SuggestionsContributorConfiguration suggestionsContributorConfiguration) {
+		SuggestionsContributorConfiguration
+			suggestionsContributorConfiguration) {
 
 		SearchResponse searchResponse = _searcher.search(
 			_getSearchRequest(
@@ -118,10 +120,6 @@ public class BasicSuggestionsContributor implements SuggestionsContributor {
 		long entryClassPK, LiferayPortletRequest liferayPortletRequest,
 		LiferayPortletResponse liferayPortletResponse, Layout searchLayout) {
 
-		ThemeDisplay themeDisplay =
-			(ThemeDisplay)liferayPortletRequest.getAttribute(
-				WebKeys.THEME_DISPLAY);
-
 		try {
 			if (searchLayout == null) {
 				return StringPool.BLANK;
@@ -130,8 +128,7 @@ public class BasicSuggestionsContributor implements SuggestionsContributor {
 			PortletURL viewContentURL =
 				PortletURLBuilder.createLiferayPortletURL(
 					liferayPortletResponse, searchLayout.getPlid(),
-					"com_liferay_portal_search_web_search_results_" +
-						"portlet_SearchResultsPortlet",
+					SearchResultsPortletKeys.SEARCH_RESULTS,
 					PortletRequest.RENDER_PHASE
 				).setPortletMode(
 					PortletMode.VIEW
@@ -162,6 +159,10 @@ public class BasicSuggestionsContributor implements SuggestionsContributor {
 			if (Validator.isNull(viewURL)) {
 				viewURL = viewContentURL.toString();
 			}
+
+			ThemeDisplay themeDisplay =
+				(ThemeDisplay)liferayPortletRequest.getAttribute(
+					WebKeys.THEME_DISPLAY);
 
 			return HttpComponentsUtil.setParameter(
 				viewURL, "p_l_back_url", themeDisplay.getURLCurrent());
