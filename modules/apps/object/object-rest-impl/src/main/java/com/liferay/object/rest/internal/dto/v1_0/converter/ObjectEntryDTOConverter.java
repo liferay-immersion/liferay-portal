@@ -148,18 +148,14 @@ public class ObjectEntryDTOConverter
 			Pagination pagination = Pagination.of(
 				QueryUtil.ALL_POS, QueryUtil.ALL_POS);
 
-			List<com.liferay.object.model.ObjectEntry>
-				manyToManyRelatedObjectEntries =
-					_objectEntryLocalService.getManyToManyRelatedObjectEntries(
-						objectEntry.getGroupId(),
-						objectRelationship.getObjectRelationshipId(),
-						objectEntry.getObjectEntryId(), reverse,
-						pagination.getStartPosition(),
-						pagination.getEndPosition());
-
 			return _mapRelationshipObjectEntries(
 				dtoConverterContext, nestedFieldsDepth,
-				manyToManyRelatedObjectEntries);
+				_objectEntryLocalService.getManyToManyRelatedObjectEntries(
+					objectEntry.getGroupId(),
+					objectRelationship.getObjectRelationshipId(),
+					objectEntry.getObjectEntryId(), reverse,
+					pagination.getStartPosition(),
+					pagination.getEndPosition()));
 		}
 		catch (PortalException portalException) {
 			if (_log.isWarnEnabled()) {
