@@ -138,29 +138,32 @@ public class OpenAPIResourceImpl {
 		Operation operation = pathItem.getPut();
 
 		for (Parameter parameter : operation.getParameters()) {
-			if (Objects.equals(parameter.getName(), "objectRelationshipName")) {
+			String parameterName = parameter.getName();
+
+			if (Objects.equals(parameterName, "objectRelationshipName")) {
 				continue;
 			}
+
+			if (Objects.equals(parameterName, "currentObjectEntryId")) {
+				parameterName = _currentObjectDefinition.getPKObjectFieldName();
+			}
+			else if (Objects.equals(parameterName, "relatedObjectEntryId")) {
+				parameterName = relatedObjectDefinition.getPKObjectFieldName();
+			}
+
+			String finalParameterName = parameterName;
 
 			parameters.put(
 				parameter.getName(),
 				new Parameter() {
 					{
-						name(parameter.getName());
+						name(finalParameterName);
 						in(parameter.getIn());
 						required(parameter.getRequired());
 						schema(parameter.getSchema());
 					}
 				});
 		}
-
-		_customizeParameter(
-			parameters, "currentObjectEntryId",
-			_currentObjectDefinition.getPKObjectFieldName(), false);
-
-		_customizeParameter(
-			parameters, "relatedObjectEntryId",
-			relatedObjectDefinition.getPKObjectFieldName(), false);
 
 		return new PathItem() {
 			{
@@ -181,19 +184,6 @@ public class OpenAPIResourceImpl {
 					});
 			}
 		};
-	}
-
-	private void _customizeParameter(
-		Map<String, Parameter> parameters, String parameterName,
-		String newParameterName, boolean shouldBeDeleted) {
-
-		Parameter parameter = parameters.get(parameterName);
-
-		if (shouldBeDeleted) {
-			parameters.remove(parameterName);
-		}
-
-		parameter.setName(newParameterName);
 	}
 
 	private final ObjectDefinition _currentObjectDefinition;
