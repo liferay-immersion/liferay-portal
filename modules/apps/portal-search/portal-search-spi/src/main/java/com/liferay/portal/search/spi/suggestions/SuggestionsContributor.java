@@ -29,6 +29,7 @@ public interface SuggestionsContributor {
 		LiferayPortletRequest liferayPortletRequest,
 		LiferayPortletResponse liferayPortletResponse,
 		SearchContext searchContext,
-		SuggestionsContributorConfiguration suggestionsContributorConfiguration);
+		SuggestionsContributorConfiguration
+			suggestionsContributorConfiguration);
 
 }
