@@ -224,31 +224,6 @@ public class ObjectEntryDTOConverter
 		return null;
 	}
 
-	private ObjectEntry[] _toObjectEntries(
-		DTOConverterContext dtoConverterContext, int nestedFieldsDepth,
-		List<com.liferay.object.model.ObjectEntry> objectEntries) {
-
-		return TransformUtil.transformToArray(
-			objectEntries,
-			objectEntry -> {
-				try {
-					return _toDTO(
-						_getDTOConverterContext(
-							dtoConverterContext,
-							objectEntry.getObjectEntryId()),
-						nestedFieldsDepth - 1, objectEntry);
-				}
-				catch (Exception exception) {
-					if (_log.isWarnEnabled()) {
-						_log.warn(exception);
-					}
-
-					return null;
-				}
-			},
-			ObjectEntry.class);
-	}
-
 	private ObjectEntry _toDTO(
 			DTOConverterContext dtoConverterContext, int nestedFieldsDepth,
 			com.liferay.object.model.ObjectEntry objectEntry)
@@ -285,6 +260,31 @@ public class ObjectEntryDTOConverter
 				};
 			}
 		};
+	}
+
+	private ObjectEntry[] _toObjectEntries(
+		DTOConverterContext dtoConverterContext, int nestedFieldsDepth,
+		List<com.liferay.object.model.ObjectEntry> objectEntries) {
+
+		return TransformUtil.transformToArray(
+			objectEntries,
+			objectEntry -> {
+				try {
+					return _toDTO(
+						_getDTOConverterContext(
+							dtoConverterContext,
+							objectEntry.getObjectEntryId()),
+						nestedFieldsDepth - 1, objectEntry);
+				}
+				catch (Exception exception) {
+					if (_log.isWarnEnabled()) {
+						_log.warn(exception);
+					}
+
+					return null;
+				}
+			},
+			ObjectEntry.class);
 	}
 
 	private Map<String, Object> _toProperties(
