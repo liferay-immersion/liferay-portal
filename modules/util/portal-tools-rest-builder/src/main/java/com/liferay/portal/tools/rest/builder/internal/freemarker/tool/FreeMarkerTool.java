@@ -955,8 +955,8 @@ public class FreeMarkerTool {
 		return false;
 	}
 
-	private static DateFormat _getDateFormat(String format) {
-		DateFormat dateFormat = new SimpleDateFormat(format);
+	private static DateFormat _getDateFormat(String pattern) {
+		DateFormat dateFormat = new SimpleDateFormat(pattern);
 
 		dateFormat.setTimeZone(TimeZoneUtil.GMT);
 
