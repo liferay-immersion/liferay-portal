@@ -144,7 +144,7 @@ public class ObjectEntryDTOConverter
 							objectRelationship, false);
 			}
 
-			return _mapRelationshipObjectEntries(
+			return _toObjectEntries(
 				dtoConverterContext, nestedFieldsDepth,
 				_objectEntryLocalService.getManyToManyRelatedObjectEntries(
 					objectEntry.getGroupId(),
@@ -185,7 +185,7 @@ public class ObjectEntryDTOConverter
 		ObjectRelationship objectRelationship) {
 
 		try {
-			return _mapRelationshipObjectEntries(
+			return _toObjectEntries(
 				dtoConverterContext, nestedFieldsDepth,
 				_objectEntryLocalService.getOneToManyRelatedObjectEntries(
 					objectEntry.getGroupId(),
@@ -224,7 +224,7 @@ public class ObjectEntryDTOConverter
 		return null;
 	}
 
-	private ObjectEntry[] _mapRelationshipObjectEntries(
+	private ObjectEntry[] _toObjectEntries(
 		DTOConverterContext dtoConverterContext, int nestedFieldsDepth,
 		List<com.liferay.object.model.ObjectEntry> objectEntries) {
 
