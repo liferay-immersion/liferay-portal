@@ -74,7 +74,9 @@ public class SuggestionResourceImpl extends BaseSuggestionResourceImpl {
 				suggestionsContributorConfigurations)
 		throws Exception {
 
-		if (!GetterUtil.getBoolean(PropsUtil.get("feature.flag.LPS-152597"))) {
+		if (!GetterUtil.getBoolean(PropsUtil.get("feature.flag.LPS-152597")) ||
+			(suggestionsContributorConfigurations == null)) {
+
 			return Page.of(Collections.emptyList());
 		}
 
@@ -82,7 +84,7 @@ public class SuggestionResourceImpl extends BaseSuggestionResourceImpl {
 			currentURL, plid);
 
 		return Page.of(
-			_toSuggestionsContributorResults(
+			transform(
 				_suggestionsRetriever.getSuggestionsContributorResults(
 					liferayRenderRequest,
 					RenderResponseFactory.create(
@@ -90,7 +92,25 @@ public class SuggestionResourceImpl extends BaseSuggestionResourceImpl {
 					_createSearchContext(
 						destinationFriendlyURL, _getGroupId(groupId), scope, search,
 						suggestionsContributorConfigurations)),
-				suggestionsContributorConfigurations));
+				suggestionsContributorResult ->
+					new SuggestionsContributorResults() {
+						{
+							attributes =
+								suggestionsContributorResult.getAttributes();
+							displayGroupName =
+								suggestionsContributorResult.getDisplayGroupName();
+							suggestions = transformToArray(
+								suggestionsContributorResult.getSuggestions(),
+								suggestion -> new Suggestion () {
+									{
+										attributes = suggestion.getAttributes();
+										score = suggestion.getScore();
+										text = suggestion.getText();
+									}
+								},
+								Suggestion.class);
+						}
+					}));
 	}
 
 	private LiferayRenderRequest _createLiferayRenderRequest(
@@ -192,45 +212,6 @@ public class SuggestionResourceImpl extends BaseSuggestionResourceImpl {
 		catch (PortalException portalException) {
 			throw new RuntimeException(portalException);
 		}
-	}
-
-	private List<SuggestionsContributorResults>
-		_toSuggestionsContributorResults(
-			List
-				<com.liferay.portal.search.suggestions.
-					SuggestionsContributorResults>
-						suggestionsContributorResults,
-			SuggestionsContributorConfiguration[]
-				suggestionsContributorConfigurations) {
-
-		if (suggestionsContributorConfigurations == null) {
-			return Collections.emptyList();
-		}
-
-		List<SuggestionsContributorResults> list = new ArrayList<>();
-
-		suggestionsContributorResults.forEach(
-			suggestionsContributorResult -> list.add(
-				new SuggestionsContributorResults() {
-					{
-						attributes =
-							suggestionsContributorResult.getAttributes();
-						displayGroupName =
-							suggestionsContributorResult.getDisplayGroupName();
-						suggestions = transformToArray(
-							suggestionsContributorResult.getSuggestions(),
-							suggestion -> new Suggestion () {
-								{
-									attributes = suggestion.getAttributes();
-									score = suggestion.getScore();
-									text = suggestion.getText();
-								}
-							},
-							Suggestion.class);
-					}
-				}));
-
-		return list;
 	}
 
 	@Reference
