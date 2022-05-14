@@ -212,8 +212,6 @@ public class BasicSuggestionsContributor implements SuggestionsContributor {
 		LiferayPortletResponse liferayPortletResponse, Locale locale,
 		SearchHit searchHit, Layout searchLayout) {
 
-		Document document = searchHit.getDocument();
-
 		SuggestionBuilder suggestionBuilder = _suggestionBuilderFactory.builder(
 		).score(
 			searchHit.getScore()
@@ -222,6 +220,8 @@ public class BasicSuggestionsContributor implements SuggestionsContributor {
 		String text = null;
 
 		try {
+			Document document = searchHit.getDocument();
+
 			String entryClassName = document.getString(Field.ENTRY_CLASS_NAME);
 
 			AssetRendererFactory<?> assetRendererFactory =
@@ -256,7 +256,7 @@ public class BasicSuggestionsContributor implements SuggestionsContributor {
 		}
 
 		if (text == null) {
-			text = _getText(document, locale);
+			text = _getText(searchHit.getDocument(), locale);
 		}
 
 		return suggestionBuilder.text(
