@@ -32,7 +32,6 @@ import com.liferay.object.service.ObjectEntryService;
 import com.liferay.object.service.ObjectFieldLocalService;
 import com.liferay.object.service.ObjectRelationshipLocalService;
 import com.liferay.object.service.ObjectRelationshipService;
-import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.search.BooleanClauseOccur;
@@ -117,31 +116,14 @@ public class ObjectEntryManagerImpl implements ObjectEntryManager {
 			long primaryKey1, long primaryKey2, long userId)
 		throws Exception {
 
-		List<ObjectRelationship> objectRelationships =
-			_objectRelationshipService.getObjectRelationships(
-				objectDefinition.getObjectDefinitionId(), QueryUtil.ALL_POS,
-				QueryUtil.ALL_POS);
-
-		Map<String, ObjectRelationship> objectRelationshipsMap =
-			new HashMap<>();
-
-		for (ObjectRelationship objectRelationship : objectRelationships) {
-			objectRelationshipsMap.put(
-				objectRelationship.getName(), objectRelationship);
-		}
-
-		long objectRelationshipId = -1;
-
-		ObjectRelationship objectRelationship = objectRelationshipsMap.get(
-			objectRelationshipName);
-
-		if (objectRelationship != null) {
-			objectRelationshipId = objectRelationship.getObjectRelationshipId();
-		}
+		ObjectRelationship objectRelationship =
+			_objectRelationshipService.getObjectRelationship(
+				objectDefinition.getObjectDefinitionId(),
+				objectRelationshipName);
 
 		_objectRelationshipLocalService.addObjectRelationshipMappingTableValues(
-			userId, objectRelationshipId, primaryKey1, primaryKey2,
-			new ServiceContext());
+			userId, objectRelationship.getObjectRelationshipId(), primaryKey1,
+			primaryKey2, new ServiceContext());
 
 		return getObjectEntry(
 			dtoConverterContext, objectDefinition, primaryKey1);
