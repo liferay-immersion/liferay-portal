@@ -88,7 +88,8 @@ public class OpenAPIResourceImpl {
 				ObjectDefinition objectDefinition = entry.getValue();
 
 				_createCustomRelationshipEndpointToOpenAPI(
-					openAPI, relationshipEndpoint, objectRelationship, objectDefinition);
+					openAPI, relationshipEndpoint, objectRelationship,
+					objectDefinition);
 
 				openAPI.getComponents(
 				).getSchemas(
@@ -117,13 +118,14 @@ public class OpenAPIResourceImpl {
 	}
 
 	private void _createCustomRelationshipEndpointToOpenAPI(
-		OpenAPI entity, String relationshipEndpoint, ObjectRelationship objectRelationship,
+		OpenAPI openAPI, String relationshipEndpoint,
+		ObjectRelationship objectRelationship,
 		ObjectDefinition relatedObjectDefinition) {
 
-		Paths entityPaths = entity.getPaths();
+		Paths paths = openAPI.getPaths();
 
 		PathItem customRelationshipPathItem = _createCustomRelationshipPathItem(
-			entityPaths.get(relationshipEndpoint), objectRelationship,
+			paths.get(relationshipEndpoint), objectRelationship,
 			relatedObjectDefinition);
 
 		String currentObjectName = StringUtil.lowerCaseFirstLetter(
@@ -143,7 +145,7 @@ public class OpenAPIResourceImpl {
 				relatedObjectName + "Id"
 			});
 
-		entityPaths.addPathItem(
+		paths.addPathItem(
 			customRelationshipEndpoint, customRelationshipPathItem);
 	}
 
