@@ -31,11 +31,9 @@ import io.swagger.v3.oas.models.media.Schema;
 import io.swagger.v3.oas.models.parameters.Parameter;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -134,40 +132,34 @@ public class OpenAPIResourceImpl {
 		ObjectRelationship objectRelationship, PathItem pathItem,
 		ObjectDefinition relatedObjectDefinition) {
 
+		Map<String, Parameter> parameters = new HashMap<>();
+
 		Operation operation = pathItem.getPut();
 
-		List<Parameter> operationParameters = operation.getParameters();
-
-		Stream<Parameter> operationParametersStream =
-			operationParameters.stream();
-
-		Map<String, Parameter> customRelationshipPutOperationParameters =
-			operationParametersStream.map(
-				parameter -> {
-					Parameter customParameter = new Parameter();
-
-					customParameter.name(parameter.getName());
-					customParameter.in(parameter.getIn());
-					customParameter.required(parameter.getRequired());
-					customParameter.schema(parameter.getSchema());
-
-					return customParameter;
-				}
-			).collect(
-				Collectors.toMap(Parameter::getName, parameter -> parameter)
-			);
+		for (Parameter parameter : operation.getParameters()) {
+			parameters.put(
+				parameter.getName(),
+				new Parameter() {
+					{
+						name(parameter.getName());
+						in(parameter.getIn());
+						required(parameter.getRequired());
+						schema(parameter.getSchema());
+					}
+				});
+		}
 
 		_customizeParameter(
-			customRelationshipPutOperationParameters, "currentObjectEntryId",
+			parameters, "currentObjectEntryId",
 			_currentObjectDefinition.getPKObjectFieldName(), false);
 
 		_customizeParameter(
-			customRelationshipPutOperationParameters, "relatedObjectEntryId",
+			parameters, "relatedObjectEntryId",
 			relatedObjectDefinition.getPKObjectFieldName(), false);
 
 		_customizeParameter(
-			customRelationshipPutOperationParameters, "objectRelationshipName",
-			objectRelationship.getName(), true);
+			parameters, "objectRelationshipName", objectRelationship.getName(),
+			true);
 
 		return new PathItem() {
 			{
@@ -181,10 +173,7 @@ public class OpenAPIResourceImpl {
 									StringUtil.upperCaseFirstLetter(
 										objectRelationship.getName()),
 									relatedObjectDefinition.getShortName()));
-							parameters(
-								new ArrayList<>(
-									customRelationshipPutOperationParameters.
-										values()));
+							parameters(new ArrayList<>(parameters.values()));
 							responses(operation.getResponses());
 							tags(operation.getTags());
 						}
