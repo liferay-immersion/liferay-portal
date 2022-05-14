@@ -101,7 +101,7 @@ public class OpenAPIResourceImpl {
 							objectRelationship.getName(),
 							relatedObjectDefinition.getPKObjectFieldName()
 						}),
-					_createCustomRelationshipPathItem(
+					_createPathItem(
 						objectRelationship, paths.get(key),
 						relatedObjectDefinition));
 
@@ -129,7 +129,7 @@ public class OpenAPIResourceImpl {
 		return response;
 	}
 
-	private PathItem _createCustomRelationshipPathItem(
+	private PathItem _createPathItem(
 		ObjectRelationship objectRelationship, PathItem pathItem,
 		ObjectDefinition relatedObjectDefinition) {
 
