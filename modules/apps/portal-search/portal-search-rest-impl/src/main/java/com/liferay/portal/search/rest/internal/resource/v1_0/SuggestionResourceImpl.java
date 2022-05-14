@@ -88,7 +88,7 @@ public class SuggestionResourceImpl extends BaseSuggestionResourceImpl {
 					RenderResponseFactory.create(
 						contextHttpServletResponse, (RenderRequest)liferayRenderRequest),
 					_createSearchContext(
-						destinationFriendlyURL, groupId, scope, search,
+						destinationFriendlyURL, _getGroupId(groupId), scope, search,
 						suggestionsContributorConfigurations)),
 				suggestionsContributorConfigurations));
 	}
@@ -135,8 +135,6 @@ public class SuggestionResourceImpl extends BaseSuggestionResourceImpl {
 		throws Exception {
 
 		SearchContext searchContext = new SearchContext();
-
-		groupId = _getGroupId(groupId);
 
 		searchContext.setAttribute(
 			"search.experiences.ip.address",
