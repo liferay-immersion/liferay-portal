@@ -69,7 +69,7 @@ public class SuggestionsRetrieverImpl implements SuggestionsRetriever {
 					suggestionsContributorConfigurations) {
 
 			SuggestionsContributorResults contributorResults =
-				_getContributorResults(
+				_getSuggestionsContributorResults(
 					liferayPortletRequest, liferayPortletResponse,
 					searchContext, suggestionsContributorConfiguration);
 
@@ -94,7 +94,7 @@ public class SuggestionsRetrieverImpl implements SuggestionsRetriever {
 		_suggestionsContributorServiceTrackerMap.close();
 	}
 
-	private SuggestionsContributorResults _getContributorResults(
+	private SuggestionsContributorResults _getSuggestionsContributorResults(
 		LiferayPortletRequest liferayPortletRequest,
 		LiferayPortletResponse liferayPortletResponse,
 		SearchContext searchContext,
