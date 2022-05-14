@@ -65,7 +65,7 @@ public class ObjectEntryApplication extends Application {
 			new OpenAPIResourceImpl(
 				_objectDefinitionLocalService.fetchObjectDefinition(
 					_objectDefinitionId),
-				_getObjectRelationshipsRelatedObjects(), _openAPIResource,
+				_getObjectDefinitionsMap(), _openAPIResource,
 				_getOpenAPISchemaFilter(_applicationPath),
 				new HashSet<Class<?>>() {
 					{
@@ -116,10 +116,11 @@ public class ObjectEntryApplication extends Application {
 	}
 
 	private Map<ObjectRelationship, ObjectDefinition>
-		_getObjectRelationshipsRelatedObjects() {
+		_getObjectDefinitionsMap() {
 
-		Map<ObjectRelationship, ObjectDefinition>
-			objectRelationshipObjectDefinitionMap = new HashMap<>();
+		Map<ObjectRelationship, ObjectDefinition> objectDefinitionsMap =
+			new HashMap<>();
+
 		List<ObjectRelationship> objectRelationships =
 			_objectRelationshipLocalService.getObjectRelationships(
 				_objectDefinitionId);
@@ -130,12 +131,12 @@ public class ObjectEntryApplication extends Application {
 					objectRelationship.getObjectDefinitionId2());
 
 			if (objectDefinition != null) {
-				objectRelationshipObjectDefinitionMap.put(
+				objectDefinitionsMap.put(
 					objectRelationship, objectDefinition);
 			}
 		}
 
-		return objectRelationshipObjectDefinitionMap;
+		return objectDefinitionsMap;
 	}
 
 	private OpenAPISchemaFilter _getOpenAPISchemaFilter(
