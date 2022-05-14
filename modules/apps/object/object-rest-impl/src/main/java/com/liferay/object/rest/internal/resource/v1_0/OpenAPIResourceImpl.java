@@ -81,15 +81,29 @@ public class OpenAPIResourceImpl {
 			openAPI.getPaths());
 
 		for (String relationshipEndpoint : relationshipsEndpoints) {
+			Paths paths = openAPI.getPaths();
+
 			for (Map.Entry<ObjectRelationship, ObjectDefinition> entry :
 					_objectDefinitionsMap.entrySet()) {
 
 				ObjectRelationship objectRelationship = entry.getKey();
-				ObjectDefinition objectDefinition = entry.getValue();
+				ObjectDefinition relatedObjectDefinition = entry.getValue();
 
-				_createCustomRelationshipEndpointToOpenAPI(
-					openAPI, relationshipEndpoint, objectRelationship,
-					objectDefinition);
+				paths.addPathItem(
+					StringUtil.replace(
+						relationshipEndpoint,
+						new String[] {
+							"currentObjectEntryId", "{objectRelationshipName}",
+							"relatedObjectEntryId"
+						},
+						new String[] {
+							_currentObjectDefinition.getPKObjectFieldName(),
+							objectRelationship.getName(),
+							relatedObjectDefinition.getPKObjectFieldName()
+						}),
+					_createCustomRelationshipPathItem(
+						paths.get(relationshipEndpoint), objectRelationship,
+						relatedObjectDefinition));
 
 				openAPI.getComponents(
 				).getSchemas(
@@ -109,39 +123,10 @@ public class OpenAPIResourceImpl {
 				);
 			}
 
-			Paths paths = openAPI.getPaths();
-
 			paths.remove(relationshipEndpoint);
 		}
 
 		return response;
-	}
-
-	private void _createCustomRelationshipEndpointToOpenAPI(
-		OpenAPI openAPI, String relationshipEndpoint,
-		ObjectRelationship objectRelationship,
-		ObjectDefinition relatedObjectDefinition) {
-
-		Paths paths = openAPI.getPaths();
-
-		PathItem customRelationshipPathItem = _createCustomRelationshipPathItem(
-			paths.get(relationshipEndpoint), objectRelationship,
-			relatedObjectDefinition);
-
-		String customRelationshipEndpoint = StringUtil.replace(
-			relationshipEndpoint,
-			new String[] {
-				"currentObjectEntryId", "{objectRelationshipName}",
-				"relatedObjectEntryId"
-			},
-			new String[] {
-				_currentObjectDefinition.getPKObjectFieldName(),
-				objectRelationship.getName(),
-				relatedObjectDefinition.getPKObjectFieldName()
-			});
-
-		paths.addPathItem(
-			customRelationshipEndpoint, customRelationshipPathItem);
 	}
 
 	private PathItem _createCustomRelationshipPathItem(
