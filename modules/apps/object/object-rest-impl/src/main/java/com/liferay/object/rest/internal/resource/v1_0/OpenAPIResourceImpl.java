@@ -115,9 +115,10 @@ public class OpenAPIResourceImpl {
 					new Schema<Object>() {
 						{
 							setDescription(
-								"Information about the relationship " +
-									objectRelationship.getName() +
-										" can be embedded with nestedFields.");
+								StringBundler.concat(
+									"Information about the relationship ",
+									objectRelationship.getName(),
+									" can be embedded with \"nestedFields\"."));
 						}
 					}
 				);
