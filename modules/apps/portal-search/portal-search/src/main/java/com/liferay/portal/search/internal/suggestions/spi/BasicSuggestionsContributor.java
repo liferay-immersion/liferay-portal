@@ -220,9 +220,7 @@ public class BasicSuggestionsContributor implements SuggestionsContributor {
 		);
 
 		String entryClassName = document.getString(Field.ENTRY_CLASS_NAME);
-
 		long entryClassPK = document.getLong(Field.ENTRY_CLASS_PK);
-
 		String text = null;
 
 		try {
@@ -247,6 +245,7 @@ public class BasicSuggestionsContributor implements SuggestionsContributor {
 						assetRenderer, assetRendererFactory, entryClassName,
 						entryClassPK, liferayPortletRequest,
 						liferayPortletResponse, searchLayout));
+
 				text = assetRenderer.getTitle(locale);
 			}
 		}
