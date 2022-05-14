@@ -77,13 +77,13 @@ public class SuggestionsRetrieverImpl implements SuggestionsRetriever {
 			_suggestionsContributorServiceTrackerMap.getService(
 				suggestionsContributorConfiguration.getContributorName());
 
-		if (suggestionsContributor != null) {
-			return suggestionsContributor.getSuggestionsContributorResults(
-				liferayPortletRequest, liferayPortletResponse, searchContext,
-				suggestionsContributorConfiguration);
+		if (suggestionsContributor == null) {
+			return null;
 		}
 
-		return null;
+		return suggestionsContributor.getSuggestionsContributorResults(
+			liferayPortletRequest, liferayPortletResponse, searchContext,
+			suggestionsContributorConfiguration);
 	}
 
 	private ServiceTrackerMap<String, SuggestionsContributor>
