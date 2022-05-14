@@ -34,7 +34,6 @@ definition {
 	test SelectWebContentBasedOnTemplateNameWithXSS {
 		task ("Add a web content template with a XSS name") {
 			var actualScript = '''<script>alert(123);</script>''';
-
 			var escapedScript = '''&lt;script&gt;alert(123);&lt;/script&gt;''';
 
 			WebContentNavigator.openWebContentAdmin(siteURLKey = "test-site-name");

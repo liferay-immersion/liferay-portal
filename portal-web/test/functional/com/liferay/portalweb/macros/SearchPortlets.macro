@@ -413,7 +413,9 @@ definition {
 
 		var searchPage = StringUtil.toLowerCase("${searchPage}");
 		var portalURL = PropsUtil.get("portal.url");
+
 		var searchURL = "${portalURL}/web/guest/${searchPage}?q=";
+
 		var searchURL = "${searchURL}${searchTerm}";
 
 		return "${searchURL}";

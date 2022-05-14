@@ -239,9 +239,7 @@ definition {
 		}
 
 		var publishDateDay = Time.getUTCDay();
-
 		var publishDateMonth = Time.getUTCMonth();
-
 		var publishDateYear = Time.getUTCYear();
 
 		var publishDate = "${publishDateYear}-${publishDateMonth}-${publishDateDay}";
@@ -251,7 +249,6 @@ definition {
 			value1 = "${publishDate}");
 
 		var publishTimeHours = Time.getUTCHours();
-
 		var publishTimeMinutes = Time.getUTCMinutes();
 
 		if ("${utcMinutes}" == "58") {

@@ -125,6 +125,7 @@ definition {
 		Navigator.gotoNavItem(navItem = "Performance");
 
 		var displayDateYear = DateUtil.getCurrentYear();
+
 		var displayDateYear = ${displayDateYear} + 1;
 
 		WorkflowMetrics.selectDateRange(

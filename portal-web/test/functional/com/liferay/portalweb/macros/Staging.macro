@@ -427,6 +427,7 @@ definition {
 		}
 
 		var displayDateHour = selenium.getAttribute("//input[contains(@id,'schedulerStartDateHour')]@value");
+
 		var displayDateHourLength = StringUtil.length("${displayDateHour}");
 
 		if ("${displayDateHourLength}" == "1") {
@@ -434,10 +435,14 @@ definition {
 		}
 
 		var displayDateAmpm = selenium.getAttribute("//input[contains(@id,'schedulerStartDateAmPm')]@value");
+
 		var displayDateAmpm = StringUtil.replace("${displayDateAmpm}", "0", "AM");
+
 		var displayDateAmpm = StringUtil.replace("${displayDateAmpm}", "1", "PM");
 		var displayDateMinute = selenium.getAttribute("//input[contains(@id,'schedulerStartDateMinute')]@value");
+
 		var displayDateMinuteFuture = ${displayDateMinute} + 3;
+
 		var displayDateMinuteFutureLength = StringUtil.length("${displayDateMinuteFuture}");
 
 		if ("${displayDateMinuteFutureLength}" == "1") {
@@ -466,7 +471,9 @@ definition {
 			}
 
 			var endByDateYear = selenium.getAttribute("//input[contains(@id,'schedulerEndDateYear')]@value");
+
 			var endByDateYearFuture = ${endByDateYear} + 5;
+
 			var endByDay = "${endByDateMonth}/${endByDateDay}/${endByDateYearFuture}";
 
 			Type(
@@ -1037,7 +1044,6 @@ definition {
 		var siteId = JSONGroupSetter.setGroupId(
 			groupName = "Remote Site",
 			portalURL = "http://localhost:${remotePort}");
-
 		var siteURLKey = ContentPagesNavigator._convertNameToKey(name = "${siteName}");
 
 		Staging.openStagingAdmin(siteURLKey = "${siteURLKey}");
@@ -1207,7 +1213,9 @@ definition {
 		Click(locator1 = "StagingPublishToLive#DATE_SCHEDULE_START_DATE");
 
 		var daySelected = selenium.getText("CalendarEditEvent#MINI_CALENDAR_DAY_SELECTED");
+
 		var tomorrow = ${daySelected} + 1;
+
 		var key_daySpecific = "${tomorrow}";
 
 		if (IsElementPresent(locator1 = "CalendarEditEvent#MINI_CALENDAR_DAY_SPECIFIC")) {

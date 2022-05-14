@@ -495,6 +495,7 @@ definition {
 				locator1 = "SiteNavigationMenu#ITEM_ENTRY_NESTED");
 
 			var i = ${i} + 1;
+
 			var i = StringUtil.valueOf("${i}");
 		}
 	}

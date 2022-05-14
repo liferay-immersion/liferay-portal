@@ -4,6 +4,7 @@ definition {
 		var currentURL = Navigator.getCurrentURL();
 
 		var findWhereIdBegins = StringUtil.extractLast("${currentURL}", "clientExtensionEntryId=");
+
 		var clientExtensionEntryIdValue = StringUtil.extractFirst("${findWhereIdBegins}", "&_com_liferay_client_extension_web_internal_portlet_ClientExtensionAdminPortlet_redirect");
 
 		JSONRemoteApp.deleteIFrameRemoteAppEntry(clientExtensionEntryId = "${clientExtensionEntryIdValue}");
@@ -214,6 +215,7 @@ definition {
 		var currentURL = Navigator.getCurrentURL();
 
 		var findWhereIdBegins = StringUtil.extractLast("${currentURL}", "clientExtensionEntryId=");
+
 		var clientExtensionEntryIdValue = StringUtil.extractFirst("${findWhereIdBegins}", "&_com_liferay_client_extension_web_internal_portlet_ClientExtensionAdminPortlet_redirect");
 
 		return "${clientExtensionEntryIdValue}";

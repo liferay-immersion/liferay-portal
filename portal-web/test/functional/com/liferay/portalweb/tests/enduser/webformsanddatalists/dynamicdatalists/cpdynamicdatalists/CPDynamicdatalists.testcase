@@ -3527,61 +3527,34 @@ definition {
 	@priority = "3"
 	test ViewCannotAddNonAlphanumericCharactersToFieldName {
 		var character1 = '''`''';
-
 		var character2 = '''~''';
-
 		var character3 = '''!''';
-
 		var character4 = '''@''';
-
 		var character5 = '''#''';
-
 		var character6 = '''$''';
-
 		var character7 = '''%''';
-
 		var character8 = '''^''';
-
 		var character9 = '''&''';
-
 		var character10 = '''*''';
-
 		var character11 = '''(''';
-
 		var character12 = ''')''';
-
 		var character13 = '''-''';
-
 		var character14 = '''+''';
-
 		var character15 = '''=''';
-
 		var character16 = '''[''';
-
 		var character17 = '''{''';
-
 		var character18 = '''}''';
-
 		var character19 = '''?''';
-
 		var character20 = '''|''';
-
 		var character21 = ''';''';
-
 		var character22 = ''':''';
 		var character23 = "'";
-
 		var character24 = '''"''';
-
 		var character25 = '''>''';
-
 		var character26 = '''<''';
-
 		var character27 = '''.''';
-
 		var character28 = '''/''';
 		var character29 = "test space";
-
 		var characterValid = '''_''';
 
 		Navigator.openURL();

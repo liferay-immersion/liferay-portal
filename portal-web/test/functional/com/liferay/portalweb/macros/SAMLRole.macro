@@ -172,6 +172,7 @@ definition {
 		}
 		else {
 			var liferayHome = PropsUtil.get("liferay.home.dir.name");
+
 			var filePath = "${liferayHome}-1/data";
 
 			UploadTempFile(

@@ -492,9 +492,13 @@ definition {
 			}
 
 			var curr_price = StringUtil.replace("${curr_price}", "$ ", "");
+
 			var curr_price = StringUtil.replace("${curr_price}", ".00", "");
+
 			var length = StringUtil.length("${curr_price}");
+
 			var index = ${length} - 1;
+
 			var intPart = StringUtil.substring("${curr_price}", "0", "${index}");
 
 			if ("${intPart}" == "") {
@@ -512,6 +516,7 @@ definition {
 			}
 
 			var decreasedPrice = ${curr_price} - ${intPart};
+
 			var decreasedPrice = "$ ${decreasedPrice}.${aux}0";
 
 			if ("${iterator}" == "1") {
@@ -1849,6 +1854,7 @@ definition {
 		CommerceNavigator.gotoEntry(entryName = "Test Price List");
 
 		var timeString = selenium.getElementValue("TextInput#DATE_TIME_PRICE_LISTS");
+
 		var ampm = RegexUtil.replace("${timeString}", "([0-9]*):([0-9]*) ([A-Z]*)", "3");
 		var hours = RegexUtil.replace("${timeString}", "([0-9]*):([0-9]*) ([A-Z]*)", "1");
 		var minutes = RegexUtil.replace("${timeString}", "([0-9]*):([0-9]*) ([A-Z]*)", "2");
@@ -1990,6 +1996,7 @@ definition {
 			value1 = "30");
 
 		var timeString = selenium.getElementValue("TextInput#DATE_TIME_PRICE_LISTS");
+
 		var ampm = RegexUtil.replace("${timeString}", "([0-9]*):([0-9]*) ([A-Z]*)", "3");
 		var hours = RegexUtil.replace("${timeString}", "([0-9]*):([0-9]*) ([A-Z]*)", "1");
 		var minutes = RegexUtil.replace("${timeString}", "([0-9]*):([0-9]*) ([A-Z]*)", "2");
@@ -2341,6 +2348,7 @@ definition {
 				value1 = "30");
 
 			var timeString = selenium.getElementValue("TextInput#DATE_TIME_PRICE_LISTS");
+
 			var ampm = RegexUtil.replace("${timeString}", "([0-9]*):([0-9]*) ([A-Z]*)", "3");
 			var hours = RegexUtil.replace("${timeString}", "([0-9]*):([0-9]*) ([A-Z]*)", "1");
 			var minutes = RegexUtil.replace("${timeString}", "([0-9]*):([0-9]*) ([A-Z]*)", "2");

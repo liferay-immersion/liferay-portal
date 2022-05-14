@@ -331,7 +331,6 @@ definition {
 	</div>
 </div>
 		''';
-
 			var cssSnippet = '''
 .fragment-example {
 }
@@ -408,7 +407,6 @@ definition {
 	</div>
 </div>
 		''';
-
 			var cssSnippet = '''
 .fragment-example {
 }

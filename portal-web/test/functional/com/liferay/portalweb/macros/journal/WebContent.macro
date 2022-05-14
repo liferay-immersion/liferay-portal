@@ -866,10 +866,14 @@ definition {
 
 	macro clickMarginOfContentContainer {
 		var elementHeight = selenium.getElementHeight("WCEditWebContent#CONTENT_CONTAINER");
+
 		var offSetY = 50 * ${elementHeight};
+
 		var offSetY = ${offSetY} / 100;
 		var elementWidth = selenium.getElementWidth("WCEditWebContent#CONTENT_CONTAINER");
+
 		var offSetX = 2 * ${elementWidth};
+
 		var offSetX = ${offSetX} / 100;
 
 		Click.clickAt(
@@ -1405,10 +1409,14 @@ definition {
 		var displayDate = selenium.getAttribute("//input[contains(@id,'displayDate')]@value");
 		var displayDateHour = selenium.getAttribute("//input[contains(@id,'displayDateHour')]@value");
 		var displayDateAmpm = selenium.getAttribute("//input[contains(@id,'displayDateAmPm')]@value");
+
 		var displayDateAmpm = StringUtil.replace("${displayDateAmpm}", "0", "AM");
+
 		var displayDateAmpm = StringUtil.replace("${displayDateAmpm}", "1", "PM");
 		var displayDateMinute = selenium.getAttribute("//input[contains(@id,'displayDateMinute')]@value");
+
 		var displayDateMinuteFuture = ${displayDateMinute} + ${minuteIncrease};
+
 		var displayTime = "${displayDateHour}:${displayDateMinuteFuture} ${displayDateAmpm}";
 
 		WebContent.editDisplayDate(
@@ -1746,6 +1754,7 @@ definition {
 		Panel.expandPanel(panel = "Default Template");
 
 		var templateName = StringUtil.replace("${templateName}", "&lt;", "<");
+
 		var templateName = StringUtil.replace("${templateName}", "&gt;", ">");
 
 		AssertTextEquals(
@@ -1921,6 +1930,7 @@ definition {
 
 		for (var documentType : list "${documentTypes}") {
 			var documentTypeUppercase = StringUtil.upperCase("${documentType}");
+
 			var key_documentType = "${documentTypeUppercase}";
 
 			AssertTextEquals.assertPartialText(

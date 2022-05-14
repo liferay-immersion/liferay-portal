@@ -41,7 +41,6 @@ definition {
 
 	macro assertFileContent {
 		var fileContent = TestCase.getTempFileContent(fileName = "${fileName}");
-
 		var expectedFileContent = TestCase.getFileContent(fileName = "${comparisonFileName}");
 
 		if ("${fileContent}" != "${expectedFileContent}") {

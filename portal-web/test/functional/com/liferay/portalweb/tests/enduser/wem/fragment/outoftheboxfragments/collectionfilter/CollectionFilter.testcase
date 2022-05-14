@@ -56,7 +56,6 @@ definition {
 				groupName = "Test Site Name",
 				title = "SUV",
 				vocabularyName = "Type");
-
 			var carId = JSONCategory.addCategory(
 				groupName = "Test Site Name",
 				title = "Car",
@@ -286,12 +285,10 @@ definition {
 				groupName = "Test Site Name",
 				title = "9 inch",
 				vocabularyName = "Size");
-
 			var inch95Id = JSONCategory.addCategory(
 				groupName = "Test Site Name",
 				title = "9.5 inch",
 				vocabularyName = "Size");
-
 			var inch100Id = JSONCategory.addCategory(
 				groupName = "Test Site Name",
 				title = "10 inch",
@@ -310,12 +307,10 @@ definition {
 				groupName = "Test Site Name",
 				title = "United States",
 				vocabularyName = "Warehouse");
-
 			var cnId = JSONCategory.addCategory(
 				groupName = "Test Site Name",
 				title = "China",
 				vocabularyName = "Warehouse");
-
 			var esId = JSONCategory.addCategory(
 				groupName = "Test Site Name",
 				title = "Spain",
@@ -1420,13 +1415,11 @@ definition {
 				parentCategoryName = "Category Name",
 				title = "Subcategory A",
 				vocabularyName = "Vocabulary Name");
-
 			var subcategoryBId = JSONCategory.addSubcategory(
 				groupName = "Test Site Name",
 				parentCategoryName = "Category Name",
 				title = "Subcategory B",
 				vocabularyName = "Vocabulary Name");
-
 			var subcategoryCId = JSONCategory.addSubcategory(
 				groupName = "Test Site Name",
 				parentCategoryName = "Category Name",
@@ -2303,12 +2296,10 @@ definition {
 				groupName = "Test Site Name",
 				title = "Category A",
 				vocabularyName = "Vocabulary Name");
-
 			var categoryBId = JSONCategory.addCategory(
 				groupName = "Test Site Name",
 				title = "Category B",
 				vocabularyName = "Vocabulary Name");
-
 			var categoryCId = JSONCategory.addCategory(
 				groupName = "Test Site Name",
 				title = "Category C",
@@ -3382,12 +3373,10 @@ definition {
 				groupName = "Test Site Name",
 				title = "Large",
 				vocabularyName = "Size");
-
 			var mediumId = JSONCategory.addCategory(
 				groupName = "Test Site Name",
 				title = "Medium",
 				vocabularyName = "Size");
-
 			var smallId = JSONCategory.addCategory(
 				groupName = "Test Site Name",
 				title = "Small",
@@ -3407,13 +3396,11 @@ definition {
 				parentCategoryName = "Pure Color",
 				title = "Blue",
 				vocabularyName = "Color");
-
 			var redId = JSONCategory.addSubcategory(
 				groupName = "Test Site Name",
 				parentCategoryName = "Pure Color",
 				title = "Red",
 				vocabularyName = "Color");
-
 			var greenId = JSONCategory.addSubcategory(
 				groupName = "Test Site Name",
 				parentCategoryName = "Pure Color",
@@ -3744,7 +3731,6 @@ definition {
 				groupName = "Test Site Name",
 				title = "SUV",
 				vocabularyName = "Type");
-
 			var carId = JSONCategory.addCategory(
 				groupName = "Test Site Name",
 				title = "Car",

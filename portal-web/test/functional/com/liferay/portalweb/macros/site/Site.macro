@@ -190,6 +190,7 @@ definition {
 				localizedName = "${localizedName}");
 
 			var i = ${i} + 1;
+
 			var i = StringUtil.valueOf("${i}");
 		}
 

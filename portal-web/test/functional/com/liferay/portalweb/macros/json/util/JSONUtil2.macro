@@ -103,6 +103,7 @@ definition {
 		// Replace last comma with }
 
 		var localizedMap = RegexUtil.replace("${localizedMap}", "(.*)(?=,)", "1");
+
 		var localizedMap = "${localizedMap}}";
 
 		return "${localizedMap}";

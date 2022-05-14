@@ -643,7 +643,9 @@ definition {
 		Click(locator1 = "Link#DOWNLOAD");
 
 		var outputDir = PropsUtil.get("output.dir.name");
+
 		var fileContent = FileUtil.read("${outputDir}/sxpElement.json");
+
 		var customElementJson = StringUtil.replace("${fileContent}", "Boost Asset Type", "Boost Results of Web Content Articles");
 
 		Click(locator1 = "Modal#CLOSE_BUTTON");
@@ -710,6 +712,7 @@ definition {
 		Click(locator1 = "Link#DOWNLOAD");
 
 		var outputDir = PropsUtil.get("output.dir.name");
+
 		var elementJson = FileUtil.read("${outputDir}/sxpElement.json");
 
 		Click(locator1 = "Modal#CLOSE_BUTTON");

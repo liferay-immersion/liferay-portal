@@ -947,7 +947,6 @@ definition {
 	@priority = "4"
 	test AddXSSToHTMLField {
 		var ddlRecordFieldData1 = '''<img src=x onerror=alert(/xss/) />''';
-
 		var ddlRecordFieldData2 = ''''+alert('xss')+'"+alert("xss")+"''';
 
 		Navigator.openURL();

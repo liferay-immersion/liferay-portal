@@ -83,13 +83,11 @@ definition {
 
 		task ("Get blogs and message boards URL") {
 			var portalURL = PropsUtil.get("portal.url");
-
 			var blogEntryId = JSONBlog.getBlogEntryId(
 				entryTitle = "Blogs Entry Title",
 				groupName = "Test Site Name");
 
 			var blogEntryURL = "${portalURL}/web/test-site-name/test-page-name/-/blogs/${blogEntryId}";
-
 			var messageId = JSONMBMessage.getMessageIdByName(
 				groupName = "Test Site Name",
 				threadSubject = "MB Thread Message Subject");
@@ -195,13 +193,11 @@ definition {
 
 		task ("Get blogs and message boards URL") {
 			var portalURL = PropsUtil.get("portal.url");
-
 			var blogEntryId = JSONBlog.getBlogEntryId(
 				entryTitle = "Blogs Entry Title",
 				groupName = "Test Site Name");
 
 			var blogEntryURL = "${portalURL}/web/test-site-name/test-page-name/-/blogs/${blogEntryId}";
-
 			var messageId = JSONMBMessage.getMessageIdByName(
 				groupName = "Test Site Name",
 				threadSubject = "MB Thread Message Subject");
@@ -495,13 +491,11 @@ definition {
 
 		task ("Get blogs and message boards URL") {
 			var portalURL = PropsUtil.get("portal.url");
-
 			var blogEntryId = JSONBlog.getBlogEntryId(
 				entryTitle = "Blogs Entry Title",
 				groupName = "Test Site Name");
 
 			var blogEntryURL = "${portalURL}/web/test-site-name/test-page-name/-/blogs/${blogEntryId}";
-
 			var messageId = JSONMBMessage.getMessageIdByName(
 				groupName = "Test Site Name",
 				threadSubject = "MB Thread Message Subject");

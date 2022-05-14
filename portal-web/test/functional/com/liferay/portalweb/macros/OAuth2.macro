@@ -141,6 +141,7 @@ definition {
 			http://localhost:9080/o/oauth2/token \
 				--data client_id=abc123&client_secret=abc123&grant_type=authorization_code&code=${authorizationCode}
 		''';
+
 		var response = JSONCurlUtil.post("${curl}");
 
 		if (contains("${response}", "access_token")) {
@@ -414,7 +415,9 @@ definition {
 		}
 
 		var response = JSONCurlUtil.post("${tokenCurl}");
+
 		var partialResponse = StringUtil.extractFirst("${response}", "\",\"token_type");
+
 		var accessToken = StringUtil.extractLast("${partialResponse}", "access_token\":\"");
 
 		echo("## * Access Token: ${accessToken}");
@@ -996,7 +999,9 @@ definition {
 		if (isSet(globalScopeLinkValue)) {
 			if (contains("${scopeTranslation}", "+")) {
 				var partialScopeTranslation = StringUtil.extractFirst("${scopeTranslation}", "+");
+
 				var partialScopeTranslation = StringUtil.trim("${partialScopeTranslation}");
+
 				var key_scopeText = "${partialScopeTranslation}";
 			}
 			else {

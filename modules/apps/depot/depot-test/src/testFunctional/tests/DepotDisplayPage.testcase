@@ -691,7 +691,6 @@ definition {
 		var dmFileEntryId = JSONDocument.getFileEntryId(
 			dmDocumentTitle = "Document_1.jpg",
 			groupName = "Test Site Name");
-
 		var siteId = JSONGroupAPI._getGroupIdByName(
 			groupName = "Test Site Name",
 			site = "true");
@@ -853,6 +852,7 @@ definition {
 		Button.clickSave();
 
 		var mappedFieldValue = StringUtil.add("Title is Text: ${", "${textNumber}:Text", "");
+
 		var mappedFieldValue = StringUtil.add("${mappedFieldValue}", "}", "");
 
 		OpenGraph.viewMappedField(
@@ -860,6 +860,7 @@ definition {
 			mappedFieldValue = "${mappedFieldValue}");
 
 		var mappedFieldValue = StringUtil.add("Description is Text: ${", "${textNumber}:Text", "");
+
 		var mappedFieldValue = StringUtil.add("${mappedFieldValue}", "}", "");
 
 		OpenGraph.viewMappedField(
@@ -871,6 +872,7 @@ definition {
 			mappedFieldValue = "WC Structure Name: Small Image");
 
 		var mappedFieldValue = StringUtil.add("Image Alt is Text: ${", "${textNumber}:Text", "");
+
 		var mappedFieldValue = StringUtil.add("${mappedFieldValue}", "}", "");
 
 		OpenGraph.viewMappedField(
@@ -976,6 +978,7 @@ definition {
 		Button.clickSave();
 
 		var mappedFieldValue = StringUtil.add("HTML Title is Text: ${", "${textNumber}:Text", "");
+
 		var mappedFieldValue = StringUtil.add("${mappedFieldValue}", "}", "");
 
 		OpenGraph.viewMappedField(
@@ -983,6 +986,7 @@ definition {
 			mappedFieldValue = "${mappedFieldValue}");
 
 		var mappedFieldValue = StringUtil.add("Description is Text: ${", "${textNumber}:Text", "");
+
 		var mappedFieldValue = StringUtil.add("${mappedFieldValue}", "}", "");
 
 		OpenGraph.viewMappedField(

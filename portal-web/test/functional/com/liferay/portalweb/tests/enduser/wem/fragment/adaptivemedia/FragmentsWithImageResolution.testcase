@@ -99,7 +99,6 @@ definition {
 
 		task ("Take down the Width and File Size of image resolution") {
 			var fileSizeManual = PageEditor.getFileSizeOfSelectedImageResolution();
-
 			var widthManual = PageEditor.getWidthOfSelectedImageResolution();
 		}
 
@@ -171,7 +170,6 @@ definition {
 
 		task ("Take down the Width and File Size of image resolution") {
 			var fileSizeManual = PageEditor.getFileSizeOfSelectedImageResolution();
-
 			var widthManual = PageEditor.getWidthOfSelectedImageResolution();
 		}
 
@@ -217,7 +215,6 @@ definition {
 
 		task ("Take down the Width and File Size of image resolution in Desktop viewport") {
 			var fileSizeDesktop = PageEditor.getFileSizeOfSelectedImageResolution();
-
 			var width = PageEditor.getWidthOfSelectedImageResolution();
 		}
 
@@ -241,7 +238,6 @@ definition {
 
 		task ("Take down the Width and File Size of image resolution in Tablet viewport") {
 			var fileSizeTablet = PageEditor.getFileSizeOfSelectedImageResolution();
-
 			var width = PageEditor.getWidthOfSelectedImageResolution();
 		}
 
@@ -285,7 +281,6 @@ definition {
 
 		task ("Take down the Width and File Size of image resolution in Desktop viewport") {
 			var fileSizeDesktop = PageEditor.getFileSizeOfSelectedImageResolution();
-
 			var width = PageEditor.getWidthOfSelectedImageResolution();
 		}
 
@@ -309,7 +304,6 @@ definition {
 
 		task ("Take down the Width and File Size of image resolution in Portrait Phone viewport") {
 			var fileSizePortraitPhone = PageEditor.getFileSizeOfSelectedImageResolution();
-
 			var width = PageEditor.getWidthOfSelectedImageResolution();
 		}
 
@@ -456,7 +450,6 @@ definition {
 
 		task ("Take down the Width and File Size of image resolution in Desktop viewport") {
 			var fileSizeDesktop = PageEditor.getFileSizeOfSelectedImageResolution();
-
 			var width = PageEditor.getWidthOfSelectedImageResolution();
 		}
 
@@ -486,7 +479,6 @@ definition {
 
 		task ("Take down the Width and File Size of image resolution in Portrait Phone viewport") {
 			var fileSizePortraitPhone = PageEditor.getFileSizeOfSelectedImageResolution();
-
 			var width = PageEditor.getWidthOfSelectedImageResolution();
 		}
 
@@ -639,7 +631,6 @@ definition {
 
 		task ("Take down the Width and File Size of image resolution in Desktop viewport") {
 			var fileSizeDesktop = PageEditor.getFileSizeOfSelectedImageResolution();
-
 			var width = PageEditor.getWidthOfSelectedImageResolution();
 		}
 
@@ -669,7 +660,6 @@ definition {
 
 		task ("Take down the Width and File Size of image resolution in Tablet viewport") {
 			var fileSizeTablet = PageEditor.getFileSizeOfSelectedImageResolution();
-
 			var width = PageEditor.getWidthOfSelectedImageResolution();
 		}
 
@@ -832,7 +822,6 @@ definition {
 
 		task ("Take down the Width and File Size of image resolution in Landscape Phone viewport") {
 			var fileSizeLandscapePhone = PageEditor.getFileSizeOfSelectedImageResolution();
-
 			var widthLandscapePhone = PageEditor.getWidthOfSelectedImageResolution();
 		}
 
@@ -896,7 +885,6 @@ definition {
 
 		task ("Take down the Width and File Size of image resolution in Tablet viewport") {
 			var fileSizeTablet = PageEditor.getFileSizeOfSelectedImageResolution();
-
 			var widthTablet = PageEditor.getWidthOfSelectedImageResolution();
 		}
 
@@ -974,7 +962,6 @@ definition {
 
 		task ("Take down the Width and File Size of image resolution in Tablet viewport") {
 			var fileSizeTablet = PageEditor.getFileSizeOfSelectedImageResolution();
-
 			var widthTablet = PageEditor.getWidthOfSelectedImageResolution();
 		}
 
@@ -1029,7 +1016,6 @@ definition {
 
 		task ("Take down the Width and File Size of image resolution") {
 			var fileSize = PageEditor.getFileSizeOfSelectedImageResolution();
-
 			var width = PageEditor.getWidthOfSelectedImageResolution();
 		}
 
@@ -1101,7 +1087,6 @@ definition {
 
 		task ("Take down the Width and File Size of image resolution in Tablet viewport") {
 			var fileSizeTablet = PageEditor.getFileSizeOfSelectedImageResolution();
-
 			var widthTablet = PageEditor.getWidthOfSelectedImageResolution();
 		}
 
@@ -1176,7 +1161,6 @@ definition {
 
 		task ("Take down the Width and File Size of image resolution in Tablet viewport") {
 			var fileSizeTablet = PageEditor.getFileSizeOfSelectedImageResolution();
-
 			var widthTablet = PageEditor.getWidthOfSelectedImageResolution();
 		}
 

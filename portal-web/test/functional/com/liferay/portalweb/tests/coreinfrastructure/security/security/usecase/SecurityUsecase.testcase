@@ -124,9 +124,7 @@ out.println(PortalUtil.escapeRedirect("/"));
 			WaitForSPARefresh();
 
 			var authToken = Page.getAuthTokenFromHtmlSource();
-
 			var plid = Page.getPlidFromHtmlSource();
-
 			var portalURL = PropsUtil.get("portal.url");
 
 			Navigator.openSpecificURL(url = '''${portalURL}/c/portal/update_layout?cmd=add&p_p_col_id=column-1&p_p_col_pos=0&p_p_id=com_liferay_marketplace_store_web_portlet_MarketplacePurchasedPortlet&p_auth=${authToken}&p_l_id=${plid}''');
@@ -211,6 +209,7 @@ out.println(PortalUtil.escapeRedirect("/"));
 		property portal.acceptance = "true";
 
 		var portalURL = PropsUtil.get("portal.url");
+
 		var url = "${portalURL}/c/portal/json_service?serviceClassName=com.liferay.portal.kernel.service.AccountServiceUtil&serviceMethodName=getOSGiServiceIdentifier&p_auth=";
 
 		task ("Assert JSONWS empty page") {
@@ -226,7 +225,6 @@ out.println(PortalUtil.escapeRedirect("/"));
 		property test.name.skip.portal.instance = "SecurityUsecase#ValidateCannotStealAdminAccount";
 
 		var pAuth = Api.getPAuth();
-
 		var portalURL = PropsUtil.get("portal.url");
 
 		task ("Add new user") {

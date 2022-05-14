@@ -24,7 +24,6 @@ definition {
 
 	macro uploadSingleFile {
 		var key_uploadFileName = "${uploadFileName}";
-
 		var filePath = TestCase.getDependenciesDirPath(fileName = "${uploadFileName}");
 
 		WaitForElementPresent(locator1 = "ItemSelector#ITEM_SELECTOR_IFRAME");

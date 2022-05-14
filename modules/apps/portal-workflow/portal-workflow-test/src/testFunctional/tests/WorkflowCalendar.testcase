@@ -10,7 +10,6 @@ definition {
 		TestCase.setUpPortalInstance();
 
 		var testPortalInstance = PropsUtil.get("test.portal.instance");
-
 		var siteName = TestCase.getSiteName(siteName = "${siteName}");
 
 		User.firstLoginPG();

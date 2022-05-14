@@ -892,6 +892,7 @@ definition {
 		var key_categoryColumnName = "${categoryColumnName}";
 		var key_optionRowName = "${optionRowName}";
 		var optionNumber = "${optionNumber}";
+
 		var key_optionNumber = "Row: Option ${optionNumber}, Column: Category ${optionNumber}";
 		var key_fieldName = "${fieldName}";
 
@@ -901,6 +902,7 @@ definition {
 	macro selectGridRadioOptionWithoutCategory {
 		var optionRowNumber = "${optionRowNumber}";
 		var optionColumnNumber = "${optionColumnNumber}";
+
 		var key_optionNumber = "Row: Option ${optionRowNumber}, Column: Option ${optionColumnNumber}";
 		var key_fieldName = "${fieldName}";
 

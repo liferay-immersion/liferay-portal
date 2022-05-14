@@ -2,6 +2,7 @@ definition {
 
 	macro assertNavTabVisualContent {
 		var tabName = StringUtil.replace("${tab}", " ", "_");
+
 		var tabName = StringUtil.toLowerCase("${tabName}");
 
 		Navigator.gotoNavTab(navTab = "${tab}");

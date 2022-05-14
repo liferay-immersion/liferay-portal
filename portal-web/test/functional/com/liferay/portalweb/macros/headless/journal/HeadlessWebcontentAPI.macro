@@ -52,6 +52,7 @@ definition {
 
 		if ("${os}" == "true") {
 			var content = StringUtil.replace("${content}", ">", "^>");
+
 			var content = StringUtil.replace("${content}", "<", "^<");
 		}
 
@@ -77,6 +78,7 @@ definition {
 					"viewableBy": "${viewableBy}"
 				}
 		''';
+
 		var articleId = JSONCurlUtil.post("${curl}", "$.id");
 
 		if ("${articleId}" == "") {
@@ -90,7 +92,6 @@ definition {
 		Variables.assertDefined(parameterList = "${data},${label},${name},${ddmStructureId},${title}");
 
 		var portalURL = JSONCompany.getDefaultPortalURL();
-
 		var siteId = JSONGroupAPI._getGroupIdByName(
 			groupName = "Guest",
 			site = "true");
@@ -115,6 +116,7 @@ definition {
     "title": "${title}"
 	}
 		''';
+
 		var curl = JSONCurlUtil.post("${curl}");
 
 		return "${curl}";

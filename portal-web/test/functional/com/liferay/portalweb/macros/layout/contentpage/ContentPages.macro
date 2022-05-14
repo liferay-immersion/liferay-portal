@@ -341,6 +341,7 @@ definition {
 		}
 
 		var class = selenium.getAttribute("xpath=(//div[contains(@class,'${fragmentName}')])[${index}]//ancestor::div[contains(@class,'lfr-layout-structure-item-')]@class");
+
 		var commonStylesClass = StringUtil.extractFirst("${class}", " lfr-layout-structure-item-");
 
 		return "${commonStylesClass}";
@@ -391,6 +392,7 @@ definition {
 		}
 		else {
 			var fragmentName = StringUtil.replace("${fragmentName}", " ", "-");
+
 			var fragmentName = StringUtil.lowerCase("${fragmentName}");
 		}
 

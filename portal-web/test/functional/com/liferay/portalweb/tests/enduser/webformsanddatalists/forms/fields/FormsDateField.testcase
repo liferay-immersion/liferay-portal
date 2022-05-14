@@ -39,7 +39,9 @@ definition {
 		property portal.acceptance = "true";
 
 		var displayDateYear = DateUtil.getCurrentYear();
+
 		var futureYear = ${displayDateYear} + 1;
+
 		var displayFutureDate = "01/01/${futureYear}";
 
 		FormsAdmin.addForm();
@@ -93,6 +95,7 @@ definition {
 		property portal.acceptance = "true";
 
 		var displayDateYear = DateUtil.getCurrentYear();
+
 		var futureYear = ${displayDateYear} + 1;
 		var pastYear = ${displayDateYear} - 1;
 		var displayFutureDate = "01/01/${futureYear}";
@@ -500,6 +503,7 @@ definition {
 		property portal.acceptance = "true";
 
 		var displayDateYear = DateUtil.getCurrentYear();
+
 		var futureYear = ${displayDateYear} + 1;
 
 		FormsAdmin.addForm();
@@ -1311,7 +1315,9 @@ definition {
 		property portal.acceptance = "true";
 
 		var displayDateYear = DateUtil.getCurrentYear();
+
 		var futureYear = ${displayDateYear} + 1;
+
 		var displayFutureDate = "01/01/${futureYear}";
 
 		FormsAdmin.addForm();
@@ -1369,6 +1375,7 @@ definition {
 		property portal.acceptance = "true";
 
 		var displayDateYear = DateUtil.getCurrentYear();
+
 		var futureYear = ${displayDateYear} + 1;
 		var pastYear = ${displayDateYear} - 1;
 
@@ -1495,8 +1502,10 @@ definition {
 		property portal.acceptance = "true";
 
 		var displayDateYear = DateUtil.getCurrentYear();
+
 		var futureYear = ${displayDateYear} + 1;
 		var pastYear = ${displayDateYear} - 1;
+
 		var displayPastDate = "01/01/${pastYear}";
 		var displayFutureDate = "01/01/${futureYear}";
 

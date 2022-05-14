@@ -263,7 +263,6 @@ definition {
 		var homePageModificationDate1 = SiteTemplates.getPageModificationDate(
 			groupName = "Site Name",
 			pageNameFilter = "%Home%");
-
 		var widgetPageModificationDate1 = SiteTemplates.getPageModificationDate(
 			groupName = "Site Name",
 			pageNameFilter = "%Widget Page Name%");
@@ -290,7 +289,6 @@ definition {
 		var homePageModificationDate2 = SiteTemplates.getPageModificationDate(
 			groupName = "Site Name",
 			pageNameFilter = "%Home%");
-
 		var widgetPageModificationDate2 = SiteTemplates.getPageModificationDate(
 			groupName = "Site Name",
 			pageNameFilter = "%Widget Page Name%");
@@ -329,7 +327,6 @@ definition {
 		var homePageModificationDate3 = SiteTemplates.getPageModificationDate(
 			groupName = "Site Name",
 			pageNameFilter = "%Home%");
-
 		var widgetPageModificationDate3 = SiteTemplates.getPageModificationDate(
 			groupName = "Site Name",
 			pageNameFilter = "%Widget Page Name%");
@@ -794,7 +791,6 @@ definition {
 		AssertAlertNotPresent();
 
 		var actualScript = '''<script>alert(123);</script>''';
-
 		var escapedScript = '''&lt;script&gt;alert(123);&lt;/script&gt;''';
 
 		AssertHTMLSourceTextNotPresent(value1 = "${actualScript}");

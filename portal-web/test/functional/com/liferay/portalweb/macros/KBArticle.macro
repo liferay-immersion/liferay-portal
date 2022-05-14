@@ -57,6 +57,7 @@ definition {
 
 		if (isSet(kbArticleFriendlyURL)) {
 			var kbArticleTitleFormatted = StringUtil.lowerCase("${kbArticleFriendlyURL}");
+
 			var kbArticleTitleFormatted = StringUtil.replace("${kbArticleTitleFormatted}", " ", "-");
 
 			Type(
@@ -65,6 +66,7 @@ definition {
 		}
 		else {
 			var kbArticleTitleFormatted = StringUtil.lowerCase("${kbArticleTitle}");
+
 			var kbArticleTitleFormatted = StringUtil.replace("${kbArticleTitleFormatted}", " ", "-");
 
 			AssertTextEquals(
@@ -112,6 +114,7 @@ definition {
 
 		if (isSet(kbArticleFriendlyURL)) {
 			var kbArticleTitleFormatted = StringUtil.lowerCase("${kbArticleFriendlyURL}");
+
 			var kbArticleTitleFormatted = StringUtil.replace("${kbArticleTitleFormatted}", " ", "-");
 
 			Type(
@@ -120,6 +123,7 @@ definition {
 		}
 		else {
 			var kbArticleTitleFormatted = StringUtil.lowerCase("${kbArticleTitle}");
+
 			var kbArticleTitleFormatted = StringUtil.replace("${kbArticleTitleFormatted}", " ", "-");
 
 			AssertTextEquals(
@@ -918,7 +922,6 @@ definition {
 		var groupId = JSONWebcontentSetter.setGroupId(
 			groupName = "${groupName}",
 			site = "${site}");
-
 		var parentResourceClassNameId = JSONClassname._getClassNameId(value = "com.liferay.knowledge.base.model.KBFolder");
 
 		if (!(isSet(parentResourcePrimKey))) {
@@ -1169,6 +1172,7 @@ definition {
 
 		while (IsElementPresent(locator1 = "KnowledgeBase#HIERARCHY_NAVIGATION_CHILD_GENERIC")) {
 			var childCount = ${childCount} + 1;
+
 			var kbChildArticleTitle = "${kbParentChild} ${childCount}";
 			var key_kbArticleTitle = "${kbArticleTitle}";
 
@@ -1473,6 +1477,7 @@ definition {
 
 		while (IsElementPresent(locator1 = "KnowledgeBase#HIERARCHY_NAVIGATION_GENERIC")) {
 			var count = ${count} + 1;
+
 			var kbParentTitle = "${kbArticleTitle} ${count}";
 
 			if (IsElementPresent(locator1 = "xpath=//div[@class='kbarticle-navigation']/ul[${count}]")) {

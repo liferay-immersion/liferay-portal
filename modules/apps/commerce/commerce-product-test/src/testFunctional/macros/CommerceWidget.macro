@@ -10,6 +10,7 @@ definition {
 		return document.querySelectorAll(`[data-qa-id='${stringToMatch}'] li`).length.toString();
 
 		''';
+
 		var count = selenium.getEval("${javaScriptCountElement}");
 
 		return "${count}";
@@ -31,6 +32,7 @@ definition {
 		return document.querySelectorAll(`[data-qa-id='${stringToMatch}'] li`).length.toString();
 
 		''';
+
 		var count = selenium.getEval("${javaScriptCountElement}");
 
 		return "${count}";

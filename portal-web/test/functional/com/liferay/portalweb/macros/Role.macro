@@ -107,6 +107,7 @@ definition {
 
 	macro definePermissionPG {
 		var key_roleTitle = StringUtil.replace("${roleTitle}", " ", "-");
+
 		var key_roleTitle = StringUtil.lowerCase("${key_roleTitle}");
 
 		SelectFrameTop(value1 = "relative=top");
@@ -441,6 +442,7 @@ definition {
 
 	macro removePermissionPG {
 		var key_roleTitle = StringUtil.replace("${roleTitle}", " ", "-");
+
 		var key_roleTitle = StringUtil.lowerCase("${key_roleTitle}");
 
 		SelectFrameTop(value1 = "relative=top");
@@ -690,6 +692,7 @@ definition {
 
 	macro viewPermissionPG {
 		var key_roleTitle = StringUtil.replace("${roleTitle}", " ", "-");
+
 		var key_roleTitle = StringUtil.lowerCase("${key_roleTitle}");
 
 		if ("${permissionFlagged}" == "true") {

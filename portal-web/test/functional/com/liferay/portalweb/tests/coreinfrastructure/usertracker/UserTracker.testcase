@@ -148,7 +148,6 @@ definition {
 		SignOut.signOut();
 
 		var afterLoginUserTrackerTable = SQL.executeMySQLStatement(mysqlStatement = "SELECT * FROM lportal.UserTracker;");
-
 		var companyId = JSONCompany.getCompanyId();
 
 		echo("UserTracker table: ${afterLoginUserTrackerTable}");
@@ -185,7 +184,6 @@ definition {
 		UserBar.signOut();
 
 		var afterVirutalInstanceUserTrackerTable = SQL.executeMySQLStatement(mysqlStatement = "SELECT * FROM lportal.UserTracker;");
-
 		var virutalInstanceCompanyId = JSONCompany.getCompanyId(portalInstanceName = "www.able.com");
 
 		echo("UserTracker table: ${afterVirutalInstanceUserTrackerTable}");

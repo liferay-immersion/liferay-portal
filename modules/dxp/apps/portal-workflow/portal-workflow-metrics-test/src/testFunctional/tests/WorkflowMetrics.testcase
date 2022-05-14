@@ -23,7 +23,6 @@ definition {
 
 	tearDown {
 		var testPortalInstance = PropsUtil.get("test.portal.instance");
-
 		var siteName = TestCase.getSiteName(siteName = "${siteName}");
 
 		BlogsEntry.tearDownCP();
@@ -672,9 +671,10 @@ definition {
 		property portal.acceptance = "true";
 
 		var siteName = TestCase.getSiteName(siteName = "${siteName}");
-
 		var currentYear = DateUtil.getCurrentYear();
+
 		var futureYear = ${currentYear} + 1;
+
 		var futureYearShort = StringUtil.substring("${futureYear}", "2", "4");
 
 		ProductMenu.gotoPortlet(
@@ -1499,7 +1499,6 @@ definition {
 		property test.name.skip.portal.instance = "WorkflowMetrics#SeeListOfReports";
 
 		var siteName = TestCase.getSiteName(siteName = "${siteName}");
-
 		var key_testSlaDefinitionDays = "0";
 		var key_testSlaDefinitionHours = "00:02";
 		var key_testSlaDefinitionDescription = "SLA Description";
@@ -1941,9 +1940,10 @@ definition {
 		property portal.acceptance = "true";
 
 		var siteName = TestCase.getSiteName(siteName = "${siteName}");
-
 		var currentYear = DateUtil.getCurrentYear();
+
 		var futureYear = ${currentYear} + 1;
+
 		var futureYearShort = StringUtil.substring("${futureYear}", "2", "4");
 
 		ProductMenu.gotoPortlet(
@@ -1996,8 +1996,8 @@ definition {
 	@priority = "4"
 	test UpdateDueDateInvalidDateTime {
 		var siteName = TestCase.getSiteName(siteName = "${siteName}");
-
 		var currentYear = DateUtil.getCurrentYear();
+
 		var futureYear = ${currentYear} + 1;
 
 		ProductMenu.gotoPortlet(
@@ -2282,7 +2282,6 @@ definition {
 		var key_testSlaDefinitionEnd = "Process Ends: Approved";
 		var key_testSlaDefinitionName = "SLA Name";
 		var key_testSlaDefinitionStart = "Process Begins";
-
 		var siteName = TestCase.getSiteName(siteName = "${siteName}");
 
 		WorkflowMetrics.goToWorkflowSLASettings(workflowProcessName = "Single Approver");
@@ -2762,7 +2761,6 @@ definition {
 		property test.name.skip.portal.instance = "WorkflowMetrics#ViewPendingItems";
 
 		var siteName = TestCase.getSiteName(siteName = "${siteName}");
-
 		var key_testSlaDefinitionDays = "0";
 		var key_testSlaDefinitionHours = "00:02";
 		var key_testSlaDefinitionDescription = "SLA Description";

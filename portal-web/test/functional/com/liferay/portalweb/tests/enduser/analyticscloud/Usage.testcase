@@ -237,7 +237,6 @@ definition {
 
 		task ("View the usage percentage on Individuals card") {
 			var percentage = ACSettings.getUsagePercentage(metricName = "Individuals");
-
 			var result = MathUtil.isGreaterThan("${current}", "550");
 
 			if ("${result}" == "true") {
@@ -401,7 +400,6 @@ definition {
 
 		task ("View the usage percentage on Page Views") {
 			var percentage = ACSettings.getUsagePercentage(metricName = "Page Views");
-
 			var result = MathUtil.isGreaterThan("${current}", "375,000");
 
 			if ("${result}" == "true") {
@@ -454,6 +452,7 @@ definition {
 			var oldPageViews = ACSettings.getCurrentNumber(metricName = "Page Views");
 
 			var pageViewsNumber = StringUtil.replace("${oldPageViews}", ",", "");
+
 			var sumPageViews = ${pageViewsNumber} + 1;
 		}
 

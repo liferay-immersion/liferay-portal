@@ -43,8 +43,8 @@ definition {
 		}
 
 		var port = Elasticsearch.getServerPort();
-
 		var portalHostname = PropsUtil.get("portal.hostname");
+
 		var curl = "http://${portalHostname}:${port}/_tasks";
 
 		while (!(isSet(reindexStartTime)) || ("${retryReindex}" == "true") && (maxIterations = "2")) {

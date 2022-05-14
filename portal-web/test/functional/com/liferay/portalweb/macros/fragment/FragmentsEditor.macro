@@ -60,7 +60,6 @@ definition {
 		var dependencyFilePath = TestCase.getDependenciesDirPath(fileName = "${fileName}");
 
 		var content = FileUtil.read("${dependencyFilePath}");
-
 		var fileExtension = File.getFileExtension(fileName = "${fileName}");
 
 		if ("${fileExtension}" == "html") {

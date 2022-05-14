@@ -887,6 +887,7 @@ definition {
 			UserBar.gotoDropdown();
 
 			var dropdownItem = "我的个人资料";
+
 			var key_dropdownItem = "${dropdownItem}";
 
 			AssertTextEquals(

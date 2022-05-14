@@ -138,7 +138,6 @@ definition {
 					groupId = "${groupId}",
 					layoutName = "Test Page Name",
 					privateLayout = "false");
-
 				var layoutTemplateId = JSONLayoutUtil._getLayoutTemplateId(layoutTemplate = "${layoutTemplate}");
 
 				if (!(contains("${typeSettings}", "${layoutTemplateId}"))) {

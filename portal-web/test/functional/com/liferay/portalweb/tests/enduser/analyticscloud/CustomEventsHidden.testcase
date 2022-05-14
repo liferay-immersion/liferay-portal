@@ -124,6 +124,7 @@ definition {
 		property test.name.skip.portal.instance = "CustomEventsHiden#CanHideDefaultAndCustomEvent";
 
 		var defaultEventName = "assetDownloaded";
+
 		var defaultEventNameList = "${defaultEventName},assetClicked,assetSubmitted";
 
 		task ("Fill fields and create custom event") {
@@ -233,6 +234,7 @@ definition {
 	@priority = "5"
 	test CanUnhideDefaultAndCustomEvent {
 		var defaultEventName = "assetDepthReached";
+
 		var defaultEventNameList = "${defaultEventName},assetClicked,assetSubmitted";
 
 		task ("Fill fields and create custom event") {

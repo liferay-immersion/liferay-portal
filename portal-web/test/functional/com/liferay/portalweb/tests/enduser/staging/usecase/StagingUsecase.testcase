@@ -1107,6 +1107,7 @@ definition {
 		WebContentNavigator.gotoEditFeed(feedName = "Web Content Feed");
 
 		var webContentFeedURL = selenium.getAttribute("//a[contains(@href,'rss') and contains(.,'Preview')]@href");
+
 		var stagingFeedId = StringUtil.extractLast("${webContentFeedURL}", "/");
 		var entryExternalURL = StringUtil.replace("${webContentFeedURL}", "http://", "");
 
@@ -1146,6 +1147,7 @@ definition {
 			siteName = "Site Name");
 
 		var webContentFeedURL = selenium.getAttribute("//div[contains(@class,'journal-content-article')]//a[contains(@href,'rss')]@href");
+
 		var liveFeedId = StringUtil.extractLast("${webContentFeedURL}", "/");
 
 		echo("## * Live FeedId: ${liveFeedId}");
@@ -1925,7 +1927,9 @@ definition {
 			siteName = "Site Name");
 
 		var downloadURL = selenium.getAttribute("//div[contains(@class,'journal-content-article')]/a@href");
+
 		var stagingGroupId = StringUtil.extractLast("${downloadURL}", "documents/");
+
 		var stagingGroupId = StringUtil.extractFirst("${stagingGroupId}", "/");
 
 		echo("## * Staging GroupId: ${stagingGroupId}");
@@ -1935,7 +1939,9 @@ definition {
 			siteName = "Site Name");
 
 		var downloadURL = selenium.getAttribute("//div[contains(@class,'journal-content-article')]/a@href");
+
 		var liveGroupId = StringUtil.extractLast("${downloadURL}", "documents/");
+
 		var liveGroupId = StringUtil.extractFirst("${liveGroupId}", "/");
 
 		echo("## * Live GroupId: ${liveGroupId}");

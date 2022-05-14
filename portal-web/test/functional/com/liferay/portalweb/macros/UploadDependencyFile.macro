@@ -2,7 +2,6 @@ definition {
 
 	macro uploadArchiveFile {
 		var tempDir = PropsUtil.get("output.dir.name");
-
 		var dependencyFilePath = TestCase.getDependenciesDirPath(fileName = "${fileName}");
 
 		UploadFile(

@@ -7,7 +7,6 @@ definition {
 			folderId = "${folderId}",
 			groupName = "${groupName}",
 			portalURL = "${baseURL}");
-
 		var portalURL = JSONCompany.getPortalURL();
 
 		if (!(isSet(parentCommentId))) {
@@ -37,7 +36,6 @@ definition {
 	@summary = "This calls the JSON WS API to add a Document entry"
 	macro addFile {
 		var portalURL = JSONCompany.getPortalURL();
-
 		var repositoryId = JSONGroupAPI._getSiteIdByGroupKey(groupName = "${groupName}");
 
 		if (isSet(folderName)) {
@@ -100,7 +98,6 @@ definition {
 		Variables.assertDefined(parameterList = "${groupName},${mimeType},${sourceFileName}");
 
 		var portalURL = JSONCompany.getPortalURL();
-
 		var repositoryId = JSONGroupAPI._getSiteIdByGroupKey(groupName = "${groupName}");
 
 		if (isSet(folderName)) {
@@ -216,9 +213,7 @@ definition {
 		Variables.assertDefined(parameterList = "${targetGroupName},${sourceGroupName},${dmDocumentTitle}");
 
 		var portalURL = JSONCompany.getPortalURL();
-
 		var targetRepositoryId = JSONGroupAPI._getSiteIdByGroupKey(groupName = "${targetGroupName}");
-
 		var sourceRepositoryId = JSONGroupAPI._getSiteIdByGroupKey(groupName = "${sourceGroupName}");
 
 		if (isSet(sourceFolderName)) {
@@ -338,6 +333,7 @@ definition {
 			  -d folderId=${folderId} \
 			  -d title=${dmDocumentTitle}
 		''';
+
 		var fileEntryId = JSONCurlUtil.post("${curl}", "$.[?(@['title'] == '${dmDocumentTitle}')]['fileEntryId']");
 
 		return "${fileEntryId}";
@@ -370,6 +366,7 @@ definition {
 			  -d folderId=${folderId} \
 			  -d title=${dmDocumentTitle}
 		''';
+
 		var fileEntryUuid = JSONCurlUtil.post("${curl}", "$.[?(@['title'] == '${dmDocumentTitle}')]['uuid']");
 
 		return "${fileEntryUuid}";
@@ -382,9 +379,7 @@ definition {
 			folderId = "${folderId}",
 			groupName = "${groupName}",
 			portalURL = "${baseURL}");
-
 		var portalURL = JSONCompany.getPortalURL();
-
 		var newFolderId = JSONDocumentAPI._getFolderIdByFolderName(
 			groupName = "${groupName}",
 			name = "${folderName}");
@@ -426,7 +421,6 @@ definition {
 			groupName = "${groupName}",
 			portalURL = "${baseURL}",
 			site = "${site}");
-
 		var portalURL = JSONCompany.getPortalURL();
 
 		var curl = '''

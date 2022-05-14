@@ -47,6 +47,7 @@ definition {
 	"r_supervisor_c_managerId": "${managerId}"
 	}
 		''';
+
 		var employeeId = JSONCurlUtil.post("${curl}", "$.id");
 
 		return "${employeeId}";
@@ -64,6 +65,7 @@ definition {
 	"firstname": "${firstname}"
 	}
 		''';
+
 		var managerId = JSONCurlUtil.post("${curl}", "$.id");
 
 		return "${managerId}";
@@ -104,6 +106,7 @@ definition {
 	"scope": "company"
 					}
 		''';
+
 		var objectDefinitionId = JSONCurlUtil.post("${curl}", "$.id");
 
 		return "${objectDefinitionId}";
@@ -129,6 +132,7 @@ definition {
   	"type": "${type}"
 					}
 		''';
+
 		var relationshipId = JSONCurlUtil.post("${curl}", "$.id");
 
 		return "${relationshipId}";
@@ -138,11 +142,11 @@ definition {
 		Variables.assertDefined(parameterList = "${employeeId}");
 
 		var portalURL = JSONCompany.getDefaultPortalURL();
-
 		var curl = '''
         	http://localhost:8080/o/c/employees/${employeeId} \
 			-u test@liferay.com:test
 		''';
+
 		var employeeFirstname = JSONCurlUtil.get("${curl}", "$.firstname");
 
 		return "${employeeFirstname}";
@@ -152,11 +156,11 @@ definition {
 		Variables.assertDefined(parameterList = "${managerId}");
 
 		var portalURL = JSONCompany.getDefaultPortalURL();
-
 		var curl = '''
         	http://localhost:8080/o/c/managers/${managerId} \
 			-u test@liferay.com:test
 		''';
+
 		var managerFirstname = JSONCurlUtil.get("${curl}", "$.firstname");
 
 		return "${managerFirstname}";
@@ -183,6 +187,7 @@ definition {
         	${portalURL}/o/object-admin/v1.0/object-definitions/${objectDefinitionId} \
 			-u test@liferay.com:test
 		''';
+
 		var objectDefinitionStatus = JSONCurlUtil.get("${curl}", "$.active");
 
 		return "${objectDefinitionStatus}";
@@ -203,6 +208,7 @@ definition {
         	${portalURL}/o/c/${objects}?nestedFields=${nestedField} \
 			-u test@liferay.com:test
 		''';
+
 		var json = JSONCurlUtil.get("${curl}");
 
 		return "${json}";
@@ -212,11 +218,11 @@ definition {
 		Variables.assertDefined(parameterList = "${relationshipId}");
 
 		var portalURL = JSONCompany.getDefaultPortalURL();
-
 		var curl = '''
         	http://localhost:8080/o/object-admin/v1.0/object-relationships/${relationshipId} \
 			-u test@liferay.com:test
 		''';
+
 		var relationshipName = JSONCurlUtil.get("${curl}", "$.name");
 
 		return "${relationshipName}";
@@ -231,6 +237,7 @@ definition {
         	${portalURL}/o/object-admin/v1.0/object-definitions/${objectDefinitionId}/publish \
 			-u test@liferay.com:test
 		''';
+
 		var json = JSONCurlUtil.post("${curl}");
 
 		return "${json}";
@@ -252,6 +259,7 @@ definition {
 	"r_supervisor_c_managerId": "${managerId}"
 					}
 	''';
+
 		var response = JSONCurlUtil.put("${curl}");
 
 		return "${response}";

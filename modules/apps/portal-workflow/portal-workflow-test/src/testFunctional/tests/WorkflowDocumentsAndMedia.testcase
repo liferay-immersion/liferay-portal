@@ -395,7 +395,6 @@ definition {
 	@priority = "3"
 	test CanShareAFile {
 		var siteName = TestCase.getSiteName(siteName = "${siteName}");
-
 		var user = "DXP";
 
 		ProductMenu.gotoPortlet(
@@ -754,7 +753,6 @@ definition {
 	@priority = "3"
 	test StatusBecomeDraftAfterCheckout {
 		var siteName = TestCase.getSiteName(siteName = "${siteName}");
-
 		var documentTitle = "Document_1";
 
 		ProductMenu.gotoPortlet(

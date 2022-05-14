@@ -50,7 +50,6 @@ definition {
 	@priority = "5"
 	test CanDownloadJapaneseFileByFileName {
 		var portalURL = PropsUtil.get("portal.url");
-
 		var siteId = JSONGroupAPI._getGroupIdByName(
 			groupName = "Guest",
 			site = "true");
@@ -75,7 +74,6 @@ definition {
 	@priority = "5"
 	test CanDownloadJapaneseFileByTitle {
 		var portalURL = PropsUtil.get("portal.url");
-
 		var siteId = JSONGroupAPI._getGroupIdByName(
 			groupName = "Guest",
 			site = "true");

@@ -179,7 +179,6 @@ definition {
 			userFullName = "Test Test (You)");
 
 		var fileContent = SystemSettings.getConfigFileContent(configFileName = "com.liferay.journal.configuration.JournalServiceConfiguration.config");
-
 		var expectedText = "articleCommentsEnabled=B&quot;true&quot;";
 
 		if (contains("${fileContent}", "${expectedText}")) {
