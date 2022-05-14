@@ -93,7 +93,7 @@ public class OpenAPIResourceImpl {
 					relationshipSchema.setDescription(
 						"Information about the relationship " +
 							objectRelationship.getName() +
-								". Can be embedded with nestedFields");
+								" can be embedded with nestedFields.");
 
 					entity.getComponents(
 					).getSchemas(
