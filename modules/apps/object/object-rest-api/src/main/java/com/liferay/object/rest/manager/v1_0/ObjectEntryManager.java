@@ -23,9 +23,12 @@ import com.liferay.portal.vulcan.dto.converter.DTOConverterContext;
 import com.liferay.portal.vulcan.pagination.Page;
 import com.liferay.portal.vulcan.pagination.Pagination;
 
+import org.osgi.annotation.versioning.ProviderType;
+
 /**
  * @author Gabriel Albuquerque
  */
+@ProviderType
 public interface ObjectEntryManager {
 
 	public ObjectEntry addObjectEntry(
