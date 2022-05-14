@@ -18,7 +18,6 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.Layout;
 import com.liferay.portal.kernel.model.Portlet;
 import com.liferay.portal.kernel.portlet.LiferayRenderRequest;
-import com.liferay.portal.kernel.portlet.LiferayRenderResponse;
 import com.liferay.portal.kernel.portlet.PortletConfigFactoryUtil;
 import com.liferay.portal.kernel.portlet.PortletInstanceFactoryUtil;
 import com.liferay.portal.kernel.search.SearchContext;
@@ -42,9 +41,7 @@ import com.liferay.portal.vulcan.pagination.Page;
 import com.liferay.portlet.RenderRequestFactory;
 import com.liferay.portlet.RenderResponseFactory;
 
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 
 import javax.portlet.PortletConfig;
 import javax.portlet.PortletMode;
@@ -88,20 +85,22 @@ public class SuggestionResourceImpl extends BaseSuggestionResourceImpl {
 				_suggestionsRetriever.getSuggestionsContributorResults(
 					liferayRenderRequest,
 					RenderResponseFactory.create(
-						contextHttpServletResponse, (RenderRequest)liferayRenderRequest),
+						contextHttpServletResponse,
+						(RenderRequest)liferayRenderRequest),
 					_createSearchContext(
-						destinationFriendlyURL, _getGroupId(groupId), scope, search,
-						suggestionsContributorConfigurations)),
+						destinationFriendlyURL, _getGroupId(groupId), scope,
+						search, suggestionsContributorConfigurations)),
 				suggestionsContributorResult ->
 					new SuggestionsContributorResults() {
 						{
 							attributes =
 								suggestionsContributorResult.getAttributes();
 							displayGroupName =
-								suggestionsContributorResult.getDisplayGroupName();
+								suggestionsContributorResult.
+									getDisplayGroupName();
 							suggestions = transformToArray(
 								suggestionsContributorResult.getSuggestions(),
-								suggestion -> new Suggestion () {
+								suggestion -> new Suggestion() {
 									{
 										attributes = suggestion.getAttributes();
 										score = suggestion.getScore();
