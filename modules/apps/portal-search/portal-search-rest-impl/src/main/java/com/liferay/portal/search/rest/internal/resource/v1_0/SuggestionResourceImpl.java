@@ -37,6 +37,7 @@ import com.liferay.portal.search.rest.dto.v1_0.SuggestionsContributorConfigurati
 import com.liferay.portal.search.rest.dto.v1_0.SuggestionsContributorResults;
 import com.liferay.portal.search.rest.resource.v1_0.SuggestionResource;
 import com.liferay.portal.search.suggestions.SuggestionsRetriever;
+import com.liferay.portal.search.web.constants.SearchBarPortletKeys;
 import com.liferay.portal.vulcan.pagination.Page;
 import com.liferay.portlet.RenderRequestFactory;
 import com.liferay.portlet.RenderResponseFactory;
@@ -97,8 +98,7 @@ public class SuggestionResourceImpl extends BaseSuggestionResourceImpl {
 		throws Exception {
 
 		Portlet portlet = _portletLocalService.getPortletById(
-			"com_liferay_portal_search_web_search_bar_portlet_" +
-				"SearchBarPortlet");
+			SearchBarPortletKeys.SEARCH_BAR);
 
 		ServletContext servletContext =
 			(ServletContext)contextHttpServletRequest.getAttribute(WebKeys.CTX);
