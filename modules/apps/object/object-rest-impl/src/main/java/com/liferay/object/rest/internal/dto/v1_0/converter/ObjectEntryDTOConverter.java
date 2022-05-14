@@ -185,9 +185,6 @@ public class ObjectEntryDTOConverter
 		com.liferay.object.model.ObjectEntry objectEntry,
 		ObjectRelationship objectRelationship) {
 
-		Pagination pagination = Pagination.of(
-			QueryUtil.ALL_POS, QueryUtil.ALL_POS);
-
 		try {
 			List<com.liferay.object.model.ObjectEntry>
 				oneToManyRelatedObjectEntries =
@@ -195,8 +192,7 @@ public class ObjectEntryDTOConverter
 						objectEntry.getGroupId(),
 						objectRelationship.getObjectRelationshipId(),
 						objectEntry.getObjectEntryId(),
-						pagination.getStartPosition(),
-						pagination.getEndPosition());
+						QueryUtil.ALL_POS, QueryUtil.ALL_POS);
 
 			return _mapRelationshipObjectEntries(
 				dtoConverterContext, nestedFieldsDepth,
