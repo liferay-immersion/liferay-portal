@@ -82,35 +82,33 @@ public class OpenAPIResourceImpl {
 		List<String> relationshipsEndpoints = _getRelationshipsEndpoints(
 			entity.getPaths());
 
-		relationshipsEndpoints.forEach(
-			endpoint -> {
-				_objectRelationshipRelatedObjectDefinitionMap.forEach(
-					(objectRelationship, objectDefinition) -> {
-						_createCustomRelationshipEndpointToOpenAPI(
-							entity, endpoint, objectRelationship,
-							objectDefinition);
+		for (String endpoint : relationshipsEndpoints) {
+			_objectRelationshipRelatedObjectDefinitionMap.forEach(
+				(objectRelationship, objectDefinition) -> {
+					_createCustomRelationshipEndpointToOpenAPI(
+						entity, endpoint, objectRelationship, objectDefinition);
 
-						Schema<Object> relationshipSchema = new Schema<>();
+					Schema<Object> relationshipSchema = new Schema<>();
 
-						relationshipSchema.setDescription(
-							"Information about the relationship " +
-								objectRelationship.getName() +
-									". Can be embedded with nestedFields");
+					relationshipSchema.setDescription(
+						"Information about the relationship " +
+							objectRelationship.getName() +
+								". Can be embedded with nestedFields");
 
-						entity.getComponents(
-						).getSchemas(
-						).get(
-							_currentObjectDefinition.getShortName()
-						).getProperties(
-						).put(
-							objectRelationship.getName(), relationshipSchema
-						);
-					});
+					entity.getComponents(
+					).getSchemas(
+					).get(
+						_currentObjectDefinition.getShortName()
+					).getProperties(
+					).put(
+						objectRelationship.getName(), relationshipSchema
+					);
+				});
 
-				Paths entityPaths = entity.getPaths();
+			Paths entityPaths = entity.getPaths();
 
-				entityPaths.remove(endpoint);
-			});
+			entityPaths.remove(endpoint);
+		}
 
 		return openAPI;
 	}
