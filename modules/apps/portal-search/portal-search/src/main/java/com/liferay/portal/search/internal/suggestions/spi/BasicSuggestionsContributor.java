@@ -219,11 +219,11 @@ public class BasicSuggestionsContributor implements SuggestionsContributor {
 			searchHit.getScore()
 		);
 
-		String entryClassName = document.getString(Field.ENTRY_CLASS_NAME);
-		long entryClassPK = document.getLong(Field.ENTRY_CLASS_PK);
 		String text = null;
 
 		try {
+			String entryClassName = document.getString(Field.ENTRY_CLASS_NAME);
+
 			AssetRendererFactory<?> assetRendererFactory =
 				AssetRendererFactoryRegistryUtil.
 					getAssetRendererFactoryByClassName(entryClassName);
@@ -231,6 +231,8 @@ public class BasicSuggestionsContributor implements SuggestionsContributor {
 			if (assetRendererFactory == null) {
 				return null;
 			}
+
+			long entryClassPK = document.getLong(Field.ENTRY_CLASS_PK);
 
 			AssetRenderer<?> assetRenderer =
 				assetRendererFactory.getAssetRenderer(entryClassPK);
