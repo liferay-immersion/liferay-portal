@@ -22,6 +22,7 @@ import com.liferay.portal.aop.AopService;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermission;
+import com.liferay.portal.kernel.service.ServiceContext;
 
 import java.util.List;
 import java.util.Locale;
@@ -61,6 +62,25 @@ public class ObjectRelationshipServiceImpl
 		return objectRelationshipLocalService.addObjectRelationship(
 			getUserId(), objectDefinitionId1, objectDefinitionId2, deletionType,
 			labelMap, name, type);
+	}
+
+	@Override
+	public void addObjectRelationshipMappingTableValues(
+			long objectRelationshipId, long primaryKey1, long primaryKey2,
+			ServiceContext serviceContext)
+		throws PortalException {
+
+		ObjectRelationship objectRelationship =
+			objectRelationshipPersistence.findByPrimaryKey(
+				objectRelationshipId);
+
+		_objectDefinitionModelResourcePermission.check(
+			getPermissionChecker(), objectRelationship.getObjectDefinitionId1(),
+			ActionKeys.UPDATE);
+
+		objectRelationshipLocalService.addObjectRelationshipMappingTableValues(
+			getUserId(), objectRelationshipId, primaryKey1, primaryKey2,
+			serviceContext);
 	}
 
 	@Override

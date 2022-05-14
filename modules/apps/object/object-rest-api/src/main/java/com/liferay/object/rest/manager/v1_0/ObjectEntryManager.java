@@ -40,7 +40,7 @@ public interface ObjectEntryManager {
 	public ObjectEntry addObjectRelationshipMappingTableValues(
 			DTOConverterContext dtoConverterContext,
 			ObjectDefinition objectDefinition, String objectRelationshipName,
-			long primaryKey1, long primaryKey2, long userId)
+			long primaryKey1, long primaryKey2)
 		throws Exception;
 
 	public ObjectEntry addOrUpdateObjectEntry(
