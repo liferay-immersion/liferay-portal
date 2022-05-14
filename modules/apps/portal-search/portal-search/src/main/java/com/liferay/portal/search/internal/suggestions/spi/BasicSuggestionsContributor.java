@@ -136,15 +136,17 @@ public class BasicSuggestionsContributor implements SuggestionsContributor {
 					WindowState.MAXIMIZED
 				).buildPortletURL();
 
-			AssetEntry assetEntry = _assetEntryLocalService.getEntry(
-				entryClassName, entryClassPK);
-
 			MutableRenderParameters mutableRenderParameters =
 				viewContentURL.getRenderParameters();
 
 			mutableRenderParameters.setValue("mvcPath", "/view_content.jsp");
+
+			AssetEntry assetEntry = _assetEntryLocalService.getEntry(
+				entryClassName, entryClassPK);
+
 			mutableRenderParameters.setValue(
 				"assetEntryId", String.valueOf(assetEntry.getEntryId()));
+
 			mutableRenderParameters.setValue(
 				"type", assetRendererFactory.getType());
 
