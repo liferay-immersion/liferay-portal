@@ -54,15 +54,13 @@ public class OpenAPIResourceImpl {
 
 	public OpenAPIResourceImpl(
 		ObjectDefinition currentObjectDefinition,
-		Map<ObjectRelationship, ObjectDefinition>
-			objectDefinitionsMap,
+		Map<ObjectRelationship, ObjectDefinition> objectDefinitionsMap,
 		OpenAPIResource openAPIResource,
 		OpenAPISchemaFilter openAPISchemaFilter,
 		Set<Class<?>> resourceClasses) {
 
 		_currentObjectDefinition = currentObjectDefinition;
-		_objectDefinitionsMap =
-			objectDefinitionsMap;
+		_objectDefinitionsMap = objectDefinitionsMap;
 		_openAPIResource = openAPIResource;
 		_openAPISchemaFilter = openAPISchemaFilter;
 		_resourceClasses = resourceClasses;
@@ -83,28 +81,32 @@ public class OpenAPIResourceImpl {
 			entity.getPaths());
 
 		for (String endpoint : relationshipsEndpoints) {
-			_objectDefinitionsMap.forEach(
-				(objectRelationship, objectDefinition) -> {
-					_createCustomRelationshipEndpointToOpenAPI(
-						entity, endpoint, objectRelationship, objectDefinition);
+			for (Map.Entry<ObjectRelationship, ObjectDefinition> entry :
+					_objectDefinitionsMap.entrySet()) {
 
-					entity.getComponents(
-					).getSchemas(
-					).get(
-						_currentObjectDefinition.getShortName()
-					).getProperties(
-					).put(
-						objectRelationship.getName(),
-						new Schema<Object>() {
-							{
-								setDescription(
-									"Information about the relationship " +
-										objectRelationship.getName() +
-											" can be embedded with nestedFields.");
-							}
+				ObjectRelationship objectRelationship = entry.getKey();
+				ObjectDefinition objectDefinition = entry.getValue();
+
+				_createCustomRelationshipEndpointToOpenAPI(
+					entity, endpoint, objectRelationship, objectDefinition);
+
+				entity.getComponents(
+				).getSchemas(
+				).get(
+					_currentObjectDefinition.getShortName()
+				).getProperties(
+				).put(
+					objectRelationship.getName(),
+					new Schema<Object>() {
+						{
+							setDescription(
+								"Information about the relationship " +
+									objectRelationship.getName() +
+										" can be embedded with nestedFields.");
 						}
-					);
-				});
+					}
+				);
+			}
 
 			Paths entityPaths = entity.getPaths();
 
