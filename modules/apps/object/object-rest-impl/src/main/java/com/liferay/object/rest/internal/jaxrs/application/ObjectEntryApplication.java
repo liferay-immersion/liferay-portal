@@ -130,10 +130,7 @@ public class ObjectEntryApplication extends Application {
 				_objectDefinitionLocalService.fetchObjectDefinition(
 					objectRelationship.getObjectDefinitionId2());
 
-			if (objectDefinition != null) {
-				objectDefinitionsMap.put(
-					objectRelationship, objectDefinition);
-			}
+			objectDefinitionsMap.put(objectRelationship, objectDefinition);
 		}
 
 		return objectDefinitionsMap;
