@@ -85,8 +85,8 @@ public class SuggestionResourceImpl extends BaseSuggestionResourceImpl {
 			_toSuggestionsContributorResults(
 				_suggestionsRetriever.getSuggestionsContributorResults(
 					liferayRenderRequest,
-					_createLiferayRenderResponse(
-						(RenderRequest)liferayRenderRequest),
+					RenderResponseFactory.create(
+						contextHttpServletResponse, (RenderRequest)liferayRenderRequest),
 					_createSearchContext(
 						destinationFriendlyURL, groupId, scope, search,
 						suggestionsContributorConfigurations)),
@@ -125,14 +125,6 @@ public class SuggestionResourceImpl extends BaseSuggestionResourceImpl {
 				contextHttpServletResponse, liferayRenderRequest));
 
 		return liferayRenderRequest;
-	}
-
-	private LiferayRenderResponse _createLiferayRenderResponse(
-			RenderRequest renderRequest)
-		throws Exception {
-
-		return RenderResponseFactory.create(
-			contextHttpServletResponse, renderRequest);
 	}
 
 	private SearchContext _createSearchContext(
