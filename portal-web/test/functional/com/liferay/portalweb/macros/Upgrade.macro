@@ -3323,7 +3323,6 @@ definition {
 
 	macro viewAndEditOpenGraph {
 		var portalURL = PropsUtil.get("portal.url");
-
 		var siteId = JSONGroupSetter.setGroupId(groupName = "Test Site Name");
 
 		Navigator.openToGroupPagesPortlet(
@@ -4261,7 +4260,6 @@ definition {
 
 	macro viewDocuments {
 		var portalURL = PropsUtil.get("portal.url");
-
 		var siteId = JSONGroupAPI._getGroupIdByName(
 			groupName = "Guest",
 			site = "true");
@@ -4630,7 +4628,6 @@ definition {
 
 	macro viewMatchingCalendarIndexesInPartitionedDatabase {
 		var baseSchemaIndex = SQL.executeMySQLStatement(mysqlStatement = "SHOW INDEX FROM lportal.Calendar;");
-
 		var partitionSchemaIndex = SQL.executeMySQLStatement(mysqlStatement = "SHOW INDEX FROM lpartition_41246.Calendar;");
 
 		if ("${baseSchemaIndex}" == "${partitionSchemaIndex}") {

@@ -112,7 +112,6 @@ definition {
 				groupName = "Test Site Name",
 				title = "Category_1",
 				vocabularyName = "Vocabulary Name");
-
 			var categoryId2 = JSONCategory.addCategory(
 				groupName = "Test Site Name",
 				title = "Category_2",
@@ -244,7 +243,6 @@ definition {
 				groupName = "Test Site Name",
 				title = "Category_1",
 				vocabularyName = "Vocabulary Name");
-
 			var categoryId2 = JSONCategory.addCategory(
 				groupName = "Test Site Name",
 				title = "Category_2",
@@ -680,7 +678,6 @@ definition {
 				groupName = "Test Site Name",
 				title = "Category_1",
 				vocabularyName = "Vocabulary Name");
-
 			var categoryId2 = JSONCategory.addCategory(
 				groupName = "Test Site Name",
 				title = "Category_2",
@@ -1142,7 +1139,6 @@ definition {
 				groupName = "Test Site Name",
 				title = "Category_1",
 				vocabularyName = "Vocabulary Name");
-
 			var categoryId2 = JSONCategory.addCategory(
 				groupName = "Test Site Name",
 				title = "Category_2",
@@ -1251,7 +1247,6 @@ definition {
 				groupName = "Test Site Name",
 				title = "Category_1",
 				vocabularyName = "Vocabulary Name");
-
 			var categoryId2 = JSONCategory.addCategory(
 				groupName = "Test Site Name",
 				title = "Category_2",
@@ -1480,7 +1475,6 @@ definition {
 				groupName = "Test Site Name",
 				title = "Category_1",
 				vocabularyName = "Vocabulary Name");
-
 			var categoryId2 = JSONCategory.addCategory(
 				groupName = "Test Site Name",
 				title = "Category_2",
@@ -1598,7 +1592,6 @@ definition {
 				groupName = "Test Site Name",
 				title = "Category_1",
 				vocabularyName = "Vocabulary Name");
-
 			var categoryId2 = JSONCategory.addCategory(
 				groupName = "Test Site Name",
 				title = "Category_2",
@@ -2600,7 +2593,6 @@ definition {
 				groupName = "Test Site Name",
 				title = "Category_1",
 				vocabularyName = "Vocabulary Name");
-
 			var categoryId2 = JSONCategory.addCategory(
 				groupName = "Test Site Name",
 				title = "Category_2",

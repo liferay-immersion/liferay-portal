@@ -546,6 +546,7 @@ definition {
 				orgType = "Organization");
 
 			var suborgName = StringUtil.replace("${suborgName}", " ", "-");
+
 			var suborgName = StringUtil.lowerCase("${suborgName}");
 
 			Site.openSiteSettingsAdmin(siteURLKey = "${suborgName}");
@@ -1791,7 +1792,6 @@ definition {
 		property test.name.skip.portal.instance = "UsersandorganizationsUsecase#ViewContentInCustomOrganizationTypeSite";
 
 		var portalURL = PropsUtil.get("portal.url");
-
 		var siteName = TestCase.getSiteName(siteName = "${siteName}");
 
 		JSONRole.addOrganizationRole(roleTitle = "Canada Orgrole");

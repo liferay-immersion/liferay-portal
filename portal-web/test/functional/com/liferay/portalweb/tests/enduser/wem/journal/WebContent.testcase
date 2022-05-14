@@ -1515,7 +1515,6 @@ definition {
 				parentCategoryName = "Category Name 1",
 				title = "Subcategory Name",
 				vocabularyName = "Vocabulary Name");
-
 			var subcategoryId2 = JSONCategory.addSubcategory(
 				groupName = "Test Site Name",
 				parentCategoryName = "Category Name 2",

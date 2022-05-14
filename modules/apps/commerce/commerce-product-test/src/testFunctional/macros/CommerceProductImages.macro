@@ -143,6 +143,7 @@ definition {
 		SelectFrame.selectFrameNoLoading(locator1 = "CommerceEntry#IFRAME_SIDE_PANEL");
 
 		var productMediaId = selenium.getText("CommerceEntry#SIDE_PANEL_IFRAME_TITLE");
+
 		var productMediaId = StringUtil.extractDigits("${productMediaId}");
 
 		Click(locator1 = "Icon#CLOSE");

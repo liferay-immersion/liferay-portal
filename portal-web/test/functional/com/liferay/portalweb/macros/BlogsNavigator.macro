@@ -262,7 +262,6 @@ definition {
 			friendlyURL = "${friendlyURL}",
 			groupName = "${groupName}",
 			site = "${site}");
-
 		var baseURL = "${baseURL}";
 
 		if (!(isSet(baseURL))) {
@@ -284,7 +283,6 @@ definition {
 		var stagingId = JSONGroupAPI._getGroupIdByName(
 			groupName = "${groupName}",
 			site = "${site}");
-
 		var baseURL = "${baseURL}";
 
 		if (!(isSet(baseURL))) {

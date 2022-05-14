@@ -126,6 +126,7 @@ definition {
 				-u test@liferay.com:test \
 				-d groupId=${groupId}
 		''';
+
 		var layoutPageTemplateCollectionId = JSONCurlUtil.post("${curl}", "$.[?(@['name'] == '${layoutPageTemplateCollectionName}')]['layoutPageTemplateCollectionId']");
 
 		if ("${layoutPageTemplateCollectionId}" == "") {
@@ -150,6 +151,7 @@ definition {
 			  -d "end=-1" \
 			  -d -orderByComparator=
 		''';
+
 		var layoutPageTemplateEntryId = JSONCurlUtil.post("${curl}", "$.[?(@['name'] == '${layoutPageTemplateEntryName}')]['layoutPageTemplateEntryId']");
 
 		if ("${layoutPageTemplateEntryId}" == "") {
@@ -174,6 +176,7 @@ definition {
 			  -d "end=-1" \
 			  -d -orderByComparator=
 		''';
+
 		var masterLayoutPlid = JSONCurlUtil.post("${curl}", "$.[?(@['name'] == '${masterLayoutEntryName}')]['plid']");
 
 		if ("${masterLayoutPlid}" == "") {

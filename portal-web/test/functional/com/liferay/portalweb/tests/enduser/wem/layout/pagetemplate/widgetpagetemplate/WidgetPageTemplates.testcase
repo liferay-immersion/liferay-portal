@@ -477,7 +477,6 @@ definition {
 				siteScopeName = "Global");
 
 			var key_larFileName = "${larFileName}";
-
 			var larFileName = LAR.getLarFileName();
 
 			LAR.downloadLar();

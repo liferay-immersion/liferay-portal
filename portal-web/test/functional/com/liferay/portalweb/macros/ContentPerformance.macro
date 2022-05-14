@@ -26,6 +26,7 @@ definition {
 				value1 = "${language}");
 
 			var i = ${i} + 1;
+
 			var i = StringUtil.valueOf("${i}");
 		}
 	}

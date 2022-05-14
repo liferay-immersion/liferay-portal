@@ -197,7 +197,9 @@ definition {
 		WaitForSPARefresh();
 
 		var href = selenium.getAttribute("//tr/td/a[contains(text(),'${key_ddlDataDefinitionName}')]@href");
+
 		var findWhereIdBegins = StringUtil.extractLast("${href}", "ddmStructureId=");
+
 		var ddmStructureId = StringUtil.extractFirst("${findWhereIdBegins}", "&p_p_auth");
 
 		return "${ddmStructureId}";

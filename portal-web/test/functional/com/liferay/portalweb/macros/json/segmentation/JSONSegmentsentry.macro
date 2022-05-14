@@ -5,7 +5,6 @@ definition {
 		Variables.assertDefined(parameterList = "${groupName},${segmentName},${fieldName},${operator}");
 
 		var descriptionMap = JSONSegmentsentrySetter.setDescriptionMap(description = "${description}");
-
 		var field = JSONSegmentsentrySetter.setField(fieldName = "${fieldName}");
 
 		var criteria = JSONSegmentsentrySetter.setCriteria(
@@ -13,9 +12,7 @@ definition {
 			field = "${field}",
 			operator = "${operator}",
 			text = "${text}");
-
 		var nameMap = JSONSegmentsentrySetter.setNameMap(name = "${segmentName}");
-
 		var serviceContext = JSONSegmentsentrySetter.setServiceContext(
 			assetCategoryIds = "${assetCategoryIds}",
 			assetTagNames = "${assetTagNames}",
@@ -40,7 +37,6 @@ definition {
 		var groupId = JSONGroupAPI._getGroupIdByName(
 			groupName = "${groupName}",
 			site = "true");
-
 		var portalURL = JSONCompany.getPortalURL();
 
 		var curl = '''
@@ -49,6 +45,7 @@ definition {
 				-d groupId=${groupId} \
 				-d includeAncestorSegmentsEntries=true
 		''';
+
 		var segmentId = JSONCurlUtil.post("${curl}", "$.[?(@['nameCurrentValue'] == '${segmentName}')]['segmentsEntryId']");
 
 		echo("## ID for Segment ${segmentName}: ${segmentId}");

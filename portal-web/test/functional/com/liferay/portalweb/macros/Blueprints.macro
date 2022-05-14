@@ -113,6 +113,7 @@ definition {
 				-H 'accept: application/json' \
 				-u test@liferay.com:test
 		''';
+
 		var blueprintId = JSONCurlUtil.get("${curl}", "$.items[?(@['title'] == '${title}')]['id']");
 
 		echo("## ID for Blueprint ${title}: ${blueprintId}");
@@ -130,6 +131,7 @@ definition {
 				-H 'accept: application/json' \
 				-u test@liferay.com:test
 		''';
+
 		var elementId = JSONCurlUtil.get("${curl}", "$.items[?(@['title'] == '${title}')]['id']");
 
 		echo("## ID for Element ${title}: ${elementId}");
@@ -245,6 +247,7 @@ definition {
 
 	macro viewDownloadedContent {
 		var tempDir = PropsUtil.get("output.dir.name");
+
 		var fileContent = FileUtil.read("${tempDir}/${fileName}");
 
 		if (contains("${fileContent}", "${text}")) {

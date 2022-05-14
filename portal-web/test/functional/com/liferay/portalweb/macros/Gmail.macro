@@ -137,6 +137,7 @@ definition {
 
 	macro openMessageContinueReadingButton {
 		var pageNameURL = StringUtil.replace("${pageName}", " ", "-");
+
 		var pageNameURL = StringUtil.lowerCase("/${pageNameURL}");
 
 		AssertClick(
@@ -154,7 +155,9 @@ definition {
 	macro openMessageLink {
 		var key_gmailAssetType = "${gmailAssetType}";
 		var pageNameURL = StringUtil.replace("${pageName}", " ", "-");
+
 		var pageNameURL = StringUtil.lowerCase("/${pageNameURL}");
+
 		var key_pageNameURL = "${pageNameURL}";
 
 		AssertClick.assertPartialTextClickAt(

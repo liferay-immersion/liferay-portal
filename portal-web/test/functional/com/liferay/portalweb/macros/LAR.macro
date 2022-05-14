@@ -665,7 +665,6 @@ definition {
 	macro isExistedFolder {
 		var tempDir = PropsUtil.get("output.dir.name");
 		var folderName = "${folderName}";
-
 		var companyId = JSONCompany.getCompanyId();
 
 		var folderExists = FileUtil.exists("${tempDir}/company/${companyId}/${folderName}");
@@ -686,7 +685,6 @@ definition {
 
 	macro openDepotExportAdmin {
 		var baseURL = "${baseURL}";
-
 		var depotId = JSONGroupAPI._getDepotIdByName(depotName = "${depotName}");
 
 		if (!(isSet(baseURL))) {
@@ -698,7 +696,6 @@ definition {
 
 	macro openDepotImportAdmin {
 		var baseURL = "${baseURL}";
-
 		var depotId = JSONGroupAPI._getDepotIdByName(depotName = "${depotName}");
 
 		if (!(isSet(baseURL))) {
@@ -710,6 +707,7 @@ definition {
 
 	macro openExportAdmin {
 		var siteNameURL = StringUtil.replace("${siteScopeName}", " ", "-");
+
 		var siteNameURL = StringUtil.lowerCase("${siteNameURL}");
 		var baseURL = "${baseURL}";
 
@@ -722,6 +720,7 @@ definition {
 
 	macro openImportAdmin {
 		var siteNameURL = StringUtil.replace("${siteName}", " ", "-");
+
 		var siteNameURL = StringUtil.lowerCase("${siteNameURL}");
 		var baseURL = "${baseURL}";
 

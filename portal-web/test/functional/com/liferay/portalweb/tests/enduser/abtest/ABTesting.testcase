@@ -1675,6 +1675,7 @@ definition {
 				locator1 = "ABTest#SELECT_CLICKABLE_ELEMENT");
 
 			var idelement = selenium.getAttribute("//div[contains(@class,'text-truncate')]@title");
+
 			var idelement = StringUtil.substring("${idelement}", "1", "19");
 
 			Click(locator1 = "ABTest#SET_ELEMENT_AS_CLICK_TARGET_BUTTON");
@@ -3129,7 +3130,6 @@ definition {
 
 		task ("Get the element ID from buttons") {
 			var idbutton = ABTest.takeElementID();
-
 			var idbutton2 = ABTest.takeElementID(key_index = "2");
 		}
 

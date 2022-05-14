@@ -323,7 +323,6 @@ definition {
 		var redirectEntryId = JSONRedirect.getRedirectEntryId(
 			destinationURL = "${destinationURL}",
 			groupName = "${groupName}");
-
 		var baseURL = "${baseURL}";
 
 		if (!(isSet(baseURL))) {

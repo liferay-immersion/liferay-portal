@@ -1130,6 +1130,7 @@ definition {
 		var displayDateDay = "14";
 		var displayDateMonth = DateUtil.getFormattedCurrentDate("MM");
 		var displayDateYear = DateUtil.getCurrentYear();
+
 		var displayDate = "${displayDateMonth}/${displayDateDay}/${displayDateYear}";
 
 		CalendarEvent.viewStartsDate(startDate = "${displayDate}");

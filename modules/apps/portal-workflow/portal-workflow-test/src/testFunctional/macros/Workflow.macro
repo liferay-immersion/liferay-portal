@@ -999,6 +999,7 @@ definition {
 		SelectFrame(locator1 = "MyWorkflowTasks#IFRAME_UPDATE_DUE_DATE");
 
 		var currentYear = DateUtil.getCurrentYear();
+
 		var futureYear = ${currentYear} + 1;
 
 		Type(
@@ -1051,6 +1052,7 @@ definition {
 		SelectFrame(locator1 = "MyWorkflowTasks#IFRAME_UPDATE_DUE_DATE");
 
 		var currentYear = DateUtil.getCurrentYear();
+
 		var futureYear = ${currentYear} + 1;
 
 		SelectFrame(locator1 = "WorkflowDefinition#DIALOG_BOX_BODY");

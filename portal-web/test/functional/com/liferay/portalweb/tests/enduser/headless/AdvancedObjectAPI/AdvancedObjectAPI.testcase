@@ -14,7 +14,6 @@ definition {
 				en_US_plural_label = "Managers",
 				name = "Manager",
 				requiredStringFieldName = "firstname");
-
 			var objectDefinitionId2 = ObjectDefinitionAPI.createAndPublishObjectDefinition(
 				en_US_label = "Employee",
 				en_US_plural_label = "Employees",
@@ -77,7 +76,6 @@ definition {
 
 		task ("Given two manager accounts created") {
 			var managerId1 = ObjectDefinitionAPI.createManager(managerFirstname = "Courtney");
-
 			var managerId2 = ObjectDefinitionAPI.createManager(managerFirstname = "Aaron");
 		}
 
@@ -85,7 +83,6 @@ definition {
 			var employeeId1 = ObjectDefinitionAPI.createEmployee(
 				employeeFirstname = "Bruce",
 				managerId = "${managerId1}");
-
 			var employeeId2 = ObjectDefinitionAPI.createEmployee(
 				employeeFirstname = "Riley",
 				managerId = "${managerId2}");

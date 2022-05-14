@@ -203,7 +203,6 @@ definition {
 		var groupId = JSONWebcontentSetter.setGroupId(
 			groupName = "${groupName}",
 			site = "${site}");
-
 		var articleId = JSONWebcontentSetter.setArticleId(
 			groupName = "${groupName}",
 			site = "${site}",

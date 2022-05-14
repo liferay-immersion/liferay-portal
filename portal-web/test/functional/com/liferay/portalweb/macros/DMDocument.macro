@@ -556,6 +556,7 @@ definition {
 					value1 = "${validationError}");
 
 				var i = ${i} + 1;
+
 				var i = StringUtil.valueOf("${i}");
 			}
 		}
@@ -839,6 +840,7 @@ definition {
 
 	macro assertFileNameFromTempFolder {
 		var tempDir = PropsUtil.get("output.dir.name");
+
 		var downloadedFile = FileUtil.exists("${tempDir}/${fileName}");
 
 		if ("${downloadedFile}" == "true") {
@@ -851,6 +853,7 @@ definition {
 
 	macro assertNoFileNameFromTempFolder {
 		var tempDir = PropsUtil.get("output.dir.name");
+
 		var exportedFile = FileUtil.exists("${tempDir}/${fileName}");
 
 		if ("${exportedFile}" == "true") {
@@ -1895,6 +1898,7 @@ definition {
 
 		var portalURL = PropsUtil.get("portal.url");
 		var dmLatestVersionURL = selenium.getAttribute("//input[contains(@id,'urlInput')]@value");
+
 		var dmDocumentURL = StringUtil.extractLast("${dmLatestVersionURL}", "${portalURL}");
 
 		echo("## * Document URL: ${dmDocumentURL}");
@@ -1910,6 +1914,7 @@ definition {
 		var dmDocumentURL = selenium.getAttribute("//img[contains(@class,'preview-file-image') and contains(@src,'${dmDocumentFileName}')]@src");
 
 		var curl = '''${dmDocumentURL} -I''';
+
 		var responseHeader = JSONCurlUtil.post("${curl}");
 
 		return "${responseHeader}";
@@ -3894,6 +3899,7 @@ definition {
 
 		for (var tagName : list "${tagName}") {
 			var tagName = StringUtil.lowerCase("${tagName}");
+
 			var key_tagName = "${tagName}";
 
 			AssertTextEquals(

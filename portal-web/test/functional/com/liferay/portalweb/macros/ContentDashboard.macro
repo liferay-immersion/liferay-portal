@@ -502,12 +502,10 @@ definition {
 			groupName = "Global",
 			title = "Audience 1",
 			vocabularyName = "Audience");
-
 		var stageCategory = JSONCategory.addCategory(
 			groupName = "Global",
 			title = "Stage 1",
 			vocabularyName = "Stage");
-
 		static var audienceId1 = "${audienceCategory}";
 		static var stageId1 = "${stageCategory}";
 

@@ -160,6 +160,7 @@ definition {
 			value1 = "Any User");
 
 		var userLoginFullName = StringUtil.lowerCase("${userLoginFullName}");
+
 		var key_userLoginFullName = "${userLoginFullName}";
 
 		AssertTextEquals.assertPartialText(

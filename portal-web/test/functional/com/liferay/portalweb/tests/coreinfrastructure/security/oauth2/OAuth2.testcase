@@ -654,16 +654,13 @@ definition {
 
 		task ("Set article Id") {
 			var portalURL = PropsUtil.get("portal.url");
-
 			var siteName = TestCase.getSiteName(siteName = "${siteName}");
-
 			var tokenCurl = '''
 				${portalURL}/o/oauth2/token \
 					--data grant_type=client_credentials&client_id=abc123&client_secret=abc123
 			''';
 
 			var accessToken = OAuth2.getAccessToken(tokenCurl = "${tokenCurl}");
-
 			var articleId = JSONWebcontentSetter.setArticleId(
 				groupName = "Guest",
 				title = "WC Title");
@@ -680,6 +677,7 @@ definition {
 					-d articleId=${articleId} \
 					-d articleURL='wc-title'
 			''';
+
 			var deleteOutput1 = JSONCurlUtil.post("${deleteCurl}");
 
 			OAuth2.assertPermissionsDenied(

@@ -302,7 +302,9 @@ definition {
 
 		task ("View only the last 5 activities shown in page 1") {
 			var portalURL = PropsUtil.get("portal.url");
+
 			var portalURL = StringUtil.replace("${portalURL}", "http://", "");
+
 			var portalURL = StringUtil.replace("${portalURL}", ":8080", "");
 			var n = "0";
 

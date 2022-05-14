@@ -86,6 +86,7 @@ definition {
 			Button.clickSave();
 
 			var uniqueSuccess = "Your comment has already been posted. Would you like to create an account with the provided information?";
+
 			var key_uniqueSuccess = "${uniqueSuccess}";
 
 			WaitForElementPresent(locator1 = "Message#UNIQUE_SUCCESS");

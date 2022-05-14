@@ -46,7 +46,9 @@ definition {
 
 	macro signInPortalInstanceSetUp {
 		var portalURL = PropsUtil.get("portal.url");
+
 		var portalURL = StringUtil.replace("${portalURL}", "http://", "");
+
 		var portalURL = StringUtil.replace("${portalURL}", ":8080", "");
 
 		HeadlessPortalInstanceAPI.addPortalInstance(

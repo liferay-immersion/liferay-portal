@@ -143,12 +143,10 @@ definition {
 				groupName = "Global",
 				title = "Subaudience_1",
 				vocabularyName = "Audience");
-
 			var audienceId2 = JSONCategory.addCategory(
 				groupName = "Global",
 				title = "Subaudience_2",
 				vocabularyName = "Audience");
-
 			var audienceId3 = JSONCategory.addCategory(
 				groupName = "Global",
 				title = "Subaudience_3",
@@ -160,12 +158,10 @@ definition {
 				groupName = "Global",
 				title = "Substage_1",
 				vocabularyName = "Stage");
-
 			var stageId2 = JSONCategory.addCategory(
 				groupName = "Global",
 				title = "Substage_2",
 				vocabularyName = "Stage");
-
 			var stageId3 = JSONCategory.addCategory(
 				groupName = "Global",
 				title = "Substage_3",
@@ -714,12 +710,10 @@ definition {
 				groupName = "Global",
 				title = "C_Subaudience_1",
 				vocabularyName = "Audience");
-
 			var categoryId2 = JSONCategory.addCategory(
 				groupName = "Global",
 				title = "B_Subaudience_2",
 				vocabularyName = "Audience");
-
 			var categoryId3 = JSONCategory.addCategory(
 				groupName = "Global",
 				title = "A_Subaudience_3",
@@ -926,12 +920,10 @@ definition {
 				groupName = "Global",
 				title = "Subaudience_1",
 				vocabularyName = "Audience");
-
 			var categoryId2 = JSONCategory.addCategory(
 				groupName = "Global",
 				title = "Subaudience_2",
 				vocabularyName = "Audience");
-
 			var categoryId3 = JSONCategory.addCategory(
 				groupName = "Global",
 				title = "Subaudience_3",
@@ -1018,12 +1010,10 @@ definition {
 				groupName = "Global",
 				title = "Subaudience_1",
 				vocabularyName = "Audience");
-
 			var audienceId2 = JSONCategory.addCategory(
 				groupName = "Global",
 				title = "Subaudience_2",
 				vocabularyName = "Audience");
-
 			var audienceId3 = JSONCategory.addCategory(
 				groupName = "Global",
 				title = "Subaudience_3",
@@ -1035,12 +1025,10 @@ definition {
 				groupName = "Global",
 				title = "Substage_1",
 				vocabularyName = "Stage");
-
 			var stageId2 = JSONCategory.addCategory(
 				groupName = "Global",
 				title = "Substage_2",
 				vocabularyName = "Stage");
-
 			var stageId3 = JSONCategory.addCategory(
 				groupName = "Global",
 				title = "Substage_3",
@@ -1159,12 +1147,10 @@ definition {
 				groupName = "Global",
 				title = "Subaudience_1",
 				vocabularyName = "Audience");
-
 			var audienceId2 = JSONCategory.addCategory(
 				groupName = "Global",
 				title = "Subaudience_2",
 				vocabularyName = "Audience");
-
 			var audienceId3 = JSONCategory.addCategory(
 				groupName = "Global",
 				title = "Subaudience_3",
@@ -1176,12 +1162,10 @@ definition {
 				groupName = "Global",
 				title = "Substage_1",
 				vocabularyName = "Stage");
-
 			var stageId2 = JSONCategory.addCategory(
 				groupName = "Global",
 				title = "Substage_2",
 				vocabularyName = "Stage");
-
 			var stageId3 = JSONCategory.addCategory(
 				groupName = "Global",
 				title = "Substage_3",
@@ -2739,7 +2723,6 @@ definition {
 				groupName = "Global",
 				title = "Category1",
 				vocabularyName = "Audience");
-
 			var categoryId2 = JSONCategory.addCategory(
 				groupName = "Global",
 				title = "Category2",
@@ -2873,7 +2856,6 @@ definition {
 				groupName = "Global",
 				title = "Category1",
 				vocabularyName = "Audience");
-
 			var categoryId2 = JSONCategory.addCategory(
 				groupName = "Global",
 				title = "Category2",
@@ -2964,7 +2946,6 @@ definition {
 				groupName = "Global",
 				title = "Category1",
 				vocabularyName = "Audience");
-
 			var categoryId2 = JSONCategory.addCategory(
 				groupName = "Global",
 				title = "Category2",
@@ -3055,7 +3036,6 @@ definition {
 				groupName = "Global",
 				title = "Category1",
 				vocabularyName = "Audience");
-
 			var categoryId2 = JSONCategory.addCategory(
 				groupName = "Global",
 				title = "Category2",
@@ -3828,12 +3808,10 @@ definition {
 				groupName = "Global",
 				title = "Subaudience_1",
 				vocabularyName = "Audience");
-
 			var audienceId2 = JSONCategory.addCategory(
 				groupName = "Global",
 				title = "Subaudience_2",
 				vocabularyName = "Audience");
-
 			var audienceId3 = JSONCategory.addCategory(
 				groupName = "Global",
 				title = "Subaudience_3",
@@ -3845,12 +3823,10 @@ definition {
 				groupName = "Global",
 				title = "Substage_1",
 				vocabularyName = "Stage");
-
 			var stageId2 = JSONCategory.addCategory(
 				groupName = "Global",
 				title = "Substage_2",
 				vocabularyName = "Stage");
-
 			var stageId3 = JSONCategory.addCategory(
 				groupName = "Global",
 				title = "Substage_3",
@@ -4269,12 +4245,10 @@ definition {
 				groupName = "Global",
 				title = "C_Subaudience_1",
 				vocabularyName = "Audience");
-
 			var categoryId2 = JSONCategory.addCategory(
 				groupName = "Global",
 				title = "B_Subaudience_2",
 				vocabularyName = "Audience");
-
 			var categoryId3 = JSONCategory.addCategory(
 				groupName = "Global",
 				title = "A_Subaudience_3",
@@ -4286,12 +4260,10 @@ definition {
 				groupName = "Global",
 				title = "Substage_1",
 				vocabularyName = "Stage");
-
 			var stageId2 = JSONCategory.addCategory(
 				groupName = "Global",
 				title = "Substage_2",
 				vocabularyName = "Stage");
-
 			var stageId3 = JSONCategory.addCategory(
 				groupName = "Global",
 				title = "Substage_3",
@@ -5064,12 +5036,10 @@ definition {
 				groupName = "Global",
 				title = "Subaudience_1",
 				vocabularyName = "Audience");
-
 			var audienceId2 = JSONCategory.addCategory(
 				groupName = "Global",
 				title = "Subaudience_2",
 				vocabularyName = "Audience");
-
 			var audienceId3 = JSONCategory.addCategory(
 				groupName = "Global",
 				title = "Subaudience_3",
@@ -5081,12 +5051,10 @@ definition {
 				groupName = "Global",
 				title = "Substage_1",
 				vocabularyName = "Stage");
-
 			var stageId2 = JSONCategory.addCategory(
 				groupName = "Global",
 				title = "Substage_2",
 				vocabularyName = "Stage");
-
 			var stageId3 = JSONCategory.addCategory(
 				groupName = "Global",
 				title = "Substage_3",

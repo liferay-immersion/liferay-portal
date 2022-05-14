@@ -641,6 +641,7 @@ definition {
 
 		var attributeName = "city";
 		var inputValue = "recife";
+
 		var attributeValueList = "${inputValue},los angeles,madrid";
 		var optionValueList = "contains,not contains,is,is not";
 

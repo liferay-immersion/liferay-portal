@@ -2090,7 +2090,9 @@ catch (Exception e) {
 	e.printStackTrace(out);
 }
 			''';
+
 			var script = StringUtil.trimLeading("${script}");
+
 			var script = StringUtil.trimTrailing("${script}");
 
 			ServerAdministration.executeScript(

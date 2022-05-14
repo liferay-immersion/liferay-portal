@@ -1117,7 +1117,9 @@ definition {
 		property portal.upstream = "quarantine";
 
 		var currentDateYear = DateUtil.getCurrentYear();
+
 		var currentDatelastYear = ${currentDateYear} - 1;
+
 		var currentDatelastYearShort = StringUtil.substring("${currentDatelastYear}", "2", "4");
 
 		Navigator.openURL();

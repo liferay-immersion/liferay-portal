@@ -1538,6 +1538,7 @@ definition {
 
 		for (var segmentType : list "Dynamic Segment,Static Segment") {
 			var getFirst = StringUtil.extractFirst("${segmentType}", " ");
+
 			var getFirst = StringUtil.upperCase("${getFirst}");
 
 			AssertTextEquals(

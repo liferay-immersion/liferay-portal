@@ -49,13 +49,13 @@ definition {
 		task ("Add a fragment with fragmentElementId and fragmentEntryLinkNamespace freemarker variables") {
 			var newLine = '''
 ''';
-
 			var htmlSnippet = '''
 <div class="gf-1">
 	<h1>${fragmentElementId}</h1>
 	<h1>${fragmentEntryLinkNamespace}</h1>
 </div>
 			''';
+
 			var htmlSnippet = StringUtil.regexReplaceAll("${htmlSnippet}", "${newLine}", "");
 
 			var fragmentEntryId = JSONFragment.addSection(

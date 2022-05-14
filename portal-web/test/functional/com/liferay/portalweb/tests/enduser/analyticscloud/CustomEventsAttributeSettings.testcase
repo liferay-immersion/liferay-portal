@@ -301,6 +301,7 @@ definition {
 		var attributeName1 = "color1";
 		var attributeName2 = "color2";
 		var attributeName3 = "color3";
+
 		var attributeNameList = "${attributeName1},${attributeName2},${attributeName3}";
 		var attributeValueList = "blue,red,black";
 

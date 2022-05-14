@@ -25,6 +25,7 @@ var computedStyle = getComputedStyle(getWebElement("${element}"));
 return computedStyle.getPropertyValue("${attribute}");
 
 		''';
+
 		var cssValue = selenium.getEval("${javascript}");
 
 		return "${cssValue}";
@@ -43,6 +44,7 @@ var computedStyle = getComputedStyle(getWebElement("${element}"),'${pseudo}');
 return computedStyle.getPropertyValue("${attribute}");
 
 		''';
+
 		var cssValue = selenium.getEval("${javascript}");
 
 		return "${cssValue}";
@@ -54,6 +56,7 @@ return computedStyle.getPropertyValue("${attribute}");
 		var javascript = '''
 return	Array.from(document.getElementById('${id}').sheet.rules).filter(rule => rule.selectorText == `.${className}`)[0].style.${styleName};
 		''';
+
 		var styleValue = selenium.getEval("${javascript}");
 
 		return "${styleValue}";

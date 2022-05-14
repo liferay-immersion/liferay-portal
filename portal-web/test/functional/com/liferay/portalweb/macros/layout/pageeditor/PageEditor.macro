@@ -1029,6 +1029,7 @@ definition {
 		}
 		else {
 			var fragmentName = StringUtil.replace("${fragmentName}", " ", "-");
+
 			var fragmentName = StringUtil.lowerCase("${fragmentName}");
 		}
 
@@ -1042,10 +1043,14 @@ definition {
 
 	macro clickManagementBar {
 		var elementHeight = selenium.getElementHeight("PageEditor#FRAGMENT_SIDEBAR_BODY");
+
 		var offSetY = 25 * ${elementHeight};
+
 		var offSetY = ${offSetY} / 100;
 		var elementWidth = selenium.getElementWidth("PageEditor#FRAGMENT_SIDEBAR_BODY");
+
 		var offSetX = 0 * ${elementWidth};
+
 		var offSetX = ${offSetX} / 100;
 
 		Click.clickAt(
@@ -3058,8 +3063,11 @@ definition {
 		}
 
 		var class = selenium.getAttribute("xpath=(//div[@aria-label='${fragmentName}'])[${index}]@class");
+
 		var class = StringUtil.extractFirst("${class}", " page-editor__topper");
+
 		var class = StringUtil.extractLast("${class}", "lfr-layout-structure-item-topper-");
+
 		var commonStylesClass = StringUtil.add("lfr-layout-structure-item-", "${class}", "");
 
 		return "${commonStylesClass}";
@@ -3071,7 +3079,9 @@ definition {
 		WaitForElementPresent(locator1 = "PageEditor#IMAGE_RESOLUTION_LABEL");
 
 		var fileSize = selenium.getText("PageEditor#IMAGE_RESOLUTION_LABEL");
+
 		var fileSize = StringUtil.extractFirst("${fileSize}", ".");
+
 		var fileSize = StringUtil.extractDigits("${fileSize}");
 
 		return "${fileSize}";
@@ -3083,6 +3093,7 @@ definition {
 		WaitForElementPresent(locator1 = "PageEditor#IMAGE_RESOLUTION_LABEL");
 
 		var width = selenium.getText("PageEditor#IMAGE_RESOLUTION_LABEL");
+
 		var width = StringUtil.extractDigits("${width}");
 
 		return "${width}";
@@ -3165,6 +3176,7 @@ definition {
 		}
 		else {
 			var fragmentName = StringUtil.replace("${fragmentName}", " ", "-");
+
 			var fragmentName = StringUtil.lowerCase("${fragmentName}");
 		}
 
@@ -4113,6 +4125,7 @@ definition {
 		}
 		else {
 			var fragmentName = StringUtil.replace("${fragmentName}", " ", "-");
+
 			var fragmentName = StringUtil.lowerCase("${fragmentName}");
 		}
 

@@ -82,6 +82,7 @@ definition {
 	test CanCopySampleJavascript {
 		var layoutName = "Custom 2";
 		var globalAttributesList = "canonicalUrl,pageTitle,referrer,url";
+
 		var disableAttributesList = "${globalAttributesList},birthdate";
 		var attributesList = "category,like";
 

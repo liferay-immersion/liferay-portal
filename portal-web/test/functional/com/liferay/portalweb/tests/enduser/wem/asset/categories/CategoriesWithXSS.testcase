@@ -61,7 +61,6 @@ definition {
 	@uitest
 	test AddVocabularyWhenExistingStructureAndDocumentTypeWithXSSName {
 		var documentName = '''<script>alert(123)</script>''';
-
 		var structureName = '''<script>alert(456)</script>''';
 
 		task ("Add a document type with XSS name") {

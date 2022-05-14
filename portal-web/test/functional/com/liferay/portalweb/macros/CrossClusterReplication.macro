@@ -50,6 +50,7 @@ definition {
 		echo("##");
 
 		var remoteClusterIndexList = JSONCurlUtil.get("http://localhost:9200/_cat/indices?h=index");
+
 		var remoteClusterIndexList = RegexUtil.replace("${remoteClusterIndexList}", "\n", ",");
 
 		for (var indexName : list "${remoteClusterIndexList}") {

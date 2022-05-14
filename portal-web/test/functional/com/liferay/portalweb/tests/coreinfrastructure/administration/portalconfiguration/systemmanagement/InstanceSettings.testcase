@@ -553,7 +553,6 @@ definition {
 		var articleId = JSONWebcontentSetter.setArticleId(
 			groupName = "Terms of Use Site",
 			title = "Terms of Use WC Title");
-
 		var groupId = JSONGroupSetter.setGroupId(groupName = "Terms of Use Site");
 
 		FormFields.viewCheckboxChecked(fieldName = "terms-of-use-required");
@@ -863,6 +862,7 @@ definition {
 		SystemSettings.deleteConfiguration();
 
 		var tempFileDirectory = selenium.getOutputDirName();
+
 		var exportConfigFile = FileUtil.exists("${tempFileDirectory}");
 
 		if ("${exportConfigFile}" == "true") {
@@ -1064,8 +1064,8 @@ definition {
 		AssertElementPresent(locator1 = "Button#UPDATE");
 
 		var tempFileName = TestCase.getDownloadedTempFileName(fileNamePattern = "com.liferay.account.configuration.AccountEntryEmailDomainsConfiguration.scoped-*.config");
-
 		var tempFileDirectory = selenium.getOutputDirName();
+
 		var exportedConfigFile = FileUtil.exists("${tempFileDirectory}/${tempFileName}");
 
 		if ("${exportedConfigFile}" == "true") {
@@ -1100,8 +1100,8 @@ definition {
 		LexiconEntry.viewEntryName(rowEntry = "Google");
 
 		var tempFileName = TestCase.getDownloadedTempFileName(fileNamePattern = "com.liferay.portal.security.sso.openid.connect.internal.configuration.OpenIdConnectProviderConfiguration-*.config");
-
 		var tempFileDirectory = selenium.getOutputDirName();
+
 		var exportedConfigFile = FileUtil.exists("${tempFileDirectory}/${tempFileName}");
 
 		if ("${exportedConfigFile}" == "true") {

@@ -51,12 +51,10 @@ definition {
 				groupName = "Test Site Name",
 				title = "Category Name 1",
 				vocabularyName = "Vocabulary Name");
-
 			var secondCategoryId = JSONCategory.addCategory(
 				groupName = "Test Site Name",
 				title = "Category Name 2",
 				vocabularyName = "Vocabulary Name");
-
 			var thirdCategoryId = JSONCategory.addCategory(
 				groupName = "Test Site Name",
 				title = "Category Name 3",
@@ -2439,12 +2437,10 @@ definition {
 				groupName = "Test Site Name",
 				title = "Category Name 1",
 				vocabularyName = "Vocabulary Name");
-
 			var secondCategoryId = JSONCategory.addCategory(
 				groupName = "Test Site Name",
 				title = "Category Name 2",
 				vocabularyName = "Vocabulary Name");
-
 			var thirdCategoryId = JSONCategory.addCategory(
 				groupName = "Test Site Name",
 				title = "Category Name 3",

@@ -7,7 +7,6 @@ definition {
 		var groupId = JSONStagingSetter.setGroupId(
 			groupKey = "${groupKey}",
 			site = "${site}");
-
 		var userId = JSONUserAPI._getUserIdByEmailAddress(userEmailAddress = "${userEmailAddress}");
 
 		JSONGroupAPI._assignUserToGroup(

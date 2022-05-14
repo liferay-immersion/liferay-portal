@@ -21,7 +21,6 @@ definition {
 		property test.name.skip.portal.instance = "Audit#AssertAuditConsoleInformationIsPresentAfterEnabledLog";
 
 		var companyId = JSONCompany.getCompanyId();
-
 		var userId = JSONUserAPI._getUserIdByEmailAddress(userEmailAddress = "test@liferay.com");
 
 		task ("Enable log context and Incoming X-Request-ID") {
@@ -43,6 +42,7 @@ definition {
 			Navigator.openURL(baseURL = "http://localhost:8080/api/jsonws/user/get-user-by-email-address/company-id/email-address");
 
 			var curl = '''http://localhost:8080/api/jsonws/user/get-user-by-email-address/company-id/email-address''';
+
 			var runGet = JSONCurlUtil.get("${curl}");
 
 			for (var logString : list "xRequestId,sessionId,companyId=${companyId},virtualHostName,clientIP,emailAddress,serverName,userId=${userId}") {
@@ -59,7 +59,6 @@ definition {
 		property test.name.skip.portal.instance = "Audit#AssertInvalidXRequestId";
 
 		var companyId = JSONCompany.getCompanyId();
-
 		var userId = JSONUserAPI._getUserIdByEmailAddress(userEmailAddress = "test@liferay.com");
 
 		task ("Assert that console outputs a different X-Request-ID than invalid inputted X-Request-ID") {
@@ -68,6 +67,7 @@ definition {
 			var invalidXRequestId = "invalidXRID";
 
 			var curl = '''http://localhost:8080/api/jsonws/user/get-user-by-email-address/company-id/email-address -H 'X-Request-Id:${invalidXRequestId}' ''';
+
 			var userId = JSONCurlUtil.get("${curl}");
 
 			AssertConsoleTextNotPresent(value1 = "${invalidXRequestId}");
@@ -85,7 +85,6 @@ definition {
 		property test.name.skip.portal.instance = "Audit#AssertValidXRequestId";
 
 		var companyId = JSONCompany.getCompanyId();
-
 		var userId = JSONUserAPI._getUserIdByEmailAddress(userEmailAddress = "test@liferay.com");
 
 		task ("Assert that console outputs the same X-Request-ID as inputted X-Request-ID") {
@@ -94,6 +93,7 @@ definition {
 			var validXRequestId = StringUtil.randomString("40");
 
 			var curl = '''http://localhost:8080/api/jsonws/user/get-user-by-email-address/company-id/email-address -H 'X-Request-Id:${validXRequestId}' ''';
+
 			var userId = JSONCurlUtil.get("${curl}");
 
 			AuditLog.viewLogFileContent(logString = "${validXRequestId}");

@@ -371,7 +371,6 @@ definition {
 
 	macro openToAddDMEntry {
 		var depotId = JSONGroupAPI._getDepotIdByName(depotName = "${depotName}");
-
 		var groupId = JSONGroupAPI._getGroupIdByName(
 			groupName = "${depotName}",
 			site = "false");
@@ -482,11 +481,9 @@ definition {
 		}
 
 		var depotId = JSONGroupAPI._getDepotIdByName(depotName = "${depotName}");
-
 		var groupId = JSONWebcontentSetter.setGroupId(
 			groupName = "${depotName}",
 			site = "false");
-
 		var articleId = JSONWebcontentSetter.setArticleId(
 			groupName = "${depotName}",
 			site = "false",

@@ -52,7 +52,6 @@ definition {
 			FragmentsAdmin.addFragment(fragmentName = "Fragment Name");
 
 			var fragmentHtml = '''<lfr-widget-web-content>''';
-
 			var htmlSnippet = '''<lfr-''';
 
 			FragmentsEditor.autocompleteFragmentHTML(
@@ -105,7 +104,6 @@ definition {
 			LAR.exportSiteCP(siteScopeName = "Test Site Name");
 
 			var key_larFileName = "${larFileName}";
-
 			var larFileName = LAR.getLarFileName();
 
 			LAR.downloadLar();
@@ -161,14 +159,13 @@ definition {
 		task ("Add a fragment in global fragment collection") {
 			var newLine = '''
 ''';
-
 			var htmlSnippet = '''
 <${configuration.headingLevel} class="component-global-fragment-name mb-0 text-break" data-lfr-editable-id="element-text" data-lfr-editable-type="text">
 	Heading Example
 </${configuration.headingLevel}>
 			''';
-			var htmlSnippet = StringUtil.regexReplaceAll("${htmlSnippet}", "${newLine}", "");
 
+			var htmlSnippet = StringUtil.regexReplaceAll("${htmlSnippet}", "${newLine}", "");
 			var jsonSnippet = '''
 {
 	"fieldSets": [
@@ -208,6 +205,7 @@ definition {
 	]
 }
 			''';
+
 			var jsonSnippet = StringUtil.regexReplaceAll("${jsonSnippet}", "${newLine}", "");
 
 			JSONFragment.addSection(
@@ -247,7 +245,6 @@ definition {
 			LAR.exportSiteCP(siteScopeName = "Test Site Name");
 
 			var key_larFileName = "${larFileName}";
-
 			var larFileName = LAR.getLarFileName();
 
 			LAR.downloadLar();
@@ -417,7 +414,6 @@ definition {
 			LAR.exportSiteCP(siteScopeName = "Test Site Name");
 
 			var key_larFileName = "${larFileName}";
-
 			var larFileName = LAR.getLarFileName();
 
 			LAR.downloadLar();

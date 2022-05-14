@@ -1077,6 +1077,7 @@ definition {
 		property testray.component.names = "Security";
 
 		var entryAbstractDescription = '''<script>alert(123)</script>''';
+
 		var key_entryAbstractDescription = "${entryAbstractDescription}";
 
 		task ("Add public layout") {

@@ -44,6 +44,7 @@ var element = document.evaluate("${element}", document, null, XPathResult.FIRST_
 
 return element.textContent;
 		''';
+
 		var textContent = selenium.getEval("${javascript}");
 
 		return "${textContent}";

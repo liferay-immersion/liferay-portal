@@ -69,6 +69,7 @@ definition {
 			-d start=0 \
 			-d end=${triggerCount}
 		''';
+
 		var triggerIds = JSONCurlUtil.post("${curl}", "$.[?(@['dispatchTaskExecutorType'] == '${taskExecutorType}')].['dispatchTriggerId']");
 
 		if ("${triggerIds}" != "") {
@@ -111,6 +112,7 @@ definition {
 			-d start=0 \
 			-d end=${triggerCount}
 		''';
+
 		var triggerId = JSONCurlUtil.post("${curl}", "$.[?(@['name'] == '${triggerName}')]['dispatchTriggerId']");
 
 		return "${triggerId}";
@@ -136,6 +138,7 @@ definition {
 			-d start=0 \
 			-d end=${triggerCount}
 		''';
+
 		var triggerIds = JSONCurlUtil.post("${curl}", "$..['dispatchTriggerId']");
 
 		return "${triggerIds}";

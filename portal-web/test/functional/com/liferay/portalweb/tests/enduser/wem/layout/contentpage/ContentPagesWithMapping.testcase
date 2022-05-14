@@ -73,12 +73,10 @@ definition {
 				groupName = "Test Site Name",
 				title = "Category Name 3-1",
 				vocabularyName = "Vocabulary Name 3");
-
 			var categoryId4 = JSONCategory.addCategory(
 				groupName = "Test Site Name",
 				title = "Category Name 3-2",
 				vocabularyName = "Vocabulary Name 3");
-
 			var categoryId5 = JSONCategory.addCategory(
 				groupName = "Test Site Name",
 				title = "Category Name 3-3",

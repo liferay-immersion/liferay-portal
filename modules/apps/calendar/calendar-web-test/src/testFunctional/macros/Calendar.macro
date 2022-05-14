@@ -491,6 +491,7 @@ definition {
 		}
 
 		var key_roleTitle = StringUtil.replace("${roleTitle}", " ", "-");
+
 		var key_roleTitle = StringUtil.lowerCase("${key_roleTitle}");
 
 		IFrame.selectPermissionsFrame();

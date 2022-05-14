@@ -91,9 +91,7 @@ definition {
 			var fileEntryId = JSONDocument.getFileEntryId(
 				dmDocumentTitle = "DM AC Title",
 				groupName = "Site Name");
-
 			var portalURL = PropsUtil.get("portal.url");
-
 			var siteName = TestCase.getSiteName(siteName = "${siteName}");
 
 			ACAssets.viewAssetAppearsOnMetric(
@@ -345,7 +343,6 @@ definition {
 		// AC Story ticket: LRAC-10405
 
 		var documentNameList = "DM AC Title,New Document";
-
 		var propertyName = ACDXPSettings.connectDXPtoAnalyticsCloud(siteName = "Site Name");
 
 		task ("Add another document") {
@@ -668,7 +665,6 @@ definition {
 	@priority = "5"
 	test DocumentsTechnologyCardShowsViewsByExpectedDevice {
 		var documentNameList = "DM AC Title,DM AC Title";
-
 		var propertyName = ACDXPSettings.connectDXPtoAnalyticsCloud(siteName = "Site Name");
 
 		task ("Download the document") {

@@ -58,6 +58,7 @@ definition {
 
 		if ("${os}" == "true") {
 			var content = StringUtil.replace("${content}", ">", "^>");
+
 			var content = StringUtil.replace("${content}", "<", "^<");
 		}
 
@@ -80,6 +81,7 @@ definition {
 					"viewableBy": "${viewableBy}"
 				}
 		''';
+
 		var entryId = JSONCurlUtil.post("${curl}", "$.id");
 
 		return "${entryId}";

@@ -93,7 +93,6 @@ definition {
 				groupName = "Global",
 				title = "Audience 2",
 				vocabularyName = "Audience");
-
 			var stageId2 = JSONCategory.addCategory(
 				groupName = "Global",
 				title = "Stage 2",
@@ -163,7 +162,6 @@ definition {
 				groupName = "Global",
 				title = "Audience 2",
 				vocabularyName = "Audience");
-
 			var stageId2 = JSONCategory.addCategory(
 				groupName = "Global",
 				title = "Stage 2",
@@ -492,7 +490,6 @@ definition {
 				groupName = "Global",
 				title = "Audience 2",
 				vocabularyName = "Audience");
-
 			var stageId2 = JSONCategory.addCategory(
 				groupName = "Global",
 				title = "Stage 2",

@@ -1156,14 +1156,13 @@ definition {
 		task ("Add a fragment in global fragment collection") {
 			var newLine = '''
 ''';
-
 			var htmlSnippet = '''
 <${configuration.headingLevel} class="component-heading mb-0 text-break" data-lfr-editable-id="element-text" data-lfr-editable-type="text">
 	Heading Example
 </${configuration.headingLevel}>
 			''';
-			var htmlSnippet = StringUtil.regexReplaceAll("${htmlSnippet}", "${newLine}", "");
 
+			var htmlSnippet = StringUtil.regexReplaceAll("${htmlSnippet}", "${newLine}", "");
 			var jsonSnippet = '''
 {
 	"fieldSets": [
@@ -1203,6 +1202,7 @@ definition {
 	]
 }
 			''';
+
 			var jsonSnippet = StringUtil.regexReplaceAll("${jsonSnippet}", "${newLine}", "");
 
 			JSONFragment.addSection(
@@ -1255,14 +1255,13 @@ definition {
 		task ("Add a fragment in global fragment collection") {
 			var newLine = '''
 ''';
-
 			var htmlSnippet = '''
 <${configuration.headingLevel} class="component-heading mb-0 text-break" data-lfr-editable-id="element-text" data-lfr-editable-type="text">
 	Heading Example
 </${configuration.headingLevel}>
 			''';
-			var htmlSnippet = StringUtil.regexReplaceAll("${htmlSnippet}", "${newLine}", "");
 
+			var htmlSnippet = StringUtil.regexReplaceAll("${htmlSnippet}", "${newLine}", "");
 			var jsonSnippet = '''
 {
 	"fieldSets": [
@@ -1302,6 +1301,7 @@ definition {
 	]
 }
 			''';
+
 			var jsonSnippet = StringUtil.regexReplaceAll("${jsonSnippet}", "${newLine}", "");
 
 			JSONFragment.addSection(
@@ -1357,7 +1357,6 @@ definition {
 
 		task ("Add a new fragment in each collection") {
 			var htmlSnippet = FragmentsAPI.getFragmentFileContent(fileName = "checkbox_configuration.html");
-
 			var jsonSnippet = FragmentsAPI.getFragmentFileContent(fileName = "checkbox_configuration.json");
 
 			JSONFragment.addSection(
@@ -1369,7 +1368,6 @@ definition {
 				name = "Checkbox Fragment Example");
 
 			var htmlSnippet = FragmentsAPI.getFragmentFileContent(fileName = "colorPalette_configuration.html");
-
 			var jsonSnippet = FragmentsAPI.getFragmentFileContent(fileName = "colorPalette_configuration.json");
 
 			JSONFragment.addSection(
@@ -1381,7 +1379,6 @@ definition {
 				name = "ColorPalette Fragment Example");
 
 			var htmlSnippet = FragmentsAPI.getFragmentFileContent(fileName = "text_configuration.html");
-
 			var jsonSnippet = FragmentsAPI.getFragmentFileContent(fileName = "placeholder_configuration.json");
 
 			JSONFragment.addSection(
