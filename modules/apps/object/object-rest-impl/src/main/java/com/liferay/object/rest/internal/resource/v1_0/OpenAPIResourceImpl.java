@@ -54,15 +54,15 @@ public class OpenAPIResourceImpl {
 
 	public OpenAPIResourceImpl(
 		ObjectDefinition currentObjectDefinition,
-		Map<ObjectRelationship, ObjectDefinition> objectDefinitionsMap,
 		OpenAPIResource openAPIResource,
 		OpenAPISchemaFilter openAPISchemaFilter,
+		Map<ObjectRelationship, ObjectDefinition> relatedObjectDefinitionsMap,
 		Set<Class<?>> resourceClasses) {
 
 		_currentObjectDefinition = currentObjectDefinition;
-		_objectDefinitionsMap = objectDefinitionsMap;
 		_openAPIResource = openAPIResource;
 		_openAPISchemaFilter = openAPISchemaFilter;
+		_relatedObjectDefinitionsMap = relatedObjectDefinitionsMap;
 		_resourceClasses = resourceClasses;
 	}
 
@@ -84,7 +84,7 @@ public class OpenAPIResourceImpl {
 			Paths paths = openAPI.getPaths();
 
 			for (Map.Entry<ObjectRelationship, ObjectDefinition> entry :
-					_objectDefinitionsMap.entrySet()) {
+					_relatedObjectDefinitionsMap.entrySet()) {
 
 				ObjectRelationship objectRelationship = entry.getKey();
 				ObjectDefinition relatedObjectDefinition = entry.getValue();
@@ -211,10 +211,10 @@ public class OpenAPIResourceImpl {
 	}
 
 	private final ObjectDefinition _currentObjectDefinition;
-	private final Map<ObjectRelationship, ObjectDefinition>
-		_objectDefinitionsMap;
 	private final OpenAPIResource _openAPIResource;
 	private final OpenAPISchemaFilter _openAPISchemaFilter;
+	private final Map<ObjectRelationship, ObjectDefinition>
+		_relatedObjectDefinitionsMap;
 	private final Set<Class<?>> _resourceClasses;
 
 	@Context

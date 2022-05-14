@@ -65,8 +65,8 @@ public class ObjectEntryApplication extends Application {
 			new OpenAPIResourceImpl(
 				_objectDefinitionLocalService.fetchObjectDefinition(
 					_objectDefinitionId),
-				_getObjectDefinitionsMap(), _openAPIResource,
-				_getOpenAPISchemaFilter(_applicationPath),
+				_openAPIResource, _getOpenAPISchemaFilter(_applicationPath),
+				_getRelatedObjectDefinitionsMap(),
 				new HashSet<Class<?>>() {
 					{
 						add(ObjectEntryResourceImpl.class);
@@ -115,27 +115,6 @@ public class ObjectEntryApplication extends Application {
 			objectField.getName(), objectField.getDBType());
 	}
 
-	private Map<ObjectRelationship, ObjectDefinition>
-		_getObjectDefinitionsMap() {
-
-		Map<ObjectRelationship, ObjectDefinition> objectDefinitionsMap =
-			new HashMap<>();
-
-		List<ObjectRelationship> objectRelationships =
-			_objectRelationshipLocalService.getObjectRelationships(
-				_objectDefinitionId);
-
-		for (ObjectRelationship objectRelationship : objectRelationships) {
-			ObjectDefinition objectDefinition =
-				_objectDefinitionLocalService.fetchObjectDefinition(
-					objectRelationship.getObjectDefinitionId2());
-
-			objectDefinitionsMap.put(objectRelationship, objectDefinition);
-		}
-
-		return objectDefinitionsMap;
-	}
-
 	private OpenAPISchemaFilter _getOpenAPISchemaFilter(
 		String applicationPath) {
 
@@ -164,6 +143,28 @@ public class ObjectEntryApplication extends Application {
 			).build());
 
 		return openAPISchemaFilter;
+	}
+
+	private Map<ObjectRelationship, ObjectDefinition>
+		_getRelatedObjectDefinitionsMap() {
+
+		Map<ObjectRelationship, ObjectDefinition> relatedObjectDefinitionsMap =
+			new HashMap<>();
+
+		List<ObjectRelationship> objectRelationships =
+			_objectRelationshipLocalService.getObjectRelationships(
+				_objectDefinitionId);
+
+		for (ObjectRelationship objectRelationship : objectRelationships) {
+			ObjectDefinition objectDefinition =
+				_objectDefinitionLocalService.fetchObjectDefinition(
+					objectRelationship.getObjectDefinitionId2());
+
+			relatedObjectDefinitionsMap.put(
+				objectRelationship, objectDefinition);
+		}
+
+		return relatedObjectDefinitionsMap;
 	}
 
 	private String _applicationName;
