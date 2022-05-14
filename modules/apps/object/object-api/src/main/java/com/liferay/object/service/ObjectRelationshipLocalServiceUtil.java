@@ -321,6 +321,13 @@ public class ObjectRelationshipLocalServiceUtil {
 		return getService().getObjectRelationship(objectRelationshipId);
 	}
 
+	public static ObjectRelationship getObjectRelationship(
+			long objectDefinitionId1, String name)
+		throws PortalException {
+
+		return getService().getObjectRelationship(objectDefinitionId1, name);
+	}
+
 	/**
 	 * Returns the object relationship with the matching UUID and company.
 	 *
