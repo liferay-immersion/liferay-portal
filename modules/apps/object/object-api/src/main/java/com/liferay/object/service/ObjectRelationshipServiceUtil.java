@@ -50,6 +50,15 @@ public class ObjectRelationshipServiceUtil {
 			name, type);
 	}
 
+	public static void addObjectRelationshipMappingTableValues(
+			long objectRelationshipId, long primaryKey1, long primaryKey2,
+			com.liferay.portal.kernel.service.ServiceContext serviceContext)
+		throws PortalException {
+
+		getService().addObjectRelationshipMappingTableValues(
+			objectRelationshipId, primaryKey1, primaryKey2, serviceContext);
+	}
+
 	public static ObjectRelationship deleteObjectRelationship(
 			long objectRelationshipId)
 		throws PortalException {
@@ -62,6 +71,13 @@ public class ObjectRelationshipServiceUtil {
 		throws PortalException {
 
 		return getService().getObjectRelationship(objectRelationshipId);
+	}
+
+	public static ObjectRelationship getObjectRelationship(
+			long objectDefinitionId1, String name)
+		throws PortalException {
+
+		return getService().getObjectRelationship(objectDefinitionId1, name);
 	}
 
 	public static List<ObjectRelationship> getObjectRelationships(

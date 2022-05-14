@@ -274,6 +274,11 @@ public interface ObjectRelationshipLocalService
 	public ObjectRelationship getObjectRelationship(long objectRelationshipId)
 		throws PortalException;
 
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public ObjectRelationship getObjectRelationship(
+			long objectDefinitionId1, String name)
+		throws PortalException;
+
 	/**
 	 * Returns the object relationship with the matching UUID and company.
 	 *

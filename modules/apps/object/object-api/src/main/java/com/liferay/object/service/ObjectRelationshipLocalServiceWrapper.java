@@ -363,6 +363,15 @@ public class ObjectRelationshipLocalServiceWrapper
 			objectRelationshipId);
 	}
 
+	@Override
+	public com.liferay.object.model.ObjectRelationship getObjectRelationship(
+			long objectDefinitionId1, String name)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return _objectRelationshipLocalService.getObjectRelationship(
+			objectDefinitionId1, name);
+	}
+
 	/**
 	 * Returns the object relationship with the matching UUID and company.
 	 *
