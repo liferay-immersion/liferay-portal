@@ -72,13 +72,13 @@ public class OpenAPIResourceImpl {
 	public Response getOpenAPI(@PathParam("type") String type)
 		throws Exception {
 
-		Response openAPI = _openAPIResource.getOpenAPI(
+		Response response = _openAPIResource.getOpenAPI(
 			_openAPISchemaFilter, _resourceClasses, type, _uriInfo);
 
-		OpenAPI entity = (OpenAPI)openAPI.getEntity();
+		OpenAPI openAPI = (OpenAPI)response.getEntity();
 
 		List<String> relationshipsEndpoints = _getRelationshipsEndpoints(
-			entity.getPaths());
+			openAPI.getPaths());
 
 		for (String endpoint : relationshipsEndpoints) {
 			for (Map.Entry<ObjectRelationship, ObjectDefinition> entry :
@@ -88,9 +88,9 @@ public class OpenAPIResourceImpl {
 				ObjectDefinition objectDefinition = entry.getValue();
 
 				_createCustomRelationshipEndpointToOpenAPI(
-					entity, endpoint, objectRelationship, objectDefinition);
+					openAPI, endpoint, objectRelationship, objectDefinition);
 
-				entity.getComponents(
+				openAPI.getComponents(
 				).getSchemas(
 				).get(
 					_currentObjectDefinition.getShortName()
@@ -108,12 +108,12 @@ public class OpenAPIResourceImpl {
 				);
 			}
 
-			Paths entityPaths = entity.getPaths();
+			Paths paths = openAPI.getPaths();
 
-			entityPaths.remove(endpoint);
+			paths.remove(endpoint);
 		}
 
-		return openAPI;
+		return response;
 	}
 
 	private void _createCustomRelationshipEndpointToOpenAPI(
