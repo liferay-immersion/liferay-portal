@@ -128,12 +128,6 @@ public class OpenAPIResourceImpl {
 			paths.get(relationshipEndpoint), objectRelationship,
 			relatedObjectDefinition);
 
-		String currentObjectName = StringUtil.lowerCaseFirstLetter(
-			_currentObjectDefinition.getShortName());
-
-		String relatedObjectName = StringUtil.lowerCaseFirstLetter(
-			relatedObjectDefinition.getShortName());
-
 		String customRelationshipEndpoint = StringUtil.replace(
 			relationshipEndpoint,
 			new String[] {
@@ -141,8 +135,9 @@ public class OpenAPIResourceImpl {
 				"relatedObjectEntryId"
 			},
 			new String[] {
-				currentObjectName + "Id", objectRelationship.getName(),
-				relatedObjectName + "Id"
+				_currentObjectDefinition.getPKObjectFieldName(),
+				objectRelationship.getName(),
+				relatedObjectDefinition.getPKObjectFieldName()
 			});
 
 		paths.addPathItem(
@@ -177,19 +172,13 @@ public class OpenAPIResourceImpl {
 				Collectors.toMap(Parameter::getName, parameter -> parameter)
 			);
 
-		String currentObjectName = StringUtil.lowerCaseFirstLetter(
-			_currentObjectDefinition.getShortName());
-
 		_customizeParameter(
 			customRelationshipPutOperationParameters, "currentObjectEntryId",
-			currentObjectName + "Id", false);
-
-		String relatedObjectName = StringUtil.lowerCaseFirstLetter(
-			relatedObjectDefinition.getShortName());
+			_currentObjectDefinition.getPKObjectFieldName(), false);
 
 		_customizeParameter(
 			customRelationshipPutOperationParameters, "relatedObjectEntryId",
-			relatedObjectName + "Id", false);
+			relatedObjectDefinition.getPKObjectFieldName(), false);
 
 		_customizeParameter(
 			customRelationshipPutOperationParameters, "objectRelationshipName",
