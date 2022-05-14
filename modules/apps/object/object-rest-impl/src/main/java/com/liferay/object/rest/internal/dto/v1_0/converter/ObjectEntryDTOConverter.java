@@ -186,17 +186,13 @@ public class ObjectEntryDTOConverter
 		ObjectRelationship objectRelationship) {
 
 		try {
-			List<com.liferay.object.model.ObjectEntry>
-				oneToManyRelatedObjectEntries =
-					_objectEntryLocalService.getOneToManyRelatedObjectEntries(
-						objectEntry.getGroupId(),
-						objectRelationship.getObjectRelationshipId(),
-						objectEntry.getObjectEntryId(),
-						QueryUtil.ALL_POS, QueryUtil.ALL_POS);
-
 			return _mapRelationshipObjectEntries(
 				dtoConverterContext, nestedFieldsDepth,
-				oneToManyRelatedObjectEntries);
+				_objectEntryLocalService.getOneToManyRelatedObjectEntries(
+					objectEntry.getGroupId(),
+					objectRelationship.getObjectRelationshipId(),
+					objectEntry.getObjectEntryId(),
+					QueryUtil.ALL_POS, QueryUtil.ALL_POS));
 		}
 		catch (PortalException portalException) {
 			if (_log.isWarnEnabled()) {
