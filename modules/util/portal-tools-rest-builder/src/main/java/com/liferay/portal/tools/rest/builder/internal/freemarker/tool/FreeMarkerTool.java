@@ -577,7 +577,7 @@ public class FreeMarkerTool {
 				return _dateFormat.format(value);
 			}
 
-			return _dateTimeFormat.format(value);
+			return _dateTimeDateFormat.format(value);
 		}
 
 		return value.toString();
@@ -1272,7 +1272,7 @@ public class FreeMarkerTool {
 	}
 
 	private static final DateFormat _dateFormat = _getDateFormat("yyyy-MM-dd");
-	private static final DateFormat _dateTimeFormat = _getDateFormat(
+	private static final DateFormat _dateTimeDateFormat = _getDateFormat(
 		DateUtil.ISO_8601_PATTERN);
 	private static final FreeMarkerTool _freeMarkerTool = new FreeMarkerTool();
 
