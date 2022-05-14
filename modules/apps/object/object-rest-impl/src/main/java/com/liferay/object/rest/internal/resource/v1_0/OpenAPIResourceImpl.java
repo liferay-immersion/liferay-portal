@@ -103,7 +103,7 @@ public class OpenAPIResourceImpl {
 							relatedObjectDefinition.getPKObjectFieldName()
 						}),
 					_createCustomRelationshipPathItem(
-						paths.get(key), objectRelationship,
+						objectRelationship, paths.get(key),
 						relatedObjectDefinition));
 
 				openAPI.getComponents(
@@ -131,19 +131,18 @@ public class OpenAPIResourceImpl {
 	}
 
 	private PathItem _createCustomRelationshipPathItem(
-		PathItem relationshipPathItem, ObjectRelationship objectRelationship,
+		ObjectRelationship objectRelationship, PathItem pathItem,
 		ObjectDefinition relatedObjectDefinition) {
 
-		Operation relationshipPutOperation = relationshipPathItem.getPut();
+		Operation operation = pathItem.getPut();
 
-		List<Parameter> relationshipPutOperationParameters =
-			relationshipPutOperation.getParameters();
+		List<Parameter> operationParameters = operation.getParameters();
 
-		Stream<Parameter> relationshipPutOperationParametersStream =
-			relationshipPutOperationParameters.stream();
+		Stream<Parameter> operationParametersStream =
+			operationParameters.stream();
 
 		Map<String, Parameter> customRelationshipPutOperationParameters =
-			relationshipPutOperationParametersStream.map(
+			operationParametersStream.map(
 				parameter -> {
 					Parameter customParameter = new Parameter();
 
@@ -186,8 +185,8 @@ public class OpenAPIResourceImpl {
 								new ArrayList<>(
 									customRelationshipPutOperationParameters.
 										values()));
-							responses(relationshipPutOperation.getResponses());
-							tags(relationshipPutOperation.getTags());
+							responses(operation.getResponses());
+							tags(operation.getTags());
 						}
 					});
 			}
