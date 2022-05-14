@@ -99,7 +99,6 @@ public class SuggestionResourceImpl extends BaseSuggestionResourceImpl {
 
 		Portlet portlet = _portletLocalService.getPortletById(
 			SearchBarPortletKeys.SEARCH_BAR);
-
 		ServletContext servletContext =
 			(ServletContext)contextHttpServletRequest.getAttribute(WebKeys.CTX);
 
