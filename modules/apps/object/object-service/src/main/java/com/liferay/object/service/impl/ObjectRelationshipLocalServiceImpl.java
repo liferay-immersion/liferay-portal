@@ -276,6 +276,15 @@ public class ObjectRelationshipLocalServiceImpl
 	}
 
 	@Override
+	public ObjectRelationship getObjectRelationship(
+			long objectDefinitionId1, String name)
+		throws PortalException {
+
+		return objectRelationshipPersistence.findByODI1_N(
+			objectDefinitionId1, name);
+	}
+
+	@Override
 	public List<ObjectRelationship> getObjectRelationships(
 		long objectDefinitionId1) {
 

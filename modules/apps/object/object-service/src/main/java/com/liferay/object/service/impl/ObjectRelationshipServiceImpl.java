@@ -97,6 +97,18 @@ public class ObjectRelationshipServiceImpl
 	}
 
 	@Override
+	public ObjectRelationship getObjectRelationship(
+			long objectDefinitionId1, String name)
+		throws PortalException {
+
+		_objectDefinitionModelResourcePermission.check(
+			getPermissionChecker(), objectDefinitionId1, ActionKeys.VIEW);
+
+		return objectRelationshipPersistence.findByODI1_N(
+			objectDefinitionId1, name);
+	}
+
+	@Override
 	public List<ObjectRelationship> getObjectRelationships(
 			long objectDefinitionId1, int start, int end)
 		throws PortalException {
