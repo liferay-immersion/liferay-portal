@@ -16,8 +16,6 @@ package com.liferay.portal.search.internal.suggestions;
 
 import com.liferay.osgi.service.tracker.collections.map.ServiceTrackerMap;
 import com.liferay.osgi.service.tracker.collections.map.ServiceTrackerMapFactory;
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.LiferayPortletRequest;
 import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
 import com.liferay.portal.kernel.search.SearchContext;
@@ -25,9 +23,8 @@ import com.liferay.portal.search.rest.dto.v1_0.SuggestionsContributorConfigurati
 import com.liferay.portal.search.spi.suggestions.SuggestionsContributor;
 import com.liferay.portal.search.suggestions.SuggestionsContributorResults;
 import com.liferay.portal.search.suggestions.SuggestionsRetriever;
+import com.liferay.portal.vulcan.util.TransformUtil;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.osgi.framework.BundleContext;
@@ -47,38 +44,13 @@ public class SuggestionsRetrieverImpl implements SuggestionsRetriever {
 		LiferayPortletResponse liferayPortletResponse,
 		SearchContext searchContext) {
 
-		SuggestionsContributorConfiguration[]
-			suggestionsContributorConfigurations =
-				(SuggestionsContributorConfiguration[])
-					searchContext.getAttribute(
-						"search.suggestions.contributor.configurations");
-
-		if (suggestionsContributorConfigurations == null) {
-			if (_log.isDebugEnabled()) {
-				_log.debug("Contributor configurations not present");
-			}
-
-			return Collections.emptyList();
-		}
-
-		List<SuggestionsContributorResults> suggestionsContributorResults =
-			new ArrayList<>();
-
-		for (SuggestionsContributorConfiguration
-				suggestionsContributorConfiguration :
-					suggestionsContributorConfigurations) {
-
-			SuggestionsContributorResults contributorResults =
+		return TransformUtil.transformToList(
+			(SuggestionsContributorConfiguration[])searchContext.getAttribute(
+				"search.suggestions.contributor.configurations"),
+			suggestionsContributorConfiguration ->
 				_getSuggestionsContributorResults(
 					liferayPortletRequest, liferayPortletResponse,
-					searchContext, suggestionsContributorConfiguration);
-
-			if (contributorResults != null) {
-				suggestionsContributorResults.add(contributorResults);
-			}
-		}
-
-		return suggestionsContributorResults;
+					searchContext, suggestionsContributorConfiguration));
 	}
 
 	@Activate
@@ -98,7 +70,8 @@ public class SuggestionsRetrieverImpl implements SuggestionsRetriever {
 		LiferayPortletRequest liferayPortletRequest,
 		LiferayPortletResponse liferayPortletResponse,
 		SearchContext searchContext,
-		SuggestionsContributorConfiguration suggestionsContributorConfiguration) {
+		SuggestionsContributorConfiguration
+			suggestionsContributorConfiguration) {
 
 		SuggestionsContributor suggestionsContributor =
 			_suggestionsContributorServiceTrackerMap.getService(
@@ -106,15 +79,12 @@ public class SuggestionsRetrieverImpl implements SuggestionsRetriever {
 
 		if (suggestionsContributor != null) {
 			return suggestionsContributor.getSuggestionsContributorResults(
-				liferayPortletRequest, liferayPortletResponse,
-				searchContext, suggestionsContributorConfiguration);
+				liferayPortletRequest, liferayPortletResponse, searchContext,
+				suggestionsContributorConfiguration);
 		}
 
 		return null;
 	}
-
-	private static final Log _log = LogFactoryUtil.getLog(
-		SuggestionsRetrieverImpl.class);
 
 	private ServiceTrackerMap<String, SuggestionsContributor>
 		_suggestionsContributorServiceTrackerMap;
