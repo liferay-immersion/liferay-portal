@@ -77,11 +77,12 @@ public class OpenAPIResourceImpl {
 
 		OpenAPI openAPI = (OpenAPI)response.getEntity();
 
-		List<String> relationshipsEndpoints = _getRelationshipsEndpoints(
-			openAPI.getPaths());
+		Paths paths = openAPI.getPaths();
 
-		for (String relationshipEndpoint : relationshipsEndpoints) {
-			Paths paths = openAPI.getPaths();
+		for (String key : paths.keySet()) {
+			if (!key.contains("objectRelationshipName")) {
+				continue;
+			}
 
 			for (Map.Entry<ObjectRelationship, ObjectDefinition> entry :
 					_relatedObjectDefinitionsMap.entrySet()) {
@@ -91,7 +92,7 @@ public class OpenAPIResourceImpl {
 
 				paths.addPathItem(
 					StringUtil.replace(
-						relationshipEndpoint,
+						key,
 						new String[] {
 							"currentObjectEntryId", "{objectRelationshipName}",
 							"relatedObjectEntryId"
@@ -102,7 +103,7 @@ public class OpenAPIResourceImpl {
 							relatedObjectDefinition.getPKObjectFieldName()
 						}),
 					_createCustomRelationshipPathItem(
-						paths.get(relationshipEndpoint), objectRelationship,
+						paths.get(key), objectRelationship,
 						relatedObjectDefinition));
 
 				openAPI.getComponents(
@@ -123,7 +124,7 @@ public class OpenAPIResourceImpl {
 				);
 			}
 
-			paths.remove(relationshipEndpoint);
+			paths.remove(key);
 		}
 
 		return response;
@@ -196,18 +197,6 @@ public class OpenAPIResourceImpl {
 		}
 
 		parameter.setName(newParameterName);
-	}
-
-	private List<String> _getRelationshipsEndpoints(Paths paths) {
-		Set<String> keySet = paths.keySet();
-
-		Stream<String> keySetStream = keySet.stream();
-
-		return keySetStream.filter(
-			pathItem -> pathItem.contains("objectRelationshipName")
-		).collect(
-			Collectors.toList()
-		);
 	}
 
 	private final ObjectDefinition _currentObjectDefinition;
