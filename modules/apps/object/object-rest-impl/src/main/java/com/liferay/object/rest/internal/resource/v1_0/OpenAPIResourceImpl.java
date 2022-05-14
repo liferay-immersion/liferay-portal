@@ -189,9 +189,9 @@ public class OpenAPIResourceImpl {
 		customRelationshipPutOperation.tags(relationshipPutOperation.getTags());
 		customRelationshipPutOperation.operationId(
 			StringBundler.concat(
-				"put", StringUtil.upperCaseFirstLetter(currentObjectName),
+				"put", _currentObjectDefinition.getShortName(),
 				StringUtil.upperCaseFirstLetter(objectRelationship.getName()),
-				StringUtil.upperCaseFirstLetter(relatedObjectName)));
+				relatedObjectDefinition.getShortName()));
 		customRelationshipPutOperation.parameters(
 			new ArrayList<>(customRelationshipPutOperationParameters.values()));
 		customRelationshipPutOperation.responses(
