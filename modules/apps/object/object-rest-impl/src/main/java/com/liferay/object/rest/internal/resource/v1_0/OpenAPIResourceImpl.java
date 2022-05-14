@@ -33,6 +33,7 @@ import io.swagger.v3.oas.models.parameters.Parameter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 import javax.ws.rs.GET;
@@ -137,6 +138,10 @@ public class OpenAPIResourceImpl {
 		Operation operation = pathItem.getPut();
 
 		for (Parameter parameter : operation.getParameters()) {
+			if (Objects.equals(parameter.getName(), "objectRelationshipName")) {
+				continue;
+			}
+
 			parameters.put(
 				parameter.getName(),
 				new Parameter() {
@@ -156,10 +161,6 @@ public class OpenAPIResourceImpl {
 		_customizeParameter(
 			parameters, "relatedObjectEntryId",
 			relatedObjectDefinition.getPKObjectFieldName(), false);
-
-		_customizeParameter(
-			parameters, "objectRelationshipName", objectRelationship.getName(),
-			true);
 
 		return new PathItem() {
 			{
