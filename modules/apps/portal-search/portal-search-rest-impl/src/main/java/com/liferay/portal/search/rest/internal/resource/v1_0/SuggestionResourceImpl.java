@@ -194,24 +194,6 @@ public class SuggestionResourceImpl extends BaseSuggestionResourceImpl {
 		}
 	}
 
-	private Suggestion[] _toSuggestions(
-		List<com.liferay.portal.search.suggestions.Suggestion> suggestions) {
-
-		List<Suggestion> list = new ArrayList<>();
-
-		suggestions.forEach(
-			suggestion -> list.add(
-				new Suggestion() {
-					{
-						attributes = suggestion.getAttributes();
-						score = suggestion.getScore();
-						text = suggestion.getText();
-					}
-				}));
-
-		return list.toArray(new Suggestion[0]);
-	}
-
 	private List<SuggestionsContributorResults>
 		_toSuggestionsContributorResults(
 			List
@@ -235,8 +217,16 @@ public class SuggestionResourceImpl extends BaseSuggestionResourceImpl {
 							suggestionsContributorResult.getAttributes();
 						displayGroupName =
 							suggestionsContributorResult.getDisplayGroupName();
-						suggestions = _toSuggestions(
-							suggestionsContributorResult.getSuggestions());
+						suggestions = transformToArray(
+							suggestionsContributorResult.getSuggestions(),
+							suggestion -> new Suggestion () {
+								{
+									attributes = suggestion.getAttributes();
+									score = suggestion.getScore();
+									text = suggestion.getText();
+								}
+							},
+							Suggestion.class);
 					}
 				}));
 
