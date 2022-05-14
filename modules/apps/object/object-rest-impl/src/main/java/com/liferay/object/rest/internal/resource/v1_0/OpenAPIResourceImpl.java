@@ -88,20 +88,21 @@ public class OpenAPIResourceImpl {
 					_createCustomRelationshipEndpointToOpenAPI(
 						entity, endpoint, objectRelationship, objectDefinition);
 
-					Schema<Object> relationshipSchema = new Schema<>();
-
-					relationshipSchema.setDescription(
-						"Information about the relationship " +
-							objectRelationship.getName() +
-								" can be embedded with nestedFields.");
-
 					entity.getComponents(
 					).getSchemas(
 					).get(
 						_currentObjectDefinition.getShortName()
 					).getProperties(
 					).put(
-						objectRelationship.getName(), relationshipSchema
+						objectRelationship.getName(),
+						new Schema<Object>() {
+							{
+								setDescription(
+									"Information about the relationship " +
+										objectRelationship.getName() +
+											" can be embedded with nestedFields.");
+							}
+						}
 					);
 				});
 
