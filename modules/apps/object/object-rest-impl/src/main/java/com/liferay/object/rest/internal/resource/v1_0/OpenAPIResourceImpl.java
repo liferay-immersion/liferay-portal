@@ -170,26 +170,28 @@ public class OpenAPIResourceImpl {
 			customRelationshipPutOperationParameters, "objectRelationshipName",
 			objectRelationship.getName(), true);
 
-		PathItem pathItem = new PathItem();
-
-		pathItem.put(
-			new Operation() {
-				{
-					operationId(
-						StringBundler.concat(
-							"put", _currentObjectDefinition.getShortName(),
-							StringUtil.upperCaseFirstLetter(
-								objectRelationship.getName()),
-							relatedObjectDefinition.getShortName()));
-					parameters(
-						new ArrayList<>(
-							customRelationshipPutOperationParameters.values()));
-					responses(relationshipPutOperation.getResponses());
-					tags(relationshipPutOperation.getTags());
-				}
-			});
-
-		return pathItem;
+		return new PathItem() {
+			{
+				put(
+					new Operation() {
+						{
+							operationId(
+								StringBundler.concat(
+									"put",
+									_currentObjectDefinition.getShortName(),
+									StringUtil.upperCaseFirstLetter(
+										objectRelationship.getName()),
+									relatedObjectDefinition.getShortName()));
+							parameters(
+								new ArrayList<>(
+									customRelationshipPutOperationParameters.
+										values()));
+							responses(relationshipPutOperation.getResponses());
+							tags(relationshipPutOperation.getTags());
+						}
+					});
+			}
+		};
 	}
 
 	private void _customizeParameter(
