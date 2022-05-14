@@ -97,6 +97,11 @@ public class SuggestionResourceImpl extends BaseSuggestionResourceImpl {
 			String currentURL, long plid)
 		throws Exception {
 
+		Layout layout = _layoutLocalService.getLayout(plid);
+
+		contextHttpServletRequest.setAttribute(
+			WebKeys.THEME_DISPLAY, _createThemeDisplay(currentURL, layout));
+
 		Portlet portlet = _portletLocalService.getPortletById(
 			SearchBarPortletKeys.SEARCH_BAR);
 		ServletContext servletContext =
@@ -104,11 +109,6 @@ public class SuggestionResourceImpl extends BaseSuggestionResourceImpl {
 
 		PortletConfig portletConfig = PortletConfigFactoryUtil.create(
 			portlet, servletContext);
-
-		Layout layout = _layoutLocalService.getLayout(plid);
-
-		contextHttpServletRequest.setAttribute(
-			WebKeys.THEME_DISPLAY, _createThemeDisplay(currentURL, layout));
 
 		LiferayRenderRequest liferayRenderRequest = RenderRequestFactory.create(
 			contextHttpServletRequest, portlet,
