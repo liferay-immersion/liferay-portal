@@ -50,7 +50,6 @@ import com.liferay.portal.util.PropsValues;
 import com.liferay.portal.vulcan.dto.converter.DTOConverter;
 import com.liferay.portal.vulcan.dto.converter.DTOConverterContext;
 import com.liferay.portal.vulcan.dto.converter.DefaultDTOConverterContext;
-import com.liferay.portal.vulcan.pagination.Pagination;
 import com.liferay.portal.vulcan.util.LocalizedMapUtil;
 import com.liferay.portal.vulcan.util.TransformUtil;
 
@@ -150,8 +149,8 @@ public class ObjectEntryDTOConverter
 				_objectEntryLocalService.getManyToManyRelatedObjectEntries(
 					objectEntry.getGroupId(),
 					objectRelationship.getObjectRelationshipId(),
-					objectEntry.getObjectEntryId(), reverse,
-					QueryUtil.ALL_POS, QueryUtil.ALL_POS));
+					objectEntry.getObjectEntryId(), reverse, QueryUtil.ALL_POS,
+					QueryUtil.ALL_POS));
 		}
 		catch (PortalException portalException) {
 			if (_log.isWarnEnabled()) {
@@ -191,8 +190,8 @@ public class ObjectEntryDTOConverter
 				_objectEntryLocalService.getOneToManyRelatedObjectEntries(
 					objectEntry.getGroupId(),
 					objectRelationship.getObjectRelationshipId(),
-					objectEntry.getObjectEntryId(),
-					QueryUtil.ALL_POS, QueryUtil.ALL_POS));
+					objectEntry.getObjectEntryId(), QueryUtil.ALL_POS,
+					QueryUtil.ALL_POS));
 		}
 		catch (PortalException portalException) {
 			if (_log.isWarnEnabled()) {
