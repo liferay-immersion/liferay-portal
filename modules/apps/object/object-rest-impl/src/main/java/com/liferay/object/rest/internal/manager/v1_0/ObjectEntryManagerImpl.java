@@ -30,7 +30,6 @@ import com.liferay.object.scope.ObjectScopeProvider;
 import com.liferay.object.scope.ObjectScopeProviderRegistry;
 import com.liferay.object.service.ObjectEntryService;
 import com.liferay.object.service.ObjectFieldLocalService;
-import com.liferay.object.service.ObjectRelationshipLocalService;
 import com.liferay.object.service.ObjectRelationshipService;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -113,16 +112,16 @@ public class ObjectEntryManagerImpl implements ObjectEntryManager {
 	public ObjectEntry addObjectRelationshipMappingTableValues(
 			DTOConverterContext dtoConverterContext,
 			ObjectDefinition objectDefinition, String objectRelationshipName,
-			long primaryKey1, long primaryKey2, long userId)
+			long primaryKey1, long primaryKey2)
 		throws Exception {
 
 		ObjectRelationship objectRelationship =
-			_objectRelationshipLocalService.getObjectRelationship(
+			_objectRelationshipService.getObjectRelationship(
 				objectDefinition.getObjectDefinitionId(),
 				objectRelationshipName);
 
-		_objectRelationshipLocalService.addObjectRelationshipMappingTableValues(
-			userId, objectRelationship.getObjectRelationshipId(), primaryKey1,
+		_objectRelationshipService.addObjectRelationshipMappingTableValues(
+			objectRelationship.getObjectRelationshipId(), primaryKey1,
 			primaryKey2, new ServiceContext());
 
 		return getObjectEntry(
@@ -558,9 +557,6 @@ public class ObjectEntryManagerImpl implements ObjectEntryManager {
 
 	@Reference
 	private ObjectFieldLocalService _objectFieldLocalService;
-
-	@Reference
-	private ObjectRelationshipLocalService _objectRelationshipLocalService;
 
 	@Reference
 	private ObjectRelationshipService _objectRelationshipService;

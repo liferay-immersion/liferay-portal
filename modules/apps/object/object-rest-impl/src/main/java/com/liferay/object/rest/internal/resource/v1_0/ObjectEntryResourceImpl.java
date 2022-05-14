@@ -208,8 +208,7 @@ public class ObjectEntryResourceImpl extends BaseObjectEntryResourceImpl {
 
 		return _objectEntryManager.addObjectRelationshipMappingTableValues(
 			_getDTOConverterContext(currentObjectEntryId), _objectDefinition,
-			objectRelationshipName, currentObjectEntryId, relatedObjectEntryId,
-			contextUser.getUserId());
+			objectRelationshipName, currentObjectEntryId, relatedObjectEntryId);
 	}
 
 	@Override
