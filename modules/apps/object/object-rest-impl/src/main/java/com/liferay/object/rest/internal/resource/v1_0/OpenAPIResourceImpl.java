@@ -132,8 +132,8 @@ public class OpenAPIResourceImpl {
 		String customRelationshipEndpoint = StringUtil.replace(
 			endpoint,
 			new String[] {
-				_CURRENT_OBJECT_ID, _RELATIONSHIP_NAME_IN_ENDPOINT,
-				_RELATED_OBJECT_ID
+				"currentObjectEntryId", "{objectRelationshipName}",
+				"relatedObjectEntryId"
 			},
 			new String[] {
 				currentObjectName + "Id", objectRelationship.getName(),
@@ -176,18 +176,18 @@ public class OpenAPIResourceImpl {
 			_currentObjectDefinition.getShortName());
 
 		_customizeParameter(
-			customRelationshipPutOperationParameters, _CURRENT_OBJECT_ID,
+			customRelationshipPutOperationParameters, "currentObjectEntryId",
 			currentObjectName + "Id", false);
 
 		String relatedObjectName = StringUtil.lowerCaseFirstLetter(
 			relatedObjectDefinition.getShortName());
 
 		_customizeParameter(
-			customRelationshipPutOperationParameters, _RELATED_OBJECT_ID,
+			customRelationshipPutOperationParameters, "relatedObjectEntryId",
 			relatedObjectName + "Id", false);
 
 		_customizeParameter(
-			customRelationshipPutOperationParameters, _RELATIONSHIP_NAME,
+			customRelationshipPutOperationParameters, "objectRelationshipName",
 			objectRelationship.getName(), true);
 
 		Operation customRelationshipPutOperation = new Operation();
@@ -225,20 +225,11 @@ public class OpenAPIResourceImpl {
 		Stream<String> keySetStream = keySet.stream();
 
 		return keySetStream.filter(
-			pathItem -> pathItem.contains(_RELATIONSHIP_NAME)
+			pathItem -> pathItem.contains("objectRelationshipName")
 		).collect(
 			Collectors.toList()
 		);
 	}
-
-	private static final String _CURRENT_OBJECT_ID = "currentObjectEntryId";
-
-	private static final String _RELATED_OBJECT_ID = "relatedObjectEntryId";
-
-	private static final String _RELATIONSHIP_NAME = "objectRelationshipName";
-
-	private static final String _RELATIONSHIP_NAME_IN_ENDPOINT =
-		"{objectRelationshipName}";
 
 	private final ObjectDefinition _currentObjectDefinition;
 	private final Map<ObjectRelationship, ObjectDefinition>
