@@ -71,7 +71,7 @@ public class SuggestionsRetrieverImpl implements SuggestionsRetriever {
 			SuggestionsContributorResults contributorResults =
 				_getContributorResults(
 					liferayPortletRequest, liferayPortletResponse,
-					suggestionsContributorConfiguration, searchContext);
+					searchContext, suggestionsContributorConfiguration);
 
 			if (contributorResults != null) {
 				suggestionsContributorResults.add(contributorResults);
@@ -97,8 +97,8 @@ public class SuggestionsRetrieverImpl implements SuggestionsRetriever {
 	private SuggestionsContributorResults _getContributorResults(
 		LiferayPortletRequest liferayPortletRequest,
 		LiferayPortletResponse liferayPortletResponse,
-		SuggestionsContributorConfiguration suggestionsContributorConfiguration,
-		SearchContext searchContext) {
+		SearchContext searchContext,
+		SuggestionsContributorConfiguration suggestionsContributorConfiguration) {
 
 		SuggestionsContributor suggestionsContributor =
 			_suggestionsContributorServiceTrackerMap.getService(
@@ -107,7 +107,7 @@ public class SuggestionsRetrieverImpl implements SuggestionsRetriever {
 		if (suggestionsContributor != null) {
 			return suggestionsContributor.getSuggestionsContributorResults(
 				liferayPortletRequest, liferayPortletResponse,
-				suggestionsContributorConfiguration, searchContext);
+				searchContext, suggestionsContributorConfiguration);
 		}
 
 		return null;

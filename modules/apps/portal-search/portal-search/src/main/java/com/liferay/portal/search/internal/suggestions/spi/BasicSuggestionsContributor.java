@@ -79,8 +79,8 @@ public class BasicSuggestionsContributor implements SuggestionsContributor {
 	public SuggestionsContributorResults getSuggestionsContributorResults(
 		LiferayPortletRequest liferayPortletRequest,
 		LiferayPortletResponse liferayPortletResponse,
-		SuggestionsContributorConfiguration suggestionsContributorConfiguration,
-		SearchContext searchContext) {
+		SearchContext searchContext,
+		SuggestionsContributorConfiguration suggestionsContributorConfiguration) {
 
 		SearchResponse searchResponse = _searcher.search(
 			_getSearchRequest(
