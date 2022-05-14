@@ -147,7 +147,6 @@ public class SuggestionResourceImpl extends BaseSuggestionResourceImpl {
 		searchContext.setAttribute(
 			"search.suggestions.destination.friendly.url",
 			destinationFriendlyURL);
-
 		searchContext.setCompanyId(contextCompany.getCompanyId());
 
 		if (!StringUtil.equals(scope, "everything")) {
