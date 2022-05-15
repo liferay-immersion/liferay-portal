@@ -106,15 +106,15 @@ public class RelatedModelsFDSDataProvider
 						objectFieldDBColumnName = objectField.getDBColumnName();
 					}
 
-					Map<String, Object> entryMap =
+					Map<String, Object> modelAttributes =
 						relatedModel.getModelAttributes();
 
-					Object value = entryMap.get(objectFieldDBColumnName);
+					Object value = modelAttributes.get(objectFieldDBColumnName);
 
 					return new RelatedModel(
 						objectDefinition.getClassName(),
 						GetterUtil.getLong(
-							entryMap.get(
+							modelAttributes.get(
 								objectDefinition.
 									getPKObjectFieldDBColumnName())),
 						GetterUtil.getString(value), true);
