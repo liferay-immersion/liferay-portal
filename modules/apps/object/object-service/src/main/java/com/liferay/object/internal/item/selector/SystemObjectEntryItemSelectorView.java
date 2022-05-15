@@ -203,15 +203,14 @@ public class SystemObjectEntryItemSelectorView
 			ObjectField objectField = _objectFieldLocalService.fetchObjectField(
 				_objectDefinition.getTitleObjectFieldId());
 
-			if (objectField != null) {
-				Map<String, Object> modelAttributes =
-					_baseModel.getModelAttributes();
-
-				return (String)modelAttributes.get(
-					objectField.getDBColumnName());
+			if (objectField == null) {
+				return StringPool.BLANK;
 			}
 
-			return StringPool.BLANK;
+			Map<String, Object> modelAttributes =
+				_baseModel.getModelAttributes();
+
+			return (String)modelAttributes.get(objectField.getDBColumnName());
 		}
 
 		@Override
