@@ -399,7 +399,7 @@ const WalkthroughStep = ({
 											onClick={() => onNext()}
 											small
 										>
-											{Liferay.Language.get('got-it')}
+											{Liferay.Language.get('ok')}
 										</ClayButton>
 									) : (
 										<ClayButton
