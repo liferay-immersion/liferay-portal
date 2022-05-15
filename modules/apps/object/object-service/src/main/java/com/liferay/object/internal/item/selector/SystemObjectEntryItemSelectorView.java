@@ -74,8 +74,8 @@ public class SystemObjectEntryItemSelectorView
 		ObjectEntryLocalService objectEntryLocalService,
 		ObjectFieldLocalService objectFieldLocalService,
 		ObjectRelatedModelsProviderRegistry objectRelatedModelsProviderRegistry,
-		SystemObjectDefinitionMetadata systemObjectDefinitionMetadata,
-		Portal portal) {
+		Portal portal,
+		SystemObjectDefinitionMetadata systemObjectDefinitionMetadata) {
 
 		_itemSelectorViewDescriptorRenderer =
 			itemSelectorViewDescriptorRenderer;
@@ -84,8 +84,8 @@ public class SystemObjectEntryItemSelectorView
 		_objectFieldLocalService = objectFieldLocalService;
 		_objectRelatedModelsProviderRegistry =
 			objectRelatedModelsProviderRegistry;
-		_systemObjectDefinitionMetadata = systemObjectDefinitionMetadata;
 		_portal = portal;
+		_systemObjectDefinitionMetadata = systemObjectDefinitionMetadata;
 	}
 
 	@Override
