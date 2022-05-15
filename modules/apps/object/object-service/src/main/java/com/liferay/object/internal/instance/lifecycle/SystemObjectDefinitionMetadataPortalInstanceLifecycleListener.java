@@ -196,6 +196,17 @@ public class SystemObjectDefinitionMetadataPortalInstanceLifecycleListener
 				_objectDefinitionLocalService.addOrUpdateSystemObjectDefinition(
 					companyId, systemObjectDefinitionMetadata);
 
+			_bundleContext.registerService(
+				ItemSelectorView.class,
+				new SystemObjectEntryItemSelectorView(
+					_itemSelectorViewDescriptorRenderer, objectDefinition,
+					_objectEntryLocalService, _objectFieldLocalService,
+					_objectRelatedModelsProviderRegistry,
+					systemObjectDefinitionMetadata, _portal),
+				HashMapDictionaryBuilder.<String, Object>put(
+					"item.selector.view.order", 500
+				).build());
+
 			if (GetterUtil.getBoolean(
 					PropsUtil.get("feature.flag.LPS-151676"))) {
 
@@ -228,16 +239,6 @@ public class SystemObjectDefinitionMetadataPortalInstanceLifecycleListener
 					true),
 				HashMapDictionaryBuilder.<String, Object>put(
 					"model.class.name", objectDefinition.getClassName()
-				).build());
-			_bundleContext.registerService(
-				ItemSelectorView.class,
-				new SystemObjectEntryItemSelectorView(
-					_itemSelectorViewDescriptorRenderer, objectDefinition,
-					_objectEntryLocalService, _objectFieldLocalService,
-					_objectRelatedModelsProviderRegistry,
-					systemObjectDefinitionMetadata, _portal),
-				HashMapDictionaryBuilder.<String, Object>put(
-					"item.selector.view.order", 500
 				).build());
 		}
 		catch (PortalException portalException) {
