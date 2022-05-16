@@ -76,11 +76,11 @@ public class FrontendIconsServlet extends HttpServlet {
 				return;
 			}
 
-			String packOrSite = matcher.group(1);
-
 			String[] iconPacks = null;
 
-			if (packOrSite.equals("site")) {
+			String path = matcher.group(1);
+
+			if (path.equals("site")) {
 				FrontendIconsPacksConfiguration
 					frontendIconsPacksConfiguration =
 						_configurationProvider.getGroupConfiguration(
@@ -89,7 +89,7 @@ public class FrontendIconsServlet extends HttpServlet {
 
 				iconPacks = frontendIconsPacksConfiguration.selectedIconPacks();
 			}
-			else if (packOrSite.equals("pack")) {
+			else if (path.equals("pack")) {
 				iconPacks = new String[] {matcher.group(2)};
 			}
 			else {
