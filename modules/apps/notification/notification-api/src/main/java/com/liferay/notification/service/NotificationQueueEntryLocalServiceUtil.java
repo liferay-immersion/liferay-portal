@@ -304,12 +304,6 @@ public class NotificationQueueEntryLocalServiceUtil {
 		return getService().getPersistedModel(primaryKeyObj);
 	}
 
-	public static void unassociateNotificationTemplate(
-		long notificationTemplateId) {
-
-		getService().unassociateNotificationTemplate(notificationTemplateId);
-	}
-
 	/**
 	 * Updates the notification queue entry in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	 *
