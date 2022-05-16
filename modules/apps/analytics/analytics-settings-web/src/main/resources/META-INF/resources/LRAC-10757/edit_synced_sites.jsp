@@ -26,9 +26,10 @@ QADisplayContext qaDisplayContext = (QADisplayContext)request.getAttribute(Analy
 	<ol class="multi-step-indicator-label-top multi-step-nav multi-step-nav-collapse-sm sheet-lg">
 		<li class="complete multi-step-item multi-step-item-expand">
 			<div class="multi-step-divider"></div>
+
 			<div class="multi-step-indicator">
 				<div class="multi-step-indicator-label">
-					<liferay-ui:message key="connect-ac" />
+					<liferay-ui:message key="connect-analytics-cloud" />
 				</div>
 
 				<a class="multi-step-icon" data-multi-step-icon="1" href="#1"></a>
@@ -36,6 +37,7 @@ QADisplayContext qaDisplayContext = (QADisplayContext)request.getAttribute(Analy
 		</li>
 		<li class="active multi-step-item multi-step-item-expand">
 			<div class="multi-step-divider"></div>
+
 			<div class="multi-step-indicator">
 				<div class="multi-step-indicator-label">
 					<liferay-ui:message key="property" />
@@ -46,6 +48,7 @@ QADisplayContext qaDisplayContext = (QADisplayContext)request.getAttribute(Analy
 		</li>
 		<li class="multi-step-item multi-step-item-expand">
 			<div class="multi-step-divider"></div>
+
 			<div class="multi-step-indicator">
 				<div class="multi-step-indicator-label">
 					<liferay-ui:message key="people" />
@@ -56,6 +59,7 @@ QADisplayContext qaDisplayContext = (QADisplayContext)request.getAttribute(Analy
 		</li>
 		<li class="multi-step-item">
 			<div class="multi-step-divider"></div>
+
 			<div class="multi-step-indicator">
 				<div class="multi-step-indicator-label">
 					<liferay-ui:message key="people-data" />
