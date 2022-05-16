@@ -96,11 +96,11 @@ public class NotificationTemplateLocalServiceImpl
 	public NotificationTemplate deleteNotificationTemplate(
 		NotificationTemplate notificationTemplate) {
 
-		_notificationQueueEntryLocalService.
-			updateNotificationQueueEntriesTemplateIds(
-				notificationTemplate.getNotificationTemplateId());
+		notificationTemplate = notificationTemplatePersistence.remove(
+			notificationTemplate);
 
-		notificationTemplatePersistence.remove(notificationTemplate);
+		_notificationQueueEntryLocalService.unassociateNotificationTemplate(
+			notificationTemplate.getNotificationTemplateId());
 
 		return notificationTemplate;
 	}

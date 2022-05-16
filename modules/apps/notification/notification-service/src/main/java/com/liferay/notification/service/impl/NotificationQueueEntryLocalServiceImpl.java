@@ -98,9 +98,7 @@ public class NotificationQueueEntryLocalServiceImpl
 	}
 
 	@Override
-	public void updateNotificationQueueEntriesTemplateIds(
-		long notificationTemplateId) {
-
+	public void unassociateNotificationTemplate(long notificationTemplateId) {
 		List<NotificationQueueEntry> notificationQueueEntries =
 			notificationQueueEntryPersistence.findByNotificationTemplateId(
 				notificationTemplateId);
