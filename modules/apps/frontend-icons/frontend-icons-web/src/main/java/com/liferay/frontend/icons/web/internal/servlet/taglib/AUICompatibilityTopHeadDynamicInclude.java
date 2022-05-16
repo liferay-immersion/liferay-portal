@@ -41,10 +41,6 @@ public class AUICompatibilityTopHeadDynamicInclude extends BaseDynamicInclude {
 			HttpServletResponse httpServletResponse, String key)
 		throws IOException {
 
-		ThemeDisplay themeDisplay =
-			(ThemeDisplay)httpServletRequest.getAttribute(
-				WebKeys.THEME_DISPLAY);
-
 		PrintWriter printWriter = httpServletResponse.getWriter();
 
 		StringBundler sb = new StringBundler(5);
@@ -52,10 +48,16 @@ public class AUICompatibilityTopHeadDynamicInclude extends BaseDynamicInclude {
 		sb.append("<script data-senna-track=\"temporary\">");
 		sb.append("var Liferay = window.Liferay || {};");
 		sb.append("Liferay._ICONS_ = Liferay._ICONS_ || {};");
+
+		ThemeDisplay themeDisplay =
+			(ThemeDisplay)httpServletRequest.getAttribute(
+				WebKeys.THEME_DISPLAY);
+
 		sb.append(
 			StringBundler.concat(
 				"Liferay._ICONS_.spritemap = '",
 				FrontendIconsUtil.getSpritemapPath(themeDisplay), "';"));
+
 		sb.append(
 			StringBundler.concat(
 				"Liferay._ICONS_.systemSpritemap = '",
