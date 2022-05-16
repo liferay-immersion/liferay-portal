@@ -32,7 +32,6 @@ Role role = (Role)objArray[1];
 	<portlet:actionURL name="deletePermission" var="deletePermissionURL">
 		<portlet:param name="mvcPath" value="/edit_role_permissions.jsp" />
 		<portlet:param name="tabs1" value="define-permissions" />
-		<portlet:param name="redirect" value="<%= currentURL %>" />
 		<portlet:param name="roleId" value="<%= String.valueOf(role.getRoleId()) %>" />
 		<portlet:param name="name" value="<%= permission.getName() %>" />
 		<portlet:param name="scope" value="<%= String.valueOf(permission.getScope()) %>" />
@@ -43,6 +42,6 @@ Role role = (Role)objArray[1];
 	<liferay-ui:icon-delete
 		confirmation="are-you-sure-you-want-to-remove-this-permission"
 		message="remove"
-		url="<%= deletePermissionURL %>"
+		url='<%= "submitForm(document." + liferayPortletResponse.getNamespace() + "fm, '" + HtmlUtil.escapeJS(deletePermissionURL) + "');" %>'
 	/>
 </liferay-ui:icon-menu>
