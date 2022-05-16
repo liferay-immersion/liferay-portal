@@ -105,10 +105,10 @@ public class FrontendIconsResourcePackTracker {
 				return null;
 			}
 
-			String path = headers.get("Liferay-Icons-Path");
 			String name = headers.get("Liferay-Icons-Pack-Name");
+			String path = headers.get("Liferay-Icons-Path");
 
-			if (Validator.isBlank(path) || Validator.isBlank(name)) {
+			if (Validator.isBlank(name) || Validator.isBlank(path)) {
 				return null;
 			}
 
