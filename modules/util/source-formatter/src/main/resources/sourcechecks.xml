@@ -1162,6 +1162,10 @@
 		</check>
 	</source-processor>
 	<source-processor name="LDIFSourceProcessor">
+		<check name="LDIFEntryOrderCheck">
+			<category name="Styling" />
+			<description name="Checks the order of entries and attributes in `.ldif` file." />
+		</check>
 	</source-processor>
 	<source-processor name="LFRBuildSourceProcessor">
 		<check name="LFRBuildContentCheck">
