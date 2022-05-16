@@ -62,7 +62,6 @@ public class OAuthClientEntryLocalServiceImpl
 		throws PortalException {
 
 		User user = _userLocalService.getUser(userId);
-
 		JSONObject infoJSONObject = _getInfoJSONObject(infoJSON);
 
 		_validateInfoJSON(
