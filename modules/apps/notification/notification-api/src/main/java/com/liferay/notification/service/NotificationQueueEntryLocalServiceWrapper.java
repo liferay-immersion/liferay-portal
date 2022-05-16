@@ -346,11 +346,9 @@ public class NotificationQueueEntryLocalServiceWrapper
 	}
 
 	@Override
-	public void updateNotificationQueueEntriesTemplateIds(
-		long notificationTemplateId) {
-
-		_notificationQueueEntryLocalService.
-			updateNotificationQueueEntriesTemplateIds(notificationTemplateId);
+	public void unassociateNotificationTemplate(long notificationTemplateId) {
+		_notificationQueueEntryLocalService.unassociateNotificationTemplate(
+			notificationTemplateId);
 	}
 
 	/**
