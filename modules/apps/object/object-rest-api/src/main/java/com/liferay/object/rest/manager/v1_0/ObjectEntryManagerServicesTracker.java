@@ -21,7 +21,7 @@ import java.util.List;
  */
 public interface ObjectEntryManagerServicesTracker {
 
-	public ObjectEntryManager getObjectEntryManager(String name);
+	public ObjectEntryManager getObjectEntryManager(String storageType);
 
 	public List<ObjectEntryManager> getObjectEntryManagers();
 

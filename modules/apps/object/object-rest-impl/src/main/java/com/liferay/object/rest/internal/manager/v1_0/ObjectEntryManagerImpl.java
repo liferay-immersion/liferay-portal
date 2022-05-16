@@ -89,7 +89,7 @@ import org.osgi.service.component.annotations.Reference;
  */
 @Component(
 	immediate = true,
-	property = "object.entry.manager.key=" + ObjectDefinitionConstants.STORAGE_TYPE_DEFAULT,
+	property = "object.entry.manager.storage.type=" + ObjectDefinitionConstants.STORAGE_TYPE_DEFAULT,
 	service = ObjectEntryManager.class
 )
 public class ObjectEntryManagerImpl implements ObjectEntryManager {

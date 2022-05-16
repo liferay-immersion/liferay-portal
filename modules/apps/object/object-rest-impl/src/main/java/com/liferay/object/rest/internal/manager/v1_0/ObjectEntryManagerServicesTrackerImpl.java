@@ -35,8 +35,8 @@ public class ObjectEntryManagerServicesTrackerImpl
 	implements ObjectEntryManagerServicesTracker {
 
 	@Override
-	public ObjectEntryManager getObjectEntryManager(String key) {
-		return _serviceTrackerMap.getService(key);
+	public ObjectEntryManager getObjectEntryManager(String storageType) {
+		return _serviceTrackerMap.getService(storageType);
 	}
 
 	@Override
@@ -48,7 +48,7 @@ public class ObjectEntryManagerServicesTrackerImpl
 	protected void activate(BundleContext bundleContext) {
 		_serviceTrackerMap = ServiceTrackerMapFactory.openSingleValueMap(
 			bundleContext, ObjectEntryManager.class,
-			"object.entry.manager.key");
+			"object.entry.manager.storage.type");
 	}
 
 	@Deactivate
