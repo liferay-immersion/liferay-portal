@@ -85,6 +85,7 @@
 		<exception>DuplicateOAuthClientEntry</exception>
 		<exception>OAuthClientAuthServerMetadataJSON</exception>
 		<exception>OAuthClientAuthServerType</exception>
+		<exception>OAuthClientEntryInfoJSON</exception>
 		<exception>OAuthClientEntryParametersJSON</exception>
 	</exceptions>
 </service-builder>
