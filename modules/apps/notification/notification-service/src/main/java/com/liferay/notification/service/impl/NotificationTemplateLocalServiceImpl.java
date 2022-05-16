@@ -52,17 +52,18 @@ public class NotificationTemplateLocalServiceImpl
 			Map<Locale, String> subjectMap, String to)
 		throws PortalException {
 
-		User user = _userLocalService.getUser(userId);
-
-		validate(name, from);
+		_validate(name, from);
 
 		NotificationTemplate notificationTemplate =
 			notificationTemplatePersistence.create(
 				counterLocalService.increment());
 
+		User user = _userLocalService.getUser(userId);
+
 		notificationTemplate.setCompanyId(user.getCompanyId());
 		notificationTemplate.setUserId(user.getUserId());
 		notificationTemplate.setUserName(user.getFullName());
+
 		notificationTemplate.setBcc(bcc);
 		notificationTemplate.setBodyMap(bodyMap);
 		notificationTemplate.setCc(cc);
@@ -115,7 +116,7 @@ public class NotificationTemplateLocalServiceImpl
 			notificationTemplatePersistence.findByPrimaryKey(
 				notificationTemplateId);
 
-		validate(name, from);
+		_validate(name, from);
 
 		notificationTemplate.setBcc(bcc);
 		notificationTemplate.setBodyMap(bodyMap);
@@ -131,7 +132,7 @@ public class NotificationTemplateLocalServiceImpl
 		return notificationTemplatePersistence.update(notificationTemplate);
 	}
 
-	protected void validate(String name, String from) throws PortalException {
+	private void _validate(String name, String from) throws PortalException {
 		if (Validator.isNull(name)) {
 			throw new NotificationTemplateNameException("Name is null");
 		}
