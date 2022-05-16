@@ -92,7 +92,7 @@ import org.osgi.service.component.annotations.Reference;
 	property = "object.entry.manager.storage.type=" + ObjectDefinitionConstants.STORAGE_TYPE_DEFAULT,
 	service = ObjectEntryManager.class
 )
-public class ObjectEntryManagerImpl implements ObjectEntryManager {
+public class DefaultObjectEntryManagerImpl implements ObjectEntryManager {
 
 	@Override
 	public ObjectEntry addObjectEntry(
@@ -535,7 +535,7 @@ public class ObjectEntryManagerImpl implements ObjectEntryManager {
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
-		ObjectEntryManagerImpl.class);
+		DefaultObjectEntryManagerImpl.class);
 
 	@Reference
 	private Aggregations _aggregations;
