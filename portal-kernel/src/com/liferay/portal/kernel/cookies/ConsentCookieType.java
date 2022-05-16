@@ -24,10 +24,10 @@ import java.util.Locale;
 public class ConsentCookieType {
 
 	public ConsentCookieType(
-		String name, LocalizedValuesMap descriptionMap, boolean prechecked) {
+		LocalizedValuesMap descriptionMap, String name, boolean prechecked) {
 
-		_name = name;
 		_descriptionMap = descriptionMap;
+		_name = name;
 		_prechecked = prechecked;
 	}
 

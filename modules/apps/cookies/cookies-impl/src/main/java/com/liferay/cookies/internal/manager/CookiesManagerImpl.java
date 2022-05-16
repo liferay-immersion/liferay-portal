@@ -278,16 +278,16 @@ public class CookiesManagerImpl implements CookiesManager {
 
 		return ListUtil.fromArray(
 			new ConsentCookieType(
-				CookiesConstants.NAME_CONSENT_TYPE_FUNCTIONAL,
 				cookiesConsentConfiguration.functionalCookiesDescription(),
+				CookiesConstants.NAME_CONSENT_TYPE_FUNCTIONAL,
 				cookiesConsentConfiguration.functionalCookiesPrechecked()),
 			new ConsentCookieType(
-				CookiesConstants.NAME_CONSENT_TYPE_PERFORMANCE,
 				cookiesConsentConfiguration.performanceCookiesDescription(),
+				CookiesConstants.NAME_CONSENT_TYPE_PERFORMANCE,
 				cookiesConsentConfiguration.performanceCookiesPrechecked()),
 			new ConsentCookieType(
-				CookiesConstants.NAME_CONSENT_TYPE_PERSONALIZATION,
 				cookiesConsentConfiguration.personalizationCookiesDescription(),
+				CookiesConstants.NAME_CONSENT_TYPE_PERSONALIZATION,
 				cookiesConsentConfiguration.
 					personalizationCookiesPrechecked()));
 	}
@@ -302,10 +302,9 @@ public class CookiesManagerImpl implements CookiesManager {
 
 		return ListUtil.fromArray(
 			new ConsentCookieType(
-				CookiesConstants.NAME_CONSENT_TYPE_NECESSARY,
 				cookiesConsentConfiguration.
 					strictlyNecessaryCookiesDescription(),
-				true));
+				CookiesConstants.NAME_CONSENT_TYPE_NECESSARY, true));
 	}
 
 	@Override
