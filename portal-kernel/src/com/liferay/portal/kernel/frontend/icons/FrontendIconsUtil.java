@@ -53,15 +53,15 @@ public class FrontendIconsUtil {
 	}
 
 	public static String getSystemIconPackName() {
-		return _SYSTEM_ICON_PACK;
+		return _SYSTEM_ICON_PACK_NAME;
 	}
 
 	public static String getSystemSpritemapPath() {
-		return getSpritemapPath(_SYSTEM_ICON_PACK);
+		return getSpritemapPath(_SYSTEM_ICON_PACK_NAME);
 	}
 
 	private static final String _ICONS_BASE_PATH = "/o/icons";
 
-	private static final String _SYSTEM_ICON_PACK = "clay";
+	private static final String _SYSTEM_ICON_PACK_NAME = "clay";
 
 }
