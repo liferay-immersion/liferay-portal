@@ -83,7 +83,8 @@ public class NotificationQueueEntryLocalServiceImpl
 			notificationQueueEntryPersistence.findByPrimaryKey(
 				notificationQueueEntryId);
 
-		return deleteNotificationQueueEntry(notificationQueueEntry);
+		return notificationQueueEntryLocalService.deleteNotificationQueueEntry(
+			notificationQueueEntry);
 	}
 
 	@Override

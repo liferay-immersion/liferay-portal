@@ -87,7 +87,8 @@ public class NotificationTemplateLocalServiceImpl
 			notificationTemplatePersistence.findByPrimaryKey(
 				notificationTemplateId);
 
-		return deleteNotificationTemplate(notificationTemplate);
+		return notificationTemplateLocalService.deleteNotificationTemplate(
+			notificationTemplate);
 	}
 
 	@Override
