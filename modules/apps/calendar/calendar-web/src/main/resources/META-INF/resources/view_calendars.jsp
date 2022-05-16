@@ -20,6 +20,20 @@
 String redirect = ParamUtil.getString(request, "redirect");
 
 CalendarResource calendarResource = (CalendarResource)request.getAttribute(CalendarWebKeys.CALENDAR_RESOURCE);
+
+int cur = ParamUtil.getInteger(request, "cur", QueryUtil.ALL_POS);
+int delta = ParamUtil.getInteger(request, "delta", QueryUtil.ALL_POS);
+
+int start = delta * (cur - 1);
+int end = delta * cur;
+
+PortletURL iteratorURL = renderResponse.createRenderURL();
+
+if (iteratorURL != null) {
+	iteratorURL.setParameter("calendarResourceId", String.valueOf(calendarResource.getCalendarResourceId()));
+	iteratorURL.setParameter("mvcPath", "/view_calendars.jsp");
+	iteratorURL.setParameter("redirect", redirect);
+}
 %>
 
 <clay:container-fluid>
@@ -46,11 +60,11 @@ CalendarResource calendarResource = (CalendarResource)request.getAttribute(Calen
 <clay:container-fluid>
 	<liferay-ui:search-container
 		emptyResultsMessage="there-are-no-calendars-for-the-selected-resource"
-		iteratorURL="<%= renderResponse.createRenderURL() %>"
+		iteratorURL="<%= iteratorURL %>"
 		total="<%= CalendarServiceUtil.searchCount(themeDisplay.getCompanyId(), new long[] {calendarResource.getGroupId()}, new long[] {calendarResource.getCalendarResourceId()}, null, false) %>"
 	>
 		<liferay-ui:search-container-results
-			results="<%= CalendarServiceUtil.search(themeDisplay.getCompanyId(), new long[] {calendarResource.getGroupId()}, new long[] {calendarResource.getCalendarResourceId()}, null, false, QueryUtil.ALL_POS, QueryUtil.ALL_POS, new CalendarNameComparator(true)) %>"
+			results="<%= CalendarServiceUtil.search(themeDisplay.getCompanyId(), new long[] {calendarResource.getGroupId()}, new long[] {calendarResource.getCalendarResourceId()}, null, false, start, end, new CalendarNameComparator(true)) %>"
 		/>
 
 		<liferay-ui:search-container-row
