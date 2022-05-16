@@ -83,6 +83,7 @@
 	<exceptions>
 		<exception>DuplicateOAuthClientAuthServer</exception>
 		<exception>DuplicateOAuthClientEntry</exception>
+		<exception>OAuthClientAuthServerMetadataJSON</exception>
 		<exception>OAuthClientAuthServerType</exception>
 		<exception>OAuthClientEntryParametersJSON</exception>
 	</exceptions>
