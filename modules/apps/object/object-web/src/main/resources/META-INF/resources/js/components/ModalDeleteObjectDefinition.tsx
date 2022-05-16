@@ -53,7 +53,7 @@ function ModalDeleteObjectDefinition({
 				<div>
 					{Liferay.Util.sub(
 						Liferay.Language.get(
-							'to-delete-x-you-need-first-delete-its-relationships'
+							'to-delete-x,-you-must-first-delete-its-relationships'
 						),
 						`${name}`
 					)}
@@ -87,7 +87,7 @@ function ModalDeleteObjectDefinition({
 			<p
 				dangerouslySetInnerHTML={{
 					__html: Liferay.Util.sub(
-						Liferay.Language.get('x-has-x-records'),
+						Liferay.Language.get('x-has-x-object-entries'),
 						`<strong>${name}</strong>`,
 						`${objectEntriesCount}`
 					),
@@ -96,7 +96,7 @@ function ModalDeleteObjectDefinition({
 
 			<p>
 				{Liferay.Language.get(
-					'to-export-all-records-go-to-global-menu-applications-import-export-center'
+					'go-to-global-menu-applications-import-export-center-to-export-all-object-entries'
 				)}
 			</p>
 
