@@ -44,22 +44,20 @@ public class CookiesConfigurationVisibilityController
 		try {
 			CookiesBannerConfiguration cookiesBannerConfiguration = null;
 
-			if (ExtendedObjectClassDefinition.Scope.SYSTEM.equals(scope)) {
-				cookiesBannerConfiguration =
-					_configurationProvider.getSystemConfiguration(
-						CookiesBannerConfiguration.class);
-			}
-
 			if (ExtendedObjectClassDefinition.Scope.COMPANY.equals(scope)) {
 				cookiesBannerConfiguration =
 					_configurationProvider.getCompanyConfiguration(
 						CookiesBannerConfiguration.class, (Long)scopePK);
 			}
-
-			if (ExtendedObjectClassDefinition.Scope.GROUP.equals(scope)) {
+			else if (ExtendedObjectClassDefinition.Scope.GROUP.equals(scope)) {
 				cookiesBannerConfiguration =
 					_configurationProvider.getGroupConfiguration(
 						CookiesBannerConfiguration.class, (Long)scopePK);
+			}
+			else if (ExtendedObjectClassDefinition.Scope.SYSTEM.equals(scope)) {
+				cookiesBannerConfiguration =
+					_configurationProvider.getSystemConfiguration(
+						CookiesBannerConfiguration.class);
 			}
 
 			if (cookiesBannerConfiguration != null) {
