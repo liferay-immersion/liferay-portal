@@ -47,16 +47,16 @@ public class NotificationQueueEntryLocalServiceImpl
 			String toName)
 		throws PortalException {
 
-		User user = _userLocalService.getUser(userId);
-
-		long notificationQueueEntryId = counterLocalService.increment();
-
 		NotificationQueueEntry notificationQueueEntry =
-			notificationQueueEntryPersistence.create(notificationQueueEntryId);
+			notificationQueueEntryPersistence.create(
+				counterLocalService.increment());
+
+		User user = _userLocalService.getUser(userId);
 
 		notificationQueueEntry.setCompanyId(user.getCompanyId());
 		notificationQueueEntry.setUserId(user.getUserId());
 		notificationQueueEntry.setUserName(user.getFullName());
+
 		notificationQueueEntry.setNotificationTemplateId(
 			notificationTemplateId);
 		notificationQueueEntry.setBcc(bcc);
