@@ -16,9 +16,10 @@ package com.liferay.notification.service.impl;
 
 import com.liferay.notification.exception.NotificationTemplateFromException;
 import com.liferay.notification.exception.NotificationTemplateNameException;
+import com.liferay.notification.model.NotificationQueueEntry;
 import com.liferay.notification.model.NotificationTemplate;
-import com.liferay.notification.service.NotificationQueueEntryLocalService;
 import com.liferay.notification.service.base.NotificationTemplateLocalServiceBaseImpl;
+import com.liferay.notification.service.persistence.NotificationQueueEntryPersistence;
 import com.liferay.portal.aop.AopService;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.SystemEventConstants;
@@ -27,6 +28,7 @@ import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.systemevent.SystemEvent;
 import com.liferay.portal.kernel.util.Validator;
 
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -99,8 +101,17 @@ public class NotificationTemplateLocalServiceImpl
 		notificationTemplate = notificationTemplatePersistence.remove(
 			notificationTemplate);
 
-		_notificationQueueEntryLocalService.unassociateNotificationTemplate(
-			notificationTemplate.getNotificationTemplateId());
+		List<NotificationQueueEntry> notificationQueueEntries =
+			_notificationQueueEntryPersistence.findByNotificationTemplateId(
+				notificationTemplate.getNotificationTemplateId());
+
+		for (NotificationQueueEntry notificationQueueEntry :
+				notificationQueueEntries) {
+
+			notificationQueueEntry.setNotificationTemplateId(0);
+
+			_notificationQueueEntryPersistence.update(notificationQueueEntry);
+		}
 
 		return notificationTemplate;
 	}
@@ -144,8 +155,8 @@ public class NotificationTemplateLocalServiceImpl
 	}
 
 	@Reference
-	private NotificationQueueEntryLocalService
-		_notificationQueueEntryLocalService;
+	private NotificationQueueEntryPersistence
+		_notificationQueueEntryPersistence;
 
 	@Reference
 	private UserLocalService _userLocalService;

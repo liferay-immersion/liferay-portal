@@ -23,8 +23,6 @@ import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.systemevent.SystemEvent;
 
-import java.util.List;
-
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -95,21 +93,6 @@ public class NotificationQueueEntryLocalServiceImpl
 		notificationQueueEntryPersistence.remove(notificationQueueEntry);
 
 		return notificationQueueEntry;
-	}
-
-	@Override
-	public void unassociateNotificationTemplate(long notificationTemplateId) {
-		List<NotificationQueueEntry> notificationQueueEntries =
-			notificationQueueEntryPersistence.findByNotificationTemplateId(
-				notificationTemplateId);
-
-		for (NotificationQueueEntry notificationQueueEntry :
-				notificationQueueEntries) {
-
-			notificationQueueEntry.setNotificationTemplateId(0);
-
-			notificationQueueEntryPersistence.update(notificationQueueEntry);
-		}
 	}
 
 	@Reference
