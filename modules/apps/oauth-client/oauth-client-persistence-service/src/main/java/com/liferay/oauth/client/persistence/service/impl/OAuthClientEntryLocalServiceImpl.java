@@ -16,6 +16,7 @@ package com.liferay.oauth.client.persistence.service.impl;
 
 import com.liferay.oauth.client.persistence.exception.DuplicateOAuthClientEntryException;
 import com.liferay.oauth.client.persistence.exception.OAuthClientAuthServerTypeException;
+import com.liferay.oauth.client.persistence.exception.OAuthClientEntryInfoJSONException;
 import com.liferay.oauth.client.persistence.exception.OAuthClientEntryParametersJSONException;
 import com.liferay.oauth.client.persistence.model.OAuthClientAuthServer;
 import com.liferay.oauth.client.persistence.model.OAuthClientAuthServerTable;
@@ -263,8 +264,7 @@ public class OAuthClientEntryLocalServiceImpl
 				ClientInformation.parse(infoJSONObject);
 			}
 			catch (ParseException parseException) {
-				throw new OAuthClientAuthServerTypeException(
-					"Unable to parse type: " + type, parseException);
+				throw new OAuthClientEntryInfoJSONException(parseException);
 			}
 		}
 		else if (type.equals("openid-configuration")) {
@@ -272,13 +272,12 @@ public class OAuthClientEntryLocalServiceImpl
 				OIDCClientInformation.parse(infoJSONObject);
 			}
 			catch (ParseException parseException) {
-				throw new OAuthClientAuthServerTypeException(
-					"Unable to parse type: " + type, parseException);
+				throw new OAuthClientEntryInfoJSONException(parseException);
 			}
 		}
 		else {
 			throw new OAuthClientAuthServerTypeException(
-				"Invalid type: " + type);
+				"Invalid type " + type);
 		}
 	}
 
