@@ -85,10 +85,10 @@ function AddToCartButton({
 						const errorMessage =
 							cpInstances.length > 1
 								? Liferay.Language.get(
-										'unable-to-add-the-products-to-the-cart'
+										'unable-to-add-products-to-the-cart'
 								  )
 								: Liferay.Language.get(
-										'unable-to-add-the-product-to-the-cart'
+										'unable-to-add-product-to-the-cart'
 								  );
 
 						showErrorNotification(errorMessage);
