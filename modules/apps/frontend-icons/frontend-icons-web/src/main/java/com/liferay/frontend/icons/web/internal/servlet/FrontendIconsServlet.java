@@ -77,7 +77,6 @@ public class FrontendIconsServlet extends HttpServlet {
 			}
 
 			String packOrSite = matcher.group(1);
-			String packNameOrSiteId = matcher.group(2);
 
 			String[] iconPacks;
 
@@ -86,12 +85,12 @@ public class FrontendIconsServlet extends HttpServlet {
 					frontendIconsPacksConfiguration =
 						_configurationProvider.getGroupConfiguration(
 							FrontendIconsPacksConfiguration.class,
-							GetterUtil.getLong(packNameOrSiteId));
+							GetterUtil.getLong(matcher.group(2)));
 
 				iconPacks = frontendIconsPacksConfiguration.selectedIconPacks();
 			}
 			else if (packOrSite.equals("pack")) {
-				iconPacks = new String[] {packNameOrSiteId};
+				iconPacks = new String[] {matcher.group(2)};
 			}
 			else {
 				httpServletResponse.setStatus(HttpServletResponse.SC_NOT_FOUND);
