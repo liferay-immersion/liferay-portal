@@ -19,6 +19,7 @@ import com.liferay.oauth.client.persistence.exception.OAuthClientAuthServerMetad
 import com.liferay.oauth.client.persistence.exception.OAuthClientAuthServerTypeException;
 import com.liferay.oauth.client.persistence.model.OAuthClientAuthServer;
 import com.liferay.oauth.client.persistence.service.base.OAuthClientAuthServerLocalServiceBaseImpl;
+import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.aop.AopService;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.GroupConstants;
@@ -229,7 +230,8 @@ public class OAuthClientAuthServerLocalServiceImpl
 				null) {
 
 			throw new DuplicateOAuthClientAuthServerException(
-				"Issuer: " + issuer);
+				StringBundler.concat(
+					"Company ID ", companyId, " and issuer ", issuer));
 		}
 	}
 
@@ -261,7 +263,7 @@ public class OAuthClientAuthServerLocalServiceImpl
 		}
 		else {
 			throw new OAuthClientAuthServerTypeException(
-				"Invalid type: " + type);
+				"Invalid type " + type);
 		}
 	}
 
