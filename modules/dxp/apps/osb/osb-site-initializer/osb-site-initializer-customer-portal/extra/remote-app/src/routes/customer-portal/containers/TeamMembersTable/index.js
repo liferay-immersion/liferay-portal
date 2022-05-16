@@ -68,8 +68,8 @@ const TeamMembersTable = ({licenseKeyDownloadURL, project, sessionId}) => {
 			userAccounts.filter(
 				(user) =>
 					user?.roles[0] === ROLE_TYPES.admin.key ||
-					user?.roles[0] === ROLE_TYPES.requester.key ||
-					user?.roles[0] === ROLE_TYPES.partnerManager.key
+					user?.roles[0] === ROLE_TYPES.partnerManager.key ||
+					user?.roles[0] === ROLE_TYPES.requester.key
 			).length === 1
 		);
 	}, [userAccounts]);
