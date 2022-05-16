@@ -112,11 +112,11 @@ public class NotificationTemplateLocalServiceImpl
 			String name, Map<Locale, String> subjectMap, String to)
 		throws PortalException {
 
+		_validate(name, from);
+
 		NotificationTemplate notificationTemplate =
 			notificationTemplatePersistence.findByPrimaryKey(
 				notificationTemplateId);
-
-		_validate(name, from);
 
 		notificationTemplate.setBcc(bcc);
 		notificationTemplate.setBodyMap(bodyMap);
