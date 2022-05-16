@@ -32,7 +32,7 @@ import org.osgi.service.component.annotations.Component;
  */
 @Component(
 	enabled = false, immediate = true,
-	property = "object.entry.manager.key=" + ObjectDefinitionConstants.STORAGE_TYPE_SALESFORCE,
+	property = "object.entry.manager.storage.type=" + ObjectDefinitionConstants.STORAGE_TYPE_SALESFORCE,
 	service = ObjectEntryManager.class
 )
 public class ObjectEntryManagerSalesforceImpl implements ObjectEntryManager {
