@@ -60,25 +60,25 @@ public class OAuthClientEntryLocalServiceImpl
 			String parametersJSON)
 		throws PortalException {
 
-		_validateParametersJSON(parametersJSON);
-
-		OAuthClientEntry oAuthClientEntry = oAuthClientEntryPersistence.create(
-			counterLocalService.increment());
-
 		User user = _userLocalService.getUser(userId);
 
 		JSONObject infoJSONObject = _getInfoJSONObject(infoJSON);
 
-		_validateInfo(user.getCompanyId(), authServerIssuer, infoJSONObject);
+		_validateInfoJSON(
+			user.getCompanyId(), authServerIssuer, infoJSONObject);
 
 		String clientId = infoJSONObject.getAsString("client_id");
 
 		_validateClientId(user.getCompanyId(), authServerIssuer, clientId);
 
+		_validateParametersJSON(parametersJSON);
+
+		OAuthClientEntry oAuthClientEntry = oAuthClientEntryPersistence.create(
+			counterLocalService.increment());
+
 		oAuthClientEntry.setCompanyId(user.getCompanyId());
 		oAuthClientEntry.setUserId(user.getUserId());
 		oAuthClientEntry.setUserName(user.getFullName());
-
 		oAuthClientEntry.setAuthServerIssuer(authServerIssuer);
 		oAuthClientEntry.setClientId(clientId);
 		oAuthClientEntry.setInfoJSON(infoJSON);
@@ -199,21 +199,21 @@ public class OAuthClientEntryLocalServiceImpl
 			String parametersJSON)
 		throws PortalException {
 
-		_validateParametersJSON(parametersJSON);
-
 		OAuthClientEntry oAuthClientEntry =
 			oAuthClientEntryLocalService.getOAuthClientEntry(
 				oAuthClientEntryId);
 
 		JSONObject infoJSONObject = _getInfoJSONObject(infoJSON);
 
-		_validateInfo(
+		_validateInfoJSON(
 			oAuthClientEntry.getCompanyId(), authServerIssuer, infoJSONObject);
 
 		String clientId = infoJSONObject.getAsString("client_id");
 
 		_validateClientId(
 			oAuthClientEntry.getCompanyId(), authServerIssuer, clientId);
+
+		_validateParametersJSON(parametersJSON);
 
 		oAuthClientEntry.setAuthServerIssuer(authServerIssuer);
 		oAuthClientEntry.setClientId(clientId);
@@ -244,11 +244,11 @@ public class OAuthClientEntryLocalServiceImpl
 
 		if (oAuthClientEntry != null) {
 			throw new DuplicateOAuthClientEntryException(
-				"ClientId: " + clientId);
+				"Client ID " + clientId);
 		}
 	}
 
-	private void _validateInfo(
+	private void _validateInfoJSON(
 			long companyId, String authServerIssuer, JSONObject infoJSONObject)
 		throws PortalException {
 
