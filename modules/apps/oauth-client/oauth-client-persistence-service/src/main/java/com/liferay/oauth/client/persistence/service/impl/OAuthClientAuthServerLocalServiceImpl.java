@@ -57,11 +57,7 @@ public class OAuthClientAuthServerLocalServiceImpl
 
 		JSONObject metadataJSONObject = _getMetadataJSONObject(metadataJSON);
 
-		_validateMetadata(metadataJSONObject, type);
-
-		OAuthClientAuthServer oAuthClientAuthServer =
-			oAuthClientAuthServerPersistence.create(
-				counterLocalService.increment());
+		_validateMetadataJSON(metadataJSONObject, type);
 
 		User user = _userLocalService.getUser(userId);
 
@@ -69,11 +65,13 @@ public class OAuthClientAuthServerLocalServiceImpl
 
 		_validateIssuer(user.getCompanyId(), issuer);
 
-		oAuthClientAuthServer.setCompanyId(user.getCompanyId());
+		OAuthClientAuthServer oAuthClientAuthServer =
+			oAuthClientAuthServerPersistence.create(
+				counterLocalService.increment());
 
+		oAuthClientAuthServer.setCompanyId(user.getCompanyId());
 		oAuthClientAuthServer.setUserId(user.getUserId());
 		oAuthClientAuthServer.setUserName(user.getFullName());
-
 		oAuthClientAuthServer.setDiscoveryEndpoint(discoveryEndpoint);
 		oAuthClientAuthServer.setIssuer(issuer);
 		oAuthClientAuthServer.setMetadataJSON(metadataJSON);
@@ -193,7 +191,7 @@ public class OAuthClientAuthServerLocalServiceImpl
 
 		JSONObject metadataJSONObject = _getMetadataJSONObject(metadataJSON);
 
-		_validateMetadata(metadataJSONObject, type);
+		_validateMetadataJSON(metadataJSONObject, type);
 
 		OAuthClientAuthServer oAuthClientAuthServer =
 			oAuthClientAuthServerLocalService.getOAuthClientAuthServer(
@@ -233,7 +231,8 @@ public class OAuthClientAuthServerLocalServiceImpl
 		}
 	}
 
-	private void _validateMetadata(JSONObject metadataJSONObject, String type)
+	private void _validateMetadataJSON(
+			JSONObject metadataJSONObject, String type)
 		throws PortalException {
 
 		if (Validator.isNull(type)) {
