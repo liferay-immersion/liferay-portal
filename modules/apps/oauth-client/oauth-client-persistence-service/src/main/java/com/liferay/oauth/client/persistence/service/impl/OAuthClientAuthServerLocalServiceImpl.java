@@ -15,6 +15,7 @@
 package com.liferay.oauth.client.persistence.service.impl;
 
 import com.liferay.oauth.client.persistence.exception.DuplicateOAuthClientAuthServerException;
+import com.liferay.oauth.client.persistence.exception.OAuthClientAuthServerMetadataJSONException;
 import com.liferay.oauth.client.persistence.exception.OAuthClientAuthServerTypeException;
 import com.liferay.oauth.client.persistence.model.OAuthClientAuthServer;
 import com.liferay.oauth.client.persistence.service.base.OAuthClientAuthServerLocalServiceBaseImpl;
@@ -216,7 +217,8 @@ public class OAuthClientAuthServerLocalServiceImpl
 			return JSONObjectUtils.parse(metadataJSON);
 		}
 		catch (ParseException parseException) {
-			throw new PortalException(parseException);
+			throw new OAuthClientAuthServerMetadataJSONException(
+				parseException);
 		}
 	}
 
@@ -244,8 +246,8 @@ public class OAuthClientAuthServerLocalServiceImpl
 				AuthorizationServerMetadata.parse(metadataJSONObject);
 			}
 			catch (ParseException parseException) {
-				throw new OAuthClientAuthServerTypeException(
-					"Unable to parse type: " + type, parseException);
+				throw new OAuthClientAuthServerMetadataJSONException(
+					parseException);
 			}
 		}
 		else if (type.equals("openid-configuration")) {
@@ -253,8 +255,8 @@ public class OAuthClientAuthServerLocalServiceImpl
 				OIDCProviderMetadata.parse(metadataJSONObject);
 			}
 			catch (ParseException parseException) {
-				throw new OAuthClientAuthServerTypeException(
-					"Unable to parse type: " + type, parseException);
+				throw new OAuthClientAuthServerMetadataJSONException(
+					parseException);
 			}
 		}
 		else {
