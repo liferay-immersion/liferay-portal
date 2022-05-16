@@ -345,12 +345,6 @@ public class NotificationQueueEntryLocalServiceWrapper
 			primaryKeyObj);
 	}
 
-	@Override
-	public void unassociateNotificationTemplate(long notificationTemplateId) {
-		_notificationQueueEntryLocalService.unassociateNotificationTemplate(
-			notificationTemplateId);
-	}
-
 	/**
 	 * Updates the notification queue entry in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	 *
