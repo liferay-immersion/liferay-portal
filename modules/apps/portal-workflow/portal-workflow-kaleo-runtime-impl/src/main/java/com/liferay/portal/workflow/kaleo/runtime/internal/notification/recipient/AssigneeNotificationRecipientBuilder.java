@@ -98,9 +98,7 @@ public class AssigneeNotificationRecipientBuilder
 				ServiceContext serviceContext =
 					executionContext.getServiceContext();
 
-				long currentUserId = serviceContext.getUserId();
-
-				if (currentUserId ==
+				if (serviceContext.getUserId() ==
 						kaleoTaskAssignmentInstance.getAssigneeClassPK()) {
 
 					continue;
