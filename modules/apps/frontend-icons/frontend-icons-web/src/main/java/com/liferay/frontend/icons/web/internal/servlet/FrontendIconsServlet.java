@@ -78,7 +78,7 @@ public class FrontendIconsServlet extends HttpServlet {
 
 			String packOrSite = matcher.group(1);
 
-			String[] iconPacks;
+			String[] iconPacks = null;
 
 			if (packOrSite.equals("site")) {
 				FrontendIconsPacksConfiguration
