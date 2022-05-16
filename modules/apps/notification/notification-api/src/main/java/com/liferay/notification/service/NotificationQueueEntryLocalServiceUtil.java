@@ -304,11 +304,10 @@ public class NotificationQueueEntryLocalServiceUtil {
 		return getService().getPersistedModel(primaryKeyObj);
 	}
 
-	public static void updateNotificationQueueEntriesTemplateIds(
+	public static void unassociateNotificationTemplate(
 		long notificationTemplateId) {
 
-		getService().updateNotificationQueueEntriesTemplateIds(
-			notificationTemplateId);
+		getService().unassociateNotificationTemplate(notificationTemplateId);
 	}
 
 	/**
