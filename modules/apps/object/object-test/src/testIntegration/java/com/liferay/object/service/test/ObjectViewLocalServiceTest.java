@@ -15,26 +15,37 @@
 package com.liferay.object.service.test;
 
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
+import com.liferay.list.type.model.ListTypeDefinition;
+import com.liferay.list.type.model.ListTypeEntry;
+import com.liferay.list.type.service.ListTypeDefinitionLocalService;
+import com.liferay.list.type.service.ListTypeEntryLocalService;
+import com.liferay.object.constants.ObjectViewFilterColumnConstants;
 import com.liferay.object.exception.DefaultObjectViewException;
 import com.liferay.object.exception.ObjectViewColumnFieldNameException;
+import com.liferay.object.exception.ObjectViewFilterColumnException;
 import com.liferay.object.exception.ObjectViewSortColumnException;
 import com.liferay.object.model.ObjectDefinition;
 import com.liferay.object.model.ObjectField;
 import com.liferay.object.model.ObjectView;
 import com.liferay.object.model.ObjectViewColumn;
+import com.liferay.object.model.ObjectViewFilterColumn;
 import com.liferay.object.model.ObjectViewSortColumn;
 import com.liferay.object.service.ObjectDefinitionLocalService;
 import com.liferay.object.service.ObjectFieldLocalService;
 import com.liferay.object.service.ObjectViewLocalService;
 import com.liferay.object.service.persistence.ObjectViewColumnPersistence;
+import com.liferay.object.service.persistence.ObjectViewFilterColumnPersistence;
 import com.liferay.object.service.persistence.ObjectViewSortColumnPersistence;
 import com.liferay.object.service.test.util.ObjectDefinitionTestUtil;
 import com.liferay.object.util.LocalizedMapUtil;
+import com.liferay.object.util.ObjectFieldUtil;
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.rule.DeleteAfterTestRun;
 import com.liferay.portal.kernel.test.util.RandomTestUtil;
 import com.liferay.portal.kernel.test.util.TestPropsValues;
 import com.liferay.portal.kernel.util.ListUtil;
+import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
@@ -65,8 +76,31 @@ public class ObjectViewLocalServiceTest {
 
 	@Before
 	public void setUp() throws Exception {
+		ListTypeDefinition listTypeDefinition =
+			_listTypeDefinitionLocalService.addListTypeDefinition(
+				TestPropsValues.getUserId(),
+				Collections.singletonMap(LocaleUtil.US, "Countries"));
+
+		ListTypeEntry listTypeEntry =
+			_listTypeEntryLocalService.addListTypeEntry(
+				TestPropsValues.getUserId(),
+				listTypeDefinition.getListTypeDefinitionId(),
+				StringUtil.randomId(),
+				Collections.singletonMap(LocaleUtil.US, "Brazil"));
+
+		Assert.assertNotNull(listTypeEntry);
+
+		ObjectField objectField = ObjectFieldUtil.createObjectField(
+			"Picklist", "String", "country");
+
+		objectField.setListTypeDefinitionId(
+			listTypeDefinition.getListTypeDefinitionId());
+
 		_objectDefinition = ObjectDefinitionTestUtil.addObjectDefinition(
-			_objectDefinitionLocalService);
+			_objectDefinitionLocalService,
+			Arrays.asList(
+				objectField,
+				ObjectFieldUtil.createObjectField("Text", "String", "name")));
 	}
 
 	@Test
@@ -78,66 +112,37 @@ public class ObjectViewLocalServiceTest {
 			Arrays.asList(
 				_createObjectViewColumn("Able", "able"),
 				_createObjectViewColumn("Baker", "baker")),
-			Collections.emptyList(),
+			Arrays.asList(
+				_createObjectViewFilterColumn(
+					ObjectViewFilterColumnConstants.FILTER_TYPE_INCLUDES,
+					"{\"includes\": [\"brazil\"]}", "country"),
+				_createObjectViewFilterColumn(null, null, "dateCreated")),
 			Arrays.asList(
 				_createObjectViewSortColumn("able", "asc"),
 				_createObjectViewSortColumn("baker", "asc")));
 
-		try {
-			_objectViewLocalService.addObjectView(
-				TestPropsValues.getUserId(),
-				_objectDefinition.getObjectDefinitionId(), true,
-				LocalizedMapUtil.getLocalizedMap(RandomTestUtil.randomString()),
-				Arrays.asList(
-					_createObjectViewColumn("Easy", "easy"),
-					_createObjectViewColumn("Fox", "fox")),
-				Collections.emptyList(),
-				Arrays.asList(
-					_createObjectViewSortColumn("easy", "asc"),
-					_createObjectViewSortColumn("fox", "asc")));
-
-			Assert.fail();
-		}
-		catch (DefaultObjectViewException defaultObjectViewException) {
-			String message = defaultObjectViewException.getMessage();
-
-			Assert.assertTrue(
-				message.contains("There can only be one default object view"));
-		}
-
-		try {
-			_objectViewLocalService.addObjectView(
-				TestPropsValues.getUserId(),
-				_objectDefinition.getObjectDefinitionId(), false,
-				LocalizedMapUtil.getLocalizedMap(RandomTestUtil.randomString()),
-				Arrays.asList(
-					_createObjectViewColumnWithNonexistentObjectFieldName()),
-				Collections.emptyList(), Collections.emptyList());
-		}
-		catch (ObjectViewColumnFieldNameException
-					objectViewColumnFieldNameException) {
-
-			Assert.assertEquals(
-				"There is no object field with the name: zebra",
-				objectViewColumnFieldNameException.getMessage());
-		}
-
-		try {
-			_objectViewLocalService.addObjectView(
-				TestPropsValues.getUserId(),
-				_objectDefinition.getObjectDefinitionId(), false,
-				LocalizedMapUtil.getLocalizedMap(RandomTestUtil.randomString()),
-				_createObjectViewColumnsWithDuplicateObjectFieldName(),
-				Collections.emptyList(), Collections.emptyList());
-		}
-		catch (ObjectViewColumnFieldNameException
-					objectViewColumnFieldNameException) {
-
-			Assert.assertEquals(
-				"There is already an object view column with the object " +
-					"field name: roger",
-				objectViewColumnFieldNameException.getMessage());
-		}
+		_assertFailureAddOrUpdateObjectView(
+			true, DefaultObjectViewException.class,
+			"There can only be one default object view", null,
+			Arrays.asList(
+				_createObjectViewColumn("Easy", "easy"),
+				_createObjectViewColumn("Fox", "fox")),
+			Collections.emptyList(),
+			Arrays.asList(
+				_createObjectViewSortColumn("easy", "asc"),
+				_createObjectViewSortColumn("fox", "asc")));
+		_assertFailureAddOrUpdateObjectView(
+			false, ObjectViewColumnFieldNameException.class,
+			"There is no object field with the name: zebra", null,
+			Arrays.asList(
+				_createObjectViewColumnWithNonexistentObjectFieldName()),
+			Collections.emptyList(), Collections.emptyList());
+		_assertFailureAddOrUpdateObjectView(
+			false, ObjectViewColumnFieldNameException.class,
+			"There is already an object view column with the object field " +
+				"name: roger",
+			null, _createObjectViewColumnsWithDuplicateObjectFieldName(),
+			Collections.emptyList(), Collections.emptyList());
 
 		_objectViewLocalService.addObjectView(
 			TestPropsValues.getUserId(),
@@ -146,36 +151,54 @@ public class ObjectViewLocalServiceTest {
 			_createObjectViewColumnsWithoutLabel(), Collections.emptyList(),
 			Collections.emptyList());
 
-		try {
-			_objectViewLocalService.addObjectView(
-				TestPropsValues.getUserId(),
-				_objectDefinition.getObjectDefinitionId(), false,
-				LocalizedMapUtil.getLocalizedMap(RandomTestUtil.randomString()),
-				Arrays.asList(_createObjectViewColumn("Item", "item")),
-				Collections.emptyList(),
-				Arrays.asList(
-					_createObjectViewSortColumnWithWrongObjectFieldName()));
-		}
-		catch (ObjectViewSortColumnException objectViewSortColumnException) {
-			Assert.assertEquals(
-				"There is no object view column with the name: zulu",
-				objectViewSortColumnException.getMessage());
-		}
-
-		try {
-			_objectViewLocalService.addObjectView(
-				TestPropsValues.getUserId(),
-				_objectDefinition.getObjectDefinitionId(), false,
-				LocalizedMapUtil.getLocalizedMap(RandomTestUtil.randomString()),
-				Arrays.asList(_createObjectViewColumn("King", "king")),
-				Collections.emptyList(),
-				Arrays.asList(_createObjectViewSortColumn("king", "zulu")));
-		}
-		catch (ObjectViewSortColumnException objectViewSortColumnException) {
-			Assert.assertEquals(
-				"There is no sort order of type: zulu",
-				objectViewSortColumnException.getMessage());
-		}
+		_assertFailureAddOrUpdateObjectView(
+			false, ObjectViewSortColumnException.class,
+			"There is no object view column with the name: zulu", null,
+			Arrays.asList(_createObjectViewColumn("Item", "item")),
+			Collections.emptyList(),
+			Arrays.asList(
+				_createObjectViewSortColumnWithWrongObjectFieldName()));
+		_assertFailureAddOrUpdateObjectView(
+			false, ObjectViewSortColumnException.class,
+			"There is no sort order of type: zulu", null,
+			Arrays.asList(_createObjectViewColumn("King", "king")),
+			Collections.emptyList(),
+			Arrays.asList(_createObjectViewSortColumn("king", "zulu")));
+		_assertFailureAddOrUpdateObjectView(
+			false, ObjectViewFilterColumnException.class,
+			"Object field name is null", null, Collections.emptyList(),
+			Arrays.asList(_createObjectViewFilterColumn(null, null, null)),
+			Collections.emptyList());
+		_assertFailureAddOrUpdateObjectView(
+			false, ObjectViewFilterColumnException.class,
+			"Object field name \"creator\" is not filterable", null,
+			Collections.emptyList(),
+			Arrays.asList(_createObjectViewFilterColumn(null, null, "creator")),
+			Collections.emptyList());
+		_assertFailureAddOrUpdateObjectView(
+			false, ObjectViewFilterColumnException.class,
+			"Object field name \"name\" is not filterable", null,
+			Collections.emptyList(),
+			Arrays.asList(_createObjectViewFilterColumn(null, null, "name")),
+			Collections.emptyList());
+		_assertFailureAddOrUpdateObjectView(
+			false, ObjectViewFilterColumnException.class,
+			"Object field name \"country\" needs to have the filter type and " +
+				"JSON specified",
+			null, Collections.emptyList(),
+			Arrays.asList(
+				_createObjectViewFilterColumn(
+					null, RandomTestUtil.randomString(), "country")),
+			Collections.emptyList());
+		_assertFailureAddOrUpdateObjectView(
+			false, ObjectViewFilterColumnException.class,
+			"Object field name \"country\" needs to have the filter type and " +
+				"JSON specified",
+			null, Collections.emptyList(),
+			Arrays.asList(
+				_createObjectViewFilterColumn(
+					RandomTestUtil.randomString(), null, "country")),
+			Collections.emptyList());
 
 		_deleteObjectFields();
 
@@ -228,69 +251,76 @@ public class ObjectViewLocalServiceTest {
 		Assert.assertEquals(
 			objectViewSortColumns.toString(), 1, objectViewSortColumns.size());
 
-		try {
-			_objectViewLocalService.updateObjectView(
-				objectView.getObjectViewId(), objectView.isDefaultObjectView(),
-				objectView.getNameMap(),
-				Collections.singletonList(
-					_createObjectViewColumnWithNonexistentObjectFieldName()),
-				Collections.emptyList(), Collections.emptyList());
-		}
-		catch (ObjectViewColumnFieldNameException
-					objectViewColumnFieldNameException) {
-
-			Assert.assertEquals(
-				"There is no object field with the name: zebra",
-				objectViewColumnFieldNameException.getMessage());
-		}
-
-		try {
-			_objectViewLocalService.updateObjectView(
-				objectView.getObjectViewId(), objectView.isDefaultObjectView(),
-				objectView.getNameMap(),
-				_createObjectViewColumnsWithDuplicateObjectFieldName(),
-				Collections.emptyList(), Collections.emptyList());
-		}
-		catch (ObjectViewColumnFieldNameException
-					objectViewColumnFieldNameException) {
-
-			Assert.assertEquals(
-				"There is already an object view column with the object " +
-					"field name: roger",
-				objectViewColumnFieldNameException.getMessage());
-		}
-
-		try {
-			_objectViewLocalService.updateObjectView(
-				objectView.getObjectViewId(), objectView.isDefaultObjectView(),
-				objectView.getNameMap(),
-				Collections.singletonList(
-					_createObjectViewColumn("Jig", "jig")),
-				Collections.emptyList(),
-				Collections.singletonList(
-					_createObjectViewSortColumn("jig", "desc")));
-		}
-		catch (ObjectViewSortColumnException objectViewSortColumnException) {
-			Assert.assertEquals(
-				"There is no object view column with the name: king",
-				objectViewSortColumnException.getMessage());
-		}
-
-		try {
-			_objectViewLocalService.updateObjectView(
-				objectView.getObjectViewId(), objectView.isDefaultObjectView(),
-				objectView.getNameMap(),
-				Collections.singletonList(
-					_createObjectViewColumn("Love", "love")),
-				Collections.emptyList(),
-				Collections.singletonList(
-					_createObjectViewSortColumn("love", "zulu")));
-		}
-		catch (ObjectViewSortColumnException objectViewSortColumnException) {
-			Assert.assertEquals(
-				"There is no sort order of type: zulu",
-				objectViewSortColumnException.getMessage());
-		}
+		_assertFailureAddOrUpdateObjectView(
+			objectView.isDefaultObjectView(),
+			ObjectViewColumnFieldNameException.class,
+			"There is no object field with the name: zebra", objectView,
+			Collections.singletonList(
+				_createObjectViewColumnWithNonexistentObjectFieldName()),
+			Collections.emptyList(), Collections.emptyList());
+		_assertFailureAddOrUpdateObjectView(
+			objectView.isDefaultObjectView(),
+			ObjectViewColumnFieldNameException.class,
+			"There is already an object view column with the object field " +
+				"name: roger",
+			objectView, _createObjectViewColumnsWithDuplicateObjectFieldName(),
+			Collections.emptyList(), Collections.emptyList());
+		_assertFailureAddOrUpdateObjectView(
+			objectView.isDefaultObjectView(),
+			ObjectViewSortColumnException.class,
+			"There is no object view column with the name: king", objectView,
+			Collections.singletonList(_createObjectViewColumn("Jig", "jig")),
+			Collections.emptyList(),
+			Collections.singletonList(
+				_createObjectViewSortColumn("king", "desc")));
+		_assertFailureAddOrUpdateObjectView(
+			objectView.isDefaultObjectView(),
+			ObjectViewSortColumnException.class,
+			"There is no sort order of type: zulu", objectView,
+			Collections.singletonList(_createObjectViewColumn("Love", "love")),
+			Collections.emptyList(),
+			Collections.singletonList(
+				_createObjectViewSortColumn("love", "zulu")));
+		_assertFailureAddOrUpdateObjectView(
+			objectView.isDefaultObjectView(),
+			ObjectViewFilterColumnException.class, "Object field name is null",
+			objectView, Collections.emptyList(),
+			Arrays.asList(_createObjectViewFilterColumn(null, null, null)),
+			Collections.emptyList());
+		_assertFailureAddOrUpdateObjectView(
+			objectView.isDefaultObjectView(),
+			ObjectViewFilterColumnException.class,
+			"Object field name \"creator\" is not filterable", objectView,
+			Collections.emptyList(),
+			Arrays.asList(_createObjectViewFilterColumn(null, null, "creator")),
+			Collections.emptyList());
+		_assertFailureAddOrUpdateObjectView(
+			objectView.isDefaultObjectView(),
+			ObjectViewFilterColumnException.class,
+			"Object field name \"name\" is not filterable", objectView,
+			Collections.emptyList(),
+			Arrays.asList(_createObjectViewFilterColumn(null, null, "name")),
+			Collections.emptyList());
+		_assertFailureAddOrUpdateObjectView(
+			objectView.isDefaultObjectView(),
+			ObjectViewFilterColumnException.class,
+			"Object field name \"country\" needs to have the filter type and " +
+				"JSON specified",
+			objectView, Collections.emptyList(),
+			Arrays.asList(
+				_createObjectViewFilterColumn(
+					null, RandomTestUtil.randomString(), "country")),
+			Collections.emptyList());
+		_assertFailureAddOrUpdateObjectView(
+			objectView.isDefaultObjectView(),
+			ObjectViewFilterColumnException.class,
+			"Object field name \"country\" needs to have the filter type and " +
+				"JSON specified",
+			objectView, Collections.emptyList(),
+			Arrays.asList(
+				_createObjectViewFilterColumn(
+					RandomTestUtil.randomString(), null, "country")),
+			Collections.emptyList());
 
 		objectView = _objectViewLocalService.updateObjectView(
 			objectView.getObjectViewId(), objectView.isDefaultObjectView(),
@@ -331,6 +361,30 @@ public class ObjectViewLocalServiceTest {
 	}
 
 	private ObjectView _addObjectView() throws Exception {
+		ListTypeDefinition listTypeDefinition =
+			_listTypeDefinitionLocalService.addListTypeDefinition(
+				TestPropsValues.getUserId(),
+				Collections.singletonMap(LocaleUtil.US, "Countries"));
+
+		ListTypeEntry listTypeEntry =
+			_listTypeEntryLocalService.addListTypeEntry(
+				TestPropsValues.getUserId(),
+				listTypeDefinition.getListTypeDefinitionId(),
+				StringUtil.randomId(),
+				Collections.singletonMap(LocaleUtil.US, "Brazil"));
+
+		Assert.assertNotNull(listTypeEntry);
+
+		ObjectField objectField = ObjectFieldUtil.createObjectField(
+			"Picklist", "String", "country");
+
+		objectField.setListTypeDefinitionId(
+			listTypeDefinition.getListTypeDefinitionId());
+		objectField.setObjectDefinitionId(
+			_objectDefinition.getObjectDefinitionId());
+
+		_objectFieldLocalService.addObjectField(objectField);
+
 		return _objectViewLocalService.addObjectView(
 			TestPropsValues.getUserId(),
 			_objectDefinition.getObjectDefinitionId(), true,
@@ -338,10 +392,50 @@ public class ObjectViewLocalServiceTest {
 			Arrays.asList(
 				_createObjectViewColumn("Able", "able"),
 				_createObjectViewColumn("Baker", "baker")),
-			Collections.emptyList(),
+			Arrays.asList(
+				_createObjectViewFilterColumn(
+					ObjectViewFilterColumnConstants.FILTER_TYPE_EXCLUDES,
+					"{\"excludes\": [3, 4]}", "status"),
+				_createObjectViewFilterColumn(
+					ObjectViewFilterColumnConstants.FILTER_TYPE_INCLUDES,
+					"{\"includes\": [\"brazil\"]}", "country"),
+				_createObjectViewFilterColumn(null, null, "dateCreated")),
 			Arrays.asList(
 				_createObjectViewSortColumn("able", "asc"),
 				_createObjectViewSortColumn("baker", "asc")));
+	}
+
+	private void _assertFailureAddOrUpdateObjectView(
+		boolean defaultObjectView, Class<?> expectedException, String message,
+		ObjectView objectView, List<ObjectViewColumn> objectViewColumns,
+		List<ObjectViewFilterColumn> objectViewFilterColumns,
+		List<ObjectViewSortColumn> objectViewSortColumns) {
+
+		try {
+			if (objectView != null) {
+				_objectViewLocalService.updateObjectView(
+					objectView.getObjectViewId(), defaultObjectView,
+					objectView.getNameMap(), objectViewColumns,
+					objectViewFilterColumns, objectViewSortColumns);
+			}
+			else {
+				_objectViewLocalService.addObjectView(
+					TestPropsValues.getUserId(),
+					_objectDefinition.getObjectDefinitionId(),
+					defaultObjectView,
+					LocalizedMapUtil.getLocalizedMap(
+						RandomTestUtil.randomString()),
+					objectViewColumns, objectViewFilterColumns,
+					objectViewSortColumns);
+			}
+
+			Assert.fail();
+		}
+		catch (PortalException portalException) {
+			if (expectedException.isInstance(portalException)) {
+				Assert.assertEquals(message, portalException.getMessage());
+			}
+		}
 	}
 
 	private void _assertObjectView(ObjectView objectView) {
@@ -350,6 +444,13 @@ public class ObjectViewLocalServiceTest {
 
 		Assert.assertEquals(
 			objectViewColumns.toString(), 2, objectViewColumns.size());
+
+		List<ObjectViewFilterColumn> objectViewFilterColumns =
+			objectView.getObjectViewFilterColumns();
+
+		Assert.assertEquals(
+			objectViewFilterColumns.toString(), 3,
+			objectViewFilterColumns.size());
 
 		List<ObjectViewSortColumn> objectViewSortColumns =
 			objectView.getObjectViewSortColumns();
@@ -415,6 +516,19 @@ public class ObjectViewLocalServiceTest {
 		return objectViewColumn;
 	}
 
+	private ObjectViewFilterColumn _createObjectViewFilterColumn(
+		String filterType, String json, String objectFieldName) {
+
+		ObjectViewFilterColumn objectViewFilterColumn =
+			_objectViewFilterColumnPersistence.create(0);
+
+		objectViewFilterColumn.setFilterType(filterType);
+		objectViewFilterColumn.setJson(json);
+		objectViewFilterColumn.setObjectFieldName(objectFieldName);
+
+		return objectViewFilterColumn;
+	}
+
 	private ObjectViewSortColumn _createObjectViewSortColumn(
 		String objectFieldName, String sortOrder) {
 
@@ -449,6 +563,12 @@ public class ObjectViewLocalServiceTest {
 		}
 	}
 
+	@Inject
+	private ListTypeDefinitionLocalService _listTypeDefinitionLocalService;
+
+	@Inject
+	private ListTypeEntryLocalService _listTypeEntryLocalService;
+
 	@DeleteAfterTestRun
 	private ObjectDefinition _objectDefinition;
 
@@ -460,6 +580,10 @@ public class ObjectViewLocalServiceTest {
 
 	@Inject
 	private ObjectViewColumnPersistence _objectViewColumnPersistence;
+
+	@Inject
+	private ObjectViewFilterColumnPersistence
+		_objectViewFilterColumnPersistence;
 
 	@Inject
 	private ObjectViewLocalService _objectViewLocalService;
