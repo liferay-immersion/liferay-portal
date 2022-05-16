@@ -91,9 +91,11 @@
 
 					if (calendarResourceId) {
 						<portlet:renderURL var="calendarsURL">
+							<portlet:param name="calendarResourceId" value="{calendarResourceId}" />
+							<portlet:param name="cur" value="<%= String.valueOf(SearchContainer.DEFAULT_CUR) %>" />
+							<portlet:param name="delta" value="<%= String.valueOf(SearchContainer.DEFAULT_DELTA) %>" />
 							<portlet:param name="mvcPath" value="/view_calendars.jsp" />
 							<portlet:param name="redirect" value="<%= currentURL %>" />
-							<portlet:param name="calendarResourceId" value="{calendarResourceId}" />
 						</portlet:renderURL>
 
 						window.location.href = Liferay.CalendarUtil.fillURLParameters(
