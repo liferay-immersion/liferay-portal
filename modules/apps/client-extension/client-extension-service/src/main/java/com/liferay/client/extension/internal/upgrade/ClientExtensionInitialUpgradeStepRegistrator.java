@@ -42,9 +42,9 @@ public class ClientExtensionInitialUpgradeStepRegistrator
 						return;
 					}
 
-					for (Class<?> upgradeProcessClass : _upgradeProcesses) {
+					for (Class<?> clazz : _classes) {
 						UpgradeProcess upgradeProcess =
-							(UpgradeProcess)upgradeProcessClass.newInstance();
+							(UpgradeProcess)clazz.newInstance();
 
 						upgradeProcess.upgrade();
 					}
@@ -53,7 +53,7 @@ public class ClientExtensionInitialUpgradeStepRegistrator
 			});
 	}
 
-	private final Class<?>[] _upgradeProcesses = {
+	private final Class<?>[] _classes = {
 		com.liferay.client.extension.internal.upgrade.v1_0_1.
 			RemoteAppEntryUpgradeProcess.class,
 		com.liferay.client.extension.internal.upgrade.v2_0_0.
