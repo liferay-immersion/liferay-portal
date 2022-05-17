@@ -79,13 +79,13 @@ request.setAttribute("view_suggestions.jsp-searchContainer", kbCommentsSearchCon
 />
 
 <clay:container-fluid>
-	<liferay-ui:success key="suggestionDeleted" message="suggestion-deleted-successfully" />
+	<liferay-ui:success key="suggestionDeleted" message="suggestion-was-deleted-successfully" />
 
-	<liferay-ui:success key="suggestionsDeleted" message="suggestions-deleted-successfully" />
+	<liferay-ui:success key="suggestionsDeleted" message="suggestions-were-deleted-successfully" />
 
-	<liferay-ui:success key="suggestionStatusUpdated" message="suggestion-status-updated-successfully" />
+	<liferay-ui:success key="suggestionStatusUpdated" message="suggestion-status-was-updated-successfully" />
 
-	<liferay-ui:success key="suggestionSaved" message="suggestion-saved-successfully" />
+	<liferay-ui:success key="suggestionSaved" message="suggestion-was-saved-successfully" />
 
 	<liferay-util:include page="/admin/common/view_suggestions_by_status.jsp" servletContext="<%= application %>" />
 </clay:container-fluid>
