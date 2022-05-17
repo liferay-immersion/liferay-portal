@@ -149,19 +149,6 @@ public class ObjectViewLocalServiceTest {
 			Collections.emptyList());
 
 		_assertFailureAddOrUpdateObjectView(
-			false, ObjectViewSortColumnException.class,
-			"There is no object view column with the name: zulu", null,
-			Arrays.asList(_createObjectViewColumn("Item", "item")),
-			Collections.emptyList(),
-			Arrays.asList(
-				_createObjectViewSortColumnWithWrongObjectFieldName()));
-		_assertFailureAddOrUpdateObjectView(
-			false, ObjectViewSortColumnException.class,
-			"There is no sort order of type: zulu", null,
-			Arrays.asList(_createObjectViewColumn("King", "king")),
-			Collections.emptyList(),
-			Arrays.asList(_createObjectViewSortColumn("king", "zulu")));
-		_assertFailureAddOrUpdateObjectView(
 			false, ObjectViewFilterColumnException.class,
 			"Object field name is null", null, Collections.emptyList(),
 			Arrays.asList(_createObjectViewFilterColumn(null, null, null)),
@@ -196,6 +183,19 @@ public class ObjectViewLocalServiceTest {
 				_createObjectViewFilterColumn(
 					RandomTestUtil.randomString(), null, "country")),
 			Collections.emptyList());
+		_assertFailureAddOrUpdateObjectView(
+			false, ObjectViewSortColumnException.class,
+			"There is no object view column with the name: zulu", null,
+			Arrays.asList(_createObjectViewColumn("Item", "item")),
+			Collections.emptyList(),
+			Arrays.asList(
+				_createObjectViewSortColumnWithWrongObjectFieldName()));
+		_assertFailureAddOrUpdateObjectView(
+			false, ObjectViewSortColumnException.class,
+			"There is no sort order of type: zulu", null,
+			Arrays.asList(_createObjectViewColumn("King", "king")),
+			Collections.emptyList(),
+			Arrays.asList(_createObjectViewSortColumn("king", "zulu")));
 
 		_deleteObjectFields();
 
