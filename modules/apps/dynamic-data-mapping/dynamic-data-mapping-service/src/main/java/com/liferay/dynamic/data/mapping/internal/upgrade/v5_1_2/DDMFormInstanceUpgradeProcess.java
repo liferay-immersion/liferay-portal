@@ -121,6 +121,8 @@ public class DDMFormInstanceUpgradeProcess extends UpgradeProcess {
 
 		try (ResultSet resultSet = selectPreparedStatement1.executeQuery()) {
 			while (resultSet.next()) {
+				boolean convertedFromPolls = false;
+
 				Date expirationDate = null;
 
 				if (hasExpirationDate) {
@@ -132,8 +134,6 @@ public class DDMFormInstanceUpgradeProcess extends UpgradeProcess {
 
 				JSONArray fieldValuesJSONArray =
 					settingsJSONObject.getJSONArray("fieldValues");
-
-				boolean convertedFromPolls = false;
 
 				for (int i = 0; i < fieldValuesJSONArray.length(); i++) {
 					JSONObject fieldValueJSONObject =
