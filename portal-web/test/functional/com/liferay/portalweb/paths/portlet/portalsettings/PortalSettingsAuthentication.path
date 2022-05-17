@@ -297,6 +297,17 @@
 	<td></td>
 	<td></td>
 </tr>
+<!--LDAP_GENERAL-->
+<tr>
+	<td>LDAP_GENERAL_METHOD</td>
+	<td>//select[contains(@id,'method')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>LDAP_GENERAL_PASSWORD_ENCRYPTION_ALGORITHM</td>
+	<td>//select[contains(@id,'passwordEncryptionAlgorithm')]</td>
+	<td></td>
+</tr>
 <!--LDAP_IMPORT-->
 <tr>
 	<td>LDAP_IMPORT_INTERVAL</td>
