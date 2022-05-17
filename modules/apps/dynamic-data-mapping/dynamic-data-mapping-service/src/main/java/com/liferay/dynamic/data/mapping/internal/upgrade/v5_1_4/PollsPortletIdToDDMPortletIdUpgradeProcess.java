@@ -67,8 +67,8 @@ public class PollsPortletIdToDDMPortletIdUpgradeProcess
 				AutoBatchPreparedStatementUtil.autoBatch(
 					connection.prepareStatement(
 						StringBundler.concat(
-							"update PortletPreferenceValue set name =",
-							" 'formInstanceId' where name = 'questionId' AND ",
+							"update PortletPreferenceValue set name = ",
+							"'formInstanceId' where name = 'questionId' AND ",
 							"portletPreferencesId = ?")));
 			ResultSet resultSet = selectPreparedStatement.executeQuery()) {
 
