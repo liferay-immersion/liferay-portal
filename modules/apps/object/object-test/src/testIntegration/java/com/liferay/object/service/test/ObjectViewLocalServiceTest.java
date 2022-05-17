@@ -264,22 +264,6 @@ public class ObjectViewLocalServiceTest {
 			Collections.emptyList(), Collections.emptyList());
 		_assertFailureAddOrUpdateObjectView(
 			objectView.isDefaultObjectView(),
-			ObjectViewSortColumnException.class,
-			"There is no object view column with the name: king", objectView,
-			Collections.singletonList(_createObjectViewColumn("Jig", "jig")),
-			Collections.emptyList(),
-			Collections.singletonList(
-				_createObjectViewSortColumn("king", "desc")));
-		_assertFailureAddOrUpdateObjectView(
-			objectView.isDefaultObjectView(),
-			ObjectViewSortColumnException.class,
-			"There is no sort order of type: zulu", objectView,
-			Collections.singletonList(_createObjectViewColumn("Love", "love")),
-			Collections.emptyList(),
-			Collections.singletonList(
-				_createObjectViewSortColumn("love", "zulu")));
-		_assertFailureAddOrUpdateObjectView(
-			objectView.isDefaultObjectView(),
 			ObjectViewFilterColumnException.class, "Object field name is null",
 			objectView, Collections.emptyList(),
 			Arrays.asList(_createObjectViewFilterColumn(null, null, null)),
@@ -318,6 +302,22 @@ public class ObjectViewLocalServiceTest {
 				_createObjectViewFilterColumn(
 					RandomTestUtil.randomString(), null, "country")),
 			Collections.emptyList());
+		_assertFailureAddOrUpdateObjectView(
+			objectView.isDefaultObjectView(),
+			ObjectViewSortColumnException.class,
+			"There is no object view column with the name: king", objectView,
+			Collections.singletonList(_createObjectViewColumn("Jig", "jig")),
+			Collections.emptyList(),
+			Collections.singletonList(
+				_createObjectViewSortColumn("king", "desc")));
+		_assertFailureAddOrUpdateObjectView(
+			objectView.isDefaultObjectView(),
+			ObjectViewSortColumnException.class,
+			"There is no sort order of type: zulu", objectView,
+			Collections.singletonList(_createObjectViewColumn("Love", "love")),
+			Collections.emptyList(),
+			Collections.singletonList(
+				_createObjectViewSortColumn("love", "zulu")));
 
 		objectView = _objectViewLocalService.updateObjectView(
 			objectView.getObjectViewId(), objectView.isDefaultObjectView(),
