@@ -16,7 +16,6 @@ package com.liferay.object.service.test;
 
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.list.type.model.ListTypeDefinition;
-import com.liferay.list.type.model.ListTypeEntry;
 import com.liferay.list.type.service.ListTypeDefinitionLocalService;
 import com.liferay.list.type.service.ListTypeEntryLocalService;
 import com.liferay.object.constants.ObjectViewFilterColumnConstants;
@@ -364,8 +363,7 @@ public class ObjectViewLocalServiceTest {
 
 		_listTypeEntryLocalService.addListTypeEntry(
 			TestPropsValues.getUserId(),
-			listTypeDefinition.getListTypeDefinitionId(),
-			StringUtil.randomId(),
+			listTypeDefinition.getListTypeDefinitionId(), StringUtil.randomId(),
 			Collections.singletonMap(LocaleUtil.US, "Brazil"));
 
 		ObjectField objectField = ObjectFieldUtil.createObjectField(
