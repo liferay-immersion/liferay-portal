@@ -111,7 +111,8 @@ public class ObjectFieldLocalServiceImpl
 		ObjectField objectField = _addObjectField(
 			userId, listTypeDefinitionId, objectDefinitionId, businessType,
 			name + StringPool.UNDERLINE, dbTableName, dbType, indexed,
-			indexedAsKeyword, indexedLanguageId, labelMap, name, required);
+			indexedAsKeyword, indexedLanguageId, labelMap, name, required,
+			false);
 
 		if (objectDefinition.isApproved()) {
 			runSQL(
@@ -145,7 +146,8 @@ public class ObjectFieldLocalServiceImpl
 		return _addObjectField(
 			userId, 0, objectDefinitionId, businessType, dbColumnName,
 			objectDefinition.getDBTableName(), dbType, indexed,
-			indexedAsKeyword, indexedLanguageId, labelMap, name, required);
+			indexedAsKeyword, indexedLanguageId, labelMap, name, required,
+			true);
 	}
 
 	@Indexable(type = IndexableType.DELETE)
@@ -369,7 +371,7 @@ public class ObjectFieldLocalServiceImpl
 			String businessType, String dbColumnName, String dbTableName,
 			String dbType, boolean indexed, boolean indexedAsKeyword,
 			String indexedLanguageId, Map<Locale, String> labelMap, String name,
-			boolean required)
+			boolean required, boolean system)
 		throws PortalException {
 
 		ObjectDefinition objectDefinition =
@@ -402,6 +404,7 @@ public class ObjectFieldLocalServiceImpl
 		objectField.setName(name);
 		objectField.setRelationshipType(null);
 		objectField.setRequired(required);
+		objectField.setSystem(system);
 
 		return objectFieldPersistence.update(objectField);
 	}
