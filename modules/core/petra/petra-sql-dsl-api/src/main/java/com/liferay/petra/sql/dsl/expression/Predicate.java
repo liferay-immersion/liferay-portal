@@ -68,7 +68,7 @@ public interface Predicate extends Expression<Boolean> {
 			UnsafeSupplier<Expression<Boolean>, T> unsafeSupplier)
 		throws T {
 
-		return and(unsafeSupplier.get());
+		return not(unsafeSupplier.get());
 	}
 
 	public Predicate or(Expression<Boolean> expression);
