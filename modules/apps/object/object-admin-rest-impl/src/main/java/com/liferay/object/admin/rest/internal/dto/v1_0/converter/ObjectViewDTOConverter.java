@@ -188,7 +188,7 @@ public class ObjectViewDTOConverter
 						objectDefinitionId,
 						objectViewFilterColumn.getObjectFieldName());
 
-				if (objectField.getListTypeDefinitionId() == 0L) {
+				if (objectField.getListTypeDefinitionId() == 0) {
 					return StringPool.BLANK;
 				}
 
