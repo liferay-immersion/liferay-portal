@@ -81,14 +81,11 @@ public class ObjectViewLocalServiceTest {
 				TestPropsValues.getUserId(),
 				Collections.singletonMap(LocaleUtil.US, "Countries"));
 
-		ListTypeEntry listTypeEntry =
-			_listTypeEntryLocalService.addListTypeEntry(
-				TestPropsValues.getUserId(),
-				listTypeDefinition.getListTypeDefinitionId(),
-				StringUtil.randomId(),
-				Collections.singletonMap(LocaleUtil.US, "Brazil"));
-
-		Assert.assertNotNull(listTypeEntry);
+		_listTypeEntryLocalService.addListTypeEntry(
+			TestPropsValues.getUserId(),
+			listTypeDefinition.getListTypeDefinitionId(),
+			StringUtil.randomId(),
+			Collections.singletonMap(LocaleUtil.US, "Brazil"));
 
 		ObjectField objectField = ObjectFieldUtil.createObjectField(
 			"Picklist", "String", "country");
