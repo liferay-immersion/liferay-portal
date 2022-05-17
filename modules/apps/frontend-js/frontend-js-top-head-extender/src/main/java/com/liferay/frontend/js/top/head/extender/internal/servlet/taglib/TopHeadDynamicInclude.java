@@ -184,12 +184,11 @@ public class TopHeadDynamicInclude implements DynamicInclude {
 		_addPortalBundles(_jsResourceURLs, PropsKeys.JAVASCRIPT_BAREBONE_FILES);
 
 		synchronized (_topHeadResourcesServiceReferences) {
-			String pathProxy = _portal.getPathProxy();
+			String contextPath = _portal.getPathContext();
+			String proxyPath = _portal.getPathProxy();
 
-			String portalPathContext = _portal.getPathContext();
-
-			String unproxiedPortalPathContext = portalPathContext.substring(
-				pathProxy.length());
+			String unproxiedContextPath = contextPath.substring(
+				proxyPath.length());
 
 			for (ServiceReference<TopHeadResources>
 					topHeadResourcesServiceReference :
@@ -199,15 +198,15 @@ public class TopHeadDynamicInclude implements DynamicInclude {
 					topHeadResourcesServiceReference);
 
 				try {
-					String bundlePathContext = _portal.getPathContext(
+					String bundleContextPath = _portal.getPathContext(
 						topHeadResources.getServletContextPath());
 
-					String unproxiedBundlePathContext =
-						bundlePathContext.substring(pathProxy.length());
+					String unproxiedBundleContextPath =
+						bundleContextPath.substring(proxyPath.length());
 
 					String urlPrefix = StringBundler.concat(
-						pathProxy, unproxiedPortalPathContext,
-						unproxiedBundlePathContext);
+						proxyPath, unproxiedContextPath,
+						unproxiedBundleContextPath);
 
 					for (String jsResourcePath :
 							topHeadResources.getJsResourcePaths()) {
@@ -246,13 +245,13 @@ public class TopHeadDynamicInclude implements DynamicInclude {
 			comboRequestAbsolutePortalURLBuilder =
 				absolutePortalURLBuilder.forComboRequest();
 
-		long jsLastModified = -1;
+		long timestamp = -1;
 
 		if (_portalWebResources != null) {
-			jsLastModified = _portalWebResources.getLastModified();
+			timestamp = _portalWebResources.getLastModified();
 		}
 
-		comboRequestAbsolutePortalURLBuilder.setTimestamp(jsLastModified);
+		comboRequestAbsolutePortalURLBuilder.setTimestamp(timestamp);
 
 		String comboURL = comboRequestAbsolutePortalURLBuilder.build();
 
