@@ -188,6 +188,10 @@ public class ObjectViewDTOConverter
 						objectDefinitionId,
 						objectViewFilterColumn.getObjectFieldName());
 
+				if (objectField.getListTypeDefinitionId() == 0L) {
+					return StringPool.BLANK;
+				}
+
 				Map<String, Object> preloadedData =
 					objectFieldFilterParser.parse(
 						objectField.getListTypeDefinitionId(), locale,
