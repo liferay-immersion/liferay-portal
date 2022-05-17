@@ -68,15 +68,15 @@ public class ListObjectFieldFilterParserTest {
 		}
 
 		Mockito.when(
-			objectViewFilterColumn.getObjectFieldName()
-		).thenReturn(
-			"status"
-		);
-
-		Mockito.when(
 			objectViewFilterColumn.getJson()
 		).thenReturn(
 			"{\"excludes\": [\"brazil\"]}"
+		);
+
+		Mockito.when(
+			objectViewFilterColumn.getObjectFieldName()
+		).thenReturn(
+			"status"
 		);
 
 		try {
