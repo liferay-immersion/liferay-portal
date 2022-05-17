@@ -161,12 +161,6 @@ public class ObjectViewLocalServiceTest {
 			Collections.emptyList());
 		_assertFailureAddOrUpdateObjectView(
 			false, ObjectViewFilterColumnException.class,
-			"Object field name \"name\" is not filterable", null,
-			Collections.emptyList(),
-			Arrays.asList(_createObjectViewFilterColumn(null, null, "name")),
-			Collections.emptyList());
-		_assertFailureAddOrUpdateObjectView(
-			false, ObjectViewFilterColumnException.class,
 			"Object field name \"country\" needs to have the filter type and " +
 				"JSON specified",
 			null, Collections.emptyList(),
@@ -182,6 +176,12 @@ public class ObjectViewLocalServiceTest {
 			Arrays.asList(
 				_createObjectViewFilterColumn(
 					RandomTestUtil.randomString(), null, "country")),
+			Collections.emptyList());
+		_assertFailureAddOrUpdateObjectView(
+			false, ObjectViewFilterColumnException.class,
+			"Object field name \"name\" is not filterable", null,
+			Collections.emptyList(),
+			Arrays.asList(_createObjectViewFilterColumn(null, null, "name")),
 			Collections.emptyList());
 		_assertFailureAddOrUpdateObjectView(
 			false, ObjectViewSortColumnException.class,
@@ -251,16 +251,16 @@ public class ObjectViewLocalServiceTest {
 		_assertFailureAddOrUpdateObjectView(
 			objectView.isDefaultObjectView(),
 			ObjectViewColumnFieldNameException.class,
-			"There is no object field with the name: zebra", objectView,
-			Collections.singletonList(
-				_createObjectViewColumnWithNonexistentObjectFieldName()),
+			"There is already an object view column with the object field " +
+				"name: roger",
+			objectView, _createObjectViewColumnsWithDuplicateObjectFieldName(),
 			Collections.emptyList(), Collections.emptyList());
 		_assertFailureAddOrUpdateObjectView(
 			objectView.isDefaultObjectView(),
 			ObjectViewColumnFieldNameException.class,
-			"There is already an object view column with the object field " +
-				"name: roger",
-			objectView, _createObjectViewColumnsWithDuplicateObjectFieldName(),
+			"There is no object field with the name: zebra", objectView,
+			Collections.singletonList(
+				_createObjectViewColumnWithNonexistentObjectFieldName()),
 			Collections.emptyList(), Collections.emptyList());
 		_assertFailureAddOrUpdateObjectView(
 			objectView.isDefaultObjectView(),
@@ -274,13 +274,6 @@ public class ObjectViewLocalServiceTest {
 			"Object field name \"creator\" is not filterable", objectView,
 			Collections.emptyList(),
 			Arrays.asList(_createObjectViewFilterColumn(null, null, "creator")),
-			Collections.emptyList());
-		_assertFailureAddOrUpdateObjectView(
-			objectView.isDefaultObjectView(),
-			ObjectViewFilterColumnException.class,
-			"Object field name \"name\" is not filterable", objectView,
-			Collections.emptyList(),
-			Arrays.asList(_createObjectViewFilterColumn(null, null, "name")),
 			Collections.emptyList());
 		_assertFailureAddOrUpdateObjectView(
 			objectView.isDefaultObjectView(),
@@ -301,6 +294,13 @@ public class ObjectViewLocalServiceTest {
 			Arrays.asList(
 				_createObjectViewFilterColumn(
 					RandomTestUtil.randomString(), null, "country")),
+			Collections.emptyList());
+		_assertFailureAddOrUpdateObjectView(
+			objectView.isDefaultObjectView(),
+			ObjectViewFilterColumnException.class,
+			"Object field name \"name\" is not filterable", objectView,
+			Collections.emptyList(),
+			Arrays.asList(_createObjectViewFilterColumn(null, null, "name")),
 			Collections.emptyList());
 		_assertFailureAddOrUpdateObjectView(
 			objectView.isDefaultObjectView(),
@@ -403,8 +403,9 @@ public class ObjectViewLocalServiceTest {
 	}
 
 	private void _assertFailureAddOrUpdateObjectView(
-		boolean defaultObjectView, Class<?> expectedException, String message,
-		ObjectView objectView, List<ObjectViewColumn> objectViewColumns,
+		boolean defaultObjectView, Class<?> expectedExceptionClass,
+		String message, ObjectView objectView,
+		List<ObjectViewColumn> objectViewColumns,
 		List<ObjectViewFilterColumn> objectViewFilterColumns,
 		List<ObjectViewSortColumn> objectViewSortColumns) {
 
@@ -429,7 +430,7 @@ public class ObjectViewLocalServiceTest {
 			Assert.fail();
 		}
 		catch (PortalException portalException) {
-			if (expectedException.isInstance(portalException)) {
+			if (expectedExceptionClass.isInstance(portalException)) {
 				Assert.assertEquals(message, portalException.getMessage());
 			}
 		}
