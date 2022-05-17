@@ -80,10 +80,6 @@ public class ObjectEntryEntityModel implements EntityModel {
 		).build();
 
 		for (ObjectField objectField : objectFields) {
-			if (objectField.isSystem()) {
-				continue;
-			}
-
 			if (Objects.equals(
 					objectField.getRelationshipType(), "oneToMany")) {
 
