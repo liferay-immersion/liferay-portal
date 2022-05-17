@@ -114,6 +114,9 @@ public class NotificationTemplateLocalServiceImpl
 		notificationTemplate = notificationTemplatePersistence.remove(
 			notificationTemplate);
 
+		_resourceLocalService.deleteResource(
+			notificationTemplate, ResourceConstants.SCOPE_INDIVIDUAL);
+
 		List<NotificationQueueEntry> notificationQueueEntries =
 			_notificationQueueEntryPersistence.findByNotificationTemplateId(
 				notificationTemplate.getNotificationTemplateId());
@@ -125,9 +128,6 @@ public class NotificationTemplateLocalServiceImpl
 
 			_notificationQueueEntryPersistence.update(notificationQueueEntry);
 		}
-
-		_resourceLocalService.deleteResource(
-			notificationTemplate, ResourceConstants.SCOPE_INDIVIDUAL);
 
 		return notificationTemplate;
 	}
