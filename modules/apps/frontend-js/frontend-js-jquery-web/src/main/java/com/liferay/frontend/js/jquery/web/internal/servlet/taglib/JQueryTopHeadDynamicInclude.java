@@ -84,13 +84,12 @@ public class JQueryTopHeadDynamicInclude extends BaseDynamicInclude {
 			for (String fileName : _FILE_NAMES) {
 				sb.append("&");
 
-				String filePath = absolutePortalURLBuilder.forBundleScript(
-					_bundleContext.getBundle(), fileName
-				).ignoreCDNHost(
-				).ignorePathProxy(
-				).build();
-
-				comboRequestAbsolutePortalURLBuilder.addFile(filePath);
+				comboRequestAbsolutePortalURLBuilder.addFile(
+					absolutePortalURLBuilder.forBundleScript(
+						_bundleContext.getBundle(), fileName
+					).ignoreCDNHost(
+					).ignorePathProxy(
+					).build());
 			}
 
 			sb.append(comboRequestAbsolutePortalURLBuilder.build());
