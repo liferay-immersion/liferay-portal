@@ -127,13 +127,13 @@ public class JSONServerServletTest {
 
 			Assert.assertSame(ServletException.class, throwable.getClass());
 
-			Assert.assertEquals("Item does not exist", throwable.getMessage());
+			Assert.assertEquals("Item does not exist.", throwable.getMessage());
 
 			message = _objectMapper.readValue(
 				mockHttpServletResponse.getContentAsString(), HashMap.class);
 
 			Assert.assertEquals(500, message.get("code"));
-			Assert.assertEquals("Item does not exist", message.get("message"));
+			Assert.assertEquals("Item does not exist.", message.get("message"));
 		}
 
 		// /meat/beef without cut
@@ -157,13 +157,15 @@ public class JSONServerServletTest {
 
 			Assert.assertSame(ServletException.class, throwable.getClass());
 
-			Assert.assertEquals("Invalid input", throwable.getMessage());
+			Assert.assertEquals(
+				"The input is invalid.", throwable.getMessage());
 
 			message = _objectMapper.readValue(
 				mockHttpServletResponse.getContentAsString(), HashMap.class);
 
 			Assert.assertEquals(500, message.get("code"));
-			Assert.assertEquals("Invalid input", message.get("message"));
+			Assert.assertEquals(
+				"The input is invalid.", message.get("message"));
 		}
 
 		// /meat/pork
@@ -380,13 +382,15 @@ public class JSONServerServletTest {
 
 			Assert.assertSame(ServletException.class, throwable.getClass());
 
-			Assert.assertEquals("Out of stock", throwable.getMessage());
+			Assert.assertEquals(
+				"The item is out of stock.", throwable.getMessage());
 
 			message = _objectMapper.readValue(
 				mockHttpServletResponse.getContentAsString(), HashMap.class);
 
 			Assert.assertEquals(500, message.get("code"));
-			Assert.assertEquals("Out of stock", message.get("message"));
+			Assert.assertEquals(
+				"The item is out of stock.", message.get("message"));
 		}
 
 		// /fruit/apple without color
@@ -410,13 +414,15 @@ public class JSONServerServletTest {
 
 			Assert.assertSame(ServletException.class, throwable.getClass());
 
-			Assert.assertEquals("Invalid input", throwable.getMessage());
+			Assert.assertEquals(
+				"The input is invalid.", throwable.getMessage());
 
 			message = _objectMapper.readValue(
 				mockHttpServletResponse.getContentAsString(), HashMap.class);
 
 			Assert.assertEquals(500, message.get("code"));
-			Assert.assertEquals("Invalid input", message.get("message"));
+			Assert.assertEquals(
+				"The input is invalid.", message.get("message"));
 		}
 
 		// /fruit/orange
@@ -564,13 +570,15 @@ public class JSONServerServletTest {
 
 			Assert.assertSame(ServletException.class, throwable.getClass());
 
-			Assert.assertEquals("Invalid input", throwable.getMessage());
+			Assert.assertEquals(
+				"The input is invalid.", throwable.getMessage());
 
 			message = _objectMapper.readValue(
 				mockHttpServletResponse.getContentAsString(), HashMap.class);
 
 			Assert.assertEquals(500, message.get("code"));
-			Assert.assertEquals("Invalid input", message.get("message"));
+			Assert.assertEquals(
+				"The input is invalid.", message.get("message"));
 		}
 
 		// /fruit/raspberry with ID
@@ -672,13 +680,13 @@ public class JSONServerServletTest {
 
 			Assert.assertSame(ServletException.class, throwable.getClass());
 
-			Assert.assertEquals("Item does not exist", throwable.getMessage());
+			Assert.assertEquals("Item does not exist.", throwable.getMessage());
 
 			message = _objectMapper.readValue(
 				mockHttpServletResponse.getContentAsString(), HashMap.class);
 
 			Assert.assertEquals(500, message.get("code"));
-			Assert.assertEquals("Item does not exist", message.get("message"));
+			Assert.assertEquals("Item does not exist.", message.get("message"));
 		}
 
 		// /meat/chicken without cut
@@ -702,13 +710,15 @@ public class JSONServerServletTest {
 
 			Assert.assertSame(ServletException.class, throwable.getClass());
 
-			Assert.assertEquals("Invalid input", throwable.getMessage());
+			Assert.assertEquals(
+				"The input is invalid.", throwable.getMessage());
 
 			message = _objectMapper.readValue(
 				mockHttpServletResponse.getContentAsString(), HashMap.class);
 
 			Assert.assertEquals(500, message.get("code"));
-			Assert.assertEquals("Invalid input", message.get("message"));
+			Assert.assertEquals(
+				"The input is invalid.", message.get("message"));
 		}
 
 		// /meat/fish with unknown ID
