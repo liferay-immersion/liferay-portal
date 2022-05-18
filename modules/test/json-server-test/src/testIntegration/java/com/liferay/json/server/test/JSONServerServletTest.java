@@ -227,7 +227,6 @@ public class JSONServerServletTest {
 			HttpServletResponse.SC_OK, mockHttpServletResponse.getStatus());
 
 		mockHttpServletRequest.setMethod(HttpMethods.GET);
-		mockHttpServletRequest.setPathInfo("/meat/pork/2");
 
 		mockHttpServletResponse = new MockHttpServletResponse();
 
