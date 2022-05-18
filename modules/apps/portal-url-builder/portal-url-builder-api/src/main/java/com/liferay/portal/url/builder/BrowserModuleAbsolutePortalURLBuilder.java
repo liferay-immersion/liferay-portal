@@ -21,13 +21,13 @@ import com.liferay.portal.url.builder.facet.BuildableAbsolutePortalURLBuilder;
  *
  * <p>
  * This is used by the AMD server side resolver and it is very specialized since
- * it is part of the server-AMD loader protocol and cannot/shouldn't be used for
- * any other purpose.
+ * it is part of the server AMD loader protocol and cannot/should not be used
+ * for any other purpose.
  * </p>
  *
  * <p>
  * The URLs returned by this builder have to be usable both for isolated
- * requests and combo requests thus, they don't contain any parameter or cache
+ * requests and combo requests thus, they do not contain any parameter or cache
  * control, since those have to be managed by the AMD loader when composing the
  * actual request.
  * </p>

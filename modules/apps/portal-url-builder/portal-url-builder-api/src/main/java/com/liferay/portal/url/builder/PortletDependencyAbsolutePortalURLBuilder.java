@@ -29,7 +29,7 @@ import com.liferay.portal.url.builder.facet.CDNAwareAbsolutePortalURLBuilder;
  *
  * <p>
  * If neither are present, the resource is retrieved from a CDN host if
- * configured, or Portal otherwise.
+ * configured, or portal otherwise.
  * </p>
  *
  * @author Neil Griffin

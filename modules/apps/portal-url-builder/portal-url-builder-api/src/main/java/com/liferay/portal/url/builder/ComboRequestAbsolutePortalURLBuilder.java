@@ -20,9 +20,9 @@ import com.liferay.portal.url.builder.facet.BuildableAbsolutePortalURLBuilder;
  * Builds a JavaScript combo request URL.
  *
  * <p>
- * Combo requests are cacheable but don't implement the {@link
+ * Combo requests are cacheable but do not implement the {@link
  * com.liferay.portal.url.builder.facet.CacheAwareAbsolutePortalURLBuilder}
- * interface because there was an old mechanism in place that doesn't conform
+ * interface because there was an old mechanism in place that does not conform
  * exactly to the new semantics.
  * </p>
  *
