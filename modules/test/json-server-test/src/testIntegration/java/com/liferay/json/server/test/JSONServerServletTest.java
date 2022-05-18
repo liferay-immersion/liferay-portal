@@ -166,39 +166,6 @@ public class JSONServerServletTest {
 			Assert.assertEquals("Invalid input", message.get("message"));
 		}
 
-		// /meat/pork, with no ID
-
-		mockHttpServletRequest.setPathInfo("/meat/pork");
-
-		mockHttpServletResponse = new MockHttpServletResponse();
-
-		try (LogCapture logCapture = LoggerTestUtil.configureLog4JLogger(
-				_CLASS_NAME, LoggerTestUtil.ERROR)) {
-
-			_servlet.service(mockHttpServletRequest, mockHttpServletResponse);
-
-			List<LogEntry> logEntries = logCapture.getLogEntries();
-
-			Assert.assertEquals(logEntries.toString(), 1, logEntries.size());
-
-			LogEntry logEntry = logEntries.get(0);
-
-			Throwable throwable = logEntry.getThrowable();
-
-			Assert.assertSame(
-				IllegalArgumentException.class, throwable.getClass());
-
-			Assert.assertEquals(
-				"Missing ID in path /meat/pork", throwable.getMessage());
-
-			message = _objectMapper.readValue(
-				mockHttpServletResponse.getContentAsString(), HashMap.class);
-
-			Assert.assertEquals(500, message.get("code"));
-			Assert.assertEquals(
-				"Missing ID in path /meat/pork", message.get("message"));
-		}
-
 		// /meat/pork, where ID is 2
 
 		mockHttpServletRequest.setMethod(HttpMethods.GET);
@@ -255,6 +222,39 @@ public class JSONServerServletTest {
 			Assert.assertEquals(500, message.get("code"));
 			Assert.assertEquals(
 				"Unknown ID in path /meat/pork/2", message.get("message"));
+		}
+
+		// /meat/pork, with no ID
+
+		mockHttpServletRequest.setPathInfo("/meat/pork");
+
+		mockHttpServletResponse = new MockHttpServletResponse();
+
+		try (LogCapture logCapture = LoggerTestUtil.configureLog4JLogger(
+				_CLASS_NAME, LoggerTestUtil.ERROR)) {
+
+			_servlet.service(mockHttpServletRequest, mockHttpServletResponse);
+
+			List<LogEntry> logEntries = logCapture.getLogEntries();
+
+			Assert.assertEquals(logEntries.toString(), 1, logEntries.size());
+
+			LogEntry logEntry = logEntries.get(0);
+
+			Throwable throwable = logEntry.getThrowable();
+
+			Assert.assertSame(
+				IllegalArgumentException.class, throwable.getClass());
+
+			Assert.assertEquals(
+				"Missing ID in path /meat/pork", throwable.getMessage());
+
+			message = _objectMapper.readValue(
+				mockHttpServletResponse.getContentAsString(), HashMap.class);
+
+			Assert.assertEquals(500, message.get("code"));
+			Assert.assertEquals(
+				"Missing ID in path /meat/pork", message.get("message"));
 		}
 	}
 
