@@ -425,9 +425,6 @@ public class JSONServerServlet extends HttpServlet {
 				_id = -1;
 			}
 
-			_relativePath = StringUtil.merge(
-				parts.subList(1, parts.size()), StringPool.SLASH);
-
 			byte[] bytes = StreamUtil.toByteArray(
 				httpServletRequest.getInputStream());
 
@@ -437,6 +434,9 @@ public class JSONServerServlet extends HttpServlet {
 			else {
 				_parameters = _objectMapper.readValue(bytes, HashMap.class);
 			}
+
+			_relativePath = StringUtil.merge(
+				parts.subList(1, parts.size()), StringPool.SLASH);
 		}
 
 		private final Map<String, Object> _applicationMap;
