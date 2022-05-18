@@ -376,7 +376,7 @@ public class BundleSiteInitializer implements SiteInitializer {
 					new SiteNavigationMenuItemSettingsBuilder();
 
 			_invoke(() -> _addAccounts(serviceContext));
-			_invoke(() -> _addCustomFields(serviceContext));
+			_invoke(() -> _addExpandoColumns(serviceContext));
 			_invoke(() -> _addDDMStructures(serviceContext));
 
 			Map<String, String> assetListEntryIdsStringUtilReplaceValues =
@@ -737,11 +737,11 @@ public class BundleSiteInitializer implements SiteInitializer {
 			_servletContext);
 	}
 
-	private void _addCustomFields(ServiceContext serviceContext)
+	private void _addExpandoColumns(ServiceContext serviceContext)
 		throws Exception {
 
 		String json = SiteInitializerUtil.read(
-			"/site-initializer/custom-fields.json", _servletContext);
+			"/site-initializer/expando-columns.json", _servletContext);
 
 		if (json == null) {
 			return;
