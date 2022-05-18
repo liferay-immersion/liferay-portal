@@ -76,7 +76,7 @@ public class AMImageMagickImageScaler implements AMImageScaler {
 
 			if (!scaledImageFile.exists()) {
 				throw new AMRuntimeException.IOException(
-					"Failed to scale image using ImageMagick");
+					"Unable to scale image using ImageMagick");
 			}
 
 			ImageBag imageBag = _imageTool.read(scaledImageFile);
