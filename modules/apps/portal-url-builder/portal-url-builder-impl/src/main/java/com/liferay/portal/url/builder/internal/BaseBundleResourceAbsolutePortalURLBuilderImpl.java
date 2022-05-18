@@ -33,13 +33,13 @@ import org.osgi.framework.Bundle;
 /**
  * @author Iván Zaera Avellón
  */
-public abstract class AbstractBundleResourceAbsolutePortalURLBuilderImpl<T>
+public abstract class BaseBundleResourceAbsolutePortalURLBuilderImpl<T>
 	implements BuildableAbsolutePortalURLBuilder,
 			   CacheAwareAbsolutePortalURLBuilder<T>,
 			   CDNAwareAbsolutePortalURLBuilder<T>,
 			   PathProxyAwareAbsolutePortalURLBuilder<T> {
 
-	public AbstractBundleResourceAbsolutePortalURLBuilderImpl(
+	public BaseBundleResourceAbsolutePortalURLBuilderImpl(
 		Bundle bundle, CacheHelper cacheHelper, String cdnHost,
 		HttpServletRequest httpServletRequest, String pathModule,
 		String pathProxy, String relativeURL) {
