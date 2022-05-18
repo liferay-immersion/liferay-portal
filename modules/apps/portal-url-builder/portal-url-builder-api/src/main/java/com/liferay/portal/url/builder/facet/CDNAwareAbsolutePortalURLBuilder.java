@@ -15,7 +15,7 @@
 package com.liferay.portal.url.builder.facet;
 
 /**
- * A URL builder that controls serving by CDN/Portal of underlying resource.
+ * A URL builder that controls serving by CDN/portal of underlying resource.
  *
  * <p>
  * By default, CDN aware resources are served from CDN if it is configured.
