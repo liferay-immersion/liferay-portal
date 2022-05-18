@@ -480,12 +480,13 @@ export default class Blogs {
 					})
 					.catch(() => {
 						this._updateStatus(strings.saveDraftError);
+					})
+					.finally(() => {
+						Liferay.Util.toggleDisabled(
+							this._getElementById('publishButton'),
+							false
+						);
 					});
-
-				Liferay.Util.toggleDisabled(
-					this._getElementById('publishButton'),
-					false
-				);
 			}
 		}
 		else {
