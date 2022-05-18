@@ -113,7 +113,7 @@ public class JSONServerServletTest {
 		mockHttpServletResponse = new MockHttpServletResponse();
 
 		try (LogCapture logCapture = LoggerTestUtil.configureLog4JLogger(
-				_TEST_CLASS_NAME, LoggerTestUtil.ERROR)) {
+				_CLASS_NAME, LoggerTestUtil.ERROR)) {
 
 			_servlet.service(mockHttpServletRequest, mockHttpServletResponse);
 
@@ -143,7 +143,7 @@ public class JSONServerServletTest {
 		mockHttpServletResponse = new MockHttpServletResponse();
 
 		try (LogCapture logCapture = LoggerTestUtil.configureLog4JLogger(
-				_TEST_CLASS_NAME, LoggerTestUtil.ERROR)) {
+				_CLASS_NAME, LoggerTestUtil.ERROR)) {
 
 			_servlet.service(mockHttpServletRequest, mockHttpServletResponse);
 
@@ -173,7 +173,7 @@ public class JSONServerServletTest {
 		mockHttpServletResponse = new MockHttpServletResponse();
 
 		try (LogCapture logCapture = LoggerTestUtil.configureLog4JLogger(
-				_TEST_CLASS_NAME, LoggerTestUtil.ERROR)) {
+				_CLASS_NAME, LoggerTestUtil.ERROR)) {
 
 			_servlet.service(mockHttpServletRequest, mockHttpServletResponse);
 
@@ -232,7 +232,7 @@ public class JSONServerServletTest {
 		mockHttpServletResponse = new MockHttpServletResponse();
 
 		try (LogCapture logCapture = LoggerTestUtil.configureLog4JLogger(
-				_TEST_CLASS_NAME, LoggerTestUtil.ERROR)) {
+				_CLASS_NAME, LoggerTestUtil.ERROR)) {
 
 			_servlet.service(mockHttpServletRequest, mockHttpServletResponse);
 
@@ -274,7 +274,7 @@ public class JSONServerServletTest {
 			new MockHttpServletResponse();
 
 		try (LogCapture logCapture = LoggerTestUtil.configureLog4JLogger(
-				_TEST_CLASS_NAME, LoggerTestUtil.ERROR)) {
+				_CLASS_NAME, LoggerTestUtil.ERROR)) {
 
 			_servlet.service(mockHttpServletRequest, mockHttpServletResponse);
 
@@ -307,7 +307,7 @@ public class JSONServerServletTest {
 		mockHttpServletResponse = new MockHttpServletResponse();
 
 		try (LogCapture logCapture = LoggerTestUtil.configureLog4JLogger(
-				_TEST_CLASS_NAME, LoggerTestUtil.ERROR)) {
+				_CLASS_NAME, LoggerTestUtil.ERROR)) {
 
 			_servlet.service(mockHttpServletRequest, mockHttpServletResponse);
 
@@ -369,7 +369,7 @@ public class JSONServerServletTest {
 		mockHttpServletResponse = new MockHttpServletResponse();
 
 		try (LogCapture logCapture = LoggerTestUtil.configureLog4JLogger(
-				_TEST_CLASS_NAME, LoggerTestUtil.ERROR)) {
+				_CLASS_NAME, LoggerTestUtil.ERROR)) {
 
 			_servlet.service(mockHttpServletRequest, mockHttpServletResponse);
 
@@ -400,7 +400,7 @@ public class JSONServerServletTest {
 		mockHttpServletResponse = new MockHttpServletResponse();
 
 		try (LogCapture logCapture = LoggerTestUtil.configureLog4JLogger(
-				_TEST_CLASS_NAME, LoggerTestUtil.ERROR)) {
+				_CLASS_NAME, LoggerTestUtil.ERROR)) {
 
 			_servlet.service(mockHttpServletRequest, mockHttpServletResponse);
 
@@ -467,7 +467,7 @@ public class JSONServerServletTest {
 		mockHttpServletResponse = new MockHttpServletResponse();
 
 		try (LogCapture logCapture = LoggerTestUtil.configureLog4JLogger(
-				_TEST_CLASS_NAME, LoggerTestUtil.ERROR)) {
+				_CLASS_NAME, LoggerTestUtil.ERROR)) {
 
 			_servlet.service(mockHttpServletRequest, mockHttpServletResponse);
 
@@ -511,7 +511,7 @@ public class JSONServerServletTest {
 			new MockHttpServletResponse();
 
 		try (LogCapture logCapture = LoggerTestUtil.configureLog4JLogger(
-				_TEST_CLASS_NAME, LoggerTestUtil.ERROR)) {
+				_CLASS_NAME, LoggerTestUtil.ERROR)) {
 
 			_servlet.service(mockHttpServletRequest, mockHttpServletResponse);
 
@@ -557,7 +557,7 @@ public class JSONServerServletTest {
 		mockHttpServletResponse = new MockHttpServletResponse();
 
 		try (LogCapture logCapture = LoggerTestUtil.configureLog4JLogger(
-				_TEST_CLASS_NAME, LoggerTestUtil.ERROR)) {
+				_CLASS_NAME, LoggerTestUtil.ERROR)) {
 
 			_servlet.service(mockHttpServletRequest, mockHttpServletResponse);
 
@@ -665,7 +665,7 @@ public class JSONServerServletTest {
 		mockHttpServletResponse = new MockHttpServletResponse();
 
 		try (LogCapture logCapture = LoggerTestUtil.configureLog4JLogger(
-				_TEST_CLASS_NAME, LoggerTestUtil.ERROR)) {
+				_CLASS_NAME, LoggerTestUtil.ERROR)) {
 
 			_servlet.service(mockHttpServletRequest, mockHttpServletResponse);
 
@@ -695,7 +695,7 @@ public class JSONServerServletTest {
 		mockHttpServletResponse = new MockHttpServletResponse();
 
 		try (LogCapture logCapture = LoggerTestUtil.configureLog4JLogger(
-				_TEST_CLASS_NAME, LoggerTestUtil.ERROR)) {
+				_CLASS_NAME, LoggerTestUtil.ERROR)) {
 
 			_servlet.service(mockHttpServletRequest, mockHttpServletResponse);
 
@@ -727,7 +727,7 @@ public class JSONServerServletTest {
 		mockHttpServletResponse = new MockHttpServletResponse();
 
 		try (LogCapture logCapture = LoggerTestUtil.configureLog4JLogger(
-				_TEST_CLASS_NAME, LoggerTestUtil.ERROR)) {
+				_CLASS_NAME, LoggerTestUtil.ERROR)) {
 
 			_servlet.service(mockHttpServletRequest, mockHttpServletResponse);
 
@@ -759,7 +759,7 @@ public class JSONServerServletTest {
 		mockHttpServletResponse = new MockHttpServletResponse();
 
 		try (LogCapture logCapture = LoggerTestUtil.configureLog4JLogger(
-				_TEST_CLASS_NAME, LoggerTestUtil.ERROR)) {
+				_CLASS_NAME, LoggerTestUtil.ERROR)) {
 
 			_servlet.service(mockHttpServletRequest, mockHttpServletResponse);
 
@@ -807,10 +807,10 @@ public class JSONServerServletTest {
 		Assert.assertEquals("Rainbow Trout", message.get("name"));
 	}
 
-	private static final String _TEST_CLASS_NAME =
+	private static final String _CLASS_NAME =
 		"com.liferay.json.server.internal.servlet.JSONServerServlet";
 
-	@Inject(filter = "osgi.http.whiteboard.servlet.name=" + _TEST_CLASS_NAME)
+	@Inject(filter = "osgi.http.whiteboard.servlet.name=" + _CLASS_NAME)
 	private static Servlet _servlet;
 
 	private final ObjectMapper _objectMapper = new ObjectMapper();
