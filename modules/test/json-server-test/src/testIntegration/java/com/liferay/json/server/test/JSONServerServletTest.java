@@ -79,9 +79,9 @@ public class JSONServerServletTest {
 		MockHttpServletRequest mockHttpServletRequest =
 			new MockHttpServletRequest();
 
+		mockHttpServletRequest.setContent("{\"cut\" :\"Chunk\"}".getBytes());
 		mockHttpServletRequest.setMethod(HttpMethods.DELETE);
 		mockHttpServletRequest.setPathInfo("/meat/beef");
-		mockHttpServletRequest.setContent("{\"cut\" :\"Chunk\"}".getBytes());
 
 		MockHttpServletResponse mockHttpServletResponse =
 			new MockHttpServletResponse();
