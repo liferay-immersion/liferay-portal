@@ -715,7 +715,6 @@ public class JSONServerServletTest {
 
 		mockHttpServletRequest.setContent(
 			"{\"id\": 2, \"name\": \"Rainbow Trout\"}".getBytes());
-		mockHttpServletRequest.setMethod(HttpMethods.PUT);
 		mockHttpServletRequest.setPathInfo("/meat/fish");
 
 		mockHttpServletResponse = new MockHttpServletResponse();
