@@ -737,40 +737,6 @@ public class BundleSiteInitializer implements SiteInitializer {
 			_servletContext);
 	}
 
-	private void _addExpandoColumns(ServiceContext serviceContext)
-		throws Exception {
-
-		String json = SiteInitializerUtil.read(
-			"/site-initializer/expando-columns.json", _servletContext);
-
-		if (json == null) {
-			return;
-		}
-
-		JSONArray jsonArray = JSONFactoryUtil.createJSONArray(json);
-
-		for (int i = 0; i < jsonArray.length(); i++) {
-			JSONObject jsonObject = jsonArray.getJSONObject(i);
-
-			ExpandoBridge expandoBridge =
-				ExpandoBridgeFactoryUtil.getExpandoBridge(
-					serviceContext.getCompanyId(),
-					jsonObject.getString("modelResource"));
-
-			if (expandoBridge == null) {
-				continue;
-			}
-
-			if (expandoBridge.getAttribute(jsonObject.getString("name")) ==
-					null) {
-
-				expandoBridge.addAttribute(
-					jsonObject.getString("name"),
-					jsonObject.getInt("dataType"));
-			}
-		}
-	}
-
 	private void _addDDMStructures(ServiceContext serviceContext)
 		throws Exception {
 
@@ -1113,6 +1079,40 @@ public class BundleSiteInitializer implements SiteInitializer {
 				"/site-initializer/documents/group", serviceContext,
 				siteNavigationMenuItemSettingsBuilder)
 		).build();
+	}
+
+	private void _addExpandoColumns(ServiceContext serviceContext)
+		throws Exception {
+
+		String json = SiteInitializerUtil.read(
+			"/site-initializer/expando-columns.json", _servletContext);
+
+		if (json == null) {
+			return;
+		}
+
+		JSONArray jsonArray = JSONFactoryUtil.createJSONArray(json);
+
+		for (int i = 0; i < jsonArray.length(); i++) {
+			JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+			ExpandoBridge expandoBridge =
+				ExpandoBridgeFactoryUtil.getExpandoBridge(
+					serviceContext.getCompanyId(),
+					jsonObject.getString("modelResource"));
+
+			if (expandoBridge == null) {
+				continue;
+			}
+
+			if (expandoBridge.getAttribute(jsonObject.getString("name")) ==
+					null) {
+
+				expandoBridge.addAttribute(
+					jsonObject.getString("name"),
+					jsonObject.getInt("dataType"));
+			}
+		}
 	}
 
 	private void _addFragmentEntries(
