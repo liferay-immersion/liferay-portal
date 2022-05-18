@@ -214,13 +214,13 @@ function appendXMLAssignments(
 				'scriptedAssignment'
 			);
 
-			dataAssignments.script.forEach((item, index) => {
+			dataAssignments.script.forEach((item) => {
 				buffer.push(
 					xmlScriptedAssignment.open,
 					XMLUtil.create('script', cdata(item)),
 					XMLUtil.create(
 						'scriptLanguage',
-						dataAssignments.scriptLanguage[index]
+						dataAssignments.scriptLanguage
 					),
 					xmlScriptedAssignment.close
 				);
