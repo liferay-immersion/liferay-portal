@@ -16,7 +16,7 @@ package com.liferay.portal.url.builder.facet;
 
 /**
  * A URL builder that can control caching of underlying resource using a URL
- * parameter (`t` or `mac`, for example) to invalidate browser caches.
+ * parameter (e.g. "t" or "mac") to invalidate browser caches.
  *
  * <p>
  * By default, cacheable resources use the {@link CachePolicy#UNTIL_CHANGED}
