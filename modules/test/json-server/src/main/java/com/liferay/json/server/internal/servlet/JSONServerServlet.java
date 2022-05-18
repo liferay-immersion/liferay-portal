@@ -262,29 +262,6 @@ public class JSONServerServlet extends HttpServlet {
 		}
 	}
 
-	private boolean _isMatch(
-		Map<String, Object> actualParameters,
-		Map<String, Object> expectedParameters) {
-
-		if (expectedParameters == null) {
-			return true;
-		}
-
-		if (actualParameters == null) {
-			return false;
-		}
-
-		for (Map.Entry<String, Object> entry : expectedParameters.entrySet()) {
-			if (!Objects.equals(
-					entry.getValue(), actualParameters.get(entry.getKey()))) {
-
-				return false;
-			}
-		}
-
-		return true;
-	}
-
 	private void _fixId(
 		Map<String, Object> model, List<Map<String, Object>> models) {
 
@@ -314,6 +291,29 @@ public class JSONServerServlet extends HttpServlet {
 		}
 
 		return GetterUtil.getLongStrict(String.valueOf(idObject));
+	}
+
+	private boolean _isMatch(
+		Map<String, Object> actualParameters,
+		Map<String, Object> expectedParameters) {
+
+		if (expectedParameters == null) {
+			return true;
+		}
+
+		if (actualParameters == null) {
+			return false;
+		}
+
+		for (Map.Entry<String, Object> entry : expectedParameters.entrySet()) {
+			if (!Objects.equals(
+					entry.getValue(), actualParameters.get(entry.getKey()))) {
+
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	private void _load(String applicationName, URL url) throws IOException {
