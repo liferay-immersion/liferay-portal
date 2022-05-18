@@ -22,6 +22,7 @@ import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 
 import java.util.Locale;
+import java.util.function.IntFunction;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -37,6 +38,11 @@ import org.osgi.service.component.annotations.Component;
 )
 public class ColorDDMFormFieldValueAccessor
 	implements DDMFormFieldValueAccessor<String> {
+
+	@Override
+	public IntFunction<String[]> getArrayGeneratorIntFunction() {
+		return String[]::new;
+	}
 
 	@Override
 	public String getValue(DDMFormFieldValue ddmFormFieldValue, Locale locale) {
