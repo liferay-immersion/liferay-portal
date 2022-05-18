@@ -58,12 +58,12 @@ import org.osgi.service.component.annotations.Component;
 	immediate = true,
 	property = {
 		"osgi.http.whiteboard.context.path=/json-server",
-		"osgi.http.whiteboard.servlet.name=com.liferay.json.server.internal.servlet.JsonServerServlet",
+		"osgi.http.whiteboard.servlet.name=com.liferay.json.server.internal.servlet.JSONServerServlet",
 		"osgi.http.whiteboard.servlet.pattern=/json-server/*"
 	},
 	service = Servlet.class
 )
-public class JsonServerServlet extends HttpServlet {
+public class JSONServerServlet extends HttpServlet {
 
 	@Activate
 	protected void activate() throws IOException {
@@ -357,7 +357,7 @@ public class JsonServerServlet extends HttpServlet {
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
-		JsonServerServlet.class);
+		JSONServerServlet.class);
 
 	private final Map<String, Map<String, Object>> _appDatas = new HashMap<>();
 	private ObjectMapper _objectMapper;
