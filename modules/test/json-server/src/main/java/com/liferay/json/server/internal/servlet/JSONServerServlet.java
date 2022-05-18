@@ -100,11 +100,10 @@ public class JSONServerServlet extends HttpServlet {
 
 		Request request = new Request(httpServletRequest);
 
-		Object mockResponse = _process(HttpMethods.DELETE, request);
+		Object response = _process(HttpMethods.DELETE, request);
 
-		if (mockResponse != null) {
-			_objectMapper.writeValue(
-				httpServletResponse.getWriter(), mockResponse);
+		if (response != null) {
+			_objectMapper.writeValue(httpServletResponse.getWriter(), response);
 
 			return;
 		}
@@ -139,11 +138,10 @@ public class JSONServerServlet extends HttpServlet {
 
 		Request request = new Request(httpServletRequest);
 
-		Object mockResponse = _process(HttpMethods.GET, request);
+		Object response = _process(HttpMethods.GET, request);
 
-		if (mockResponse != null) {
-			_objectMapper.writeValue(
-				httpServletResponse.getWriter(), mockResponse);
+		if (response != null) {
+			_objectMapper.writeValue(httpServletResponse.getWriter(), response);
 
 			return;
 		}
@@ -175,11 +173,10 @@ public class JSONServerServlet extends HttpServlet {
 
 		Request request = new Request(httpServletRequest);
 
-		Object mockResponse = _process(HttpMethods.POST, request);
+		Object response = _process(HttpMethods.POST, request);
 
-		if (mockResponse != null) {
-			_objectMapper.writeValue(
-				httpServletResponse.getWriter(), mockResponse);
+		if (response != null) {
+			_objectMapper.writeValue(httpServletResponse.getWriter(), response);
 
 			return;
 		}
@@ -201,11 +198,10 @@ public class JSONServerServlet extends HttpServlet {
 
 		Request request = new Request(httpServletRequest);
 
-		Object mockResponse = _process(HttpMethods.PUT, request);
+		Object response = _process(HttpMethods.PUT, request);
 
-		if (mockResponse != null) {
-			_objectMapper.writeValue(
-				httpServletResponse.getWriter(), mockResponse);
+		if (response != null) {
+			_objectMapper.writeValue(httpServletResponse.getWriter(), response);
 
 			return;
 		}
