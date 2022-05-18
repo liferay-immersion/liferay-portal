@@ -64,7 +64,7 @@ public class CacheHelper {
 	 * This is a compromise technique that may be used when a resource cannot be
 	 * checked for updates.
 	 *
-	 * It appends a `t` parameter to the URL with the last time the server was
+	 * It appends a "t" parameter to the URL with the last time the server was
 	 * started, which invalidates browser caches after every server restart.
 	 *
 	 * This is suboptimal in the sense that a server restart doesn't mean that
