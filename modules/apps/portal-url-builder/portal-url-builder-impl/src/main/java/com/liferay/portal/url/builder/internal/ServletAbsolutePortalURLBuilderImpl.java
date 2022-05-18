@@ -38,9 +38,9 @@ public class ServletAbsolutePortalURLBuilderImpl
 
 		URLUtil.appendURL(sb, _pathModule, _pathProxy, _requestURL);
 
-		// There's no need to add any cache param because API requests are
-		// handled by servlets, thus the portal sends headers to prevent
-		// browsers from caching them.
+		// There is no need to add a cache param because API requests are
+		// handled by servlets. The portal sends headers to prevent browsers
+		// from caching them.
 
 		return sb.toString();
 	}
