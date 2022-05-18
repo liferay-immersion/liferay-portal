@@ -74,7 +74,7 @@ public class JSONServerServletTest {
 	@Test
 	public void testDelete() throws Exception {
 
-		// Mocking beef/Chunk
+		// /meat/beef, where cut is "Chunk"
 
 		MockHttpServletRequest mockHttpServletRequest =
 			new MockHttpServletRequest();
@@ -93,7 +93,7 @@ public class JSONServerServletTest {
 
 		Assert.assertEquals("Done", message.get("message"));
 
-		// Mocking beef/Rib
+		// /meat/beef, where cut is "Rib"
 
 		mockHttpServletRequest.setContent("{\"cut\" :\"Rib\"}".getBytes());
 
@@ -106,7 +106,7 @@ public class JSONServerServletTest {
 
 		Assert.assertEquals("Are you sure?", message.get("message"));
 
-		// Mocking beef/Round
+		// /meat/beef, where cut is "Round"
 
 		mockHttpServletRequest.setContent("{\"cut\" :\"Round\"}".getBytes());
 
@@ -136,7 +136,7 @@ public class JSONServerServletTest {
 			Assert.assertEquals("Item does not exist", message.get("message"));
 		}
 
-		// Mocking beef/no cut
+		// /meat/beef, with invalid input
 
 		mockHttpServletRequest.setContent(null);
 
@@ -166,7 +166,7 @@ public class JSONServerServletTest {
 			Assert.assertEquals("Invalid input", message.get("message"));
 		}
 
-		// Missing id
+		// /meat/pork, with no ID
 
 		mockHttpServletRequest.setPathInfo("/meat/pork");
 
@@ -189,17 +189,17 @@ public class JSONServerServletTest {
 				IllegalArgumentException.class, throwable.getClass());
 
 			Assert.assertEquals(
-				"Missing id in path /meat/pork", throwable.getMessage());
+				"Missing ID in path /meat/pork", throwable.getMessage());
 
 			message = _objectMapper.readValue(
 				mockHttpServletResponse.getContentAsString(), HashMap.class);
 
 			Assert.assertEquals(500, message.get("code"));
 			Assert.assertEquals(
-				"Missing id in path /meat/pork", message.get("message"));
+				"Missing ID in path /meat/pork", message.get("message"));
 		}
 
-		// Delete by id
+		// /meat/pork, where ID is 2
 
 		mockHttpServletRequest.setMethod(HttpMethods.GET);
 		mockHttpServletRequest.setPathInfo("/meat/pork/2");
@@ -247,16 +247,14 @@ public class JSONServerServletTest {
 			Assert.assertSame(ServletException.class, throwable.getClass());
 
 			Assert.assertEquals(
-				"Unknown model id in path /meat/pork/2",
-				throwable.getMessage());
+				"Unknown ID in path /meat/pork/2", throwable.getMessage());
 
 			message = _objectMapper.readValue(
 				mockHttpServletResponse.getContentAsString(), HashMap.class);
 
 			Assert.assertEquals(500, message.get("code"));
 			Assert.assertEquals(
-				"Unknown model id in path /meat/pork/2",
-				message.get("message"));
+				"Unknown ID in path /meat/pork/2", message.get("message"));
 		}
 	}
 
@@ -718,7 +716,7 @@ public class JSONServerServletTest {
 			Assert.assertEquals("Invalid input", message.get("message"));
 		}
 
-		// Missing id
+		// Missing ID
 
 		mockHttpServletRequest.setPathInfo("/meat/fish");
 		mockHttpServletRequest.setContent(
@@ -741,14 +739,14 @@ public class JSONServerServletTest {
 
 			Assert.assertSame(ServletException.class, throwable.getClass());
 			Assert.assertEquals(
-				"Missing id {name=Rainbow Trout}", throwable.getMessage());
+				"Missing ID {name=Rainbow Trout}", throwable.getMessage());
 
 			message = _objectMapper.readValue(
 				mockHttpServletResponse.getContentAsString(), HashMap.class);
 
 			Assert.assertEquals(500, message.get("code"));
 			Assert.assertEquals(
-				"Missing id {name=Rainbow Trout}", message.get("message"));
+				"Missing ID {name=Rainbow Trout}", message.get("message"));
 		}
 
 		// Put with unknown id
