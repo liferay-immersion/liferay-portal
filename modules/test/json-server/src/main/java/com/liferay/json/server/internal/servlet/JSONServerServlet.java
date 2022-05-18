@@ -150,7 +150,7 @@ public class JSONServerServlet extends HttpServlet {
 
 		if (request.getId() > 0) {
 			for (Map<String, Object> model : models) {
-				if (Objects.equals(request.getId(), _getId(model))) {
+				if (Objects.equals(_getId(model), request.getId())) {
 					_objectMapper.writeValue(
 						httpServletResponse.getWriter(), model);
 
