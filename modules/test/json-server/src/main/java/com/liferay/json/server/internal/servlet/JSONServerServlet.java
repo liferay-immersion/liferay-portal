@@ -100,7 +100,7 @@ public class JSONServerServlet extends HttpServlet {
 
 		Request request = new Request(httpServletRequest);
 
-		Object mockResponse = _process(request, HttpMethods.DELETE);
+		Object mockResponse = _process(HttpMethods.DELETE, request);
 
 		if (mockResponse != null) {
 			_objectMapper.writeValue(
@@ -139,7 +139,7 @@ public class JSONServerServlet extends HttpServlet {
 
 		Request request = new Request(httpServletRequest);
 
-		Object mockResponse = _process(request, HttpMethods.GET);
+		Object mockResponse = _process(HttpMethods.GET, request);
 
 		if (mockResponse != null) {
 			_objectMapper.writeValue(
@@ -175,7 +175,7 @@ public class JSONServerServlet extends HttpServlet {
 
 		Request request = new Request(httpServletRequest);
 
-		Object mockResponse = _process(request, HttpMethods.POST);
+		Object mockResponse = _process(HttpMethods.POST, request);
 
 		if (mockResponse != null) {
 			_objectMapper.writeValue(
@@ -201,7 +201,7 @@ public class JSONServerServlet extends HttpServlet {
 
 		Request request = new Request(httpServletRequest);
 
-		Object mockResponse = _process(request, HttpMethods.PUT);
+		Object mockResponse = _process(HttpMethods.PUT, request);
 
 		if (mockResponse != null) {
 			_objectMapper.writeValue(
@@ -321,7 +321,7 @@ public class JSONServerServlet extends HttpServlet {
 			(Map<String, Object>)_objectMapper.readValue(url, HashMap.class));
 	}
 
-	private Object _process(Request request, String method)
+	private Object _process(String method, Request request)
 		throws IOException, ServletException {
 
 		List<Map<String, Object>> mockList = request.getMockList(method);
@@ -383,8 +383,7 @@ public class JSONServerServlet extends HttpServlet {
 			Object models = _appData.get(_modelName);
 
 			if ((models == null) || !(models instanceof List)) {
-				throw new ServletException(
-					"Unknown model name " + _modelName);
+				throw new ServletException("Unknown model name " + _modelName);
 			}
 
 			return (List<Map<String, Object>>)models;
