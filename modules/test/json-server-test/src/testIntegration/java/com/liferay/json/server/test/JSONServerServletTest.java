@@ -58,10 +58,10 @@ public class JSONServerServletTest {
 
 	@Before
 	public void setUp() {
-		Map<?, ?> appDatas = ReflectionTestUtil.getFieldValue(
-			_servlet, "_appDatas");
+		Map<?, ?> applicationMaps = ReflectionTestUtil.getFieldValue(
+			_servlet, "_applicationMaps");
 
-		appDatas.clear();
+		applicationMaps.clear();
 
 		ReflectionTestUtil.invoke(
 			_servlet, "_load", new Class<?>[] {String.class, URL.class},

@@ -316,7 +316,7 @@ public class JSONServerServlet extends HttpServlet {
 	}
 
 	private void _load(String applicationName, URL url) throws IOException {
-		_appDatas.put(
+		_applicationMaps.put(
 			applicationName,
 			(Map<String, Object>)_objectMapper.readValue(url, HashMap.class));
 	}
@@ -359,7 +359,8 @@ public class JSONServerServlet extends HttpServlet {
 	private static final Log _log = LogFactoryUtil.getLog(
 		JSONServerServlet.class);
 
-	private final Map<String, Map<String, Object>> _appDatas = new HashMap<>();
+	private final Map<String, Map<String, Object>> _applicationMaps =
+		new HashMap<>();
 	private ObjectMapper _objectMapper;
 
 	private class Request {
@@ -369,7 +370,7 @@ public class JSONServerServlet extends HttpServlet {
 		}
 
 		public List<Map<String, Object>> getMockList(String method) {
-			Object mockList = _appData.get(
+			Object mockList = _applicationMap.get(
 				StringBundler.concat(_relativePath, StringPool.AT, method));
 
 			if ((mockList == null) || !(mockList instanceof List)) {
@@ -380,7 +381,7 @@ public class JSONServerServlet extends HttpServlet {
 		}
 
 		public List<Map<String, Object>> getModels() throws ServletException {
-			Object models = _appData.get(_modelName);
+			Object models = _applicationMap.get(_modelName);
 
 			if ((models == null) || !(models instanceof List)) {
 				throw new ServletException("Unknown model name " + _modelName);
@@ -410,9 +411,9 @@ public class JSONServerServlet extends HttpServlet {
 					"Missing model name in path " + path);
 			}
 
-			_appData = _appDatas.get(parts.get(0));
+			_applicationMap = _applicationMaps.get(parts.get(0));
 
-			if (_appData == null) {
+			if (_applicationMap == null) {
 				throw new IllegalArgumentException(
 					"Unknown application name " + parts.get(0));
 			}
@@ -440,7 +441,7 @@ public class JSONServerServlet extends HttpServlet {
 			}
 		}
 
-		private final Map<String, Object> _appData;
+		private final Map<String, Object> _applicationMap;
 		private final long _id;
 		private final String _modelName;
 		private final Map<String, Object> _parameters;
