@@ -261,7 +261,7 @@ public class JSONServerServletTest {
 	@Test
 	public void testGet() throws Exception {
 
-		// Missing app name
+		// Missing application name
 
 		MockHttpServletRequest mockHttpServletRequest =
 			new MockHttpServletRequest();
@@ -288,14 +288,14 @@ public class JSONServerServletTest {
 				IllegalArgumentException.class, throwable.getClass());
 
 			Assert.assertEquals(
-				"Missing app name in path null", throwable.getMessage());
+				"Missing application name in path null", throwable.getMessage());
 
 			Map<String, Object> message = _objectMapper.readValue(
 				mockHttpServletResponse.getContentAsString(), HashMap.class);
 
 			Assert.assertEquals(500, message.get("code"));
 			Assert.assertEquals(
-				"Missing app name in path null", message.get("message"));
+				"Missing application name in path null", message.get("message"));
 		}
 
 		// Missing model name
@@ -331,10 +331,10 @@ public class JSONServerServletTest {
 				"Missing model name in path /fruit", message.get("message"));
 		}
 
-		// Mocking apple/green
+		// /fruit/apple where color is "green"
 
-		mockHttpServletRequest.setPathInfo("/fruit/apple");
 		mockHttpServletRequest.setContent("{\"color\" :\"green\"}".getBytes());
+		mockHttpServletRequest.setPathInfo("/fruit/apple");
 
 		mockHttpServletResponse = new MockHttpServletResponse();
 
@@ -345,10 +345,10 @@ public class JSONServerServletTest {
 
 		Assert.assertEquals(5, message.get("price"));
 
-		// Mocking apple/red
+		// /fruit/apple where color is "red"
 
-		mockHttpServletRequest.setPathInfo("/fruit/apple");
 		mockHttpServletRequest.setContent("{\"color\" :\"red\"}".getBytes());
+		mockHttpServletRequest.setPathInfo("/fruit/apple");
 
 		mockHttpServletResponse = new MockHttpServletResponse();
 
@@ -359,10 +359,10 @@ public class JSONServerServletTest {
 
 		Assert.assertEquals(6, message.get("price"));
 
-		// Mocking apple/yellow
+		// /fruit/apple where color is "yellow"
 
-		mockHttpServletRequest.setPathInfo("/fruit/apple");
 		mockHttpServletRequest.setContent("{\"color\" :\"yellow\"}".getBytes());
+		mockHttpServletRequest.setPathInfo("/fruit/apple");
 
 		mockHttpServletResponse = new MockHttpServletResponse();
 
@@ -390,10 +390,10 @@ public class JSONServerServletTest {
 			Assert.assertEquals("Out of stock", message.get("message"));
 		}
 
-		// Mocking apple/no color
+		// /fruit/apple with invalid input
 
-		mockHttpServletRequest.setPathInfo("/fruit/apple");
 		mockHttpServletRequest.setContent(null);
+		mockHttpServletRequest.setPathInfo("/fruit/apple");
 
 		mockHttpServletResponse = new MockHttpServletResponse();
 
@@ -421,7 +421,7 @@ public class JSONServerServletTest {
 			Assert.assertEquals("Invalid input", message.get("message"));
 		}
 
-		// Get list
+		// /fruit/orange
 
 		mockHttpServletRequest.setPathInfo("/fruit/orange");
 
@@ -444,7 +444,7 @@ public class JSONServerServletTest {
 		Assert.assertEquals(2, orange2.get("id"));
 		Assert.assertEquals("Boold Orange", orange2.get("name"));
 
-		// Get by id
+		// /fruit/orange/2
 
 		mockHttpServletRequest.setPathInfo("/fruit/orange/2");
 
@@ -458,7 +458,7 @@ public class JSONServerServletTest {
 		Assert.assertEquals(2, orange3.get("id"));
 		Assert.assertEquals("Boold Orange", orange3.get("name"));
 
-		// Get by unknown id
+		// /fruit/orange/3
 
 		mockHttpServletRequest.setPathInfo("/fruit/orange/3");
 
@@ -501,9 +501,9 @@ public class JSONServerServletTest {
 		MockHttpServletRequest mockHttpServletRequest =
 			new MockHttpServletRequest();
 
+		mockHttpServletRequest.setContent("{\"color\" :\"green\"}".getBytes());
 		mockHttpServletRequest.setMethod(HttpMethods.POST);
 		mockHttpServletRequest.setPathInfo("/fruit/banana");
-		mockHttpServletRequest.setContent("{\"color\" :\"green\"}".getBytes());
 
 		MockHttpServletResponse mockHttpServletResponse =
 			new MockHttpServletResponse();
@@ -534,8 +534,8 @@ public class JSONServerServletTest {
 
 		// Mocking banana/yellow
 
-		mockHttpServletRequest.setPathInfo("/fruit/banana");
 		mockHttpServletRequest.setContent("{\"color\" :\"yellow\"}".getBytes());
+		mockHttpServletRequest.setPathInfo("/fruit/banana");
 
 		mockHttpServletResponse = new MockHttpServletResponse();
 
@@ -548,9 +548,9 @@ public class JSONServerServletTest {
 
 		// Mocking banana/no color
 
+		mockHttpServletRequest.setContent(null);
 		mockHttpServletRequest.setMethod(HttpMethods.POST);
 		mockHttpServletRequest.setPathInfo("/fruit/banana");
-		mockHttpServletRequest.setContent(null);
 
 		mockHttpServletResponse = new MockHttpServletResponse();
 
@@ -580,9 +580,9 @@ public class JSONServerServletTest {
 
 		// Post with auto id
 
-		mockHttpServletRequest.setPathInfo("/fruit/raspberry");
 		mockHttpServletRequest.setContent(
 			"{\"name\" :\"Allen Black\"}".getBytes());
+		mockHttpServletRequest.setPathInfo("/fruit/raspberry");
 
 		mockHttpServletResponse = new MockHttpServletResponse();
 
@@ -591,9 +591,9 @@ public class JSONServerServletTest {
 		Assert.assertEquals(
 			HttpServletResponse.SC_OK, mockHttpServletResponse.getStatus());
 
+		mockHttpServletRequest.setContent(null);
 		mockHttpServletRequest.setMethod(HttpMethods.GET);
 		mockHttpServletRequest.setPathInfo("/fruit/raspberry/2");
-		mockHttpServletRequest.setContent(null);
 
 		mockHttpServletResponse = new MockHttpServletResponse();
 
@@ -607,10 +607,10 @@ public class JSONServerServletTest {
 
 		// Post with given id
 
-		mockHttpServletRequest.setMethod(HttpMethods.POST);
-		mockHttpServletRequest.setPathInfo("/fruit/raspberry");
 		mockHttpServletRequest.setContent(
 			"{\"id\":7, \"name\" :\"Jewel\"}".getBytes());
+		mockHttpServletRequest.setMethod(HttpMethods.POST);
+		mockHttpServletRequest.setPathInfo("/fruit/raspberry");
 
 		mockHttpServletResponse = new MockHttpServletResponse();
 
@@ -619,9 +619,9 @@ public class JSONServerServletTest {
 		Assert.assertEquals(
 			HttpServletResponse.SC_OK, mockHttpServletResponse.getStatus());
 
+		mockHttpServletRequest.setContent(null);
 		mockHttpServletRequest.setMethod(HttpMethods.GET);
 		mockHttpServletRequest.setPathInfo("/fruit/raspberry/7");
-		mockHttpServletRequest.setContent(null);
 
 		mockHttpServletResponse = new MockHttpServletResponse();
 
@@ -642,9 +642,9 @@ public class JSONServerServletTest {
 		MockHttpServletRequest mockHttpServletRequest =
 			new MockHttpServletRequest();
 
+		mockHttpServletRequest.setContent("{\"cut\" :\"Breast\"}".getBytes());
 		mockHttpServletRequest.setMethod(HttpMethods.PUT);
 		mockHttpServletRequest.setPathInfo("/meat/chicken");
-		mockHttpServletRequest.setContent("{\"cut\" :\"Breast\"}".getBytes());
 
 		MockHttpServletResponse mockHttpServletResponse =
 			new MockHttpServletResponse();
@@ -718,9 +718,9 @@ public class JSONServerServletTest {
 
 		// Missing ID
 
-		mockHttpServletRequest.setPathInfo("/meat/fish");
 		mockHttpServletRequest.setContent(
 			"{\"name\" :\"Rainbow Trout\"}".getBytes());
+		mockHttpServletRequest.setPathInfo("/meat/fish");
 
 		mockHttpServletResponse = new MockHttpServletResponse();
 
