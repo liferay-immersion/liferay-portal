@@ -111,7 +111,7 @@ public class JSONServerServlet extends HttpServlet {
 
 		if (request.getId() == -1) {
 			throw new IllegalArgumentException(
-				"Missing id in path " + httpServletRequest.getPathInfo());
+				"Missing ID in path " + httpServletRequest.getPathInfo());
 		}
 
 		List<Map<String, Object>> models = request.getModels();
@@ -128,7 +128,7 @@ public class JSONServerServlet extends HttpServlet {
 			}
 		}
 
-		throw new ServletException("Unknown id " + request.getId());
+		throw new ServletException("Unknown ID " + request.getId());
 	}
 
 	@Override
@@ -161,7 +161,7 @@ public class JSONServerServlet extends HttpServlet {
 			}
 
 			throw new ServletException(
-				"Unknown model id in path " + httpServletRequest.getPathInfo());
+				"Unknown model ID in path " + httpServletRequest.getPathInfo());
 		}
 
 		_objectMapper.writeValue(httpServletResponse.getWriter(), models);
@@ -215,7 +215,7 @@ public class JSONServerServlet extends HttpServlet {
 		Long id = _getId(model);
 
 		if (id == null) {
-			throw new ServletException("Missing id " + model);
+			throw new ServletException("Missing ID " + model);
 		}
 
 		List<Map<String, Object>> models = request.getModels();
@@ -234,7 +234,7 @@ public class JSONServerServlet extends HttpServlet {
 			}
 		}
 
-		throw new ServletException("Unknown id " + id);
+		throw new ServletException("Unknown ID " + id);
 	}
 
 	@Override
@@ -384,7 +384,7 @@ public class JSONServerServlet extends HttpServlet {
 
 			if ((models == null) || !(models instanceof List)) {
 				throw new ServletException(
-					"Unknown model name : " + _modelName);
+					"Unknown model name " + _modelName);
 			}
 
 			return (List<Map<String, Object>>)models;
@@ -403,7 +403,7 @@ public class JSONServerServlet extends HttpServlet {
 
 			if (pathElements.isEmpty()) {
 				throw new IllegalArgumentException(
-					"Missing app name in path " + path);
+					"Missing application name in path " + path);
 			}
 
 			if (pathElements.size() < 2) {
@@ -415,7 +415,7 @@ public class JSONServerServlet extends HttpServlet {
 
 			if (_appData == null) {
 				throw new IllegalArgumentException(
-					"Unknown app name " + pathElements.get(0));
+					"Unknown application name " + pathElements.get(0));
 			}
 
 			_modelName = pathElements.get(1);
