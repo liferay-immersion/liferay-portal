@@ -315,9 +315,9 @@ public class JSONServerServlet extends HttpServlet {
 		return GetterUtil.getLongStrict(String.valueOf(idObject));
 	}
 
-	private void _load(String appName, URL url) throws IOException {
+	private void _load(String applicationName, URL url) throws IOException {
 		_appDatas.put(
-			appName,
+			applicationName,
 			(Map<String, Object>)_objectMapper.readValue(url, HashMap.class));
 	}
 
