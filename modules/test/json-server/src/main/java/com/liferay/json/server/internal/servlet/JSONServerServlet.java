@@ -159,7 +159,7 @@ public class JSONServerServlet extends HttpServlet {
 			}
 
 			throw new ServletException(
-				"Unknown model ID in path " + httpServletRequest.getPathInfo());
+				"Unknown ID in path " + httpServletRequest.getPathInfo());
 		}
 
 		_objectMapper.writeValue(httpServletResponse.getWriter(), models);
@@ -351,7 +351,7 @@ public class JSONServerServlet extends HttpServlet {
 			}
 		}
 
-		throw new ServerException("Unable to match for " + parameters);
+		throw new ServerException("Unable to match " + parameters);
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
