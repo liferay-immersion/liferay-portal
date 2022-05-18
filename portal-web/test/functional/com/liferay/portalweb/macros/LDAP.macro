@@ -70,6 +70,38 @@ definition {
 			value1 = "get-apacheds-commands");
 	}
 
+	macro setGeneralMethod {
+		Variables.assertDefined(parameterList = "${generalMethod}");
+
+		PortalSettings.gotoConfiguration(
+			configurationCategory = "LDAP",
+			configurationName = "General",
+			configurationScope = "Virtual Instance Scope");
+
+		Select(
+			locator1 = "Select#SELECT_ID",
+			selectFieldId = "method",
+			value1 = "${generalMethod}");
+
+		PortletEntry.save();
+	}
+
+	macro setPasswordEncryption {
+		Variables.assertDefined(parameterList = "${passwordEncryption}");
+
+		PortalSettings.gotoConfiguration(
+			configurationCategory = "LDAP",
+			configurationName = "General",
+			configurationScope = "Virtual Instance Scope");
+
+		Select(
+			locator1 = "Select#SELECT_ID",
+			selectFieldId = "passwordEncryptionAlgorithm",
+			value1 = "${passwordEncryption}");
+
+		PortletEntry.save();
+	}
+
 	@description = "Update LDAP database through LDIF file"
 	macro updateLDAPDatabaseWithLDIFFile {
 		AntCommand(
@@ -93,6 +125,15 @@ definition {
 		UserGroup.viewRemoveMemberCP(
 			userFirstName = "${userFirstName}",
 			userGroupName = "${userGroupName}");
+	}
+
+	@description = "Verify that the user is imported on localhost after LDAP sync"
+	macro verifyUserIsImported {
+		User.openUsersAdmin();
+
+		Search.searchCP(searchTerm = "${userScreenName}");
+
+		AssertElementPresent(locator1 = "ContentRow#ENTRY_CONTENT_ROW_1");
 	}
 
 }
