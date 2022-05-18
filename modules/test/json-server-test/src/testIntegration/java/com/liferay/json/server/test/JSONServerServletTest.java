@@ -65,10 +65,11 @@ public class JSONServerServletTest {
 
 		ReflectionTestUtil.invoke(
 			_servlet, "_load", new Class<?>[] {String.class, URL.class},
-			"fruit", JSONServerServletTest.class.getResource("/fruit.json"));
+			"fruit",
+			JSONServerServletTest.class.getResource("dependencies/fruit.json"));
 		ReflectionTestUtil.invoke(
 			_servlet, "_load", new Class<?>[] {String.class, URL.class}, "meat",
-			JSONServerServletTest.class.getResource("/meat.json"));
+			JSONServerServletTest.class.getResource("dependencies/meat.json"));
 	}
 
 	@Test
