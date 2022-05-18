@@ -81,7 +81,7 @@ public class JSONServerServletTest {
 
 		mockHttpServletRequest.setMethod(HttpMethods.DELETE);
 		mockHttpServletRequest.setPathInfo("/meat/beef");
-		mockHttpServletRequest.setContent("{\"cut\":\"Chunk\"}".getBytes());
+		mockHttpServletRequest.setContent("{\"cut\" :\"Chunk\"}".getBytes());
 
 		MockHttpServletResponse mockHttpServletResponse =
 			new MockHttpServletResponse();
@@ -95,7 +95,7 @@ public class JSONServerServletTest {
 
 		// Mocking beef/Rib
 
-		mockHttpServletRequest.setContent("{\"cut\":\"Rib\"}".getBytes());
+		mockHttpServletRequest.setContent("{\"cut\" :\"Rib\"}".getBytes());
 
 		mockHttpServletResponse = new MockHttpServletResponse();
 
@@ -108,7 +108,7 @@ public class JSONServerServletTest {
 
 		// Mocking beef/Round
 
-		mockHttpServletRequest.setContent("{\"cut\":\"Round\"}".getBytes());
+		mockHttpServletRequest.setContent("{\"cut\" :\"Round\"}".getBytes());
 
 		mockHttpServletResponse = new MockHttpServletResponse();
 
@@ -336,7 +336,7 @@ public class JSONServerServletTest {
 		// Mocking apple/green
 
 		mockHttpServletRequest.setPathInfo("/fruit/apple");
-		mockHttpServletRequest.setContent("{\"color\":\"green\"}".getBytes());
+		mockHttpServletRequest.setContent("{\"color\" :\"green\"}".getBytes());
 
 		mockHttpServletResponse = new MockHttpServletResponse();
 
@@ -350,7 +350,7 @@ public class JSONServerServletTest {
 		// Mocking apple/red
 
 		mockHttpServletRequest.setPathInfo("/fruit/apple");
-		mockHttpServletRequest.setContent("{\"color\":\"red\"}".getBytes());
+		mockHttpServletRequest.setContent("{\"color\" :\"red\"}".getBytes());
 
 		mockHttpServletResponse = new MockHttpServletResponse();
 
@@ -364,7 +364,7 @@ public class JSONServerServletTest {
 		// Mocking apple/yellow
 
 		mockHttpServletRequest.setPathInfo("/fruit/apple");
-		mockHttpServletRequest.setContent("{\"color\":\"yellow\"}".getBytes());
+		mockHttpServletRequest.setContent("{\"color\" :\"yellow\"}".getBytes());
 
 		mockHttpServletResponse = new MockHttpServletResponse();
 
@@ -505,7 +505,7 @@ public class JSONServerServletTest {
 
 		mockHttpServletRequest.setMethod(HttpMethods.POST);
 		mockHttpServletRequest.setPathInfo("/fruit/banana");
-		mockHttpServletRequest.setContent("{\"color\":\"green\"}".getBytes());
+		mockHttpServletRequest.setContent("{\"color\" :\"green\"}".getBytes());
 
 		MockHttpServletResponse mockHttpServletResponse =
 			new MockHttpServletResponse();
@@ -537,7 +537,7 @@ public class JSONServerServletTest {
 		// Mocking banana/yellow
 
 		mockHttpServletRequest.setPathInfo("/fruit/banana");
-		mockHttpServletRequest.setContent("{\"color\":\"yellow\"}".getBytes());
+		mockHttpServletRequest.setContent("{\"color\" :\"yellow\"}".getBytes());
 
 		mockHttpServletResponse = new MockHttpServletResponse();
 
@@ -584,7 +584,7 @@ public class JSONServerServletTest {
 
 		mockHttpServletRequest.setPathInfo("/fruit/raspberry");
 		mockHttpServletRequest.setContent(
-			"{\"name\":\"Allen Black\"}".getBytes());
+			"{\"name\" :\"Allen Black\"}".getBytes());
 
 		mockHttpServletResponse = new MockHttpServletResponse();
 
@@ -612,7 +612,7 @@ public class JSONServerServletTest {
 		mockHttpServletRequest.setMethod(HttpMethods.POST);
 		mockHttpServletRequest.setPathInfo("/fruit/raspberry");
 		mockHttpServletRequest.setContent(
-			"{\"id\":7,\"name\":\"Jewel\"}".getBytes());
+			"{\"id\":7, \"name\" :\"Jewel\"}".getBytes());
 
 		mockHttpServletResponse = new MockHttpServletResponse();
 
@@ -646,7 +646,7 @@ public class JSONServerServletTest {
 
 		mockHttpServletRequest.setMethod(HttpMethods.PUT);
 		mockHttpServletRequest.setPathInfo("/meat/chicken");
-		mockHttpServletRequest.setContent("{\"cut\":\"Breast\"}".getBytes());
+		mockHttpServletRequest.setContent("{\"cut\" :\"Breast\"}".getBytes());
 
 		MockHttpServletResponse mockHttpServletResponse =
 			new MockHttpServletResponse();
@@ -660,7 +660,7 @@ public class JSONServerServletTest {
 
 		// Mocking chicken/Thighs
 
-		mockHttpServletRequest.setContent("{\"cut\":\"Thighs\"}".getBytes());
+		mockHttpServletRequest.setContent("{\"cut\" :\"Thighs\"}".getBytes());
 
 		mockHttpServletResponse = new MockHttpServletResponse();
 
@@ -722,7 +722,7 @@ public class JSONServerServletTest {
 
 		mockHttpServletRequest.setPathInfo("/meat/fish");
 		mockHttpServletRequest.setContent(
-			"{\"name\":\"Rainbow Trout\"}".getBytes());
+			"{\"name\" :\"Rainbow Trout\"}".getBytes());
 
 		mockHttpServletResponse = new MockHttpServletResponse();
 
@@ -754,7 +754,7 @@ public class JSONServerServletTest {
 		// Put with unknown id
 
 		mockHttpServletRequest.setContent(
-			"{\"id\":2,\"name\":\"Rainbow Trout\"}".getBytes());
+			"{\"id\":2, \"name\" :\"Rainbow Trout\"}".getBytes());
 
 		mockHttpServletResponse = new MockHttpServletResponse();
 
@@ -784,7 +784,7 @@ public class JSONServerServletTest {
 		// Put with id
 
 		mockHttpServletRequest.setContent(
-			"{\"id\":1,\"name\":\"Rainbow Trout\"}".getBytes());
+			"{\"id\":1, \"name\" :\"Rainbow Trout\"}".getBytes());
 
 		mockHttpServletResponse = new MockHttpServletResponse();
 
