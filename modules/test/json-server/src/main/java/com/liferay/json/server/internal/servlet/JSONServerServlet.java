@@ -262,20 +262,21 @@ public class JSONServerServlet extends HttpServlet {
 		}
 	}
 
-	private boolean _contains(
-		Map<String, Object> expectedData, Map<String, Object> parameters) {
+	private boolean _isMatch(
+		Map<String, Object> actualParameters,
+		Map<String, Object> expectedParameters) {
 
-		if (expectedData == null) {
+		if (expectedParameters == null) {
 			return true;
 		}
 
-		if (parameters == null) {
+		if (actualParameters == null) {
 			return false;
 		}
 
-		for (Map.Entry<String, Object> entry : expectedData.entrySet()) {
+		for (Map.Entry<String, Object> entry : expectedParameters.entrySet()) {
 			if (!Objects.equals(
-					entry.getValue(), parameters.get(entry.getKey()))) {
+					entry.getValue(), actualParameters.get(entry.getKey()))) {
 
 				return false;
 			}
@@ -334,9 +335,9 @@ public class JSONServerServlet extends HttpServlet {
 		Map<String, Object> parameters = request.getParameters();
 
 		for (Map<String, Object> methodEntry : methodEntries) {
-			if (_contains(
-					(Map<String, Object>)methodEntry.get("request"),
-					parameters)) {
+			if (_isMatch(
+					parameters,
+					(Map<String, Object>)methodEntry.get("request"))) {
 
 				Object response = methodEntry.get("response");
 
