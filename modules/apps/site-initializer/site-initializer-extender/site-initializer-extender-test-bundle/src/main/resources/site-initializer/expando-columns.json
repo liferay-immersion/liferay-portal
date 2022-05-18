@@ -2,11 +2,11 @@
 	{
 		"dataType": 5,
 		"modelResource": "com.liferay.account.model.AccountEntry",
-		"name": "Test Custom Field 1"
+		"name": "Test Expando Column 1"
 	},
 	{
 		"dataType": 15,
 		"modelResource": "com.liferay.account.model.AccountEntry",
-		"name": "Test Custom Field 2"
+		"name": "Test Expando Column 2"
 	}
 ]
