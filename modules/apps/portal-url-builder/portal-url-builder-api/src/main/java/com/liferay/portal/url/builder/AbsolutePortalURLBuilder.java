@@ -39,9 +39,9 @@ public interface AbsolutePortalURLBuilder {
 	/**
 	 * Returns a URL builder for AMD JavaScript files.
 	 *
-	 * @param  browserModulePath the browser module path (for example:
-	 *              		/o/js/resolved-module/..., but it could be legacy config
-	 *              	    generator module path too)
+	 * @param  browserModulePath the browser module path (e.g.
+	 *         /o/js/resolved-module/... or a legacy config generator module
+	 *         path too)
 	 * @return a URL builder for AMD JavaScript files
 	 * @review
 	 */
@@ -78,21 +78,21 @@ public interface AbsolutePortalURLBuilder {
 	public ComboRequestAbsolutePortalURLBuilder forComboRequest();
 
 	/**
-	 * Returns a URL builder for Portal images. Image resources live in {@code
+	 * Returns a URL builder for portal images. Image resources live in {@code
 	 * com.liferay.portal.kernel.util.Portal#PATH_IMAGE}.
 	 *
 	 * @param  relativeURL the image's relative URL
-	 * @return a URL builder for Portal images
+	 * @return a URL builder for portal images
 	 */
 	public PortalImageAbsolutePortalURLBuilder forPortalImage(
 		String relativeURL);
 
 	/**
-	 * Returns a URL builder for Portal's main resources. Main resources live in
+	 * Returns a URL builder for portal's main resources. Main resources live in
 	 * {@code com.liferay.portal.kernel.util.Portal#PATH_MAIN}.
 	 *
 	 * @param  relativeURL the resource's relative URL
-	 * @return a URL builder for Portal's main resources
+	 * @return a URL builder for portal's main resources
 	 */
 	public PortalMainResourceAbsolutePortalURLBuilder forPortalMainResource(
 		String relativeURL);
