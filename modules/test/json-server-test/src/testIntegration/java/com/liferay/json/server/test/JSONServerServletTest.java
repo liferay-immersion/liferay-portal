@@ -712,32 +712,6 @@ public class JSONServerServletTest {
 			Assert.assertEquals("Invalid input", message.get("message"));
 		}
 
-		// /meat/fish/1
-
-		mockHttpServletRequest.setContent(
-			"{\"id\": 1, \"name\": \"Rainbow Trout\"}".getBytes());
-		mockHttpServletRequest.setPathInfo("/meat/fish");
-
-		mockHttpServletResponse = new MockHttpServletResponse();
-
-		_servlet.service(mockHttpServletRequest, mockHttpServletResponse);
-
-		Assert.assertEquals(
-			HttpServletResponse.SC_OK, mockHttpServletResponse.getStatus());
-
-		mockHttpServletRequest.setMethod(HttpMethods.GET);
-		mockHttpServletRequest.setPathInfo("/meat/fish/1");
-
-		mockHttpServletResponse = new MockHttpServletResponse();
-
-		_servlet.service(mockHttpServletRequest, mockHttpServletResponse);
-
-		message = _objectMapper.readValue(
-			mockHttpServletResponse.getContentAsString(), HashMap.class);
-
-		Assert.assertEquals(1, message.get("id"));
-		Assert.assertEquals("Rainbow Trout", message.get("name"));
-
 		// /meat/fish with unknown ID
 
 		mockHttpServletRequest.setContent(
@@ -801,6 +775,32 @@ public class JSONServerServletTest {
 			Assert.assertEquals(
 				"Missing ID {name=Rainbow Trout}", message.get("message"));
 		}
+
+		// /meat/fish/1
+
+		mockHttpServletRequest.setContent(
+			"{\"id\": 1, \"name\": \"Rainbow Trout\"}".getBytes());
+		mockHttpServletRequest.setPathInfo("/meat/fish");
+
+		mockHttpServletResponse = new MockHttpServletResponse();
+
+		_servlet.service(mockHttpServletRequest, mockHttpServletResponse);
+
+		Assert.assertEquals(
+			HttpServletResponse.SC_OK, mockHttpServletResponse.getStatus());
+
+		mockHttpServletRequest.setMethod(HttpMethods.GET);
+		mockHttpServletRequest.setPathInfo("/meat/fish/1");
+
+		mockHttpServletResponse = new MockHttpServletResponse();
+
+		_servlet.service(mockHttpServletRequest, mockHttpServletResponse);
+
+		message = _objectMapper.readValue(
+			mockHttpServletResponse.getContentAsString(), HashMap.class);
+
+		Assert.assertEquals(1, message.get("id"));
+		Assert.assertEquals("Rainbow Trout", message.get("name"));
 	}
 
 	private static final String _CLASS_NAME =
