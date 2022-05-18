@@ -49,7 +49,7 @@ import org.springframework.mock.web.MockHttpServletResponse;
  * @author Shuyang Zhou
  */
 @RunWith(Arquillian.class)
-public class JsonServerServletTest {
+public class JSONServerServletTest {
 
 	@ClassRule
 	@Rule
@@ -65,10 +65,10 @@ public class JsonServerServletTest {
 
 		ReflectionTestUtil.invoke(
 			_servlet, "_load", new Class<?>[] {String.class, URL.class},
-			"fruit", JsonServerServletTest.class.getResource("/fruit.json"));
+			"fruit", JSONServerServletTest.class.getResource("/fruit.json"));
 		ReflectionTestUtil.invoke(
 			_servlet, "_load", new Class<?>[] {String.class, URL.class}, "meat",
-			JsonServerServletTest.class.getResource("/meat.json"));
+			JSONServerServletTest.class.getResource("/meat.json"));
 	}
 
 	@Test
@@ -808,7 +808,7 @@ public class JsonServerServletTest {
 	}
 
 	private static final String _TEST_CLASS_NAME =
-		"com.liferay.json.server.internal.servlet.JsonServerServlet";
+		"com.liferay.json.server.internal.servlet.JSONServerServlet";
 
 	@Inject(filter = "osgi.http.whiteboard.servlet.name=" + _TEST_CLASS_NAME)
 	private static Servlet _servlet;
