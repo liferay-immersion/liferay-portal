@@ -325,21 +325,20 @@ public class JSONServerServlet extends HttpServlet {
 	private Object _process(String method, Request request)
 		throws IOException, ServletException {
 
-		List<Map<String, Object>> methodEntries = request.getMethodEntries(
-			method);
+		List<Map<String, Object>> methodCalls = request.getMethodCalls(method);
 
-		if (methodEntries == null) {
+		if (methodCalls == null) {
 			return null;
 		}
 
 		Map<String, Object> parameters = request.getParameters();
 
-		for (Map<String, Object> methodEntry : methodEntries) {
+		for (Map<String, Object> methodCall : methodCalls) {
 			if (_isMatch(
 					parameters,
-					(Map<String, Object>)methodEntry.get("request"))) {
+					(Map<String, Object>)methodCall.get("request"))) {
 
-				Object response = methodEntry.get("response");
+				Object response = methodCall.get("response");
 
 				if (response instanceof Map) {
 					Map<String, Object> responseMap =
@@ -352,7 +351,7 @@ public class JSONServerServlet extends HttpServlet {
 					}
 				}
 
-				return methodEntry.get("response");
+				return methodCall.get("response");
 			}
 		}
 
@@ -372,15 +371,15 @@ public class JSONServerServlet extends HttpServlet {
 			return _id;
 		}
 
-		public List<Map<String, Object>> getMethodEntries(String method) {
-			Object methodEntries = _applicationMap.get(
+		public List<Map<String, Object>> getMethodCalls(String method) {
+			Object methodCalls = _applicationMap.get(
 				StringBundler.concat(_relativePath, StringPool.AT, method));
 
-			if ((methodEntries == null) || !(methodEntries instanceof List)) {
+			if ((methodCalls == null) || !(methodCalls instanceof List)) {
 				return null;
 			}
 
-			return (List<Map<String, Object>>)methodEntries;
+			return (List<Map<String, Object>>)methodCalls;
 		}
 
 		public List<Map<String, Object>> getModels() throws ServletException {
