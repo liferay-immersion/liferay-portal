@@ -21,8 +21,8 @@ import com.liferay.portal.url.builder.facet.CDNAwareAbsolutePortalURLBuilder;
  * Builds a portlet dependency URL.
  *
  * <p>
- * Portlet dependency resources are retrieved from a configured CSS URN or
- * JS URN if present. (See
+ * Portlet dependency resources are retrieved from a configured CSS URN or JS
+ * URN if present. (See
  * <code>com.liferay.portal.kernel.util.PropsKeys#PORTLET_DEPENDENCY_CSS_URN</code>
  * and <code>PropsKeys#PORTLET_DEPENDENCY_JAVASCRIPT_URN</code>).
  * </p>
