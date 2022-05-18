@@ -398,36 +398,36 @@ public class JSONServerServlet extends HttpServlet {
 
 			String path = httpServletRequest.getPathInfo();
 
-			List<String> pathElements = StringUtil.split(path, '/');
+			List<String> parts = StringUtil.split(path, '/');
 
-			if (pathElements.isEmpty()) {
+			if (parts.isEmpty()) {
 				throw new IllegalArgumentException(
 					"Missing application name in path " + path);
 			}
 
-			if (pathElements.size() < 2) {
+			if (parts.size() < 2) {
 				throw new IllegalArgumentException(
 					"Missing model name in path " + path);
 			}
 
-			_appData = _appDatas.get(pathElements.get(0));
+			_appData = _appDatas.get(parts.get(0));
 
 			if (_appData == null) {
 				throw new IllegalArgumentException(
-					"Unknown application name " + pathElements.get(0));
+					"Unknown application name " + parts.get(0));
 			}
 
-			_modelName = pathElements.get(1);
+			_modelName = parts.get(1);
 
-			if (pathElements.size() > 2) {
-				_id = GetterUtil.getLongStrict(pathElements.get(2));
+			if (parts.size() > 2) {
+				_id = GetterUtil.getLongStrict(parts.get(2));
 			}
 			else {
 				_id = -1;
 			}
 
 			_relativePath = StringUtil.merge(
-				pathElements.subList(1, pathElements.size()), StringPool.SLASH);
+				parts.subList(1, parts.size()), StringPool.SLASH);
 
 			byte[] bytes = StreamUtil.toByteArray(
 				httpServletRequest.getInputStream());
