@@ -84,15 +84,15 @@ public class CacheHelper {
 
 	@Activate
 	protected void activate(BundleContext bundleContext) {
-		if (_lastRestartTime == -1) {
-			_lastRestartTime = System.currentTimeMillis();
-		}
-
 		_bundleTracker = new BundleTracker<>(
 			bundleContext, Bundle.ACTIVE | Bundle.STOPPING,
 			_bundleBundleTrackerCustomizer);
 
 		_bundleTracker.open();
+
+		if (_lastRestartTime == -1) {
+			_lastRestartTime = System.currentTimeMillis();
+		}
 	}
 
 	@Deactivate
