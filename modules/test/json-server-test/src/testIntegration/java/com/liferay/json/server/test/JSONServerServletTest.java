@@ -446,7 +446,7 @@ public class JSONServerServletTest {
 		Map<String, Object> orange2 = oranges.get(1);
 
 		Assert.assertEquals(2, orange2.get("id"));
-		Assert.assertEquals("Boold Orange", orange2.get("name"));
+		Assert.assertEquals("Blood Orange", orange2.get("name"));
 
 		// /fruit/orange/2
 
@@ -460,7 +460,7 @@ public class JSONServerServletTest {
 			mockHttpServletResponse.getContentAsString(), HashMap.class);
 
 		Assert.assertEquals(2, orange3.get("id"));
-		Assert.assertEquals("Boold Orange", orange3.get("name"));
+		Assert.assertEquals("Blood Orange", orange3.get("name"));
 
 		// /fruit/orange/3
 
@@ -484,16 +484,14 @@ public class JSONServerServletTest {
 			Assert.assertSame(ServletException.class, throwable.getClass());
 
 			Assert.assertEquals(
-				"Unknown model id in path /fruit/orange/3",
-				throwable.getMessage());
+				"Unknown ID in path /fruit/orange/3", throwable.getMessage());
 
 			message = _objectMapper.readValue(
 				mockHttpServletResponse.getContentAsString(), HashMap.class);
 
 			Assert.assertEquals(500, message.get("code"));
 			Assert.assertEquals(
-				"Unknown model id in path /fruit/orange/3",
-				message.get("message"));
+				"Unknown ID in path /fruit/orange/3", message.get("message"));
 		}
 	}
 
@@ -624,7 +622,7 @@ public class JSONServerServletTest {
 
 		mockHttpServletRequest.setContent(null);
 		mockHttpServletRequest.setMethod(HttpMethods.GET);
-		mockHttpServletRequest.setPathInfo("/fruit/raspberry/2");
+		mockHttpServletRequest.setPathInfo("/fruit/raspberry/8");
 
 		mockHttpServletResponse = new MockHttpServletResponse();
 
@@ -633,7 +631,7 @@ public class JSONServerServletTest {
 		message = _objectMapper.readValue(
 			mockHttpServletResponse.getContentAsString(), HashMap.class);
 
-		Assert.assertEquals(2, message.get("id"));
+		Assert.assertEquals(8, message.get("id"));
 		Assert.assertEquals("Allen Black", message.get("name"));
 	}
 
