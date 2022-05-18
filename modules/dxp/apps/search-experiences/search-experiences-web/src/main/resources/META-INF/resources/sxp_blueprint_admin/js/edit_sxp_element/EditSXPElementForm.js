@@ -513,7 +513,7 @@ function EditSXPElementForm({
 								<span className="text-truncate-inline">
 									<span className="text-truncate">
 										{Liferay.Language.get(
-											'json-autocompletion'
+											'json-autocomplete'
 										)}
 									</span>
 								</span>
@@ -523,7 +523,7 @@ function EditSXPElementForm({
 						<div className="container-fluid">
 							<div className="help-text text-secondary">
 								{Liferay.Language.get(
-									'begin-typing-inside-double-quotes-to-see-the-autocompletion-options'
+									'begin-typing-inside-double-quotes-to-see-the-autocomplete-options'
 								)}
 							</div>
 
