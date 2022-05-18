@@ -21,12 +21,12 @@
 				"cut": "Round"
 			},
 			"response": {
-				"!exception": "Item does not exist"
+				"!exception": "Item does not exist."
 			}
 		},
 		{
 			"response": {
-				"!exception": "Invalid input"
+				"!exception": "The input is invalid."
 			}
 		}
 	],
@@ -44,12 +44,12 @@
 				"cut": "Thighs"
 			},
 			"response": {
-				"!exception": "Item does not exist"
+				"!exception": "Item does not exist."
 			}
 		},
 		{
 			"response": {
-				"!exception": "Invalid input"
+				"!exception": "The input is invalid."
 			}
 		}
 	],
