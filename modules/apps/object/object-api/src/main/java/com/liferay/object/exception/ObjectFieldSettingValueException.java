@@ -25,6 +25,15 @@ import java.util.Set;
  */
 public class ObjectFieldSettingValueException extends PortalException {
 
+	public static class CanNotBeGreaterThan255Characters
+		extends ObjectFieldSettingValueException {
+
+		public CanNotBeGreaterThan255Characters() {
+			super("Storage folder path can not be greater than 255 characters");
+		}
+
+	}
+
 	public static class InvalidValue extends ObjectFieldSettingValueException {
 
 		public InvalidValue(
