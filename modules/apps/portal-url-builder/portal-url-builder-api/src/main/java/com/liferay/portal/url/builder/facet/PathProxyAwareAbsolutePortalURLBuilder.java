@@ -20,8 +20,8 @@ package com.liferay.portal.url.builder.facet;
  *
  * <p>
  * By default, the proxy path is always used. However, there are scenarios where
- * the developer may need to strip it from the generated URL (for example, when
- * wanting to retrieve the internal URL of a resource).
+ * the developer may need to strip it from the generated URL (e.ge. when
+ * retrieving the internal URL of a resource).
  * </p>
  *
  * @author Iván Zaera Avellón
