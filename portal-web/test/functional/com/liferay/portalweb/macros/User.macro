@@ -2410,6 +2410,7 @@ definition {
 		User.loginPG(
 			authenticationMethod = "${authenticationMethod}",
 			nodePort = "${nodePort}",
+			password = "${password}",
 			userEmailAddress = "${userLoginEmailAddress}",
 			userScreenName = "${userScreenName}");
 	}
