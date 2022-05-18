@@ -68,7 +68,7 @@ public class CacheHelper {
 	 * It appends a "t" parameter to the URL with the last time the server was
 	 * started, which invalidates browser caches after every server restart.
 	 *
-	 * This is suboptimal in the sense that a server restart doesn't mean that
+	 * This is suboptimal in the sense that a server restart does not mean that
 	 * resources have been changed, but at least, it's efficient if servers
 	 * are not restarted very often, and guarantees that any upgrade of the
 	 * Portal invalidates browser caches (because you cannot upgrade without

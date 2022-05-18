@@ -174,7 +174,7 @@ public class AbsolutePortalURLBuilderImpl implements AbsolutePortalURLBuilder {
 	private final HttpServletRequest _httpServletRequest;
 
 	/**
-	 * Portal web app's web context path (doesn't contain the proxy, CDN, or any
+	 * Portal web app's web context path (does not contain the proxy, CDN, or any
 	 * other kind of configurable path.
 	 */
 	private final String _pathContext;
