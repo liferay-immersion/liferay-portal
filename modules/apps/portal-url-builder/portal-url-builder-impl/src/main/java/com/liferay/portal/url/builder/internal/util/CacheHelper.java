@@ -26,6 +26,7 @@ import java.io.InputStream;
 
 import java.net.URL;
 
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -177,7 +178,7 @@ public class CacheHelper {
 		};
 
 	private BundleTracker<Bundle> _bundleTracker;
-	private final ConcurrentMap<Long, ConcurrentMap<String, String>> _digests =
+	private final Map<Long, ConcurrentMap<String, String>> _digests =
 		new ConcurrentHashMap<>();
 	private long _lastRestartTime = -1;
 
