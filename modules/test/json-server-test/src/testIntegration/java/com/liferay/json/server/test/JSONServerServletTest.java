@@ -288,14 +288,16 @@ public class JSONServerServletTest {
 				IllegalArgumentException.class, throwable.getClass());
 
 			Assert.assertEquals(
-				"Missing application name in path null", throwable.getMessage());
+				"Missing application name in path null",
+				throwable.getMessage());
 
 			Map<String, Object> message = _objectMapper.readValue(
 				mockHttpServletResponse.getContentAsString(), HashMap.class);
 
 			Assert.assertEquals(500, message.get("code"));
 			Assert.assertEquals(
-				"Missing application name in path null", message.get("message"));
+				"Missing application name in path null",
+				message.get("message"));
 		}
 
 		// Missing model name
