@@ -96,6 +96,21 @@ public class DDMFormFieldInfoFieldConverterImpl
 		}
 
 		if (Objects.equals(
+				ddmFormField.getType(), DDMFormFieldTypeConstants.RADIO)) {
+
+			finalStep.attribute(
+				SelectInfoFieldType.OPTIONS,
+				_getInfoFieldOptions(ddmFormField));
+		}
+
+		if (Objects.equals(
+				ddmFormField.getType(), DDMFormFieldTypeConstants.RICH_TEXT)) {
+
+			finalStep.attribute(TextInfoFieldType.HTML, true);
+			finalStep.attribute(TextInfoFieldType.MULTILINE, true);
+		}
+
+		if (Objects.equals(
 				ddmFormField.getType(), DDMFormFieldTypeConstants.SELECT)) {
 
 			finalStep.attribute(
@@ -111,21 +126,6 @@ public class DDMFormFieldInfoFieldConverterImpl
 			Objects.equals(
 				ddmFormField.getProperty("displayStyle"), "multiline")) {
 
-			finalStep.attribute(TextInfoFieldType.MULTILINE, true);
-		}
-
-		if (Objects.equals(
-				ddmFormField.getType(), DDMFormFieldTypeConstants.RADIO)) {
-
-			finalStep.attribute(
-				SelectInfoFieldType.OPTIONS,
-				_getInfoFieldOptions(ddmFormField));
-		}
-
-		if (Objects.equals(
-				ddmFormField.getType(), DDMFormFieldTypeConstants.RICH_TEXT)) {
-
-			finalStep.attribute(TextInfoFieldType.HTML, true);
 			finalStep.attribute(TextInfoFieldType.MULTILINE, true);
 		}
 
