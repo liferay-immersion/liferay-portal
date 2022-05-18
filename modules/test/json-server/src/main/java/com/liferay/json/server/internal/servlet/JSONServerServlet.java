@@ -100,7 +100,7 @@ public class JSONServerServlet extends HttpServlet {
 
 		Request request = new Request(httpServletRequest);
 
-		Object mockResponse = _processMock(request, HttpMethods.DELETE);
+		Object mockResponse = _process(request, HttpMethods.DELETE);
 
 		if (mockResponse != null) {
 			_objectMapper.writeValue(
@@ -139,7 +139,7 @@ public class JSONServerServlet extends HttpServlet {
 
 		Request request = new Request(httpServletRequest);
 
-		Object mockResponse = _processMock(request, HttpMethods.GET);
+		Object mockResponse = _process(request, HttpMethods.GET);
 
 		if (mockResponse != null) {
 			_objectMapper.writeValue(
@@ -175,7 +175,7 @@ public class JSONServerServlet extends HttpServlet {
 
 		Request request = new Request(httpServletRequest);
 
-		Object mockResponse = _processMock(request, HttpMethods.POST);
+		Object mockResponse = _process(request, HttpMethods.POST);
 
 		if (mockResponse != null) {
 			_objectMapper.writeValue(
@@ -201,7 +201,7 @@ public class JSONServerServlet extends HttpServlet {
 
 		Request request = new Request(httpServletRequest);
 
-		Object mockResponse = _processMock(request, HttpMethods.PUT);
+		Object mockResponse = _process(request, HttpMethods.PUT);
 
 		if (mockResponse != null) {
 			_objectMapper.writeValue(
@@ -321,7 +321,7 @@ public class JSONServerServlet extends HttpServlet {
 			(Map<String, Object>)_objectMapper.readValue(url, HashMap.class));
 	}
 
-	private Object _processMock(Request request, String method)
+	private Object _process(Request request, String method)
 		throws IOException, ServletException {
 
 		List<Map<String, Object>> mockList = request.getMockList(method);
