@@ -324,19 +324,21 @@ public class JSONServerServlet extends HttpServlet {
 	private Object _process(String method, Request request)
 		throws IOException, ServletException {
 
-		List<Map<String, Object>> mockList = request.getMockList(method);
+		List<Map<String, Object>> methodEntries = request.getMethodEntries(
+			method);
 
-		if (mockList == null) {
+		if (methodEntries == null) {
 			return null;
 		}
 
 		Map<String, Object> parameters = request.getParameters();
 
-		for (Map<String, Object> mock : mockList) {
+		for (Map<String, Object> methodEntry : methodEntries) {
 			if (_contains(
-					(Map<String, Object>)mock.get("request"), parameters)) {
+					(Map<String, Object>)methodEntry.get("request"),
+					parameters)) {
 
-				Object response = mock.get("response");
+				Object response = methodEntry.get("response");
 
 				if (response instanceof Map) {
 					Map<String, Object> responseMap =
@@ -349,7 +351,7 @@ public class JSONServerServlet extends HttpServlet {
 					}
 				}
 
-				return mock.get("response");
+				return methodEntry.get("response");
 			}
 		}
 
@@ -369,15 +371,15 @@ public class JSONServerServlet extends HttpServlet {
 			return _id;
 		}
 
-		public List<Map<String, Object>> getMockList(String method) {
-			Object mockList = _applicationMap.get(
+		public List<Map<String, Object>> getMethodEntries(String method) {
+			Object methodEntries = _applicationMap.get(
 				StringBundler.concat(_relativePath, StringPool.AT, method));
 
-			if ((mockList == null) || !(mockList instanceof List)) {
+			if ((methodEntries == null) || !(methodEntries instanceof List)) {
 				return null;
 			}
 
-			return (List<Map<String, Object>>)mockList;
+			return (List<Map<String, Object>>)methodEntries;
 		}
 
 		public List<Map<String, Object>> getModels() throws ServletException {
