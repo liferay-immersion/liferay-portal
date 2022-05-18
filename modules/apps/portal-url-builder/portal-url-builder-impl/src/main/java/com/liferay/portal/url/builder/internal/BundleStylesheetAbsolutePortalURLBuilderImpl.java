@@ -31,7 +31,7 @@ import org.osgi.framework.Bundle;
  * @author Iván Zaera Avellón
  */
 public class BundleStylesheetAbsolutePortalURLBuilderImpl
-	extends AbstractBundleResourceAbsolutePortalURLBuilderImpl
+	extends BaseBundleResourceAbsolutePortalURLBuilderImpl
 		<BundleStylesheetAbsolutePortalURLBuilder>
 	implements BundleStylesheetAbsolutePortalURLBuilder {
 
