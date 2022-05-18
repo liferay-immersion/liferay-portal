@@ -29,7 +29,7 @@ import org.osgi.framework.Bundle;
  * @author Iván Zaera Avellón
  */
 public class BundleScriptAbsolutePortalURLBuilderImpl
-	extends AbstractBundleResourceAbsolutePortalURLBuilderImpl
+	extends BaseBundleResourceAbsolutePortalURLBuilderImpl
 		<BundleScriptAbsolutePortalURLBuilder>
 	implements BundleScriptAbsolutePortalURLBuilder {
 
