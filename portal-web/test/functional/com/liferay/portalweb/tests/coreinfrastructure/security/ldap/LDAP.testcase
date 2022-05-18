@@ -305,6 +305,41 @@ definition {
 		}
 	}
 
+	@description = "This is a use case for LPS-78606 and LPS-64800. Users who have SHA-384 encrypted password and are imported from LDAP are able to log in."
+	@priority = "5"
+	test LDAPAuthenticationWorksWithDifferentPasswordAlgorithm {
+		property apacheds.enabled = "true";
+		property test.name.skip.portal.instance = "LDAP#LDAPAuthenticationWorksWithDifferentPasswordAlgorithm";
+
+		task ("Given: User enable DEBUG log level for LDAP related loggers") {
+			LDAP.enableLDAPDebugLogs();
+		}
+
+		task ("And: Adds LDAP server and configure settings") {
+			var enableSettingList = "enabled,ldapImportEnabled";
+
+			LDAP.addLDAPServerAndTestConnection();
+
+			LDAP.enableLDAPSettings(enableSettingList = "${enableSettingList}");
+
+			LDAP.setGeneralMethod(generalMethod = "Password Compare");
+
+			LDAP.setPasswordEncryption(passwordEncryption = "SHA-384");
+		}
+
+		task ("When: User adds a new user through LDAP with SHA-384 password encryption") {
+			LDAP.installLDAPCommandUtil();
+
+			LDAP.updateLDAPDatabaseWithLDIFFile(ldifName = "addUserWithSHA-384");
+
+			LDAP.verifyUserIsImported(userScreenName = "usersn");
+		}
+
+		task ("Then:The new user can log in with his encrypted password") {
+			User.logoutAndLoginPG();
+		}
+	}
+
 	@description = "This is a use case for LPS-73381. LDAP instance settings do not affect system settings."
 	@priority = "3"
 	test LDAPInstanceSettingsDoNotAffectSystemSettings {
