@@ -39,7 +39,7 @@ public interface ComboRequestAbsolutePortalURLBuilder
 	public ComboRequestAbsolutePortalURLBuilder addFile(String filePath);
 
 	/**
-	 * Set the value to use for the `t` parameter that controls caching.
+	 * Set the value to use for the "t" parameter that controls caching.
 	 */
 	public ComboRequestAbsolutePortalURLBuilder setTimestamp(long timestamp);
 
