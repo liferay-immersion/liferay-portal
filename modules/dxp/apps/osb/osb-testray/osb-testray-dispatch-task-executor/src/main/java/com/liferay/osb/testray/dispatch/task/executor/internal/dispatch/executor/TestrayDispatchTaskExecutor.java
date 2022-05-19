@@ -133,7 +133,7 @@ public class TestrayDispatchTaskExecutor extends BaseDispatchTaskExecutor {
 		PrincipalThreadLocal.setName(user.getUserId());
 
 		try {
-			_invoke(() -> _loadCache(dispatchTrigger.getCompanyId()));
+			_invoke(() -> _load(dispatchTrigger.getCompanyId()));
 
 			_invoke(
 				() -> _uploadToTestray(
@@ -1033,7 +1033,7 @@ public class TestrayDispatchTaskExecutor extends BaseDispatchTaskExecutor {
 		return trimmedValue.isEmpty();
 	}
 
-	private void _loadCache(long companyId) throws Exception {
+	private void _load(long companyId) throws Exception {
 		List<ObjectDefinition> objectDefinitions =
 			_objectDefinitionLocalService.getObjectDefinitions(
 				companyId, true, WorkflowConstants.STATUS_APPROVED);
