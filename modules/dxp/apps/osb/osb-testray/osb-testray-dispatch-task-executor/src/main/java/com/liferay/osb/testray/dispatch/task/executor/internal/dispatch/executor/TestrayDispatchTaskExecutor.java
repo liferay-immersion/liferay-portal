@@ -228,7 +228,7 @@ public class TestrayDispatchTaskExecutor extends BaseDispatchTaskExecutor {
 		String testrayCaseName = (String)testrayCasePropertiesMap.get(
 			"testray.testcase.name");
 
-		String objectEntryMapKey = StringBundler.concat(
+		String objectEntryIdsKey = StringBundler.concat(
 			"Case#", testrayCaseName, "#ProjectId#", testrayProjectId);
 
 		long testrayCaseId = _getObjectEntryId(
@@ -236,7 +236,7 @@ public class TestrayDispatchTaskExecutor extends BaseDispatchTaskExecutor {
 			StringBundler.concat(
 				"projectId eq ", testrayProjectId, " and name eq '",
 				testrayCaseName, "'"),
-			"Case", objectEntryMapKey);
+			"Case", objectEntryIdsKey);
 
 		long testrayTeamId = _getTestrayTeamId(
 			companyId, testrayProjectId,
@@ -276,7 +276,7 @@ public class TestrayDispatchTaskExecutor extends BaseDispatchTaskExecutor {
 
 			testrayCaseId = objectEntry.getId();
 
-			_objectEntryIds.put(objectEntryMapKey, testrayCaseId);
+			_objectEntryIds.put(objectEntryIdsKey, testrayCaseId);
 		}
 
 		long testrayCaseResultId = _getTestrayCaseResultId(
@@ -295,7 +295,7 @@ public class TestrayDispatchTaskExecutor extends BaseDispatchTaskExecutor {
 			long companyId, long testrayCaseResultId, String testrayIssueName)
 		throws Exception {
 
-		String objectEntryMapKey = "Issue#" + testrayIssueName;
+		String objectEntryIdsKey = "Issue#" + testrayIssueName;
 
 		if (_isEmpty(testrayIssueName)) {
 			return;
@@ -311,7 +311,7 @@ public class TestrayDispatchTaskExecutor extends BaseDispatchTaskExecutor {
 				() -> {
 					long testrayIssueId = _getObjectEntryId(
 						companyId, "name eq '" + testrayIssueName + "'",
-						"Issue", objectEntryMapKey);
+						"Issue", objectEntryIdsKey);
 
 					if (testrayIssueId > 0) {
 						return testrayIssueId;
@@ -319,7 +319,7 @@ public class TestrayDispatchTaskExecutor extends BaseDispatchTaskExecutor {
 
 					testrayIssueId = _addTestrayIssue(testrayIssueName);
 
-					_objectEntryIds.put(objectEntryMapKey, testrayIssueId);
+					_objectEntryIds.put(objectEntryIdsKey, testrayIssueId);
 
 					return testrayIssueId;
 				}
@@ -422,10 +422,10 @@ public class TestrayDispatchTaskExecutor extends BaseDispatchTaskExecutor {
 
 	private long _getObjectEntryId(
 			long companyId, String filterString,
-			String objectDefinitionShortName, String objectEntryMapKey)
+			String objectDefinitionShortName, String objectEntryIdsKey)
 		throws Exception {
 
-		Long objectEntryId = _objectEntryIds.get(objectEntryMapKey);
+		Long objectEntryId = _objectEntryIds.get(objectEntryIdsKey);
 
 		if (objectEntryId != null) {
 			return objectEntryId;
@@ -514,7 +514,7 @@ public class TestrayDispatchTaskExecutor extends BaseDispatchTaskExecutor {
 			String testrayBuildName, long testrayProjectId)
 		throws Exception {
 
-		String objectEntryMapKey = StringBundler.concat(
+		String objectEntryIdsKey = StringBundler.concat(
 			"Build#", testrayBuildName, "#ProjectId#", testrayProjectId);
 
 		long testrayBuildId = _getObjectEntryId(
@@ -522,7 +522,7 @@ public class TestrayDispatchTaskExecutor extends BaseDispatchTaskExecutor {
 			StringBundler.concat(
 				"projectId eq ", testrayProjectId, " and name eq '",
 				testrayBuildName, "'"),
-			"Build", objectEntryMapKey);
+			"Build", objectEntryIdsKey);
 
 		if (testrayBuildId != 0) {
 			return testrayBuildId;
@@ -558,7 +558,7 @@ public class TestrayDispatchTaskExecutor extends BaseDispatchTaskExecutor {
 
 		testrayBuildId = objectEntry.getId();
 
-		_objectEntryIds.put(objectEntryMapKey, testrayBuildId);
+		_objectEntryIds.put(objectEntryIdsKey, testrayBuildId);
 
 		return testrayBuildId;
 	}
@@ -667,11 +667,11 @@ public class TestrayDispatchTaskExecutor extends BaseDispatchTaskExecutor {
 			long companyId, String testrayCaseTypeName)
 		throws Exception {
 
-		String objectEntryMapKey = "CaseType#" + testrayCaseTypeName;
+		String objectEntryIdsKey = "CaseType#" + testrayCaseTypeName;
 
 		long testrayCaseTypeId = _getObjectEntryId(
 			companyId, "name eq '" + testrayCaseTypeName + "'", "CaseType",
-			objectEntryMapKey);
+			objectEntryIdsKey);
 
 		if (testrayCaseTypeId != 0) {
 			return testrayCaseTypeId;
@@ -685,7 +685,7 @@ public class TestrayDispatchTaskExecutor extends BaseDispatchTaskExecutor {
 
 		testrayCaseTypeId = objectEntry.getId();
 
-		_objectEntryIds.put(objectEntryMapKey, testrayCaseTypeId);
+		_objectEntryIds.put(objectEntryIdsKey, testrayCaseTypeId);
 
 		return testrayCaseTypeId;
 	}
@@ -695,7 +695,7 @@ public class TestrayDispatchTaskExecutor extends BaseDispatchTaskExecutor {
 			long testrayTeamId)
 		throws Exception {
 
-		String objectEntryMapKey = StringBundler.concat(
+		String objectEntryIdsKey = StringBundler.concat(
 			"Component#", testrayComponentName, "#ProjectId#",
 			testrayProjectId);
 
@@ -704,7 +704,7 @@ public class TestrayDispatchTaskExecutor extends BaseDispatchTaskExecutor {
 			StringBundler.concat(
 				"projectId eq ", testrayProjectId, " and name eq '",
 				testrayComponentName, "'"),
-			"Component", objectEntryMapKey);
+			"Component", objectEntryIdsKey);
 
 		if (testrayComponentId != 0) {
 			return testrayComponentId;
@@ -722,7 +722,7 @@ public class TestrayDispatchTaskExecutor extends BaseDispatchTaskExecutor {
 
 		testrayComponentId = objectEntry.getId();
 
-		_objectEntryIds.put(objectEntryMapKey, testrayComponentId);
+		_objectEntryIds.put(objectEntryIdsKey, testrayComponentId);
 
 		return testrayComponentId;
 	}
@@ -731,12 +731,12 @@ public class TestrayDispatchTaskExecutor extends BaseDispatchTaskExecutor {
 			long companyId, String testrayFactorCategoryName)
 		throws Exception {
 
-		String objectEntryMapKey =
+		String objectEntryIdsKey =
 			"FactorCategory#" + testrayFactorCategoryName;
 
 		long testrayFactorCategoryId = _getObjectEntryId(
 			companyId, "name eq '" + testrayFactorCategoryName + "'",
-			"FactorCategory", objectEntryMapKey);
+			"FactorCategory", objectEntryIdsKey);
 
 		if (testrayFactorCategoryId != 0) {
 			return testrayFactorCategoryId;
@@ -750,7 +750,7 @@ public class TestrayDispatchTaskExecutor extends BaseDispatchTaskExecutor {
 
 		testrayFactorCategoryId = objectEntry.getId();
 
-		_objectEntryIds.put(objectEntryMapKey, testrayFactorCategoryId);
+		_objectEntryIds.put(objectEntryIdsKey, testrayFactorCategoryId);
 
 		return testrayFactorCategoryId;
 	}
@@ -760,7 +760,7 @@ public class TestrayDispatchTaskExecutor extends BaseDispatchTaskExecutor {
 			String testrayFactorOptionName)
 		throws Exception {
 
-		String objectEntryMapKey = StringBundler.concat(
+		String objectEntryIdsKey = StringBundler.concat(
 			"FactorOption#", testrayFactorOptionName, "#FactorCategoryId#",
 			testrayFactorCategoryId);
 
@@ -769,7 +769,7 @@ public class TestrayDispatchTaskExecutor extends BaseDispatchTaskExecutor {
 			StringBundler.concat(
 				"factorCategoryId eq ", testrayFactorCategoryId,
 				" and name eq '", testrayFactorOptionName, "'"),
-			"FactorOption", objectEntryMapKey);
+			"FactorOption", objectEntryIdsKey);
 
 		if (testrayFactorOptionId != 0) {
 			return testrayFactorOptionId;
@@ -786,7 +786,7 @@ public class TestrayDispatchTaskExecutor extends BaseDispatchTaskExecutor {
 
 		testrayFactorOptionId = objectEntry.getId();
 
-		_objectEntryIds.put(objectEntryMapKey, testrayFactorOptionId);
+		_objectEntryIds.put(objectEntryIdsKey, testrayFactorOptionId);
 
 		return testrayFactorOptionId;
 	}
@@ -796,12 +796,12 @@ public class TestrayDispatchTaskExecutor extends BaseDispatchTaskExecutor {
 			long testrayProjectId)
 		throws Exception {
 
-		String objectEntryMapKey =
+		String objectEntryIdsKey =
 			"ProductVersion#" + testrayProductVersionName;
 
 		long testrayProductVersionId = _getObjectEntryId(
 			companyId, "name eq '" + testrayProductVersionName + "'",
-			"ProductVersion", objectEntryMapKey);
+			"ProductVersion", objectEntryIdsKey);
 
 		if (testrayProductVersionId != 0) {
 			return testrayProductVersionId;
@@ -817,7 +817,7 @@ public class TestrayDispatchTaskExecutor extends BaseDispatchTaskExecutor {
 
 		testrayProductVersionId = objectEntry.getId();
 
-		_objectEntryIds.put(objectEntryMapKey, testrayProductVersionId);
+		_objectEntryIds.put(objectEntryIdsKey, testrayProductVersionId);
 
 		return testrayProductVersionId;
 	}
@@ -825,11 +825,11 @@ public class TestrayDispatchTaskExecutor extends BaseDispatchTaskExecutor {
 	private long _getTestrayProjectId(long companyId, String testrayProjectName)
 		throws Exception {
 
-		String objectEntryMapKey = "Project#" + testrayProjectName;
+		String objectEntryIdsKey = "Project#" + testrayProjectName;
 
 		long testrayProjectId = _getObjectEntryId(
 			companyId, "name eq '" + testrayProjectName + "'", "Project",
-			objectEntryMapKey);
+			objectEntryIdsKey);
 
 		if (testrayProjectId != 0) {
 			return testrayProjectId;
@@ -843,7 +843,7 @@ public class TestrayDispatchTaskExecutor extends BaseDispatchTaskExecutor {
 
 		testrayProjectId = objectEntry.getId();
 
-		_objectEntryIds.put(objectEntryMapKey, testrayProjectId);
+		_objectEntryIds.put(objectEntryIdsKey, testrayProjectId);
 
 		return testrayProjectId;
 	}
@@ -852,7 +852,7 @@ public class TestrayDispatchTaskExecutor extends BaseDispatchTaskExecutor {
 			long companyId, long testrayProjectId, String testrayRoutineName)
 		throws Exception {
 
-		String objectEntryMapKey = StringBundler.concat(
+		String objectEntryIdsKey = StringBundler.concat(
 			"Routine#", testrayRoutineName, "#ProjectId#", testrayProjectId);
 
 		long testrayRoutineId = _getObjectEntryId(
@@ -860,7 +860,7 @@ public class TestrayDispatchTaskExecutor extends BaseDispatchTaskExecutor {
 			StringBundler.concat(
 				"projectId eq ", testrayProjectId, " and name eq '",
 				testrayRoutineName, "'"),
-			"Routine", objectEntryMapKey);
+			"Routine", objectEntryIdsKey);
 
 		if (testrayRoutineId != 0) {
 			return testrayRoutineId;
@@ -876,7 +876,7 @@ public class TestrayDispatchTaskExecutor extends BaseDispatchTaskExecutor {
 
 		testrayRoutineId = objectEntry.getId();
 
-		_objectEntryIds.put(objectEntryMapKey, testrayRoutineId);
+		_objectEntryIds.put(objectEntryIdsKey, testrayRoutineId);
 
 		return testrayRoutineId;
 	}
@@ -925,7 +925,7 @@ public class TestrayDispatchTaskExecutor extends BaseDispatchTaskExecutor {
 			long testrayBuildId, String testrayRunName)
 		throws Exception {
 
-		String objectEntryMapKey = StringBundler.concat(
+		String objectEntryIdsKey = StringBundler.concat(
 			"Run#", testrayRunName, "#BuildId#", testrayBuildId);
 
 		long testrayRunId = _getObjectEntryId(
@@ -933,7 +933,7 @@ public class TestrayDispatchTaskExecutor extends BaseDispatchTaskExecutor {
 			StringBundler.concat(
 				"buildId eq ", testrayBuildId, " and name eq '", testrayRunName,
 				"'"),
-			"Run", objectEntryMapKey);
+			"Run", objectEntryIdsKey);
 
 		if (testrayRunId != 0) {
 			return testrayRunId;
@@ -968,7 +968,7 @@ public class TestrayDispatchTaskExecutor extends BaseDispatchTaskExecutor {
 			_defaultDTOConverterContext, _objectDefinitions.get("Run"),
 			objectEntry.getId(), objectEntry);
 
-		_objectEntryIds.put(objectEntryMapKey, testrayRunId);
+		_objectEntryIds.put(objectEntryIdsKey, testrayRunId);
 
 		return testrayRunId;
 	}
@@ -977,7 +977,7 @@ public class TestrayDispatchTaskExecutor extends BaseDispatchTaskExecutor {
 			long companyId, long testrayProjectId, String testrayTeamName)
 		throws Exception {
 
-		String objectEntryMapKey = StringBundler.concat(
+		String objectEntryIdsKey = StringBundler.concat(
 			"Team#", testrayTeamName, "#ProjectId#", testrayProjectId);
 
 		long testrayTeamId = _getObjectEntryId(
@@ -985,7 +985,7 @@ public class TestrayDispatchTaskExecutor extends BaseDispatchTaskExecutor {
 			StringBundler.concat(
 				"projectId eq ", testrayProjectId, " and name eq '",
 				testrayTeamName, "'"),
-			"Team", objectEntryMapKey);
+			"Team", objectEntryIdsKey);
 
 		if (testrayTeamId != 0) {
 			return testrayTeamId;
@@ -999,7 +999,7 @@ public class TestrayDispatchTaskExecutor extends BaseDispatchTaskExecutor {
 				"r_projectToTeams_c_projectId", testrayProjectId
 			).build());
 
-		_objectEntryIds.put(objectEntryMapKey, objectEntry.getId());
+		_objectEntryIds.put(objectEntryIdsKey, objectEntry.getId());
 
 		return objectEntry.getId();
 	}
