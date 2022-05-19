@@ -156,14 +156,8 @@ public class TestrayDispatchTaskExecutor extends BaseDispatchTaskExecutor {
 			String objectDefinitionShortName, Map<String, Object> properties)
 		throws Exception {
 
-		ObjectDefinition objectDefinition = _objectDefinitions.get(
+		ObjectDefinition objectDefinition = _getObjectDefinition(
 			objectDefinitionShortName);
-
-		if (objectDefinition == null) {
-			throw new PortalException(
-				"No object definition found with short name " +
-					objectDefinitionShortName);
-		}
 
 		ObjectEntry objectEntry = new ObjectEntry();
 
@@ -396,26 +390,33 @@ public class TestrayDispatchTaskExecutor extends BaseDispatchTaskExecutor {
 		return attributeNode.getTextContent();
 	}
 
-	private List<ObjectEntry> _getObjectEntries(
-			long companyId, String objectDefinitionShortName)
+	private ObjectDefinition _getObjectDefinition(
+			String objectDefinitionShortName)
 		throws Exception {
 
 		ObjectDefinition objectDefinition = _objectDefinitions.get(
 			objectDefinitionShortName);
 
 		if (objectDefinition == null) {
-			_log.error("Object Definition not found");
-
-			throw new PortalException("Object Definition not found");
+			throw new PortalException(
+				"No object definition found with short name " +
+					objectDefinitionShortName);
 		}
 
-		Filter filter = null;
+		return objectDefinition;
+	}
+
+	private List<ObjectEntry> _getObjectEntries(
+			long companyId, String objectDefinitionShortName)
+		throws Exception {
+
+		ObjectDefinition objectDefinition = _getObjectDefinition(
+			objectDefinitionShortName);
 
 		com.liferay.portal.vulcan.pagination.Page<ObjectEntry>
 			objectEntriesPage = _objectEntryManager.getObjectEntries(
-				companyId, _objectDefinitions.get(objectDefinitionShortName),
-				null, null, _defaultDTOConverterContext, filter, null, null,
-				null);
+				companyId, objectDefinition, null, null,
+				_defaultDTOConverterContext, (Filter)null, null, null, null);
 
 		return (List<ObjectEntry>)objectEntriesPage.getItems();
 	}
