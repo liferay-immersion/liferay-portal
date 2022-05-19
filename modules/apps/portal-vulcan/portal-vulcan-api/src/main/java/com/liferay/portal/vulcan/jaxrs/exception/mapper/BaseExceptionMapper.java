@@ -69,8 +69,8 @@ public abstract class BaseExceptionMapper<T extends Throwable>
 	private Problem _getSanitizedProblem(T exception) {
 		Problem problem = getProblem(exception);
 
-		if (_log.isDebugEnabled()) {
-			_log.debug("Problem " + problem, exception);
+		if (_log.isWarnEnabled()) {
+			_log.warn("Problem " + problem, exception);
 		}
 
 		problem.setDetail(null);
