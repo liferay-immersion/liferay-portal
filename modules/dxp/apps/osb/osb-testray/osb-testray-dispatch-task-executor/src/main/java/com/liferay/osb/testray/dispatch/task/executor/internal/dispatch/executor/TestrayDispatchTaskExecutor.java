@@ -1147,8 +1147,7 @@ public class TestrayDispatchTaskExecutor extends BaseDispatchTaskExecutor {
 	}
 
 	private void _loadTestrayTeams(long companyId) throws Exception {
-		List<ObjectEntry> objectEntries = _getObjectEntries(
-			companyId, "Team");
+		List<ObjectEntry> objectEntries = _getObjectEntries(companyId, "Team");
 
 		if (ListUtil.isEmpty(objectEntries)) {
 			return;
