@@ -102,7 +102,19 @@ public class TestrayDispatchTaskExecutor extends BaseDispatchTaskExecutor {
 		UnicodeProperties unicodeProperties =
 			dispatchTrigger.getDispatchTaskSettingsUnicodeProperties();
 
-		_validateUnicodeProperties(unicodeProperties);
+		if (Validator.isNull(unicodeProperties.getProperty("s3APIKey")) ||
+			Validator.isNull(unicodeProperties.getProperty("s3BucketName")) ||
+			Validator.isNull(
+				unicodeProperties.getProperty("s3ErroredFolderName")) ||
+			Validator.isNull(
+				unicodeProperties.getProperty("s3InboxFolderName")) ||
+			Validator.isNull(
+				unicodeProperties.getProperty("s3ProcessedFolderName"))) {
+
+			_log.error("The required properties are not set");
+
+			return;
+		}
 
 		User user = _userLocalService.getUser(dispatchTrigger.getUserId());
 
@@ -110,27 +122,28 @@ public class TestrayDispatchTaskExecutor extends BaseDispatchTaskExecutor {
 			false, null, null, null, null, LocaleUtil.getSiteDefault(), null,
 			user);
 
-		String originalPrincipalThreadLocalName =
-			PrincipalThreadLocal.getName();
-
-		PermissionChecker originalPermissionThreadLocalPermissionChecker =
+		PermissionChecker originalPermissionChecker =
 			PermissionThreadLocal.getPermissionChecker();
-
-		PrincipalThreadLocal.setName(user.getUserId());
 
 		PermissionThreadLocal.setPermissionChecker(
 			PermissionCheckerFactoryUtil.create(user));
 
+		String originalName = PrincipalThreadLocal.getName();
+
+		PrincipalThreadLocal.setName(user.getUserId());
+
 		try {
 			_invoke(() -> _loadCache(dispatchTrigger.getCompanyId()));
+
 			_invoke(
 				() -> _uploadToTestray(
 					dispatchTrigger.getCompanyId(), unicodeProperties));
 		}
 		finally {
-			PrincipalThreadLocal.setName(originalPrincipalThreadLocalName);
 			PermissionThreadLocal.setPermissionChecker(
-				originalPermissionThreadLocalPermissionChecker);
+				originalPermissionChecker);
+
+			PrincipalThreadLocal.setName(originalName);
 		}
 	}
 
@@ -1281,24 +1294,6 @@ public class TestrayDispatchTaskExecutor extends BaseDispatchTaskExecutor {
 
 			throw new PortalException(
 				"Unable to authenticate with GCP", ioException);
-		}
-	}
-
-	private void _validateUnicodeProperties(UnicodeProperties unicodeProperties)
-		throws Exception {
-
-		if (Validator.isNull(unicodeProperties.getProperty("s3APIKey")) ||
-			Validator.isNull(unicodeProperties.getProperty("s3BucketName")) ||
-			Validator.isNull(
-				unicodeProperties.getProperty("s3ErroredFolderName")) ||
-			Validator.isNull(
-				unicodeProperties.getProperty("s3InboxFolderName")) ||
-			Validator.isNull(
-				unicodeProperties.getProperty("s3ProcessedFolderName"))) {
-
-			_log.error("It is necessary to set all properties");
-
-			throw new PortalException("It is necessary to set all properties");
 		}
 	}
 
