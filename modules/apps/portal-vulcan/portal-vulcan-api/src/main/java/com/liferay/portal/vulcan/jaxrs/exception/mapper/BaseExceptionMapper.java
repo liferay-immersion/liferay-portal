@@ -14,10 +14,8 @@
 
 package com.liferay.portal.vulcan.jaxrs.exception.mapper;
 
-import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.util.PropsValues;
 
 import java.util.List;
 
@@ -72,17 +70,11 @@ public abstract class BaseExceptionMapper<T extends Throwable>
 		Problem problem = getProblem(exception);
 
 		if (_log.isDebugEnabled()) {
-			_log.debug(
-				StringBundler.concat(
-					"[ERROR-CODE: ", problem.getType(), "] ",
-					problem.getTitle()),
-				exception);
+			_log.debug("Problem " + problem, exception);
 		}
 
-		if (PropsValues.HEADLESS_BASE_EXCEPTION_MAPPER_SANITIZE_PROBLEM) {
-			problem.setDetail(null);
-			problem.setTitle(null);
-		}
+		problem.setDetail(null);
+		problem.setTitle(null);
 
 		return problem;
 	}
