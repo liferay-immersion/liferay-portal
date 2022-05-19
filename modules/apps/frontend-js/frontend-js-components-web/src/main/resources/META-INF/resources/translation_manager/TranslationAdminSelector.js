@@ -147,6 +147,7 @@ const TranslationAdminSelector = ({
 								key={activeLocale.id}
 								onClick={() => {
 									setSelectedLanguageId(activeLocale.id);
+									setSelectorDropdownActive(false);
 								}}
 							>
 								<ClayLayout.ContentRow containerElement="span">
