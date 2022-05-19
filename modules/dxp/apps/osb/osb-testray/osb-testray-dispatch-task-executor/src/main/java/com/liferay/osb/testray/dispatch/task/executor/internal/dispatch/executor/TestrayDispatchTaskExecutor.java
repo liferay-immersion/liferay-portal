@@ -285,10 +285,10 @@ public class TestrayDispatchTaskExecutor extends BaseDispatchTaskExecutor {
 
 		_addTestrayCaseResultIssue(
 			companyId, testrayCaseResultId,
-			(String)testrayCasePropertiesMap.get("testray.case.issue"));
+			(String)testrayCasePropertiesMap.get("testray.case.defect"));
 		_addTestrayCaseResultIssue(
 			companyId, testrayCaseResultId,
-			(String)testrayCasePropertiesMap.get("testray.case.defect"));
+			(String)testrayCasePropertiesMap.get("testray.case.issue"));
 	}
 
 	private void _addTestrayCaseResultIssue(
