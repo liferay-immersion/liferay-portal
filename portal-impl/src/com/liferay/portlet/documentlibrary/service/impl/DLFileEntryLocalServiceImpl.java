@@ -3501,7 +3501,9 @@ public class DLFileEntryLocalServiceImpl
 			DLFolder parentDLFolder = _dlFolderPersistence.findByPrimaryKey(
 				folderId);
 
-			if (groupId != parentDLFolder.getGroupId()) {
+			if ((groupId != parentDLFolder.getGroupId()) ||
+				parentDLFolder.isInTrash()) {
+
 				throw new NoSuchFolderException();
 			}
 		}
