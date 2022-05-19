@@ -84,7 +84,9 @@ import org.w3c.dom.NodeList;
  */
 @Component(
 	property = {
+		"dispatch.task.executor.cluster.mode=single-node",
 		"dispatch.task.executor.name=testray",
+		"dispatch.task.executor.overlapping=false",
 		"dispatch.task.executor.type=testray"
 	},
 	service = DispatchTaskExecutor.class
