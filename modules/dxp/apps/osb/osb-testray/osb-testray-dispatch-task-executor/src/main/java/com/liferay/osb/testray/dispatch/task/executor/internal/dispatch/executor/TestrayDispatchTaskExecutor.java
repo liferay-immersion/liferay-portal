@@ -160,9 +160,9 @@ public class TestrayDispatchTaskExecutor extends BaseDispatchTaskExecutor {
 			objectDefinitionShortName);
 
 		if (objectDefinition == null) {
-			_log.error("Object Definition not found");
-
-			throw new PortalException("Object Definition not found");
+			throw new PortalException(
+				"No object definition found with short name " +
+					objectDefinitionShortName);
 		}
 
 		ObjectEntry objectEntry = new ObjectEntry();
