@@ -1056,14 +1056,14 @@ public class TestrayDispatchTaskExecutor extends BaseDispatchTaskExecutor {
 	}
 
 	private void _loadTestrayCaseTypes(long companyId) throws Exception {
-		List<ObjectEntry> objectEntriesList = _getObjectEntries(
+		List<ObjectEntry> objectEntries = _getObjectEntries(
 			companyId, "CaseType");
 
-		if (ListUtil.isEmpty(objectEntriesList)) {
+		if (ListUtil.isEmpty(objectEntries)) {
 			return;
 		}
 
-		for (ObjectEntry objectEntry : objectEntriesList) {
+		for (ObjectEntry objectEntry : objectEntries) {
 			Map<String, Object> properties = objectEntry.getProperties();
 
 			_objectEntryIds.put(
@@ -1073,14 +1073,14 @@ public class TestrayDispatchTaskExecutor extends BaseDispatchTaskExecutor {
 	}
 
 	private void _loadTestrayComponents(long companyId) throws Exception {
-		List<ObjectEntry> objectEntriesList = _getObjectEntries(
+		List<ObjectEntry> objectEntries = _getObjectEntries(
 			companyId, "Component");
 
-		if (ListUtil.isEmpty(objectEntriesList)) {
+		if (ListUtil.isEmpty(objectEntries)) {
 			return;
 		}
 
-		for (ObjectEntry objectEntry : objectEntriesList) {
+		for (ObjectEntry objectEntry : objectEntries) {
 			Map<String, Object> properties = objectEntry.getProperties();
 
 			_objectEntryIds.put(
@@ -1092,14 +1092,14 @@ public class TestrayDispatchTaskExecutor extends BaseDispatchTaskExecutor {
 	}
 
 	private void _loadTestrayFactorCategories(long companyId) throws Exception {
-		List<ObjectEntry> objectEntriesList = _getObjectEntries(
+		List<ObjectEntry> objectEntries = _getObjectEntries(
 			companyId, "FactorCategory");
 
-		if (ListUtil.isEmpty(objectEntriesList)) {
+		if (ListUtil.isEmpty(objectEntries)) {
 			return;
 		}
 
-		for (ObjectEntry objectEntry : objectEntriesList) {
+		for (ObjectEntry objectEntry : objectEntries) {
 			Map<String, Object> properties = objectEntry.getProperties();
 
 			_objectEntryIds.put(
@@ -1109,14 +1109,14 @@ public class TestrayDispatchTaskExecutor extends BaseDispatchTaskExecutor {
 	}
 
 	private void _loadTestrayFactorOptions(long companyId) throws Exception {
-		List<ObjectEntry> objectEntriesList = _getObjectEntries(
+		List<ObjectEntry> objectEntries = _getObjectEntries(
 			companyId, "FactorOption");
 
-		if (ListUtil.isEmpty(objectEntriesList)) {
+		if (ListUtil.isEmpty(objectEntries)) {
 			return;
 		}
 
-		for (ObjectEntry objectEntry : objectEntriesList) {
+		for (ObjectEntry objectEntry : objectEntries) {
 			Map<String, Object> properties = objectEntry.getProperties();
 
 			_objectEntryIds.put(
@@ -1130,14 +1130,14 @@ public class TestrayDispatchTaskExecutor extends BaseDispatchTaskExecutor {
 	}
 
 	private void _loadTestrayProjects(long companyId) throws Exception {
-		List<ObjectEntry> objectEntriesList = _getObjectEntries(
+		List<ObjectEntry> objectEntries = _getObjectEntries(
 			companyId, "Project");
 
-		if (ListUtil.isEmpty(objectEntriesList)) {
+		if (ListUtil.isEmpty(objectEntries)) {
 			return;
 		}
 
-		for (ObjectEntry objectEntry : objectEntriesList) {
+		for (ObjectEntry objectEntry : objectEntries) {
 			Map<String, Object> properties = objectEntry.getProperties();
 
 			_objectEntryIds.put(
@@ -1147,14 +1147,14 @@ public class TestrayDispatchTaskExecutor extends BaseDispatchTaskExecutor {
 	}
 
 	private void _loadTestrayTeams(long companyId) throws Exception {
-		List<ObjectEntry> objectEntriesList = _getObjectEntries(
+		List<ObjectEntry> objectEntries = _getObjectEntries(
 			companyId, "Team");
 
-		if (ListUtil.isEmpty(objectEntriesList)) {
+		if (ListUtil.isEmpty(objectEntries)) {
 			return;
 		}
 
-		for (ObjectEntry objectEntry : objectEntriesList) {
+		for (ObjectEntry objectEntry : objectEntries) {
 			Map<String, Object> properties = objectEntry.getProperties();
 
 			_objectEntryIds.put(
