@@ -410,13 +410,11 @@ public class TestrayDispatchTaskExecutor extends BaseDispatchTaskExecutor {
 			long companyId, String objectDefinitionShortName)
 		throws Exception {
 
-		ObjectDefinition objectDefinition = _getObjectDefinition(
-			objectDefinitionShortName);
-
 		com.liferay.portal.vulcan.pagination.Page<ObjectEntry>
 			objectEntriesPage = _objectEntryManager.getObjectEntries(
-				companyId, objectDefinition, null, null,
-				_defaultDTOConverterContext, (Filter)null, null, null, null);
+				companyId, _getObjectDefinition(objectDefinitionShortName),
+				null, null, _defaultDTOConverterContext, (Filter)null, null,
+				null, null);
 
 		return (List<ObjectEntry>)objectEntriesPage.getItems();
 	}
