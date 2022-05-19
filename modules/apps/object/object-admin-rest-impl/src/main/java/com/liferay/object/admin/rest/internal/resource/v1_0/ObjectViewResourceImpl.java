@@ -28,10 +28,8 @@ import com.liferay.object.service.persistence.ObjectViewFilterColumnPersistence;
 import com.liferay.object.service.persistence.ObjectViewSortColumnPersistence;
 import com.liferay.portal.kernel.search.Field;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
-import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HashMapBuilder;
-import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.vulcan.dto.converter.DefaultDTOConverterContext;
 import com.liferay.portal.vulcan.pagination.Page;
 import com.liferay.portal.vulcan.pagination.Pagination;
@@ -101,12 +99,6 @@ public class ObjectViewResourceImpl extends BaseObjectViewResourceImpl {
 			Long objectDefinitionId, ObjectView objectView)
 		throws Exception {
 
-		if (ArrayUtil.isNotEmpty(objectView.getObjectViewFilterColumns()) &&
-			!GetterUtil.getBoolean(PropsUtil.get("feature.flag.LPS-144957"))) {
-
-			throw new UnsupportedOperationException();
-		}
-
 		return _toObjectView(
 			_objectViewService.addObjectView(
 				objectDefinitionId,
@@ -140,12 +132,6 @@ public class ObjectViewResourceImpl extends BaseObjectViewResourceImpl {
 	@Override
 	public ObjectView putObjectView(Long objectViewId, ObjectView objectView)
 		throws Exception {
-
-		if (ArrayUtil.isNotEmpty(objectView.getObjectViewFilterColumns()) &&
-			!GetterUtil.getBoolean(PropsUtil.get("feature.flag.LPS-144957"))) {
-
-			throw new UnsupportedOperationException();
-		}
 
 		return _toObjectView(
 			_objectViewService.updateObjectView(

@@ -14,7 +14,7 @@
 
 import 'codemirror/mode/groovy/groovy';
 import {ClayToggle} from '@clayui/form';
-import {FieldFeedback, useFeatureFlag} from 'data-engine-js-components-web';
+import {FieldFeedback} from 'data-engine-js-components-web';
 import React, {ChangeEventHandler, useRef, useState} from 'react';
 
 import Card from '../Card/Card';
@@ -97,7 +97,6 @@ function Conditions({
 		}
 	);
 	const editorRef = useRef<CodeMirror.Editor>();
-	const flags = useFeatureFlag();
 	const emptyScriptError = errors.script;
 	const engine = values.engine;
 	const ddmTooltip = {
@@ -149,14 +148,12 @@ function Conditions({
 						</div>
 					</div>
 
-					{flags['LPS-147651'] && (
-						<Sidebar
-							editorRef={editorRef}
-							objectValidationRuleElements={
-								objectValidationRuleElements
-							}
-						/>
-					)}
+					<Sidebar
+						editorRef={editorRef}
+						objectValidationRuleElements={
+							objectValidationRuleElements
+						}
+					/>
 				</div>
 			</Card>
 

@@ -13,7 +13,6 @@
  */
 
 import ClayTabs from '@clayui/tabs';
-import {useFeatureFlag} from 'data-engine-js-components-web';
 import {fetch} from 'frontend-js-web';
 import React, {useContext, useEffect, useState} from 'react';
 
@@ -40,6 +39,10 @@ const TABS = [
 		Component: DefaultSortScreen,
 		label: Liferay.Language.get('default-sort'),
 	},
+	{
+		Component: FilterScreen,
+		label: Liferay.Language.get('filters'),
+	},
 ];
 
 const HEADERS = new Headers({
@@ -55,15 +58,6 @@ const CustomView: React.FC<React.HTMLAttributes<HTMLElement>> = () => {
 
 	const [activeIndex, setActiveIndex] = useState<number>(0);
 	const [loading, setLoading] = useState<boolean>(true);
-
-	const flags = useFeatureFlag();
-
-	if (TABS.length < 4 && flags['LPS-144957']) {
-		TABS.push({
-			Component: FilterScreen,
-			label: Liferay.Language.get('filters'),
-		});
-	}
 
 	useEffect(() => {
 		const makeFetch = async () => {
