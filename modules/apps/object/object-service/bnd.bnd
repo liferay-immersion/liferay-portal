@@ -1,6 +1,6 @@
 Bundle-Name: Liferay Object Service
 Bundle-SymbolicName: com.liferay.object.service
-Bundle-Version: 1.0.60
+Bundle-Version: 1.0.61
 Liferay-Require-SchemaVersion: 3.6.0
 Liferay-Service: true
 -dsannotations-options: inherit
