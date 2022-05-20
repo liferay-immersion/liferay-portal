@@ -529,7 +529,7 @@ public class LayoutStagedModelDataHandlerTest
 
 		if (layoutElement == null) {
 			throw new IllegalStateException(
-				"Unable to find layout element with uuid " + layoutUuid);
+				"Unable to find layout element with UUID " + layoutUuid);
 		}
 
 		Element portletRootElement = layoutElement.element("portlets");
@@ -551,7 +551,7 @@ public class LayoutStagedModelDataHandlerTest
 
 		if (portletElement == null) {
 			throw new IllegalStateException(
-				"Unable to find portlet element with portlet id " + portletId);
+				"Unable to find portlet element with portlet ID " + portletId);
 		}
 
 		Document portletDocument = SAXReaderUtil.read(
