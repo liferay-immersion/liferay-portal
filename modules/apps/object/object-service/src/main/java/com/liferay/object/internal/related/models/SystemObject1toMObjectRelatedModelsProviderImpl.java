@@ -193,6 +193,10 @@ public class SystemObject1toMObjectRelatedModelsProviderImpl
 			long groupId, long objectRelationshipId, long primaryKey)
 		throws PortalException {
 
+		PersistedModelLocalService persistedModelLocalService =
+			_persistedModelLocalServiceRegistry.getPersistedModelLocalService(
+				_systemObjectDefinitionMetadata.getModelClassName());
+
 		DynamicObjectDefinitionTable dynamicObjectDefinitionTable =
 			_getDynamicObjectDefinitionTable();
 
@@ -201,10 +205,6 @@ public class SystemObject1toMObjectRelatedModelsProviderImpl
 			primaryKey,
 			DSLQueryFactoryUtil.countDistinct(
 				dynamicObjectDefinitionTable.getPrimaryKeyColumn()));
-
-		PersistedModelLocalService persistedModelLocalService =
-			_persistedModelLocalServiceRegistry.getPersistedModelLocalService(
-				_systemObjectDefinitionMetadata.getModelClassName());
 
 		return persistedModelLocalService.dslQueryCount(dslQuery);
 	}
