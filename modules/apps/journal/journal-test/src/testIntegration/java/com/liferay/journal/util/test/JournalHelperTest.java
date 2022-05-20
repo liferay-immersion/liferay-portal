@@ -92,7 +92,7 @@ public class JournalHelperTest {
 	}
 
 	@Test
-	public void testBuildURLPattern() throws Exception {
+	public void testcreateURLPattern() throws Exception {
 		JournalArticle article = JournalTestUtil.addArticle(
 			_group.getGroupId(),
 			JournalFolderConstants.DEFAULT_PARENT_FOLDER_ID, "Test",
@@ -102,7 +102,7 @@ public class JournalHelperTest {
 
 		Assert.assertEquals(
 			getArticleURL(),
-			_journalHelper.buildURLPattern(
+			_journalHelper.createURLPattern(
 				article, _themeDisplay.getLocale(), layout.isPrivateLayout(),
 				FriendlyURLResolverConstants.URL_SEPARATOR_JOURNAL_ARTICLE,
 				_themeDisplay));

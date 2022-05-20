@@ -87,7 +87,7 @@ public class JournalOpenSearchImpl extends HitsOpenSearchImpl {
 			groupId, articleId);
 
 		if (Validator.isNotNull(article.getLayoutUuid())) {
-			return _journalHelper.buildURLPattern(
+			return _journalHelper.createURLPattern(
 				article, themeDisplay.getLocale(), false,
 				JournalArticleConstants.CANONICAL_URL_SEPARATOR, themeDisplay);
 		}

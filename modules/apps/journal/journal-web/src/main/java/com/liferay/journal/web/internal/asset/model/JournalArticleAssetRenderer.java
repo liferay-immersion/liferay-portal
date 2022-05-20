@@ -394,7 +394,7 @@ public class JournalArticleAssetRenderer
 			return noSuchEntryRedirect;
 		}
 
-		String friendlyURL = JournalHelperUtil.buildURLPattern(
+		String friendlyURL = JournalHelperUtil.createURLPattern(
 			_article, themeDisplay.getLocale(), layout.isPrivateLayout(),
 			JournalArticleConstants.CANONICAL_URL_SEPARATOR, themeDisplay);
 

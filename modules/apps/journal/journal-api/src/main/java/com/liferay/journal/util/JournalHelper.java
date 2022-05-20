@@ -32,7 +32,7 @@ import javax.portlet.PortletRequest;
  */
 public interface JournalHelper {
 
-	public String buildURLPattern(
+	public String createURLPattern(
 			JournalArticle article, Locale locale, boolean privateLayout,
 			String separator, ThemeDisplay themeDisplay)
 		throws PortalException;

@@ -8943,7 +8943,7 @@ public class JournalArticleLocalServiceImpl
 		for (Locale locale : friendlyURLs.keySet()) {
 			friendlyURLMap.put(
 				LocaleUtil.toLanguageId(locale),
-				_journalHelper.buildURLPattern(
+				_journalHelper.createURLPattern(
 					article, locale, false,
 					FriendlyURLResolverConstants.URL_SEPARATOR_JOURNAL_ARTICLE,
 					themeDisplay));

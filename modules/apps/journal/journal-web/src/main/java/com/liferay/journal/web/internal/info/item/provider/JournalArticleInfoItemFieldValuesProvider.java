@@ -185,7 +185,7 @@ public class JournalArticleInfoItemFieldValuesProvider
 			return StringPool.BLANK;
 		}
 
-		return _journalHelper.buildURLPattern(
+		return _journalHelper.createURLPattern(
 			journalArticle, themeDisplay.getLocale(), layout.isPrivateLayout(),
 			JournalArticleConstants.CANONICAL_URL_SEPARATOR, themeDisplay);
 	}

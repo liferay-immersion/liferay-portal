@@ -99,7 +99,7 @@ public class JournalArticleActivityInterpreter
 			if (layout != null) {
 				ThemeDisplay themeDisplay = serviceContext.getThemeDisplay();
 
-				return _journalHelper.buildURLPattern(
+				return _journalHelper.createURLPattern(
 					article, themeDisplay.getLocale(), layout.isPrivateLayout(),
 					JournalArticleConstants.CANONICAL_URL_SEPARATOR,
 					themeDisplay);

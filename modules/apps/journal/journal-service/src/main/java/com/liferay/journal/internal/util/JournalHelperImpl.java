@@ -80,7 +80,7 @@ import org.osgi.service.component.annotations.Reference;
 public class JournalHelperImpl implements JournalHelper {
 
 	@Override
-	public String buildURLPattern(
+	public String createURLPattern(
 			JournalArticle article, Locale locale, boolean privateLayout,
 			String separator, ThemeDisplay themeDisplay)
 		throws PortalException {

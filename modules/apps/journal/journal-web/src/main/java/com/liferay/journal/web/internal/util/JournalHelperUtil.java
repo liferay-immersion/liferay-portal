@@ -33,12 +33,12 @@ import org.osgi.service.component.annotations.Reference;
 @Component(immediate = true, service = {})
 public class JournalHelperUtil {
 
-	public static String buildURLPattern(
+	public static String createURLPattern(
 			JournalArticle article, Locale locale, boolean privateLayout,
 			String separator, ThemeDisplay themeDisplay)
 		throws PortalException {
 
-		return _journalHelper.buildURLPattern(
+		return _journalHelper.createURLPattern(
 			article, locale, privateLayout, separator, themeDisplay);
 	}
 
