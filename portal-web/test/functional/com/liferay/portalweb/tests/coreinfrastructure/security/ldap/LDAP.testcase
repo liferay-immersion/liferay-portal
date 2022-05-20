@@ -354,4 +354,35 @@ definition {
 		}
 	}
 
+	@description = "This is a use case for LRQA-42766. Users can be imported with group import method."
+	@priority = "3"
+	test UsersCanBeImportedFromLDAPByGroups {
+		property apacheds.enabled = "true";
+		property test.name.skip.portal.instance = "LDAP#UsersCanBeImportedFromLDAPByGroups";
+
+		task ("Given: User adds LDAP server and configure settings with group import method") {
+			var enableSettingList = "enabled,ldapImportEnabled";
+
+			LDAP.addLDAPServerAndTestConnection();
+
+			LDAP.enableLDAPSettings(enableSettingList = "${enableSettingList}");
+
+			PortalSettings.changeGroupImportMethod(groupImportMethod = "Group");
+		}
+
+		task ("When: User creates a new user on LDAP and import it") {
+			LDAP.installLDAPCommandUtil();
+
+			LDAP.importLDIFOnLDAPAndTriggerSync(ldifName = "addUser");
+		}
+
+		task ("Then: This new user can log in") {
+			User.logoutPG();
+
+			User.firstLoginUI(
+				password = "test",
+				userEmailAddress = "testUser2@liferay.com");
+		}
+	}
+
 }
