@@ -150,27 +150,26 @@ public class OrderTypeResourceTest extends BaseOrderTypeResourceTestCase {
 	}
 
 	private CommerceOrderType _addCommerceOrderType() throws Exception {
-		if (_commerceOrderType == null) {
-			DateConfig displayDateConfig = DateConfig.toDisplayDateConfig(
-				RandomTestUtil.nextDate(), _user.getTimeZone());
-			DateConfig expirationDateConfig = DateConfig.toExpirationDateConfig(
-				RandomTestUtil.nextDate(), _user.getTimeZone());
-
-			_commerceOrderType =
-				_commerceOrderTypeLocalService.addCommerceOrderType(
-					RandomTestUtil.randomString(), _user.getUserId(),
-					RandomTestUtil.randomLocaleStringMap(),
-					RandomTestUtil.randomLocaleStringMap(),
-					RandomTestUtil.randomBoolean(),
-					displayDateConfig.getMonth(), displayDateConfig.getDay(),
-					displayDateConfig.getYear(), displayDateConfig.getHour(),
-					displayDateConfig.getMinute(), 0,
-					expirationDateConfig.getMonth(),
-					expirationDateConfig.getDay(),
-					expirationDateConfig.getYear(),
-					expirationDateConfig.getHour(),
-					expirationDateConfig.getMinute(), true, _serviceContext);
+		if (_commerceOrderType != null) {
+			return _commerceOrderType;
 		}
+
+		DateConfig displayDateConfig = DateConfig.toDisplayDateConfig(
+			RandomTestUtil.nextDate(), _user.getTimeZone());
+		DateConfig expirationDateConfig = DateConfig.toExpirationDateConfig(
+			RandomTestUtil.nextDate(), _user.getTimeZone());
+
+		_commerceOrderType =
+			_commerceOrderTypeLocalService.addCommerceOrderType(
+				RandomTestUtil.randomString(), _user.getUserId(),
+				RandomTestUtil.randomLocaleStringMap(),
+				RandomTestUtil.randomLocaleStringMap(),
+				RandomTestUtil.randomBoolean(), displayDateConfig.getMonth(),
+				displayDateConfig.getDay(), displayDateConfig.getYear(),
+				displayDateConfig.getHour(), displayDateConfig.getMinute(), 0,
+				expirationDateConfig.getMonth(), expirationDateConfig.getDay(),
+				expirationDateConfig.getYear(), expirationDateConfig.getHour(),
+				expirationDateConfig.getMinute(), true, _serviceContext);
 
 		return _commerceOrderType;
 	}
