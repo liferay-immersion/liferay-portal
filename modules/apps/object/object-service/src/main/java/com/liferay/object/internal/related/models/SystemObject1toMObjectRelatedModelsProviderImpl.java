@@ -242,13 +242,12 @@ public class SystemObject1toMObjectRelatedModelsProviderImpl
 					}
 				).and(
 					() -> {
-						DynamicObjectDefinitionTable
-							dynamicObjectDefinitionTable =
-								_getDynamicObjectDefinitionTable();
-
 						Column<?, Long> primaryKeyColumn = _table.getColumn(
 							objectDefinition.getPKObjectFieldDBColumnName());
 
+						DynamicObjectDefinitionTable
+							dynamicObjectDefinitionTable =
+								_getDynamicObjectDefinitionTable();
 						ObjectField objectField =
 							_objectFieldLocalService.getObjectField(
 								objectFieldId);
