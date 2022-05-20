@@ -92,7 +92,6 @@ public class JournalHelperImpl implements JournalHelper {
 				_layoutSetLocalService.getLayoutSet(
 					article.getGroupId(), privateLayout),
 				themeDisplay, false, false));
-
 		sb.append(separator);
 		sb.append(article.getUrlTitle(locale));
 
