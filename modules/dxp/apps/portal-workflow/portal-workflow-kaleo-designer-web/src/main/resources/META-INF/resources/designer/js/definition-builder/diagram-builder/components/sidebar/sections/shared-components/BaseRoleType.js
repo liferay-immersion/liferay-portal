@@ -205,13 +205,13 @@ const BaseRoleType = ({
 
 		setFilterRoleType(true);
 		setSelectedRoleType(event.target.value);
-		setSelectedRoleName(null);
+		setSelectedRoleName('');
 	};
 
 	const roleTypeItemClick = (item) => {
 		setSelectedRoleType(item);
 		setRoleTypeDropdownActive(false);
-		setSelectedRoleName(null);
+		setSelectedRoleName('');
 	};
 
 	const initialLoading = networkStatus === 1;
