@@ -20,15 +20,14 @@ import com.liferay.frontend.data.set.provider.search.FDSPagination;
 import com.liferay.frontend.data.set.sample.web.internal.constants.FDSSampleFDSNames;
 import com.liferay.frontend.data.set.sample.web.internal.model.UserEntry;
 import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
+import com.liferay.portal.vulcan.util.TransformUtil;
 import com.liferay.users.admin.kernel.util.UsersAdmin;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -57,25 +56,17 @@ public class ClassicFDSDataProvider implements FDSDataProvider<UserEntry> {
 			(ThemeDisplay)httpServletRequest.getAttribute(
 				WebKeys.THEME_DISPLAY);
 
-		List<User> users = _usersAdmin.getUsers(
-			_userLocalService.search(
-				themeDisplay.getCompanyId(), fdsKeywords.getKeywords(),
-				WorkflowConstants.STATUS_APPROVED,
-				new LinkedHashMap<String, Object>(),
-				fdsPagination.getStartPosition(),
-				fdsPagination.getEndPosition(), sort));
-
-		List<UserEntry> userEntries = new ArrayList<>();
-
-		for (User user : users) {
-			UserEntry userEntry = new UserEntry(
+		return TransformUtil.transform(
+			_usersAdmin.getUsers(
+				_userLocalService.search(
+					themeDisplay.getCompanyId(), fdsKeywords.getKeywords(),
+					WorkflowConstants.STATUS_APPROVED,
+					new LinkedHashMap<String, Object>(),
+					fdsPagination.getStartPosition(),
+					fdsPagination.getEndPosition(), sort)),
+			user -> new UserEntry(
 				user.getEmailAddress(), user.getFirstName(),
-				user.getLastName());
-
-			userEntries.add(userEntry);
-		}
-
-		return userEntries;
+				user.getLastName()));
 	}
 
 	@Override
