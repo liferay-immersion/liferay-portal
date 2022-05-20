@@ -305,7 +305,7 @@ public class SearchPermissionCheckerImpl implements SearchPermissionChecker {
 	}
 
 	private SearchPermissionContext _createSearchPermissionContext(
-			long companyId, long userId, long[] groupIds,
+			long companyId, long[] groupIds, long userId,
 			PermissionChecker permissionChecker)
 		throws Exception {
 
@@ -446,8 +446,8 @@ public class SearchPermissionCheckerImpl implements SearchPermissionChecker {
 	}
 
 	private BooleanFilter _getPermissionBooleanFilter(
-			long companyId, long[] searchGroupIds, long userId,
-			String className, SearchContext searchContext)
+			long companyId, long[] groupIds, long userId, String className,
+			SearchContext searchContext)
 		throws Exception {
 
 		Indexer<?> indexer = indexerRegistry.getIndexer(className);
@@ -487,7 +487,7 @@ public class SearchPermissionCheckerImpl implements SearchPermissionChecker {
 		}
 		else if (!permissionChecker.isCompanyAdmin(companyId)) {
 			searchPermissionContext = _createSearchPermissionContext(
-				companyId, userId, searchGroupIds, permissionChecker);
+				companyId, groupIds, userId, permissionChecker);
 		}
 
 		if (searchPermissionContext == null) {
@@ -501,7 +501,7 @@ public class SearchPermissionCheckerImpl implements SearchPermissionChecker {
 			"searchPermissionContext", searchPermissionContext);
 
 		return _getPermissionFilter(
-			companyId, searchGroupIds, userId, permissionChecker,
+			companyId, groupIds, userId, permissionChecker,
 			_getPermissionName(searchContext, className),
 			searchPermissionContext);
 	}
