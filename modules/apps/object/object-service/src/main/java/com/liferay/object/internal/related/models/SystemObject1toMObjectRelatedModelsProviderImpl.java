@@ -200,13 +200,12 @@ public class SystemObject1toMObjectRelatedModelsProviderImpl
 		DynamicObjectDefinitionTable dynamicObjectDefinitionTable =
 			_getDynamicObjectDefinitionTable();
 
-		DSLQuery dslQuery = _getGroupByStep(
-			dynamicObjectDefinitionTable, groupId, objectRelationshipId,
-			primaryKey,
-			DSLQueryFactoryUtil.countDistinct(
-				dynamicObjectDefinitionTable.getPrimaryKeyColumn()));
-
-		return persistedModelLocalService.dslQueryCount(dslQuery);
+		return persistedModelLocalService.dslQueryCount(
+			_getGroupByStep(
+				dynamicObjectDefinitionTable, groupId, objectRelationshipId,
+				primaryKey,
+				DSLQueryFactoryUtil.countDistinct(
+					dynamicObjectDefinitionTable.getPrimaryKeyColumn())));
 	}
 
 	@Override
