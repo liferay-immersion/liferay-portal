@@ -86,6 +86,8 @@ export default function SourceBuilder() {
 	).toLowerCase();
 
 	function loadFile(event) {
+		setShowInvalidContentMessage(false);
+
 		var files = event.target.files;
 
 		if (files[0].type === 'text/xml') {
