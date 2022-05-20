@@ -275,6 +275,10 @@ public class SystemObject1toMObjectRelatedModelsProviderImpl
 	}
 
 	private DynamicObjectDefinitionTable _getDynamicObjectDefinitionTable() {
+
+		// TODO Cache this across the cluster with proper invalidation when the
+		// object definition or its object fields are updated
+
 		return new DynamicObjectDefinitionTable(
 			_objectDefinition,
 			_objectFieldLocalService.getObjectFields(
