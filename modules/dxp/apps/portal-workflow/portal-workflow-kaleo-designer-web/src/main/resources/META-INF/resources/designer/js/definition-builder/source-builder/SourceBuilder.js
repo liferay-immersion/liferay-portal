@@ -100,6 +100,7 @@ export default function SourceBuilder() {
 					fileInput.value = '';
 
 					setShowImportSuccessMessage(true);
+					setShowInvalidContentMessage(false); 
 				}
 			};
 
