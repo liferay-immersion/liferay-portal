@@ -50,17 +50,17 @@ public class CommerceQualifierMetadataRegistryImpl
 
 	@Override
 	public List<CommerceQualifierMetadata> getCommerceQualifierMetadatas() {
-		List<CommerceQualifierMetadata> commerceQualifiersMetadata =
+		List<CommerceQualifierMetadata> commerceQualifierMetadatas =
 			new ArrayList<>();
 
 		for (String key : _serviceTrackerMap.keySet()) {
 			CommerceQualifierMetadata commerceQualifierMetadata =
 				_serviceTrackerMap.getService(key);
 
-			commerceQualifiersMetadata.add(commerceQualifierMetadata);
+			commerceQualifierMetadatas.add(commerceQualifierMetadata);
 		}
 
-		return Collections.unmodifiableList(commerceQualifiersMetadata);
+		return Collections.unmodifiableList(commerceQualifierMetadatas);
 	}
 
 	@Activate
