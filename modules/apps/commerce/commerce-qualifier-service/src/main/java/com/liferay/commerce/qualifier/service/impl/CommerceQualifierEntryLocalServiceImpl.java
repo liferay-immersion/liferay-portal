@@ -383,6 +383,107 @@ public class CommerceQualifierEntryLocalServiceImpl
 	}
 
 	private GroupByStep _getGroupByStep(
+		long companyId, FromStep fromStep,
+		CommerceQualifierMetadata sourceCommerceQualifierMetadata,
+		Map<String, ?> sourceAttributes, Map<String, ?> targetAttributes) {
+
+		Table sourceTable = sourceCommerceQualifierMetadata.getTable();
+
+		JoinStep joinStep = fromStep.from(sourceTable);
+
+		Predicate predicate = sourceTable.getColumn(
+			"companyId"
+		).eq(
+			companyId
+		);
+
+		if (sourceAttributes != null) {
+			for (Map.Entry<String, ?> sourceAttribute :
+					sourceAttributes.entrySet()) {
+
+				predicate = predicate.and(
+					() -> {
+						Object value = sourceAttribute.getValue();
+
+						if (value instanceof Object[]) {
+							return sourceTable.getColumn(
+								sourceAttribute.getKey()
+							).in(
+								(Object[])value
+							);
+						}
+
+						return sourceTable.getColumn(
+							sourceAttribute.getKey()
+						).eq(
+							value
+						);
+					});
+			}
+		}
+
+		if (targetAttributes == null) {
+			return joinStep.leftJoinOn(
+				CommerceQualifierEntryTable.INSTANCE,
+				CommerceQualifierEntryTable.INSTANCE.sourceClassNameId.eq(
+					classNameLocalService.getClassNameId(
+						sourceCommerceQualifierMetadata.getModelClassName())
+				).and(
+					CommerceQualifierEntryTable.INSTANCE.sourceClassPK.eq(
+						sourceCommerceQualifierMetadata.getPrimaryKeyColumn())
+				)
+			).where(
+				predicate.and(
+					CommerceQualifierEntryTable.INSTANCE.
+						commerceQualifierEntryId.isNull())
+			);
+		}
+
+		String[] allowedTargetClassNames = Stream.of(
+			sourceCommerceQualifierMetadata.getAllowedTargetClassNameGroups()
+		).flatMap(
+			Stream::of
+		).toArray(
+			String[]::new
+		);
+
+		if (allowedTargetClassNames.length == 0) {
+			return joinStep.where(predicate);
+		}
+
+		Predicate subpredicate = null;
+
+		for (String allowedTargetClassName : allowedTargetClassNames) {
+			CommerceQualifierEntryTable tableAlias =
+				CommerceQualifierUtil.getCommerceQualifierTableAlias(
+					sourceCommerceQualifierMetadata.getModelClassName(),
+					allowedTargetClassName);
+
+			joinStep = joinStep.leftJoinOn(
+				tableAlias,
+				_getPredicate(
+					tableAlias.sourceClassNameId,
+					sourceCommerceQualifierMetadata.getModelClassName(),
+					tableAlias.sourceClassPK,
+					sourceCommerceQualifierMetadata.getPrimaryKeyColumn(),
+					tableAlias.targetClassNameId, allowedTargetClassName));
+
+			Predicate targetPredicate = _getTargetPredicate(
+				tableAlias.commerceQualifierEntryId, tableAlias.targetClassPK,
+				targetAttributes.get(allowedTargetClassName));
+
+			if (subpredicate == null) {
+				subpredicate = targetPredicate;
+			}
+			else {
+				subpredicate = subpredicate.and(targetPredicate);
+			}
+		}
+
+		return joinStep.where(predicate.and(subpredicate.withParentheses()));
+	}
+
+	private GroupByStep _getGroupByStep(
 		long companyId, FromStep fromStep, Table innerJoinTable,
 		Predicate innerJoinPredicate, boolean target, String className1,
 		Long classPK1, String className2, String keywords,
@@ -489,107 +590,6 @@ public class CommerceQualifierEntryLocalServiceImpl
 		).or(
 			primaryKeyColumn.isNull()
 		).withParentheses();
-	}
-
-	private GroupByStep _getGroupByStep(
-		long companyId, FromStep fromStep,
-		CommerceQualifierMetadata sourceCommerceQualifierMetadata,
-		Map<String, ?> sourceAttributes, Map<String, ?> targetAttributes) {
-
-		Table sourceTable = sourceCommerceQualifierMetadata.getTable();
-
-		JoinStep joinStep = fromStep.from(sourceTable);
-
-		Predicate predicate = sourceTable.getColumn(
-			"companyId"
-		).eq(
-			companyId
-		);
-
-		if (sourceAttributes != null) {
-			for (Map.Entry<String, ?> sourceAttribute :
-					sourceAttributes.entrySet()) {
-
-				predicate = predicate.and(
-					() -> {
-						Object value = sourceAttribute.getValue();
-
-						if (value instanceof Object[]) {
-							return sourceTable.getColumn(
-								sourceAttribute.getKey()
-							).in(
-								(Object[])value
-							);
-						}
-
-						return sourceTable.getColumn(
-							sourceAttribute.getKey()
-						).eq(
-							value
-						);
-					});
-			}
-		}
-
-		if (targetAttributes == null) {
-			return joinStep.leftJoinOn(
-				CommerceQualifierEntryTable.INSTANCE,
-				CommerceQualifierEntryTable.INSTANCE.sourceClassNameId.eq(
-					classNameLocalService.getClassNameId(
-						sourceCommerceQualifierMetadata.getModelClassName())
-				).and(
-					CommerceQualifierEntryTable.INSTANCE.sourceClassPK.eq(
-						sourceCommerceQualifierMetadata.getPrimaryKeyColumn())
-				)
-			).where(
-				predicate.and(
-					CommerceQualifierEntryTable.INSTANCE.
-						commerceQualifierEntryId.isNull())
-			);
-		}
-
-		String[] allowedTargetClassNames = Stream.of(
-			sourceCommerceQualifierMetadata.getAllowedTargetClassNameGroups()
-		).flatMap(
-			Stream::of
-		).toArray(
-			String[]::new
-		);
-
-		if (allowedTargetClassNames.length == 0) {
-			return joinStep.where(predicate);
-		}
-
-		Predicate subpredicate = null;
-
-		for (String allowedTargetClassName : allowedTargetClassNames) {
-			CommerceQualifierEntryTable tableAlias =
-				CommerceQualifierUtil.getCommerceQualifierTableAlias(
-					sourceCommerceQualifierMetadata.getModelClassName(),
-					allowedTargetClassName);
-
-			joinStep = joinStep.leftJoinOn(
-				tableAlias,
-				_getPredicate(
-					tableAlias.sourceClassNameId,
-					sourceCommerceQualifierMetadata.getModelClassName(),
-					tableAlias.sourceClassPK,
-					sourceCommerceQualifierMetadata.getPrimaryKeyColumn(),
-					tableAlias.targetClassNameId, allowedTargetClassName));
-
-			Predicate targetPredicate = _getTargetPredicate(
-				tableAlias.commerceQualifierEntryId, tableAlias.targetClassPK,
-				targetAttributes.get(allowedTargetClassName));
-
-			if (subpredicate == null) {
-				subpredicate = targetPredicate;
-			}
-			else {
-				subpredicate = subpredicate.and(targetPredicate);
-			}
-		}
-
-		return joinStep.where(predicate.and(subpredicate.withParentheses()));
 	}
 
 	@Reference
