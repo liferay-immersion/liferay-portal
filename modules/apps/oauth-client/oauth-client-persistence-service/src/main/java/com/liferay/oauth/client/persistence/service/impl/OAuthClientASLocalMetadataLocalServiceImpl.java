@@ -243,7 +243,7 @@ public class OAuthClientASLocalMetadataLocalServiceImpl
 		}
 	}
 
-	private byte[] _getBytes(long data) {
+	private byte[] _getBytes(long oAuthClientASLocalMetadataId) {
 		return new byte[] {
 			(byte)((data >> 56) & 0xff), (byte)((data >> 48) & 0xff),
 			(byte)((data >> 40) & 0xff), (byte)((data >> 32) & 0xff),
