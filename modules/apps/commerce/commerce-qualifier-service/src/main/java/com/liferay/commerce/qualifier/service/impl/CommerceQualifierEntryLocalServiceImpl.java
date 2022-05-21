@@ -223,7 +223,7 @@ public class CommerceQualifierEntryLocalServiceImpl
 			sourceCommerceQualifierMetadata.getPersistedModelLocalService();
 
 		return (List<E>)persistedModelLocalService.dslQuery(
-			_groupByStep(
+			_getGroupByStep(
 				companyId,
 				DSLQueryFactoryUtil.select(
 					sourceCommerceQualifierMetadata.getTable()),
@@ -491,7 +491,7 @@ public class CommerceQualifierEntryLocalServiceImpl
 		).withParentheses();
 	}
 
-	private GroupByStep _groupByStep(
+	private GroupByStep _getGroupByStep(
 		long companyId, FromStep fromStep,
 		CommerceQualifierMetadata sourceCommerceQualifierMetadata,
 		Map<String, ?> sourceAttributes, Map<String, ?> targetAttributes) {
