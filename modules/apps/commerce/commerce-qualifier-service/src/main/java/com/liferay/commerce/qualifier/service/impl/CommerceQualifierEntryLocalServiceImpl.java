@@ -125,13 +125,13 @@ public class CommerceQualifierEntryLocalServiceImpl
 			String sourceClassName, long sourceClassPK)
 		throws PortalException {
 
-		List<CommerceQualifierEntry> commerceQualifiers =
+		List<CommerceQualifierEntry> commerceQualifierEntries =
 			commerceQualifierEntryPersistence.findByS_S(
 				classNameLocalService.getClassNameId(sourceClassName),
 				sourceClassPK);
 
 		for (CommerceQualifierEntry commerceQualifierEntry :
-				commerceQualifiers) {
+				commerceQualifierEntries) {
 
 			commerceQualifierEntryLocalService.deleteCommerceQualifierEntry(
 				commerceQualifierEntry);
@@ -143,14 +143,14 @@ public class CommerceQualifierEntryLocalServiceImpl
 			String sourceClassName, long sourceClassPK, String targetClassName)
 		throws PortalException {
 
-		List<CommerceQualifierEntry> commerceQualifiers =
+		List<CommerceQualifierEntry> commerceQualifierEntries =
 			commerceQualifierEntryPersistence.findByS_S_T(
 				classNameLocalService.getClassNameId(sourceClassName),
 				sourceClassPK,
 				classNameLocalService.getClassNameId(targetClassName));
 
 		for (CommerceQualifierEntry commerceQualifierEntry :
-				commerceQualifiers) {
+				commerceQualifierEntries) {
 
 			commerceQualifierEntryLocalService.deleteCommerceQualifierEntry(
 				commerceQualifierEntry);
@@ -162,13 +162,13 @@ public class CommerceQualifierEntryLocalServiceImpl
 			String targetClassName, long targetClassPK)
 		throws PortalException {
 
-		List<CommerceQualifierEntry> commerceQualifiers =
+		List<CommerceQualifierEntry> commerceQualifierEntries =
 			commerceQualifierEntryPersistence.findByT_T(
 				classNameLocalService.getClassNameId(targetClassName),
 				targetClassPK);
 
 		for (CommerceQualifierEntry commerceQualifierEntry :
-				commerceQualifiers) {
+				commerceQualifierEntries) {
 
 			commerceQualifierEntryLocalService.deleteCommerceQualifierEntry(
 				commerceQualifierEntry);
@@ -180,14 +180,14 @@ public class CommerceQualifierEntryLocalServiceImpl
 			String sourceClassName, String targetClassName, long targetClassPK)
 		throws PortalException {
 
-		List<CommerceQualifierEntry> commerceQualifiers =
+		List<CommerceQualifierEntry> commerceQualifierEntries =
 			commerceQualifierEntryPersistence.findByS_T_T(
 				classNameLocalService.getClassNameId(sourceClassName),
 				classNameLocalService.getClassNameId(targetClassName),
 				targetClassPK);
 
 		for (CommerceQualifierEntry commerceQualifierEntry :
-				commerceQualifiers) {
+				commerceQualifierEntries) {
 
 			commerceQualifierEntryLocalService.deleteCommerceQualifierEntry(
 				commerceQualifierEntry);
