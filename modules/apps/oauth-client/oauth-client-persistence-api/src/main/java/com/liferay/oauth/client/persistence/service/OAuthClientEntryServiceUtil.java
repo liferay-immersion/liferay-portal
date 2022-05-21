@@ -64,11 +64,11 @@ public class OAuthClientEntryServiceUtil {
 
 	public static List<OAuthClientEntry>
 			getAuthServerWellKnownURISuffixOAuthClientEntries(
-				long companyId, String authServerType)
+				long companyId, String authServerWellKnownURISuffix)
 		throws PortalException {
 
 		return getService().getAuthServerWellKnownURISuffixOAuthClientEntries(
-			companyId, authServerType);
+			companyId, authServerWellKnownURISuffix);
 	}
 
 	public static List<OAuthClientEntry> getCompanyOAuthClientEntries(

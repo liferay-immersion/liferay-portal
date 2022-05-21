@@ -184,7 +184,7 @@ public class OAuthClientEntryServiceHttp {
 		<com.liferay.oauth.client.persistence.model.OAuthClientEntry>
 				getAuthServerWellKnownURISuffixOAuthClientEntries(
 					HttpPrincipal httpPrincipal, long companyId,
-					String authServerType)
+					String authServerWellKnownURISuffix)
 			throws com.liferay.portal.kernel.exception.PortalException {
 
 		try {
@@ -194,7 +194,7 @@ public class OAuthClientEntryServiceHttp {
 				_getAuthServerWellKnownURISuffixOAuthClientEntriesParameterTypes3);
 
 			MethodHandler methodHandler = new MethodHandler(
-				methodKey, companyId, authServerType);
+				methodKey, companyId, authServerWellKnownURISuffix);
 
 			Object returnObj = null;
 

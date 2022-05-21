@@ -71,12 +71,12 @@ public class OAuthClientEntryServiceWrapper
 	public java.util.List
 		<com.liferay.oauth.client.persistence.model.OAuthClientEntry>
 				getAuthServerWellKnownURISuffixOAuthClientEntries(
-					long companyId, String authServerType)
+					long companyId, String authServerWellKnownURISuffix)
 			throws com.liferay.portal.kernel.exception.PortalException {
 
 		return _oAuthClientEntryService.
 			getAuthServerWellKnownURISuffixOAuthClientEntries(
-				companyId, authServerType);
+				companyId, authServerWellKnownURISuffix);
 	}
 
 	@Override

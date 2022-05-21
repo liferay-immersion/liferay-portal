@@ -66,7 +66,7 @@ public interface OAuthClientEntryService extends BaseService {
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public List<OAuthClientEntry>
 			getAuthServerWellKnownURISuffixOAuthClientEntries(
-				long companyId, String authServerType)
+				long companyId, String authServerWellKnownURISuffix)
 		throws PortalException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
