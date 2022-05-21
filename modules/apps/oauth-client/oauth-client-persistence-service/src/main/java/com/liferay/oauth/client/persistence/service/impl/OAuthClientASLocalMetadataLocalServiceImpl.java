@@ -73,8 +73,8 @@ public class OAuthClientASLocalMetadataLocalServiceImpl
 		oAuthClientASLocalMetadata.setUserName(user.getFullName());
 		oAuthClientASLocalMetadata.setLocalWellKnownURI(
 			_generateLocalWellKnownURI(
-				metadataJSONObject.getAsString("issuer"), wellKnownURISuffix,
-				oAuthClientASLocalMetadata.getOAuthClientASLocalMetadataId()));
+				oAuthClientASLocalMetadata.getOAuthClientASLocalMetadataId(),
+				metadataJSONObject.getAsString("issuer"), wellKnownURISuffix));
 		oAuthClientASLocalMetadata.setMetadataJSON(metadataJSON);
 
 		oAuthClientASLocalMetadata =
@@ -211,10 +211,9 @@ public class OAuthClientASLocalMetadataLocalServiceImpl
 
 			oAuthClientASLocalMetadata.setLocalWellKnownURI(
 				_generateLocalWellKnownURI(
+					oAuthClientASLocalMetadataId,
 					metadataJSONObject.getAsString("issuer"),
-					wellKnownURISuffix,
-					oAuthClientASLocalMetadata.
-						getOAuthClientASLocalMetadataId()));
+					wellKnownURISuffix));
 		}
 
 		return oAuthClientASLocalMetadataPersistence.update(
@@ -222,8 +221,8 @@ public class OAuthClientASLocalMetadataLocalServiceImpl
 	}
 
 	private String _generateLocalWellKnownURI(
-			String issuer, String wellKnownURISuffix,
-			long oAuthClientASLocalMetadataId)
+			long oAuthClientASLocalMetadataId, String issuer,
+			String wellKnownURISuffix)
 		throws PortalException {
 
 		try {
