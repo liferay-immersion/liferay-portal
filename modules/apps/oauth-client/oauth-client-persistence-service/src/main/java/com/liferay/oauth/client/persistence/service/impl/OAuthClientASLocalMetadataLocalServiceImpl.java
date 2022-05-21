@@ -245,10 +245,14 @@ public class OAuthClientASLocalMetadataLocalServiceImpl
 
 	private byte[] _getBytes(long oAuthClientASLocalMetadataId) {
 		return new byte[] {
-			(byte)((data >> 56) & 0xff), (byte)((data >> 48) & 0xff),
-			(byte)((data >> 40) & 0xff), (byte)((data >> 32) & 0xff),
-			(byte)((data >> 24) & 0xff), (byte)((data >> 16) & 0xff),
-			(byte)((data >> 8) & 0xff), (byte)((data >> 0) & 0xff)
+			(byte)((oAuthClientASLocalMetadataId >> 56) & 0xff),
+			(byte)((oAuthClientASLocalMetadataId >> 48) & 0xff),
+			(byte)((oAuthClientASLocalMetadataId >> 40) & 0xff),
+			(byte)((oAuthClientASLocalMetadataId >> 32) & 0xff),
+			(byte)((oAuthClientASLocalMetadataId >> 24) & 0xff),
+			(byte)((oAuthClientASLocalMetadataId >> 16) & 0xff),
+			(byte)((oAuthClientASLocalMetadataId >> 8) & 0xff),
+			(byte)((oAuthClientASLocalMetadataId >> 0) & 0xff)
 		};
 	}
 
