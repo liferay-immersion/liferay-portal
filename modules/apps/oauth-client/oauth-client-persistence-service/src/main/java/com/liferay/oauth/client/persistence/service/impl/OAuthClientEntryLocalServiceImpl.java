@@ -167,7 +167,7 @@ public class OAuthClientEntryLocalServiceImpl
 					companyId
 				).and(
 					OAuthClientEntryTable.INSTANCE.authServerWellKnownURI.like(
-						"%" + authServerWellKnownURISuffix + '%')
+						'%' + authServerWellKnownURISuffix + '%')
 				)
 			));
 	}

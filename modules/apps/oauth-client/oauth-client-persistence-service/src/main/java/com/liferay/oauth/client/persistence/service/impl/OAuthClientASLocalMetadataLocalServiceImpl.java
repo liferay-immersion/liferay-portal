@@ -221,22 +221,9 @@ public class OAuthClientASLocalMetadataLocalServiceImpl
 			oAuthClientASLocalMetadata);
 	}
 
-	/**
-	 * Manually inputted Authorization Server metadata, aka local metadata, does
-	 * not have wellKnownURI as unique identifier, thus generating one for
-	 * internal identification.
-	 * Generation logic follows RFC8414#Section3
-	 *
-	 * @param issuer e.g. https://authserver.com/issuer01
-	 * @param wellKnownURISuffix e.g. openid-configuration
-	 * @param id unique id
-	 *
-	 * @return a generated well-known URI as unique identifier for this metadata
-	 * used for internal identification.
-	 *         e.g. https://authserver.com/.well-known/openid-configuration/issuer01/Base64(MD5(id))/local
-	 */
 	private String _generateLocalWellKnownURI(
-			String issuer, String wellKnownURISuffix, long id)
+			String issuer, String wellKnownURISuffix,
+			long oAuthClientASLocalMetadataId)
 		throws PortalException {
 
 		try {
@@ -247,7 +234,10 @@ public class OAuthClientASLocalMetadataLocalServiceImpl
 			return StringBundler.concat(
 				issuerURI.getScheme(), "://", issuerURI.getAuthority(),
 				"/.well-known/", wellKnownURISuffix, issuerURI.getPath(), '/',
-				Base64.encode(messageDigest.digest(_getBytes(id))), "/local");
+				Base64.encode(
+					messageDigest.digest(
+						_getBytes(oAuthClientASLocalMetadataId))),
+				"/local");
 		}
 		catch (Exception exception) {
 			throw new PortalException(exception);

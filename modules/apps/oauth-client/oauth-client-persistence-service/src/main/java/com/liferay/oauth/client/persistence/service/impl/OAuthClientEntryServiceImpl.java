@@ -91,13 +91,13 @@ public class OAuthClientEntryServiceImpl
 	@Override
 	public List<OAuthClientEntry>
 			getAuthServerWellKnownURISuffixOAuthClientEntries(
-				long companyId, String authServerType)
+				long companyId, String authServerWellKnownURISuffix)
 		throws PortalException {
 
 		List<OAuthClientEntry> oAuthClientEntries =
 			oAuthClientEntryLocalService.
 				getAuthServerWellKnownURISuffixOAuthClientEntries(
-					companyId, authServerType);
+					companyId, authServerWellKnownURISuffix);
 
 		for (OAuthClientEntry oAuthClientEntry : oAuthClientEntries) {
 			_oAuthClientEntryModelResourcePermission.check(
