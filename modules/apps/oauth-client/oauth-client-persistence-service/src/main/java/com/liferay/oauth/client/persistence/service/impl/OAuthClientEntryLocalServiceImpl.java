@@ -30,6 +30,7 @@ import com.liferay.portal.kernel.model.ResourceConstants;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.service.ResourceLocalService;
 import com.liferay.portal.kernel.service.UserLocalService;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 
 import com.nimbusds.oauth2.sdk.ParseException;
@@ -76,7 +77,7 @@ public class OAuthClientEntryLocalServiceImpl
 		String clientId = infoJSONObject.getAsString("client_id");
 
 		_validateClientId(
-			user.getCompanyId(), authServerWellKnownURI, clientId, 0);
+			0, user.getCompanyId(), authServerWellKnownURI, clientId);
 
 		if (Validator.isNull(parametersJSON)) {
 			parametersJSON = "{}";
@@ -167,7 +168,7 @@ public class OAuthClientEntryLocalServiceImpl
 					companyId
 				).and(
 					OAuthClientEntryTable.INSTANCE.authServerWellKnownURI.like(
-						'%' + authServerWellKnownURISuffix + '%')
+						StringUtil.quote(authServerWellKnownURISuffix, '%'))
 				)
 			));
 	}
@@ -211,8 +212,8 @@ public class OAuthClientEntryLocalServiceImpl
 		String clientId = infoJSONObject.getAsString("client_id");
 
 		_validateClientId(
-			oAuthClientEntry.getCompanyId(), authServerWellKnownURI, clientId,
-			oAuthClientEntryId);
+			oAuthClientEntryId, oAuthClientEntry.getCompanyId(),
+			authServerWellKnownURI, clientId);
 
 		if (Validator.isNull(parametersJSON)) {
 			parametersJSON = "{}";
@@ -270,8 +271,8 @@ public class OAuthClientEntryLocalServiceImpl
 	}
 
 	private void _validateClientId(
-			long companyId, String authServerWellKnownURI, String clientId,
-			long oAuthClientEntryId)
+			long oAuthClientEntryId, long companyId,
+			String authServerWellKnownURI, String clientId)
 		throws PortalException {
 
 		OAuthClientEntry oAuthClientEntry = null;
