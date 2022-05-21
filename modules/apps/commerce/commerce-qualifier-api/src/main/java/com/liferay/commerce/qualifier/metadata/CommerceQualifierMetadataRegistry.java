@@ -24,6 +24,6 @@ public interface CommerceQualifierMetadataRegistry {
 	public CommerceQualifierMetadata getCommerceQualifierMetadata(
 		String className);
 
-	public List<CommerceQualifierMetadata> getCommerceQualifiersMetadata();
+	public List<CommerceQualifierMetadata> getCommerceQualifierMetadatas();
 
 }

@@ -49,7 +49,7 @@ public class CommerceQualifierMetadataRegistryImpl
 	}
 
 	@Override
-	public List<CommerceQualifierMetadata> getCommerceQualifiersMetadata() {
+	public List<CommerceQualifierMetadata> getCommerceQualifierMetadatas() {
 		List<CommerceQualifierMetadata> commerceQualifiersMetadata =
 			new ArrayList<>();
 
