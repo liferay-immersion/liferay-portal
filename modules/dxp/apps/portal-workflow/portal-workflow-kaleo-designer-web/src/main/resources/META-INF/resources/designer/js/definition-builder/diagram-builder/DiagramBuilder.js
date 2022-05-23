@@ -38,6 +38,9 @@ import getCollidingElements from './util/collisionDetection';
 import populateAssignmentsData from './util/populateAssignmentsData';
 import populateNotificationsData from './util/populateNotificationsData';
 
+let id = 2;
+const getId = () => `item_${id++}`;
+
 const deserializeUtil = new DeserializeUtil();
 
 export default function DiagramBuilder() {
@@ -93,7 +96,7 @@ export default function DiagramBuilder() {
 					),
 				},
 			},
-			id: `${crypto.randomUUID()}`,
+			id: getId(),
 			type: 'transition',
 		};
 
@@ -161,7 +164,7 @@ export default function DiagramBuilder() {
 					data: {
 						newNode: true,
 					},
-					id: `${crypto.randomUUID()}`,
+					id: getId(),
 					position,
 					type,
 				};
