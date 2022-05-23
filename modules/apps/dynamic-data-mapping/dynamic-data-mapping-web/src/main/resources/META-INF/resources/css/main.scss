@@ -371,6 +371,11 @@ textarea.script {
 	border-radius: 0.25rem;
 	margin-top: 0.5rem;
 	padding: 0.625rem;
+
+	.form-builder-field-node {
+		display: inline;
+		margin-right: 5px;
+	}
 }
 
 .form-builder-placeholder {
