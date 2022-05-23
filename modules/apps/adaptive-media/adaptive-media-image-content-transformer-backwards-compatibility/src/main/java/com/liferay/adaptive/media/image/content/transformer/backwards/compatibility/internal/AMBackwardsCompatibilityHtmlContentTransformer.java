@@ -69,9 +69,9 @@ public class AMBackwardsCompatibilityHtmlContentTransformer
 
 		for (Element imgElement : document.select("img:not(picture > img)")) {
 			String imgElementString = imgElement.toString();
-			String srcString = imgElement.attr("src");
 
-			String replacement = _transform(imgElementString, srcString);
+			String replacement = _transform(
+				imgElementString, imgElement.attr("src"));
 
 			imgElement.replaceWith(_parseNode(replacement));
 		}
@@ -146,16 +146,16 @@ public class AMBackwardsCompatibilityHtmlContentTransformer
 		return bodyNode.childNode(0);
 	}
 
-	private String _transform(String imgElementString, String srcString)
+	private String _transform(String imgElementString, String src)
 		throws PortalException {
 
-		Pattern pattern = getPattern();
-
-		Matcher matcher = pattern.matcher(srcString);
+		String replacement = imgElementString;
 
 		StringBuffer sb = null;
 
-		String replacement = imgElementString;
+		Pattern pattern = getPattern();
+
+		Matcher matcher = pattern.matcher(src);
 
 		while (matcher.find()) {
 			if (sb == null) {
