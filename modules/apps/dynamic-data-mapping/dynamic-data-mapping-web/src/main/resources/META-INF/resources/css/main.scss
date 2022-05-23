@@ -9,12 +9,12 @@
 	.field-labels-inline {
 		clear: both;
 		display: block;
-
+		
 		.field-label {
 			margin-top: 0;
 		}
 	}
-
+	
 	.field {
 		.field-content {
 			clear: both;
@@ -26,13 +26,36 @@
 			margin-top: -7px;
 		}
 
-		.nav-tabs + .tab-content .tab-pane {
-			padding: 2rem 1rem;
+		.tab-pane{
+			padding: 2rem 1rem !important;
+		}
+
+		.property-builder-field-label {
+			overflow: hidden !important;
+			text-overflow: ellipsis !important;
+			white-space: nowrap !important;
+		}
+
+		.property-builder-field {
+			text-align: center !important;
+		}
+
+		.property-builder-fields-container .property-builder-field {
+			margin: 0 !important;
+		}
+
+		.property-builder-content-container{
+			padding-left: 0 !important;
+		}
+
+		.property-builder-canvas {
+			background-color: #e7e7e7 !important;
+			background-image: none !important;
 		}
 
 		.property-builder-drop-container,
 		.tab-pane {
-			min-height: 500px;
+			min-height: 500px !important;
 
 			@include media-breakpoint-down(sm) {
 				min-height: 100px;
@@ -45,8 +68,12 @@
 			}
 		}
 
+		.property-builder-fields-container{
+			padding-left: 0 !important;
+		}
+
 		.property-builder-fields-container .property-builder-field {
-			width: 33%;
+			width: 33% !important;
 		}
 
 		.radio {
@@ -54,12 +81,36 @@
 		}
 	}
 
+	.form-builder-field{
+		background-color: #fff !important;
+		border: 0.0625rem solid #e7e7ed !important;
+		margin: 8px 6px 0 !important;
+		margin-top: 0.5rem !important;
+		padding: 0.625rem !important;
+	}
+
 	.lfr-structure-entry-details-container {
 		margin-top: 10px;
 	}
 
 	.lfr-translation-manager {
-		margin-bottom: 15px;
+		margin-bottom: 15px !important;
+		
+		.lfr-translation-manager-translation.lfr-translation-manager-translation{
+			border: 1px solid transparent !important;
+    		border-radius: 4px !important;
+    		cursor: pointer !important;
+    		display: inline-block !important;
+    		margin: 0.2em !important;
+    		padding: 0.4em 0.3em 0.4em 0.5em !important;
+    		text-decoration: none !important;
+		}
+
+		.lfr-translation-manager-translation.lfr-translation-manager-translation-editing {
+			background-color: #598BEC !important;
+			border-color: #224FA8 !important;
+			color: #FFF !important; 
+		}
 	}
 
 	.lfr-ddm-link-to-page a {
@@ -185,7 +236,7 @@
 	}
 
 	.property-builder-field {
-		padding: 5px 0;
+		padding: 5px 0 !important;
 
 		.property-builder-field-icon {
 			font-size: 24px;
@@ -221,6 +272,13 @@ textarea.script {
 
 .has-control-menu > .basecelleditor {
 	z-index: 9999 !important;
+}
+
+.basecelleditor {
+	background-color: #f2f2f2 !important;
+    border: 1px solid #808080 !important;
+    padding: 6px !important;
+    text-align: left !important;
 }
 
 .lfr-ddm-container {
