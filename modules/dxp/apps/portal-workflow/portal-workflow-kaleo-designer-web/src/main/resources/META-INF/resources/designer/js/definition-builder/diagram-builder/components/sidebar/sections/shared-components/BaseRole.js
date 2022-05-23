@@ -129,7 +129,7 @@ export default function BaseRole({
 						</ClayDropDown.ItemList>
 					</ClayAutocomplete.DropDown>
 
-					{loading && <ClayAutocomplete.LoadingIndicator />}
+					{loading}
 				</ClayAutocomplete>
 			</ClayForm.Group>
 			<ClayForm.Group>

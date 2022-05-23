@@ -25,7 +25,6 @@ const Role = () => {
 				...previousValue.data,
 				assignments: {
 					assignmentType: ['roleId'],
-					roleId: role.id,
 					sectionsData: {
 						id: role.id,
 						name: role.name,
