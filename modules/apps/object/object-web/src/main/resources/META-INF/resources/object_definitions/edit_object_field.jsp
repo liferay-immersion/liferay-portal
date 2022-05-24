@@ -34,6 +34,8 @@ ObjectField objectField = (ObjectField)request.getAttribute(ObjectWebKeys.OBJECT
 		).put(
 			"isApproved", objectDefinition.isApproved()
 		).put(
+			"isSystem", objectDefinition.isSystem()
+		).put(
 			"objectField", objectDefinitionsFieldsDisplayContext.getObjectFieldJSONObject(objectField)
 		).put(
 			"objectFieldTypes", objectDefinitionsFieldsDisplayContext.getObjectFieldBusinessTypeMaps(Validator.isNotNull(objectField.getRelationshipType()), locale)
