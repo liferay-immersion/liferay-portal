@@ -38,6 +38,8 @@ export default function WorkflowInstanceTracker({workflowInstanceId}) {
 	const [visitedNodes, setVisitedNodes] = useState([]);
 	const [definitionElements, setDefinitionElements] = useState({});
 
+	const languageId = themeDisplay.getLanguageId().replace('_', '-');
+
 	useEffect(() => {
 		fetch(
 			`/o/headless-admin-workflow/v1.0/workflow-instances/${workflowInstanceId}`,
@@ -50,6 +52,9 @@ export default function WorkflowInstanceTracker({workflowInstanceId}) {
 				fetch(
 					`/o/headless-admin-workflow/v1.0/workflow-definitions/by-name/${data.workflowDefinitionName}`,
 					{
+						headers: {
+							'Accept-Language': languageId,
+						},
 						method: 'GET',
 						params: {
 							version: data.workflowDefinitionVersion,
