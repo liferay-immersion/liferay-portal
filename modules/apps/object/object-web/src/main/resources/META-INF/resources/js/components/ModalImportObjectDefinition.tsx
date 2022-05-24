@@ -16,7 +16,10 @@ import ClayAlert from '@clayui/alert';
 import ClayButton from '@clayui/button';
 import ClayForm, {ClayInput} from '@clayui/form';
 import ClayModal, {useModal} from '@clayui/modal';
-import React, {useEffect, useRef, useState} from 'react';
+import {fetch} from 'frontend-js-web';
+import React, {FormEvent, useEffect, useRef, useState} from 'react';
+
+import {openToast} from './SidePanelContent';
 
 interface IProps {
 	importObjectDefinitionURL: string;
@@ -26,9 +29,14 @@ interface IProps {
 
 interface IFile {
 	fileName?: string;
-	inputFile?: File | null;
+	inputFile?: Blob | null;
 	inputFileValue?: string;
 }
+
+const HEADER = new Headers({
+	'Accept': 'application/json',
+	'Content-Type': 'application/json',
+});
 
 const ModalImportObjectDefinition: React.FC<IProps> = ({
 	importObjectDefinitionURL,
@@ -74,6 +82,90 @@ const ModalImportObjectDefinition: React.FC<IProps> = ({
 			Liferay.destroyComponent(importObjectDefinitionModalComponentId);
 	}, [importObjectDefinitionModalComponentId, setVisible]);
 
+	const validate = (value: string) => {
+		let error: string | null = null;
+
+		const regexFirstCharactersIsUpper: RegExp = /^[a-z]/;
+		const regexSpecialCharacters: RegExp = /.*[@!#$%^&*()/\\]/;
+
+		if (regexFirstCharactersIsUpper.test(value)) {
+			error = Liferay.Language.get(
+				'the-first-character-of-a-name-must-be-an-upper-case-letter'
+			);
+		}
+		else if (regexSpecialCharacters.test(value)) {
+			error = Liferay.Language.get(
+				'name-must-only-contain-letters-and-digits'
+			);
+		}
+
+		return error;
+	};
+
+	const getTypeError = (type: string) => {
+		switch (type) {
+			case 'ObjectDefinitionNameException.MustBeginWithUpperCaseLetter':
+				return Liferay.Language.get(
+					'the-first-character-of-a-name-must-be-an-upper-case-letter'
+				);
+			case 'ObjectDefinitionNameException.MustNotBeDuplicate':
+				return Liferay.Language.get(
+					'this-name-is-already-in-use-try-another-one'
+				);
+			case 'ObjectDefinitionNameException.MustOnlyContainLettersAndDigits':
+				return Liferay.Language.get(
+					'name-must-only-contain-letters-and-digits'
+				);
+			default:
+				return Liferay.Language.get(
+					'the-structure-was-not-successfully-imported'
+				);
+		}
+	};
+
+	const onSubmit = async (event: FormEvent) => {
+		event.preventDefault();
+
+		const error = validate(name);
+
+		if (error) {
+			openToast({
+				message: error,
+				type: 'danger',
+			});
+
+			return;
+		}
+
+		const response = await fetch(
+			'/o/object-admin/v1.0/object-definitions',
+			{
+				body: inputFileValue,
+				headers: HEADER,
+				method: 'POST',
+			}
+		);
+
+		if (response.ok) {
+			openToast({
+				message: Liferay.Language.get(
+					'the-object-action-was-created-successfully'
+				),
+				type: 'success',
+			});
+
+			setVisible(false);
+		}
+		else {
+			const jsonResponse = (await response.json()) as any;
+
+			openToast({
+				message: getTypeError(jsonResponse.type),
+				type: 'danger',
+			});
+		}
+	};
+
 	return visible ? (
 		<ClayModal observer={observer}>
 			<ClayModal.Header>
@@ -81,15 +173,7 @@ const ModalImportObjectDefinition: React.FC<IProps> = ({
 			</ClayModal.Header>
 
 			<ClayModal.Body>
-				<ClayForm
-
-					// @ts-ignore
-
-					action={importObjectDefinitionURL}
-					encType="multipart/form-data"
-					id={importObjectDefinitionFormId}
-					method="POST"
-				>
+				<ClayForm id={importObjectDefinitionFormId} onSubmit={onSubmit}>
 					<ClayAlert
 						displayType="info"
 						title={`${Liferay.Language.get('info')}:`}
@@ -161,17 +245,24 @@ const ModalImportObjectDefinition: React.FC<IProps> = ({
 						className="d-none"
 						name={objectDefinitionJSONInputId}
 						onChange={({target}) => {
+							const fileData = new FileReader();
 							const inputFile = target.files?.item(0);
 
-							setFile({
-								fileName: inputFile?.name,
-								inputFile,
-								inputFileValue: target.value,
-							});
+							fileData.onload = function (event) {
+								const value = event.target?.result as string;
+
+								setFile({
+									fileName: inputFile?.name,
+									inputFile,
+									inputFileValue: value as string,
+								});
+							};
+
+							fileData.readAsText(inputFile as Blob);
 						}}
 						ref={inputFileRef}
 						type="file"
-						value={inputFileValue}
+						value=""
 					/>
 				</ClayForm>
 			</ClayModal.Body>
