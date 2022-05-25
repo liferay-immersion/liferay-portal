@@ -14,7 +14,6 @@
 
 import React from 'react';
 interface IProps {
-	importObjectDefinitionURL: string;
 	nameMaxLength: string;
 	portletNamespace: string;
 }

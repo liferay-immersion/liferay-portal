@@ -22,7 +22,6 @@ import React, {FormEvent, useEffect, useRef, useState} from 'react';
 import {openToast} from './SidePanelContent';
 
 interface IProps {
-	importObjectDefinitionURL: string;
 	nameMaxLength: string;
 	portletNamespace: string;
 }
@@ -39,7 +38,6 @@ const HEADER = new Headers({
 });
 
 const ModalImportObjectDefinition: React.FC<IProps> = ({
-	importObjectDefinitionURL,
 	nameMaxLength,
 	portletNamespace,
 }) => {

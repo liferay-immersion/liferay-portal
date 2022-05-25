@@ -33,15 +33,6 @@
 		module="js/components/ModalImportObjectDefinition"
 		props='<%=
 			HashMapBuilder.<String, Object>put(
-				"importObjectDefinitionURL",
-				PortletURLBuilder.createActionURL(
-					renderResponse
-				).setActionName(
-					"/object_definitions/import_object_definition"
-				).setRedirect(
-					currentURL
-				).buildString()
-			).put(
 				"nameMaxLength", ModelHintsConstants.TEXT_MAX_LENGTH
 			).build()
 		%>'
