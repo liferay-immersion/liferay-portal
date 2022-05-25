@@ -21,7 +21,6 @@ import {fetch} from 'frontend-js-web';
 import React, {FormEvent, useEffect, useRef, useState} from 'react';
 
 interface IProps {
-	importObjectDefinitionURL: string;
 	nameMaxLength: string;
 	portletNamespace: string;
 }
@@ -38,7 +37,6 @@ const HEADER = new Headers({
 });
 
 const ModalImportObjectDefinition: React.FC<IProps> = ({
-	importObjectDefinitionURL,
 	nameMaxLength,
 	portletNamespace,
 }) => {
