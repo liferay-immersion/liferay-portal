@@ -28,3 +28,37 @@
 		}
 	}
 }
+.col-ddm .col-md-4 {
+	.lfr-objects__attachment {
+	display: block;
+	gap: 1rem 0.2rem;
+
+	&-download {
+		display: none;
+	}
+
+	&-button {
+		background-color: unset;
+	}
+
+	&-loading {
+		margin: 0;
+	}
+
+	&-title {
+		align-items: center;
+		display: flex;
+		padding-top: 5px;
+
+		&:focus-within,
+		&:hover {
+			.lfr-objects__attachment-download {
+				color: black;
+				display: unset;
+				margin-left: 0.5rem;
+			}
+		}
+	}
+	}
+
+}
