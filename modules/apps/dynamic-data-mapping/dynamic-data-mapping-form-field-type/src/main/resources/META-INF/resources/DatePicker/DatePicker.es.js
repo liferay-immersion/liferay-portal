@@ -114,7 +114,6 @@ export default function DatePicker({
 				: value) ??
 			predefinedValue ??
 			'';
-
 		if (rawDate !== '') {
 			const date = moment(rawDate, serverFormat, true);
 			formattedDate = date
@@ -151,8 +150,10 @@ export default function DatePicker({
 	 */
 	useEffect(
 		() =>
-			setDate(({formattedDate, name, predefinedValue}) =>
-				name === date.name && predefinedValue === date.predefinedValue
+			setDate(({formattedDate, name, predefinedValue, rawDate}) =>
+				name === date.name &&
+				predefinedValue === date.predefinedValue &&
+				rawDate === ''
 					? {...date, formattedDate}
 					: date
 			),
