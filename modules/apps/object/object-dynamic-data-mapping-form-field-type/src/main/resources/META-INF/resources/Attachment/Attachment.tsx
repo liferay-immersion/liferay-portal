@@ -116,7 +116,7 @@ function File({attachment, loading, onDelete}: IFileProps) {
 					>
 						<ClayIcon symbol="download" />
 					</a>
-					
+
 					<ClayButtonWithIcon
 						borderless
 						displayType="secondary"
