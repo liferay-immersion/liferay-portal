@@ -23,6 +23,7 @@ import {isEdge, isNode} from 'react-flow-renderer';
 import {DefinitionBuilderContext} from '../../../DefinitionBuilderContext';
 import {defaultLanguageId} from '../../../constants';
 import {xmlNamespace} from '../../../source-builder/constants';
+import DeserializeUtil from '../../../source-builder/deserializeUtil';
 import {serializeDefinition} from '../../../source-builder/serializeUtil';
 import XMLUtil from '../../../source-builder/xmlUtil';
 import {getAvailableLocalesObject} from '../../../util/availableLocales';
@@ -47,9 +48,11 @@ export default function UpperToolbar({displayNames, languageIds}) {
 		selectedLanguageId,
 		setAlertMessage,
 		setAlertType,
+		setDefinitionDescription,
 		setDefinitionId,
 		setDefinitionTitle,
 		setDeserialize,
+		setElements,
 		setSelectedLanguageId,
 		setShowAlert,
 		setShowDefinitionInfo,
@@ -68,12 +71,10 @@ export default function UpperToolbar({displayNames, languageIds}) {
 		displayNames,
 		languageIds
 	);
-
 	const errorTitle = () => {
 		if (blockingErrors.errorType === 'duplicated') {
 			return Liferay.Language.get('you-have-the-same-id-in-two-nodes');
 		}
-
 		if (blockingErrors.errorType === 'emptyField') {
 			return Liferay.Language.get('some-fields-need-to-be-filled');
 		}
@@ -81,23 +82,41 @@ export default function UpperToolbar({displayNames, languageIds}) {
 			return Liferay.Language.get('error');
 		}
 	};
-
 	const getXMLContent = (exporting) => {
+		let currentDescription;
+		let currentElements;
 		let xmlContent;
 
 		if (currentEditor && !exporting) {
 			xmlContent = currentEditor.getData();
 		}
 		else {
+			if (sourceView) {
+				const deserializeUtil = new DeserializeUtil();
+				const xmlDefinition = currentEditor.getData();
+
+				deserializeUtil.updateXMLDefinition(xmlDefinition);
+				const metadata = deserializeUtil.getMetadata();
+
+				currentDescription = metadata.description;
+				setDefinitionDescription(currentDescription);
+
+				currentElements = deserializeUtil.getElements();
+				setElements(currentElements);
+			}
+			else {
+				currentDescription = definitionDescription;
+				currentElements = elements;
+			}
 			xmlContent = serializeDefinition(
 				xmlNamespace,
 				{
-					description: definitionDescription,
+					description: currentDescription,
 					name: definitionName,
 					version,
 				},
-				elements.filter(isNode),
-				elements.filter(isEdge),
+				currentElements.filter(isNode),
+				currentElements.filter(isEdge),
 				exporting
 			);
 		}
