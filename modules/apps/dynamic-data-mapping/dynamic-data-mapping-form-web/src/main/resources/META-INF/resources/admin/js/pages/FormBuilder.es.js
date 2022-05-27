@@ -413,11 +413,23 @@ export function FormBuilder() {
 		shareFormInstanceURL,
 	]);
 
+	// When derendering removes the Sidebar-open css class
+
 	useEffect(() => {
 		if (!objectFields.length) {
 			addObjectFields(dispatch);
 		}
 
+		return () => {
+			const alerts = document.querySelector(
+				'.ddm-form-web__exception-container'
+			);
+			if (sidebarOpen && alerts) {
+				alerts.className = classNames(
+					'ddm-form-web__exception-container'
+				);
+			}
+		};
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
