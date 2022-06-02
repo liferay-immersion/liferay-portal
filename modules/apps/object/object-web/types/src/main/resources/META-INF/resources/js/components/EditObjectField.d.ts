@@ -20,7 +20,7 @@ export default function EditObjectField({
 	forbiddenLastChars,
 	forbiddenNames,
 	isApproved,
-	isSystem,
+	isSystemObject,
 	objectField: initialValues,
 	objectFieldTypes,
 	objectName,
@@ -31,7 +31,7 @@ interface IProps {
 	forbiddenLastChars: string[];
 	forbiddenNames: string[];
 	isApproved: boolean;
-	isSystem: boolean;
+	isSystemObject: boolean;
 	objectField: ObjectField;
 	objectFieldTypes: ObjectFieldType[];
 	objectName: string;

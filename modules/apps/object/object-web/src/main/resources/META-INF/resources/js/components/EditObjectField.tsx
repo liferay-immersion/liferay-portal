@@ -59,7 +59,7 @@ export default function EditObjectField({
 	forbiddenLastChars,
 	forbiddenNames,
 	isApproved,
-	isSystem,
+	isSystemObject,
 	objectField: initialValues,
 	objectFieldTypes,
 	objectName,
@@ -134,12 +134,13 @@ export default function EditObjectField({
 		<SidePanelForm
 			className="lfr-objects__edit-object-field"
 			onSubmit={handleSubmit}
-			readOnly={isSystem ? disabled : readOnly}
+			readOnly={isSystemObject ? disabled : readOnly}
 			title={Liferay.Language.get('field')}
 		>
 			<Card title={Liferay.Language.get('basic-info')}>
 				<InputLocalized
-					disabled={isSystem ? disabled : readOnly}
+					defaultLanguageId={defaultLanguageId}
+					disabled={isSystemObject ? disabled : readOnly}
 					error={errors.label}
 					label={Liferay.Language.get('label')}
 					locales={locales}
@@ -172,8 +173,9 @@ export default function EditObjectField({
 					{(values.businessType === 'Text' ||
 						values.businessType === 'LongText') && (
 						<MaxLengthProperties
-							disabled={isSystem ? disabled : readOnly}
+							disabled={isSystemObject ? disabled : readOnly}
 							errors={errors}
+							isSystemObject={isSystemObject}
 							objectField={values}
 							objectFieldSettings={
 								values.objectFieldSettings as ObjectFieldSetting[]
@@ -294,6 +296,7 @@ function SearchableContainer({
 function MaxLengthProperties({
 	disabled,
 	errors,
+	isSystemObject,
 	objectField,
 	objectFieldSettings,
 	onSettingsChange,
@@ -327,7 +330,7 @@ function MaxLengthProperties({
 		<>
 			<ClayForm.Group>
 				<ClayToggle
-					disabled={disabled}
+					disabled={isSystemObject ?? disabled}
 					label={Liferay.Language.get('limit-characters')}
 					name="showCounter"
 					onToggle={(value) => {
@@ -465,6 +468,7 @@ interface IAttachmentPropertiesProps {
 interface IMaxLengthPropertiesProps {
 	disabled: boolean;
 	errors: ObjectFieldErrors;
+	isSystemObject: boolean;
 	objectField: Partial<ObjectField>;
 	objectFieldSettings: ObjectFieldSetting[];
 	onSettingsChange: (setting: ObjectFieldSetting) => void;
@@ -476,7 +480,7 @@ interface IProps {
 	forbiddenLastChars: string[];
 	forbiddenNames: string[];
 	isApproved: boolean;
-	isSystem: boolean;
+	isSystemObject: boolean;
 	objectField: ObjectField;
 	objectFieldTypes: ObjectFieldType[];
 	objectName: string;
