@@ -62,6 +62,7 @@ export default function SidebarHeader({
 	const handleKeyDown = (event) => {
 		if (
 			(event.key === 'Backspace' || event.key === 'Delete') &&
+			contentName !== 'assignments' &&
 			document.querySelectorAll('.form-control:focus').length === 0 &&
 			document.querySelectorAll('.CodeMirror-focused').length === 0
 		) {
