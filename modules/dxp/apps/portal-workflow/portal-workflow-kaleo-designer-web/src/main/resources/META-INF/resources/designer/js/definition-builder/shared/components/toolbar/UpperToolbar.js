@@ -178,7 +178,7 @@ export default function UpperToolbar({displayNames, languageIds}) {
 				title: definitionTitle,
 				title_i18n: translations,
 				version,
-			}).then((response) => {
+			}).then((response) => {	
 				if (response.ok) {
 					setAlertType('success');
 
