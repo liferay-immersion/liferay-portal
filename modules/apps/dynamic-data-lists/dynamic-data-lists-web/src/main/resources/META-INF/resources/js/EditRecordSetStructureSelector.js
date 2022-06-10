@@ -22,6 +22,7 @@ export default function ({itemSelectorURL, portletNamespace, selectEventName}) {
 			const openerWindow = Liferay.Util.getOpener();
 
 			openerWindow.Liferay.Util.openSelectionModal({
+				iframeBodyCssClass: '',
 				onSelect: (selectedItem) => {
 					const form = document.getElementById(
 						`${portletNamespace}fm`
