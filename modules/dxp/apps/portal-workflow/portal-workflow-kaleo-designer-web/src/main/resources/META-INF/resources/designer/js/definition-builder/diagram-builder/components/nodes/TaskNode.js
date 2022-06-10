@@ -43,13 +43,13 @@ export default function TaskNode({
 		<BaseNode
 			actions={actions}
 			assignments={assignments}
-			className="task-node"
 			description={description}
 			descriptionSidebar={descriptionSidebar}
 			icon="check-circle-full"
 			id={id}
 			label={label}
 			newNode={newNode}
+			nodeTypeClass="task-node"
 			notifications={notifications}
 			taskTimers={taskTimers}
 			type="task"

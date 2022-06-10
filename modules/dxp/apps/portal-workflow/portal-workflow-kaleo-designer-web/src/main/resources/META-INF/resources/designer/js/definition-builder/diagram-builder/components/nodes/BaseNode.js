@@ -27,7 +27,6 @@ let handleConnect = false;
 export default function BaseNode({
 	actions,
 	assignments,
-	className,
 	description,
 	descriptionSidebar,
 	dragHandle,
@@ -37,6 +36,7 @@ export default function BaseNode({
 	isDragging,
 	label,
 	newNode,
+	nodeTypeClass,
 	notifications,
 	script,
 	sourcePosition,
@@ -105,7 +105,7 @@ export default function BaseNode({
 	}
 
 	if (selectedItem?.id === id) {
-		className = `${className} selected`;
+		nodeTypeClass = `${nodeTypeClass} selected`;
 	}
 
 	let nodeLabel;
@@ -199,7 +199,7 @@ export default function BaseNode({
 			)}
 
 			<div
-				className={`node ${className}`}
+				className={`node ${nodeTypeClass}`}
 				draghandle={dragHandle}
 				isconnectable={isConnectable?.toString()}
 				isdragging={isDragging?.toString()}
@@ -254,11 +254,11 @@ export default function BaseNode({
 }
 
 BaseNode.propTypes = {
-	className: PropTypes.string,
 	description: PropTypes.string,
 	descriptionSidebar: PropTypes.string,
 	icon: PropTypes.string.isRequired,
 	id: PropTypes.string,
 	label: PropTypes.object,
+	nodeTypeClass: PropTypes.string,
 	type: PropTypes.string.isRequired,
 };
