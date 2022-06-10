@@ -97,6 +97,7 @@ CalendarResource calendarResource = (CalendarResource)request.getAttribute(Calen
 
 		<liferay-ui:search-iterator
 			markupView="lexicon"
+			paginate="<%= false %>"
 		/>
 	</liferay-ui:search-container>
 </clay:container-fluid>
