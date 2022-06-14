@@ -100,15 +100,35 @@ export default function DataEngineLayoutBuilderHandler({namespace}) {
 
 		clearNameInputIfNeeded(defaultLanguageId);
 
+		const dataDefinitionObject = dataDefinition.serialize();
+		const dataLayoutObject = dataLayout.serialize();
+
+		for (
+			let i = 0;
+			i < dataDefinitionObject.dataDefinitionFields.length;
+			i++
+		) {
+			dataDefinitionObject.dataDefinitionFields[i].name =
+				dataDefinitionObject.dataDefinitionFields[
+					i
+				].customProperties.fieldReference;
+			dataLayoutObject.dataLayoutPages[0].dataLayoutRows[
+				i
+			].dataLayoutColumns[0].fieldNames[0] =
+				dataDefinition.dataDefinitionFields[
+					i
+				].customProperties.fieldReference;
+		}
+
 		Liferay.Util.postForm(form, {
 			data: {
 				dataDefinition: JSON.stringify({
-					...dataDefinition.serialize(),
+					...dataDefinitionObject,
 					description,
 					name,
 				}),
 				dataLayout: JSON.stringify({
-					...dataLayout.serialize(),
+					...dataLayoutObject,
 					description,
 					name,
 				}),
