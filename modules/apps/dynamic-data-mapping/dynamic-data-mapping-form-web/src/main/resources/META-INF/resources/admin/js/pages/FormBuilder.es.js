@@ -86,23 +86,9 @@ export function FormBuilder() {
 
 		const pagesVisitor = new PagesVisitor(formSettingsContext.pages);
 
-		const alertElement = document.querySelector(
-			'.lfr-ddm__show-partial-results-alert'
-		);
-
-		return pagesVisitor.mapFields(({field}) => {
-			const showPartialResultsToRespondents = pagesVisitor.findField(
-				({fieldName}) => fieldName === 'showPartialResultsToRespondents'
-			)?.value;
-
-			if (field) {
+		return pagesVisitor.mapFields((field) => {
+			if (field.valid) {
 				return field;
-			}
-
-			if (showPartialResultsToRespondents === true) {
-				alertElement.classList.remove(
-					'lfr-ddm__show-partial-results-alert--hidden'
-				);
 			}
 
 			return {
@@ -432,6 +418,18 @@ export function FormBuilder() {
 		if (!objectFields.length) {
 			addObjectFields(dispatch);
 		}
+
+		return () => {
+			const alerts = document.querySelector(
+				'.ddm-form-web__exception-container'
+			);
+
+			if (sidebarOpen && alerts) {
+				alerts.className = classNames(
+					'ddm-form-web__exception-container'
+				);
+			}
+		};
 
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
