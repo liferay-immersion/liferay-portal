@@ -308,7 +308,7 @@ interface IProps {
 	contentURL: string;
 	fileSource: string;
 	maximumFileSize: number;
-	onChange: FieldChangeEventHandler;
+	onChange: FieldChangeEventHandler<string>;
 	overallMaximumUploadRequestSize: number;
 	title: string;
 	url: string;

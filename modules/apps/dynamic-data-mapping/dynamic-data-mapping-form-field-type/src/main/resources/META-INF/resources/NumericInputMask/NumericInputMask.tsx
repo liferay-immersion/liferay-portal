@@ -54,7 +54,7 @@ interface IProps {
 	editingLanguageId: Locale;
 	ffDecimalPlacesSettingsEnabled: boolean;
 	onBlur: FocusEventHandler<HTMLInputElement>;
-	onChange: FieldChangeEventHandler;
+	onChange: FieldChangeEventHandler<unknown>;
 	onFocus: FocusEventHandler<HTMLInputElement>;
 	readOnly: boolean;
 	thousandsSeparator?: ThousandsSeparator[];
@@ -157,12 +157,10 @@ const NumericInputMask: React.FC<IProps> = ({
 					append,
 					appendType,
 					decimalPlaces,
-					// eslint-disable-next-line sort-keys
 					symbols: {
 						decimalSymbol,
 						thousandsSeparator,
 					},
-
 					// eslint-disable-next-line sort-keys
 					[key]: value,
 				},

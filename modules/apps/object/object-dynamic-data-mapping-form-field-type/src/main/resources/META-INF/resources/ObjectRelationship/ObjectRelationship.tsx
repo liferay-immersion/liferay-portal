@@ -120,9 +120,9 @@ export default function ObjectRelationship({
 	] = useState<State>({url: null});
 
 	const dispatch = useForm();
-	const {
-		objectRelationships,
-	}: {objectRelationships?: ObjectMap<number>} = useFormState();
+	const {objectRelationships} = useFormState<{
+		objectRelationships?: ObjectMap<number>;
+	}>();
 
 	const parameterObjectFieldId = parameterObjectFieldName
 		? objectRelationships?.[parameterObjectFieldName]
