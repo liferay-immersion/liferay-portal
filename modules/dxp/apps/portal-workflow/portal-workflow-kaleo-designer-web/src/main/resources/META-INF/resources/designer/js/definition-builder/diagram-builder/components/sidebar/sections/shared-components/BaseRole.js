@@ -56,7 +56,6 @@ export default function BaseRole({
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [defaultFieldValue]);
 
-	const initialLoading = networkStatus === 1;
 	const loading = networkStatus < 4;
 	const error = networkStatus === 5;
 
@@ -104,7 +103,7 @@ export default function BaseRole({
 					/>
 
 					<ClayAutocomplete.DropDown
-						active={(!!resource && active) || initialLoading}
+						active={!!resource && active}
 						closeOnClickOutside
 						onSetActive={setActive}
 					>
