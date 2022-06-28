@@ -95,7 +95,7 @@ export default function EditObjectField({
 
 			const message =
 				(error?.type && ERRORS[error.type]) ??
-				Liferay.Language.get('an-error-occurred');
+				Liferay.Language.get('maximum-number-of-characters');
 
 			openToast({message, type: 'danger'});
 		}
