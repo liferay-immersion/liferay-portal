@@ -26,7 +26,8 @@ taglib uri="http://liferay.com/tld/theme" prefix="liferay-theme" %><%@
 taglib uri="http://liferay.com/tld/ui" prefix="liferay-ui" %><%@
 taglib uri="http://liferay.com/tld/util" prefix="liferay-util" %>
 
-<%@ page import="com.liferay.dynamic.data.mapping.data.provider.web.internal.display.context.DDMDataProviderDisplayContext" %><%@
+<%@ page import="com.liferay.dynamic.data.mapping.constants.DDMPortletKeys" %><%@
+page import="com.liferay.dynamic.data.mapping.data.provider.web.internal.display.context.DDMDataProviderDisplayContext" %><%@
 page import="com.liferay.dynamic.data.mapping.data.provider.web.internal.search.DDMDataProviderInstanceRowChecker" %><%@
 page import="com.liferay.dynamic.data.mapping.exception.DataProviderInstanceURLException" %><%@
 page import="com.liferay.dynamic.data.mapping.exception.DuplicateDataProviderInstanceInputParameterNameException" %><%@
