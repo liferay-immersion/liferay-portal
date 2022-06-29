@@ -2282,6 +2282,8 @@ definition {
 					LexiconCard.clickCard(card = "${webContentTitle}");
 				}
 
+				SelectFrameTop();
+
 				PageEditor.viewItemSelectorText(
 					fieldLabel = "Item",
 					text = "${webContentTitle}");
