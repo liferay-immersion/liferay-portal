@@ -618,6 +618,7 @@ public class JournalConverterImpl implements JournalConverter {
 		throws Exception {
 
 		String fieldName = ddmFormField.getName();
+		String fieldReference = ddmFormField.getFieldReference();
 
 		int count = ddmFieldsCounter.get(fieldName);
 
@@ -637,6 +638,8 @@ public class JournalConverterImpl implements JournalConverter {
 				_getFieldInstanceId(ddmFields, fieldName, count + i));
 
 			childDynamicElementElement.addAttribute("name", fieldName);
+			childDynamicElementElement.addAttribute(
+				"fieldReference", fieldReference);
 			childDynamicElementElement.addAttribute(
 				"type", ddmFormField.getType());
 
