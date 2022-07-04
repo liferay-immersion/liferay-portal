@@ -17,6 +17,7 @@ import ClayForm, {ClayCheckbox} from '@clayui/form';
 import React, {useContext, useEffect, useState} from 'react';
 
 import {DefinitionBuilderContext} from '../../../../../DefinitionBuilderContext';
+import {contextUrl} from '../../../../../constants';
 import {
 	headers,
 	retrieveAccountRoles,
@@ -64,7 +65,7 @@ const BaseRoleType = ({
 			},
 		},
 		fetchPolicy: 'cache-first',
-		link: `${window.location.origin}${userBaseURL}/roles`,
+		link: `${window.location.origin}${contextUrl}${userBaseURL}/roles`,
 		onNetworkStatusChange: setNetworkStatus,
 		variables: {
 			pageSize: -1,

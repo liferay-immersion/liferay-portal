@@ -16,6 +16,7 @@ import ClayDropDown from '@clayui/drop-down';
 import ClayForm, {ClayInput} from '@clayui/form';
 import React, {useEffect, useState} from 'react';
 
+import {contextUrl} from '../../../../../constants';
 import {headers, userBaseURL} from '../../../../../util/fetchUtil';
 
 const BaseUser = ({
@@ -48,7 +49,7 @@ const BaseUser = ({
 				'x-csrf-token': Liferay.authToken,
 			},
 		},
-		link: `${window.location.origin}${userBaseURL}/user-accounts`,
+		link: `${window.location.origin}${contextUrl}${userBaseURL}/user-accounts`,
 		onNetworkStatusChange: setNetworkStatus,
 		variables: {search},
 	});

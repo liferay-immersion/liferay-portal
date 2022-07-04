@@ -16,6 +16,7 @@ import ClayForm, {ClayInput} from '@clayui/form';
 import PropTypes from 'prop-types';
 import React, {useEffect, useState} from 'react';
 
+import {contextUrl} from '../../../../../constants';
 import {headers, userBaseURL} from '../../../../../util/fetchUtil';
 
 export default function BaseRole({
@@ -37,7 +38,7 @@ export default function BaseRole({
 			},
 		},
 		fetchPolicy: 'cache-first',
-		link: `${window.location.origin}${userBaseURL}/roles`,
+		link: `${window.location.origin}${contextUrl}${userBaseURL}/roles`,
 		onNetworkStatusChange: setNetworkStatus,
 		variables: {
 			pageSize: -1,
