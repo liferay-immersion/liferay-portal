@@ -86,6 +86,7 @@ export default function BulkReassignModal() {
 			onCloseModal(true);
 			setSelectedItems([]);
 			setSelectAll(false);
+			window.location.reload();
 		},
 		url: '/workflow-tasks/assign-to-user',
 	});

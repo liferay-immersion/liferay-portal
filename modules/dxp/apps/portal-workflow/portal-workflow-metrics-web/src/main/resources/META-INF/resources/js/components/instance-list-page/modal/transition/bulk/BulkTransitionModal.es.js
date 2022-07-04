@@ -63,6 +63,7 @@ export default function BulkTransitionModal() {
 		setSelectTasks({selectAll: false, tasks: []});
 		setCurrentStep('selectTasks');
 		setErrorToast(false);
+		window.location.reload();
 	};
 
 	const {observer, onClose} = useModal({
