@@ -86,9 +86,24 @@ export function FormBuilder() {
 
 		const pagesVisitor = new PagesVisitor(formSettingsContext.pages);
 
-		return pagesVisitor.mapFields((field) => {
-			if (field.valid) {
-				return field;
+		const alertElement = document.querySelector(
+			'.lfr-ddm__show-partial-results-alert'
+		);
+
+		return pagesVisitor.mapFields(({field}) => {
+			
+			const showPartialResultsToRespondents = pagesVisitor.findField(
+				({fieldName}) => fieldName === 'showPartialResultsToRespondents'
+			)?.value;
+			
+			if (field) {
+				return field;	
+			}
+
+			if(showPartialResultsToRespondents === true){
+				alertElement.classList.remove(
+					'lfr-ddm__show-partial-results-alert--hidden'
+				)
 			}
 
 			return {
@@ -96,6 +111,7 @@ export function FormBuilder() {
 				displayErrors: true,
 			};
 		});
+
 	}, [formSettingsContext]);
 
 	const [{onClose}, modalDispatch] = useContext(ModalContext);
