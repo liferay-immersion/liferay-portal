@@ -1532,7 +1532,7 @@ definition {
 		var key_workflowTask = "${workflowTask}";
 
 		AssertTextEquals.assertText(
-			locator1 = "MyWorkflowTasksTask#STATE",
+			locator1 = "MyWorkflowTasksTask#TASK",
 			value1 = "${workflowTask}");
 
 		AssertTextEquals.assertPartialText(
@@ -1588,7 +1588,7 @@ definition {
 			value1 = "Nobody");
 
 		AssertTextEquals(
-			locator1 = "MyWorkflowTasksTask#STATE",
+			locator1 = "MyWorkflowTasksTask#TASK",
 			value1 = "${workflowTask}");
 
 		AssertTextEquals.assertPartialText(
