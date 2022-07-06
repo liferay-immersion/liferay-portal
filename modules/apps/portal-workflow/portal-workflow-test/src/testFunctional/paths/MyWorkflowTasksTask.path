@@ -17,7 +17,7 @@
 </tr>
 <tr>
 	<td>STATE</td>
-	<td>//div/span[contains(.,'State')]/..//div[@class='panel-body']</td>
+	<td>//div/span[contains(.,'State')]/..//div[@class='panel-body'] | //div/span[contains(.,'Task')]/..//div[@class='panel-body']</td>
 	<td></td>
 </tr>
 <tr>
