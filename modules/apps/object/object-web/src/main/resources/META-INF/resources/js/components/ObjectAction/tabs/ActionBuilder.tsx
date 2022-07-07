@@ -75,6 +75,8 @@ export default function ActionBuilder({
 		setCurrentObjectDefinitionFields,
 	] = useState<ObjectField[]>([]);
 
+	const [showAlert, setShowAlert] = useState(true);
+
 	const fetchObjectDefinitions = async () => {
 		const response = await fetch(objectDefinitionsRelationshipsURL);
 
@@ -306,23 +308,26 @@ export default function ActionBuilder({
 
 	return (
 		<>
-			<ClayAlert
-				className="lfr-objects__side-panel-content-container"
-				displayType="info"
-				title={`${Liferay.Language.get('info')}:`}
-			>
-				{Liferay.Language.get(
-					'create-conditions-and-predefined-values-using-expressions'
-				) + ' '}
-
-				<a
-					className="alert-link"
-					href="https://learn.liferay.com/dxp/latest/en/building-applications/objects/creating-and-managing-objects/expression-builder-validations-reference.html"
-					target="_blank"
+			{showAlert && (
+				<ClayAlert
+					className="lfr-objects__side-panel-content-container"
+					displayType="info"
+					onClose={() => setShowAlert(false)}
+					title={`${Liferay.Language.get('info')}:`}
 				>
-					{Liferay.Language.get('click-here-for-documentation')}
-				</a>
-			</ClayAlert>
+					{Liferay.Language.get(
+						'create-conditions-and-predefined-values-using-expressions'
+					) + ' '}
+
+					<a
+						className="alert-link"
+						href="https://learn.liferay.com/dxp/latest/en/building-applications/objects/creating-and-managing-objects/expression-builder-validations-reference.html"
+						target="_blank"
+					>
+						{Liferay.Language.get('click-here-for-documentation')}
+					</a>
+				</ClayAlert>
+			)}
 
 			{Object.keys(errors).length > 1 && (
 				<ClayAlert
