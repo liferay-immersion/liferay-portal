@@ -14,6 +14,7 @@
 
 import {ClayToggle} from '@clayui/form';
 import ClayIcon from '@clayui/icon';
+import {ClayTooltipProvider} from '@clayui/tooltip';
 import React from 'react';
 
 import './Toggle.scss';
@@ -40,12 +41,14 @@ export function Toggle({
 			{tooltip && (
 				<>
 					&nbsp;
-					<span data-tooltip-align={tooltipAlign} title={tooltip}>
-						<ClayIcon
-							className="lfr-objects__toggle-tooltip-icon"
-							symbol="question-circle-full"
-						/>
-					</span>
+					<ClayTooltipProvider>
+						<span data-tooltip-align={tooltipAlign} title={tooltip}>
+							<ClayIcon
+								className="lfr-objects__toggle-tooltip-icon"
+								symbol="question-circle-full"
+							/>
+						</span>
+					</ClayTooltipProvider>
 				</>
 			)}
 		</>
