@@ -26,4 +26,5 @@ export default CodeEditor;
 interface IProps extends ICodeMirrorEditor {
 	error?: string;
 	sidebarElements?: SidebarCategory[];
+	placeholder?: string;
 }

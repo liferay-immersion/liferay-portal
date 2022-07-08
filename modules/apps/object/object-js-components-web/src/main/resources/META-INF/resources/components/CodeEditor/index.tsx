@@ -84,5 +84,6 @@ export default CodeEditor;
 
 interface IProps extends ICodeMirrorEditor {
 	error?: string;
+	placeholder?: string;
 	sidebarElements?: SidebarCategory[];
 }
