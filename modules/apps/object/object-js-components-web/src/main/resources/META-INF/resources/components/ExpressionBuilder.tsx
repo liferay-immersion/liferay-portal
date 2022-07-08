@@ -23,6 +23,9 @@ import {FieldBase} from './FieldBase';
 
 import './ExpressionBuilder.scss';
 
+const TEXT_PLACEHOLDER =
+	'<#-- Create the condition of the action using Expression Builder. Type "${" to use the autocomplete feature. -->';
+
 export function ExpressionBuilder({
 	buttonDisabled,
 	className,
@@ -170,6 +173,7 @@ export function ExpressionBuilderModal({sidebarElements}: IModalProps) {
 				<CodeEditor
 					error={error}
 					onChange={() => {}}
+					placeholder={TEXT_PLACEHOLDER}
 					ref={editorRef}
 					sidebarElements={sidebarElements}
 					value={source}
