@@ -25,15 +25,9 @@
 	}
 }
 
-.col-md-3,
 .col-md-4,
-.col-md-5,
 .col-md-6,
-.col-md-7,
-.col-md-8,
-.col-md-9,
-.col-md-10,
-.col-md-11 {
+.col-md-8 {
 	.lfr-de__form-report {
 		display: block;
 
@@ -50,7 +44,28 @@
 	.custom-chart-size {
 		&.pie-chart {
 			display: block;
-			margin-left: 0;
+		}
+	}
+}
+
+.col-md-4 {
+	.custom-chart-size {
+		&.pie-chart {
+			display: block;
+			margin-left: -83px;
+		}
+	}
+}
+
+.col-md-8,
+.col-md-12 {
+	.custom-chart-size {
+		&.pie-chart {
+			margin-left: 63px;
+
+			@media screen and (max-width: 576px) {
+				display: block;
+			}
 		}
 	}
 }
@@ -354,15 +369,11 @@
 	.custom-chart-size {
 		display: flex;
 		min-height: 400px;
-		min-width: 400px;
+		min-width: 300px;
 		width: 100%;
 
 		&.multi-bar-chart {
 			margin-left: -32px;
-		}
-
-		&.pie-chart {
-			margin-left: 63px;
 		}
 
 		&.simple-bar-chart {
