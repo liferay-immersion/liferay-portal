@@ -1,3 +1,5 @@
+@import 'atlas-variables';
+
 .definition-builder-app {
 	height: calc(100vh - 120px);
 
@@ -7,6 +9,7 @@
 		height: 100%;
 
 		.diagram-area {
+			background-color: $light-l1;
 			height: 100%;
 			position: relative;
 			width: 100%;
