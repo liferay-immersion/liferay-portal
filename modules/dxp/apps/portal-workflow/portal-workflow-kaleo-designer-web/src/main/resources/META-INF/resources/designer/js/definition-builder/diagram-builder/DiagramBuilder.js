@@ -63,6 +63,7 @@ export default function DiagramBuilder() {
 	const [reactFlowInstance, setReactFlowInstance] = useState(null);
 	const [selectedItem, setSelectedItem] = useState(null);
 	const [selectedItemNewId, setSelectedItemNewId] = useState(null);
+	const [defaultPosition, setDefaultPosition] = useState(null);
 
 	const onConnect = (params) => {
 		if (
@@ -181,6 +182,14 @@ export default function DiagramBuilder() {
 
 	const onNodeDragStart = (event) => {
 		const elementRectangle = event.currentTarget.getBoundingClientRect();
+		const reactFlowBounds = reactFlowWrapperRef.current.getBoundingClientRect();
+
+		const position = reactFlowInstance.project({
+			x: elementRectangle.left - reactFlowBounds.left,
+			y: elementRectangle.top - reactFlowBounds.top,
+		});
+
+		setDefaultPosition(position);
 
 		setElementRectangle({
 			mouseXInRectangle: event.clientX - elementRectangle.left,
@@ -216,6 +225,24 @@ export default function DiagramBuilder() {
 				return element;
 			})
 		);
+
+		const newElements = elements.filter(
+			(element) => element.id !== node.id
+		);
+
+		if (
+			getCollidingElements(newElements, elementRectangle, position).length
+		) {
+			setElements((elements) =>
+				elements.map((element) => {
+					if (element.id === node.id) {
+						element.position = defaultPosition;
+					}
+
+					return element;
+				})
+			);
+		}
 	};
 
 	useEffect(() => {
