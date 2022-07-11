@@ -15,6 +15,21 @@
 type Locale = Liferay.Language.Locale;
 type LocalizedValue<T> = Liferay.Language.LocalizedValue<T>;
 
+type NotificationTemplate = {
+	attachmentObjectFieldIds: string[] | number[];
+	bcc: string;
+	body: LocalizedValue<string>;
+	cc: string;
+	description: string;
+	from: string;
+	fromName: LocalizedValue<string>;
+	id: number;
+	name: string;
+	objectDefinitionId: number | null;
+	subject: LocalizedValue<string>;
+	to: LocalizedValue<string>;
+};
+
 interface ObjectAction {
 	active: boolean;
 	conditionExpression?: string;

@@ -32,6 +32,12 @@ async function getList<T>(url: string) {
 	return items;
 }
 
+export async function getNotificationTemplates() {
+	return await getList<NotificationTemplate>(
+		'/o/notification/v1.0/notification-templates'
+	);
+}
+
 export async function getObjectDefinitions() {
 	return await getList<ObjectDefinition>(
 		'/o/object-admin/v1.0/object-definitions?page=-1'

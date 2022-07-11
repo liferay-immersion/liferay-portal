@@ -21,7 +21,9 @@ import {FieldBase} from './FieldBase';
 
 import './FormCustomSelect.scss';
 
-export function FormCustomSelect<T extends CustomItem = CustomItem>({
+export function FormCustomSelect<
+	T extends CustomItem<number | string> = CustomItem
+>({
 	className,
 	disabled,
 	error,
@@ -171,13 +173,13 @@ export function FormCustomSelect<T extends CustomItem = CustomItem>({
 	);
 }
 
-export interface CustomItem {
+export interface CustomItem<T = string> {
 	checked?: boolean;
 	description?: string;
 	label: string;
-	value?: string;
+	value?: T;
 }
-interface IProps<T extends CustomItem = CustomItem> {
+interface IProps<T extends CustomItem<number | string> = CustomItem> {
 	className?: string;
 	disabled?: boolean;
 	error?: string;

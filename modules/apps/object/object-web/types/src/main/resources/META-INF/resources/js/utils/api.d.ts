@@ -16,6 +16,9 @@ export declare function fetchJSON<T>(
 	input: RequestInfo,
 	init?: RequestInit
 ): Promise<T>;
+export declare function getNotificationTemplates(): Promise<
+	NotificationTemplate[]
+>;
 export declare function getObjectDefinitions(): Promise<ObjectDefinition[]>;
 export declare function getObjectFields(
 	objectDefinitionId: number
