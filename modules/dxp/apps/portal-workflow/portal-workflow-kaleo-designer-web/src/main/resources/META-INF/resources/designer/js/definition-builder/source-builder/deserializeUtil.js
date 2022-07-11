@@ -72,7 +72,10 @@ DeserializeUtil.prototype = {
 
 				const metadata = node.metadata && JSON.parse(node.metadata);
 
-				if (metadata?.terminal) {
+				if (
+					metadata?.terminal ||
+					(type === 'state' && !node.transitions && !metadata)
+				) {
 					type = 'end';
 				}
 
