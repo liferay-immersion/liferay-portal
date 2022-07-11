@@ -15,6 +15,7 @@
 import ClayButton from '@clayui/button';
 import ClayModal from '@clayui/modal';
 import {
+	API,
 	AutoComplete,
 	DatePicker,
 	FormCustomSelect,
@@ -29,7 +30,6 @@ import React, {
 	useState,
 } from 'react';
 
-import {getPickListItems} from '../utils/api';
 import {HEADERS} from '../utils/constants';
 import {
 	DATE_OPERATORS,
@@ -173,7 +173,7 @@ export function ModalAddFilter({
 		(objectField: ObjectField) => {
 			if (objectField?.businessType === 'Picklist') {
 				const makeFetch = async () => {
-					const items = await getPickListItems(
+					const items = await API.getPickListItems(
 						objectField.listTypeDefinitionId
 					);
 

@@ -12,10 +12,9 @@
  * details.
  */
 
-import {Select} from '@liferay/object-js-components-web';
+import {API, Select} from '@liferay/object-js-components-web';
 import React, {useEffect, useMemo, useState} from 'react';
 
-import {getObjectFields} from '../../utils/api';
 import {defaultLanguageId} from '../../utils/locale';
 
 export default function SelectRelationship({
@@ -38,7 +37,7 @@ export default function SelectRelationship({
 
 	useEffect(() => {
 		if (objectDefinitionId) {
-			getObjectFields(objectDefinitionId).then((fields) => {
+			API.getObjectFields(objectDefinitionId).then((fields) => {
 				const options = fields.filter(
 					({businessType}) => businessType === 'Relationship'
 				);

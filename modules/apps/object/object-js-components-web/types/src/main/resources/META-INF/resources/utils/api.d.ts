@@ -12,6 +12,30 @@
  * details.
  */
 
+declare type ObjectRelationshipType = 'manyToMany' | 'oneToMany' | 'oneToOne';
+interface ObjectRelationship {
+	deletionType: string;
+	id: number;
+	label: LocalizedValue<string>;
+	name: string;
+	objectDefinitionId1: number;
+	objectDefinitionId2: number;
+	readonly objectDefinitionName2: string;
+	objectRelationshipId: number;
+	parameterObjectFieldId?: number;
+	reverse?: boolean;
+	type: ObjectRelationshipType;
+}
+interface PickListItem {
+	id: number;
+	key: string;
+	name: string;
+}
+interface PickList {
+	id: number;
+	listTypeEntries: PickListItem[];
+	name: string;
+}
 export declare function fetchJSON<T>(
 	input: RequestInfo,
 	init?: RequestInit
@@ -39,3 +63,4 @@ export declare function updateRelationship({
 	objectRelationshipId,
 	...others
 }: ObjectRelationship): Promise<void>;
+export {};

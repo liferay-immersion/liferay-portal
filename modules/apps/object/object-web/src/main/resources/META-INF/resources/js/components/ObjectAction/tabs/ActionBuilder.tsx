@@ -17,6 +17,7 @@ import ClayForm, {ClayCheckbox, ClaySelect, ClayToggle} from '@clayui/form';
 import ClayIcon from '@clayui/icon';
 import {ClayTooltipProvider} from '@clayui/tooltip';
 import {
+	API,
 	Card,
 	CodeEditor,
 	CustomItem,
@@ -31,11 +32,6 @@ import React, {useEffect, useMemo, useState} from 'react';
 import PredefinedValuesTable from '../PredefinedValuesTable';
 
 import './ActionBuilder.scss';
-import {
-	fetchJSON,
-	getNotificationTemplates,
-	getObjectFields,
-} from '../../../utils/api';
 import {ActionError} from '../index';
 
 type ObjectsOptionsList = Array<
@@ -82,9 +78,9 @@ export default function ActionBuilder({
 	const [infoAlert, setInfoAlert] = useState(true);
 
 	const fetchObjectDefinitions = async () => {
-		const relationships = await fetchJSON<ObjectDefinitionsRelationship[]>(
-			objectDefinitionsRelationshipsURL
-		);
+		const relationships = await API.fetchJSON<
+			ObjectDefinitionsRelationship[]
+		>(objectDefinitionsRelationshipsURL);
 
 		const relatedObjects: SelectItem[] = [];
 		const unrelatedObjects: SelectItem[] = [];
@@ -153,7 +149,7 @@ export default function ActionBuilder({
 
 	useEffect(() => {
 		if (values.objectActionExecutorKey === 'notification') {
-			getNotificationTemplates().then((items) => {
+			API.getNotificationTemplates().then((items) => {
 				const notificationsArray = items.map(({id, name}) => ({
 					label: name,
 					value: id,
@@ -177,7 +173,7 @@ export default function ActionBuilder({
 		let validFields: ObjectField[] = [];
 
 		if (values.parameters?.objectDefinitionId) {
-			const items = await getObjectFields(
+			const items = await API.getObjectFields(
 				values.parameters.objectDefinitionId
 			);
 
@@ -236,7 +232,7 @@ export default function ActionBuilder({
 			parameters.relatedObjectEntries = false;
 		}
 
-		const items = await getObjectFields(objectDefinitionId);
+		const items = await API.getObjectFields(objectDefinitionId);
 
 		const validFields: ObjectField[] = [];
 

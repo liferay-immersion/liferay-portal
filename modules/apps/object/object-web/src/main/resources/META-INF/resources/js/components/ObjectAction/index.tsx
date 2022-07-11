@@ -16,6 +16,7 @@ import 'codemirror/mode/groovy/groovy';
 import ClayAlert from '@clayui/alert';
 import ClayTabs from '@clayui/tabs';
 import {
+	API,
 	CustomItem,
 	FormError,
 	SidePanelForm,
@@ -27,7 +28,6 @@ import {
 import {fetch} from 'frontend-js-web';
 import React, {useEffect, useMemo, useState} from 'react';
 
-import {getObjectFields} from '../../utils/api';
 import {HEADERS} from '../../utils/constants';
 import ActionBuilder from './tabs/ActionBuilder';
 import BasicInfo from './tabs/BasicInfo';
@@ -287,7 +287,7 @@ function useObjectActionForm({initialValues, onSubmit}: IUseObjectActionForm) {
 
 	useEffect(() => {
 		if (values.parameters?.objectDefinitionId) {
-			getObjectFields(values.parameters.objectDefinitionId).then(
+			API.getObjectFields(values.parameters.objectDefinitionId).then(
 				(fields) => {
 					const filteredFields = fields.filter(
 						({businessType, system}) =>

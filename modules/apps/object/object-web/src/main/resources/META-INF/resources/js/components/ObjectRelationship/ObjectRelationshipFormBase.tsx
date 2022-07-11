@@ -13,6 +13,7 @@
  */
 
 import {
+	API,
 	FormCustomSelect,
 	FormError,
 	Input,
@@ -22,7 +23,6 @@ import {
 } from '@liferay/object-js-components-web';
 import React, {useEffect, useMemo, useState} from 'react';
 
-import {getObjectDefinitions} from '../../utils/api';
 import {defaultLanguageId} from '../../utils/locale';
 
 export enum ObjectRelationshipType {
@@ -124,7 +124,7 @@ export function ObjectRelationshipFormBase({
 
 	useEffect(() => {
 		const fetchObjectDefinitions = async () => {
-			const items = await getObjectDefinitions();
+			const items = await API.getObjectDefinitions();
 
 			const currentObjectDefinition = items.find(
 				({id}) => values.objectDefinitionId1 === id

@@ -14,6 +14,7 @@
 
 import ClayAlert from '@clayui/alert';
 import {
+	API,
 	Card,
 	FormCustomSelect,
 	Input,
@@ -24,7 +25,6 @@ import {
 } from '@liferay/object-js-components-web';
 import React, {useState} from 'react';
 
-import {updateRelationship} from '../../utils/api';
 import {
 	availableLocales,
 	defaultLanguageId,
@@ -54,7 +54,7 @@ export default function EditRelationship({
 
 	const onSubmit = async (objectRelationship: ObjectRelationship) => {
 		try {
-			await updateRelationship(objectRelationship);
+			await API.updateRelationship(objectRelationship);
 			saveAndReload();
 
 			openToast({

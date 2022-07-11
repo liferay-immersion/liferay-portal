@@ -14,6 +14,7 @@
 
 import ClayForm, {ClayToggle} from '@clayui/form';
 import {
+	API,
 	AutoComplete,
 	FormCustomSelect,
 	FormError,
@@ -32,12 +33,6 @@ import React, {
 	useState,
 } from 'react';
 
-import {
-	getObjectFields,
-	getObjectRelationships,
-	getPickListItems,
-	getPickLists,
-} from '../utils/api';
 import {normalizeFieldSettings} from '../utils/fieldSettings';
 import {defaultLanguageId} from '../utils/locale';
 import {toCamelCase} from '../utils/string';
@@ -122,10 +117,10 @@ export default function ObjectFieldFormBase({
 
 	useEffect(() => {
 		if (values.businessType === 'Picklist') {
-			getPickLists().then(setPickLists);
+			API.getPickLists().then(setPickLists);
 
 			if (values.state) {
-				getPickListItems(values.listTypeDefinitionId!).then(
+				API.getPickListItems(values.listTypeDefinitionId!).then(
 					setPickListItems
 				);
 			}
@@ -140,7 +135,7 @@ export default function ObjectFieldFormBase({
 
 	const handleTypeChange = async (option: ObjectFieldType) => {
 		if (option.businessType === 'Picklist') {
-			setPickLists(await getPickLists());
+			setPickLists(await API.getPickLists());
 		}
 
 		let objectFieldSettings: ObjectFieldSetting[] | undefined;
@@ -315,7 +310,7 @@ export default function ObjectFieldFormBase({
 								if (state) {
 									setValues({required: state, state});
 									setPickListItems(
-										await getPickListItems(
+										await API.getPickListItems(
 											values.listTypeDefinitionId!
 										)
 									);
@@ -566,7 +561,7 @@ function AggregationSourceProperty({
 	useEffect(() => {
 		const makeFetch = async () => {
 			setObjectRelationships(
-				await getObjectRelationships(objectDefinitionId)
+				await API.getObjectRelationships(objectDefinitionId)
 			);
 		};
 
@@ -588,7 +583,7 @@ function AggregationSourceProperty({
 						aggregationFunction.value === settings.function
 				);
 
-				const relatedFields = await getObjectFields(
+				const relatedFields = await API.getObjectFields(
 					currentRelatedObjectRelationship.objectDefinitionId2
 				);
 
@@ -641,7 +636,7 @@ function AggregationSourceProperty({
 		setSelectRelatedObjectRelationship(objectRelationship);
 		setSelectedSummarizeField('');
 
-		const relatedFields = await getObjectFields(
+		const relatedFields = await API.getObjectFields(
 			objectRelationship.objectDefinitionId2
 		);
 

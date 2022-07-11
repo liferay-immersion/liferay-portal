@@ -16,10 +16,9 @@ import ClayAlert from '@clayui/alert';
 import ClayButton from '@clayui/button';
 import ClayForm from '@clayui/form';
 import ClayModal, {ClayModalProvider, useModal} from '@clayui/modal';
-import {Input} from '@liferay/object-js-components-web';
+import {API, Input} from '@liferay/object-js-components-web';
 import React, {useEffect, useState} from 'react';
 
-import {save} from '../../utils/api';
 import {defaultLanguageId} from '../../utils/locale';
 import {toCamelCase} from '../../utils/string';
 import {
@@ -45,7 +44,7 @@ function ModalAddObjectRelationship({
 
 	const onSubmit = async ({label, name, ...others}: ObjectRelationship) => {
 		try {
-			await save(
+			await API.save(
 				apiURL,
 				{
 					...others,

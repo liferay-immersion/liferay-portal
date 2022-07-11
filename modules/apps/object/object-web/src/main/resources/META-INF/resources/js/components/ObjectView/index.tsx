@@ -14,6 +14,7 @@
 
 import ClayTabs from '@clayui/tabs';
 import {
+	API,
 	SidePanelContent,
 	invalidateRequired,
 	openToast,
@@ -22,7 +23,6 @@ import {
 import {fetch} from 'frontend-js-web';
 import React, {useContext, useEffect, useState} from 'react';
 
-import {fetchJSON, getObjectFields} from '../../utils/api';
 import {HEADERS} from '../../utils/constants';
 import {defaultLanguageId} from '../../utils/locale';
 import BasicInfoScreen from './BasicInfoScreen/BasicInfoScreen';
@@ -68,11 +68,11 @@ const CustomView: React.FC<React.HTMLAttributes<HTMLElement>> = () => {
 				objectViewColumns,
 				objectViewFilterColumns,
 				objectViewSortColumns,
-			} = await fetchJSON<TObjectView>(
+			} = await API.fetchJSON<TObjectView>(
 				`/o/object-admin/v1.0/object-views/${objectViewId}`
 			);
 
-			const objectFields = await getObjectFields(objectDefinitionId);
+			const objectFields = await API.getObjectFields(objectDefinitionId);
 
 			const objectView = {
 				defaultObjectView,

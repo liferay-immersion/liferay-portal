@@ -13,6 +13,7 @@
  */
 
 import {
+	API,
 	Card,
 	SidePanelForm,
 	saveAndReload,
@@ -20,7 +21,6 @@ import {
 import {fetch, openToast} from 'frontend-js-web';
 import React, {useEffect, useState} from 'react';
 
-import {getPickListItems} from '../utils/api';
 import {HEADERS} from '../utils/constants';
 import {ERRORS} from '../utils/errors';
 import {defaultLanguageId} from '../utils/locale';
@@ -31,7 +31,7 @@ export default function EditObjectStateField({objectField, readOnly}: IProps) {
 	const [pickListItems, setPickListItems] = useState<PickListItem[]>([]);
 
 	useEffect(() => {
-		getPickListItems(objectField.listTypeDefinitionId).then(
+		API.getPickListItems(objectField.listTypeDefinitionId).then(
 			setPickListItems
 		);
 	}, [objectField.listTypeDefinitionId, setPickListItems]);
