@@ -16,6 +16,7 @@ import ClayButton from '@clayui/button';
 import ClayForm from '@clayui/form';
 import ClayManagementToolbar from '@clayui/management-toolbar';
 import {
+	API,
 	Card,
 	FormCustomSelect,
 	Input,
@@ -149,16 +150,8 @@ export default function EditNotificationTemplate({
 
 	useEffect(() => {
 		if (notificationTemplateId !== 0) {
-			const makeFetch = async () => {
-				const response = await fetch(
-					`/o/notification/v1.0/notification-templates/${notificationTemplateId}`,
-					{
-						headers: HEADERS,
-						method: 'GET',
-					}
-				);
-
-				const {
+			API.getNotificationTemplate(notificationTemplateId).then(
+				({
 					attachmentObjectFieldIds,
 					bcc,
 					body,
@@ -170,25 +163,22 @@ export default function EditNotificationTemplate({
 					objectDefinitionId,
 					subject,
 					to,
-				} = (await response.json()) as TNotificationTemplate;
-
-				setValues({
-					...values,
-					attachmentObjectFieldIds,
-					bcc,
-					body,
-					cc,
-					description,
-					from,
-					fromName,
-					name,
-					objectDefinitionId,
-					subject,
-					to,
-				});
-			};
-
-			makeFetch();
+				}) =>
+					setValues({
+						...values,
+						attachmentObjectFieldIds,
+						bcc,
+						body,
+						cc,
+						description,
+						from,
+						fromName,
+						name,
+						objectDefinitionId,
+						subject,
+						to,
+					})
+			);
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [notificationTemplateId]);

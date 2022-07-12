@@ -12,6 +12,20 @@
  * details.
  */
 
+interface NotificationTemplate {
+	attachmentObjectFieldIds: string[] | number[];
+	bcc: string;
+	body: LocalizedValue<string>;
+	cc: string;
+	description: string;
+	from: string;
+	fromName: LocalizedValue<string>;
+	id: number;
+	name: string;
+	objectDefinitionId: number | null;
+	subject: LocalizedValue<string>;
+	to: LocalizedValue<string>;
+}
 declare type ObjectRelationshipType = 'manyToMany' | 'oneToMany' | 'oneToOne';
 interface ObjectRelationship {
 	deletionType: string;
@@ -40,6 +54,9 @@ export declare function fetchJSON<T>(
 	input: RequestInfo,
 	init?: RequestInit
 ): Promise<T>;
+export declare function getNotificationTemplate(
+	notificationTemplateId: number
+): Promise<NotificationTemplate>;
 export declare function getNotificationTemplates(): Promise<
 	NotificationTemplate[]
 >;

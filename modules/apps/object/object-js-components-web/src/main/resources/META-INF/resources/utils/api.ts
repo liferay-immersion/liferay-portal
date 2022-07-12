@@ -14,6 +14,21 @@
 
 import {fetch} from 'frontend-js-web';
 
+interface NotificationTemplate {
+	attachmentObjectFieldIds: string[] | number[];
+	bcc: string;
+	body: LocalizedValue<string>;
+	cc: string;
+	description: string;
+	from: string;
+	fromName: LocalizedValue<string>;
+	id: number;
+	name: string;
+	objectDefinitionId: number | null;
+	subject: LocalizedValue<string>;
+	to: LocalizedValue<string>;
+}
+
 type ObjectRelationshipType = 'manyToMany' | 'oneToMany' | 'oneToOne';
 
 interface ObjectRelationship {
@@ -58,6 +73,12 @@ async function getList<T>(url: string) {
 	const {items} = await fetchJSON<{items: T[]}>(url);
 
 	return items;
+}
+
+export async function getNotificationTemplate(notificationTemplateId: number) {
+	return await fetchJSON<NotificationTemplate>(
+		`/o/notification/v1.0/notification-templates/${notificationTemplateId}`
+	);
 }
 
 export async function getNotificationTemplates() {
