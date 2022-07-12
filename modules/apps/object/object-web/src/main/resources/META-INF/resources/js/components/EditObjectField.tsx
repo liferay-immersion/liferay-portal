@@ -15,6 +15,7 @@
 import ClayForm, {ClayRadio, ClayRadioGroup, ClayToggle} from '@clayui/form';
 import {useModal} from '@clayui/modal';
 import {
+	API,
 	BuilderScreen,
 	Card,
 	Input,
@@ -341,26 +342,7 @@ export default function EditObjectField({
 
 	useEffect(() => {
 		if (values.businessType === 'Aggregation' && objectDefinitionId2) {
-			const makeFetch = async () => {
-				const response = await fetch(
-					`/o/object-admin/v1.0/object-definitions/${objectDefinitionId2}/object-fields`,
-					{
-						headers: HEADERS,
-					}
-				);
-
-				const {
-					items: objectFields,
-				}: {
-					items: ObjectField[];
-				} = (await response.json()) as {
-					items: ObjectField[];
-				};
-
-				setObjectFields(objectFields);
-			};
-
-			makeFetch();
+			API.getObjectFields(objectDefinitionId2).then(setObjectFields);
 		}
 	}, [values.businessType, objectDefinitionId2]);
 

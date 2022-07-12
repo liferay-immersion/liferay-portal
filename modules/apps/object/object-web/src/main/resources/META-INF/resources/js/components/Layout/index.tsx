@@ -20,10 +20,8 @@ import {
 	openToast,
 	saveAndReload,
 } from '@liferay/object-js-components-web';
-import {fetch} from 'frontend-js-web';
 import React, {useContext, useEffect, useState} from 'react';
 
-import {HEADERS} from '../../utils/constants';
 import {defaultLanguageId} from '../../utils/locale';
 import {TabsVisitor} from '../../utils/visitor';
 import InfoScreen from './InfoScreen/InfoScreen';
@@ -196,36 +194,20 @@ const Layout: React.FC<React.HTMLAttributes<HTMLElement>> = () => {
 			return;
 		}
 
-		const response = await fetch(
-			`/o/object-admin/v1.0/object-layouts/${objectLayoutId}`,
-			{
-				body: JSON.stringify(objectLayout),
-				headers: HEADERS,
-				method: 'PUT',
-			}
-		);
-
-		if (response.status === 401) {
-			window.location.reload();
-		}
-		else if (response.ok) {
+		try {
+			await API.save(
+				`/o/object-admin/v1.0/object-layouts/${objectLayoutId}`,
+				objectLayout
+			);
 			saveAndReload();
-
 			openToast({
 				message: Liferay.Language.get(
 					'the-object-layout-was-updated-successfully'
 				),
 			});
 		}
-		else {
-			const {
-				title = Liferay.Language.get('an-error-occurred'),
-			} = (await response.json()) as {title: any};
-
-			openToast({
-				message: title,
-				type: 'danger',
-			});
+		catch ({message}) {
+			openToast({message: message as string, type: 'danger'});
 		}
 	};
 

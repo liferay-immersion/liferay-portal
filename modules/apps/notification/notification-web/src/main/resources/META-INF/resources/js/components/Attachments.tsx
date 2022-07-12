@@ -13,26 +13,18 @@
  */
 
 import ClayPanel from '@clayui/panel';
-
-// @ts-ignore
-
 import {
+	API,
 	AutoComplete,
 	CustomItem,
 	FormCustomSelect,
 } from '@liferay/object-js-components-web';
-import {fetch} from 'frontend-js-web';
 import React, {useEffect, useMemo, useState} from 'react';
 
 import {defaultLanguageId} from '../utils/locale';
 
 import './Attachments.scss';
 import {TNotificationTemplate} from './EditNotificationTemplate';
-
-const HEADERS = new Headers({
-	'Accept': 'application/json',
-	'Content-Type': 'application/json',
-});
 
 export function Attachments({setValues, values}: IProps) {
 	const [objectDefinitions, setObjectDefinitions] = useState<
@@ -78,15 +70,7 @@ export function Attachments({setValues, values}: IProps) {
 	const getAttachmentFields = async function fetchObjectFields(
 		objectDefinitionId: number
 	) {
-		const response = await fetch(
-			`/o/object-admin/v1.0/object-definitions/${objectDefinitionId}/object-fields`,
-			{
-				headers: HEADERS,
-				method: 'GET',
-			}
-		);
-
-		const {items} = (await response.json()) as {items: ObjectField[]};
+		const items = await API.getObjectFields(objectDefinitionId);
 
 		const fields: ObjectField[] = items?.filter(
 			(field) => field.businessType === 'Attachment'
@@ -117,27 +101,11 @@ export function Attachments({setValues, values}: IProps) {
 	}, [values.objectDefinitionId]);
 
 	useEffect(() => {
-		const makeFetch = async () => {
-			const response = await fetch(
-				'/o/object-admin/v1.0/object-definitions',
-				{
-					headers: HEADERS,
-					method: 'GET',
-				}
-			);
-
-			const {items} = (await response.json()) as {
-				items: ObjectDefinition[];
-			};
-
-			const objectDefinitions = items.filter(
-				({system}: ObjectDefinition) => !system
-			);
+		API.getObjectDefinitions().then((items) => {
+			const objectDefinitions = items.filter(({system}) => !system);
 
 			setObjectDefinitions(objectDefinitions);
-		};
-
-		makeFetch();
+		});
 	}, []);
 
 	useEffect(() => {

@@ -22,6 +22,7 @@ import {FrontendDataSet} from '@liferay/frontend-data-set-web';
 
 import {render} from '@liferay/frontend-js-react-web';
 import {
+	API,
 	AutoComplete,
 	onActionDropdownItemClick,
 } from '@liferay/object-js-components-web';
@@ -30,13 +31,8 @@ import React, {useEffect, useState} from 'react';
 
 import {defaultLanguageId} from '../utils/locale';
 
-const HEADERS = new Headers({
-	'Accept': 'application/json',
-	'Content-Type': 'application/json',
-});
-
 export function DefinitionOfTerms({baseResourceURL}: IProps) {
-	const [objectDefinitons, setObjectDefinitons] = useState<
+	const [objectDefinitions, setObjectDefinitions] = useState<
 		ObjectDefinition[]
 	>();
 	const [selectedEntity, setSelectedEntity] = useState<ObjectDefinition>();
@@ -112,27 +108,13 @@ export function DefinitionOfTerms({baseResourceURL}: IProps) {
 	);
 
 	useEffect(() => {
-		const makeFetch = async () => {
-			const response = await fetch(
-				'/o/object-admin/v1.0/object-definitions',
-				{
-					headers: HEADERS,
-					method: 'GET',
-				}
-			);
-
-			const {items} = (await response.json()) as {
-				items: ObjectDefinition[];
-			};
-
+		API.getObjectDefinitions().then((items) => {
 			const objectDefinitions = items.filter(
 				({system}: ObjectDefinition) => !system
 			);
 
-			setObjectDefinitons(objectDefinitions);
-		};
-
-		makeFetch();
+			setObjectDefinitions(objectDefinitions);
+		});
 	}, []);
 
 	const getEntityFields = async (objectDefinition: ObjectDefinition) => {
@@ -144,7 +126,7 @@ export function DefinitionOfTerms({baseResourceURL}: IProps) {
 			}).toString()
 		);
 
-		const responseJSON = (await response.json()) as any[];
+		const responseJSON: [] = await response.json();
 
 		setFrontEndDataSetProps({
 			...frontEndDataSetProps,
@@ -191,7 +173,7 @@ export function DefinitionOfTerms({baseResourceURL}: IProps) {
 					emptyStateMessage={Liferay.Language.get(
 						'no-entities-were-found'
 					)}
-					items={objectDefinitons ?? []}
+					items={objectDefinitions ?? []}
 					label={Liferay.Language.get('entity')}
 					onChangeQuery={setQuery}
 					onSelectItem={(item: ObjectDefinition) => {
