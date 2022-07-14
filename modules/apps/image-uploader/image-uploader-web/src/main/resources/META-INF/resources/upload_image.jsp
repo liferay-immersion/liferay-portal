@@ -93,7 +93,7 @@ String tempImageFileName = ParamUtil.getString(request, "tempImageFileName");
 							</h4>
 
 							<div class="lfr-change-logo lfr-portrait-preview" id="<portlet:namespace />portraitPreview">
-								<img alt="<liferay-ui:message escapeAttribute="<%= true %>" key="image-preview" />" class="img-fluid lfr-portrait-preview-img" id="<portlet:namespace />portraitPreviewImg" src="<%= HtmlUtil.escape(currentImageURL) %>" />
+								<img alt="<liferay-ui:message escapeAttribute="<%= true %>" key="image-preview" />" class="img-fluid lfr-portrait-preview-img" id="<portlet:namespace />portraitPreviewImg" src="<%= HtmlUtil.escape(currentImageURL) %>" style="max-width: 50vh;" />
 							</div>
 
 							<c:if test='<%= Validator.isNull(currentImageURL) || currentImageURL.contains("/spacer.png") %>'>
