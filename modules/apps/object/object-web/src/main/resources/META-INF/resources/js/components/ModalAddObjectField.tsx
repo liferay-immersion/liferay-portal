@@ -97,6 +97,7 @@ function ModalAddObjectField({
 					)}
 
 					<Input
+						autoComplete="off"
 						error={errors.label}
 						label={Liferay.Language.get('label')}
 						name="label"

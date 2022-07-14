@@ -210,6 +210,7 @@ export default function ObjectFieldFormBase({
 	return (
 		<>
 			<Input
+				autoComplete="off"
 				disabled={disabled}
 				error={errors.name}
 				label={Liferay.Language.get('field-name')}
