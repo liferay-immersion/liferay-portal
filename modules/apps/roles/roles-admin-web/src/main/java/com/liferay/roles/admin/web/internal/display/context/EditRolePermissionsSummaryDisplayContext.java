@@ -91,8 +91,9 @@ public class EditRolePermissionsSummaryDisplayContext {
 
 		_searchContainer = new SearchContainer(
 			_liferayPortletRequest, null, null,
-			SearchContainer.DEFAULT_CUR_PARAM, 50, _getPermissionsAllURL(),
-			_getHeaderNames(), "this-role-does-not-have-any-permissions");
+			SearchContainer.DEFAULT_CUR_PARAM, SearchContainer.DEFAULT_DELTA,
+			_getPermissionsAllURL(), _getHeaderNames(),
+			"this-role-does-not-have-any-permissions");
 
 		_searchContainer.setResultsAndTotal(
 			ListUtil.sort(_getPermissionDisplays()));
