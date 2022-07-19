@@ -395,6 +395,7 @@ export default function DiagramBuilder() {
 						onConnect={onConnect}
 						onConnectEnd={onConnectEnd}
 						onConnectStart={onConnectStart}
+						onDragLeave={() => setCollidingElements(null)}
 						onDragOver={onDragOver}
 						onDrop={onDrop}
 						onLoad={onLoad}
