@@ -52,9 +52,12 @@ export default function BaseNode({
 	const targethandlesRef = useRef();
 	const {selectedLanguageId} = useContext(DefinitionBuilderContext);
 
-	const {collidingElements, selectedItem, setSelectedItem} = useContext(
-		DiagramBuilderContext
-	);
+	const {
+		collidingElements,
+		selectedItem,
+		setCollidingElements,
+		setSelectedItem,
+	} = useContext(DiagramBuilderContext);
 
 	useEffect(() => {
 		if (sourcehandlesRef?.current && targethandlesRef?.current) {
@@ -165,6 +168,7 @@ export default function BaseNode({
 			{!descriptionSidebar && (
 				<div
 					className="node-handle-area"
+					onDragLeave={() => setCollidingElements(null)}
 					onMouseEnter={displaySourceHandles(true)}
 					onMouseLeave={displaySourceHandles(false)}
 				>
