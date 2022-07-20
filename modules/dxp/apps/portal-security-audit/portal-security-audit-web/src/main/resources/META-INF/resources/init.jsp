@@ -53,6 +53,8 @@ page import="com.liferay.portal.security.audit.web.internal.display.context.Audi
 <%
 Calendar today = CalendarFactoryUtil.getCalendar(timeZone, locale);
 
+today.add(Calendar.MINUTE, 1);
+
 Calendar yesterday = CalendarFactoryUtil.getCalendar(timeZone, locale);
 
 yesterday.add(Calendar.DATE, -1);
