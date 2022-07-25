@@ -70,7 +70,7 @@ public class AggregationObjectFieldBusinessType
 	@Override
 	public Set<String> getAllowedObjectFieldSettingsNames() {
 		return SetUtil.fromArray(
-			"filters", "function", "relationship", "summarizeField");
+			"filters", "function", "objectFieldName", "objectRelationshipName");
 	}
 
 	@Override
@@ -124,7 +124,8 @@ public class AggregationObjectFieldBusinessType
 
 	@Override
 	public Set<String> getRequiredObjectFieldSettingsNames() {
-		return SetUtil.fromArray("function", "relationship", "summarizeField");
+		return SetUtil.fromArray(
+			"function", "objectFieldName", "objectRelationshipName");
 	}
 
 	@Override
@@ -159,7 +160,7 @@ public class AggregationObjectFieldBusinessType
 				objectFieldName, "function", function);
 		}
 		else if (Objects.equals(function, "COUNT")) {
-			requiredObjectFieldSettingsNames.remove("summarizeField");
+			requiredObjectFieldSettingsNames.remove("objectFieldName");
 		}
 
 		Set<String> missingRequiredObjectFieldSettingsNames = new HashSet<>();
@@ -199,7 +200,8 @@ public class AggregationObjectFieldBusinessType
 				_objectRelationshipLocalService.getObjectRelationship(
 					objectDefinitionId,
 					GetterUtil.getString(
-						objectFieldSettingsValuesMap.get("relationship")));
+						objectFieldSettingsValuesMap.get(
+							"objectRelationshipName")));
 
 			ObjectDefinition objectDefinition =
 				_objectDefinitionLocalService.fetchObjectDefinition(
@@ -208,15 +210,15 @@ public class AggregationObjectFieldBusinessType
 			ObjectField objectField = _objectFieldLocalService.getObjectField(
 				objectDefinition.getObjectDefinitionId(),
 				GetterUtil.getString(
-					objectFieldSettingsValuesMap.get("summarizeField")));
+					objectFieldSettingsValuesMap.get("objectFieldName")));
 
 			if (!ArrayUtil.contains(
 					_NUMERIC_BUSINESS_TYPES, objectField.getBusinessType())) {
 
 				throw new ObjectFieldSettingValueException.InvalidValue(
-					objectFieldName, "summarizeField",
+					objectFieldName, "objectFieldName",
 					GetterUtil.getString(
-						objectFieldSettingsValuesMap.get("summarizeField")));
+						objectFieldSettingsValuesMap.get("objectFieldName")));
 			}
 
 			_validateObjectFilters(
@@ -228,16 +230,16 @@ public class AggregationObjectFieldBusinessType
 					noSuchObjectRelationshipException) {
 
 			throw new ObjectFieldSettingValueException.InvalidValue(
-				objectFieldName, "relationship",
+				objectFieldName, "objectRelationshipName",
 				GetterUtil.getString(
-					objectFieldSettingsValuesMap.get("relationship")),
+					objectFieldSettingsValuesMap.get("objectRelationshipName")),
 				noSuchObjectRelationshipException);
 		}
 		catch (NoSuchObjectFieldException noSuchObjectFieldException) {
 			throw new ObjectFieldSettingValueException.InvalidValue(
-				objectFieldName, "summarizeField",
+				objectFieldName, "objectFieldName",
 				GetterUtil.getString(
-					objectFieldSettingsValuesMap.get("summarizeField")),
+					objectFieldSettingsValuesMap.get("objectFieldName")),
 				noSuchObjectFieldException);
 		}
 		catch (PortalException portalException) {
