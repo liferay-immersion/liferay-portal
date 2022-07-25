@@ -67,7 +67,7 @@ export default function pageReset({
 						</ClayButton.Group>,
 					],
 					header: Liferay.Language.get(
-						'delete-page-with-rule-applied-to-field'
+						'reset-page-with-rule-applied-to-field'
 					),
 					size: 'md',
 				},
