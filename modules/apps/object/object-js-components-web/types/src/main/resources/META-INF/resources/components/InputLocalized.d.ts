@@ -16,6 +16,7 @@
 
 import './InputLocalized.scss';
 export declare function InputLocalized({
+	disableFlag,
 	disabled,
 	error,
 	id,
@@ -30,6 +31,7 @@ export declare function InputLocalized({
 }: IProps): JSX.Element;
 interface IProps {
 	className?: string;
+	disableFlag?: boolean;
 	disabled?: boolean;
 	error?: string;
 	id?: string;

@@ -30,6 +30,7 @@ const availableLocales = Object.keys(Liferay.Language.available)
 	}));
 
 export function InputLocalized({
+	disableFlag,
 	disabled,
 	error,
 	id,
@@ -45,11 +46,19 @@ export function InputLocalized({
 	const [locale, setLocale] = useState<InputLocale>(availableLocales[0]);
 
 	useEffect(() => {
+		if (disableFlag) {
+			const localizationButton = document.querySelector(
+				'.dropdown-toggle'
+			);
+
+			localizationButton?.setAttribute('disabled', 'true');
+		}
+
 		const locale =
 			availableLocales.find(({label}) => label === selectedLocale)! ??
 			availableLocales[0];
 		setLocale(locale);
-	}, [selectedLocale]);
+	}, [disableFlag, selectedLocale]);
 
 	return (
 		<FieldBase
@@ -86,6 +95,7 @@ export function InputLocalized({
 
 interface IProps {
 	className?: string;
+	disableFlag?: boolean;
 	disabled?: boolean;
 	error?: string;
 	id?: string;
