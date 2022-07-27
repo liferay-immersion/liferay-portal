@@ -36,6 +36,7 @@ import java.sql.ResultSet;
 
 import java.util.Arrays;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * @author Wade Cao
@@ -105,6 +106,24 @@ public class SXPBlueprintUpgradeProcess extends UpgradeProcess {
 			}
 
 			if (serviceBuilderSXPElement.isReadOnly()) {
+				if (Objects.equals(
+						serviceBuilderSXPElement.getExternalReferenceCode(),
+						"BOOST_CONTENTS_IN_A_CATEGORY_FOR_A_PERIOD_OF_TIME") ||
+					Objects.equals(
+						serviceBuilderSXPElement.getExternalReferenceCode(),
+						"BOOST_CONTENTS_IN_A_CATEGORY_FOR_THE_TIME_OF_DAY") ||
+					Objects.equals(
+						serviceBuilderSXPElement.getExternalReferenceCode(),
+						"LIMIT_SEARCH_TO_CONTENTS_CREATED_WITHIN_A_PERIOD_OF_" +
+							"TIME")) {
+
+					sxpElement.setElementDefinition(
+						ElementDefinition.unsafeToDTO(
+							_renameElementDefinitionJSON(
+								String.valueOf(
+									sxpElement.getElementDefinition()))));
+				}
+
 				Map<String, String> description_i18n =
 					sxpElement.getDescription_i18n();
 
@@ -112,12 +131,6 @@ public class SXPBlueprintUpgradeProcess extends UpgradeProcess {
 					"en-US", _renameDescription(description_i18n.get("en-US")));
 
 				Map<String, String> title_i18n = sxpElement.getTitle_i18n();
-
-				sxpElement.setElementDefinition(
-					ElementDefinition.unsafeToDTO(
-						_renameElementDefinitionJSON(
-							String.valueOf(
-								sxpElement.getElementDefinition()))));
 
 				title_i18n.put("en-US", _renameTitle(title_i18n.get("en-US")));
 			}
