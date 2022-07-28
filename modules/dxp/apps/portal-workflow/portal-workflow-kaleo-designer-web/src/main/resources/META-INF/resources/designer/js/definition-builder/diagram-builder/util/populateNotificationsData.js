@@ -19,7 +19,6 @@ const populateNotificationsData = (initialElements, setElements) => {
 
 		if (isNode(element) && element.data.notifications) {
 			const recipients = element.data.notifications.recipients;
-
 			recipients.map((recipient, index) => {
 				if (recipient?.assignmentType?.[0] === 'roleId') {
 					retrieveRolesBy('roleId', recipient.roleId)
@@ -36,13 +35,25 @@ const populateNotificationsData = (initialElements, setElements) => {
 							setElements([...initialElements]);
 						});
 				}
-				else if (
-					recipient?.assignmentType?.[0] === 'user' &&
-					recipient.emailAddress
-				) {
+				else if (recipient?.assignmentType?.[0] === 'user') {
 					const sectionsData = [];
 
-					retrieveUsersBy('emailAddress', recipient.emailAddress)
+					let filterTypeRetrieveUsersBy = Object.keys(recipient)[1];
+					const keywordRetrieveUsersBy = Object.values(recipient)[1];
+
+					if (filterTypeRetrieveUsersBy === 'userId') {
+						filterTypeRetrieveUsersBy = filterTypeRetrieveUsersBy
+							.toLocaleLowerCase()
+							.replace('user', '');
+					}
+					else if (filterTypeRetrieveUsersBy === 'screenName') {
+						filterTypeRetrieveUsersBy = 'alternateName';
+					}
+
+					retrieveUsersBy(
+						filterTypeRetrieveUsersBy,
+						keywordRetrieveUsersBy
+					)
 						.then((response) => response.json())
 						.then(({items}) => {
 							items.forEach((item, index) => {
