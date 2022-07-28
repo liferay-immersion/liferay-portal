@@ -76,7 +76,7 @@ editDDMStructureURL.setParameter("structureKey", String.valueOf(ddmStructureKey)
 				</li>
 				<li class="tbar-item">
 					<div class="journal-article-button-row tbar-section text-right">
-						<aui:button cssClass="btn-secondary btn-sm mr-3" href="<%= redirect %>" type="cancel" />
+						<aui:button cssClass="btn-sm mr-3" href="<%= redirect %>" type="cancel" />
 
 						<aui:button cssClass="btn-sm mr-3" id="submitButton" type="submit" value="save" />
 					</div>
