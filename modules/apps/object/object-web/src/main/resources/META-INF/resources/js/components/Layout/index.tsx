@@ -195,6 +195,17 @@ const Layout: React.FC<React.HTMLAttributes<HTMLElement>> = () => {
 			return;
 		}
 
+		if (objectLayout.objectLayoutTabs[0].objectRelationshipId > 0) {
+			openToast({
+				message: Liferay.Language.get(
+					'the-layouts-first-tab-must-be-a-field-type-tab'
+				),
+				type: 'danger',
+			});
+
+			return;
+		}
+
 		try {
 			await API.save(
 				`/o/object-admin/v1.0/object-layouts/${objectLayoutId}`,
