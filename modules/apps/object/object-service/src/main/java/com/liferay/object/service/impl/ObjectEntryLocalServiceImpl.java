@@ -2511,6 +2511,7 @@ public class ObjectEntryLocalServiceImpl
 		ObjectEntryTable.INSTANCE.objectEntryId,
 		ObjectEntryTable.INSTANCE.userName,
 		ObjectEntryTable.INSTANCE.createDate,
+		ObjectEntryTable.INSTANCE.externalReferenceCode,
 		ObjectEntryTable.INSTANCE.modifiedDate, ObjectEntryTable.INSTANCE.status
 	};
 

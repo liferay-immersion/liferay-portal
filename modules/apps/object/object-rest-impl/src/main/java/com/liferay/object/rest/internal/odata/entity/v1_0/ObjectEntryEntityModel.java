@@ -58,7 +58,9 @@ public class ObjectEntryEntityModel implements EntityModel {
 				"dateModified", locale -> "modifiedDate",
 				locale -> "modifiedDate")
 		).put(
-			"externalReferenceCode", new StringEntityField("id", locale -> "id")
+			"externalReferenceCode",
+			new StringEntityField(
+				"externalReferenceCode", locale -> "externalReferenceCode")
 		).put(
 			"id",
 			new IdEntityField(
