@@ -1440,7 +1440,7 @@ AUI.add(
 		const DDMDecimalField = A.Component.create({
 			ATTRS: {
 				dataType: {
-					value: 'double',
+					value: 'decimal',
 				},
 
 				fieldNamespace: {
