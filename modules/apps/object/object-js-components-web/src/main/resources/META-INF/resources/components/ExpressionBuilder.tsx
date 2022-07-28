@@ -172,6 +172,12 @@ export function ExpressionBuilderModal({sidebarElements}: IModalProps) {
 				<CodeEditor
 					error={error}
 					onChange={() => {}}
+					placeholder={`<#-- ${Liferay.Util.sub(
+						Liferay.Language.get(
+							'create-the-condition-of-the-action-using-expression-builder-type-x-to-use-the-autocomplete-feature'
+						),
+						['"${"']
+					)} -->`}
 					ref={editorRef}
 					sidebarElements={sidebarElements}
 					value={source}
