@@ -2247,9 +2247,11 @@ AUI.add(
 
 					const parentLayoutId = instance._currentParentLayoutId;
 
-					const privateLayout = !!instance._navbar
-						.one('.private')
-						.hasClass('active');
+					const navbarPrivateTab = instance._navbar.one('.private');
+
+					const privateLayout = navbarPrivateTab
+						? navbarPrivateTab.hasClass('active')
+						: false;
 
 					const key = [parentLayoutId, groupId, privateLayout].join(
 						'-'
