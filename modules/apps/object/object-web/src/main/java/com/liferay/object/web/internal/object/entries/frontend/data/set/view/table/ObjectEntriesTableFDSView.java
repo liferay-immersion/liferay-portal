@@ -35,6 +35,8 @@ import com.liferay.object.service.ObjectRelationshipLocalService;
 import com.liferay.object.service.ObjectViewLocalService;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
+import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 
@@ -207,9 +209,18 @@ public class ObjectEntriesTableFDSView extends BaseTableFDSView {
 				fieldLabel, true);
 		}
 		else if (Objects.equals(fieldName, "externalReferenceCode")) {
-			_addFDSTableSchemaField(
-				null, "actionLink", null, fdsTableSchemaBuilder,
-				"externalReferenceCode", fieldLabel, true);
+			if (GetterUtil.getBoolean(
+					PropsUtil.get("feature.flag.LPS-158821"))) {
+
+				_addFDSTableSchemaField(
+					null, "actionLink", null, fdsTableSchemaBuilder,
+					"externalReferenceCode", fieldLabel, true);
+			}
+			else {
+				_addFDSTableSchemaField(
+					null, "actionLink", null, fdsTableSchemaBuilder, "id",
+					fieldLabel, true);
+			}
 		}
 		else if (Objects.equals(fieldName, "id")) {
 			_addFDSTableSchemaField(
