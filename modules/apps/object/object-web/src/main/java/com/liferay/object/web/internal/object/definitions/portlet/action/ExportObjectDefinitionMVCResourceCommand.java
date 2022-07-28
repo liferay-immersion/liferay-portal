@@ -14,6 +14,7 @@
 
 package com.liferay.object.web.internal.object.definitions.portlet.action;
 
+import com.liferay.object.admin.rest.dto.v1_0.ObjectAction;
 import com.liferay.object.admin.rest.dto.v1_0.ObjectDefinition;
 import com.liferay.object.admin.rest.dto.v1_0.ObjectField;
 import com.liferay.object.admin.rest.resource.v1_0.ObjectDefinitionResource;
@@ -32,6 +33,7 @@ import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.Time;
@@ -39,6 +41,9 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.util.PropsUtil;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Objects;
 
 import javax.portlet.ResourceRequest;
@@ -91,6 +96,18 @@ public class ExportObjectDefinitionMVCResourceCommand
 					!Objects.equals(
 						objectField.getBusinessTypeAsString(),
 						ObjectFieldConstants.BUSINESS_TYPE_AGGREGATION)));
+
+		for (ObjectAction objectAction : objectDefinition.getObjectActions()) {
+			Map<String, Object> parameters =
+				(Map<String, Object>)objectAction.getParameters();
+
+			parameters.put(
+				"predefinedValues",
+				ListUtil.toList(
+					(ArrayList<LinkedHashMap>)parameters.get(
+						"predefinedValues"),
+					JSONFactoryUtil::createJSONObject));
+		}
 
 		JSONObject objectDefinitionJSONObject =
 			JSONFactoryUtil.createJSONObject(objectDefinition.toString());

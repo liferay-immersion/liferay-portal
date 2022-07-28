@@ -20,14 +20,11 @@ import com.liferay.object.constants.ObjectActionConstants;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.UnicodeProperties;
 import com.liferay.portal.kernel.util.UnicodePropertiesBuilder;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
@@ -97,11 +94,7 @@ public class ObjectActionUtil {
 				value = GetterUtil.getLong(value);
 			}
 			else if (Objects.equals(entry.getKey(), "predefinedValues")) {
-				value = ListUtil.toList(
-					(List<Object>)JSONFactoryUtil.looseDeserialize(
-						entry.getValue()),
-					item -> JSONFactoryUtil.createJSONObject(
-						(LinkedHashMap)item));
+				value = JSONFactoryUtil.looseDeserialize((String)value);
 			}
 			else if (Objects.equals(entry.getKey(), "relatedObjectEntries")) {
 				value = GetterUtil.getBoolean(value);
