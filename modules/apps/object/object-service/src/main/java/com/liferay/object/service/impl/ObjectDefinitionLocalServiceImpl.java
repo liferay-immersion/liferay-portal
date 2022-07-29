@@ -806,7 +806,7 @@ public class ObjectDefinitionLocalServiceImpl
 				ObjectEntryTable.INSTANCE.getTableName(),
 				ObjectFieldConstants.DB_TYPE_STRING, null, false, false, null,
 				LocalizedMapUtil.getLocalizedMap(
-					LanguageUtil.get(
+					_language.get(
 						LocaleUtil.getDefault(), "external-reference-code")),
 				"externalReferenceCode", false, false);
 		}
