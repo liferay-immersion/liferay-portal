@@ -2014,7 +2014,7 @@ definition {
 
 		ProcessBuilderKaleoDesignerReact.dragSidebarNodeAndMove(
 			nodeLabel = "State",
-			nodePosition = "-20,90");
+			nodePosition = "-200,-250");
 
 		ProcessBuilderKaleoDesignerReact.backArrowOnSidebar();
 
@@ -2050,7 +2050,7 @@ definition {
 
 		ProcessBuilderKaleoDesignerReact.dragSidebarNodeAndMove(
 			nodeLabel = "Task",
-			nodePosition = "0,0");
+			nodePosition = "-200,-250");
 
 		ProcessBuilderKaleoDesignerReact.addConnector(
 			connectorIn = "task",
@@ -2106,7 +2106,9 @@ definition {
 
 		Workflow.addNewDefinition(workflowDefinitionTitle = "New Workflow Definition");
 
-		ProcessBuilderKaleoDesignerReact.dragSidebarNodeAndMove(nodeLabel = "Task");
+		ProcessBuilderKaleoDesignerReact.dragSidebarNodeAndMove(
+			nodeLabel = "Task",
+			nodePosition = "-200,-250");
 
 		ProcessBuilderKaleoDesignerReact.viewAndFillTimers(
 			actionName = "Liferay Timer",
@@ -2748,7 +2750,7 @@ definition {
 
 		ProcessBuilderKaleoDesignerReact.dragSidebarNodeAndMove(
 			nodeLabel = "Task",
-			nodePosition = "0,0");
+			nodePosition = "-200,-250");
 
 		ProcessBuilderKaleoDesignerReact.addConnector(
 			connectorIn = "task",
@@ -3612,7 +3614,9 @@ definition {
 
 		Workflow.addNewDefinition(workflowDefinitionTitle = "New Workflow Definition");
 
-		ProcessBuilderKaleoDesignerReact.dragSidebarNodeAndMove(nodeLabel = "Task");
+		ProcessBuilderKaleoDesignerReact.dragSidebarNodeAndMove(
+			nodeLabel = "Task",
+			nodePosition = "-200,-250");
 
 		ProcessBuilderKaleoDesignerReact.addConnector(
 			connectorIn = "task",
@@ -3744,7 +3748,7 @@ definition {
 
 		ProcessBuilderKaleoDesignerReact.dragSidebarNodeAndMove(
 			nodeLabel = "Task",
-			nodePosition = "0,0");
+			nodePosition = "-200,-250");
 
 		ProcessBuilderKaleoDesignerReact.addConnector(
 			connectorIn = "task",
@@ -3774,7 +3778,7 @@ definition {
 
 		ProcessBuilderKaleoDesignerReact.dragSidebarNodeAndMove(
 			nodeLabel = "Task",
-			nodePosition = "0,0");
+			nodePosition = "-200,-250");
 
 		ProcessBuilderKaleoDesignerReact.backArrowOnSidebar();
 
