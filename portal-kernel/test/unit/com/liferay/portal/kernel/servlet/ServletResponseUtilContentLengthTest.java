@@ -38,19 +38,9 @@ public class ServletResponseUtilContentLengthTest {
 	}
 
 	@Test
-	public void testContentLengthEqualsToInputStreamLength() throws Exception {
+	public void testContentLength() throws Exception {
 		_assertContentLength(_INPUTSTREAM_LENGTH);
-	}
-
-	@Test
-	public void testContentLengthGreaterThanInputStreamLength()
-		throws Exception {
-
 		_assertContentLength(_INPUTSTREAM_LENGTH + 1);
-	}
-
-	@Test
-	public void testContentLengthLowerThanInputStreamLength() throws Exception {
 		_assertContentLength(_INPUTSTREAM_LENGTH - 1);
 	}
 
