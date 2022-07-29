@@ -40,18 +40,18 @@ interface ObjectActionParameters {
 }
 
 type ObjectFieldBusinessType =
+	| 'Aggregation'
 	| 'Attachment'
+	| 'Date'
+	| 'Decimal'
+	| 'Integer'
+	| 'LongInteger'
 	| 'LongText'
 	| 'Picklist'
+	| 'PrecisionDecimal'
 	| 'Relationship'
 	| 'Text'
-	| 'Aggregation'
-	| 'LongInteger'
-	| 'Integer'
-	| 'Decimal'
-	| 'PrecisionDecimal'
-	| 'Workflow Status'
-	| 'Date';
+	| 'Workflow Status';
 interface ObjectFieldType {
 	businessType: ObjectFieldBusinessType;
 	dbType: string;
@@ -146,16 +146,16 @@ interface IItem extends LabelValueObject {
 type ObjectFieldSettingName =
 	| 'acceptedFileExtensions'
 	| 'fileSource'
-	| 'maximumFileSize'
+	| 'filters'
+	| 'function'
 	| 'maxLength'
+	| 'maximumFileSize'
+	| 'objectFieldName'
+	| 'objectRelationshipName'
 	| 'showCounter'
 	| 'showFilesInDocumentsAndMedia'
-	| 'storageDLFolderPath'
-	| 'objectRelationshipName'
-	| 'function'
-	| 'objectFieldName'
-	| 'filters'
-	| 'stateFlow';
+	| 'stateFlow'
+	| 'storageDLFolderPath';
 
 interface ObjectValidation {
 	active: boolean;
