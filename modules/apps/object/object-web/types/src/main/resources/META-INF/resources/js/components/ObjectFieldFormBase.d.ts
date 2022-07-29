@@ -38,10 +38,10 @@ export declare function useObjectFieldForm({
 }: IUseObjectFieldForm): {
 	errors: FormError<
 		ObjectField & {
+			function: any;
 			acceptedFileExtensions: any;
 			fileSource: any;
 			filters: any;
-			function: any;
 			maxLength: any;
 			maximumFileSize: any;
 			objectFieldName: any;

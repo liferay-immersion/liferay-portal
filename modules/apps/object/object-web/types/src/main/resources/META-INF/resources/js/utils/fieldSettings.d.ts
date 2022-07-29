@@ -15,6 +15,16 @@
 export declare function normalizeFieldSettings(
 	objectFieldSettings: ObjectFieldSetting[] | undefined
 ): {
+	function?:
+		| string
+		| number
+		| boolean
+		| ObjectFieldFilterSetting[]
+		| {
+				id: number;
+				objectStates: ObjectState[];
+		  }
+		| undefined;
 	acceptedFileExtensions?:
 		| string
 		| number
@@ -36,16 +46,6 @@ export declare function normalizeFieldSettings(
 		  }
 		| undefined;
 	filters?:
-		| string
-		| number
-		| boolean
-		| ObjectFieldFilterSetting[]
-		| {
-				id: number;
-				objectStates: ObjectState[];
-		  }
-		| undefined;
-	function?:
 		| string
 		| number
 		| boolean
