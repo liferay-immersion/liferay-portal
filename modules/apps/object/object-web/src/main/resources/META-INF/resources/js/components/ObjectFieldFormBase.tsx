@@ -430,14 +430,16 @@ export function useObjectFieldForm({
 			errors.businessType = REQUIRED_MSG;
 		}
 		else if (field.businessType === 'Aggregation') {
-			if (!settings.objectRelationshipName) {
-				errors.objectRelationshipName = REQUIRED_MSG;
-			}
 			if (!settings.function) {
 				errors.function = REQUIRED_MSG;
 			}
+
 			if (settings.function !== 'COUNT' && !settings.objectFieldName) {
 				errors.objectFieldName = REQUIRED_MSG;
+			}
+
+			if (!settings.objectRelationshipName) {
+				errors.objectRelationshipName = REQUIRED_MSG;
 			}
 		}
 		else if (field.businessType === 'Attachment') {
