@@ -38,18 +38,18 @@ export declare function useObjectFieldForm({
 }: IUseObjectFieldForm): {
 	errors: FormError<
 		ObjectField & {
-			function: any;
-			maxLength: any;
 			acceptedFileExtensions: any;
 			fileSource: any;
+			filters: any;
+			function: any;
+			maxLength: any;
 			maximumFileSize: any;
+			objectFieldName: any;
+			objectRelationshipName: any;
 			showCounter: any;
 			showFilesInDocumentsAndMedia: any;
-			storageDLFolderPath: any;
-			objectRelationshipName: any;
-			objectFieldName: any;
-			filters: any;
 			stateFlow: any;
+			storageDLFolderPath: any;
 		}
 	>;
 	handleChange: React.ChangeEventHandler<HTMLInputElement>;
