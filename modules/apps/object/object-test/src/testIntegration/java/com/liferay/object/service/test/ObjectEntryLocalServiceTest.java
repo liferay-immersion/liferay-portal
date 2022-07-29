@@ -1283,7 +1283,11 @@ public class ObjectEntryLocalServiceTest {
 		Assert.assertEquals("Peter", values.get("firstName"));
 		Assert.assertEquals(
 			"listTypeEntryKey1", values.get("listTypeEntryKeyRequired"));
-		Assert.assertEquals(values.toString(), 24, values.size());
+
+		int expectedValuesSize = 25;
+
+		Assert.assertEquals(
+			values.toString(), expectedValuesSize, values.size());
 
 		_addObjectEntry(
 			HashMapBuilder.<String, Serializable>put(
@@ -1309,7 +1313,8 @@ public class ObjectEntryLocalServiceTest {
 		Assert.assertEquals("Peter", values.get("firstName"));
 		Assert.assertEquals(
 			"listTypeEntryKey1", values.get("listTypeEntryKeyRequired"));
-		Assert.assertEquals(values.toString(), 24, values.size());
+		Assert.assertEquals(
+			values.toString(), expectedValuesSize, values.size());
 
 		values = valuesList.get(1);
 
@@ -1318,7 +1323,8 @@ public class ObjectEntryLocalServiceTest {
 		Assert.assertEquals("James", values.get("firstName"));
 		Assert.assertEquals(
 			"listTypeEntryKey2", values.get("listTypeEntryKeyRequired"));
-		Assert.assertEquals(values.toString(), 24, values.size());
+		Assert.assertEquals(
+			values.toString(), expectedValuesSize, values.size());
 
 		_addObjectEntry(
 			HashMapBuilder.<String, Serializable>put(
@@ -1344,7 +1350,8 @@ public class ObjectEntryLocalServiceTest {
 		Assert.assertEquals("Peter", values.get("firstName"));
 		Assert.assertEquals(
 			"listTypeEntryKey1", values.get("listTypeEntryKeyRequired"));
-		Assert.assertEquals(values.toString(), 24, values.size());
+		Assert.assertEquals(
+			values.toString(), expectedValuesSize, values.size());
 
 		values = valuesList.get(1);
 
@@ -1353,7 +1360,8 @@ public class ObjectEntryLocalServiceTest {
 		Assert.assertEquals("James", values.get("firstName"));
 		Assert.assertEquals(
 			"listTypeEntryKey2", values.get("listTypeEntryKeyRequired"));
-		Assert.assertEquals(values.toString(), 24, values.size());
+		Assert.assertEquals(
+			values.toString(), expectedValuesSize, values.size());
 
 		values = valuesList.get(2);
 
@@ -1362,7 +1370,8 @@ public class ObjectEntryLocalServiceTest {
 		Assert.assertEquals("John", values.get("firstName"));
 		Assert.assertEquals(
 			"listTypeEntryKey3", values.get("listTypeEntryKeyRequired"));
-		Assert.assertEquals(values.toString(), 24, values.size());
+		Assert.assertEquals(
+			values.toString(), expectedValuesSize, values.size());
 
 		valuesList = _objectEntryLocalService.getValuesList(
 			_irrelevantObjectDefinition.getObjectDefinitionId(), 0, null, null,
