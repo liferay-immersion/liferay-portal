@@ -72,6 +72,7 @@ import com.liferay.portal.kernel.service.permission.GroupPermissionUtil;
 import com.liferay.portal.kernel.service.permission.LayoutPermissionUtil;
 import com.liferay.portal.kernel.service.permission.PortalPermissionUtil;
 import com.liferay.portal.kernel.servlet.HttpHeaders;
+import com.liferay.portal.kernel.servlet.HttpMethods;
 import com.liferay.portal.kernel.servlet.PortalWebResourceConstants;
 import com.liferay.portal.kernel.servlet.PortalWebResourcesUtil;
 import com.liferay.portal.kernel.servlet.SessionErrors;
@@ -994,9 +995,10 @@ public class ServicePreAction extends Action {
 
 					String method = httpServletRequest.getMethod();
 
-					if ((Objects.equals(method, "GET") &&
+					if ((Objects.equals(method, HttpMethods.GET) &&
 						 (originalPlid == plid)) ||
-						(!Objects.equals(method, "GET") && !signedIn)) {
+						(!Objects.equals(
+							method, HttpMethods.GET) && !signedIn)) {
 
 						String message =
 							"User layouts cannot be accessed via p_l_id";
