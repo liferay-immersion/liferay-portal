@@ -262,11 +262,9 @@ public class AggregationObjectFieldBusinessType
 			_validateObjectFilterValue(
 				missingObjectFilterValues, "filterBy",
 				objectFilter.getFilterBy());
-
 			_validateObjectFilterValue(
 				missingObjectFilterValues, "filterType",
 				objectFilter.getFilterType());
-
 			_validateObjectFilterValue(
 				missingObjectFilterValues, "json", objectFilter.getJSON());
 
