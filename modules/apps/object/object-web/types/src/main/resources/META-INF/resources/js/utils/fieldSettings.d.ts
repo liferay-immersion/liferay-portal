@@ -15,26 +15,6 @@
 export declare function normalizeFieldSettings(
 	objectFieldSettings: ObjectFieldSetting[] | undefined
 ): {
-	function?:
-		| string
-		| number
-		| boolean
-		| ObjectFieldFilterSetting[]
-		| {
-				id: number;
-				objectStates: ObjectState[];
-		  }
-		| undefined;
-	maxLength?:
-		| string
-		| number
-		| boolean
-		| ObjectFieldFilterSetting[]
-		| {
-				id: number;
-				objectStates: ObjectState[];
-		  }
-		| undefined;
 	acceptedFileExtensions?:
 		| string
 		| number
@@ -55,7 +35,57 @@ export declare function normalizeFieldSettings(
 				objectStates: ObjectState[];
 		  }
 		| undefined;
+	filters?:
+		| string
+		| number
+		| boolean
+		| ObjectFieldFilterSetting[]
+		| {
+				id: number;
+				objectStates: ObjectState[];
+		  }
+		| undefined;
+	function?:
+		| string
+		| number
+		| boolean
+		| ObjectFieldFilterSetting[]
+		| {
+				id: number;
+				objectStates: ObjectState[];
+		  }
+		| undefined;
+	maxLength?:
+		| string
+		| number
+		| boolean
+		| ObjectFieldFilterSetting[]
+		| {
+				id: number;
+				objectStates: ObjectState[];
+		  }
+		| undefined;
 	maximumFileSize?:
+		| string
+		| number
+		| boolean
+		| ObjectFieldFilterSetting[]
+		| {
+				id: number;
+				objectStates: ObjectState[];
+		  }
+		| undefined;
+	objectFieldName?:
+		| string
+		| number
+		| boolean
+		| ObjectFieldFilterSetting[]
+		| {
+				id: number;
+				objectStates: ObjectState[];
+		  }
+		| undefined;
+	objectRelationshipName?:
 		| string
 		| number
 		| boolean
@@ -85,47 +115,17 @@ export declare function normalizeFieldSettings(
 				objectStates: ObjectState[];
 		  }
 		| undefined;
-	storageDLFolderPath?:
-		| string
-		| number
-		| boolean
-		| ObjectFieldFilterSetting[]
-		| {
-				id: number;
-				objectStates: ObjectState[];
-		  }
-		| undefined;
-	objectRelationshipName?:
-		| string
-		| number
-		| boolean
-		| ObjectFieldFilterSetting[]
-		| {
-				id: number;
-				objectStates: ObjectState[];
-		  }
-		| undefined;
-	objectFieldName?:
-		| string
-		| number
-		| boolean
-		| ObjectFieldFilterSetting[]
-		| {
-				id: number;
-				objectStates: ObjectState[];
-		  }
-		| undefined;
-	filters?:
-		| string
-		| number
-		| boolean
-		| ObjectFieldFilterSetting[]
-		| {
-				id: number;
-				objectStates: ObjectState[];
-		  }
-		| undefined;
 	stateFlow?:
+		| string
+		| number
+		| boolean
+		| ObjectFieldFilterSetting[]
+		| {
+				id: number;
+				objectStates: ObjectState[];
+		  }
+		| undefined;
+	storageDLFolderPath?:
 		| string
 		| number
 		| boolean
