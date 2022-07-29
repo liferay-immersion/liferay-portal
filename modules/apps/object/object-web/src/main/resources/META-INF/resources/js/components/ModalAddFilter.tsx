@@ -191,7 +191,7 @@ export function ModalAddFilter({
 
 				makeFetch();
 			}
-			else {
+			else if (objectField.name === 'status') {
 				let newItems: IItem[] = [];
 
 				if (editingFilter) {

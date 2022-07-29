@@ -60,6 +60,7 @@ export default function EditObjectField({
 	objectFieldTypes,
 	objectName,
 	readOnly,
+	workflowStatusJSONArray,
 }: IProps) {
 	const [editingObjectFieldName, setEditingObjectFieldName] = useState('');
 	const [editingFilter, setEditingFilter] = useState(false);
@@ -428,6 +429,36 @@ export default function EditObjectField({
 								return picklistAggregationFilter;
 							}
 
+							if (objectField.name === 'status') {
+								const statusFilterValues: number[] =
+
+									// @ts-ignore
+
+									parsedFilter.json[filterType];
+
+								const workflowStatusValueList = statusFilterValues.map(
+									(statusValue) => {
+										const currentStatus = workflowStatusJSONArray.find(
+											(workflowStatus) =>
+												Number(workflowStatus.value) ===
+												statusValue
+										);
+
+										return {
+											label: currentStatus?.label,
+											value: currentStatus?.label,
+										};
+									}
+								);
+
+								const statusAggregationFilter: AggregationFilters = {
+									...aggregationFilter,
+									valueList: workflowStatusValueList as LabelValueObject[],
+								};
+
+								return statusAggregationFilter;
+							}
+
 							return aggregationFilter;
 						}
 					}
@@ -548,7 +579,8 @@ export default function EditObjectField({
 								objectField.businessType === 'Picklist' ||
 								objectField.businessType === 'Integer' ||
 								objectField.businessType === 'LongInteger' ||
-								objectField.businessType === 'Date'
+								objectField.businessType === 'Date' ||
+								objectField.name === 'status'
 							) {
 								return objectField;
 							}
@@ -557,7 +589,7 @@ export default function EditObjectField({
 					observer={observer}
 					onClose={onClose}
 					onSave={handleSaveFilterColumn}
-					workflowStatusJSONArray={[]}
+					workflowStatusJSONArray={workflowStatusJSONArray}
 				/>
 			)}
 
@@ -883,6 +915,7 @@ interface IProps {
 	objectFieldTypes: ObjectFieldType[];
 	objectName: string;
 	readOnly: boolean;
+	workflowStatusJSONArray: LabelValueObject[];
 }
 
 interface ISearchableProps {
