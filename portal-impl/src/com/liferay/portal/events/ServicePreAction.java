@@ -997,8 +997,8 @@ public class ServicePreAction extends Action {
 
 					if ((Objects.equals(method, HttpMethods.GET) &&
 						 (originalPlid == plid)) ||
-						(!Objects.equals(
-							method, HttpMethods.GET) && !signedIn)) {
+						(!Objects.equals(method, HttpMethods.GET) &&
+						 !signedIn)) {
 
 						String message =
 							"User layouts cannot be accessed via p_l_id";
