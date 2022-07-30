@@ -20,7 +20,7 @@ task forceDeploy
 task zipExtraRemoteApp(type: Zip)
 
 String extraRemoteAppName = "com.liferay.site.initializer.testray.extra.remote.app"
-String extraRemoteAppVersion = "20220725.1617"
+String extraRemoteAppVersion = "20220730.1102"
 
 DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd.HHmm")
 
