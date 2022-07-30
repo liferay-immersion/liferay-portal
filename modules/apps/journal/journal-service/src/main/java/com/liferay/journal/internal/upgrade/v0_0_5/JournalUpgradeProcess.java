@@ -25,6 +25,8 @@ import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.petra.xml.XMLUtil;
 import com.liferay.portal.kernel.language.LanguageUtil;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.GroupConstants;
 import com.liferay.portal.kernel.security.permission.ResourceActions;
@@ -590,7 +592,18 @@ public class JournalUpgradeProcess extends UpgradeProcess {
 				if (Validator.isNull(ddmStructureKey)) {
 					long groupId = resultSet.getLong("groupId");
 
-					content = _convertStaticContentToDynamic(groupId, content);
+					try {
+						content = _convertStaticContentToDynamic(
+							groupId, content);
+					}
+					catch (Exception exception) {
+						_log.error(
+							StringBundler.concat(
+								"ID: ", id, "\nGroup ID: ", id, "\nContent: ",
+								content));
+
+						throw exception;
+					}
 
 					_updateJournalArticle(id, name, name, content);
 
@@ -614,6 +627,9 @@ public class JournalUpgradeProcess extends UpgradeProcess {
 		"([\\p{Punct}&&[^_]]|\\p{Space})+";
 
 	private static final String _TYPE_ATTRIBUTE_DDM_DATE = "type=\"ddm-date\"";
+
+	private static final Log _log = LogFactoryUtil.getLog(
+		JournalUpgradeProcess.class);
 
 	private static final DateFormat _dateFormat =
 		DateFormatFactoryUtil.getSimpleDateFormat("yyyy-MM-dd");
