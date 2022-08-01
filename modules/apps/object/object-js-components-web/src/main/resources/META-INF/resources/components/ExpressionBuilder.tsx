@@ -174,7 +174,7 @@ export function ExpressionBuilderModal({sidebarElements}: IModalProps) {
 					onChange={() => {}}
 					placeholder={`<#-- ${Liferay.Util.sub(
 						Liferay.Language.get(
-							'create-the-condition-of-the-action-using-expression-builder-type-x-to-use-the-autocomplete-feature'
+							'create-the-condition-of-the-action-using-the-expression-builder-type-x-to-use-the-autocomplete-feature'
 						),
 						['"${"']
 					)} -->`}
