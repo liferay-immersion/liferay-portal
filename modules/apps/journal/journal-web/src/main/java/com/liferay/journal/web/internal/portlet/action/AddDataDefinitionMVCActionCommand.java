@@ -20,7 +20,6 @@ import com.liferay.data.engine.rest.dto.v2_0.DataLayout;
 import com.liferay.data.engine.rest.resource.exception.DataDefinitionValidationException;
 import com.liferay.data.engine.rest.resource.v2_0.DataDefinitionResource;
 import com.liferay.journal.constants.JournalPortletKeys;
-import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseTransactionalMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
 import com.liferay.portal.kernel.servlet.SessionErrors;
@@ -106,11 +105,13 @@ public class AddDataDefinitionMVCActionCommand
 		DataDefinition dataDefinition = DataDefinition.toDTO(
 			dataDefinitionString);
 
+		String structureKey = ParamUtil.getString(
+			actionRequest, "structureKey");
 		String dataLayout = ParamUtil.getString(actionRequest, "dataLayout");
 		Map<Locale, String> descriptionMap =
 			LocalizationUtil.getLocalizationMap(actionRequest, "description");
 
-		dataDefinition.setDataDefinitionKey(StringPool.BLANK);
+		dataDefinition.setDataDefinitionKey(structureKey);
 		dataDefinition.setDefaultDataLayout(DataLayout.toDTO(dataLayout));
 		dataDefinition.setDescription(
 			LocalizedValueUtil.toStringObjectMap(descriptionMap));
