@@ -3846,6 +3846,12 @@ return	Array.from(getWebElement("(//div[@aria-label='${fragmentName}'])[${index}
 
 		Navigator.gotoNavTab(navTab = "Page Elements");
 
+		if (IsElementNotPresent(key_index = "${index}", key_nodeName = "${fragmentName}", locator1 = "Treeview#PAGE_STRUCTURE_TREE_NODE_INDEX")) {
+			Click(
+				key_nodeName = "",
+				locator1 = "Treeview#PAGE_STRUCTURE_TREE_NODE_COLLAPSED");
+		}
+
 		if (IsElementNotPresent(key_index = "${index}", key_nodeName = "${fragmentName}", locator1 = "Treeview#PAGE_STRUCTURE_TREE_NODE_ACTIVE_INDEX")) {
 			Click(
 				key_index = "${index}",
