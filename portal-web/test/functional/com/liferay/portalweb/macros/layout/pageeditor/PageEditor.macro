@@ -349,7 +349,8 @@ definition {
 							key_fragmentName = "${fragmentName}",
 							key_targetFragmentName = "${targetElementName}",
 							locator1 = "PageEditor#FRAGMENTS_AND_WIDGETS_TAB_FRAGMENT",
-							locator2 = "PageEditor#ANY_FRAGMENT_DROP_TARGET");
+							locator2 = "PageEditor#ANY_FRAGMENT_DROP_TARGET",
+							ratio = "${ratio}");
 					}
 					else {
 						DragAndDrop.javaScriptDragAndDropObjectBelowTallNestedObject(
@@ -358,7 +359,8 @@ definition {
 							key_fragmentName = "${fragmentName}",
 							key_targetFragmentName = "${targetElementName}",
 							locator1 = "PageEditor#FRAGMENTS_AND_WIDGETS_TAB_FRAGMENT",
-							locator2 = "PageEditor#ANY_FRAGMENT_DROP_TARGET");
+							locator2 = "PageEditor#ANY_FRAGMENT_DROP_TARGET",
+							ratio = "${ratio}");
 					}
 				}
 
