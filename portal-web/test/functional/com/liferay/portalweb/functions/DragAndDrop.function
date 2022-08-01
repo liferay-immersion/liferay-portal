@@ -358,41 +358,10 @@ Simulate.dragAndDrop(arguments[0], arguments[1]);
 		selenium.waitForElementPresent("${locator2}");
 
 		if (contains("${ratio}", "ratio")) {
-			var javaScript = '''
-Simulate = {
-	dragAndDrop: async function(source, target) {
-		const dataTransfer = new DataTransfer();
-
-		const dispatchEvent = async(type, element) => {
-			const rect = element.getBoundingClientRect();
-
-			const event = new DragEvent(
-				type,{
-					bubbles: true,
-					clientX: rect.left + (rect.width / 2),
-					clientY: rect.top + (rect.height / (5 / 4)),
-					dataTransfer: dataTransfer,
-					relatedTarget: element
-				});
-
-			element.dispatchEvent(event);
-		};
-
-		await dispatchEvent('dragstart', source);
-
-		await dispatchEvent('dragover', target);
-
-		await dispatchEvent('drop', target);
-
-		await dispatchEvent('dragend', source);
-	}
-};
-
-Simulate.dragAndDrop(arguments[0], arguments[1]);
-		''';
+			var ratio = "5 / 4";
 		}
-		else {
-			var javaScript = '''
+
+		var javaScript = '''
 Simulate = {
 	dragAndDrop: async function(source, target, ratio) {
 		const dataTransfer = new DataTransfer();
@@ -424,7 +393,6 @@ Simulate = {
 
 Simulate.dragAndDrop(arguments[0], arguments[1], ${ratio});
 		''';
-		}
 
 		selenium.executeJavaScript("${javaScript}", "${locator1}", "${locator2}");
 
