@@ -86,7 +86,6 @@ public class AMBackwardsCompatibilityHtmlContentTransformerTest {
 		ReflectionTestUtil.setFieldValue(
 			_contentTransformer, "_fileEntryFriendlyURLResolver",
 			_fileEntryFriendlyURLResolver);
-
 		ReflectionTestUtil.setFieldValue(
 			_contentTransformer, "_groupLocalService", _groupLocalService);
 	}
