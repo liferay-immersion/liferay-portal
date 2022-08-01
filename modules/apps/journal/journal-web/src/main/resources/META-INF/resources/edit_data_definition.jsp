@@ -51,7 +51,7 @@ else {
 
 editDDMStructureURL.setParameter("mvcPath", "/edit_data_definition.jsp");
 editDDMStructureURL.setParameter("ddmStructureId", String.valueOf(ddmStructureId));
-editDDMStructureURL.setParameter("ddmStructureKey", String.valueOf(ddmStructureKey));
+editDDMStructureURL.setParameter("structureKey", String.valueOf(ddmStructureKey));
 %>
 
 <liferay-util:html-top>
