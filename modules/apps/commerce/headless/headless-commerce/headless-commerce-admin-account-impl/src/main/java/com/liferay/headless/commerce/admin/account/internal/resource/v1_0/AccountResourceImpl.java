@@ -44,7 +44,6 @@ import com.liferay.headless.commerce.admin.account.internal.util.v1_0.AccountOrg
 import com.liferay.headless.commerce.admin.account.resource.v1_0.AccountResource;
 import com.liferay.headless.commerce.core.util.ExpandoUtil;
 import com.liferay.headless.commerce.core.util.ServiceContextHelper;
-import com.liferay.petra.function.UnsafeConsumer;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -54,7 +53,6 @@ import com.liferay.portal.kernel.model.Country;
 import com.liferay.portal.kernel.model.Region;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.search.Field;
-import com.liferay.portal.kernel.search.SearchContext;
 import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.search.filter.Filter;
 import com.liferay.portal.kernel.security.permission.PermissionChecker;
@@ -210,24 +208,18 @@ public class AccountResourceImpl extends BaseAccountResourceImpl {
 			AccountEntry.class.getName(), search, pagination,
 			queryConfig -> queryConfig.setSelectedFieldNames(
 				Field.ENTRY_CLASS_PK),
-			new UnsafeConsumer() {
+			searchContext -> {
+				PermissionChecker permissionChecker =
+					PermissionThreadLocal.getPermissionChecker();
 
-				public void accept(Object object) throws Exception {
-					SearchContext searchContext = (SearchContext)object;
-
-					PermissionChecker permissionChecker =
-						PermissionThreadLocal.getPermissionChecker();
-
-					if (!permissionChecker.isOmniadmin()) {
-						searchContext.setAttribute(
-							"organizationIds",
-							_organizationLocalService.getUserOrganizationIds(
-								contextUser.getUserId(), true));
-					}
-
-					searchContext.setCompanyId(contextCompany.getCompanyId());
+				if (!permissionChecker.isOmniadmin()) {
+					searchContext.setAttribute(
+						"organizationIds",
+						_organizationLocalService.getUserOrganizationIds(
+							contextUser.getUserId(), true));
 				}
 
+				searchContext.setCompanyId(contextCompany.getCompanyId());
 			},
 			sorts,
 			document -> _toAccount(
