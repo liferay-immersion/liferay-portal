@@ -631,7 +631,9 @@ definition {
 				PageEditor.addElementToContainer(
 					collectionName = "Basic Components",
 					fragmentName = "${fragmentName}",
+					height = "Tall",
 					navTab = "Fragments",
+					ratio = "9 / 8",
 					targetElementName = "Blogs");
 			}
 		}
@@ -713,7 +715,7 @@ definition {
 				dropTarget = "Up",
 				fragmentName = "Paragraph",
 				navTab = "Fragments",
-				targetElementName = "Blogs");
+				targetElementName = "HTML");
 
 			PageEditor.viewFragmentEditableText(
 				editableText = "A paragraph is a self-contained unit of a discourse in writing dealing with a particular point or idea. Paragraphs are usually an expected part of formal writing, used to organize longer prose.",
