@@ -576,10 +576,10 @@ export default function EditObjectField({
 					objectFields={
 						objectFields?.filter((objectField) => {
 							if (
-								objectField.businessType === 'Picklist' ||
+								objectField.businessType === 'Date' ||
 								objectField.businessType === 'Integer' ||
 								objectField.businessType === 'LongInteger' ||
-								objectField.businessType === 'Date' ||
+								objectField.businessType === 'Picklist' ||
 								objectField.name === 'status'
 							) {
 								return objectField;
