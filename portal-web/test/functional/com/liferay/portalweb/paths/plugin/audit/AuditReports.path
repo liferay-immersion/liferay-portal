@@ -30,7 +30,7 @@
 </tr>
 <tr>
 	<td>REPORTS_TABLE_RESOURCE_NAME</td>
-	<td>//tbody[@class='table-data']/tr[contains(.,'${key_resourceAction}') and contains(.,'${key_resourceName}')]/td[4]</td>
+	<td>//table//tr/td[contains(@class,'lfr-resource-name')]/a[contains(.,'${key_resourceName}')]/../following-sibling::td[contains(@class,'lfr-resource-action-column')]//a[contains(.,'${key_resourceAction}')]</td>
 	<td></td>
 </tr>
 <tr>
