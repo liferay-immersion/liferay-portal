@@ -24,7 +24,7 @@ definition {
 			else {
 				CKEditor.addContentInWebContent(
 					content = "${webContentContent}",
-					fieldLabel = "content");
+					fieldLabel = "Content");
 			}
 		}
 
@@ -180,7 +180,7 @@ definition {
 
 		CKEditor.addContentInWebContent(
 			content = "Web Content Content",
-			fieldLabel = "content");
+			fieldLabel = "Content");
 
 		AssertClick(
 			locator1 = "Button#PUBLISH",
@@ -240,7 +240,7 @@ definition {
 		if (isSet(webContentContent)) {
 			CKEditor.addContentInWebContent(
 				content = "${webContentContent}",
-				fieldLabel = "content");
+				fieldLabel = "Content");
 		}
 
 		AssertClick(
@@ -311,7 +311,7 @@ definition {
 
 		CKEditor.addContentInWebContent(
 			content = "${webContentContent}",
-			fieldLabel = "content");
+			fieldLabel = "Content");
 	}
 
 	macro addWithCategoryCP {
@@ -1252,7 +1252,7 @@ definition {
 		if (isSet(webContentContent)) {
 			CKEditor.addContentInWebContent(
 				content = "${webContentContent}",
-				fieldLabel = "content");
+				fieldLabel = "Content");
 		}
 
 		AssertClick(
@@ -1272,7 +1272,7 @@ definition {
 		if (isSet(webContentContentEdit)) {
 			CKEditor.addContentInWebContent(
 				content = "${webContentContentEdit}",
-				fieldLabel = "content");
+				fieldLabel = "Content");
 		}
 
 		if (isSet(webContentSelectWcFile)) {
@@ -1618,7 +1618,7 @@ definition {
 
 		CKEditor.addContentInWebContent(
 			content = "Web Content Content",
-			fieldLabel = "content");
+			fieldLabel = "Content");
 
 		Click(locator1 = "Button#SAVE_AS_DRAFT");
 
