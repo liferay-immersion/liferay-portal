@@ -126,7 +126,7 @@ public class PropertyDefinition {
 		HashMapBuilder.<PropertyType, Set<Class<?>>>put(
 			PropertyType.BIG_DECIMAL,
 			SetUtil.fromArray(
-				BigDecimal.class, Integer.class, Double.class, Float.class,
+				BigDecimal.class, Double.class, Float.class, Integer.class,
 				Long.class)
 		).<PropertyType, Set<Class<?>>>put(
 			PropertyType.BOOLEAN, SetUtil.fromArray(Boolean.class)

@@ -58,11 +58,11 @@ public class DefaultPropertyValidatorTest {
 		defaultPropertyValidator.validate(
 			propertyDefinition, new BigDecimal(RandomTestUtil.randomLong()));
 		defaultPropertyValidator.validate(
-			propertyDefinition, RandomTestUtil.randomInt());
-		defaultPropertyValidator.validate(
 			propertyDefinition, RandomTestUtil.randomDouble());
 		defaultPropertyValidator.validate(
 			propertyDefinition, RandomTestUtil.randomFloat());
+		defaultPropertyValidator.validate(
+			propertyDefinition, RandomTestUtil.randomInt());
 		defaultPropertyValidator.validate(
 			propertyDefinition, RandomTestUtil.randomLong());
 	}
