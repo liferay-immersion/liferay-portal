@@ -969,7 +969,7 @@ definition {
 			SelectFrame.selectFrameNoLoading(locator1 = "CKEditor#BODY_FIELD_IFRAME_2");
 
 			Type(
-				key_fieldLabel = "content",
+				key_fieldLabel = "Content",
 				locator1 = "CKEditor#BODY",
 				value1 = "${webContentContentEdit}");
 
@@ -1310,7 +1310,7 @@ definition {
 		SelectFrame.selectFrameNoLoading(locator1 = "CKEditor#BODY_FIELD_IFRAME_2");
 
 		Type(
-			key_fieldLabel = "content",
+			key_fieldLabel = "Content",
 			locator1 = "CKEditor#BODY",
 			value1 = "${webContentContentEdit}");
 
@@ -1822,7 +1822,7 @@ definition {
 			navTab = "${navTab}");
 
 		SelectFrame.selectFrameNoLoading(
-			key_fieldLabel = "content",
+			key_fieldLabel = "Content",
 			locator1 = "CKEditor#BODY_FIELD_IFRAME_WEB_CONTENT_ARTICLE");
 
 		AssertElementPresent(locator1 = "CKEditor#CONTENT_AUDIO_LINK_IMAGE");
@@ -1846,7 +1846,7 @@ definition {
 		}
 
 		SelectFrame.selectFrameNoLoading(
-			key_fieldLabel = "content",
+			key_fieldLabel = "Content",
 			locator1 = "CKEditor#BODY_FIELD_IFRAME_WEB_CONTENT_ARTICLE");
 
 		AssertElementPresent(locator1 = "CKEditor#CONTENT_VIDEO_LINK_IMAGE");
@@ -1954,7 +1954,7 @@ definition {
 			value1 = "${webContentTitle}");
 
 		SelectFrame.selectFrameNoLoading(
-			key_fieldLabel = "content",
+			key_fieldLabel = "Content",
 			locator1 = "CKEditor#BODY_FIELD_IFRAME_WEB_CONTENT_ARTICLE");
 
 		AssertTextEquals(
@@ -2337,7 +2337,7 @@ definition {
 			value1 = "${webContentTitle}");
 
 		SelectFrame.selectFrameNoLoading(
-			key_fieldLabel = "content",
+			key_fieldLabel = "Content",
 			locator1 = "CKEditor#BODY_FIELD_IFRAME_WEB_CONTENT_ARTICLE");
 
 		AssertTextEquals(
@@ -2785,7 +2785,7 @@ definition {
 			value1 = "${webContentTitle}");
 
 		SelectFrame.selectFrameNoLoading(
-			key_fieldLabel = "content",
+			key_fieldLabel = "Content",
 			locator1 = "CKEditor#BODY_FIELD_IFRAME_WEB_CONTENT_ARTICLE");
 
 		AssertTextEquals(
