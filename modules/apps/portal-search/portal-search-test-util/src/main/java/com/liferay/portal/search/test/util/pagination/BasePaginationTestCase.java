@@ -40,7 +40,8 @@ public abstract class BasePaginationTestCase extends BaseIndexingTestCase {
 		for (int i = 0; i < _TOTAL_DOCUMENTS; i++) {
 			addDocument(
 				DocumentCreationHelpers.singleText(
-					_FIELD, StringUtil.toLowerCase(testName.getMethodName())));
+					"test-field",
+					StringUtil.toLowerCase(testName.getMethodName())));
 		}
 	}
 
@@ -155,8 +156,6 @@ public abstract class BasePaginationTestCase extends BaseIndexingTestCase {
 
 		return searchContext;
 	}
-
-	private static final String _FIELD = "test-field";
 
 	private static final int _TOTAL_DOCUMENTS = 20;
 
