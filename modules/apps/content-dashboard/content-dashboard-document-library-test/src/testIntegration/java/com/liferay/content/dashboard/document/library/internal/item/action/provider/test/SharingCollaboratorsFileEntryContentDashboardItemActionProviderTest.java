@@ -111,7 +111,6 @@ public class
 
 		Assert.assertTrue(
 			url.contains("param_classPK=" + _fileEntryId.getFileEntryId()));
-
 		Assert.assertTrue(
 			url.contains("param_mvcPath=/sharing_collaborators.jsp"));
 	}

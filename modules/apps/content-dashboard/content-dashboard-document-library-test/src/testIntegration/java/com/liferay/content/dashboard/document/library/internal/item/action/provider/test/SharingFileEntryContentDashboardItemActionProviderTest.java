@@ -110,7 +110,6 @@ public class SharingFileEntryContentDashboardItemActionProviderTest {
 
 		Assert.assertTrue(
 			url.contains("param_classPK=" + _fileEntryId.getFileEntryId()));
-
 		Assert.assertTrue(url.contains("param_mvcPath=/sharing_button.jsp"));
 	}
 

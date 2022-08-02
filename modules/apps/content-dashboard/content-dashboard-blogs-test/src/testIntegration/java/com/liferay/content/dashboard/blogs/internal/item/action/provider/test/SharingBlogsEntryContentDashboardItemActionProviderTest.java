@@ -106,7 +106,6 @@ public class SharingBlogsEntryContentDashboardItemActionProviderTest {
 
 		Assert.assertTrue(
 			url.contains("param_classPK=" + blogsEntry.getEntryId()));
-
 		Assert.assertTrue(url.contains("param_mvcPath=/sharing_button.jsp"));
 	}
 

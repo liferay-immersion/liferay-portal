@@ -243,11 +243,9 @@ public class GetContentDashboardItemInfoMVCResourceCommandTest {
 			jsonObject.getString("className"));
 		Assert.assertEquals(
 			infoItemReference.getClassPK(), jsonObject.getLong("classPK"), 0);
-
 		Assert.assertEquals(
 			contentDashboardItem.getDescription(LocaleUtil.US),
 			jsonObject.getString("description"));
-
 		Assert.assertNotNull(jsonObject.getString("fetchSharingButtonURL"));
 		Assert.assertNotNull(
 			jsonObject.getString("fetchSharingCollaboratorsURL"));
