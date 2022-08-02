@@ -413,98 +413,99 @@ public abstract class BasePortletPreferencesUpgradeProcess
 					portletId, ctCollectionId
 				};
 			},
-			values -> {
-				long portletPreferencesId = (Long)values[0];
-				long companyId = (Long)values[1];
-
-				if (companyId > 0) {
-					int ownerType = (Integer)values[2];
-					long plid = (Long)values[3];
-					long ownerId = (Long)values[4];
-					String portletId = (String)values[5];
-					long ctCollectionId = (Long)values[6];
-
-					try (PreparedStatement preparedStatement1 =
-							AutoBatchPreparedStatementUtil.autoBatch(
-								connection,
-								StringBundler.concat(
-									"select portletPreferenceValueId, ",
-									"largeValue, name, readOnly, smallValue ",
-									"from PortletPreferenceValue where ",
-									"portletPreferencesId = ? order by index_ ",
-									"asc"));
-						PreparedStatement preparedStatement2 =
-							AutoBatchPreparedStatementUtil.concurrentAutoBatch(
-								connection,
-								StringBundler.concat(
-									"insert into PortletPreferenceValue ",
-									"(mvccVersion, ctCollectionId, ",
-									"portletPreferenceValueId, companyId, ",
-									"portletPreferencesId, index_, ",
-									"largeValue, name, readOnly, smallValue) ",
-									"values (0, ?, ?, ?, ?, ?, ?, ?, ?, ?)"));
-						PreparedStatement preparedStatement3 =
-							AutoBatchPreparedStatementUtil.concurrentAutoBatch(
-								connection,
-								StringBundler.concat(
-									"update PortletPreferenceValue set ",
-									"largeValue = ?, readOnly = ?, smallValue ",
-									"= ? where portletPreferenceValueId = ?"));
-						PreparedStatement preparedStatement4 =
-							AutoBatchPreparedStatementUtil.concurrentAutoBatch(
-								connection,
-								"delete from PortletPreferenceValue where " +
-									"portletPreferenceValueId = ?")) {
-
-						preparedStatement1.setLong(1, portletPreferencesId);
-
-						Map<String, PreferenceValues> preferenceValuesMap =
-							_getPreferenceValuesMap(preparedStatement1);
-
-						String preferences = _toXMLString(preferenceValuesMap);
-
-						String newPreferences = upgradePreferences(
-							companyId, ownerId, ownerType, plid, portletId,
-							preferences);
-
-						if (preferences.equals(newPreferences)) {
-							return;
-						}
-
-						_upgradePortletPreferenceValues(
-							preferenceValuesMap, ctCollectionId,
-							portletPreferencesId, companyId, newPreferences,
-							preparedStatement2, preparedStatement3,
-							preparedStatement4);
-
-						preparedStatement2.executeBatch();
-
-						preparedStatement3.executeBatch();
-
-						preparedStatement4.executeBatch();
-					}
-				}
-				else {
-					try (PreparedStatement preparedStatement5 =
-							connection.prepareStatement(
-								"delete from PortletPreferences where " +
-									"portletPreferencesId = ?");
-						PreparedStatement preparedStatement6 =
-							connection.prepareStatement(
-								"delete from PortletPreferenceValue where " +
-									"portletPreferencesId = ?")) {
-
-						preparedStatement5.setLong(1, portletPreferencesId);
-
-						preparedStatement5.executeUpdate();
-
-						preparedStatement6.setLong(1, portletPreferencesId);
-
-						preparedStatement6.executeUpdate();
-					}
-				}
-			},
+			values -> _updatePortletPreferenceValues(values),
 			"Unable to update PortletPreferences and PortletPreferenceValue");
+	}
+
+	private void _updatePortletPreferenceValues(Object[] values)
+		throws Exception {
+
+		long portletPreferencesId = (Long)values[0];
+		long companyId = (Long)values[1];
+
+		if (companyId > 0) {
+			int ownerType = (Integer)values[2];
+			long plid = (Long)values[3];
+			long ownerId = (Long)values[4];
+			String portletId = (String)values[5];
+			long ctCollectionId = (Long)values[6];
+
+			try (PreparedStatement preparedStatement1 =
+					AutoBatchPreparedStatementUtil.autoBatch(
+						connection,
+						StringBundler.concat(
+							"select portletPreferenceValueId, largeValue, ",
+							"name, readOnly, smallValue from ",
+							"PortletPreferenceValue where ",
+							"portletPreferencesId = ? order by index_ asc"));
+				PreparedStatement preparedStatement2 =
+					AutoBatchPreparedStatementUtil.concurrentAutoBatch(
+						connection,
+						StringBundler.concat(
+							"insert into PortletPreferenceValue (mvccVersion, ",
+							"ctCollectionId, portletPreferenceValueId, ",
+							"companyId, portletPreferencesId, index_, ",
+							"largeValue, name, readOnly, smallValue) values ",
+							"(0, ?, ?, ?, ?, ?, ?, ?, ?, ?)"));
+				PreparedStatement preparedStatement3 =
+					AutoBatchPreparedStatementUtil.concurrentAutoBatch(
+						connection,
+						StringBundler.concat(
+							"update PortletPreferenceValue set largeValue = ",
+							"?, readOnly = ?, smallValue = ? where ",
+							"portletPreferenceValueId = ?"));
+				PreparedStatement preparedStatement4 =
+					AutoBatchPreparedStatementUtil.concurrentAutoBatch(
+						connection,
+						"delete from PortletPreferenceValue where " +
+							"portletPreferenceValueId = ?")) {
+
+				preparedStatement1.setLong(1, portletPreferencesId);
+
+				Map<String, PreferenceValues> preferenceValuesMap =
+					_getPreferenceValuesMap(preparedStatement1);
+
+				String preferences = _toXMLString(preferenceValuesMap);
+
+				String newPreferences = upgradePreferences(
+					companyId, ownerId, ownerType, plid, portletId,
+					preferences);
+
+				if (preferences.equals(newPreferences)) {
+					return;
+				}
+
+				_upgradePortletPreferenceValues(
+					preferenceValuesMap, ctCollectionId, portletPreferencesId,
+					companyId, newPreferences, preparedStatement2,
+					preparedStatement3, preparedStatement4);
+
+				preparedStatement2.executeBatch();
+
+				preparedStatement3.executeBatch();
+
+				preparedStatement4.executeBatch();
+			}
+		}
+		else {
+			try (PreparedStatement preparedStatement5 =
+					connection.prepareStatement(
+						"delete from PortletPreferences where " +
+							"portletPreferencesId = ?");
+				PreparedStatement preparedStatement6 =
+					connection.prepareStatement(
+						"delete from PortletPreferenceValue where " +
+							"portletPreferencesId = ?")) {
+
+				preparedStatement5.setLong(1, portletPreferencesId);
+
+				preparedStatement5.executeUpdate();
+
+				preparedStatement6.setLong(1, portletPreferencesId);
+
+				preparedStatement6.executeUpdate();
+			}
+		}
 	}
 
 	private void _upgradePortletPreferenceValues(
