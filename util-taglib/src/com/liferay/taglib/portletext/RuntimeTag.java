@@ -532,7 +532,7 @@ public class RuntimeTag extends TagSupport implements DirectTag {
 
 		String portletClassName = portlet.getPortletClass();
 
-		if (Objects.equals(portletClassName, _JSF_STANDARD)) {
+		if (Objects.equals(portletClassName, _CLASS_NAME)) {
 			return true;
 		}
 
@@ -551,7 +551,7 @@ public class RuntimeTag extends TagSupport implements DirectTag {
 		try {
 			Class<?> portletClass = classLoader.loadClass(portletClassName);
 
-			if (ClassUtil.isSubclass(portletClass, _JSF_STANDARD)) {
+			if (ClassUtil.isSubclass(portletClass, _CLASS_NAME)) {
 				return true;
 			}
 
@@ -566,7 +566,7 @@ public class RuntimeTag extends TagSupport implements DirectTag {
 		}
 		catch (ClassNotFoundException classNotFoundException) {
 			if (_log.isDebugEnabled()) {
-				_log.debug("Unable to load portletClass " + portletClassName);
+				_log.debug("Unable to load portlet class " + portletClassName);
 			}
 		}
 		catch (NoSuchMethodException noSuchMethodException) {
@@ -576,11 +576,11 @@ public class RuntimeTag extends TagSupport implements DirectTag {
 		return false;
 	}
 
+	private static final String _CLASS_NAME =
+		"javax.portlet.faces.GenericFacesPortlet";
+
 	private static final String _ERROR_PAGE =
 		"/html/taglib/portlet/runtime/error.jsp";
-
-	private static final String _JSF_STANDARD =
-		"javax.portlet.faces.GenericFacesPortlet";
 
 	private static final String _SETTINGS_SCOPE_DEFAULT =
 		PortletPreferencesFactoryConstants.SETTINGS_SCOPE_PORTLET_INSTANCE;
