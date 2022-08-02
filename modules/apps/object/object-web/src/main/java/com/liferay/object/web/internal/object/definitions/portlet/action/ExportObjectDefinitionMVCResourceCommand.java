@@ -88,15 +88,6 @@ public class ExportObjectDefinitionMVCResourceCommand
 		ObjectDefinition objectDefinition =
 			objectDefinitionResource.getObjectDefinition(objectDefinitionId);
 
-		objectDefinition.setObjectFields(
-			ArrayUtil.filter(
-				objectDefinition.getObjectFields(),
-				objectField ->
-					Validator.isNull(objectField.getRelationshipType()) &&
-					!Objects.equals(
-						objectField.getBusinessTypeAsString(),
-						ObjectFieldConstants.BUSINESS_TYPE_AGGREGATION)));
-
 		for (ObjectAction objectAction : objectDefinition.getObjectActions()) {
 			Map<String, Object> parameters =
 				(Map<String, Object>)objectAction.getParameters();
@@ -108,6 +99,15 @@ public class ExportObjectDefinitionMVCResourceCommand
 						"predefinedValues"),
 					JSONFactoryUtil::createJSONObject));
 		}
+
+		objectDefinition.setObjectFields(
+			ArrayUtil.filter(
+				objectDefinition.getObjectFields(),
+				objectField ->
+					Validator.isNull(objectField.getRelationshipType()) &&
+					!Objects.equals(
+						objectField.getBusinessTypeAsString(),
+						ObjectFieldConstants.BUSINESS_TYPE_AGGREGATION)));
 
 		JSONObject objectDefinitionJSONObject =
 			JSONFactoryUtil.createJSONObject(objectDefinition.toString());
