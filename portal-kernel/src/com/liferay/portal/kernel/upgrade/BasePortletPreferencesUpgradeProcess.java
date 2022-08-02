@@ -488,23 +488,13 @@ public abstract class BasePortletPreferencesUpgradeProcess
 			}
 		}
 		else {
-			try (PreparedStatement preparedStatement5 =
-					connection.prepareStatement(
-						"delete from PortletPreferences where " +
-							"portletPreferencesId = ?");
-				PreparedStatement preparedStatement6 =
-					connection.prepareStatement(
-						"delete from PortletPreferenceValue where " +
-							"portletPreferencesId = ?")) {
+			runSQL(
+				"delete from PortletPreferences where " +
+					"portletPreferencesId = " + portletPreferencesId);
 
-				preparedStatement5.setLong(1, portletPreferencesId);
-
-				preparedStatement5.executeUpdate();
-
-				preparedStatement6.setLong(1, portletPreferencesId);
-
-				preparedStatement6.executeUpdate();
-			}
+			runSQL(
+				"delete from PortletPreferenceValue where " +
+					"portletPreferencesId = " + portletPreferencesId);
 		}
 	}
 
