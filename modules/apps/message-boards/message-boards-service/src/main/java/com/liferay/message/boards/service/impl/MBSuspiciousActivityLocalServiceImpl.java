@@ -74,8 +74,7 @@ public class MBSuspiciousActivityLocalServiceImpl
 
 		suspiciousActivity.setReason(reason);
 
-		return mbSuspiciousActivityLocalService.updateMBSuspiciousActivity(
-			suspiciousActivity);
+		return mbSuspiciousActivityPersistence.update(suspiciousActivity);
 	}
 
 	@Override
@@ -108,8 +107,7 @@ public class MBSuspiciousActivityLocalServiceImpl
 
 		suspiciousActivity.setReason(reason);
 
-		return mbSuspiciousActivityLocalService.updateMBSuspiciousActivity(
-			suspiciousActivity);
+		return mbSuspiciousActivityPersistence.update(suspiciousActivity);
 	}
 
 	@Override
