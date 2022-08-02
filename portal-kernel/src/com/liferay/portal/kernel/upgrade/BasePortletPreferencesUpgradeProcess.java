@@ -379,7 +379,7 @@ public abstract class BasePortletPreferencesUpgradeProcess
 					}
 				}
 			},
-			"ERROR processing upgrade of PortletPreferences");
+			"Unable to update PortletPreferences");
 	}
 
 	private void _updatePortletPreferenceValues() throws Exception {
@@ -504,7 +504,7 @@ public abstract class BasePortletPreferencesUpgradeProcess
 					}
 				}
 			},
-			"ERROR processing upgrade of PortletPreferenceValues");
+			"Unable to update PortletPreferences and PortletPreferenceValue");
 	}
 
 	private void _upgradePortletPreferenceValues(
