@@ -53,7 +53,7 @@ export default function ItemConfigurationSidebar() {
 						)}
 						imgSrc={`${config.imagesPath}/no_item.svg`}
 						small
-						title={Liferay.Language.get('no-selection-yet')}
+						title={Liferay.Language.get('select-a-page-element')}
 					/>
 				)}
 			</div>
