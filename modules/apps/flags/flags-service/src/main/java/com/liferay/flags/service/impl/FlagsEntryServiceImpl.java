@@ -70,7 +70,7 @@ public class FlagsEntryServiceImpl extends FlagsEntryServiceBaseImpl {
 		if (className.equals("com.liferay.message.boards.model.MBMessage")) {
 			MBMessage mbMessage = _mbMessageService.getMessage(classPK);
 
-			if (mbMessage.getMessageId() == mbMessage.getRootMessageId()) {
+			if (mbMessage.isRoot()) {
 				_mbSuspiciousActivityService.
 					addOrUpdateThreadSuspiciousActivity(
 						mbMessage.getThreadId(), reason);
