@@ -345,14 +345,10 @@ public abstract class BasePortletPreferencesUpgradeProcess
 				long portletPreferencesId = (Long)values[0];
 				long companyId = (Long)values[1];
 
-				try (PreparedStatement preparedStatement1 =
+				try (PreparedStatement preparedStatement =
 						connection.prepareStatement(
 							"update PortletPreferences set preferences = ? " +
-								"where portletPreferencesId = ?");
-					PreparedStatement preparedStatement2 =
-						connection.prepareStatement(
-							"delete from PortletPreferences where " +
-								"portletPreferencesId = ?")) {
+								"where portletPreferencesId = ?")) {
 
 					if (companyId > 0) {
 						int ownerType = (Integer)values[2];
@@ -366,16 +362,17 @@ public abstract class BasePortletPreferencesUpgradeProcess
 							preferences);
 
 						if (!preferences.equals(newPreferences)) {
-							preparedStatement1.setString(1, newPreferences);
-							preparedStatement1.setLong(2, portletPreferencesId);
+							preparedStatement.setString(1, newPreferences);
+							preparedStatement.setLong(2, portletPreferencesId);
 
-							preparedStatement1.executeUpdate();
+							preparedStatement.executeUpdate();
 						}
 					}
 					else {
-						preparedStatement2.setLong(1, portletPreferencesId);
-
-						preparedStatement2.executeUpdate();
+						runSQL(
+							"delete from PortletPreferences where " +
+								"portletPreferencesId = " +
+									portletPreferencesId);
 					}
 				}
 			},
