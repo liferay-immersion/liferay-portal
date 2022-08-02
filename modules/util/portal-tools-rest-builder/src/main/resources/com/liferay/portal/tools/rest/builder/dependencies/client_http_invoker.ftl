@@ -66,10 +66,11 @@ public class HttpInvoker {
 
 		HttpURLConnection httpURLConnection = _openHttpURLConnection();
 
-		byte[] response = _readResponse(httpURLConnection);
+		byte[] binaryContent = _readResponse(httpURLConnection);
 
-		httpResponse.setBinaryContent(response);
-		httpResponse.setContent(new String(response));
+		httpResponse.setBinaryContent(binaryContent);
+		httpResponse.setContent(new String(binaryContent));
+
 		httpResponse.setMessage(httpURLConnection.getResponseMessage());
 		httpResponse.setStatusCode(httpURLConnection.getResponseCode());
 
@@ -335,9 +336,11 @@ public class HttpInvoker {
 	private byte[] _readResponse(HttpURLConnection httpURLConnection)
 		throws IOException {
 
-		int responseCode = httpURLConnection.getResponseCode();
+		ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 
 		InputStream inputStream = null;
+
+		int responseCode = httpURLConnection.getResponseCode();
 
 		if (responseCode > 299) {
 			inputStream = httpURLConnection.getErrorStream();
@@ -346,23 +349,21 @@ public class HttpInvoker {
 			inputStream = httpURLConnection.getInputStream();
 		}
 
-		ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-
-		byte[] data = new byte[_BUFFER_SIZE];
+		byte[] bytes = new byte[8192];
 
 		while (true) {
-			int read = inputStream.read(data, 0, data.length);
+			int read = inputStream.read(bytes, 0, bytes.length);
 
 			if (read == -1) {
 				break;
 			}
 
-			buffer.write(data, 0, read);
+			byteArrayOutputStream.write(bytes, 0, read);
 		}
 
-		buffer.flush();
+		byteArrayOutputStream.flush();
 
-		return buffer.toByteArray();
+		return byteArrayOutputStream.toByteArray();
 	}
 
 	private void _writeBody(HttpURLConnection httpURLConnection)
@@ -403,8 +404,6 @@ public class HttpInvoker {
 	}
 
 	private static final Logger _logger = Logger.getLogger(HttpInvoker.class.getName());
-
-	private static final int _BUFFER_SIZE = 8092;
 
 	private String _body;
 	private String _contentType;
