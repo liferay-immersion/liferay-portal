@@ -48,11 +48,11 @@ public class MBSuspiciousActivityServiceImpl
 
 	@Override
 	public MBSuspiciousActivity addOrUpdateThreadSuspiciousActivity(
-			String reason, long threadId)
+			long threadId, String reason)
 		throws PortalException {
 
 		return mbSuspiciousActivityLocalService.
-			addOrUpdateThreadSuspiciousActivity(getUserId(), reason, threadId);
+			addOrUpdateThreadSuspiciousActivity(getUserId(), threadId, reason);
 	}
 
 	@Override

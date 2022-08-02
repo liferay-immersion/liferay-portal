@@ -79,7 +79,7 @@ public class MBSuspiciousActivityLocalServiceImpl
 
 	@Override
 	public MBSuspiciousActivity addOrUpdateThreadSuspiciousActivity(
-			long userId, String reason, long threadId)
+			long userId, long threadId, String reason)
 		throws PortalException {
 
 		MBSuspiciousActivity suspiciousActivity =

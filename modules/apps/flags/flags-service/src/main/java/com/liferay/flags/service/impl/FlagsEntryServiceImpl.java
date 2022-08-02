@@ -73,7 +73,7 @@ public class FlagsEntryServiceImpl extends FlagsEntryServiceBaseImpl {
 			if (mbMessage.getMessageId() == mbMessage.getRootMessageId()) {
 				_mbSuspiciousActivityService.
 					addOrUpdateThreadSuspiciousActivity(
-						reason, mbMessage.getThreadId());
+						mbMessage.getThreadId(), reason);
 			}
 			else {
 				_mbSuspiciousActivityService.
