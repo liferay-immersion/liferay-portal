@@ -341,43 +341,42 @@ public abstract class BasePortletPreferencesUpgradeProcess
 					portletId, preferences
 				};
 			},
-			values -> {
-				long portletPreferencesId = (Long)values[0];
-				long companyId = (Long)values[1];
-
-				try (PreparedStatement preparedStatement =
-						connection.prepareStatement(
-							"update PortletPreferences set preferences = ? " +
-								"where portletPreferencesId = ?")) {
-
-					if (companyId <= 0) {
-						runSQL(
-							"delete from PortletPreferences where " +
-								"portletPreferencesId = " +
-									portletPreferencesId);
-
-						return;
-					}
-
-					int ownerType = (Integer)values[2];
-					long plid = (Long)values[3];
-					long ownerId = (Long)values[4];
-					String portletId = (String)values[5];
-					String preferences = (String)values[6];
-
-					String newPreferences = upgradePreferences(
-						companyId, ownerId, ownerType, plid, portletId,
-						preferences);
-
-					if (!preferences.equals(newPreferences)) {
-						preparedStatement.setString(1, newPreferences);
-						preparedStatement.setLong(2, portletPreferencesId);
-
-						preparedStatement.executeUpdate();
-					}
-				}
-			},
+			values -> _updatePortletPreferences(values),
 			"Unable to update PortletPreferences");
+	}
+
+	private void _updatePortletPreferences(Object[] values) throws Exception {
+		long portletPreferencesId = (Long)values[0];
+		long companyId = (Long)values[1];
+
+		if (companyId <= 0) {
+			runSQL(
+				"delete from PortletPreferences where portletPreferencesId = " +
+					portletPreferencesId);
+
+			return;
+		}
+
+		try (PreparedStatement preparedStatement = connection.prepareStatement(
+				"update PortletPreferences set preferences = ? where " +
+					"portletPreferencesId = ?")) {
+
+			int ownerType = (Integer)values[2];
+			long plid = (Long)values[3];
+			long ownerId = (Long)values[4];
+			String portletId = (String)values[5];
+			String preferences = (String)values[6];
+
+			String newPreferences = upgradePreferences(
+				companyId, ownerId, ownerType, plid, portletId, preferences);
+
+			if (!preferences.equals(newPreferences)) {
+				preparedStatement.setString(1, newPreferences);
+				preparedStatement.setLong(2, portletPreferencesId);
+
+				preparedStatement.executeUpdate();
+			}
+		}
 	}
 
 	private void _updatePortletPreferenceValues() throws Exception {
