@@ -1844,6 +1844,18 @@ public class GraphQLServletExtender {
 				_addField(Scalars.GraphQLString, "profileURL")
 			).build());
 
+		graphQLObjectTypeBuilder = new GraphQLObjectType.Builder();
+
+		graphQLTypes.put(
+			"FileEntry",
+			graphQLObjectTypeBuilder.name(
+				"FileEntry"
+			).field(
+				_addField(Scalars.GraphQLLong, "id")
+			).field(
+				_addField(Scalars.GraphQLString, "name")
+			).build());
+
 		GraphQLInputObjectType.Builder graphQLInputObjectTypeBuilder =
 			new GraphQLInputObjectType.Builder();
 
@@ -1857,18 +1869,6 @@ public class GraphQLServletExtender {
 				_addInputField(Scalars.GraphQLString, "name")
 			).field(
 				_addInputField(_mapGraphQLScalarType, "name_i18n")
-			).build());
-
-		graphQLObjectTypeBuilder = new GraphQLObjectType.Builder();
-
-		graphQLTypes.put(
-			"FileEntry",
-			graphQLObjectTypeBuilder.name(
-				"FileEntry"
-			).field(
-				_addField(Scalars.GraphQLLong, "id")
-			).field(
-				_addField(Scalars.GraphQLString, "name")
 			).build());
 
 		graphQLObjectTypeBuilder = new GraphQLObjectType.Builder();
