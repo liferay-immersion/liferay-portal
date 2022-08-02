@@ -94,7 +94,7 @@ definition {
 
 		Click(locator1 = "Button#SUBMIT");
 
-		AssertElementPresent(
+		WaitForElementPresent(
 			key_resourceAction = "${searchTerm}",
 			key_resourceName = "${resourceName}",
 			locator1 = "AuditReports#REPORTS_TABLE_RESOURCE_NAME");
