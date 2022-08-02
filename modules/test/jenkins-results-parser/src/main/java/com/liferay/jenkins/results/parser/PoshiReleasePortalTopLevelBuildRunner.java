@@ -121,7 +121,7 @@ public class PoshiReleasePortalTopLevelBuildRunner
 		}
 
 		throw new RuntimeException(
-			"Invalid Portal GitHub URL: " + portalGitHubURL);
+			"Invalid portal GitHub URL: " + portalGitHubURL);
 	}
 
 	@Override
