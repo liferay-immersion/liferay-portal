@@ -1185,8 +1185,8 @@ public class ObjectDefinitionLocalServiceImpl
 				 objectDefinition.getAccountEntryRestrictedObjectFieldId()))) {
 
 			throw new ObjectDefinitionAccountEntryRestrictedException(
-				"It is not allowed to update the account restriction of a " +
-					"published object");
+				"Account entry restrictions on approved object definitions " +
+					"cannot be changed");
 		}
 	}
 
