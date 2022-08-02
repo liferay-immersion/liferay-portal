@@ -337,8 +337,6 @@ public class ResourcePermissionLocalServiceImpl
 	 *        optionally an empty string if no instance exists
 	 * @param portletActions whether to associate portlet actions with the
 	 *        resource
-	 * @param serviceContext the service context to be applied. Can set group
-	 *        and guest permissions.
 	 */
 	@Override
 	public void addResourcePermissions(
