@@ -37,14 +37,13 @@ public class BuildRunnerFactory {
 			buildRunner = new RootCauseAnalysisBatchBuildRunner(
 				(PortalBatchBuildData)buildData);
 		}
+		else if (jobName.equals("test-poshi-release")) {
+			buildRunner = new PoshiReleasePortalTopLevelBuildRunner(
+				(PortalTopLevelBuildData)buildData);
+		}
 		else if (jobName.contains("-batch")) {
 			buildRunner = new DefaultPortalBatchBuildRunner(
 				(PortalBatchBuildData)buildData);
-		}
-
-		if (jobName.equals("test-poshi-release")) {
-			buildRunner = new PoshiReleasePortalTopLevelBuildRunner(
-				(PortalTopLevelBuildData)buildData);
 		}
 
 		if (jobName.startsWith("test-portal-testsuite-upstream-controller(")) {
