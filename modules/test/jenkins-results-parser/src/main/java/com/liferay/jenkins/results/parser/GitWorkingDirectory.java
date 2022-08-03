@@ -418,14 +418,15 @@ public class GitWorkingDirectory {
 	}
 
 	public String createPullRequest(
-			String body, String pullRequestBranchName, String receiverUserName,
-			String senderUserName, String title)
+			final String body, final String pullRequestBranchName,
+			final String receiverUserName, final String senderUserName,
+			final String title)
 		throws IOException {
 
-		int maxRetries = 2;
+		Retryable<String> retryable = new Retryable<String>(true, 3, 0, true) {
 
-		for (int i = 0; i <= maxRetries; i++) {
-			try {
+			@Override
+			public String execute() {
 				JSONObject requestJSONObject = new JSONObject();
 
 				requestJSONObject.put("base", _upstreamBranchName);
@@ -437,9 +438,15 @@ public class GitWorkingDirectory {
 				String url = JenkinsResultsParserUtil.getGitHubApiUrl(
 					_gitRepositoryName, receiverUserName, "pulls");
 
-				JSONObject responseJSONObject =
-					JenkinsResultsParserUtil.toJSONObject(
+				JSONObject responseJSONObject;
+
+				try {
+					responseJSONObject = JenkinsResultsParserUtil.toJSONObject(
 						url, requestJSONObject.toString());
+				}
+				catch (IOException ioException) {
+					throw new RuntimeException(ioException);
+				}
 
 				String pullRequestURL = responseJSONObject.getString(
 					"html_url");
@@ -449,14 +456,15 @@ public class GitWorkingDirectory {
 
 				return pullRequestURL;
 			}
-			catch (IOException ioException) {
-				if (i == maxRetries) {
-					throw new RuntimeException(
-						"Unable to create pull request", ioException);
-				}
 
-				ioException.printStackTrace();
-			}
+		};
+
+		try {
+			retryable.executeWithRetries();
+		}
+		catch (Exception exception) {
+			throw new RuntimeException(
+				"Unable to create pull request", exception);
 		}
 
 		return "";
