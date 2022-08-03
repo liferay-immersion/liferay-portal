@@ -111,7 +111,7 @@ public class ObjectStateFlowLocalServiceTest {
 
 			_listTypeEntries.add(listTypeEntry);
 
-			_listTypeEntryMap.put(key, listTypeEntry);
+			_listTypeEntriesMap.put(key, listTypeEntry);
 		}
 
 		_objectDefinition =
@@ -165,7 +165,7 @@ public class ObjectStateFlowLocalServiceTest {
 		Assert.assertEquals(
 			ListUtil.sort(
 				ListUtil.toList(
-					ListUtil.fromMapValues(_listTypeEntryMap),
+					ListUtil.fromMapValues(_listTypeEntriesMap),
 					ListTypeEntry::getListTypeEntryId)),
 			ListUtil.toList(
 				_objectStateLocalService.getObjectStateFlowObjectStates(
@@ -458,9 +458,9 @@ public class ObjectStateFlowLocalServiceTest {
 	private Map<Long, List<Long>>
 		_createExpectedDefaultObjectStateTransitions() {
 
-		ListTypeEntry listTypeEntryStep1 = _listTypeEntryMap.get("step1");
-		ListTypeEntry listTypeEntryStep2 = _listTypeEntryMap.get("step2");
-		ListTypeEntry listTypeEntryStep3 = _listTypeEntryMap.get("step3");
+		ListTypeEntry listTypeEntryStep1 = _listTypeEntriesMap.get("step1");
+		ListTypeEntry listTypeEntryStep2 = _listTypeEntriesMap.get("step2");
+		ListTypeEntry listTypeEntryStep3 = _listTypeEntriesMap.get("step3");
 
 		return HashMapBuilder.<Long, List<Long>>put(
 			listTypeEntryStep1.getListTypeEntryId(),
@@ -491,7 +491,7 @@ public class ObjectStateFlowLocalServiceTest {
 	@Inject
 	private ListTypeEntryLocalService _listTypeEntryLocalService;
 
-	private Map<String, ListTypeEntry> _listTypeEntryMap = new HashMap<>();
+	private Map<String, ListTypeEntry> _listTypeEntriesMap = new HashMap<>();
 	private ObjectDefinition _objectDefinition;
 
 	@Inject
