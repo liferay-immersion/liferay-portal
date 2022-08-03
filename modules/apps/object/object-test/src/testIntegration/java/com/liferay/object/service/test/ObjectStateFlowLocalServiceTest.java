@@ -234,6 +234,11 @@ public class ObjectStateFlowLocalServiceTest {
 			objectStateFlow.getObjectFieldId());
 
 		Assert.assertNull(
+			_objectFieldSettingLocalService.fetchObjectFieldSetting(
+				objectStateFlow.getObjectFieldId(),
+				ObjectFieldSettingConstants.NAME_STATE_FLOW));
+
+		Assert.assertNull(
 			_objectStateFlowLocalService.fetchObjectFieldObjectStateFlow(
 				objectField.getObjectFieldId()));
 
@@ -247,11 +252,6 @@ public class ObjectStateFlowLocalServiceTest {
 			_objectStateTransitionLocalService.
 				getObjectStateFlowObjectStateTransitions(
 					objectStateFlow.getObjectStateFlowId()));
-
-		Assert.assertNull(
-			_objectFieldSettingLocalService.fetchObjectFieldSetting(
-				objectStateFlow.getObjectFieldId(),
-				ObjectFieldSettingConstants.NAME_STATE_FLOW));
 	}
 
 	@Test
