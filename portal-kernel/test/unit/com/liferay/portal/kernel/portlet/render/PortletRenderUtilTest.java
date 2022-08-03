@@ -446,7 +446,7 @@ public class PortletRenderUtilTest {
 
 		_httpServletRequest.setAttribute(WebKeys.THEME_DISPLAY, themeDisplay);
 
-		// Root Portlet
+		// Root portlet
 
 		Portlet rootPortlet = Mockito.mock(Portlet.class);
 
