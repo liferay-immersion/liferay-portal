@@ -63,14 +63,12 @@ public class KBAdminNavigationDisplayContext {
 
 		_httpServletRequest = httpServletRequest;
 
-		_liferayPortletResponse = LiferayPortletUtil.getLiferayPortletResponse(
-			renderResponse);
-
-		_themeDisplay = (ThemeDisplay)_httpServletRequest.getAttribute(
-			WebKeys.THEME_DISPLAY);
-
 		_kbArticleURLHelper = new KBArticleURLHelper(
 			renderRequest, renderResponse);
+		_liferayPortletResponse = LiferayPortletUtil.getLiferayPortletResponse(
+			renderResponse);
+		_themeDisplay = (ThemeDisplay)_httpServletRequest.getAttribute(
+			WebKeys.THEME_DISPLAY);
 	}
 
 	public List<NavigationItem> getInfoPanelNavigationItems() {
