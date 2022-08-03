@@ -536,8 +536,7 @@ public class RuntimeTag extends TagSupport implements DirectTag {
 		String portletClassName = portlet.getPortletClass();
 
 		if (Objects.equals(
-				portletClassName,
-				"javax.portlet.faces.GenericFacesPortlet")) {
+				portletClassName, "javax.portlet.faces.GenericFacesPortlet")) {
 
 			return true;
 		}
