@@ -441,8 +441,9 @@ public class ObjectStateFlowLocalServiceTest {
 	}
 
 	private void _assertNextObjectStates(
-		List<Long> expectedListTypeEntryIds, long listTypeEntryId,
-		long objectStateFlowId) {
+			List<Long> expectedListTypeEntryIds, long listTypeEntryId,
+			long objectStateFlowId)
+		throws Exception {
 
 		ObjectState objectState =
 			_objectStateLocalService.getObjectStateFlowObjectState(
