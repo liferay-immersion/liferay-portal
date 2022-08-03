@@ -277,12 +277,12 @@ public class PortletRenderUtilTest {
 
 		for (String actualString : actual) {
 			Assert.assertTrue(
-				"Actual string is expected " + actualString,
+				"Actual string " + actualString,
 				expectedSet.remove(actualString));
 		}
 
 		Assert.assertTrue(
-			"No expected strings remain " + expectedSet, expectedSet.isEmpty());
+			"Nonempty expected set " + expectedSet, expectedSet.isEmpty());
 	}
 
 	private void _setUpMocks(boolean fastLoad, String pathContext) {
