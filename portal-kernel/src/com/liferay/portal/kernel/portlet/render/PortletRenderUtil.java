@@ -299,17 +299,14 @@ public class PortletRenderUtil {
 				httpServletRequest,
 				Arrays.asList(_FOOTER_PORTLET_CSS, _FOOTER_PORTAL_CSS),
 				Arrays.asList(portlet), URLType.CSS);
-
 			footerJavaScriptPaths = _getURLs(
 				httpServletRequest,
 				Arrays.asList(_FOOTER_PORTLET_JS, _FOOTER_PORTAL_JS),
 				Arrays.asList(portlet), URLType.JAVASCRIPT);
-
 			headerCssPaths = _getURLs(
 				httpServletRequest,
 				Arrays.asList(_HEADER_PORTLET_CSS, _HEADER_PORTAL_CSS),
 				Arrays.asList(portlet), URLType.CSS);
-
 			headerJavaScriptPaths = _getURLs(
 				httpServletRequest,
 				Arrays.asList(_HEADER_PORTLET_JS, _HEADER_PORTAL_JS),
