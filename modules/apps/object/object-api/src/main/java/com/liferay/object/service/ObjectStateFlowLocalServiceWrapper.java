@@ -250,6 +250,14 @@ public class ObjectStateFlowLocalServiceWrapper
 	}
 
 	@Override
+	public com.liferay.object.model.ObjectStateFlow
+		fetchObjectFieldObjectStateFlow(long objectFieldId) {
+
+		return _objectStateFlowLocalService.fetchObjectFieldObjectStateFlow(
+			objectFieldId);
+	}
+
+	@Override
 	public com.liferay.object.model.ObjectStateFlow fetchObjectStateFlow(
 		long objectStateFlowId) {
 
@@ -295,14 +303,6 @@ public class ObjectStateFlowLocalServiceWrapper
 
 		return _objectStateFlowLocalService.
 			getIndexableActionableDynamicQuery();
-	}
-
-	@Override
-	public com.liferay.object.model.ObjectStateFlow
-		getObjectFieldObjectStateFlow(long objectFieldId) {
-
-		return _objectStateFlowLocalService.getObjectFieldObjectStateFlow(
-			objectFieldId);
 	}
 
 	/**

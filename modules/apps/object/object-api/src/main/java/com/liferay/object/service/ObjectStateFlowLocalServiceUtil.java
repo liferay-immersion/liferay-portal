@@ -223,6 +223,12 @@ public class ObjectStateFlowLocalServiceUtil {
 		return getService().dynamicQueryCount(dynamicQuery, projection);
 	}
 
+	public static ObjectStateFlow fetchObjectFieldObjectStateFlow(
+		long objectFieldId) {
+
+		return getService().fetchObjectFieldObjectStateFlow(objectFieldId);
+	}
+
 	public static ObjectStateFlow fetchObjectStateFlow(long objectStateFlowId) {
 		return getService().fetchObjectStateFlow(objectStateFlowId);
 	}
@@ -260,12 +266,6 @@ public class ObjectStateFlowLocalServiceUtil {
 			getIndexableActionableDynamicQuery() {
 
 		return getService().getIndexableActionableDynamicQuery();
-	}
-
-	public static ObjectStateFlow getObjectFieldObjectStateFlow(
-		long objectFieldId) {
-
-		return getService().getObjectFieldObjectStateFlow(objectFieldId);
 	}
 
 	/**

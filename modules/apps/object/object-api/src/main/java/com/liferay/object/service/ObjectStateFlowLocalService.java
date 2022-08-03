@@ -207,6 +207,9 @@ public interface ObjectStateFlowLocalService
 		DynamicQuery dynamicQuery, Projection projection);
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public ObjectStateFlow fetchObjectFieldObjectStateFlow(long objectFieldId);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public ObjectStateFlow fetchObjectStateFlow(long objectStateFlowId);
 
 	/**
@@ -229,9 +232,6 @@ public interface ObjectStateFlowLocalService
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public IndexableActionableDynamicQuery getIndexableActionableDynamicQuery();
-
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public ObjectStateFlow getObjectFieldObjectStateFlow(long objectFieldId);
 
 	/**
 	 * Returns the object state flow with the primary key.
