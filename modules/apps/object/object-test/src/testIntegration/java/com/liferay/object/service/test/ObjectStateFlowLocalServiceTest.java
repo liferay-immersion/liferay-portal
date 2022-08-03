@@ -42,7 +42,6 @@ import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.rule.DeleteAfterTestRun;
 import com.liferay.portal.kernel.test.util.RandomTestUtil;
 import com.liferay.portal.kernel.test.util.TestPropsValues;
-import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.UnicodePropertiesBuilder;
@@ -54,9 +53,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
-import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
@@ -148,36 +145,6 @@ public class ObjectStateFlowLocalServiceTest {
 		Assert.assertEquals(
 			objectField.getObjectFieldId(), objectStateFlow.getObjectFieldId());
 
-		Assert.assertEquals(
-			ListUtil.sort(
-				ListUtil.toList(
-					Arrays.asList(
-						_step1ListTypeEntry, _step2ListTypeEntry,
-						_step3ListTypeEntry),
-					ListTypeEntry::getListTypeEntryId)),
-			ListUtil.toList(
-				_objectStateLocalService.getObjectStateFlowObjectStates(
-					objectStateFlow.getObjectStateFlowId()),
-				ObjectState::getListTypeEntryId));
-
-		Map<Long, List<Long>> expectedDefaultObjectStateTransitions =
-			_createExpectedDefaultObjectStateTransitions();
-
-		for (Map.Entry<Long, List<Long>> entry :
-				expectedDefaultObjectStateTransitions.entrySet()) {
-
-			ObjectState objectState =
-				_objectStateLocalService.getObjectStateFlowObjectState(
-					entry.getKey(), objectStateFlow.getObjectStateFlowId());
-
-			Assert.assertEquals(
-				entry.getValue(),
-				ListUtil.toList(
-					_objectStateLocalService.getNextObjectStates(
-						objectState.getObjectStateId()),
-					ObjectState::getListTypeEntryId));
-		}
-
 		ObjectFieldSetting objectFieldSetting =
 			_objectFieldSettingLocalService.fetchObjectFieldSetting(
 				objectField.getObjectFieldId(),
@@ -187,6 +154,36 @@ public class ObjectStateFlowLocalServiceTest {
 		Assert.assertEquals(
 			String.valueOf(objectStateFlow.getObjectStateFlowId()),
 			objectFieldSetting.getValue());
+
+		Assert.assertEquals(
+			Arrays.asList(
+				_step1ListTypeEntry.getListTypeEntryId(),
+				_step2ListTypeEntry.getListTypeEntryId(),
+				_step3ListTypeEntry.getListTypeEntryId()),
+			ListUtil.toList(
+				_objectStateLocalService.getObjectStateFlowObjectStates(
+					objectStateFlow.getObjectStateFlowId()),
+				ObjectState::getListTypeEntryId));
+
+		_assertNextObjectStates(
+			Arrays.asList(
+				_step2ListTypeEntry.getListTypeEntryId(),
+				_step3ListTypeEntry.getListTypeEntryId()),
+			_step1ListTypeEntry.getListTypeEntryId(),
+			objectStateFlow.getObjectStateFlowId());
+		_assertNextObjectStates(
+			Arrays.asList(
+				_step1ListTypeEntry.getListTypeEntryId(),
+				_step3ListTypeEntry.getListTypeEntryId()),
+			_step2ListTypeEntry.getListTypeEntryId(),
+			objectStateFlow.getObjectStateFlowId());
+		_assertNextObjectStates(
+			Arrays.asList(
+				_step1ListTypeEntry.getListTypeEntryId(),
+				_step2ListTypeEntry.getListTypeEntryId()),
+			_step3ListTypeEntry.getListTypeEntryId(),
+			objectStateFlow.getObjectStateFlowId());
+
 	}
 
 	@Test
@@ -441,25 +438,20 @@ public class ObjectStateFlowLocalServiceTest {
 		}
 	}
 
-	private Map<Long, List<Long>>
-		_createExpectedDefaultObjectStateTransitions() {
+	private void _assertNextObjectStates(
+		List<Long> expectedListTypeEntryIds, long listTypeEntryId,
+		long objectStateFlowId) {
 
-		return HashMapBuilder.<Long, List<Long>>put(
-			_step1ListTypeEntry.getListTypeEntryId(),
-			Arrays.asList(
-				_step2ListTypeEntry.getListTypeEntryId(),
-				_step3ListTypeEntry.getListTypeEntryId())
-		).put(
-			_step2ListTypeEntry.getListTypeEntryId(),
-			Arrays.asList(
-				_step1ListTypeEntry.getListTypeEntryId(),
-				_step3ListTypeEntry.getListTypeEntryId())
-		).put(
-			_step3ListTypeEntry.getListTypeEntryId(),
-			Arrays.asList(
-				_step1ListTypeEntry.getListTypeEntryId(),
-				_step2ListTypeEntry.getListTypeEntryId())
-		).build();
+		ObjectState objectState =
+			_objectStateLocalService.getObjectStateFlowObjectState(
+				listTypeEntryId, objectStateFlowId);
+
+		Assert.assertEquals(
+			expectedListTypeEntryIds,
+			ListUtil.toList(
+				_objectStateLocalService.getNextObjectStates(
+					objectState.getObjectStateId()),
+				ObjectState::getListTypeEntryId));
 	}
 
 	@DeleteAfterTestRun
