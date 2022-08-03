@@ -53,7 +53,6 @@ import com.liferay.portal.util.PropsUtil;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -92,13 +91,6 @@ public class ObjectStateFlowLocalServiceTest {
 			UnicodePropertiesBuilder.setProperty(
 				"feature.flag.LPS-152677", "false"
 			).build());
-	}
-
-	private ListTypeEntry _addListTypeEntry(String key) throws Exception {
-		return _listTypeEntryLocalService.addListTypeEntry(
-			TestPropsValues.getUserId(),
-			_listTypeDefinition.getListTypeDefinitionId(), key,
-			LocalizedMapUtil.getLocalizedMap(key));
 	}
 
 	@Before
@@ -164,7 +156,9 @@ public class ObjectStateFlowLocalServiceTest {
 		Assert.assertEquals(
 			ListUtil.sort(
 				ListUtil.toList(
-					Arrays.asList(_step1ListTypeEntry, _step2ListTypeEntry, _step3ListTypeEntry),
+					Arrays.asList(
+						_step1ListTypeEntry, _step2ListTypeEntry,
+						_step3ListTypeEntry),
 					ListTypeEntry::getListTypeEntryId)),
 			ListUtil.toList(
 				_objectStateLocalService.getObjectStateFlowObjectStates(
@@ -227,7 +221,8 @@ public class ObjectStateFlowLocalServiceTest {
 				portalException.getMessage(),
 				StringBundler.concat(
 					"No ObjectState exists with the key {listTypeEntryId=",
-					_step1ListTypeEntry.getListTypeEntryId(), ", objectStateFlowId=",
+					_step1ListTypeEntry.getListTypeEntryId(),
+					", objectStateFlowId=",
 					_objectStateFlow.getObjectStateFlowId(), "}"));
 		}
 	}
@@ -389,6 +384,13 @@ public class ObjectStateFlowLocalServiceTest {
 				_objectStateFlow.getObjectStateFlowId()));
 	}
 
+	private ListTypeEntry _addListTypeEntry(String key) throws Exception {
+		return _listTypeEntryLocalService.addListTypeEntry(
+			TestPropsValues.getUserId(),
+			_listTypeDefinition.getListTypeDefinitionId(), key,
+			LocalizedMapUtil.getLocalizedMap(key));
+	}
+
 	private ObjectField _addObjectField(
 			long listTypeDefinitionId, boolean state)
 		throws PortalException {
@@ -471,10 +473,6 @@ public class ObjectStateFlowLocalServiceTest {
 	@Inject
 	private ListTypeDefinitionLocalService _listTypeDefinitionLocalService;
 
-	private ListTypeEntry _step1ListTypeEntry;
-	private ListTypeEntry _step2ListTypeEntry;
-	private ListTypeEntry _step3ListTypeEntry;
-
 	@Inject
 	private ListTypeEntryLocalService _listTypeEntryLocalService;
 
@@ -500,5 +498,9 @@ public class ObjectStateFlowLocalServiceTest {
 	@Inject
 	private ObjectStateTransitionLocalService
 		_objectStateTransitionLocalService;
+
+	private ListTypeEntry _step1ListTypeEntry;
+	private ListTypeEntry _step2ListTypeEntry;
+	private ListTypeEntry _step3ListTypeEntry;
 
 }
