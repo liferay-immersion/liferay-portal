@@ -64,8 +64,7 @@ public class LocaleException extends PortalException {
 			return _sourceAvailableLanguageIds;
 		}
 
-		_sourceAvailableLanguageIds = _languageIdsFromLocales(
-			_sourceAvailableLocales);
+		_sourceAvailableLanguageIds = _toLanguageIds(_sourceAvailableLocales);
 
 		return _sourceAvailableLanguageIds;
 	}
@@ -75,8 +74,7 @@ public class LocaleException extends PortalException {
 			return _sourceAvailableLocales;
 		}
 
-		_sourceAvailableLocales = _localesFromLanguageIds(
-			_sourceAvailableLanguageIds);
+		_sourceAvailableLocales = _toLocales(_sourceAvailableLanguageIds);
 
 		return _sourceAvailableLocales;
 	}
@@ -86,8 +84,7 @@ public class LocaleException extends PortalException {
 			return _targetAvailableLanguageIds;
 		}
 
-		_targetAvailableLanguageIds = _languageIdsFromLocales(
-			_targetAvailableLocales);
+		_targetAvailableLanguageIds = _toLanguageIds(_targetAvailableLocales);
 
 		return _targetAvailableLanguageIds;
 	}
@@ -97,8 +94,7 @@ public class LocaleException extends PortalException {
 			return _targetAvailableLocales;
 		}
 
-		_targetAvailableLocales = _localesFromLanguageIds(
-			_targetAvailableLanguageIds);
+		_targetAvailableLocales = _toLocales(_targetAvailableLanguageIds);
 
 		return _targetAvailableLocales;
 	}
@@ -135,9 +131,7 @@ public class LocaleException extends PortalException {
 		_targetAvailableLocales = targetAvailableLocales;
 	}
 
-	private Collection<String> _languageIdsFromLocales(
-		Collection<Locale> locales) {
-
+	private Collection<String> _toLanguageIds(Collection<Locale> locales) {
 		if (locales == null) {
 			return null;
 		}
@@ -151,9 +145,7 @@ public class LocaleException extends PortalException {
 		return languageIds;
 	}
 
-	private Collection<Locale> _localesFromLanguageIds(
-		Collection<String> languageIds) {
-
+	private Collection<Locale> _toLocales(Collection<String> languageIds) {
 		if (languageIds == null) {
 			return null;
 		}
