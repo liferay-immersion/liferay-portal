@@ -158,7 +158,7 @@ public class AccountEntryLocalServiceTest {
 			TestPropsValues.getUserId(),
 			objectDefinition.getObjectDefinitionId(), true,
 			ObjectValidationRuleConstants.ENGINE_TYPE_GROOVY,
-			LocalizedMapUtil.getLocalizedMap("This name is not available"),
+			LocalizedMapUtil.getLocalizedMap("This name is not available."),
 			LocalizedMapUtil.getLocalizedMap(RandomTestUtil.randomString()),
 			com.liferay.portal.kernel.util.StringUtil.read(
 				clazz,
@@ -169,7 +169,7 @@ public class AccountEntryLocalServiceTest {
 		try {
 			_accountEntryLocalService.addAccountEntry(
 				TestPropsValues.getUserId(),
-				AccountConstants.ACCOUNT_ENTRY_ID_DEFAULT, "name unavailable",
+				AccountConstants.ACCOUNT_ENTRY_ID_DEFAULT, "Unavailable Name",
 				RandomTestUtil.randomString(), null, null, null, null,
 				AccountConstants.ACCOUNT_ENTRY_TYPE_BUSINESS,
 				WorkflowConstants.STATUS_APPROVED,
@@ -180,7 +180,7 @@ public class AccountEntryLocalServiceTest {
 		catch (ModelListenerException modelListenerException) {
 			String message = modelListenerException.getMessage();
 
-			Assert.assertTrue(message.contains("This name is not available"));
+			Assert.assertTrue(message.contains("This name is not available."));
 
 			Assert.assertTrue(
 				modelListenerException.getCause() instanceof
@@ -189,7 +189,7 @@ public class AccountEntryLocalServiceTest {
 
 		AccountEntry accountEntry = _addAccountEntry();
 
-		accountEntry.setName("name unavailable");
+		accountEntry.setName("Unavailable Name");
 
 		try {
 			_accountEntryLocalService.updateAccountEntry(accountEntry);
@@ -199,7 +199,7 @@ public class AccountEntryLocalServiceTest {
 		catch (ModelListenerException modelListenerException) {
 			String message = modelListenerException.getMessage();
 
-			Assert.assertTrue(message.contains("This name is not available"));
+			Assert.assertTrue(message.contains("This name is not available."));
 
 			Assert.assertTrue(
 				modelListenerException.getCause() instanceof
