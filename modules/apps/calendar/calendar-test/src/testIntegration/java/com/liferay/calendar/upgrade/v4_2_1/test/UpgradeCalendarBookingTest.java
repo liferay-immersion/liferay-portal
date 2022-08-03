@@ -28,7 +28,6 @@ import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.UserLocalService;
-import com.liferay.portal.kernel.test.rule.DataGuard;
 import com.liferay.portal.kernel.test.util.GroupTestUtil;
 import com.liferay.portal.kernel.test.util.UserTestUtil;
 import com.liferay.portal.kernel.upgrade.UpgradeProcess;
@@ -59,16 +58,16 @@ public class UpgradeCalendarBookingTest {
 	@Before
 	public void setUp() throws Exception {
 		_group = GroupTestUtil.addGroup();
-		_user = UserTestUtil.addUser();
 
 		_calendar = CalendarTestUtil.addCalendar(_group);
 
+		_upgradeDatabaseTestHelper =
+			CalendarUpgradeTestUtil.getUpgradeDatabaseTestHelper();
 		_upgradeProcess = CalendarUpgradeTestUtil.getUpgradeStep(
 			_upgradeStepRegistrator,
 			"com.liferay.calendar.internal.upgrade.v4_2_1." +
 				"CalendarBookingUpgradeProcess");
-		_upgradeDatabaseTestHelper =
-			CalendarUpgradeTestUtil.getUpgradeDatabaseTestHelper();
+		_user = UserTestUtil.addUser();
 	}
 
 	@After
@@ -107,10 +106,10 @@ public class UpgradeCalendarBookingTest {
 		java.util.Calendar actualStartTimeJCalendar =
 			JCalendarUtil.getJCalendar(calendarBooking.getStartTime());
 
+		assertSameTime(expectedStartTimeJCalendar, actualStartTimeJCalendar);
+
 		java.util.Calendar actualEndTimeJCalendar = JCalendarUtil.getJCalendar(
 			calendarBooking.getEndTime());
-
-		assertSameTime(expectedStartTimeJCalendar, actualStartTimeJCalendar);
 
 		assertSameTime(expectedEndTimeJCalendar, actualEndTimeJCalendar);
 	}
@@ -121,11 +120,9 @@ public class UpgradeCalendarBookingTest {
 
 		Assert.assertNotNull(expectedJCalendar);
 		Assert.assertNotNull(actualJCalendar);
-
 		Assert.assertEquals(
 			expectedJCalendar.get(java.util.Calendar.HOUR),
 			actualJCalendar.get(java.util.Calendar.HOUR));
-
 		Assert.assertEquals(
 			expectedJCalendar.get(java.util.Calendar.MINUTE),
 			actualJCalendar.get(java.util.Calendar.MINUTE));
@@ -135,7 +132,6 @@ public class UpgradeCalendarBookingTest {
 		ServiceContext serviceContext = new ServiceContext();
 
 		serviceContext.setCompanyId(_user.getCompanyId());
-
 		serviceContext.setUserId(_user.getUserId());
 
 		return serviceContext;

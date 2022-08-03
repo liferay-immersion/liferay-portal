@@ -58,15 +58,13 @@ public class UpgradeCalendarTest {
 	@Before
 	public void setUp() throws Exception {
 		_group = GroupTestUtil.addGroup();
-
-		_user = UserTestUtil.addUser();
-
+		_upgradeDatabaseTestHelper =
+			CalendarUpgradeTestUtil.getUpgradeDatabaseTestHelper();
 		_upgradeProcess = CalendarUpgradeTestUtil.getUpgradeStep(
 			_upgradeStepRegistrator,
 			"com.liferay.calendar.internal.upgrade.v1_0_2." +
 				"CalendarUpgradeProcess");
-		_upgradeDatabaseTestHelper =
-			CalendarUpgradeTestUtil.getUpgradeDatabaseTestHelper();
+		_user = UserTestUtil.addUser();
 	}
 
 	@After
