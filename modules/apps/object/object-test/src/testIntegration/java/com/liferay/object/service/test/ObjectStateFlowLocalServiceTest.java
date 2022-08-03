@@ -303,8 +303,8 @@ public class ObjectStateFlowLocalServiceTest {
 				LocalizedMapUtil.getLocalizedMap(
 					RandomTestUtil.randomString()));
 
-		_addListTypeEntry("step4");
-		_addListTypeEntry("step5");
+		_addListTypeEntry(RandomTestUtil.randomString());
+		_addListTypeEntry(RandomTestUtil.randomString());
 
 		ObjectField objectField3 = _addObjectField(
 			listTypeDefinition.getListTypeDefinitionId(), true);
