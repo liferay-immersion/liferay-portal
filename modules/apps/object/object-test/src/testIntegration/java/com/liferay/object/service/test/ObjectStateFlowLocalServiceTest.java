@@ -183,7 +183,6 @@ public class ObjectStateFlowLocalServiceTest {
 				_step2ListTypeEntry.getListTypeEntryId()),
 			_step3ListTypeEntry.getListTypeEntryId(),
 			objectStateFlow.getObjectStateFlowId());
-
 	}
 
 	@Test
