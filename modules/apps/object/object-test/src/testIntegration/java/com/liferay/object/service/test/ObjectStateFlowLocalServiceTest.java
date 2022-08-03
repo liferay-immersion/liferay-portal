@@ -188,7 +188,8 @@ public class ObjectStateFlowLocalServiceTest {
 
 	@Test
 	public void testAddObjectState() throws PortalException {
-		ListTypeEntry listTypeEntry = _addListTypeEntry("step4");
+		ListTypeEntry listTypeEntry = _addListTypeEntry(
+			RandomTestUtil.randomString());
 
 		Assert.assertNotNull(
 			_objectStateLocalService.getObjectStateFlowObjectState(
