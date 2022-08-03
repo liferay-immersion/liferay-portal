@@ -1,1 +1,1 @@
-invalidFields = "Unavailable Name" == name;
+invalidFields = "Invalid Name" == name;
