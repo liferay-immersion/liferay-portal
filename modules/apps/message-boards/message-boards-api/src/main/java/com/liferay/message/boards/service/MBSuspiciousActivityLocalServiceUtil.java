@@ -70,11 +70,11 @@ public class MBSuspiciousActivityLocalServiceUtil {
 	}
 
 	public static MBSuspiciousActivity addOrUpdateThreadSuspiciousActivity(
-			long userId, String reason, long threadId)
+			long userId, long threadId, String reason)
 		throws PortalException {
 
 		return getService().addOrUpdateThreadSuspiciousActivity(
-			userId, reason, threadId);
+			userId, threadId, reason);
 	}
 
 	/**

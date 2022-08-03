@@ -47,11 +47,11 @@ public class MBSuspiciousActivityServiceUtil {
 	}
 
 	public static MBSuspiciousActivity addOrUpdateThreadSuspiciousActivity(
-			String reason, long threadId)
+			long threadId, String reason)
 		throws PortalException {
 
 		return getService().addOrUpdateThreadSuspiciousActivity(
-			reason, threadId);
+			threadId, reason);
 	}
 
 	public static MBSuspiciousActivity deleteSuspiciousActivity(

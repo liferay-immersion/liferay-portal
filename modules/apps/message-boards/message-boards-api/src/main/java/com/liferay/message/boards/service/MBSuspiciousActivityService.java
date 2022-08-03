@@ -58,7 +58,7 @@ public interface MBSuspiciousActivityService extends BaseService {
 		throws PortalException;
 
 	public MBSuspiciousActivity addOrUpdateThreadSuspiciousActivity(
-			String reason, long threadId)
+			long threadId, String reason)
 		throws PortalException;
 
 	public MBSuspiciousActivity deleteSuspiciousActivity(

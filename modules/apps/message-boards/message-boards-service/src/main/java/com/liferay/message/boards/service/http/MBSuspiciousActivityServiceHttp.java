@@ -95,7 +95,7 @@ public class MBSuspiciousActivityServiceHttp {
 
 	public static com.liferay.message.boards.model.MBSuspiciousActivity
 			addOrUpdateThreadSuspiciousActivity(
-				HttpPrincipal httpPrincipal, String reason, long threadId)
+				HttpPrincipal httpPrincipal, long threadId, String reason)
 		throws com.liferay.portal.kernel.exception.PortalException {
 
 		try {
@@ -105,7 +105,7 @@ public class MBSuspiciousActivityServiceHttp {
 				_addOrUpdateThreadSuspiciousActivityParameterTypes1);
 
 			MethodHandler methodHandler = new MethodHandler(
-				methodKey, reason, threadId);
+				methodKey, threadId, reason);
 
 			Object returnObj = null;
 
@@ -346,7 +346,7 @@ public class MBSuspiciousActivityServiceHttp {
 		};
 	private static final Class<?>[]
 		_addOrUpdateThreadSuspiciousActivityParameterTypes1 = new Class[] {
-			String.class, long.class
+			long.class, String.class
 		};
 	private static final Class<?>[] _deleteSuspiciousActivityParameterTypes2 =
 		new Class[] {long.class};
