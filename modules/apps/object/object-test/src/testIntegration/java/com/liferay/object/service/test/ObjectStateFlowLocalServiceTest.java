@@ -303,15 +303,16 @@ public class ObjectStateFlowLocalServiceTest {
 				LocalizedMapUtil.getLocalizedMap(
 					RandomTestUtil.randomString()));
 
-		_addListTypeEntry(RandomTestUtil.randomString());
-		_addListTypeEntry(RandomTestUtil.randomString());
-
-		ObjectField objectField3 = _addObjectField(
-			listTypeDefinition.getListTypeDefinitionId(), true);
-
-		Assert.assertNotNull(
-			_objectStateFlowLocalService.fetchObjectFieldObjectStateFlow(
-				objectField3.getObjectFieldId()));
+		_listTypeEntryLocalService.addListTypeEntry(
+			TestPropsValues.getUserId(),
+			listTypeDefinition.getListTypeDefinitionId(),
+			RandomTestUtil.randomString(),
+			LocalizedMapUtil.getLocalizedMap(RandomTestUtil.randomString()));
+		_listTypeEntryLocalService.addListTypeEntry(
+			TestPropsValues.getUserId(),
+			listTypeDefinition.getListTypeDefinitionId(),
+			RandomTestUtil.randomString(),
+			LocalizedMapUtil.getLocalizedMap(RandomTestUtil.randomString()));
 
 		ObjectStateFlow objectStateFlow =
 			_objectStateFlowLocalService.updateDefaultObjectStateFlow(
@@ -320,7 +321,7 @@ public class ObjectStateFlowLocalServiceTest {
 				).listTypeDefinitionId(
 					listTypeDefinition.getListTypeDefinitionId()
 				).objectFieldId(
-					objectField3.getObjectFieldId()
+					objectField2.getObjectFieldId()
 				).userId(
 					TestPropsValues.getUserId()
 				).build(),
@@ -458,7 +459,6 @@ public class ObjectStateFlowLocalServiceTest {
 				ObjectState::getListTypeEntryId));
 	}
 
-	@DeleteAfterTestRun
 	private ListTypeDefinition _listTypeDefinition;
 
 	@Inject
