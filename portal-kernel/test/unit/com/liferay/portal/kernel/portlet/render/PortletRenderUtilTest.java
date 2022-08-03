@@ -467,6 +467,70 @@ public class PortletRenderUtilTest {
 		);
 
 		Mockito.when(
+			_portlet.getFooterPortalCss()
+		).thenReturn(
+			Arrays.asList(
+				"/footer-portal.css", "http://example.com/footer-portal.css")
+		);
+
+		Mockito.when(
+			_portlet.getFooterPortalJavaScript()
+		).thenReturn(
+			Arrays.asList(
+				"/footer-portal.js", "module:/footer-portal.js",
+				"http://example.com/footer-portal.js",
+				"module:http://example.com/footer-portal.js")
+		);
+
+		Mockito.when(
+			_portlet.getFooterPortletCss()
+		).thenReturn(
+			Arrays.asList(
+				"/footer-portlet.css", "http://example.com/footer-portlet.css")
+		);
+
+		Mockito.when(
+			_portlet.getFooterPortletJavaScript()
+		).thenReturn(
+			Arrays.asList(
+				"/footer-portlet.js", "module:/footer-portlet.js",
+				"http://example.com/footer-portlet.js",
+				"module:http://example.com/footer-portlet.js")
+		);
+
+		Mockito.when(
+			_portlet.getHeaderPortalCss()
+		).thenReturn(
+			Arrays.asList(
+				"/header-portal.css", "http://example.com/header-portal.css")
+		);
+
+		Mockito.when(
+			_portlet.getHeaderPortalJavaScript()
+		).thenReturn(
+			Arrays.asList(
+				"/header-portal.js", "module:/header-portal.js",
+				"http://example.com/header-portal.js",
+				"module:http://example.com/header-portal.js")
+		);
+
+		Mockito.when(
+			_portlet.getHeaderPortletCss()
+		).thenReturn(
+			Arrays.asList(
+				"/header-portlet.css", "http://example.com/header-portlet.css")
+		);
+
+		Mockito.when(
+			_portlet.getHeaderPortletJavaScript()
+		).thenReturn(
+			Arrays.asList(
+				"/header-portlet.js", "module:/header-portlet.js",
+				"http://example.com/header-portlet.js",
+				"module:http://example.com/header-portlet.js")
+		);
+
+		Mockito.when(
 			_portlet.getPortletId()
 		).thenReturn(
 			"com.liferay.portlet.1"
@@ -488,70 +552,6 @@ public class PortletRenderUtilTest {
 			_portlet.isInstanceable()
 		).thenReturn(
 			false
-		);
-
-		Mockito.when(
-			_portlet.getFooterPortalCss()
-		).thenReturn(
-			Arrays.asList(
-				"/footer-portal.css", "http://example.com/footer-portal.css")
-		);
-
-		Mockito.when(
-			_portlet.getFooterPortletCss()
-		).thenReturn(
-			Arrays.asList(
-				"/footer-portlet.css", "http://example.com/footer-portlet.css")
-		);
-
-		Mockito.when(
-			_portlet.getHeaderPortalCss()
-		).thenReturn(
-			Arrays.asList(
-				"/header-portal.css", "http://example.com/header-portal.css")
-		);
-
-		Mockito.when(
-			_portlet.getHeaderPortletCss()
-		).thenReturn(
-			Arrays.asList(
-				"/header-portlet.css", "http://example.com/header-portlet.css")
-		);
-
-		Mockito.when(
-			_portlet.getFooterPortalJavaScript()
-		).thenReturn(
-			Arrays.asList(
-				"/footer-portal.js", "module:/footer-portal.js",
-				"http://example.com/footer-portal.js",
-				"module:http://example.com/footer-portal.js")
-		);
-
-		Mockito.when(
-			_portlet.getFooterPortletJavaScript()
-		).thenReturn(
-			Arrays.asList(
-				"/footer-portlet.js", "module:/footer-portlet.js",
-				"http://example.com/footer-portlet.js",
-				"module:http://example.com/footer-portlet.js")
-		);
-
-		Mockito.when(
-			_portlet.getHeaderPortalJavaScript()
-		).thenReturn(
-			Arrays.asList(
-				"/header-portal.js", "module:/header-portal.js",
-				"http://example.com/header-portal.js",
-				"module:http://example.com/header-portal.js")
-		);
-
-		Mockito.when(
-			_portlet.getHeaderPortletJavaScript()
-		).thenReturn(
-			Arrays.asList(
-				"/header-portlet.js", "module:/header-portlet.js",
-				"http://example.com/header-portlet.js",
-				"module:http://example.com/header-portlet.js")
 		);
 	}
 
