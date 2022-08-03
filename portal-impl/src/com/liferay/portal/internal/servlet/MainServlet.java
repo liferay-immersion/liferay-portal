@@ -737,17 +737,14 @@ public class MainServlet extends HttpServlet {
 		}
 
 		if (StartupHelperUtil.isDBNew()) {
-			String companyDefaultVirtualHostName = GetterUtil.getString(
-				PropsValues.COMPANY_DEFAULT_VIRTUAL_HOST_NAME, "localhost");
-
-			String companyDefaultVirtualHostMailDomain = GetterUtil.getString(
-				PropsValues.COMPANY_DEFAULT_VIRTUAL_HOST_MAIL_DOMAIN,
-				PropsValues.COMPANY_DEFAULT_WEB_ID);
-
 			CompanyLocalServiceUtil.addCompany(
 				null, PropsValues.COMPANY_DEFAULT_WEB_ID,
-				companyDefaultVirtualHostName,
-				companyDefaultVirtualHostMailDomain, false, 0, true);
+				GetterUtil.getString(
+					PropsValues.COMPANY_DEFAULT_VIRTUAL_HOST_NAME, "localhost"),
+				GetterUtil.getString(
+					PropsValues.COMPANY_DEFAULT_VIRTUAL_HOST_MAIL_DOMAIN,
+					PropsValues.COMPANY_DEFAULT_WEB_ID),
+				false, 0, true);
 		}
 
 		ServletContext servletContext = getServletContext();
