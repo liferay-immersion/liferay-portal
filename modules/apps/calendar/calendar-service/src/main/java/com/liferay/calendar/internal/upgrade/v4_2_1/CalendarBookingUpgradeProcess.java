@@ -67,7 +67,6 @@ public class CalendarBookingUpgradeProcess extends UpgradeProcess {
 
 				Calendar startTimeJCalendar = JCalendarUtil.getJCalendar(
 					startTime, user.getTimeZone());
-
 				Calendar endTimeJCalendar = JCalendarUtil.getJCalendar(
 					endTime, user.getTimeZone());
 
