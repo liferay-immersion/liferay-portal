@@ -532,7 +532,10 @@ public class RuntimeTag extends TagSupport implements DirectTag {
 
 		String portletClassName = portlet.getPortletClass();
 
-		if (Objects.equals(portletClassName, _CLASS_NAME)) {
+		if (Objects.equals(
+				portletClassName,
+				"javax.portlet.faces.GenericFacesPortlet")) {
+
 			return true;
 		}
 
@@ -551,7 +554,9 @@ public class RuntimeTag extends TagSupport implements DirectTag {
 		try {
 			Class<?> portletClass = classLoader.loadClass(portletClassName);
 
-			if (ClassUtil.isSubclass(portletClass, _CLASS_NAME)) {
+			if (ClassUtil.isSubclass(
+					portletClass, "javax.portlet.faces.GenericFacesPortlet")) {
+
 				return true;
 			}
 
@@ -575,9 +580,6 @@ public class RuntimeTag extends TagSupport implements DirectTag {
 
 		return false;
 	}
-
-	private static final String _CLASS_NAME =
-		"javax.portlet.faces.GenericFacesPortlet";
 
 	private static final String _ERROR_PAGE =
 		"/html/taglib/portlet/runtime/error.jsp";

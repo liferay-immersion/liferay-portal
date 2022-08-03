@@ -119,7 +119,7 @@ public class InvokerPortletImpl
 		Class<? extends Portlet> portletClass = portlet.getClass();
 
 		if (ClassUtil.isSubclass(
-				portletClass, PortletAutoDeployer.JSF_STANDARD)) {
+				portletClass, "javax.portlet.faces.GenericFacesPortlet")) {
 
 			facesPortlet = true;
 		}

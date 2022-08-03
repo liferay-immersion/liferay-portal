@@ -47,9 +47,6 @@ import java.util.List;
 public class PortletAutoDeployer
 	extends BaseAutoDeployer implements AutoDeployer {
 
-	public static final String JSF_STANDARD =
-		"javax.portlet.faces.GenericFacesPortlet";
-
 	public PortletAutoDeployer() {
 		super(Plugin.TYPE_PORTLET);
 
