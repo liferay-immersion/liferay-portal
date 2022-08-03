@@ -807,7 +807,7 @@ public class ObjectEntryLocalServiceTest {
 	}
 
 	@Test
-	public void testAddOrUpdateObjectEntryWithAccountRestriction()
+	public void testAddOrUpdateObjectEntryWithAccountEntryRestrictedObjectFieldId()
 		throws Exception {
 
 		User user = TestPropsValues.getUser();
@@ -847,12 +847,14 @@ public class ObjectEntryLocalServiceTest {
 		_objectDefinitionLocalService.publishCustomObjectDefinition(
 			user.getUserId(), customObjectDefinition.getObjectDefinitionId());
 
+		long invalidAccountEntryId = RandomTestUtil.randomLong();
+
 		try {
 			_objectEntryLocalService.addObjectEntry(
 				TestPropsValues.getUserId(), 0,
 				customObjectDefinition.getObjectDefinitionId(),
 				HashMapBuilder.<String, Serializable>put(
-					"r_relationship_accountEntryId", 1
+					"r_relationship_accountEntryId", invalidAccountEntryId
 				).build(),
 				ServiceContextTestUtil.getServiceContext());
 
@@ -863,8 +865,9 @@ public class ObjectEntryLocalServiceTest {
 
 			Assert.assertEquals(
 				StringBundler.concat(
-					"The account entry 1 does not exist or the user ",
-					user.getUserId(), " does not belong to it"),
+					"The account entry ", invalidAccountEntryId,
+					" does not exist or the user ", user.getUserId(),
+					" does not belong to it"),
 				objectDefinitionAccountEntryRestrictedException.getMessage());
 		}
 
@@ -894,11 +897,13 @@ public class ObjectEntryLocalServiceTest {
 			accountEntry1.getAccountEntryId(),
 			values.get("r_relationship_accountEntryId"));
 
+		invalidAccountEntryId = RandomTestUtil.randomLong();
+
 		try {
 			objectEntry = _objectEntryLocalService.updateObjectEntry(
 				TestPropsValues.getUserId(), objectEntry.getObjectEntryId(),
 				HashMapBuilder.<String, Serializable>put(
-					"r_relationship_accountEntryId", 1
+					"r_relationship_accountEntryId", invalidAccountEntryId
 				).build(),
 				ServiceContextTestUtil.getServiceContext());
 
@@ -909,8 +914,9 @@ public class ObjectEntryLocalServiceTest {
 
 			Assert.assertEquals(
 				StringBundler.concat(
-					"The account entry 1 does not exist or the user ",
-					user.getUserId(), " does not belong to it"),
+					"The account entry ", invalidAccountEntryId,
+					" does not exist or the user ", user.getUserId(),
+					" does not belong to it"),
 				objectDefinitionAccountEntryRestrictedException.getMessage());
 		}
 
