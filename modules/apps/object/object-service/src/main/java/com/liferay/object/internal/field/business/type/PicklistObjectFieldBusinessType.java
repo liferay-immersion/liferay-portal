@@ -195,7 +195,7 @@ public class PicklistObjectFieldBusinessType
 				objectField.getListTypeDefinitionId(), listEntryKey);
 
 		ObjectStateFlow objectStateFlow =
-			_objectStateFlowLocalService.getObjectFieldObjectStateFlow(
+			_objectStateFlowLocalService.fetchObjectFieldObjectStateFlow(
 				objectField.getObjectFieldId());
 
 		ObjectState objectState =

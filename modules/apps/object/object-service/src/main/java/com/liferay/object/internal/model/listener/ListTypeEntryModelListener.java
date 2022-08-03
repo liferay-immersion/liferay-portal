@@ -51,7 +51,7 @@ public class ListTypeEntryModelListener
 
 		for (ObjectField objectField : objectFields) {
 			ObjectStateFlow objectStateFlow =
-				_objectStateFlowLocalService.getObjectFieldObjectStateFlow(
+				_objectStateFlowLocalService.fetchObjectFieldObjectStateFlow(
 					objectField.getObjectFieldId());
 
 			try {

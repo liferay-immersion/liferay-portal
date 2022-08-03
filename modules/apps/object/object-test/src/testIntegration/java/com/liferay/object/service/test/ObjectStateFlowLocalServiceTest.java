@@ -122,7 +122,7 @@ public class ObjectStateFlowLocalServiceTest {
 			StringUtil.randomId(), true, true, Collections.emptyList());
 
 		_objectStateFlow =
-			_objectStateFlowLocalService.getObjectFieldObjectStateFlow(
+			_objectStateFlowLocalService.fetchObjectFieldObjectStateFlow(
 				objectField.getObjectFieldId());
 	}
 
@@ -225,7 +225,7 @@ public class ObjectStateFlowLocalServiceTest {
 			_listTypeDefinition.getListTypeDefinitionId(), true);
 
 		ObjectStateFlow objectStateFlow =
-			_objectStateFlowLocalService.getObjectFieldObjectStateFlow(
+			_objectStateFlowLocalService.fetchObjectFieldObjectStateFlow(
 				objectField.getObjectFieldId());
 
 		Assert.assertNotNull(objectStateFlow);
@@ -234,7 +234,7 @@ public class ObjectStateFlowLocalServiceTest {
 			objectStateFlow.getObjectFieldId());
 
 		Assert.assertNull(
-			_objectStateFlowLocalService.getObjectFieldObjectStateFlow(
+			_objectStateFlowLocalService.fetchObjectFieldObjectStateFlow(
 				objectField.getObjectFieldId()));
 
 		Assert.assertEquals(
@@ -266,7 +266,7 @@ public class ObjectStateFlowLocalServiceTest {
 			_listTypeDefinition.getListTypeDefinitionId(), true);
 
 		Assert.assertNotNull(
-			_objectStateFlowLocalService.getObjectFieldObjectStateFlow(
+			_objectStateFlowLocalService.fetchObjectFieldObjectStateFlow(
 				objectField1.getObjectFieldId()));
 
 		Assert.assertNull(
@@ -274,14 +274,14 @@ public class ObjectStateFlowLocalServiceTest {
 				objectFieldBuilder.build(), objectField1));
 
 		Assert.assertNull(
-			_objectStateFlowLocalService.getObjectFieldObjectStateFlow(
+			_objectStateFlowLocalService.fetchObjectFieldObjectStateFlow(
 				objectField1.getObjectFieldId()));
 
 		ObjectField objectField2 = _addObjectField(
 			_listTypeDefinition.getListTypeDefinitionId(), false);
 
 		Assert.assertNull(
-			_objectStateFlowLocalService.getObjectFieldObjectStateFlow(
+			_objectStateFlowLocalService.fetchObjectFieldObjectStateFlow(
 				objectField2.getObjectFieldId()));
 
 		Assert.assertNotNull(
@@ -310,7 +310,7 @@ public class ObjectStateFlowLocalServiceTest {
 			listTypeDefinition.getListTypeDefinitionId(), true);
 
 		Assert.assertNotNull(
-			_objectStateFlowLocalService.getObjectFieldObjectStateFlow(
+			_objectStateFlowLocalService.fetchObjectFieldObjectStateFlow(
 				objectField3.getObjectFieldId()));
 
 		ObjectStateFlow objectStateFlow =

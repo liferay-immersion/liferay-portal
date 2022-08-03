@@ -137,7 +137,7 @@ public class ObjectStateFlowLocalServiceImpl
 	}
 
 	@Override
-	public ObjectStateFlow getObjectFieldObjectStateFlow(long objectFieldId) {
+	public ObjectStateFlow fetchObjectFieldObjectStateFlow(long objectFieldId) {
 		return objectStateFlowPersistence.fetchByObjectFieldId(objectFieldId);
 	}
 
