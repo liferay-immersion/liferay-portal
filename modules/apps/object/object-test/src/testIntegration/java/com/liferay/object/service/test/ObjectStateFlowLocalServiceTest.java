@@ -22,6 +22,7 @@ import com.liferay.list.type.service.ListTypeEntryLocalService;
 import com.liferay.object.constants.ObjectDefinitionConstants;
 import com.liferay.object.constants.ObjectFieldConstants;
 import com.liferay.object.constants.ObjectFieldSettingConstants;
+import com.liferay.object.exception.NoSuchObjectStateException;
 import com.liferay.object.model.ObjectDefinition;
 import com.liferay.object.model.ObjectField;
 import com.liferay.object.model.ObjectFieldSetting;
@@ -37,7 +38,6 @@ import com.liferay.object.service.ObjectStateTransitionLocalService;
 import com.liferay.object.util.LocalizedMapUtil;
 import com.liferay.object.util.ObjectFieldBuilder;
 import com.liferay.petra.string.StringBundler;
-import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.rule.DeleteAfterTestRun;
 import com.liferay.portal.kernel.test.util.RandomTestUtil;
@@ -208,9 +208,9 @@ public class ObjectStateFlowLocalServiceTest {
 
 			Assert.fail();
 		}
-		catch (PortalException portalException) {
+		catch (NoSuchObjectStateException noSuchObjectStateException) {
 			Assert.assertEquals(
-				portalException.getMessage(),
+				noSuchObjectStateException.getMessage(),
 				StringBundler.concat(
 					"No ObjectState exists with the key {listTypeEntryId=",
 					_step1ListTypeEntry.getListTypeEntryId(),
