@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.message.boards.internal.upgrade.v6_3_1;
+package com.liferay.message.boards.internal.upgrade.v6_4_0;
 
 import com.liferay.portal.kernel.upgrade.UpgradeProcess;
 
