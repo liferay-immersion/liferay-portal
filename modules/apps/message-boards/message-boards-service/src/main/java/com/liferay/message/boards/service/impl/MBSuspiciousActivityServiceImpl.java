@@ -60,6 +60,8 @@ public class MBSuspiciousActivityServiceImpl
 			long suspiciousActivityId)
 		throws PortalException {
 
+		// TODO Add permission checks for remote methods
+
 		return mbSuspiciousActivityLocalService.deleteSuspiciousActivity(
 			suspiciousActivityId);
 	}
