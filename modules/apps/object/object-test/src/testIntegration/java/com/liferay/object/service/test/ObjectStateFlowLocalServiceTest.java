@@ -365,6 +365,7 @@ public class ObjectStateFlowLocalServiceTest {
 				Collections.singletonList(objectStateTransitions.get(0)));
 
 			// TODO Besides removing, add a new one too
+
 		}
 
 		newObjectStateFlow.setObjectStates(newObjectStates);
