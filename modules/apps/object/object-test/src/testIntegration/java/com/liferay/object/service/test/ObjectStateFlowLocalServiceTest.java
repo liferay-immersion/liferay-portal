@@ -355,7 +355,7 @@ public class ObjectStateFlowLocalServiceTest {
 
 		List<ObjectState> newObjectStates = new ArrayList<>(objectStates);
 
-		for (ObjectState objectState : newObjectStates) {
+		for (ObjectState objectState : objectStates) {
 			List<ObjectStateTransition> objectStateTransitions =
 				_objectStateTransitionLocalService.
 					getObjectStateObjectStateTransitions(
@@ -363,6 +363,8 @@ public class ObjectStateFlowLocalServiceTest {
 
 			objectState.setObjectStateTransitions(
 				Collections.singletonList(objectStateTransitions.get(0)));
+
+			// TODO Besides removing, add a new one too
 		}
 
 		newObjectStateFlow.setObjectStates(newObjectStates);
