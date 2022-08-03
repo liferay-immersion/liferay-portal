@@ -487,11 +487,11 @@ public class ObjectStateFlowLocalServiceTest {
 	private ListTypeDefinitionLocalService _listTypeDefinitionLocalService;
 
 	private List<ListTypeEntry> _listTypeEntries = new ArrayList<>();
+	private Map<String, ListTypeEntry> _listTypeEntriesMap = new HashMap<>();
 
 	@Inject
 	private ListTypeEntryLocalService _listTypeEntryLocalService;
 
-	private Map<String, ListTypeEntry> _listTypeEntriesMap = new HashMap<>();
 	private ObjectDefinition _objectDefinition;
 
 	@Inject
