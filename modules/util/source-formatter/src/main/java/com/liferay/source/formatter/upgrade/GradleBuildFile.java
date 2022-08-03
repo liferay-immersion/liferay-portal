@@ -61,12 +61,12 @@ public class GradleBuildFile {
 	public void deleteGradleDependency(
 		String configuration, String group, String name) {
 
+		List<String> sourceLines = getSourceLines();
+
 		List<GradleDependency> gradleDependencies = getGradleDependencies();
 
 		ListIterator<GradleDependency> listIterator =
 			gradleDependencies.listIterator(gradleDependencies.size());
-
-		List<String> sourceLines = getSourceLines();
 
 		while (listIterator.hasPrevious()) {
 			GradleDependency gradleDependency = listIterator.previous();
@@ -104,10 +104,9 @@ public class GradleBuildFile {
 		List<GradleDependency> gradleDependencies =
 			gradleBuildFileVisitor.getGradleDependencies();
 
-		Stream<GradleDependency> gradleDependencyStream =
-			gradleDependencies.stream();
+		Stream<GradleDependency> stream = gradleDependencies.stream();
 
-		return gradleDependencyStream.filter(
+		return stream.filter(
 			gradleDependency -> Objects.equals(
 				configuration, gradleDependency.getConfiguration())
 		).collect(
@@ -172,10 +171,9 @@ public class GradleBuildFile {
 	}
 
 	private void _saveSource(List<String> lines) {
-		Stream<String> sourceStream = lines.stream();
+		Stream<String> stream = lines.stream();
 
-		_source = sourceStream.collect(
-			Collectors.joining(System.lineSeparator()));
+		_source = stream.collect(Collectors.joining(System.lineSeparator()));
 	}
 
 	private GradleBuildFileVisitor _walkAST() {

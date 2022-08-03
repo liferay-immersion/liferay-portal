@@ -107,10 +107,12 @@ public class GradleBuildFileVisitor extends CodeVisitorSupport {
 				mapExpression.getMapEntryExpressions()) {
 
 			Expression keyExpression = mapEntryExpression.getKeyExpression();
+
+			String key = keyExpression.getText();
+
 			Expression valueExpression =
 				mapEntryExpression.getValueExpression();
 
-			String key = keyExpression.getText();
 			String value = valueExpression.getText();
 
 			if (StringUtil.equalsIgnoreCase(key, "group")) {
