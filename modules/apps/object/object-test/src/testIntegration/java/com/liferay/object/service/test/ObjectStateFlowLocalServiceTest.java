@@ -187,7 +187,7 @@ public class ObjectStateFlowLocalServiceTest {
 	}
 
 	@Test
-	public void testAddObjectState() throws PortalException {
+	public void testAddListTypeEntry() throws PortalException {
 		ListTypeEntry listTypeEntry = _addListTypeEntry(
 			RandomTestUtil.randomString());
 
