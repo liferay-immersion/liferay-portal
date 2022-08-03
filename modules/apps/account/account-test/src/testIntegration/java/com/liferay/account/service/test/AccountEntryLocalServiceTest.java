@@ -147,7 +147,7 @@ public class AccountEntryLocalServiceTest {
 	}
 
 	@Test
-	public void testAccountEntryObjectValidations() throws Exception {
+	public void testAccountEntryObjectValidationRule() throws Exception {
 		ObjectDefinition objectDefinition =
 			_objectDefinitionLocalService.fetchObjectDefinitionByClassName(
 				TestPropsValues.getCompanyId(), AccountEntry.class.getName());
