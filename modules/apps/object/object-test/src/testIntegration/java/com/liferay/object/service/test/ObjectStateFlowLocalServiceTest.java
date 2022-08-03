@@ -102,9 +102,6 @@ public class ObjectStateFlowLocalServiceTest {
 				LocalizedMapUtil.getLocalizedMap(
 					RandomTestUtil.randomString()));
 
-		_listTypeEntries = new ArrayList<>();
-		_listTypeEntryMap = new HashMap<>();
-
 		for (String key : Arrays.asList("step1", "step2", "step3")) {
 			ListTypeEntry listTypeEntry =
 				_listTypeEntryLocalService.addListTypeEntry(
@@ -489,12 +486,12 @@ public class ObjectStateFlowLocalServiceTest {
 	@Inject
 	private ListTypeDefinitionLocalService _listTypeDefinitionLocalService;
 
-	private List<ListTypeEntry> _listTypeEntries;
+	private List<ListTypeEntry> _listTypeEntries = new ArrayList<>();
 
 	@Inject
 	private ListTypeEntryLocalService _listTypeEntryLocalService;
 
-	private Map<String, ListTypeEntry> _listTypeEntryMap;
+	private Map<String, ListTypeEntry> _listTypeEntryMap = new HashMap<>();
 	private ObjectDefinition _objectDefinition;
 
 	@Inject
