@@ -129,11 +129,6 @@ public class ObjectStateFlowLocalServiceTest {
 				objectField.getObjectFieldId());
 	}
 
-	@After
-	public void tearDown() throws PortalException {
-		_objectDefinitionLocalService.deleteObjectDefinition(_objectDefinition);
-	}
-
 	@Test
 	public void testAddDefaultObjectStateFlow() throws Exception {
 		Assert.assertNull(
@@ -476,6 +471,7 @@ public class ObjectStateFlowLocalServiceTest {
 	@Inject
 	private ListTypeEntryLocalService _listTypeEntryLocalService;
 
+	@DeleteAfterTestRun
 	private ObjectDefinition _objectDefinition;
 
 	@Inject
