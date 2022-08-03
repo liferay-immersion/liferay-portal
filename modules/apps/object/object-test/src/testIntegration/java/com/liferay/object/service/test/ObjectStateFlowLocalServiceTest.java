@@ -186,7 +186,7 @@ public class ObjectStateFlowLocalServiceTest {
 	}
 
 	@Test
-	public void testAddListTypeEntry() throws PortalException {
+	public void testAddListTypeEntry() throws Exception {
 		ListTypeEntry listTypeEntry = _addListTypeEntry(
 			RandomTestUtil.randomString());
 
@@ -197,7 +197,7 @@ public class ObjectStateFlowLocalServiceTest {
 	}
 
 	@Test
-	public void testDeleteListTypeEntryObjectStates() throws PortalException {
+	public void testDeleteListType() throws Exception {
 		_listTypeEntryLocalService.deleteListTypeEntry(
 			_step1ListTypeEntry.getListTypeEntryId());
 
@@ -220,7 +220,7 @@ public class ObjectStateFlowLocalServiceTest {
 	}
 
 	@Test
-	public void testDeleteObjectFieldObjectStateFlow() throws PortalException {
+	public void testDeleteObjectFieldObjectStateFlow() throws Exception {
 		ObjectField objectField = _addObjectField(
 			_listTypeDefinition.getListTypeDefinitionId(), true);
 
@@ -255,7 +255,7 @@ public class ObjectStateFlowLocalServiceTest {
 	}
 
 	@Test
-	public void testUpdateDefaultObjectStateFlow() throws PortalException {
+	public void testUpdateDefaultObjectStateFlow() throws Exception {
 		ObjectFieldBuilder objectFieldBuilder = new ObjectFieldBuilder();
 
 		Assert.assertNull(
@@ -336,7 +336,7 @@ public class ObjectStateFlowLocalServiceTest {
 	}
 
 	@Test
-	public void testUpdateObjectStateTransitions() throws PortalException {
+	public void testUpdateObjectStateTransitions() throws Exception {
 		List<ObjectState> objectStates =
 			_objectStateLocalService.getObjectStateFlowObjectStates(
 				_objectStateFlow.getObjectStateFlowId());
@@ -385,7 +385,7 @@ public class ObjectStateFlowLocalServiceTest {
 
 	private ObjectField _addObjectField(
 			long listTypeDefinitionId, boolean state)
-		throws PortalException {
+		throws Exception {
 
 		return _objectFieldLocalService.addCustomObjectField(
 			TestPropsValues.getUserId(), listTypeDefinitionId,
