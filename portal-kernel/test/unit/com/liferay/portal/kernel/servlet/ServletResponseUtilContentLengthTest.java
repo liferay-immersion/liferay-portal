@@ -45,10 +45,10 @@ public class ServletResponseUtilContentLengthTest {
 	}
 
 	private void _testContentLength(int contentLength) throws Exception {
-		String content = StringUtil.randomString(_INPUTSTREAM_LENGTH);
-
 		MockHttpServletResponse mockHttpServletResponse =
 			new MockHttpServletResponse();
+
+		String content = StringUtil.randomString(_INPUTSTREAM_LENGTH);
 
 		ServletResponseUtil.write(
 			mockHttpServletResponse,
