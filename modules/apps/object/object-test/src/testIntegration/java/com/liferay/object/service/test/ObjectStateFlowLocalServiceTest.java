@@ -94,6 +94,13 @@ public class ObjectStateFlowLocalServiceTest {
 			).build());
 	}
 
+	private ListTypeEntry _addListTypeEntry(String key) throws Exception {
+		return _listTypeEntryLocalService.addListTypeEntry(
+			TestPropsValues.getUserId(),
+			_listTypeDefinition.getListTypeDefinitionId(), key,
+			LocalizedMapUtil.getLocalizedMap(key));
+	}
+
 	@Before
 	public void setUp() throws Exception {
 		_listTypeDefinition =
@@ -102,17 +109,9 @@ public class ObjectStateFlowLocalServiceTest {
 				LocalizedMapUtil.getLocalizedMap(
 					RandomTestUtil.randomString()));
 
-		for (String key : Arrays.asList("step1", "step2", "step3")) {
-			ListTypeEntry listTypeEntry =
-				_listTypeEntryLocalService.addListTypeEntry(
-					TestPropsValues.getUserId(),
-					_listTypeDefinition.getListTypeDefinitionId(), key,
-					LocalizedMapUtil.getLocalizedMap(key));
-
-			_listTypeEntries.add(listTypeEntry);
-
-			_listTypeEntriesMap.put(key, listTypeEntry);
-		}
+		_step1ListTypeEntry = _addListTypeEntry("step1");
+		_step2ListTypeEntry = _addListTypeEntry("step2");
+		_step3ListTypeEntry = _addListTypeEntry("step3");
 
 		_objectDefinition =
 			_objectDefinitionLocalService.addCustomObjectDefinition(
@@ -165,7 +164,7 @@ public class ObjectStateFlowLocalServiceTest {
 		Assert.assertEquals(
 			ListUtil.sort(
 				ListUtil.toList(
-					ListUtil.fromMapValues(_listTypeEntriesMap),
+					Arrays.asList(_step1ListTypeEntry, _step2ListTypeEntry, _step3ListTypeEntry),
 					ListTypeEntry::getListTypeEntryId)),
 			ListUtil.toList(
 				_objectStateLocalService.getObjectStateFlowObjectStates(
@@ -203,11 +202,7 @@ public class ObjectStateFlowLocalServiceTest {
 
 	@Test
 	public void testAddObjectState() throws PortalException {
-		ListTypeEntry listTypeEntry =
-			_listTypeEntryLocalService.addListTypeEntry(
-				TestPropsValues.getUserId(),
-				_listTypeDefinition.getListTypeDefinitionId(), "step4",
-				LocalizedMapUtil.getLocalizedMap("step4"));
+		ListTypeEntry listTypeEntry = _addListTypeEntry("step4");
 
 		Assert.assertNotNull(
 			_objectStateLocalService.getObjectStateFlowObjectState(
@@ -217,14 +212,12 @@ public class ObjectStateFlowLocalServiceTest {
 
 	@Test
 	public void testDeleteListTypeEntryObjectStates() throws PortalException {
-		ListTypeEntry listTypeEntry = _listTypeEntries.get(0);
-
 		_listTypeEntryLocalService.deleteListTypeEntry(
-			listTypeEntry.getListTypeEntryId());
+			_step1ListTypeEntry.getListTypeEntryId());
 
 		try {
 			_objectStateLocalService.getObjectStateFlowObjectState(
-				listTypeEntry.getListTypeEntryId(),
+				_step1ListTypeEntry.getListTypeEntryId(),
 				_objectStateFlow.getObjectStateFlowId());
 
 			Assert.fail();
@@ -234,7 +227,7 @@ public class ObjectStateFlowLocalServiceTest {
 				portalException.getMessage(),
 				StringBundler.concat(
 					"No ObjectState exists with the key {listTypeEntryId=",
-					listTypeEntry.getListTypeEntryId(), ", objectStateFlowId=",
+					_step1ListTypeEntry.getListTypeEntryId(), ", objectStateFlowId=",
 					_objectStateFlow.getObjectStateFlowId(), "}"));
 		}
 	}
@@ -323,12 +316,8 @@ public class ObjectStateFlowLocalServiceTest {
 				LocalizedMapUtil.getLocalizedMap(
 					RandomTestUtil.randomString()));
 
-		for (String key : Arrays.asList("step4", "step5")) {
-			_listTypeEntryLocalService.addListTypeEntry(
-				TestPropsValues.getUserId(),
-				listTypeDefinition.getListTypeDefinitionId(), key,
-				LocalizedMapUtil.getLocalizedMap(key));
-		}
+		_addListTypeEntry("step4");
+		_addListTypeEntry("step5");
 
 		ObjectField objectField3 = _addObjectField(
 			listTypeDefinition.getListTypeDefinitionId(), true);
@@ -458,25 +447,21 @@ public class ObjectStateFlowLocalServiceTest {
 	private Map<Long, List<Long>>
 		_createExpectedDefaultObjectStateTransitions() {
 
-		ListTypeEntry listTypeEntryStep1 = _listTypeEntriesMap.get("step1");
-		ListTypeEntry listTypeEntryStep2 = _listTypeEntriesMap.get("step2");
-		ListTypeEntry listTypeEntryStep3 = _listTypeEntriesMap.get("step3");
-
 		return HashMapBuilder.<Long, List<Long>>put(
-			listTypeEntryStep1.getListTypeEntryId(),
+			_step1ListTypeEntry.getListTypeEntryId(),
 			Arrays.asList(
-				listTypeEntryStep2.getListTypeEntryId(),
-				listTypeEntryStep3.getListTypeEntryId())
+				_step2ListTypeEntry.getListTypeEntryId(),
+				_step3ListTypeEntry.getListTypeEntryId())
 		).put(
-			listTypeEntryStep2.getListTypeEntryId(),
+			_step2ListTypeEntry.getListTypeEntryId(),
 			Arrays.asList(
-				listTypeEntryStep1.getListTypeEntryId(),
-				listTypeEntryStep3.getListTypeEntryId())
+				_step1ListTypeEntry.getListTypeEntryId(),
+				_step3ListTypeEntry.getListTypeEntryId())
 		).put(
-			listTypeEntryStep3.getListTypeEntryId(),
+			_step3ListTypeEntry.getListTypeEntryId(),
 			Arrays.asList(
-				listTypeEntryStep1.getListTypeEntryId(),
-				listTypeEntryStep2.getListTypeEntryId())
+				_step1ListTypeEntry.getListTypeEntryId(),
+				_step2ListTypeEntry.getListTypeEntryId())
 		).build();
 	}
 
@@ -486,8 +471,9 @@ public class ObjectStateFlowLocalServiceTest {
 	@Inject
 	private ListTypeDefinitionLocalService _listTypeDefinitionLocalService;
 
-	private List<ListTypeEntry> _listTypeEntries = new ArrayList<>();
-	private Map<String, ListTypeEntry> _listTypeEntriesMap = new HashMap<>();
+	private ListTypeEntry _step1ListTypeEntry;
+	private ListTypeEntry _step2ListTypeEntry;
+	private ListTypeEntry _step3ListTypeEntry;
 
 	@Inject
 	private ListTypeEntryLocalService _listTypeEntryLocalService;
