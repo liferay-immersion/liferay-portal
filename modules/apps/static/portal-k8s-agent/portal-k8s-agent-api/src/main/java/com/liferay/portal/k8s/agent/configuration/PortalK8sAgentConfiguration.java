@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.portal.k8s.agent.configuration.v1;
+package com.liferay.portal.k8s.agent.configuration;
 
 import aQute.bnd.annotation.metatype.Meta;
 
@@ -21,7 +21,7 @@ import aQute.bnd.annotation.metatype.Meta;
  */
 @Meta.OCD(
 	factory = true,
-	id = "com.liferay.portal.k8s.agent.configuration.v1.PortalK8sAgentConfiguration"
+	id = "com.liferay.portal.k8s.agent.configuration.PortalK8sAgentConfiguration"
 )
 public interface PortalK8sAgentConfiguration {
 

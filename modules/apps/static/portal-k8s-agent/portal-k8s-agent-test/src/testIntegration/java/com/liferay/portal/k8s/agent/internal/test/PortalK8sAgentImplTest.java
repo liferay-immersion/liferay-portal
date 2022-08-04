@@ -18,7 +18,7 @@ import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.petra.function.UnsafeSupplier;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.k8s.agent.PortalK8sConfigMapModifier;
-import com.liferay.portal.k8s.agent.configuration.v1.PortalK8sAgentConfiguration;
+import com.liferay.portal.k8s.agent.configuration.PortalK8sAgentConfiguration;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.service.CompanyLocalService;

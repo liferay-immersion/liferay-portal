@@ -19,7 +19,7 @@ import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
 import com.liferay.portal.k8s.agent.PortalK8sConfigMapModifier;
-import com.liferay.portal.k8s.agent.configuration.v1.PortalK8sAgentConfiguration;
+import com.liferay.portal.k8s.agent.configuration.PortalK8sAgentConfiguration;
 import com.liferay.portal.k8s.agent.mutator.PortalK8sConfigurationPropertiesMutator;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -69,7 +69,7 @@ import org.osgi.service.component.annotations.ReferencePolicyOption;
  * @author Raymond Augé
  */
 @Component(
-	configurationPid = "com.liferay.portal.k8s.agent.configuration.v1.PortalK8sAgentConfiguration",
+	configurationPid = "com.liferay.portal.k8s.agent.configuration.PortalK8sAgentConfiguration",
 	configurationPolicy = ConfigurationPolicy.REQUIRE, immediate = true,
 	property = "portalK8sConfigurationPropertiesMutators.cardinality.minimum:Integer=3",
 	service = PortalK8sConfigMapModifier.class

@@ -38,7 +38,7 @@ import org.osgi.service.component.annotations.Reference;
  * @author Raymond Augé
  */
 @Component(
-	configurationPid = "com.liferay.portal.k8s.agent.configuration.v1.PortalK8sAgentConfiguration",
+	configurationPid = "com.liferay.portal.k8s.agent.configuration.PortalK8sAgentConfiguration",
 	configurationPolicy = ConfigurationPolicy.REQUIRE, immediate = true,
 	service = ModelListener.class
 )
