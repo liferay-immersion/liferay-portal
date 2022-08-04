@@ -39,7 +39,7 @@ public class EnvPropertiesUtil {
 		String envPrefix, long companyId,
 		BiConsumer<String, String> biConsumer) {
 
-		String companyEnvPredix = envPrefix.concat(_PROPS_BY_COMPANY);
+		String companyEnvPrefix = envPrefix.concat(_PROPS_BY_COMPANY);
 
 		Map<String, String> env = System.getenv();
 
@@ -50,9 +50,9 @@ public class EnvPropertiesUtil {
 				continue;
 			}
 
-			if (key.startsWith(companyEnvPredix)) {
+			if (key.startsWith(companyEnvPrefix)) {
 				if (companyId == GetterUtil.getLong(
-						key.substring(companyEnvPredix.length()), -1)) {
+						key.substring(companyEnvPrefix.length()), -1)) {
 
 					try {
 						Properties properties = PropertiesUtil.load(
