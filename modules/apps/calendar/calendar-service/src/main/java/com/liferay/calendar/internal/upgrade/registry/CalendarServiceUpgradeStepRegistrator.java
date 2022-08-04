@@ -149,8 +149,10 @@ public class CalendarServiceUpgradeStepRegistrator
 			new com.liferay.calendar.internal.upgrade.v4_1_2.
 				CalendarNotificationTemplateUpgradeProcess());
 
+		registry.register("4.1.2", "4.1.3", new DummyUpgradeStep());
+
 		registry.register(
-			"4.1.2", "4.2.0",
+			"4.1.3", "4.2.0",
 			new CTModelUpgradeProcess(
 				"Calendar", "CalendarBooking", "CalendarNotificationTemplate",
 				"CalendarResource"));
