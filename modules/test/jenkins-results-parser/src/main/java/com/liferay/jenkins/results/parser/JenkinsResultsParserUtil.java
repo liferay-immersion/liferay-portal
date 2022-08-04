@@ -2918,7 +2918,7 @@ public class JenkinsResultsParserUtil {
 		String command = "date +%s";
 
 		if (!hostname.equals(getHostName(""))) {
-			command = combine("ssh root@", hostname, " date +%s");
+			command = combine("ssh root@", hostname, " ", command);
 		}
 
 		try {
