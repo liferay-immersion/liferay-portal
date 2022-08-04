@@ -30,6 +30,7 @@ import ItemVocabularies from './ItemVocabularies';
 import ManageCollaborators from './ManageCollaborators';
 import Preview from './Preview';
 import Share from './Share';
+import Subscribe from './Subscribe';
 import {
 	getCategoriesCountFromVocabularies,
 	groupVocabulariesBy,
@@ -106,21 +107,7 @@ const SidebarPanelInfoView = ({
 	return (
 		<>
 			<Sidebar.Header title={title}>
-				{subscribe && (
-					<>
-						<ClayLink
-							borderless
-							className="mt-n2 text-secondary"
-							data-tooltip-align="top"
-							displayType="secondary"
-							href={subscribe.url}
-							monospaced
-							title={subscribe.label}
-						>
-							<ClayIcon symbol={subscribe.icon} />
-						</ClayLink>
-					</>
-				)}
+				{subscribe && <Subscribe {...subscribe} />}
 			</Sidebar.Header>
 
 			<Sidebar.Body className="px-0">
