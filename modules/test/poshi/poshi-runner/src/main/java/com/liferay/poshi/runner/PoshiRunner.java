@@ -240,8 +240,8 @@ public class PoshiRunner {
 			}
 			catch (OutOfMemoryError outOfMemoryError) {
 				System.out.println(
-					"Unable to create Poshi Syntax Logger, see POSHI-378 for " +
-						"details. Please use the summary.html log instead.");
+					"Unable to create Poshi syntax logger. See POSHI-378 for " +
+						"details. Use the summary.html log instead.");
 			}
 
 			SeleniumUtil.stopSelenium();
