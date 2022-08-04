@@ -108,7 +108,7 @@ public class AccountEntrySearchPermissionFilterContributor
 							organization.getCompanyId(),
 							organization.getOrganizationId());
 
-					while (suborganizations.size() > 0) {
+					while (!suborganizations.isEmpty()) {
 						organizationsSet.addAll(suborganizations);
 
 						suborganizations =
