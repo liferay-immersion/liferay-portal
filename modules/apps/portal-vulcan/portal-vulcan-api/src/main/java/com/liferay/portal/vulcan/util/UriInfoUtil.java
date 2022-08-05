@@ -49,9 +49,9 @@ public class UriInfoUtil {
 	}
 
 	private static boolean _isHttpsEnabled() {
-		if (Http.HTTPS.equals(PropsUtil.get(PropsKeys.WEB_SERVER_PROTOCOL)) ||
-			Http.HTTPS.equals(
-				PropsUtil.get(PropsKeys.PORTAL_INSTANCE_PROTOCOL))) {
+		if (Http.HTTPS.equals(
+				PropsUtil.get(PropsKeys.PORTAL_INSTANCE_PROTOCOL)) ||
+			Http.HTTPS.equals(PropsUtil.get(PropsKeys.WEB_SERVER_PROTOCOL))) {
 
 			return true;
 		}
