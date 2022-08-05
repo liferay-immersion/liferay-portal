@@ -42,7 +42,7 @@ public class AssetVocabularyUtil {
 
 	public static AssetVocabulary addAssetVocabulary(
 			AssetVocabularyLocalService assetVocabularyLocalService,
-			List<Long> classNameIdsList, Company company,
+			List<Long> classNameIds, Company company,
 			String assetVocabularyName, int visibilityType)
 		throws PortalException {
 
@@ -58,13 +58,12 @@ public class AssetVocabularyUtil {
 
 		if (assetVocabulary == null) {
 			return _addAssetVocabulary(
-				assetVocabularyLocalService, assetVocabularyName,
-				classNameIdsList, company, visibilityType);
+				assetVocabularyLocalService, assetVocabularyName, classNameIds,
+				company, visibilityType);
 		}
 
 		AssetVocabularySettingsHelper assetVocabularySettingsHelper =
-			_getAssetVocabularySettingsHelper(
-				assetVocabulary, classNameIdsList);
+			_getAssetVocabularySettingsHelper(assetVocabulary, classNameIds);
 
 		return assetVocabularyLocalService.updateVocabulary(
 			assetVocabulary.getVocabularyId(), assetVocabulary.getTitleMap(),

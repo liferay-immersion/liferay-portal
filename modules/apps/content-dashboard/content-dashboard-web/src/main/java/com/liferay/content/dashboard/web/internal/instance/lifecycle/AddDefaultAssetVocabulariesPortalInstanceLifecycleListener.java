@@ -55,8 +55,8 @@ public class AddDefaultAssetVocabulariesPortalInstanceLifecycleListener
 			company, PropsValues.ASSET_VOCABULARY_DEFAULT,
 			AssetVocabularyConstants.VISIBILITY_TYPE_PUBLIC);
 
-		List<Long> classIds = ListUtil.fromCollection(
-			_contentDashboardItemFactoryTracker.getClassIds());
+		List<Long> classNameIds = ListUtil.fromCollection(
+			_contentDashboardItemFactoryTracker.getClassNameIds());
 
 		for (ContentDashboardConstants.DefaultInternalAssetVocabularyName
 				defaultInternalAssetVocabularyName :
@@ -64,7 +64,7 @@ public class AddDefaultAssetVocabulariesPortalInstanceLifecycleListener
 						DefaultInternalAssetVocabularyName.values()) {
 
 			AssetVocabularyUtil.addAssetVocabulary(
-				_assetVocabularyLocalService, classIds, company,
+				_assetVocabularyLocalService, classNameIds, company,
 				defaultInternalAssetVocabularyName.toString(),
 				AssetVocabularyConstants.VISIBILITY_TYPE_INTERNAL);
 		}

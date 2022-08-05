@@ -47,7 +47,7 @@ import org.osgi.util.tracker.ServiceTrackerCustomizer;
 @Component(service = ContentDashboardItemFactoryTracker.class)
 public class ContentDashboardItemFactoryTracker {
 
-	public Collection<Long> getClassIds() {
+	public Collection<Long> getClassNameIds() {
 		Collection<String> classNames = getClassNames();
 
 		Stream<String> stream = classNames.stream();
