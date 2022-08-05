@@ -63,6 +63,7 @@ public class UriInfoUtilTest {
 		).thenReturn(
 			_uri
 		);
+
 		Mockito.when(
 			_uriInfo.getAbsolutePathBuilder()
 		).thenReturn(

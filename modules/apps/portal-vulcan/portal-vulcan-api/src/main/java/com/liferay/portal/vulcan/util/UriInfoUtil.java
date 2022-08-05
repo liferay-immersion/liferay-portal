@@ -32,7 +32,7 @@ public class UriInfoUtil {
 
 	public static String getAbsolutePath(UriInfo uriInfo) {
 		return String.valueOf(
-			_updateParameters(
+			_updateUriBuilder(
 				uriInfo.getAbsolutePathBuilder()
 			).build());
 	}
@@ -45,7 +45,7 @@ public class UriInfoUtil {
 	}
 
 	public static UriBuilder getBaseUriBuilder(UriInfo uriInfo) {
-		return _updateParameters(uriInfo.getBaseUriBuilder());
+		return _updateUriBuilder(uriInfo.getBaseUriBuilder());
 	}
 
 	private static boolean _isHttpsEnabled() {
@@ -59,7 +59,7 @@ public class UriInfoUtil {
 		return false;
 	}
 
-	private static UriBuilder _updateParameters(UriBuilder uriBuilder) {
+	private static UriBuilder _updateUriBuilder(UriBuilder uriBuilder) {
 		if (!Validator.isBlank(PortalUtil.getPathContext())) {
 			URI uri = uriBuilder.build();
 
