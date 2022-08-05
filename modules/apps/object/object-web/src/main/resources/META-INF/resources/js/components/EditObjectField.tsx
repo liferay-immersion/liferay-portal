@@ -530,11 +530,7 @@ export default function EditObjectField({
 		>
 			<Card title={Liferay.Language.get('basic-info')}>
 				<InputLocalized
-					disabled={
-						values.system && objectName !== 'AccountEntry'
-							? disabled
-							: readOnly
-					}
+					disabled={false}
 					error={errors.label}
 					label={Liferay.Language.get('label')}
 					onChange={(label) => setValues({label})}
