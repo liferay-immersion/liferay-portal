@@ -430,14 +430,14 @@ public class DDMFormInstanceRecordLocalServiceImpl
 			ddmFormInstanceRecordPersistence.findByPrimaryKey(
 				ddmFormInstanceRecordId);
 
+		ddmFormInstanceRecord.setModifiedDate(
+			serviceContext.getModifiedDate(null));
+
 		DDMFormInstance ddmFormInstance =
 			ddmFormInstanceRecord.getFormInstance();
 
 		ddmFormInstanceRecord.setFormInstanceVersion(
 			ddmFormInstance.getVersion());
-
-		ddmFormInstanceRecord.setModifiedDate(
-			serviceContext.getModifiedDate(null));
 
 		ddmFormInstanceRecord = ddmFormInstanceRecordPersistence.update(
 			ddmFormInstanceRecord);
