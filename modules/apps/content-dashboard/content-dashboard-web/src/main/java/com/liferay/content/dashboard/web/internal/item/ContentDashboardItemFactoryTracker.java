@@ -136,7 +136,7 @@ public class ContentDashboardItemFactoryTracker {
 						company -> AssetVocabularyUtil.addAssetVocabulary(
 							_assetVocabularyLocalService,
 							Collections.singletonList(classNameId), company,
-							defaultAssetVocabularyName.toString(),
+							defaultInternalAssetVocabularyName.toString(),
 							AssetVocabularyConstants.VISIBILITY_TYPE_INTERNAL));
 				}
 				catch (Exception exception) {
