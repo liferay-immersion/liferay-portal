@@ -64,7 +64,7 @@ public class KBArticleInfoItemFormProvider
 		}
 		catch (PortalException portalException) {
 			throw new RuntimeException(
-				"Unable to get asset entry for kb article entry " +
+				"Unable to get asset entry for knowledge base article entry " +
 					kbArticle.getResourcePrimKey(),
 				portalException);
 		}
