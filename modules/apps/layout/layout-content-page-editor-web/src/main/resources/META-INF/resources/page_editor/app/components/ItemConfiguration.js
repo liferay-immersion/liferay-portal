@@ -108,7 +108,7 @@ function ItemConfigurationContent({
 					title={Liferay.Language.get('info')}
 				>
 					{Liferay.Language.get(
-						'this-page-element-does-not-have-any-configuration-available'
+						'this-page-element-does-not-have-any-available-configurations'
 					)}
 				</ClayAlert>
 			) : (
