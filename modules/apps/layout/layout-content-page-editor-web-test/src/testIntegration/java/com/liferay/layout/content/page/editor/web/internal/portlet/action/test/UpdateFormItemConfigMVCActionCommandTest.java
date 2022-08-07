@@ -679,8 +679,6 @@ public class UpdateFormItemConfigMVCActionCommandTest {
 			new MockHttpServletRequest();
 
 		mockHttpServletRequest.setAttribute(WebKeys.LAYOUT, _layout);
-		mockHttpServletRequest.setRequestURI(
-			StringPool.SLASH + RandomTestUtil.randomString());
 
 		ThemeDisplay themeDisplay = ContentLayoutTestUtil.getThemeDisplay(
 			_company, _group, _layout);
@@ -689,6 +687,9 @@ public class UpdateFormItemConfigMVCActionCommandTest {
 
 		mockHttpServletRequest.setAttribute(
 			WebKeys.THEME_DISPLAY, themeDisplay);
+
+		mockHttpServletRequest.setRequestURI(
+			StringPool.SLASH + RandomTestUtil.randomString());
 
 		_serviceContext.setRequest(mockHttpServletRequest);
 
