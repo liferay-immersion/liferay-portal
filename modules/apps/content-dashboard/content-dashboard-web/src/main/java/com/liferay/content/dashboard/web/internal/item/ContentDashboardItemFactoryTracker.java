@@ -88,24 +88,6 @@ public class ContentDashboardItemFactoryTracker {
 		_serviceTrackerMap.close();
 	}
 
-	private void _addClassNameIdToDefaultAssetVocabularyIfNotExist(
-		long classNameId,
-		ContentDashboardConstants.DefaultInternalAssetVocabularyName
-			defaultAssetVocabularyName) {
-
-		try {
-			_companyLocalService.forEachCompany(
-				company -> AssetVocabularyUtil.addAssetVocabulary(
-					_assetVocabularyLocalService,
-					Collections.singletonList(classNameId), company,
-					defaultAssetVocabularyName.toString(),
-					AssetVocabularyConstants.VISIBILITY_TYPE_INTERNAL));
-		}
-		catch (Exception exception) {
-			_log.error(exception);
-		}
-	}
-
 	private static final Log _log = LogFactoryUtil.getLog(
 		ContentDashboardItemFactoryTracker.class);
 
@@ -149,8 +131,17 @@ public class ContentDashboardItemFactoryTracker {
 						ContentDashboardConstants.
 							DefaultInternalAssetVocabularyName.values()) {
 
-				_addClassNameIdToDefaultAssetVocabularyIfNotExist(
-					classNameId, defaultInternalAssetVocabularyName);
+				try {
+					_companyLocalService.forEachCompany(
+						company -> AssetVocabularyUtil.addAssetVocabulary(
+							_assetVocabularyLocalService,
+							Collections.singletonList(classNameId), company,
+							defaultAssetVocabularyName.toString(),
+							AssetVocabularyConstants.VISIBILITY_TYPE_INTERNAL));
+				}
+				catch (Exception exception) {
+					_log.error(exception);
+				}
 			}
 
 			return contentDashboardItemFactory;
