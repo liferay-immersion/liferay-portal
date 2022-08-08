@@ -1534,8 +1534,8 @@ public class BundleSiteInitializer implements SiteInitializer {
 
 		_setResourcePermissions(
 			layout.getCompanyId(), layout.getModelClassName(),
-			String.valueOf(layout.getPlid()),
-			jsonObject.getJSONArray("permissions"));
+			jsonObject.getJSONArray("permissions"),
+			String.valueOf(layout.getPlid()));
 
 		if (jsonObject.has("priority")) {
 			layout = _layoutLocalService.updatePriority(
@@ -3702,8 +3702,8 @@ public class BundleSiteInitializer implements SiteInitializer {
 	}
 
 	private void _setResourcePermissions(
-			long companyId, String name, String primKey,
-			JSONArray permissionsJSONArray)
+			long companyId, String name, JSONArray permissionsJSONArray,
+			String primKey)
 		throws Exception {
 
 		if (permissionsJSONArray == null) {
