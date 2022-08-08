@@ -14,6 +14,7 @@
 
 package com.liferay.portal.upgrade.v7_4_x;
 
+import com.liferay.portal.kernel.upgrade.BaseExternalReferenceCodeUpgradeProcess;
 import com.liferay.portal.kernel.upgrade.CTModelUpgradeProcess;
 import com.liferay.portal.kernel.upgrade.DummyUpgradeProcess;
 import com.liferay.portal.kernel.upgrade.UpgradeProcess;
@@ -121,6 +122,17 @@ public class PortalUpgradeProcessRegistryImpl
 		upgradeProcesses.put(new Version(15, 0, 0), new UpgradeOrgGroupRole());
 
 		upgradeProcesses.put(new Version(16, 0, 0), new DummyUpgradeProcess());
+
+		upgradeProcesses.put(
+			new Version(16, 1, 0),
+			new BaseExternalReferenceCodeUpgradeProcess() {
+
+				@Override
+				protected String[][] getTableAndPrimaryKeyColumnNames() {
+					return new String[][] {{"DLFolder", "folderId"}};
+				}
+
+			});
 	}
 
 }
