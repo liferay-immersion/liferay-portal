@@ -64,11 +64,10 @@ public class LayoutActionsDisplayContext {
 		SegmentsExperienceLocalService segmentsExperienceLocalService) {
 
 		_httpServletRequest = httpServletRequest;
+		_segmentsExperienceLocalService = segmentsExperienceLocalService;
 
 		_themeDisplay = (ThemeDisplay)_httpServletRequest.getAttribute(
 			WebKeys.THEME_DISPLAY);
-
-		_segmentsExperienceLocalService = segmentsExperienceLocalService;
 	}
 
 	public List<DropdownItem> getDropdownItems() {
