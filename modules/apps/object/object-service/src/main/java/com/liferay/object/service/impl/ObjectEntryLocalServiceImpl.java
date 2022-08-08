@@ -2036,20 +2036,6 @@ public class ObjectEntryLocalServiceImpl
 		}
 	}
 
-	private void _startWorkflowInstance(
-			long userId, ObjectEntry objectEntry, ServiceContext serviceContext)
-		throws PortalException {
-
-		ObjectDefinition objectDefinition =
-			_objectDefinitionPersistence.findByPrimaryKey(
-				objectEntry.getObjectDefinitionId());
-
-		WorkflowHandlerRegistryUtil.startWorkflowInstance(
-			objectEntry.getCompanyId(), objectEntry.getNonzeroGroupId(), userId,
-			objectDefinition.getClassName(), objectEntry.getObjectEntryId(),
-			objectEntry, serviceContext);
-	}
-
 	private void _setExternalReferenceCode(
 			ObjectEntry objectEntry, Map<String, Serializable> values)
 		throws PortalException {
@@ -2071,6 +2057,20 @@ public class ObjectEntryLocalServiceImpl
 				objectEntry.setExternalReferenceCode(externalReferenceCode);
 			}
 		}
+	}
+
+	private void _startWorkflowInstance(
+			long userId, ObjectEntry objectEntry, ServiceContext serviceContext)
+		throws PortalException {
+
+		ObjectDefinition objectDefinition =
+			_objectDefinitionPersistence.findByPrimaryKey(
+				objectEntry.getObjectDefinitionId());
+
+		WorkflowHandlerRegistryUtil.startWorkflowInstance(
+			objectEntry.getCompanyId(), objectEntry.getNonzeroGroupId(), userId,
+			objectDefinition.getClassName(), objectEntry.getObjectEntryId(),
+			objectEntry, serviceContext);
 	}
 
 	private void _updateTable(
