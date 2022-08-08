@@ -986,7 +986,7 @@ public class ObjectEntryLocalServiceImpl
 			objectEntryId, values);
 
 		if (GetterUtil.getBoolean(PropsUtil.get("feature.flag.LPS-158821"))) {
-			_updateSystemFieldValues(objectEntry, values);
+			_setExternalReferenceCode(objectEntry, values);
 		}
 
 		objectEntry.setModifiedDate(serviceContext.getModifiedDate(null));
@@ -2050,31 +2050,25 @@ public class ObjectEntryLocalServiceImpl
 			objectEntry, serviceContext);
 	}
 
-	private void _updateExternalReferenceCode(
-			String externalReferenceCode, ObjectEntry objectEntry)
-		throws PortalException {
-
-		if (Validator.isNull(externalReferenceCode)) {
-			externalReferenceCode = String.valueOf(
-				objectEntry.getObjectEntryId());
-		}
-
-		_validateExternalReferenceCode(
-			objectEntry.getCompanyId(), externalReferenceCode,
-			objectEntry.getObjectDefinitionId(),
-			objectEntry.getObjectEntryId());
-
-		objectEntry.setExternalReferenceCode(externalReferenceCode);
-	}
-
-	private void _updateSystemFieldValues(
+	private void _setExternalReferenceCode(
 			ObjectEntry objectEntry, Map<String, Serializable> values)
 		throws PortalException {
 
 		for (Map.Entry<String, Serializable> entry : values.entrySet()) {
 			if (StringUtil.equals(entry.getKey(), "externalReferenceCode")) {
-				_updateExternalReferenceCode(
-					String.valueOf(entry.getValue()), objectEntry);
+				String externalReferenceCode = String.valueOf(entry.getValue());
+
+				if (Validator.isNull(externalReferenceCode)) {
+					externalReferenceCode = String.valueOf(
+						objectEntry.getObjectEntryId());
+				}
+
+				_validateExternalReferenceCode(
+					objectEntry.getCompanyId(), externalReferenceCode,
+					objectEntry.getObjectDefinitionId(),
+					objectEntry.getObjectEntryId());
+
+				objectEntry.setExternalReferenceCode(externalReferenceCode);
 			}
 		}
 	}
