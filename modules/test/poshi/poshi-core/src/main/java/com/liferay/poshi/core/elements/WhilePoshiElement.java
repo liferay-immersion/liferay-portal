@@ -58,32 +58,34 @@ public class WhilePoshiElement extends IfPoshiElement {
 
 			String trimmedPoshiScriptSnippet = poshiScriptSnippet.trim();
 
-			if (trimmedPoshiScriptSnippet.startsWith(getPoshiScriptKeyword())) {
-				String blockName = getBlockName(poshiScriptSnippet);
+			if (!trimmedPoshiScriptSnippet.startsWith(
+					getPoshiScriptKeyword())) {
 
-				add(
-					PoshiNodeFactory.newPoshiNode(
-						this, getCondition(blockName)));
-
-				add(new ThenPoshiElement(this, poshiScriptSnippet));
-
-				if (blockName.contains("&& (maxIterations = ")) {
-					int index = blockName.lastIndexOf("&&");
-
-					String maxIterationsAssignment = blockName.substring(
-						index + 2);
-
-					maxIterationsAssignment = getParentheticalContent(
-						maxIterationsAssignment);
-
-					String maxIterationsValue = getValueFromAssignment(
-						maxIterationsAssignment);
-
-					addAttribute(
-						"max-iterations",
-						getDoubleQuotedContent(maxIterationsValue));
-				}
+				continue;
 			}
+
+			String blockName = getBlockName(poshiScriptSnippet);
+
+			add(PoshiNodeFactory.newPoshiNode(this, getCondition(blockName)));
+
+			add(new ThenPoshiElement(this, poshiScriptSnippet));
+
+			if (!blockName.contains("&& (maxIterations = ")) {
+				continue;
+			}
+
+			int index = blockName.lastIndexOf("&&");
+
+			String maxIterationsAssignment = blockName.substring(index + 2);
+
+			maxIterationsAssignment = getParentheticalContent(
+				maxIterationsAssignment);
+
+			String maxIterationsValue = getValueFromAssignment(
+				maxIterationsAssignment);
+
+			addAttribute(
+				"max-iterations", getDoubleQuotedContent(maxIterationsValue));
 		}
 	}
 
