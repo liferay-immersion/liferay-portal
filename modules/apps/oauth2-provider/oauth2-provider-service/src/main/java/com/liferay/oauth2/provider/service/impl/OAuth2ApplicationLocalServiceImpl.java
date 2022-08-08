@@ -156,14 +156,6 @@ public class OAuth2ApplicationLocalServiceImpl
 		OAuth2Application oAuth2Application =
 			oAuth2ApplicationPersistence.create(oAuth2ApplicationId);
 
-		if (serviceContext != null) {
-			String uuid = serviceContext.getUuid();
-
-			if (Validator.isNotNull(uuid)) {
-				oAuth2Application.setUuid(uuid);
-			}
-		}
-
 		oAuth2Application.setCompanyId(companyId);
 		oAuth2Application.setUserId(userId);
 		oAuth2Application.setUserName(userName);
@@ -261,14 +253,6 @@ public class OAuth2ApplicationLocalServiceImpl
 
 		OAuth2Application oAuth2Application =
 			oAuth2ApplicationPersistence.create(oAuth2ApplicationId);
-
-		if (serviceContext != null) {
-			String uuid = serviceContext.getUuid();
-
-			if (Validator.isNotNull(uuid)) {
-				oAuth2Application.setUuid(uuid);
-			}
-		}
 
 		oAuth2Application.setCompanyId(companyId);
 		oAuth2Application.setUserId(userId);
