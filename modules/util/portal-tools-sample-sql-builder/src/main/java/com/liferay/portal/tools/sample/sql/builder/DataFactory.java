@@ -393,7 +393,7 @@ public class DataFactory {
 
 		_counter = new SimpleCounter(totalGroupCount + 1);
 
-		_dLFileEntryIdCounter = new SimpleCounter();
+		_dlFileEntryIdCounter = new SimpleCounter();
 		_groupCounter = new SimpleCounter(1);
 		_timeCounter = new SimpleCounter();
 		_futureDateCounter = new SimpleCounter();
@@ -933,23 +933,23 @@ public class DataFactory {
 	}
 
 	public AssetEntryModel newAssetEntryModel(
-		DLFileEntryModel dLFileEntryModel) {
+		DLFileEntryModel dlFileEntryModel) {
 
 		return newAssetEntryModel(
-			dLFileEntryModel.getGroupId(), dLFileEntryModel.getCreateDate(),
-			dLFileEntryModel.getModifiedDate(),
+			dlFileEntryModel.getGroupId(), dlFileEntryModel.getCreateDate(),
+			dlFileEntryModel.getModifiedDate(),
 			getClassNameId(DLFileEntry.class),
-			dLFileEntryModel.getFileEntryId(), dLFileEntryModel.getUuid(),
-			dLFileEntryModel.getFileEntryTypeId(), true, true,
-			dLFileEntryModel.getMimeType(), dLFileEntryModel.getTitle());
+			dlFileEntryModel.getFileEntryId(), dlFileEntryModel.getUuid(),
+			dlFileEntryModel.getFileEntryTypeId(), true, true,
+			dlFileEntryModel.getMimeType(), dlFileEntryModel.getTitle());
 	}
 
-	public AssetEntryModel newAssetEntryModel(DLFolderModel dLFolderModel) {
+	public AssetEntryModel newAssetEntryModel(DLFolderModel dlFolderModel) {
 		return newAssetEntryModel(
-			dLFolderModel.getGroupId(), dLFolderModel.getCreateDate(),
-			dLFolderModel.getModifiedDate(), getClassNameId(DLFolder.class),
-			dLFolderModel.getFolderId(), dLFolderModel.getUuid(), 0, true, true,
-			null, dLFolderModel.getName());
+			dlFolderModel.getGroupId(), dlFolderModel.getCreateDate(),
+			dlFolderModel.getModifiedDate(), getClassNameId(DLFolder.class),
+			dlFolderModel.getFolderId(), dlFolderModel.getUuid(), 0, true, true,
+			null, dlFolderModel.getName());
 	}
 
 	public AssetEntryModel newAssetEntryModel(MBMessageModel mbMessageModel) {
@@ -2328,7 +2328,7 @@ public class DataFactory {
 				DDMFieldAttribute.class.getName(), _counter.get()));
 		counterModels.add(
 			_newCounterModel(
-				DLFileEntry.class.getName(), _dLFileEntryIdCounter.get()));
+				DLFileEntry.class.getName(), _dlFileEntryIdCounter.get()));
 		counterModels.add(
 			_newCounterModel(
 				FriendlyURLEntryLocalization.class.getName(), _counter.get()));
@@ -3432,12 +3432,12 @@ public class DataFactory {
 	}
 
 	public DDMStructureLinkModel newDDMStructureLinkModel(
-		DLFileEntryMetadataModel dLFileEntryMetadataModel) {
+		DLFileEntryMetadataModel dlFileEntryMetadataModel) {
 
 		return newDDMStructureLinkModel(
 			getClassNameId(DLFileEntryMetadata.class),
-			dLFileEntryMetadataModel.getFileEntryMetadataId(),
-			dLFileEntryMetadataModel.getDDMStructureId());
+			dlFileEntryMetadataModel.getFileEntryMetadataId(),
+			dlFileEntryMetadataModel.getDDMStructureId());
 	}
 
 	public DDMStructureVersionModel newDDMStructureVersionModel(
@@ -3696,7 +3696,7 @@ public class DataFactory {
 		dlFileEntryModel.setRepositoryId(dlFolderModel.getRepositoryId());
 		dlFileEntryModel.setFolderId(dlFolderModel.getFolderId());
 		dlFileEntryModel.setTreePath(dlFolderModel.getTreePath());
-		dlFileEntryModel.setName(String.valueOf(_dLFileEntryIdCounter.get()));
+		dlFileEntryModel.setName(String.valueOf(_dlFileEntryIdCounter.get()));
 		dlFileEntryModel.setFileName(name + "." + extension);
 		dlFileEntryModel.setExtension(extension);
 		dlFileEntryModel.setMimeType(mimeType);
@@ -7521,7 +7521,7 @@ public class DataFactory {
 	private long _defaultUserId;
 	private final String _dlDDMStructureContent;
 	private final String _dlDDMStructureLayoutContent;
-	private final SimpleCounter _dLFileEntryIdCounter;
+	private final SimpleCounter _dlFileEntryIdCounter;
 	private final List<String> _firstNames;
 	private final FriendlyURLNormalizer _friendlyURLNormalizer;
 	private final SimpleCounter _futureDateCounter;
