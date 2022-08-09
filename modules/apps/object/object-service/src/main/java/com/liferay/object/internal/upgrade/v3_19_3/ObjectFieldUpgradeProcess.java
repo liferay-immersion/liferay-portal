@@ -31,8 +31,8 @@ public class ObjectFieldUpgradeProcess extends UpgradeProcess {
 	protected void doUpgrade() throws Exception {
 		String selectSQL = SQLTransformer.transform(
 			StringBundler.concat(
-				"select objectDefinition.system_, ",
-				"objectDefinition.dbTableName, ObjectField.objectFieldId from ",
+				"select objectDefinition.dbTableName, ",
+				"objectDefinition.system_, ObjectField.objectFieldId from ",
 				"ObjectField inner join ObjectDefinition objectDefinition on ",
 				"ObjectField.objectDefinitionId = ",
 				"objectDefinition.objectDefinitionId where (",
