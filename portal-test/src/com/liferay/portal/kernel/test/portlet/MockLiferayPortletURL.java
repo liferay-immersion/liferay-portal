@@ -297,17 +297,21 @@ public class MockLiferayPortletURL implements LiferayPortletURL {
 		for (Map.Entry<String, String[]> entry : entries) {
 			String[] values = entry.getValue();
 
-			if (!ArrayUtil.isEmpty(values)) {
-				for (String value : values) {
-					if (value != null) {
-						sb.append(_portletId);
-						sb.append("_");
-						sb.append(entry.getKey());
-						sb.append("=");
-						sb.append(value);
-						sb.append(";");
-					}
+			if (ArrayUtil.isEmpty(values)) {
+				continue;
+			}
+
+			for (String value : values) {
+				if (value == null) {
+					continue;
 				}
+
+				sb.append(_portletId);
+				sb.append("_");
+				sb.append(entry.getKey());
+				sb.append("=");
+				sb.append(value);
+				sb.append(";");
 			}
 		}
 
