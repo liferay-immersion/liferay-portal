@@ -177,7 +177,7 @@ public class SXPBlueprintUpgradeProcess extends UpgradeProcess {
 		}
 		catch (IOException ioException) {
 			_log.error(
-				"Could not get default value for element with external " +
+				"Unable to get default value for element with external " +
 					"reference code: " + externalReferenceCode);
 		}
 
