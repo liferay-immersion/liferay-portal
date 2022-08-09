@@ -42,13 +42,7 @@ export function openToast(options: {
 	parentWindow.Liferay.Util.openToast(options);
 }
 
-export function SidePanelContent({
-	children,
-	className,
-	onSave,
-	readOnly,
-	title,
-}: IProps) {
+export function SidePanelContent({children, className, onSave, title}: IProps) {
 	const saveProps: {
 		onClick?: () => void;
 		type?: 'submit';
@@ -79,7 +73,7 @@ export function SidePanelContent({
 					{Liferay.Language.get('cancel')}
 				</ClayButton>
 
-				<ClayButton disabled={readOnly} {...saveProps}>
+				<ClayButton {...saveProps}>
 					{Liferay.Language.get('save')}
 				</ClayButton>
 			</ClayButton.Group>
