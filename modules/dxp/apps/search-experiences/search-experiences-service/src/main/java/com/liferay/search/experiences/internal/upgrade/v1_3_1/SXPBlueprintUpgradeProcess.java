@@ -102,12 +102,11 @@ public class SXPBlueprintUpgradeProcess extends UpgradeProcess {
 
 		Matcher matcher = _pattern.matcher(elementInstancesJSON);
 
-		if (matcher.find()) {
-			elementInstancesJSON = matcher.replaceAll(StringPool.CLOSE_BRACKET);
-		}
-		else {
+		if (!matcher.find()) {
 			return elementInstancesJSON;
 		}
+
+		elementInstancesJSON = matcher.replaceAll(StringPool.CLOSE_BRACKET);
 
 		JSONArray jsonArray = JSONFactoryUtil.createJSONArray(
 			elementInstancesJSON);
