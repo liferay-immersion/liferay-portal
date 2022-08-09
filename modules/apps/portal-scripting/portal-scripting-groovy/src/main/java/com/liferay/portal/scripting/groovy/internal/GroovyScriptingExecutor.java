@@ -35,10 +35,10 @@ import org.osgi.service.component.annotations.Component;
  */
 @Component(
 	immediate = true,
-	property = "scripting.language=" + GroovyExecutor.LANGUAGE,
+	property = "scripting.language=" + GroovyScriptingExecutor.LANGUAGE,
 	service = ScriptingExecutor.class
 )
-public class GroovyExecutor extends BaseScriptingExecutor {
+public class GroovyScriptingExecutor extends BaseScriptingExecutor {
 
 	public static final String LANGUAGE = "groovy";
 
@@ -83,7 +83,7 @@ public class GroovyExecutor extends BaseScriptingExecutor {
 
 	@Override
 	public ScriptingExecutor newInstance(boolean executeInSeparateThread) {
-		return new GroovyExecutor();
+		return new GroovyScriptingExecutor();
 	}
 
 }
