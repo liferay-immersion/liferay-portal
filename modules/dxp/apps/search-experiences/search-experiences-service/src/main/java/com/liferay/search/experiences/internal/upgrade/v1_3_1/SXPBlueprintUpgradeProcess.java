@@ -127,16 +127,16 @@ public class SXPBlueprintUpgradeProcess extends UpgradeProcess {
 				continue;
 			}
 
-			String elementDefinition = sxpElementJSONObject.getString(
+			String elementDefinitionJSON = sxpElementJSONObject.getString(
 				"elementDefinition");
 
-			elementDefinition = StringUtil.replace(
-				elementDefinition, "\"defaultValue\":[]",
+			elementDefinitionJSON = StringUtil.replace(
+				elementDefinitionJSON, "\"defaultValue\":[]",
 				_defaultValues.get(externalReferenceCode));
 
 			sxpElementJSONObject.put(
 				"elementDefinition",
-				JSONFactoryUtil.createJSONObject(elementDefinition));
+				JSONFactoryUtil.createJSONObject(elementDefinitionJSON));
 		}
 
 		return jsonArray.toString();
