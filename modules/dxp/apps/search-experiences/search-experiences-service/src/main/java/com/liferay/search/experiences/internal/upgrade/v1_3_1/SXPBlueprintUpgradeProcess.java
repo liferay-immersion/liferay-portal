@@ -195,7 +195,6 @@ public class SXPBlueprintUpgradeProcess extends UpgradeProcess {
 	private static final Pattern _pattern = Pattern.compile(
 		"Ljava\\.lang\\.Object;@\\w{8}");
 
-	private final Map<String, String> _defaultValues =
-		_loadDefaultValues();
+	private final Map<String, String> _defaultValues = _loadDefaultValues();
 
 }
