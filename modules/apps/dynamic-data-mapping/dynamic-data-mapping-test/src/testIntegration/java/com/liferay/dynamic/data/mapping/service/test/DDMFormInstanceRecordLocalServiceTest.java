@@ -28,6 +28,7 @@ import com.liferay.dynamic.data.mapping.test.util.DDMFormValuesTestUtil;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
+import com.liferay.portal.kernel.test.util.RandomTestUtil;
 import com.liferay.portal.kernel.test.util.ServiceContextTestUtil;
 import com.liferay.portal.kernel.test.util.TestPropsValues;
 import com.liferay.portal.test.rule.Inject;
@@ -65,9 +66,11 @@ public class DDMFormInstanceRecordLocalServiceTest
 		DDMFormValues ddmFormValues = DDMFormValuesTestUtil.createDDMFormValues(
 			ddmFormInstance.getDDMForm());
 
+		String string1 = RandomTestUtil.randomString();
+
 		DDMFormFieldValue ddmFormFieldValue =
 			DDMFormValuesTestUtil.createLocalizedDDMFormFieldValue(
-				"text", "first text");
+				"text", string1);
 
 		ddmFormValues.addDDMFormFieldValue(ddmFormFieldValue);
 
@@ -80,19 +83,20 @@ public class DDMFormInstanceRecordLocalServiceTest
 				ddmFormInstance.getFormInstanceId(), ddmFormValues,
 				serviceContext);
 
-		_assertDDMFormInstanceRecord(
-			ddmFormInstanceRecord, "1.0", "first text");
+		_assertDDMFormInstanceRecord(ddmFormInstanceRecord, "1.0", string1);
 
 		Value value = ddmFormFieldValue.getValue();
 
-		value.addString(value.getDefaultLocale(), "second text");
+		String string2 = RandomTestUtil.randomString();
+
+		value.addString(value.getDefaultLocale(), string2);
 
 		_assertDDMFormInstanceRecord(
 			_ddmFormInstanceRecordLocalService.updateFormInstanceRecord(
 				user.getUserId(),
 				ddmFormInstanceRecord.getFormInstanceRecordId(), false,
 				ddmFormValues, serviceContext),
-			"1.0", "second text");
+			"1.0", string2);
 
 		DDMStructure ddmStructure = ddmFormInstance.getStructure();
 
@@ -101,14 +105,16 @@ public class DDMFormInstanceRecordLocalServiceTest
 			ddmFormInstance.getNameMap(), ddmFormInstance.getDescriptionMap(),
 			ddmFormInstance.getSettingsDDMFormValues(), serviceContext);
 
-		value.addString(value.getDefaultLocale(), "third text");
+		String string3 = RandomTestUtil.randomString();
+
+		value.addString(value.getDefaultLocale(), string3);
 
 		_assertDDMFormInstanceRecord(
 			_ddmFormInstanceRecordLocalService.updateFormInstanceRecord(
 				user.getUserId(),
 				ddmFormInstanceRecord.getFormInstanceRecordId(), false,
 				ddmFormValues, serviceContext),
-			"1.1", "third text");
+			"1.1", string3);
 	}
 
 	private void _assertDDMFormInstanceRecord(
