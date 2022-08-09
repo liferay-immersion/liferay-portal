@@ -35,12 +35,12 @@ public class ObjectFieldUpgradeProcess extends UpgradeProcess {
 				"ObjectDefinition.system_, ObjectField.objectFieldId from ",
 				"ObjectField inner join ObjectDefinition on ",
 				"ObjectDefinition.objectDefinitionId = ",
-				"ObjectField.objectDefinitionId where (",
+				"ObjectField.objectDefinitionId where ",
+				"(ObjectDefinition.dbTableName != ObjectField.dbTableName and ",
 				"ObjectDefinition.system_ = [$TRUE$] and ObjectField.system_ ",
-				"= [$FALSE$] and ObjectDefinition.dbTableName != ",
-				"ObjectField.dbTableName) or (ObjectDefinition.system_ = ",
-				"[$FALSE$] and ObjectField.system_ = [$TRUE$] and ",
-				"ObjectDefinition.dbTableName = ObjectField.dbTableName)"));
+				"= [$FALSE$]) or (ObjectDefinition.dbTableName = ",
+				"ObjectField.dbTableName and ObjectDefinition.system_ = ",
+				"[$FALSE$] and ObjectField.system_ = [$TRUE$])"));
 
 		try (PreparedStatement preparedStatement1 = connection.prepareStatement(
 				selectSQL);
