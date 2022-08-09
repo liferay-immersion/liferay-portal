@@ -121,7 +121,9 @@ public class SXPBlueprintUpgradeProcess extends UpgradeProcess {
 			String externalReferenceCode = sxpElementJSONObject.getString(
 				"externalReferenceCode");
 
-			if (!_isAffectedElement(externalReferenceCode)) {
+			if (!ArrayUtil.contains(
+					_EXTERNAL_REFERENCE_CODES, externalReferenceCode)) {
+
 				continue;
 			}
 
@@ -138,16 +140,6 @@ public class SXPBlueprintUpgradeProcess extends UpgradeProcess {
 		}
 
 		return jsonArray.toString();
-	}
-
-	private boolean _isAffectedElement(String externalReferenceCode) {
-		if (ArrayUtil.contains(
-				_EXTERNAL_REFERENCE_CODES, externalReferenceCode)) {
-
-			return true;
-		}
-
-		return false;
 	}
 
 	private Map<String, String> _loadDefaultValuesMap() {
