@@ -132,7 +132,7 @@ public class SXPBlueprintUpgradeProcess extends UpgradeProcess {
 
 			elementDefinition = StringUtil.replace(
 				elementDefinition, "\"defaultValue\":[]",
-				_defaultValuesMap.get(externalReferenceCode));
+				_defaultValues.get(externalReferenceCode));
 
 			sxpElementJSONObject.put(
 				"elementDefinition",
@@ -142,8 +142,8 @@ public class SXPBlueprintUpgradeProcess extends UpgradeProcess {
 		return jsonArray.toString();
 	}
 
-	private Map<String, String> _loadDefaultValuesMap() {
-		Map<String, String> defaultValuesMap = new HashMap<>();
+	private Map<String, String> _loadDefaultValues() {
+		Map<String, String> defaultValues = new HashMap<>();
 
 		Bundle bundle = FrameworkUtil.getBundle(
 			SXPBlueprintUpgradeProcess.class);
@@ -156,14 +156,14 @@ public class SXPBlueprintUpgradeProcess extends UpgradeProcess {
 
 		for (String externalReferenceCode : _EXTERNAL_REFERENCE_CODES) {
 			_putDefaultValue(
-				bundle, path, defaultValuesMap, externalReferenceCode);
+				bundle, path, defaultValues, externalReferenceCode);
 		}
 
-		return defaultValuesMap;
+		return defaultValues;
 	}
 
 	private Map<String, String> _putDefaultValue(
-		Bundle bundle, String path, Map<String, String> defaultValuesMap,
+		Bundle bundle, String path, Map<String, String> defaultValues,
 		String externalReferenceCode) {
 
 		String fileName =
@@ -172,7 +172,7 @@ public class SXPBlueprintUpgradeProcess extends UpgradeProcess {
 		URL url = bundle.getEntry(path + fileName);
 
 		try {
-			defaultValuesMap.put(
+			defaultValues.put(
 				externalReferenceCode, StreamUtil.toString(url.openStream()));
 		}
 		catch (IOException ioException) {
@@ -181,7 +181,7 @@ public class SXPBlueprintUpgradeProcess extends UpgradeProcess {
 					"reference code: " + externalReferenceCode);
 		}
 
-		return defaultValuesMap;
+		return defaultValues;
 	}
 
 	private static final String[] _EXTERNAL_REFERENCE_CODES = {
@@ -195,7 +195,7 @@ public class SXPBlueprintUpgradeProcess extends UpgradeProcess {
 	private static final Pattern _pattern = Pattern.compile(
 		"Ljava\\.lang\\.Object;@\\w{8}");
 
-	private final Map<String, String> _defaultValuesMap =
-		_loadDefaultValuesMap();
+	private final Map<String, String> _defaultValues =
+		_loadDefaultValues();
 
 }
