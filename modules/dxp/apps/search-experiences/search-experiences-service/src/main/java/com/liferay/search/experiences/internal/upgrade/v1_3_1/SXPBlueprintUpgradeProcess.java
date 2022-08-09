@@ -142,7 +142,7 @@ public class SXPBlueprintUpgradeProcess extends UpgradeProcess {
 		return jsonArray.toString();
 	}
 
-	private Map<String, String> _loadDefaultValues() {
+	private Map<String, String> _initDefaultValues() {
 		Map<String, String> defaultValues = new HashMap<>();
 
 		Bundle bundle = FrameworkUtil.getBundle(
@@ -184,6 +184,6 @@ public class SXPBlueprintUpgradeProcess extends UpgradeProcess {
 	private static final Pattern _pattern = Pattern.compile(
 		"Ljava\\.lang\\.Object;@\\w{8}");
 
-	private final Map<String, String> _defaultValues = _loadDefaultValues();
+	private final Map<String, String> _defaultValues = _initDefaultValues();
 
 }
