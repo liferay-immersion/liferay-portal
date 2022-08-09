@@ -155,30 +155,19 @@ public class SXPBlueprintUpgradeProcess extends UpgradeProcess {
 				"/dependencies/";
 
 		for (String externalReferenceCode : _EXTERNAL_REFERENCE_CODES) {
-			_putDefaultValue(
-				bundle, path, defaultValues, externalReferenceCode);
-		}
+			URL url = bundle.getEntry(
+				path + StringUtil.toLowerCase(externalReferenceCode) + ".txt");
 
-		return defaultValues;
-	}
-
-	private Map<String, String> _putDefaultValue(
-		Bundle bundle, String path, Map<String, String> defaultValues,
-		String externalReferenceCode) {
-
-		String fileName =
-			StringUtil.toLowerCase(externalReferenceCode) + ".txt";
-
-		URL url = bundle.getEntry(path + fileName);
-
-		try {
-			defaultValues.put(
-				externalReferenceCode, StreamUtil.toString(url.openStream()));
-		}
-		catch (IOException ioException) {
-			_log.error(
-				"Unable to get default value for element with external " +
-					"reference code: " + externalReferenceCode);
+			try {
+				defaultValues.put(
+					externalReferenceCode,
+					StreamUtil.toString(url.openStream()));
+			}
+			catch (IOException ioException) {
+				_log.error(
+					"Unable to get default value for element with external " +
+						"reference code: " + externalReferenceCode);
+			}
 		}
 
 		return defaultValues;
