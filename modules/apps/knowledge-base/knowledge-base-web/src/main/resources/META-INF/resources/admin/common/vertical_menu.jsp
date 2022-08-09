@@ -18,12 +18,10 @@
 
 <%
 KBAdminNavigationDisplayContext kbAdminNavigationDisplayContext = new KBAdminNavigationDisplayContext(request, renderRequest, renderResponse);
-
-boolean isProductMenuOpen = kbAdminNavigationDisplayContext.isProductMenuOpen();
 %>
 
 <c:if test='<%= GetterUtil.getBoolean(PropsUtil.get("feature.flag.LPS-156421")) %>'>
-	<div class="knowledge-base-vertical-bar <%= isProductMenuOpen ? StringPool.BLANK : "expanded" %>" id="<portlet:namespace />verticalBarId">
+	<div class="knowledge-base-vertical-bar <%= kbAdminNavigationDisplayContext.isProductMenuOpen() ? StringPool.BLANK : "expanded" %>" id="<portlet:namespace />verticalBarId">
 		<react:component
 			componentId="verticalBarId"
 			module="admin/js/components/VerticalBar"
@@ -33,7 +31,7 @@ boolean isProductMenuOpen = kbAdminNavigationDisplayContext.isProductMenuOpen();
 				).put(
 					"parentContainerId", liferayPortletResponse.getNamespace() + "verticalBarId"
 				).put(
-					"productMenuOpen", isProductMenuOpen
+					"productMenuOpen", kbAdminNavigationDisplayContext.isProductMenuOpen()
 				).build()
 			%>'
 		/>
