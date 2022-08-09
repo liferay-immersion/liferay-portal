@@ -31,16 +31,16 @@ public class ObjectFieldUpgradeProcess extends UpgradeProcess {
 	protected void doUpgrade() throws Exception {
 		String selectSQL = SQLTransformer.transform(
 			StringBundler.concat(
-				"select objectDefinition.dbTableName, ",
-				"objectDefinition.system_, ObjectField.objectFieldId from ",
-				"ObjectField inner join ObjectDefinition objectDefinition on ",
+				"select ObjectDefinition.dbTableName, ",
+				"ObjectDefinition.system_, ObjectField.objectFieldId from ",
+				"ObjectField inner join ObjectDefinition on ",
 				"ObjectField.objectDefinitionId = ",
-				"objectDefinition.objectDefinitionId where (",
-				"objectDefinition.system_ = [$TRUE$] and ObjectField.system_ ",
-				"= [$FALSE$] and objectDefinition.dbTableName != ",
-				"ObjectField.dbTableName) or (objectDefinition.system_ = ",
+				"ObjectDefinition.objectDefinitionId where (",
+				"ObjectDefinition.system_ = [$TRUE$] and ObjectField.system_ ",
+				"= [$FALSE$] and ObjectDefinition.dbTableName != ",
+				"ObjectField.dbTableName) or (ObjectDefinition.system_ = ",
 				"[$FALSE$] and ObjectField.system_ = [$TRUE$] and ",
-				"objectDefinition.dbTableName = ObjectField.dbTableName)"));
+				"ObjectDefinition.dbTableName = ObjectField.dbTableName)"));
 
 		try (PreparedStatement preparedStatement1 = connection.prepareStatement(
 				selectSQL);
