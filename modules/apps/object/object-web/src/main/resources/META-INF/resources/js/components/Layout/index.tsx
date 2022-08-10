@@ -198,7 +198,7 @@ const Layout: React.FC<React.HTMLAttributes<HTMLElement>> = () => {
 		if (objectLayout.objectLayoutTabs[0].objectRelationshipId > 0) {
 			openToast({
 				message: Liferay.Language.get(
-					'the-layouts-first-tab-must-be-a-field-type-tab'
+					'the-layouts-first-tab-must-be-a-field-tab'
 				),
 				type: 'danger',
 			});
