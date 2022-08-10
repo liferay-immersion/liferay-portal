@@ -28,7 +28,6 @@ import com.liferay.object.service.ObjectValidationRuleLocalService;
 import com.liferay.object.service.test.util.ObjectDefinitionTestUtil;
 import com.liferay.object.util.LocalizedMapUtil;
 import com.liferay.object.util.ObjectFieldUtil;
-import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
@@ -36,7 +35,6 @@ import com.liferay.portal.kernel.test.rule.DeleteAfterTestRun;
 import com.liferay.portal.kernel.test.util.RandomTestUtil;
 import com.liferay.portal.kernel.test.util.TestPropsValues;
 import com.liferay.portal.kernel.util.LocaleUtil;
-import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 
@@ -49,7 +47,6 @@ import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.TestName;
 import org.junit.runner.RunWith;
 
 /**
@@ -90,19 +87,10 @@ public class ObjectValidationRuleLocalServiceTest {
 			ObjectValidationRuleConstants.ENGINE_TYPE_DDM,
 			ObjectValidationRuleScriptException.class, "required",
 			RandomTestUtil.randomString(), StringPool.BLANK);
-
-		Class<?> clazz = getClass();
-
 		_testAddObjectValidationRuleFailure(
 			ObjectValidationRuleConstants.ENGINE_TYPE_GROOVY,
 			ObjectValidationRuleScriptException.class, "syntax-error",
-			RandomTestUtil.randomString(),
-			StringUtil.read(
-				clazz,
-				StringBundler.concat(
-					"dependencies/", clazz.getSimpleName(), StringPool.PERIOD,
-					testName.getMethodName(), ".invalidSyntax.groovy")));
-
+			RandomTestUtil.randomString(), "import;\ninvalidFields = false;");
 		_testAddObjectValidationRuleFailure(
 			StringPool.BLANK, ObjectValidationRuleEngineException.class,
 			"Engine is null", RandomTestUtil.randomString(), _VALID_DDM_SCRIPT);
@@ -111,11 +99,8 @@ public class ObjectValidationRuleLocalServiceTest {
 			ObjectValidationRuleConstants.ENGINE_TYPE_DDM, _VALID_DDM_SCRIPT);
 		_testAddObjectValidationRuleSuccess(
 			ObjectValidationRuleConstants.ENGINE_TYPE_GROOVY,
-			StringUtil.read(
-				clazz,
-				StringBundler.concat(
-					"dependencies/", clazz.getSimpleName(), StringPool.PERIOD,
-					testName.getMethodName(), ".groovy")));
+			"import com.liferay.commerce.service.CommerceOrderLocalService;\n" +
+				"invalidFields = false;");
 	}
 
 	@Test
@@ -184,9 +169,6 @@ public class ObjectValidationRuleLocalServiceTest {
 		Assert.assertEquals(
 			"isURL(textField)", objectValidationRule.getScript());
 	}
-
-	@Rule
-	public TestName testName = new TestName();
 
 	private ObjectValidationRule _addObjectValidationRule(
 			String engine, String script)
