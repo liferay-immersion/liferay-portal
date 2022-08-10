@@ -52,6 +52,7 @@ import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.vulcan.util.TransformUtil;
 
 import java.math.BigDecimal;
 
@@ -320,23 +321,23 @@ public class PendingCommerceOrderItemFDSDataProvider
 			return Collections.emptyList();
 		}
 
-		List<OrderItem> orderItems = new ArrayList<>();
-
 		Locale locale = _portal.getLocale(httpServletRequest);
 
 		Map<Long, List<CommerceOrderValidatorResult>>
 			commerceOrderValidatorResultMap =
 				_getCommerceOrderValidatorResultMap(commerceOrderItems, locale);
 
-		for (CommerceOrderItem commerceOrderItem : commerceOrderItems) {
-			CommerceOrder commerceOrder = commerceOrderItem.getCommerceOrder();
+		return TransformUtil.transform(
+			commerceOrderItems,
+			commerceOrderItem -> {
+				CommerceOrder commerceOrder =
+					commerceOrderItem.getCommerceOrder();
 
-			CommerceOrderItemPrice commerceOrderItemPrice =
-				_commerceOrderPriceCalculation.getCommerceOrderItemPrice(
-					commerceOrder.getCommerceCurrency(), commerceOrderItem);
+				CommerceOrderItemPrice commerceOrderItemPrice =
+					_commerceOrderPriceCalculation.getCommerceOrderItemPrice(
+						commerceOrder.getCommerceCurrency(), commerceOrderItem);
 
-			orderItems.add(
-				new OrderItem(
+				return new OrderItem(
 					commerceOrderItem.getCPInstanceId(),
 					_formatDiscountAmount(commerceOrderItemPrice, locale),
 					_getCommerceOrderErrorMessages(
@@ -358,10 +359,8 @@ public class PendingCommerceOrderItemFDSDataProvider
 							(CommerceContext)httpServletRequest.getAttribute(
 								CommerceWebKeys.COMMERCE_CONTEXT)),
 						commerceOrderItem.getCPInstanceId()),
-					_formatFinalPrice(commerceOrderItemPrice, locale)));
-		}
-
-		return orderItems;
+					_formatFinalPrice(commerceOrderItemPrice, locale));
+			});
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
