@@ -15,7 +15,7 @@
 package com.liferay.portal.scripting.groovy.internal;
 
 import com.liferay.portal.kernel.scripting.ScriptingException;
-import com.liferay.portal.kernel.scripting.ScriptingSyntaxValidator;
+import com.liferay.portal.kernel.scripting.ScriptingValidator;
 import com.liferay.portal.kernel.util.AggregateClassLoader;
 
 import groovy.lang.GroovyShell;
@@ -27,11 +27,11 @@ import org.osgi.service.component.annotations.Component;
  */
 @Component(
 	immediate = true,
-	property = "scripting.language=" + GroovyScriptingSyntaxValidator.LANGUAGE,
-	service = ScriptingSyntaxValidator.class
+	property = "scripting.language=" + GroovyScriptingValidator.LANGUAGE,
+	service = ScriptingValidator.class
 )
-public class GroovyScriptingSyntaxValidator
-	implements ScriptingSyntaxValidator {
+public class GroovyScriptingValidator
+	implements ScriptingValidator {
 
 	public static final String LANGUAGE = "groovy";
 

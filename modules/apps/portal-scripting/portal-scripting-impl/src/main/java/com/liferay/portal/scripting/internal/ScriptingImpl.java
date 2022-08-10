@@ -22,7 +22,7 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.scripting.Scripting;
 import com.liferay.portal.kernel.scripting.ScriptingException;
 import com.liferay.portal.kernel.scripting.ScriptingExecutor;
-import com.liferay.portal.kernel.scripting.ScriptingSyntaxValidator;
+import com.liferay.portal.kernel.scripting.ScriptingValidator;
 import com.liferay.portal.kernel.scripting.UnsupportedLanguageException;
 
 import java.io.IOException;
@@ -118,10 +118,10 @@ public class ScriptingImpl implements Scripting {
 	public void validate(String language, String script)
 		throws ScriptingException {
 
-		ScriptingSyntaxValidator scriptingSyntaxValidator =
-			_scriptingSyntaxValidators.get(language);
+		ScriptingValidator scriptingValidator =
+			_scriptingValidators.get(language);
 
-		scriptingSyntaxValidator.validate(script);
+		scriptingValidator.validate(script);
 	}
 
 	@Reference(
@@ -139,11 +139,11 @@ public class ScriptingImpl implements Scripting {
 		policy = ReferencePolicy.DYNAMIC,
 		policyOption = ReferencePolicyOption.GREEDY
 	)
-	protected void setScriptingSyntaxValidator(
-		ScriptingSyntaxValidator scriptingSyntaxValidator) {
+	protected void setScriptingValidator(
+		ScriptingValidator scriptingValidator) {
 
-		_scriptingSyntaxValidators.put(
-			scriptingSyntaxValidator.getLanguage(), scriptingSyntaxValidator);
+		_scriptingValidators.put(
+			scriptingValidator.getLanguage(), scriptingValidator);
 	}
 
 	protected void unsetScriptingExecutors(
@@ -152,11 +152,11 @@ public class ScriptingImpl implements Scripting {
 		_scriptingExecutors.remove(scriptingExecutor.getLanguage());
 	}
 
-	protected void unsetScriptingSyntaxValidator(
-		ScriptingSyntaxValidator scriptingSyntaxValidator) {
+	protected void unsetScriptingValidator(
+		ScriptingValidator scriptingValidator) {
 
-		_scriptingSyntaxValidators.remove(
-			scriptingSyntaxValidator.getLanguage());
+		_scriptingValidators.remove(
+			scriptingValidator.getLanguage());
 	}
 
 	private String _getErrorMessage(String script, Exception exception) {
@@ -202,7 +202,7 @@ public class ScriptingImpl implements Scripting {
 
 	private final Map<String, ScriptingExecutor> _scriptingExecutors =
 		new ConcurrentHashMap<>();
-	private final Map<String, ScriptingSyntaxValidator>
-		_scriptingSyntaxValidators = new ConcurrentHashMap<>();
+	private final Map<String, ScriptingValidator>
+		_scriptingValidators = new ConcurrentHashMap<>();
 
 }

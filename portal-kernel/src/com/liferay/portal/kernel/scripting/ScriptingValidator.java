@@ -17,7 +17,7 @@ package com.liferay.portal.kernel.scripting;
 /**
  * @author Feliphe Marinho
  */
-public interface ScriptingSyntaxValidator {
+public interface ScriptingValidator {
 
 	public String getLanguage();
 
