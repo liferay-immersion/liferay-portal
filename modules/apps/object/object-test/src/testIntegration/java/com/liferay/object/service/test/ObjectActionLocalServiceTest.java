@@ -93,12 +93,12 @@ public class ObjectActionLocalServiceTest {
 				TestPropsValues.getUserId(),
 				_objectDefinition.getObjectDefinitionId());
 
+		_originalHttp = (Http)_getAndSetFieldValue(
+			Http.class, "_http", ObjectActionExecutorConstants.KEY_WEBHOOK);
 		_originalObjectScriptingExecutor =
 			(ObjectScriptingExecutor)_getAndSetFieldValue(
 				ObjectScriptingExecutor.class, "_objectScriptingExecutor",
 				ObjectActionExecutorConstants.KEY_GROOVY);
-		_originalHttp = (Http)_getAndSetFieldValue(
-			Http.class, "_http", ObjectActionExecutorConstants.KEY_WEBHOOK);
 	}
 
 	@After
@@ -107,12 +107,12 @@ public class ObjectActionLocalServiceTest {
 
 		ReflectionTestUtil.setFieldValue(
 			_objectActionExecutorRegistry.getObjectActionExecutor(
-				ObjectActionExecutorConstants.KEY_GROOVY),
-			"_objectScriptingExecutor", _originalObjectScriptingExecutor);
-		ReflectionTestUtil.setFieldValue(
-			_objectActionExecutorRegistry.getObjectActionExecutor(
 				ObjectActionExecutorConstants.KEY_WEBHOOK),
 			"_http", _originalHttp);
+		ReflectionTestUtil.setFieldValue(
+			_objectActionExecutorRegistry.getObjectActionExecutor(
+				ObjectActionExecutorConstants.KEY_GROOVY),
+			"_objectScriptingExecutor", _originalObjectScriptingExecutor);
 	}
 
 	@Test
