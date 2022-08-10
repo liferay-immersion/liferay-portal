@@ -12,16 +12,16 @@
  * details.
  */
 
-package com.liferay.object.runtime.scripting.exception;
+package com.liferay.object.scripting.exception;
 
 import com.liferay.portal.kernel.exception.PortalException;
 
 /**
  * @author Feliphe Marinho
  */
-public class GroovyScriptingException extends PortalException {
+public class ObjectScriptingException extends PortalException {
 
-	public GroovyScriptingException(String messageKey) {
+	public ObjectScriptingException(String messageKey) {
 		_messageKey = messageKey;
 	}
 

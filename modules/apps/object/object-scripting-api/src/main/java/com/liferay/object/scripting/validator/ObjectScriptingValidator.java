@@ -12,18 +12,15 @@
  * details.
  */
 
-package com.liferay.object.runtime.scripting.executor;
+package com.liferay.object.scripting.validator;
 
-import java.util.Map;
-import java.util.Set;
+import com.liferay.object.scripting.exception.ObjectScriptingException;
 
 /**
  * @author Feliphe Marinho
  */
-public interface GroovyScriptingExecutor {
+public interface ObjectScriptingValidator {
 
-	public Map<String, Object> execute(
-		Map<String, Object> inputObjects, Set<String> outputNames,
-		String script);
+	public void validate(String script) throws ObjectScriptingException;
 
 }
