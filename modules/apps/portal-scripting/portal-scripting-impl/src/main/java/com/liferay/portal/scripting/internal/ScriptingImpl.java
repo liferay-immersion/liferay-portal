@@ -23,7 +23,6 @@ import com.liferay.portal.kernel.scripting.Scripting;
 import com.liferay.portal.kernel.scripting.ScriptingException;
 import com.liferay.portal.kernel.scripting.ScriptingExecutor;
 import com.liferay.portal.kernel.scripting.ScriptingSyntaxValidator;
-import com.liferay.portal.kernel.scripting.SyntaxException;
 import com.liferay.portal.kernel.scripting.UnsupportedLanguageException;
 
 import java.io.IOException;
@@ -117,7 +116,7 @@ public class ScriptingImpl implements Scripting {
 
 	@Override
 	public void validate(String language, String script)
-		throws SyntaxException {
+		throws ScriptingException {
 
 		ScriptingSyntaxValidator scriptingSyntaxValidator =
 			_scriptingSyntaxValidatorMap.get(language);

@@ -14,8 +14,8 @@
 
 package com.liferay.portal.scripting.groovy.internal;
 
+import com.liferay.portal.kernel.scripting.ScriptingException;
 import com.liferay.portal.kernel.scripting.ScriptingSyntaxValidator;
-import com.liferay.portal.kernel.scripting.SyntaxException;
 import com.liferay.portal.kernel.util.AggregateClassLoader;
 
 import groovy.lang.GroovyShell;
@@ -40,14 +40,14 @@ public class GroovySyntaxValidator implements ScriptingSyntaxValidator {
 	}
 
 	@Override
-	public void validate(String script) throws SyntaxException {
+	public void validate(String script) throws ScriptingException {
 		try {
 			GroovyShell groovyShell = new GroovyShell(getClassLoader());
 
 			groovyShell.parse(script);
 		}
 		catch (Exception exception) {
-			throw new SyntaxException(exception);
+			throw new ScriptingException(exception);
 		}
 	}
 

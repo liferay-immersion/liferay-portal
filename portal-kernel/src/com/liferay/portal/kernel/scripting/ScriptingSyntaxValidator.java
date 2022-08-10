@@ -21,6 +21,6 @@ public interface ScriptingSyntaxValidator {
 
 	public String getLanguage();
 
-	public void validate(String script) throws SyntaxException;
+	public void validate(String script) throws ScriptingException;
 
 }

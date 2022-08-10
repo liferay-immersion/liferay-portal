@@ -14,7 +14,6 @@
 
 package com.liferay.portal.scripting.groovy.internal;
 
-import com.liferay.portal.kernel.scripting.ExecutionException;
 import com.liferay.portal.kernel.scripting.ScriptingException;
 import com.liferay.portal.kernel.scripting.ScriptingExecutor;
 import com.liferay.portal.scripting.BaseScriptingExecutor;
@@ -49,7 +48,7 @@ public class GroovyScriptingExecutor extends BaseScriptingExecutor {
 		throws ScriptingException {
 
 		if (allowedClasses != null) {
-			throw new ExecutionException(
+			throw new ScriptingException(
 				"Constrained execution not supported for Groovy");
 		}
 

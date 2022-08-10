@@ -19,7 +19,7 @@ import com.liferay.object.runtime.scripting.validator.GroovyScriptingValidator;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.scripting.Scripting;
-import com.liferay.portal.kernel.scripting.SyntaxException;
+import com.liferay.portal.kernel.scripting.ScriptingException;
 import com.liferay.portal.kernel.util.StringUtil;
 
 import org.osgi.service.component.annotations.Component;
@@ -49,9 +49,9 @@ public class GroovyScriptingValidatorImpl implements GroovyScriptingValidator {
 		try {
 			_scripting.validate("groovy", script);
 		}
-		catch (SyntaxException syntaxException) {
+		catch (ScriptingException scriptingException) {
 			if (_log.isDebugEnabled()) {
-				_log.debug(syntaxException);
+				_log.debug(scriptingException);
 			}
 
 			throw new GroovyScriptingException("syntax-error");
