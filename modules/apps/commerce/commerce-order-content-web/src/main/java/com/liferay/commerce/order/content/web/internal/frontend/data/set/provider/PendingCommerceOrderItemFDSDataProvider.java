@@ -317,10 +317,6 @@ public class PendingCommerceOrderItemFDSDataProvider
 			HttpServletRequest httpServletRequest)
 		throws Exception {
 
-		if (commerceOrderItems.isEmpty()) {
-			return Collections.emptyList();
-		}
-
 		Locale locale = _portal.getLocale(httpServletRequest);
 
 		Map<Long, List<CommerceOrderValidatorResult>>
