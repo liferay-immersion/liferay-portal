@@ -59,6 +59,7 @@ export default function EditObjectField({
 	objectFieldTypes,
 	objectName,
 	readOnly,
+	systemObject,
 	workflowStatusJSONArray,
 }: IProps) {
 	const [editingObjectFieldName, setEditingObjectFieldName] = useState<
@@ -457,7 +458,9 @@ export default function EditObjectField({
 			className="lfr-objects__edit-object-field"
 			onSubmit={handleSubmit}
 			readOnly={
-				values.system && objectName !== 'AccountEntry'
+				values.system &&
+				objectName !== 'AccountEntry' &&
+				systemObject === true
 					? disabled
 					: readOnly
 			}
@@ -467,7 +470,9 @@ export default function EditObjectField({
 				<InputLocalized
 					disableFlag={values.system && objectName !== 'AccountEntry'}
 					disabled={
-						values.system && objectName !== 'AccountEntry'
+						values.system &&
+						objectName !== 'AccountEntry' &&
+						systemObject === true
 							? disabled
 							: readOnly
 					}
@@ -897,6 +902,7 @@ interface IProps {
 	objectFieldTypes: ObjectFieldType[];
 	objectName: string;
 	readOnly: boolean;
+	systemObject: boolean;
 	workflowStatusJSONArray: LabelValueObject[];
 }
 
