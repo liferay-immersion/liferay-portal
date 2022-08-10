@@ -258,12 +258,12 @@ public class PendingCommerceOrderItemFDSDataProvider
 	private String[] _getCommerceOrderErrorMessages(
 		CommerceOrderItem commerceOrderItem,
 		Map<Long, List<CommerceOrderValidatorResult>>
-			commerceOrderValidatorResultMap) {
+			commerceOrderValidatorResultsMap) {
 
 		List<String> errorMessages = new ArrayList<>();
 
 		List<CommerceOrderValidatorResult> commerceOrderValidatorResults =
-			commerceOrderValidatorResultMap.get(
+			commerceOrderValidatorResultsMap.get(
 				commerceOrderItem.getCommerceOrderItemId());
 
 		for (CommerceOrderValidatorResult commerceOrderValidatorResult :
@@ -296,7 +296,7 @@ public class PendingCommerceOrderItemFDSDataProvider
 	}
 
 	private Map<Long, List<CommerceOrderValidatorResult>>
-			_getCommerceOrderValidatorResultMap(
+			_getcommerceOrderValidatorResultsMap(
 				List<CommerceOrderItem> commerceOrderItems, Locale locale)
 		throws Exception {
 
@@ -320,8 +320,8 @@ public class PendingCommerceOrderItemFDSDataProvider
 		Locale locale = _portal.getLocale(httpServletRequest);
 
 		Map<Long, List<CommerceOrderValidatorResult>>
-			commerceOrderValidatorResultMap =
-				_getCommerceOrderValidatorResultMap(commerceOrderItems, locale);
+			commerceOrderValidatorResultsMap =
+				_getcommerceOrderValidatorResultsMap(commerceOrderItems, locale);
 
 		return TransformUtil.transform(
 			commerceOrderItems,
@@ -337,7 +337,7 @@ public class PendingCommerceOrderItemFDSDataProvider
 					commerceOrderItem.getCPInstanceId(),
 					_formatDiscountAmount(commerceOrderItemPrice, locale),
 					_getCommerceOrderErrorMessages(
-						commerceOrderItem, commerceOrderValidatorResultMap),
+						commerceOrderItem, commerceOrderValidatorResultsMap),
 					_commerceOrderItemQuantityFormatter.format(
 						commerceOrderItem, locale),
 					_formatSubscriptionPeriod(commerceOrderItem, locale),
