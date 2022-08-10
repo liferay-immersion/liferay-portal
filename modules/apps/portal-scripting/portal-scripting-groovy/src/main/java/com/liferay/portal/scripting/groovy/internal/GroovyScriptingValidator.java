@@ -30,8 +30,7 @@ import org.osgi.service.component.annotations.Component;
 	property = "scripting.language=" + GroovyScriptingValidator.LANGUAGE,
 	service = ScriptingValidator.class
 )
-public class GroovyScriptingValidator
-	implements ScriptingValidator {
+public class GroovyScriptingValidator implements ScriptingValidator {
 
 	public static final String LANGUAGE = "groovy";
 

@@ -118,8 +118,8 @@ public class ScriptingImpl implements Scripting {
 	public void validate(String language, String script)
 		throws ScriptingException {
 
-		ScriptingValidator scriptingValidator =
-			_scriptingValidators.get(language);
+		ScriptingValidator scriptingValidator = _scriptingValidators.get(
+			language);
 
 		scriptingValidator.validate(script);
 	}
@@ -155,8 +155,7 @@ public class ScriptingImpl implements Scripting {
 	protected void unsetScriptingValidator(
 		ScriptingValidator scriptingValidator) {
 
-		_scriptingValidators.remove(
-			scriptingValidator.getLanguage());
+		_scriptingValidators.remove(scriptingValidator.getLanguage());
 	}
 
 	private String _getErrorMessage(String script, Exception exception) {
@@ -202,7 +201,7 @@ public class ScriptingImpl implements Scripting {
 
 	private final Map<String, ScriptingExecutor> _scriptingExecutors =
 		new ConcurrentHashMap<>();
-	private final Map<String, ScriptingValidator>
-		_scriptingValidators = new ConcurrentHashMap<>();
+	private final Map<String, ScriptingValidator> _scriptingValidators =
+		new ConcurrentHashMap<>();
 
 }
