@@ -1,3 +1,3 @@
-import com.liferay.portal.kernel.util.invalid.PropsInvalidUtil;
+import com.liferay.portal.kernel.util.InvalidPropsUtil;
 
 invalidFields = false;
