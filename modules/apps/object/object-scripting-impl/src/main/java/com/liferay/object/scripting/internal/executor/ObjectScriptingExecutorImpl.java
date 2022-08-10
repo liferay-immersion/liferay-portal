@@ -34,8 +34,8 @@ public class ObjectScriptingExecutorImpl implements ObjectScriptingExecutor {
 
 	@Override
 	public Map<String, Object> execute(
-		Map<String, Object> inputObjects, Set<String> outputNames,
-		String script) {
+		Map<String, Object> inputObjects, String language,
+		Set<String> outputNames, String script) {
 
 		Thread currentThread = Thread.currentThread();
 
@@ -49,7 +49,7 @@ public class ObjectScriptingExecutorImpl implements ObjectScriptingExecutor {
 
 		try {
 			results = _scripting.eval(
-				null, inputObjects, outputNames, "groovy", script);
+				null, inputObjects, outputNames, language, script);
 
 			results.put("invalidScript", false);
 		}

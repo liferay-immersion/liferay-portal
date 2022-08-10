@@ -278,7 +278,7 @@ public class ObjectValidationRuleLocalServiceImpl
 						engine,
 						ObjectValidationRuleConstants.ENGINE_TYPE_GROOVY)) {
 
-				_objectScriptingValidator.validate(script);
+				_objectScriptingValidator.validate("groovy", script);
 			}
 		}
 		catch (PortalException portalException) {

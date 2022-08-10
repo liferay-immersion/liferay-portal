@@ -32,7 +32,9 @@ import org.osgi.service.component.annotations.Reference;
 public class ObjectScriptingValidatorImpl implements ObjectScriptingValidator {
 
 	@Override
-	public void validate(String script) throws ObjectScriptingException {
+	public void validate(String language, String script)
+		throws ObjectScriptingException {
+
 		if (StringUtil.count(script, _NEW_LINE) > _MAXIMUM_NUMBER_OF_LINES) {
 			throw new ObjectScriptingException(
 				"the-maximum-number-of-lines-available-is-2987");
@@ -47,7 +49,7 @@ public class ObjectScriptingValidatorImpl implements ObjectScriptingValidator {
 		currentThread.setContextClassLoader(clazz.getClassLoader());
 
 		try {
-			_scripting.validate("groovy", script);
+			_scripting.validate(language, script);
 		}
 		catch (ScriptingException scriptingException) {
 			if (_log.isDebugEnabled()) {

@@ -36,7 +36,7 @@ public class GroovyObjectValidationRuleEngineImpl
 		Map<String, Object> inputObjects, String script) {
 
 		return _objectScriptingExecutor.execute(
-			inputObjects, SetUtil.fromArray("invalidFields"), script);
+			inputObjects, "groovy", SetUtil.fromArray("invalidFields"), script);
 	}
 
 	@Override

@@ -272,7 +272,7 @@ public class ObjectActionLocalServiceImpl
 
 			if (Validator.isNotNull(script)) {
 				try {
-					_objectScriptingValidator.validate(script);
+					_objectScriptingValidator.validate("groovy", script);
 				}
 				catch (ObjectScriptingException objectScriptingException) {
 					errorMessageKeys.put(

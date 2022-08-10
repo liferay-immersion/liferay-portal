@@ -53,7 +53,8 @@ public class GroovyObjectActionExecutorImpl implements ObjectActionExecutor {
 			ObjectActionVariablesUtil.toVariables(
 				_dtoConverterRegistry, objectDefinition, payloadJSONObject,
 				_systemObjectDefinitionMetadataTracker),
-			new HashSet<>(), parametersUnicodeProperties.get("script"));
+			"groovy", new HashSet<>(),
+			parametersUnicodeProperties.get("script"));
 
 		if (GetterUtil.getBoolean(results.get("invalidScript"))) {
 			throw new ScriptingException();

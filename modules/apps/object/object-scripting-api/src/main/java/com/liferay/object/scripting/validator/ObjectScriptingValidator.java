@@ -21,6 +21,7 @@ import com.liferay.object.scripting.exception.ObjectScriptingException;
  */
 public interface ObjectScriptingValidator {
 
-	public void validate(String script) throws ObjectScriptingException;
+	public void validate(String language, String script)
+        throws ObjectScriptingException;
 
 }
