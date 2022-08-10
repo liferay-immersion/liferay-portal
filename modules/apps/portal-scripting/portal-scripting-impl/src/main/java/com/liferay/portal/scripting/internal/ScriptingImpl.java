@@ -116,7 +116,7 @@ public class ScriptingImpl implements Scripting {
 	}
 
 	@Override
-	public void validateSyntax(String language, String script)
+	public void validate(String language, String script)
 		throws SyntaxException {
 
 		ScriptingSyntaxValidator scriptingSyntaxValidator =

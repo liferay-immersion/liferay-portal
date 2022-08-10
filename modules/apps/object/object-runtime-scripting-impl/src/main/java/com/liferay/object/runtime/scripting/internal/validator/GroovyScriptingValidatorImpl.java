@@ -47,7 +47,7 @@ public class GroovyScriptingValidatorImpl implements GroovyScriptingValidator {
 		currentThread.setContextClassLoader(clazz.getClassLoader());
 
 		try {
-			_scripting.validateSyntax("groovy", script);
+			_scripting.validate("groovy", script);
 		}
 		catch (SyntaxException syntaxException) {
 			if (_log.isDebugEnabled()) {
