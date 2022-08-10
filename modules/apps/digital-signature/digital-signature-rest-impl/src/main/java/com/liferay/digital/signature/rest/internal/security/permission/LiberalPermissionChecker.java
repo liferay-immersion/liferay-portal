@@ -27,7 +27,9 @@ import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -55,6 +57,16 @@ public class LiberalPermissionChecker implements PermissionChecker {
 		return PermissionChecker.DEFAULT_ROLE_IDS;
 	}
 
+	/**
+	 * @deprecated As of Judson (7.1.x), with no direct replacement
+	 */
+	@Deprecated
+	public List<Long> getOwnerResourceBlockIds(
+		long companyId, long groupId, String name, String actionId) {
+
+		return new ArrayList<>();
+	}
+
 	@Override
 	public long getOwnerRoleId() {
 		return _ownerRole.getRoleId();
@@ -63,6 +75,17 @@ public class LiberalPermissionChecker implements PermissionChecker {
 	@Override
 	public Map<Object, Object> getPermissionChecksMap() {
 		return new HashMap<>();
+	}
+
+	/**
+	 * @deprecated As of Judson (7.1.x), with no direct replacement
+	 */
+	@Deprecated
+	public List<Long> getResourceBlockIds(
+		long companyId, long groupId, long userId, String name,
+		String actionId) {
+
+		return new ArrayList<>();
 	}
 
 	@Override
