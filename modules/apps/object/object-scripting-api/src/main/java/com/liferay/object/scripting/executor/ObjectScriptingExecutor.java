@@ -24,6 +24,6 @@ public interface ObjectScriptingExecutor {
 
 	public Map<String, Object> execute(
 		Map<String, Object> inputObjects, String language,
-        Set<String> outputNames, String script);
+		Set<String> outputNames, String script);
 
 }
