@@ -49,6 +49,10 @@ public class UpgradeSchema extends UpgradeProcess {
 			}
 		}
 
+		if (!hasIndex("Layout", "IX_CED31606")) {
+			runSQL("drop index IX_CED31606 on Layout");
+		}
+
 		upgrade(new UpgradeMVCCVersion());
 	}
 
