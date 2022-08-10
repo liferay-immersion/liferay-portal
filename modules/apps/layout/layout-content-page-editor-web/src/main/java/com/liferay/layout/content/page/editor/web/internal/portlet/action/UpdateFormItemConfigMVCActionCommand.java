@@ -188,7 +188,6 @@ public class UpdateFormItemConfigMVCActionCommand extends BaseMVCActionCommand {
 		List<FragmentEntryLink> addedFragmentEntryLinks = new ArrayList<>();
 		DropZoneLayoutStructureItem masterDropZoneLayoutStructureItem =
 			_getMasterDropZoneLayoutStructureItem(themeDisplay.getLayout());
-
 		TreeSet<String> missingInputTypes = new TreeSet<>();
 		ServiceContext serviceContext = ServiceContextFactory.getInstance(
 			httpServletRequest);
