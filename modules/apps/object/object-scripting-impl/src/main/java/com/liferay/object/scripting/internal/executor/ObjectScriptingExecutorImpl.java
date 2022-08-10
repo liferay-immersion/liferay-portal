@@ -12,15 +12,16 @@
  * details.
  */
 
-package com.liferay.object.runtime.scripting.internal.validator;
+package com.liferay.object.scripting.internal.executor;
 
-import com.liferay.object.runtime.scripting.exception.GroovyScriptingException;
-import com.liferay.object.runtime.scripting.validator.GroovyScriptingValidator;
+import com.liferay.object.scripting.executor.ObjectScriptingExecutor;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.scripting.Scripting;
-import com.liferay.portal.kernel.scripting.ScriptingException;
-import com.liferay.portal.kernel.util.StringUtil;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -28,15 +29,13 @@ import org.osgi.service.component.annotations.Reference;
 /**
  * @author Feliphe Marinho
  */
-@Component(immediate = true, service = GroovyScriptingValidator.class)
-public class GroovyScriptingValidatorImpl implements GroovyScriptingValidator {
+@Component(immediate = true, service = ObjectScriptingExecutor.class)
+public class ObjectScriptingExecutorImpl implements ObjectScriptingExecutor {
 
 	@Override
-	public void validate(String script) throws GroovyScriptingException {
-		if (StringUtil.count(script, _NEW_LINE) > _MAXIMUM_NUMBER_OF_LINES) {
-			throw new GroovyScriptingException(
-				"the-maximum-number-of-lines-available-is-2987");
-		}
+	public Map<String, Object> execute(
+		Map<String, Object> inputObjects, Set<String> outputNames,
+		String script) {
 
 		Thread currentThread = Thread.currentThread();
 
@@ -44,29 +43,30 @@ public class GroovyScriptingValidatorImpl implements GroovyScriptingValidator {
 
 		Class<?> clazz = getClass();
 
+		Map<String, Object> results = new HashMap<>();
+
 		currentThread.setContextClassLoader(clazz.getClassLoader());
 
 		try {
-			_scripting.validate("groovy", script);
-		}
-		catch (ScriptingException scriptingException) {
-			if (_log.isDebugEnabled()) {
-				_log.debug(scriptingException);
-			}
+			results = _scripting.eval(
+				null, inputObjects, outputNames, "groovy", script);
 
-			throw new GroovyScriptingException("syntax-error");
+			results.put("invalidScript", false);
+		}
+		catch (Exception exception) {
+			_log.error(exception);
+
+			results.put("invalidScript", true);
 		}
 		finally {
 			currentThread.setContextClassLoader(contextClassLoader);
 		}
+
+		return results;
 	}
 
-	private static final int _MAXIMUM_NUMBER_OF_LINES = 2987;
-
-	private static final String _NEW_LINE = "\n";
-
 	private static final Log _log = LogFactoryUtil.getLog(
-		GroovyScriptingValidatorImpl.class);
+		ObjectScriptingExecutorImpl.class);
 
 	@Reference
 	private Scripting _scripting;
