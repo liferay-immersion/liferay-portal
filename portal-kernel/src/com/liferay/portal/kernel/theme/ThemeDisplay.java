@@ -798,6 +798,14 @@ public class ThemeDisplay
 		return _refererPlid;
 	}
 
+	public String getRemoteAddr() {
+		return _remoteAddr;
+	}
+
+	public String getRemoteHost() {
+		return _remoteHost;
+	}
+
 	/**
 	 * Returns the currently served HTTP servlet request.
 	 *
@@ -1630,8 +1638,21 @@ public class ThemeDisplay
 		_refererPlid = refererPlid;
 	}
 
+	public void setRemoteAddr(String remoteAddr) {
+		_remoteAddr = remoteAddr;
+	}
+
+	public void setRemoteHost(String remoteHost) {
+		_remoteHost = remoteHost;
+	}
+
 	public void setRequest(HttpServletRequest httpServletRequest) {
 		_httpServletRequest = httpServletRequest;
+
+		if (httpServletRequest != null) {
+			_remoteAddr = httpServletRequest.getRemoteAddr();
+			_remoteHost = httpServletRequest.getRemoteHost();
+		}
 	}
 
 	public void setResponse(HttpServletResponse httpServletResponse) {
@@ -1982,6 +2003,8 @@ public class ThemeDisplay
 	private Group _refererGroup;
 	private long _refererGroupId;
 	private long _refererPlid;
+	private String _remoteAddr;
+	private String _remoteHost;
 	private Group _scopeGroup;
 	private long _scopeGroupId;
 	private boolean _secure;

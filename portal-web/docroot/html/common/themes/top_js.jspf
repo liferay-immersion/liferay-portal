@@ -281,6 +281,12 @@
 			getRealUserId: function() {
 				return '<%= themeDisplay.getRealUserId() %>';
 			},
+			getRemoteAddr: function() {
+				return '<%= themeDisplay.getRemoteAddr() %>';
+			},
+			getRemoteHost: function() {
+				return '<%= themeDisplay.getRemoteHost() %>';
+			},
 			getScopeGroupId: function() {
 				return '<%= scopeGroup.getGroupId() %>';
 			},
