@@ -274,9 +274,9 @@ public class ObjectActionLocalServiceImpl
 				try {
 					_objectScriptingValidator.validate(script);
 				}
-				catch (ObjectScriptingException groovyScriptingException) {
+				catch (ObjectScriptingException objectScriptingException) {
 					errorMessageKeys.put(
-						"script", groovyScriptingException.getMessageKey());
+						"script", objectScriptingException.getMessageKey());
 				}
 			}
 		}
@@ -362,9 +362,6 @@ public class ObjectActionLocalServiceImpl
 	private DDMExpressionFactory _ddmExpressionFactory;
 
 	@Reference
-	private ObjectScriptingValidator _objectScriptingValidator;
-
-	@Reference
 	private JSONFactory _jsonFactory;
 
 	@Reference
@@ -378,6 +375,9 @@ public class ObjectActionLocalServiceImpl
 
 	@Reference
 	private ObjectFieldLocalService _objectFieldLocalService;
+
+	@Reference
+	private ObjectScriptingValidator _objectScriptingValidator;
 
 	@Reference
 	private UserLocalService _userLocalService;

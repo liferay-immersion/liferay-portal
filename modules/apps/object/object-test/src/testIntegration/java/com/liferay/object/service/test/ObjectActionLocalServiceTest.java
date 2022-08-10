@@ -541,7 +541,7 @@ public class ObjectActionLocalServiceTest {
 	@Inject
 	private ObjectEntryLocalService _objectEntryLocalService;
 
-	private ObjectScriptingExecutor _originalObjectScriptingExecutor;
 	private Http _originalHttp;
+	private ObjectScriptingExecutor _originalObjectScriptingExecutor;
 
 }

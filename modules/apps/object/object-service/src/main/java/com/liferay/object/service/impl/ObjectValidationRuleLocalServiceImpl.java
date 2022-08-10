@@ -287,11 +287,11 @@ public class ObjectValidationRuleLocalServiceImpl
 			}
 
 			if (portalException instanceof ObjectScriptingException) {
-				ObjectScriptingException groovyScriptingException =
+				ObjectScriptingException objectScriptingException =
 					(ObjectScriptingException)portalException;
 
 				throw new ObjectValidationRuleScriptException(
-					groovyScriptingException.getMessageKey());
+					objectScriptingException.getMessageKey());
 			}
 
 			throw new ObjectValidationRuleScriptException("syntax-error");
@@ -305,10 +305,10 @@ public class ObjectValidationRuleLocalServiceImpl
 	private DDMExpressionFactory _ddmExpressionFactory;
 
 	@Reference
-	private ObjectScriptingValidator _objectScriptingValidator;
+	private ObjectEntryLocalService _objectEntryLocalService;
 
 	@Reference
-	private ObjectEntryLocalService _objectEntryLocalService;
+	private ObjectScriptingValidator _objectScriptingValidator;
 
 	@Reference
 	private ObjectValidationRuleEngineTracker

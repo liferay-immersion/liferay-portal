@@ -69,10 +69,10 @@ public class GroovyObjectActionExecutorImpl implements ObjectActionExecutor {
 	private DTOConverterRegistry _dtoConverterRegistry;
 
 	@Reference
-	private ObjectScriptingExecutor _objectScriptingExecutor;
+	private ObjectDefinitionLocalService _objectDefinitionLocalService;
 
 	@Reference
-	private ObjectDefinitionLocalService _objectDefinitionLocalService;
+	private ObjectScriptingExecutor _objectScriptingExecutor;
 
 	@Reference
 	private SystemObjectDefinitionMetadataTracker
