@@ -27,10 +27,11 @@ import org.osgi.service.component.annotations.Component;
  */
 @Component(
 	immediate = true,
-	property = "scripting.language=" + GroovySyntaxValidator.LANGUAGE,
+	property = "scripting.language=" + GroovyScriptingSyntaxValidator.LANGUAGE,
 	service = ScriptingSyntaxValidator.class
 )
-public class GroovySyntaxValidator implements ScriptingSyntaxValidator {
+public class GroovyScriptingSyntaxValidator
+	implements ScriptingSyntaxValidator {
 
 	public static final String LANGUAGE = "groovy";
 
