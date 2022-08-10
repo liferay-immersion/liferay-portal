@@ -27,6 +27,7 @@ export default function EditObjectField({
 	objectFieldTypes,
 	objectName,
 	readOnly,
+	systemObject,
 	workflowStatusJSONArray,
 }: IProps): JSX.Element;
 interface IProps {
@@ -41,6 +42,7 @@ interface IProps {
 	objectFieldTypes: ObjectFieldType[];
 	objectName: string;
 	readOnly: boolean;
+	systemObject: boolean;
 	workflowStatusJSONArray: LabelValueObject[];
 }
 export {};
