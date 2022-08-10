@@ -76,19 +76,19 @@ public class ObjectValidationRuleLocalServiceTest {
 
 	@Test
 	public void testAddObjectValidationRule() throws Exception {
-		_assertFailureAddObjectValidationRule(
+		_testAddObjectValidationRuleFailure(
 			"abcdefghijklmnopqrstuvwxyz",
 			ObjectValidationRuleEngineException.class,
 			"Engine \"abcdefghijklmnopqrstuvwxyz\" does not exist",
 			RandomTestUtil.randomString(), _VALID_DDM_SCRIPT);
-		_assertFailureAddObjectValidationRule(
+		_testAddObjectValidationRuleFailure(
 			ObjectValidationRuleConstants.ENGINE_TYPE_DDM,
 			ObjectValidationRuleScriptException.class, "required",
 			RandomTestUtil.randomString(), StringPool.BLANK);
-		_assertFailureAddObjectValidationRule(
+		_testAddObjectValidationRuleFailure(
 			StringPool.BLANK, ObjectValidationRuleEngineException.class,
 			"Engine is null", RandomTestUtil.randomString(), _VALID_DDM_SCRIPT);
-		_assertFailureAddObjectValidationRule(
+		_testAddObjectValidationRuleFailure(
 			ObjectValidationRuleConstants.ENGINE_TYPE_DDM,
 			ObjectValidationRuleNameException.class,
 			"Name is null for locale " + LocaleUtil.US.getDisplayName(),
@@ -96,7 +96,7 @@ public class ObjectValidationRuleLocalServiceTest {
 
 		Class<?> clazz = getClass();
 
-		_assertFailureAddObjectValidationRule(
+		_testAddObjectValidationRuleFailure(
 			ObjectValidationRuleConstants.ENGINE_TYPE_GROOVY,
 			ObjectValidationRuleScriptException.class, "syntax-error",
 			RandomTestUtil.randomString(),
@@ -106,7 +106,7 @@ public class ObjectValidationRuleLocalServiceTest {
 					"dependencies/", clazz.getSimpleName(), StringPool.PERIOD,
 					testName.getMethodName(), ".invalidSyntax.groovy")));
 
-		_testAddObjectValidationRule(
+		_testAddObjectValidationRuleSuccess(
 			ObjectValidationRuleConstants.ENGINE_TYPE_GROOVY,
 			StringUtil.read(
 				clazz,
@@ -114,16 +114,14 @@ public class ObjectValidationRuleLocalServiceTest {
 					"dependencies/", clazz.getSimpleName(), StringPool.PERIOD,
 					testName.getMethodName(), ".groovy")));
 
-		_testAddObjectValidationRule(
+		_testAddObjectValidationRuleSuccess(
 			ObjectValidationRuleConstants.ENGINE_TYPE_DDM, _VALID_DDM_SCRIPT);
 	}
 
 	@Test
 	public void testDeleteObjectValidationRule() throws Exception {
-		ObjectValidationRule objectValidationRule =
-			_testAddObjectValidationRule(
-				ObjectValidationRuleConstants.ENGINE_TYPE_DDM,
-				_VALID_DDM_SCRIPT);
+		ObjectValidationRule objectValidationRule = _addObjectValidationRule(
+			ObjectValidationRuleConstants.ENGINE_TYPE_DDM, _VALID_DDM_SCRIPT);
 
 		objectValidationRule =
 			_objectValidationRuleLocalService.fetchObjectValidationRule(
@@ -143,10 +141,8 @@ public class ObjectValidationRuleLocalServiceTest {
 
 	@Test
 	public void testUpdateObjectValidationRule() throws Exception {
-		ObjectValidationRule objectValidationRule =
-			_testAddObjectValidationRule(
-				ObjectValidationRuleConstants.ENGINE_TYPE_DDM,
-				_VALID_DDM_SCRIPT);
+		ObjectValidationRule objectValidationRule = _addObjectValidationRule(
+			ObjectValidationRuleConstants.ENGINE_TYPE_DDM, _VALID_DDM_SCRIPT);
 
 		try {
 			objectValidationRule =
@@ -192,7 +188,19 @@ public class ObjectValidationRuleLocalServiceTest {
 	@Rule
 	public TestName testName = new TestName();
 
-	private void _assertFailureAddObjectValidationRule(
+	private ObjectValidationRule _addObjectValidationRule(
+			String engine, String script)
+		throws Exception {
+
+		return _objectValidationRuleLocalService.addObjectValidationRule(
+			TestPropsValues.getUserId(),
+			_objectDefinition.getObjectDefinitionId(), true, engine,
+			LocalizedMapUtil.getLocalizedMap(RandomTestUtil.randomString()),
+			LocalizedMapUtil.getLocalizedMap(RandomTestUtil.randomString()),
+			script);
+	}
+
+	private void _testAddObjectValidationRuleFailure(
 		String engine, Class<?> expectedExceptionClass, String expectedMessage,
 		String name, String script) {
 
@@ -226,7 +234,7 @@ public class ObjectValidationRuleLocalServiceTest {
 		}
 	}
 
-	private ObjectValidationRule _testAddObjectValidationRule(
+	private ObjectValidationRule _testAddObjectValidationRuleSuccess(
 			String engine, String script)
 		throws Exception {
 
