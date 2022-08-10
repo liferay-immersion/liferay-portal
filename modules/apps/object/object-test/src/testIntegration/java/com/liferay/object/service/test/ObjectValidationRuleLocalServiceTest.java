@@ -83,16 +83,13 @@ public class ObjectValidationRuleLocalServiceTest {
 			RandomTestUtil.randomString(), _VALID_DDM_SCRIPT);
 		_testAddObjectValidationRuleFailure(
 			ObjectValidationRuleConstants.ENGINE_TYPE_DDM,
-			ObjectValidationRuleScriptException.class, "required",
-			RandomTestUtil.randomString(), StringPool.BLANK);
-		_testAddObjectValidationRuleFailure(
-			StringPool.BLANK, ObjectValidationRuleEngineException.class,
-			"Engine is null", RandomTestUtil.randomString(), _VALID_DDM_SCRIPT);
-		_testAddObjectValidationRuleFailure(
-			ObjectValidationRuleConstants.ENGINE_TYPE_DDM,
 			ObjectValidationRuleNameException.class,
 			"Name is null for locale " + LocaleUtil.US.getDisplayName(),
 			StringPool.BLANK, _VALID_DDM_SCRIPT);
+		_testAddObjectValidationRuleFailure(
+			ObjectValidationRuleConstants.ENGINE_TYPE_DDM,
+			ObjectValidationRuleScriptException.class, "required",
+			RandomTestUtil.randomString(), StringPool.BLANK);
 
 		Class<?> clazz = getClass();
 
@@ -106,6 +103,12 @@ public class ObjectValidationRuleLocalServiceTest {
 					"dependencies/", clazz.getSimpleName(), StringPool.PERIOD,
 					testName.getMethodName(), ".invalidSyntax.groovy")));
 
+		_testAddObjectValidationRuleFailure(
+			StringPool.BLANK, ObjectValidationRuleEngineException.class,
+			"Engine is null", RandomTestUtil.randomString(), _VALID_DDM_SCRIPT);
+
+		_testAddObjectValidationRuleSuccess(
+			ObjectValidationRuleConstants.ENGINE_TYPE_DDM, _VALID_DDM_SCRIPT);
 		_testAddObjectValidationRuleSuccess(
 			ObjectValidationRuleConstants.ENGINE_TYPE_GROOVY,
 			StringUtil.read(
@@ -113,9 +116,6 @@ public class ObjectValidationRuleLocalServiceTest {
 				StringBundler.concat(
 					"dependencies/", clazz.getSimpleName(), StringPool.PERIOD,
 					testName.getMethodName(), ".groovy")));
-
-		_testAddObjectValidationRuleSuccess(
-			ObjectValidationRuleConstants.ENGINE_TYPE_DDM, _VALID_DDM_SCRIPT);
 	}
 
 	@Test
