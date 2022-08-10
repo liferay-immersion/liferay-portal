@@ -9,7 +9,9 @@ import com.liferay.portal.kernel.model.role.RoleConstants;
 import com.liferay.portal.kernel.security.permission.PermissionChecker;
 import com.liferay.portal.kernel.security.permission.UserBag;
 import com.liferay.portal.kernel.service.RoleLocalServiceUtil;
-import com.liferay.portal.util.PropsValues;
+import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.PropsKeys;
+import com.liferay.portal.kernel.util.PropsUtil;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -128,7 +130,8 @@ public class LiberalPermissionChecker implements PermissionChecker {
 
 	@Override
 	public boolean isCheckGuest() {
-		return PropsValues.PERMISSIONS_CHECK_GUEST_ENABLED;
+		return GetterUtil.getBoolean(
+			PropsUtil.get(PropsKeys.PERMISSIONS_CHECK_GUEST_ENABLED));
 	}
 
 	@Override
