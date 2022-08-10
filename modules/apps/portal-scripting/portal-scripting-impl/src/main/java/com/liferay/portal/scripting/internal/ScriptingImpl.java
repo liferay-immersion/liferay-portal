@@ -119,7 +119,7 @@ public class ScriptingImpl implements Scripting {
 		throws ScriptingException {
 
 		ScriptingSyntaxValidator scriptingSyntaxValidator =
-			_scriptingSyntaxValidatorMap.get(language);
+			_scriptingSyntaxValidators.get(language);
 
 		scriptingSyntaxValidator.validate(script);
 	}
@@ -142,7 +142,7 @@ public class ScriptingImpl implements Scripting {
 	protected void setScriptingSyntaxValidator(
 		ScriptingSyntaxValidator scriptingSyntaxValidator) {
 
-		_scriptingSyntaxValidatorMap.put(
+		_scriptingSyntaxValidators.put(
 			scriptingSyntaxValidator.getLanguage(), scriptingSyntaxValidator);
 	}
 
@@ -155,7 +155,7 @@ public class ScriptingImpl implements Scripting {
 	protected void unsetScriptingSyntaxValidator(
 		ScriptingSyntaxValidator scriptingSyntaxValidator) {
 
-		_scriptingSyntaxValidatorMap.remove(
+		_scriptingSyntaxValidators.remove(
 			scriptingSyntaxValidator.getLanguage());
 	}
 
@@ -203,6 +203,6 @@ public class ScriptingImpl implements Scripting {
 	private final Map<String, ScriptingExecutor> _scriptingExecutors =
 		new ConcurrentHashMap<>();
 	private final Map<String, ScriptingSyntaxValidator>
-		_scriptingSyntaxValidatorMap = new ConcurrentHashMap<>();
+		_scriptingSyntaxValidators = new ConcurrentHashMap<>();
 
 }
