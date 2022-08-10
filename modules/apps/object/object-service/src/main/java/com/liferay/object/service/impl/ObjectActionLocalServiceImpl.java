@@ -28,8 +28,8 @@ import com.liferay.object.exception.ObjectActionTriggerKeyException;
 import com.liferay.object.model.ObjectAction;
 import com.liferay.object.model.ObjectDefinition;
 import com.liferay.object.model.ObjectField;
-import com.liferay.object.runtime.scripting.exception.GroovyScriptingException;
-import com.liferay.object.runtime.scripting.validator.GroovyScriptingValidator;
+import com.liferay.object.scripting.exception.ObjectScriptingException;
+import com.liferay.object.scripting.validator.ObjectScriptingValidator;
 import com.liferay.object.service.ObjectFieldLocalService;
 import com.liferay.object.service.base.ObjectActionLocalServiceBaseImpl;
 import com.liferay.object.service.persistence.ObjectDefinitionPersistence;
@@ -272,9 +272,9 @@ public class ObjectActionLocalServiceImpl
 
 			if (Validator.isNotNull(script)) {
 				try {
-					_groovyScriptingValidator.validate(script);
+					_objectScriptingValidator.validate(script);
 				}
-				catch (GroovyScriptingException groovyScriptingException) {
+				catch (ObjectScriptingException groovyScriptingException) {
 					errorMessageKeys.put(
 						"script", groovyScriptingException.getMessageKey());
 				}
@@ -362,7 +362,7 @@ public class ObjectActionLocalServiceImpl
 	private DDMExpressionFactory _ddmExpressionFactory;
 
 	@Reference
-	private GroovyScriptingValidator _groovyScriptingValidator;
+	private ObjectScriptingValidator _objectScriptingValidator;
 
 	@Reference
 	private JSONFactory _jsonFactory;

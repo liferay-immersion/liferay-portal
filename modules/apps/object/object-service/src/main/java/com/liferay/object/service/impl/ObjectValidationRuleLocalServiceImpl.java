@@ -22,8 +22,8 @@ import com.liferay.object.exception.ObjectValidationRuleNameException;
 import com.liferay.object.exception.ObjectValidationRuleScriptException;
 import com.liferay.object.model.ObjectEntry;
 import com.liferay.object.model.ObjectValidationRule;
-import com.liferay.object.runtime.scripting.exception.GroovyScriptingException;
-import com.liferay.object.runtime.scripting.validator.GroovyScriptingValidator;
+import com.liferay.object.scripting.exception.ObjectScriptingException;
+import com.liferay.object.scripting.validator.ObjectScriptingValidator;
 import com.liferay.object.service.ObjectEntryLocalService;
 import com.liferay.object.service.base.ObjectValidationRuleLocalServiceBaseImpl;
 import com.liferay.object.validation.rule.ObjectValidationRuleEngine;
@@ -278,7 +278,7 @@ public class ObjectValidationRuleLocalServiceImpl
 						engine,
 						ObjectValidationRuleConstants.ENGINE_TYPE_GROOVY)) {
 
-				_groovyScriptingValidator.validate(script);
+				_objectScriptingValidator.validate(script);
 			}
 		}
 		catch (PortalException portalException) {
@@ -286,9 +286,9 @@ public class ObjectValidationRuleLocalServiceImpl
 				_log.debug(portalException);
 			}
 
-			if (portalException instanceof GroovyScriptingException) {
-				GroovyScriptingException groovyScriptingException =
-					(GroovyScriptingException)portalException;
+			if (portalException instanceof ObjectScriptingException) {
+				ObjectScriptingException groovyScriptingException =
+					(ObjectScriptingException)portalException;
 
 				throw new ObjectValidationRuleScriptException(
 					groovyScriptingException.getMessageKey());
@@ -305,7 +305,7 @@ public class ObjectValidationRuleLocalServiceImpl
 	private DDMExpressionFactory _ddmExpressionFactory;
 
 	@Reference
-	private GroovyScriptingValidator _groovyScriptingValidator;
+	private ObjectScriptingValidator _objectScriptingValidator;
 
 	@Reference
 	private ObjectEntryLocalService _objectEntryLocalService;

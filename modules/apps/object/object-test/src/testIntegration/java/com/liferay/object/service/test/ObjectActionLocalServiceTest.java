@@ -23,7 +23,7 @@ import com.liferay.object.constants.ObjectActionTriggerConstants;
 import com.liferay.object.model.ObjectAction;
 import com.liferay.object.model.ObjectDefinition;
 import com.liferay.object.model.ObjectEntry;
-import com.liferay.object.runtime.scripting.executor.GroovyScriptingExecutor;
+import com.liferay.object.scripting.executor.ObjectScriptingExecutor;
 import com.liferay.object.service.ObjectActionLocalService;
 import com.liferay.object.service.ObjectDefinitionLocalService;
 import com.liferay.object.service.ObjectEntryLocalService;
@@ -93,9 +93,9 @@ public class ObjectActionLocalServiceTest {
 				TestPropsValues.getUserId(),
 				_objectDefinition.getObjectDefinitionId());
 
-		_originalGroovyScriptingExecutor =
-			(GroovyScriptingExecutor)_getAndSetFieldValue(
-				GroovyScriptingExecutor.class, "_groovyScriptingExecutor",
+		_originalObjectScriptingExecutor =
+			(ObjectScriptingExecutor)_getAndSetFieldValue(
+				ObjectScriptingExecutor.class, "_objectScriptingExecutor",
 				ObjectActionExecutorConstants.KEY_GROOVY);
 		_originalHttp = (Http)_getAndSetFieldValue(
 			Http.class, "_http", ObjectActionExecutorConstants.KEY_WEBHOOK);
@@ -108,7 +108,7 @@ public class ObjectActionLocalServiceTest {
 		ReflectionTestUtil.setFieldValue(
 			_objectActionExecutorRegistry.getObjectActionExecutor(
 				ObjectActionExecutorConstants.KEY_GROOVY),
-			"_groovyScriptingExecutor", _originalGroovyScriptingExecutor);
+			"_objectScriptingExecutor", _originalObjectScriptingExecutor);
 		ReflectionTestUtil.setFieldValue(
 			_objectActionExecutorRegistry.getObjectActionExecutor(
 				ObjectActionExecutorConstants.KEY_WEBHOOK),
@@ -506,7 +506,7 @@ public class ObjectActionLocalServiceTest {
 
 					if (Objects.equals(
 							method.getDeclaringClass(),
-							GroovyScriptingExecutor.class) &&
+							ObjectScriptingExecutor.class) &&
 						Objects.equals(method.getName(), "execute")) {
 
 						return Collections.emptyMap();
@@ -541,7 +541,7 @@ public class ObjectActionLocalServiceTest {
 	@Inject
 	private ObjectEntryLocalService _objectEntryLocalService;
 
-	private GroovyScriptingExecutor _originalGroovyScriptingExecutor;
+	private ObjectScriptingExecutor _originalObjectScriptingExecutor;
 	private Http _originalHttp;
 
 }
