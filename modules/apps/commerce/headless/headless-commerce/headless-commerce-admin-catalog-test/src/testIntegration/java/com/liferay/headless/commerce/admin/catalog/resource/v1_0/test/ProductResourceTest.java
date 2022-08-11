@@ -150,10 +150,8 @@ public class ProductResourceTest extends BaseProductResourceTestCase {
 			{
 				active = true;
 				catalogId = _commerceCatalog.getCommerceCatalogId();
-
 				description = LanguageUtils.getLanguageIdMap(
 					RandomTestUtil.randomLocaleStringMap());
-
 				externalReferenceCode = StringUtil.toLowerCase(
 					RandomTestUtil.randomString());
 				name = LanguageUtils.getLanguageIdMap(
