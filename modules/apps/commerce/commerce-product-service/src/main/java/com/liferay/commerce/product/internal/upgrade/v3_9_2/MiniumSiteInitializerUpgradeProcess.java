@@ -99,13 +99,10 @@ public class MiniumSiteInitializerUpgradeProcess extends UpgradeProcess {
 					"groupId = ? and plid = ? and privateLayout = ?");
 
 		preparedStatement1.setLong(1, siteGroupId);
-
 		preparedStatement1.setBoolean(2, true);
 
 		try (ResultSet resultSet = preparedStatement1.executeQuery()) {
 			while (resultSet.next()) {
-				long plid = resultSet.getLong("plid");
-
 				long newLayoutId = _counterLocalService.increment(
 					StringBundler.concat(
 						Layout.class.getName(), StringPool.POUND, siteGroupId,
@@ -114,8 +111,9 @@ public class MiniumSiteInitializerUpgradeProcess extends UpgradeProcess {
 				preparedStatement2.setLong(1, newLayoutId);
 
 				preparedStatement2.setBoolean(2, false);
-
 				preparedStatement2.setLong(3, siteGroupId);
+
+				long plid = resultSet.getLong("plid");
 
 				preparedStatement2.setLong(4, plid);
 
@@ -124,11 +122,8 @@ public class MiniumSiteInitializerUpgradeProcess extends UpgradeProcess {
 				preparedStatement2.addBatch();
 
 				preparedStatement3.setBoolean(1, false);
-
 				preparedStatement3.setLong(2, siteGroupId);
-
 				preparedStatement3.setLong(3, plid);
-
 				preparedStatement3.setBoolean(4, true);
 
 				preparedStatement3.addBatch();
@@ -159,15 +154,11 @@ public class MiniumSiteInitializerUpgradeProcess extends UpgradeProcess {
 			long priority = 0;
 
 			while (resultSet.next()) {
-				long plid = resultSet.getLong("plid");
-
 				priority++;
 
 				preparedStatement2.setLong(1, priority);
-
 				preparedStatement2.setLong(2, siteGroupId);
-
-				preparedStatement2.setLong(3, plid);
+				preparedStatement2.setLong(3, resultSet.getLong("plid"));
 
 				preparedStatement2.addBatch();
 			}
@@ -195,15 +186,10 @@ public class MiniumSiteInitializerUpgradeProcess extends UpgradeProcess {
 
 		try (ResultSet resultSet = preparedStatement1.executeQuery()) {
 			while (resultSet.next()) {
-				long layoutId = resultSet.getLong("layoutId");
-
-				long parentLayoutId = resultSet.getLong("parentLayoutId");
-
-				preparedStatement2.setLong(1, parentLayoutId + maxLayoutId);
-
+				preparedStatement2.setLong(
+					1, resultSet.getLong("parentLayoutId") + maxLayoutId);
 				preparedStatement2.setLong(2, siteGroupId);
-
-				preparedStatement2.setLong(3, layoutId);
+				preparedStatement2.setLong(3, resultSet.getLong("layoutId"));
 
 				preparedStatement2.addBatch();
 			}
