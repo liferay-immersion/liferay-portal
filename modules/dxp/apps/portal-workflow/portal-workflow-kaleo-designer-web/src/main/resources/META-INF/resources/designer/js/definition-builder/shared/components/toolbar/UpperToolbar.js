@@ -47,7 +47,6 @@ export default function UpperToolbar({
 		currentEditor,
 		definitionDescription,
 		definitionId,
-		definitionName,
 		definitionTitle,
 		elements,
 		selectedLanguageId,
@@ -55,6 +54,7 @@ export default function UpperToolbar({
 		setAlertType,
 		setDefinitionDescription,
 		setDefinitionId,
+		setDefinitionName,
 		setDefinitionTitle,
 		setDeserialize,
 		setElements,
@@ -97,6 +97,7 @@ export default function UpperToolbar({
 	const getXMLContent = (exporting) => {
 		let currentDescription;
 		let currentElements;
+		let currentName;
 		let xmlContent;
 
 		if (currentEditor && !exporting) {
@@ -109,6 +110,9 @@ export default function UpperToolbar({
 
 				deserializeUtil.updateXMLDefinition(xmlDefinition);
 				const metadata = deserializeUtil.getMetadata();
+
+				currentName = metadata.name;
+				setDefinitionName(currentName);
 
 				currentDescription = metadata.description;
 				setDefinitionDescription(currentDescription);
@@ -124,7 +128,7 @@ export default function UpperToolbar({
 				xmlNamespace,
 				{
 					description: currentDescription,
-					name: definitionName,
+					name: currentName,
 					version,
 				},
 				currentElements.filter(isNode),
