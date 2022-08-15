@@ -38,27 +38,17 @@ public class DefaultObjectViewExceptionMapper
 	extends BaseExceptionMapper<DefaultObjectViewException> {
 
 	@Override
-	public Response toResponse(
-		DefaultObjectViewException defaultObjectViewException) {
-
-		Problem problem = getProblem(defaultObjectViewException);
-
-		return Response.status(
-			problem.getStatus()
-		).entity(
-			problem
-		).type(
-			getMediaType()
-		).build();
-	}
-
-	@Override
 	protected Problem getProblem(
 		DefaultObjectViewException defaultObjectViewException) {
 
 		return new Problem(
 			Response.Status.BAD_REQUEST,
 			defaultObjectViewException.getMessage());
+	}
+
+	@Override
+	protected boolean isSanitize() {
+		return false;
 	}
 
 }
