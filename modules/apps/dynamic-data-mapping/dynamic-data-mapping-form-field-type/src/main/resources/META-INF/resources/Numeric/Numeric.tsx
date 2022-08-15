@@ -131,11 +131,16 @@ const getFormattedValue = ({
 		prefix: '',
 	};
 
+	const charCode = symbols.decimalSymbol.charAt(0);
+
 	if (dataType === 'double') {
 		config.allowDecimal = true;
 		config.decimalLimit = null;
-		config.decimalSymbol = symbols.decimalSymbol;
+		charCode.charCodeAt(0) === 1643
+			? (config.decimalSymbol = ',')
+			: (config.decimalSymbol = symbols.decimalSymbol);
 	}
+
 	const mask = createNumberMask(config);
 
 	const {conformedValue: masked}: {conformedValue: string} = conformToMask(
@@ -209,11 +214,16 @@ const Numeric: React.FC<IProps> = ({
 			predefinedValue ??
 			'';
 
+		const charCode = symbols.decimalSymbol.charCodeAt(0);
+
 		if (dataType === 'double') {
 			const symbolsValue = newValue.match(/[^-\d]/g);
 
 			newValue = symbolsValue
-				? newValue.replace(symbolsValue[0], symbols.decimalSymbol)
+				? newValue.replace(
+						symbolsValue[0],
+						charCode === 1643 ? ',' : symbols.decimalSymbol
+				  )
 				: newValue;
 		}
 
@@ -271,7 +281,7 @@ const Numeric: React.FC<IProps> = ({
 			inputValue.masked?.length > value.length &&
 			(inputValueRaw?.length ?? 0) === rawValue.length
 		) {
-			value = inputValueRaw.slice(0, -1);
+			value = inputValueRaw.slice(0, inputValueRaw.length);
 		}
 
 		const {masked, raw} = inputMask
