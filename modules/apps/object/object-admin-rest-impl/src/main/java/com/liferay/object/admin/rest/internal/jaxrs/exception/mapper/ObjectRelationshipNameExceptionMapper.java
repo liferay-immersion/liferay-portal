@@ -38,27 +38,17 @@ public class ObjectRelationshipNameExceptionMapper
 	extends BaseExceptionMapper<ObjectRelationshipNameException> {
 
 	@Override
-	public Response toResponse(
-		ObjectRelationshipNameException objectRelationshipNameException) {
-
-		Problem problem = getProblem(objectRelationshipNameException);
-
-		return Response.status(
-			problem.getStatus()
-		).entity(
-			problem
-		).type(
-			getMediaType()
-		).build();
-	}
-
-	@Override
 	protected Problem getProblem(
 		ObjectRelationshipNameException objectRelationshipNameException) {
 
 		return new Problem(
 			Response.Status.BAD_REQUEST,
 			objectRelationshipNameException.getMessage());
+	}
+
+	@Override
+	protected boolean isSanitize() {
+		return false;
 	}
 
 }
