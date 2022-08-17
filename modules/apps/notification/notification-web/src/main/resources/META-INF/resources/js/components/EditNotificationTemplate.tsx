@@ -251,6 +251,7 @@ export default function EditNotificationTemplate({
 											to: translation,
 										});
 									}}
+									placeholder=""
 									selectedLocale={selectedLocale}
 									translations={values.to}
 								/>
@@ -317,6 +318,7 @@ export default function EditNotificationTemplate({
 													fromName: translation,
 												});
 											}}
+											placeholder=""
 											required
 											selectedLocale={selectedLocale}
 											translations={values.fromName}
@@ -337,6 +339,7 @@ export default function EditNotificationTemplate({
 									subject: translation,
 								});
 							}}
+							placeholder=""
 							selectedLocale={selectedLocale}
 							translations={values.subject}
 						/>
