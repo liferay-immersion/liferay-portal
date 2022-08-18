@@ -63,6 +63,8 @@ definition {
 	tearDown {
 		var testPortalInstance = PropsUtil.get("test.portal.instance");
 
+		ACUtils.tearDownAC();
+
 		ACUtils.tearDownDXP();
 
 		if ("${testPortalInstance}" == "true") {
@@ -71,10 +73,6 @@ definition {
 		else {
 			JSONGroup.deleteGroupByName(groupName = "Site Name");
 		}
-
-		JSONUser.tearDownNonAdminUsers();
-
-		ACUtils.tearDownAC();
 	}
 
 	@description = "Feature ID: LRAC-7943 | Automation ID: LRAC-10223 | Test Summary: Able to access hidden event"
@@ -233,6 +231,8 @@ definition {
 	@description = "Feature ID: LRAC-7865 | Automation ID: LRAC-10233 | Test Summary: Unhide a default event and unhide a custom event"
 	@priority = "5"
 	test CanUnhideDefaultAndCustomEvent {
+		property test.name.skip.portal.instance = "CustomEventsHidden#CanUnhideDefaultAndCustomEvent";
+
 		var defaultEventName = "assetDepthReached";
 
 		var defaultEventNameList = "${defaultEventName},assetClicked,assetSubmitted";

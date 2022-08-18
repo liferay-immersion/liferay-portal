@@ -42,25 +42,30 @@ import com.liferay.layout.page.template.importer.LayoutPageTemplatesImporter;
 import com.liferay.layout.page.template.service.LayoutPageTemplateEntryLocalService;
 import com.liferay.layout.page.template.service.LayoutPageTemplateStructureLocalService;
 import com.liferay.layout.util.LayoutCopyHelper;
+import com.liferay.notification.rest.resource.v1_0.NotificationTemplateResource;
 import com.liferay.object.admin.rest.resource.v1_0.ObjectDefinitionResource;
 import com.liferay.object.admin.rest.resource.v1_0.ObjectRelationshipResource;
 import com.liferay.object.service.ObjectActionLocalService;
 import com.liferay.object.service.ObjectDefinitionLocalService;
 import com.liferay.object.service.ObjectEntryLocalService;
 import com.liferay.portal.kernel.json.JSONFactory;
+import com.liferay.portal.kernel.module.configuration.ConfigurationProvider;
 import com.liferay.portal.kernel.service.GroupLocalService;
 import com.liferay.portal.kernel.service.LayoutLocalService;
 import com.liferay.portal.kernel.service.LayoutSetLocalService;
+import com.liferay.portal.kernel.service.OrganizationLocalService;
 import com.liferay.portal.kernel.service.ResourceActionLocalService;
 import com.liferay.portal.kernel.service.ResourcePermissionLocalService;
 import com.liferay.portal.kernel.service.RoleLocalService;
 import com.liferay.portal.kernel.service.ThemeLocalService;
+import com.liferay.portal.kernel.service.UserGroupLocalService;
 import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.service.WorkflowDefinitionLinkLocalService;
 import com.liferay.portal.kernel.settings.SettingsFactory;
 import com.liferay.portal.kernel.util.MapUtil;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.security.service.access.policy.service.SAPEntryLocalService;
+import com.liferay.segments.service.SegmentsEntryLocalService;
 import com.liferay.site.initializer.SiteInitializer;
 import com.liferay.site.navigation.service.SiteNavigationMenuItemLocalService;
 import com.liferay.site.navigation.service.SiteNavigationMenuLocalService;
@@ -87,6 +92,7 @@ public class SiteInitializerExtension {
 		AssetCategoryLocalService assetCategoryLocalService,
 		AssetListEntryLocalService assetListEntryLocalService, Bundle bundle,
 		ClientExtensionEntryLocalService clientExtensionEntryLocalService,
+		ConfigurationProvider configurationProvider,
 		DDMStructureLocalService ddmStructureLocalService,
 		DDMTemplateLocalService ddmTemplateLocalService,
 		DefaultDDMStructureHelper defaultDDMStructureHelper,
@@ -111,16 +117,20 @@ public class SiteInitializerExtension {
 		ListTypeDefinitionResource.Factory listTypeDefinitionResourceFactory,
 		ListTypeEntryResource listTypeEntryResource,
 		ListTypeEntryResource.Factory listTypeEntryResourceFactory,
+		NotificationTemplateResource.Factory
+			notificationTemplateResourceFactory,
 		ObjectActionLocalService objectActionLocalService,
 		ObjectDefinitionLocalService objectDefinitionLocalService,
 		ObjectDefinitionResource.Factory objectDefinitionResourceFactory,
 		ObjectRelationshipResource.Factory objectRelationshipResourceFactory,
 		ObjectEntryLocalService objectEntryLocalService,
+		OrganizationLocalService organizationLocalService,
 		OrganizationResource.Factory organizationResourceFactory, Portal portal,
 		ResourceActionLocalService resourceActionLocalService,
 		ResourcePermissionLocalService resourcePermissionLocalService,
 		RoleLocalService roleLocalService,
 		SAPEntryLocalService sapEntryLocalService,
+		SegmentsEntryLocalService segmentsEntryLocalService,
 		ServletContext servletContext, SettingsFactory settingsFactory,
 		SiteNavigationMenuItemLocalService siteNavigationMenuItemLocalService,
 		SiteNavigationMenuItemTypeRegistry siteNavigationMenuItemTypeRegistry,
@@ -132,6 +142,7 @@ public class SiteInitializerExtension {
 		TaxonomyVocabularyResource.Factory taxonomyVocabularyResourceFactory,
 		ThemeLocalService themeLocalService,
 		UserAccountResource.Factory userAccountResourceFactory,
+		UserGroupLocalService userGroupLocalService,
 		UserLocalService userLocalService,
 		WorkflowDefinitionLinkLocalService workflowDefinitionLinkLocalService,
 		WorkflowDefinitionResource.Factory workflowDefinitionResourceFactory) {
@@ -144,8 +155,9 @@ public class SiteInitializerExtension {
 			accountResourceFactory, accountRoleLocalService,
 			accountRoleResourceFactory, assetCategoryLocalService,
 			assetListEntryLocalService, bundle,
-			clientExtensionEntryLocalService, ddmStructureLocalService,
-			ddmTemplateLocalService, defaultDDMStructureHelper, dlURLHelper,
+			clientExtensionEntryLocalService, configurationProvider,
+			ddmStructureLocalService, ddmTemplateLocalService,
+			defaultDDMStructureHelper, dlURLHelper,
 			documentFolderResourceFactory, documentResourceFactory,
 			fragmentsImporter, groupLocalService, journalArticleLocalService,
 			jsonFactory, knowledgeBaseArticleResourceFactory,
@@ -155,16 +167,18 @@ public class SiteInitializerExtension {
 			layoutPageTemplateStructureLocalService, layoutSetLocalService,
 			listTypeDefinitionResource, listTypeDefinitionResourceFactory,
 			listTypeEntryResource, listTypeEntryResourceFactory,
-			objectActionLocalService, objectDefinitionLocalService,
-			objectDefinitionResourceFactory, objectRelationshipResourceFactory,
-			objectEntryLocalService, organizationResourceFactory, portal,
+			notificationTemplateResourceFactory, objectActionLocalService,
+			objectDefinitionLocalService, objectDefinitionResourceFactory,
+			objectRelationshipResourceFactory, objectEntryLocalService,
+			organizationLocalService, organizationResourceFactory, portal,
 			resourceActionLocalService, resourcePermissionLocalService,
-			roleLocalService, sapEntryLocalService, settingsFactory,
-			siteNavigationMenuItemLocalService,
+			roleLocalService, sapEntryLocalService, segmentsEntryLocalService,
+			settingsFactory, siteNavigationMenuItemLocalService,
 			siteNavigationMenuItemTypeRegistry, siteNavigationMenuLocalService,
 			structuredContentFolderResourceFactory, styleBookEntryZipProcessor,
 			taxonomyCategoryResourceFactory, taxonomyVocabularyResourceFactory,
-			themeLocalService, userAccountResourceFactory, userLocalService,
+			themeLocalService, userAccountResourceFactory,
+			userGroupLocalService, userLocalService,
 			workflowDefinitionLinkLocalService,
 			workflowDefinitionResourceFactory);
 

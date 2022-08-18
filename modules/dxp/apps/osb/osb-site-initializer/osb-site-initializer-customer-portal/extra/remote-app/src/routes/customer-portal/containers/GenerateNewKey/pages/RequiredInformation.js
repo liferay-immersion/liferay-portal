@@ -19,6 +19,7 @@ import i18n from '../../../../../common/I18n';
 import {Badge, Button, Input} from '../../../../../common/components';
 import Layout from '../../../../../common/containers/setup-forms/Layout';
 import {useAppPropertiesContext} from '../../../../../common/contexts/AppPropertiesContext';
+import {patchOrderItemByExternalReferenceCode} from '../../../../../common/services/liferay/graphql/queries';
 import {createNewGenerateKey} from '../../../../../common/services/liferay/rest/raysource/LicenseKeys';
 import getInitialGenerateNewKey from '../../../../../common/utils/constants/getInitialGenerateNewKey';
 import GenerateCardLayout from '../GenerateCardLayout';
@@ -37,7 +38,7 @@ const RequiredInformation = ({
 	urlPreviousPage,
 	values,
 }) => {
-	const {provisioningServerAPI} = useAppPropertiesContext();
+	const {client, provisioningServerAPI} = useAppPropertiesContext();
 
 	const [baseButtonDisabled, setBaseButtonDisabled] = useState(true);
 	const [addButtonDisabled, setAddButtonDisabled] = useState(false);
@@ -57,7 +58,7 @@ const RequiredInformation = ({
 	const hasFilledAtLeastOneField = values?.keys?.every((key) => {
 		const fieldValues = Object.values(key).filter(Boolean);
 
-		return fieldValues.length > 0;
+		return !!fieldValues.length;
 	});
 
 	const newUsedKeys = usedKeysCount + values?.keys?.length;
@@ -121,13 +122,18 @@ const RequiredInformation = ({
 			const sizing = `Sizing ${
 				infoSelectedKey?.selectedSubscription?.instanceSize || 1
 			}`;
+			const isVirtualClusterOrProduction = infoSelectedKey?.licenseEntryType?.includes(
+				'Virtual Cluster'
+			)
+				? 'virtual-cluster'
+				: 'production';
 
 			const licenseKey = {
 				accountKey,
 				active: true,
 				description: values?.description,
 				expirationDate: infoSelectedKey?.selectedSubscription.endDate,
-				licenseEntryType: 'production',
+				licenseEntryType: isVirtualClusterOrProduction,
 				maxClusterNodes: values?.maxClusterNodes || 0,
 				name: values?.name,
 				productKey: infoSelectedKey?.selectedSubscription.productKey,
@@ -171,6 +177,25 @@ const RequiredInformation = ({
 					)
 				);
 			}
+
+			await client.mutate({
+				mutation: patchOrderItemByExternalReferenceCode,
+				variables: {
+					externalReferenceCode: licenseKey.productPurchaseKey,
+					orderItem: {
+						customFields: [
+							{
+								customValue: {
+									data:
+										infoSelectedKey.selectedSubscription
+											.provisionedCount + 1,
+								},
+								name: 'provisionedCount',
+							},
+						],
+					},
+				},
+			});
 
 			navigate(urlPreviousPage, {state: {newKeyGeneratedAlert: true}});
 		}

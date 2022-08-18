@@ -7577,15 +7577,14 @@ public class CPInstancePersistenceImpl
 		CPInstanceModelImpl cpInstanceModelImpl =
 			(CPInstanceModelImpl)cpInstance;
 
-		if (Validator.isNull(cpInstance.getExternalReferenceCode())) {
-			cpInstance.setExternalReferenceCode(
-				String.valueOf(cpInstance.getPrimaryKey()));
-		}
-
 		if (Validator.isNull(cpInstance.getUuid())) {
 			String uuid = _portalUUID.generate();
 
 			cpInstance.setUuid(uuid);
+		}
+
+		if (Validator.isNull(cpInstance.getExternalReferenceCode())) {
+			cpInstance.setExternalReferenceCode(cpInstance.getUuid());
 		}
 
 		ServiceContext serviceContext =
@@ -7707,7 +7706,9 @@ public class CPInstancePersistenceImpl
 	 */
 	@Override
 	public CPInstance fetchByPrimaryKey(Serializable primaryKey) {
-		if (ctPersistenceHelper.isProductionMode(CPInstance.class)) {
+		if (ctPersistenceHelper.isProductionMode(
+				CPInstance.class, primaryKey)) {
+
 			return super.fetchByPrimaryKey(primaryKey);
 		}
 

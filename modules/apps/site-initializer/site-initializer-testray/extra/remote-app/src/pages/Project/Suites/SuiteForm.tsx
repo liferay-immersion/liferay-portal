@@ -12,24 +12,28 @@
  * details.
  */
 
-import {useMutation} from '@apollo/client';
 import ClayAlert from '@clayui/alert';
 import ClayButton from '@clayui/button';
 import {ClayCheckbox} from '@clayui/form';
 import {useEffect, useState} from 'react';
 import {useForm} from 'react-hook-form';
 import {useOutletContext, useParams} from 'react-router-dom';
+import {KeyedMutator} from 'swr';
 
 import Form from '../../../components/Form';
 import Container from '../../../components/Layout/Container';
-import {CreateSuite, UpdateSuite} from '../../../graphql/mutations';
-import {CreateSuiteCaseBatch} from '../../../graphql/mutations/testraySuiteCase';
-import {TestrayCase, TestraySuite, getSuites} from '../../../graphql/queries';
 import {useHeader} from '../../../hooks';
 import useFormActions from '../../../hooks/useFormActions';
 import useFormModal from '../../../hooks/useFormModal';
 import i18n from '../../../i18n';
 import yupSchema, {yupResolver} from '../../../schema/yup';
+import {
+	TestrayCase,
+	TestraySuite,
+	createSuite,
+	createSuiteCaseBatch,
+	updateSuite,
+} from '../../../services/rest';
 import {searchUtil} from '../../../util/search';
 import {CaseListView} from '../Cases';
 import SuiteSelectCasesModal from './modal';
@@ -47,12 +51,11 @@ const SuiteForm = () => {
 		form: {onClose, onError, onSave, onSubmit},
 	} = useFormActions();
 
-	const [createSuiteCaseBatch] = useMutation(CreateSuiteCaseBatch);
-
 	const {setTabs} = useHeader({shouldUpdate: false});
+	const [cases, setCases] = useState<number[]>([]);
 	const {projectId} = useParams();
-	const [cases, setCases] = useState([]);
 	const context: {
+		mutateSuite: KeyedMutator<any>;
 		testrayProject?: any;
 		testraySuite?: TestraySuite;
 	} = useOutletContext();
@@ -80,30 +83,27 @@ const SuiteForm = () => {
 	const caseParameters = watch('caseParameters');
 
 	const _onSubmit = (form: SuiteFormData) => {
-		onSubmit(
+		onSubmit<TestraySuite>(
 			{...form, projectId},
 			{
-				createMutation: CreateSuite,
-				updateMutation: UpdateSuite,
-			},
-			{refetchQueries: [{query: getSuites}]}
+				create: createSuite,
+				update: updateSuite,
+			}
 		)
 			.then((response) => {
 				if (cases.length) {
 					const suiteId =
-						response.data?.createSuite?.id ||
-						context.testraySuite?.id;
+						response.id || (context.testraySuite?.id as number);
 
-					return createSuiteCaseBatch({
-						variables: {
-							data: cases.map((caseId) => ({
-								caseId,
-								suiteId,
-							})),
-						},
-					});
+					return createSuiteCaseBatch(
+						cases.map((caseId) => ({
+							caseId,
+							suiteId,
+						}))
+					);
 				}
 			})
+			.then(context.mutateSuite)
 			.then(() => onSave())
 			.catch(() => onError());
 	};
@@ -120,7 +120,7 @@ const SuiteForm = () => {
 				return setValue('caseParameters', JSON.stringify(value));
 			}
 
-			setCases(value);
+			setCases((prevCases) => [...new Set([...prevCases, ...value])]);
 		},
 	});
 
@@ -192,7 +192,7 @@ const SuiteForm = () => {
 										),
 									name: i18n.translate('delete'),
 								},
-							],
+							] as any,
 							columns: [
 								{
 									key: 'priority',

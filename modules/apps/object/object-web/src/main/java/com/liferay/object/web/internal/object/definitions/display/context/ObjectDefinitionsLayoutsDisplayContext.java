@@ -16,7 +16,7 @@ package com.liferay.object.web.internal.object.definitions.display.context;
 
 import com.liferay.frontend.data.set.model.FDSActionDropdownItem;
 import com.liferay.frontend.taglib.clay.servlet.taglib.util.DropdownItem;
-import com.liferay.object.field.business.type.ObjectFieldBusinessTypeServicesTracker;
+import com.liferay.object.field.business.type.ObjectFieldBusinessTypeTracker;
 import com.liferay.object.model.ObjectDefinition;
 import com.liferay.object.web.internal.util.ObjectFieldBusinessTypeUtil;
 import com.liferay.petra.function.UnsafeConsumer;
@@ -42,13 +42,11 @@ public class ObjectDefinitionsLayoutsDisplayContext
 		HttpServletRequest httpServletRequest,
 		ModelResourcePermission<ObjectDefinition>
 			objectDefinitionModelResourcePermission,
-		ObjectFieldBusinessTypeServicesTracker
-			objectFieldBusinessTypeServicesTracker) {
+		ObjectFieldBusinessTypeTracker objectFieldBusinessTypeTracker) {
 
 		super(httpServletRequest, objectDefinitionModelResourcePermission);
 
-		_objectFieldBusinessTypeServicesTracker =
-			objectFieldBusinessTypeServicesTracker;
+		_objectFieldBusinessTypeTracker = objectFieldBusinessTypeTracker;
 	}
 
 	public List<FDSActionDropdownItem> getFDSActionDropdownItems()
@@ -79,8 +77,7 @@ public class ObjectDefinitionsLayoutsDisplayContext
 
 		return ObjectFieldBusinessTypeUtil.getObjectFieldBusinessTypeMaps(
 			locale,
-			_objectFieldBusinessTypeServicesTracker.
-				getObjectFieldBusinessTypes());
+			_objectFieldBusinessTypeTracker.getObjectFieldBusinessTypes());
 	}
 
 	@Override
@@ -101,7 +98,7 @@ public class ObjectDefinitionsLayoutsDisplayContext
 		};
 	}
 
-	private final ObjectFieldBusinessTypeServicesTracker
-		_objectFieldBusinessTypeServicesTracker;
+	private final ObjectFieldBusinessTypeTracker
+		_objectFieldBusinessTypeTracker;
 
 }

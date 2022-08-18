@@ -21,10 +21,13 @@ import com.liferay.asset.kernel.model.AssetVocabulary;
 import com.liferay.asset.kernel.service.AssetCategoryLocalService;
 import com.liferay.asset.kernel.service.AssetTagLocalService;
 import com.liferay.asset.test.util.AssetTestUtil;
+import com.liferay.fragment.constants.FragmentConstants;
 import com.liferay.fragment.model.FragmentEntryLink;
 import com.liferay.fragment.service.FragmentEntryLinkLocalService;
+import com.liferay.layout.model.LayoutClassedModelUsage;
 import com.liferay.layout.page.template.model.LayoutPageTemplateStructure;
 import com.liferay.layout.page.template.service.LayoutPageTemplateStructureLocalService;
+import com.liferay.layout.service.LayoutClassedModelUsageLocalService;
 import com.liferay.layout.test.constants.LayoutPortletKeys;
 import com.liferay.layout.test.util.LayoutTestUtil;
 import com.liferay.layout.util.LayoutCopyHelper;
@@ -52,6 +55,7 @@ import com.liferay.portal.kernel.service.permission.PortletPermissionUtil;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.rule.DeleteAfterTestRun;
 import com.liferay.portal.kernel.test.util.GroupTestUtil;
+import com.liferay.portal.kernel.test.util.RandomTestUtil;
 import com.liferay.portal.kernel.test.util.RoleTestUtil;
 import com.liferay.portal.kernel.test.util.ServiceContextTestUtil;
 import com.liferay.portal.kernel.util.ListUtil;
@@ -160,7 +164,7 @@ public class LayoutCopyHelperTest {
 				defaultSegmentsExperienceId, sourceLayout.getPlid(),
 				StringPool.BLANK, StringPool.BLANK, StringPool.BLANK,
 				StringPool.BLANK, StringPool.BLANK, StringPool.BLANK, 0, null,
-				_serviceContext);
+				FragmentConstants.TYPE_COMPONENT, _serviceContext);
 
 		layoutStructure.addFragmentStyledLayoutStructureItem(
 			fragmentEntryLink.getFragmentEntryLinkId(),
@@ -171,7 +175,7 @@ public class LayoutCopyHelperTest {
 			defaultSegmentsExperienceId, sourceLayout.getPlid(),
 			StringPool.BLANK, StringPool.BLANK, StringPool.BLANK,
 			StringPool.BLANK, StringPool.BLANK, StringPool.BLANK, 0, null,
-			_serviceContext);
+			FragmentConstants.TYPE_COMPONENT, _serviceContext);
 
 		layoutStructure.addFragmentStyledLayoutStructureItem(
 			fragmentEntryLink.getFragmentEntryLinkId(),
@@ -208,6 +212,49 @@ public class LayoutCopyHelperTest {
 	}
 
 	@Test
+	public void testCopyLayoutClassedModelUsages() throws Exception {
+		Layout sourceLayout = LayoutTestUtil.addTypePortletLayout(_group);
+
+		_layoutClassedModelUsageLocalService.addLayoutClassedModelUsage(
+			_group.getGroupId(), RandomTestUtil.randomLong(),
+			RandomTestUtil.randomLong(), RandomTestUtil.randomString(),
+			RandomTestUtil.randomLong(), sourceLayout.getPlid(),
+			new ServiceContext());
+
+		Layout targetLayout = LayoutTestUtil.addTypePortletLayout(_group);
+
+		_layoutCopyHelper.copyLayout(sourceLayout, targetLayout);
+
+		List<LayoutClassedModelUsage> layoutClassedModelUsages =
+			_layoutClassedModelUsageLocalService.
+				getLayoutClassedModelUsagesByPlid(targetLayout.getPlid());
+
+		Assert.assertEquals(
+			layoutClassedModelUsages.toString(), 1,
+			layoutClassedModelUsages.size());
+
+		sourceLayout = LayoutTestUtil.addTypeContentLayout(_group);
+
+		_layoutClassedModelUsageLocalService.addLayoutClassedModelUsage(
+			_group.getGroupId(), RandomTestUtil.randomLong(),
+			RandomTestUtil.randomLong(), RandomTestUtil.randomString(),
+			RandomTestUtil.randomLong(), sourceLayout.getPlid(),
+			new ServiceContext());
+
+		targetLayout = LayoutTestUtil.addTypeContentLayout(_group);
+
+		_layoutCopyHelper.copyLayout(sourceLayout, targetLayout);
+
+		layoutClassedModelUsages =
+			_layoutClassedModelUsageLocalService.
+				getLayoutClassedModelUsagesByPlid(targetLayout.getPlid());
+
+		Assert.assertEquals(
+			layoutClassedModelUsages.toString(), 1,
+			layoutClassedModelUsages.size());
+	}
+
+	@Test
 	public void testCopyLayoutDefaultSegmentsExperience() throws Exception {
 		Layout sourceLayout = LayoutTestUtil.addTypeContentLayout(_group);
 
@@ -233,7 +280,8 @@ public class LayoutCopyHelperTest {
 				).put(
 					"portletId", LayoutPortletKeys.LAYOUT_TEST_PORTLET
 				).toString(),
-				StringPool.BLANK, 0, StringPool.BLANK, _serviceContext);
+				StringPool.BLANK, 0, StringPool.BLANK,
+				FragmentConstants.TYPE_PORTLET, _serviceContext);
 
 		layoutStructure.addFragmentStyledLayoutStructureItem(
 			widgetFragmentEntryLink.getFragmentEntryLinkId(),
@@ -434,6 +482,10 @@ public class LayoutCopyHelperTest {
 
 	@Inject
 	private ImageLocalService _imageLocalService;
+
+	@Inject
+	private LayoutClassedModelUsageLocalService
+		_layoutClassedModelUsageLocalService;
 
 	@Inject
 	private LayoutCopyHelper _layoutCopyHelper;

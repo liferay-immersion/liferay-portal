@@ -33,10 +33,10 @@ export function Sidebar({editorRef, elements}: IProps) {
 					<Collapsible key={label} label={label}>
 						{items.map((item) => (
 							<Element
+								helpText={item.helpText}
 								key={item.label}
 								label={item.label}
 								onClick={() => handleClick(item)}
-								tooltip={item.tooltip}
 							/>
 						))}
 					</Collapsible>
@@ -57,6 +57,6 @@ export interface SidebarCategory {
 
 interface SidebarElement {
 	content: string;
+	helpText: string;
 	label: string;
-	tooltip: string;
 }

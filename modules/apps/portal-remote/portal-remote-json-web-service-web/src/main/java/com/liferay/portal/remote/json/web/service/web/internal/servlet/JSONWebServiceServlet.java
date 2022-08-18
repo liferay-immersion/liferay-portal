@@ -15,18 +15,19 @@
 package com.liferay.portal.remote.json.web.service.web.internal.servlet;
 
 import com.liferay.petra.string.StringPool;
-import com.liferay.portal.jsonwebservice.JSONWebServiceServiceAction;
 import com.liferay.portal.kernel.servlet.ServletContextPool;
 import com.liferay.portal.kernel.util.LocaleThreadLocal;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.remote.json.web.service.web.internal.JSONWebServiceServiceAction;
 import com.liferay.portal.servlet.JSONServlet;
 import com.liferay.portal.struts.JSONAction;
 import com.liferay.portal.util.PropsValues;
 
 import java.io.IOException;
 
-import java.util.Locale;
+import java.net.URLDecoder;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -78,10 +79,9 @@ public class JSONWebServiceServlet extends JSONServlet {
 			 !path.equals(StringPool.SLASH)) ||
 			(httpServletRequest.getParameter("discover") != null)) {
 
-			Locale locale = _portal.getLocale(
-				httpServletRequest, httpServletResponse, true);
-
-			LocaleThreadLocal.setThemeDisplayLocale(locale);
+			LocaleThreadLocal.setThemeDisplayLocale(
+				_portal.getLocale(
+					httpServletRequest, httpServletResponse, true));
 
 			super.service(httpServletRequest, httpServletResponse);
 
@@ -108,8 +108,11 @@ public class JSONWebServiceServlet extends JSONServlet {
 		return jsonWebServiceServiceAction;
 	}
 
-	private String _getPathInfo(HttpServletRequest httpServletRequest) {
-		String currentURL = _portal.getCurrentURL(httpServletRequest);
+	private String _getPathInfo(HttpServletRequest httpServletRequest)
+		throws IOException {
+
+		String currentURL = URLDecoder.decode(
+			_portal.getCurrentURL(httpServletRequest), StringPool.UTF8);
 
 		Matcher matcher = _pathInfoPattern.matcher(currentURL);
 

@@ -275,7 +275,8 @@ public abstract class BasePriceEntryResourceTestCase {
 		Page<PriceEntry> page =
 			priceEntryResource.
 				getPriceListByExternalReferenceCodePriceEntriesPage(
-					externalReferenceCode, Pagination.of(1, 10));
+					externalReferenceCode, null, null, Pagination.of(1, 10),
+					null);
 
 		Assert.assertEquals(0, page.getTotalCount());
 
@@ -288,7 +289,8 @@ public abstract class BasePriceEntryResourceTestCase {
 			page =
 				priceEntryResource.
 					getPriceListByExternalReferenceCodePriceEntriesPage(
-						irrelevantExternalReferenceCode, Pagination.of(1, 2));
+						irrelevantExternalReferenceCode, null, null,
+						Pagination.of(1, 2), null);
 
 			Assert.assertEquals(1, page.getTotalCount());
 
@@ -309,7 +311,8 @@ public abstract class BasePriceEntryResourceTestCase {
 		page =
 			priceEntryResource.
 				getPriceListByExternalReferenceCodePriceEntriesPage(
-					externalReferenceCode, Pagination.of(1, 10));
+					externalReferenceCode, null, null, Pagination.of(1, 10),
+					null);
 
 		Assert.assertEquals(2, page.getTotalCount());
 
@@ -317,6 +320,114 @@ public abstract class BasePriceEntryResourceTestCase {
 			Arrays.asList(priceEntry1, priceEntry2),
 			(List<PriceEntry>)page.getItems());
 		assertValid(page);
+	}
+
+	@Test
+	public void testGetPriceListByExternalReferenceCodePriceEntriesPageWithFilterDateTimeEquals()
+		throws Exception {
+
+		List<EntityField> entityFields = getEntityFields(
+			EntityField.Type.DATE_TIME);
+
+		if (entityFields.isEmpty()) {
+			return;
+		}
+
+		String externalReferenceCode =
+			testGetPriceListByExternalReferenceCodePriceEntriesPage_getExternalReferenceCode();
+
+		PriceEntry priceEntry1 = randomPriceEntry();
+
+		priceEntry1 =
+			testGetPriceListByExternalReferenceCodePriceEntriesPage_addPriceEntry(
+				externalReferenceCode, priceEntry1);
+
+		for (EntityField entityField : entityFields) {
+			Page<PriceEntry> page =
+				priceEntryResource.
+					getPriceListByExternalReferenceCodePriceEntriesPage(
+						externalReferenceCode, null,
+						getFilterString(entityField, "between", priceEntry1),
+						Pagination.of(1, 2), null);
+
+			assertEquals(
+				Collections.singletonList(priceEntry1),
+				(List<PriceEntry>)page.getItems());
+		}
+	}
+
+	@Test
+	public void testGetPriceListByExternalReferenceCodePriceEntriesPageWithFilterDoubleEquals()
+		throws Exception {
+
+		List<EntityField> entityFields = getEntityFields(
+			EntityField.Type.DOUBLE);
+
+		if (entityFields.isEmpty()) {
+			return;
+		}
+
+		String externalReferenceCode =
+			testGetPriceListByExternalReferenceCodePriceEntriesPage_getExternalReferenceCode();
+
+		PriceEntry priceEntry1 =
+			testGetPriceListByExternalReferenceCodePriceEntriesPage_addPriceEntry(
+				externalReferenceCode, randomPriceEntry());
+
+		@SuppressWarnings("PMD.UnusedLocalVariable")
+		PriceEntry priceEntry2 =
+			testGetPriceListByExternalReferenceCodePriceEntriesPage_addPriceEntry(
+				externalReferenceCode, randomPriceEntry());
+
+		for (EntityField entityField : entityFields) {
+			Page<PriceEntry> page =
+				priceEntryResource.
+					getPriceListByExternalReferenceCodePriceEntriesPage(
+						externalReferenceCode, null,
+						getFilterString(entityField, "eq", priceEntry1),
+						Pagination.of(1, 2), null);
+
+			assertEquals(
+				Collections.singletonList(priceEntry1),
+				(List<PriceEntry>)page.getItems());
+		}
+	}
+
+	@Test
+	public void testGetPriceListByExternalReferenceCodePriceEntriesPageWithFilterStringEquals()
+		throws Exception {
+
+		List<EntityField> entityFields = getEntityFields(
+			EntityField.Type.STRING);
+
+		if (entityFields.isEmpty()) {
+			return;
+		}
+
+		String externalReferenceCode =
+			testGetPriceListByExternalReferenceCodePriceEntriesPage_getExternalReferenceCode();
+
+		PriceEntry priceEntry1 =
+			testGetPriceListByExternalReferenceCodePriceEntriesPage_addPriceEntry(
+				externalReferenceCode, randomPriceEntry());
+
+		@SuppressWarnings("PMD.UnusedLocalVariable")
+		PriceEntry priceEntry2 =
+			testGetPriceListByExternalReferenceCodePriceEntriesPage_addPriceEntry(
+				externalReferenceCode, randomPriceEntry());
+
+		for (EntityField entityField : entityFields) {
+			Page<PriceEntry> page =
+				priceEntryResource.
+					getPriceListByExternalReferenceCodePriceEntriesPage(
+						externalReferenceCode, null,
+						getFilterString(entityField, "eq", priceEntry1),
+						Pagination.of(1, 2), null);
+
+			assertEquals(
+				Collections.singletonList(priceEntry1),
+				(List<PriceEntry>)page.getItems());
+		}
 	}
 
 	@Test
@@ -341,7 +452,8 @@ public abstract class BasePriceEntryResourceTestCase {
 		Page<PriceEntry> page1 =
 			priceEntryResource.
 				getPriceListByExternalReferenceCodePriceEntriesPage(
-					externalReferenceCode, Pagination.of(1, 2));
+					externalReferenceCode, null, null, Pagination.of(1, 2),
+					null);
 
 		List<PriceEntry> priceEntries1 = (List<PriceEntry>)page1.getItems();
 
@@ -350,7 +462,8 @@ public abstract class BasePriceEntryResourceTestCase {
 		Page<PriceEntry> page2 =
 			priceEntryResource.
 				getPriceListByExternalReferenceCodePriceEntriesPage(
-					externalReferenceCode, Pagination.of(2, 2));
+					externalReferenceCode, null, null, Pagination.of(2, 2),
+					null);
 
 		Assert.assertEquals(3, page2.getTotalCount());
 
@@ -361,11 +474,159 @@ public abstract class BasePriceEntryResourceTestCase {
 		Page<PriceEntry> page3 =
 			priceEntryResource.
 				getPriceListByExternalReferenceCodePriceEntriesPage(
-					externalReferenceCode, Pagination.of(1, 3));
+					externalReferenceCode, null, null, Pagination.of(1, 3),
+					null);
 
 		assertEqualsIgnoringOrder(
 			Arrays.asList(priceEntry1, priceEntry2, priceEntry3),
 			(List<PriceEntry>)page3.getItems());
+	}
+
+	@Test
+	public void testGetPriceListByExternalReferenceCodePriceEntriesPageWithSortDateTime()
+		throws Exception {
+
+		testGetPriceListByExternalReferenceCodePriceEntriesPageWithSort(
+			EntityField.Type.DATE_TIME,
+			(entityField, priceEntry1, priceEntry2) -> {
+				BeanTestUtil.setProperty(
+					priceEntry1, entityField.getName(),
+					DateUtils.addMinutes(new Date(), -2));
+			});
+	}
+
+	@Test
+	public void testGetPriceListByExternalReferenceCodePriceEntriesPageWithSortDouble()
+		throws Exception {
+
+		testGetPriceListByExternalReferenceCodePriceEntriesPageWithSort(
+			EntityField.Type.DOUBLE,
+			(entityField, priceEntry1, priceEntry2) -> {
+				BeanTestUtil.setProperty(
+					priceEntry1, entityField.getName(), 0.1);
+				BeanTestUtil.setProperty(
+					priceEntry2, entityField.getName(), 0.5);
+			});
+	}
+
+	@Test
+	public void testGetPriceListByExternalReferenceCodePriceEntriesPageWithSortInteger()
+		throws Exception {
+
+		testGetPriceListByExternalReferenceCodePriceEntriesPageWithSort(
+			EntityField.Type.INTEGER,
+			(entityField, priceEntry1, priceEntry2) -> {
+				BeanTestUtil.setProperty(priceEntry1, entityField.getName(), 0);
+				BeanTestUtil.setProperty(priceEntry2, entityField.getName(), 1);
+			});
+	}
+
+	@Test
+	public void testGetPriceListByExternalReferenceCodePriceEntriesPageWithSortString()
+		throws Exception {
+
+		testGetPriceListByExternalReferenceCodePriceEntriesPageWithSort(
+			EntityField.Type.STRING,
+			(entityField, priceEntry1, priceEntry2) -> {
+				Class<?> clazz = priceEntry1.getClass();
+
+				String entityFieldName = entityField.getName();
+
+				Method method = clazz.getMethod(
+					"get" + StringUtil.upperCaseFirstLetter(entityFieldName));
+
+				Class<?> returnType = method.getReturnType();
+
+				if (returnType.isAssignableFrom(Map.class)) {
+					BeanTestUtil.setProperty(
+						priceEntry1, entityFieldName,
+						Collections.singletonMap("Aaa", "Aaa"));
+					BeanTestUtil.setProperty(
+						priceEntry2, entityFieldName,
+						Collections.singletonMap("Bbb", "Bbb"));
+				}
+				else if (entityFieldName.contains("email")) {
+					BeanTestUtil.setProperty(
+						priceEntry1, entityFieldName,
+						"aaa" +
+							StringUtil.toLowerCase(
+								RandomTestUtil.randomString()) +
+									"@liferay.com");
+					BeanTestUtil.setProperty(
+						priceEntry2, entityFieldName,
+						"bbb" +
+							StringUtil.toLowerCase(
+								RandomTestUtil.randomString()) +
+									"@liferay.com");
+				}
+				else {
+					BeanTestUtil.setProperty(
+						priceEntry1, entityFieldName,
+						"aaa" +
+							StringUtil.toLowerCase(
+								RandomTestUtil.randomString()));
+					BeanTestUtil.setProperty(
+						priceEntry2, entityFieldName,
+						"bbb" +
+							StringUtil.toLowerCase(
+								RandomTestUtil.randomString()));
+				}
+			});
+	}
+
+	protected void
+			testGetPriceListByExternalReferenceCodePriceEntriesPageWithSort(
+				EntityField.Type type,
+				UnsafeTriConsumer
+					<EntityField, PriceEntry, PriceEntry, Exception>
+						unsafeTriConsumer)
+		throws Exception {
+
+		List<EntityField> entityFields = getEntityFields(type);
+
+		if (entityFields.isEmpty()) {
+			return;
+		}
+
+		String externalReferenceCode =
+			testGetPriceListByExternalReferenceCodePriceEntriesPage_getExternalReferenceCode();
+
+		PriceEntry priceEntry1 = randomPriceEntry();
+		PriceEntry priceEntry2 = randomPriceEntry();
+
+		for (EntityField entityField : entityFields) {
+			unsafeTriConsumer.accept(entityField, priceEntry1, priceEntry2);
+		}
+
+		priceEntry1 =
+			testGetPriceListByExternalReferenceCodePriceEntriesPage_addPriceEntry(
+				externalReferenceCode, priceEntry1);
+
+		priceEntry2 =
+			testGetPriceListByExternalReferenceCodePriceEntriesPage_addPriceEntry(
+				externalReferenceCode, priceEntry2);
+
+		for (EntityField entityField : entityFields) {
+			Page<PriceEntry> ascPage =
+				priceEntryResource.
+					getPriceListByExternalReferenceCodePriceEntriesPage(
+						externalReferenceCode, null, null, Pagination.of(1, 2),
+						entityField.getName() + ":asc");
+
+			assertEquals(
+				Arrays.asList(priceEntry1, priceEntry2),
+				(List<PriceEntry>)ascPage.getItems());
+
+			Page<PriceEntry> descPage =
+				priceEntryResource.
+					getPriceListByExternalReferenceCodePriceEntriesPage(
+						externalReferenceCode, null, null, Pagination.of(1, 2),
+						entityField.getName() + ":desc");
+
+			assertEquals(
+				Arrays.asList(priceEntry2, priceEntry1),
+				(List<PriceEntry>)descPage.getItems());
+		}
 	}
 
 	protected PriceEntry

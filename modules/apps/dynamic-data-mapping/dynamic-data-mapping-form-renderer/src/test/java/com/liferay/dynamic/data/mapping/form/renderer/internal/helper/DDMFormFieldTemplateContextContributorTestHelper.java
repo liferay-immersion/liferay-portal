@@ -24,9 +24,12 @@ import com.liferay.dynamic.data.mapping.form.field.type.internal.select.SelectDD
 import com.liferay.dynamic.data.mapping.form.field.type.internal.text.TextDDMFormFieldTemplateContextContributor;
 import com.liferay.portal.json.JSONFactoryImpl;
 import com.liferay.portal.kernel.json.JSONFactory;
+import com.liferay.portal.kernel.language.Language;
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.util.PortalImpl;
+
+import org.mockito.Mockito;
 
 /**
  * @author Rafael Praxedes
@@ -50,7 +53,14 @@ public class DDMFormFieldTemplateContextContributorTestHelper {
 	public DateDDMFormFieldTemplateContextContributor
 		createDateDDMFormFieldTemplateContextContributor() {
 
-		return new DateDDMFormFieldTemplateContextContributor();
+		DateDDMFormFieldTemplateContextContributor
+			dateDDMFormFieldTemplateContextContributor =
+				new DateDDMFormFieldTemplateContextContributor();
+
+		ReflectionTestUtil.setFieldValue(
+			dateDDMFormFieldTemplateContextContributor, "_language", _language);
+
+		return dateDDMFormFieldTemplateContextContributor;
 	}
 
 	public GridDDMFormFieldTemplateContextContributor
@@ -97,13 +107,15 @@ public class DDMFormFieldTemplateContextContributorTestHelper {
 		ReflectionTestUtil.setFieldValue(
 			selectDDMFormFieldTemplateContextContributor,
 			"ddmFormFieldOptionsFactory", new DDMFormFieldOptionsFactoryImpl());
-
 		ReflectionTestUtil.setFieldValue(
 			selectDDMFormFieldTemplateContextContributor, "jsonFactory",
 			_jsonFactory);
-
 		ReflectionTestUtil.setFieldValue(
 			selectDDMFormFieldTemplateContextContributor, "portal", _portal);
+
+		ReflectionTestUtil.setFieldValue(
+			selectDDMFormFieldTemplateContextContributor, "_language",
+			_language);
 
 		return selectDDMFormFieldTemplateContextContributor;
 	}
@@ -123,6 +135,7 @@ public class DDMFormFieldTemplateContextContributorTestHelper {
 	}
 
 	private final JSONFactory _jsonFactory = new JSONFactoryImpl();
+	private final Language _language = Mockito.mock(Language.class);
 	private final Portal _portal = new PortalImpl();
 
 }

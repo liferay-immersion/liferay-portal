@@ -181,6 +181,7 @@ public abstract class BaseSiteResourceTestCase {
 		Site site = randomSite();
 
 		site.setDescription(regex);
+		site.setDescriptiveName(regex);
 		site.setFriendlyUrlPath(regex);
 		site.setKey(regex);
 		site.setMembershipType(regex);
@@ -193,6 +194,7 @@ public abstract class BaseSiteResourceTestCase {
 		site = SiteSerDes.toDTO(json);
 
 		Assert.assertEquals(regex, site.getDescription());
+		Assert.assertEquals(regex, site.getDescriptiveName());
 		Assert.assertEquals(regex, site.getFriendlyUrlPath());
 		Assert.assertEquals(regex, site.getKey());
 		Assert.assertEquals(regex, site.getMembershipType());
@@ -498,6 +500,24 @@ public abstract class BaseSiteResourceTestCase {
 				continue;
 			}
 
+			if (Objects.equals("descriptiveName", additionalAssertFieldName)) {
+				if (site.getDescriptiveName() == null) {
+					valid = false;
+				}
+
+				continue;
+			}
+
+			if (Objects.equals(
+					"descriptiveName_i18n", additionalAssertFieldName)) {
+
+				if (site.getDescriptiveName_i18n() == null) {
+					valid = false;
+				}
+
+				continue;
+			}
+
 			if (Objects.equals("friendlyUrlPath", additionalAssertFieldName)) {
 				if (site.getFriendlyUrlPath() == null) {
 					valid = false;
@@ -681,6 +701,30 @@ public abstract class BaseSiteResourceTestCase {
 				if (!equals(
 						(Map)site1.getDescription_i18n(),
 						(Map)site2.getDescription_i18n())) {
+
+					return false;
+				}
+
+				continue;
+			}
+
+			if (Objects.equals("descriptiveName", additionalAssertFieldName)) {
+				if (!Objects.deepEquals(
+						site1.getDescriptiveName(),
+						site2.getDescriptiveName())) {
+
+					return false;
+				}
+
+				continue;
+			}
+
+			if (Objects.equals(
+					"descriptiveName_i18n", additionalAssertFieldName)) {
+
+				if (!equals(
+						(Map)site1.getDescriptiveName_i18n(),
+						(Map)site2.getDescriptiveName_i18n())) {
 
 					return false;
 				}
@@ -881,6 +925,19 @@ public abstract class BaseSiteResourceTestCase {
 				"Invalid entity field " + entityFieldName);
 		}
 
+		if (entityFieldName.equals("descriptiveName")) {
+			sb.append("'");
+			sb.append(String.valueOf(site.getDescriptiveName()));
+			sb.append("'");
+
+			return sb.toString();
+		}
+
+		if (entityFieldName.equals("descriptiveName_i18n")) {
+			throw new IllegalArgumentException(
+				"Invalid entity field " + entityFieldName);
+		}
+
 		if (entityFieldName.equals("friendlyUrlPath")) {
 			sb.append("'");
 			sb.append(String.valueOf(site.getFriendlyUrlPath()));
@@ -978,6 +1035,8 @@ public abstract class BaseSiteResourceTestCase {
 		return new Site() {
 			{
 				description = StringUtil.toLowerCase(
+					RandomTestUtil.randomString());
+				descriptiveName = StringUtil.toLowerCase(
 					RandomTestUtil.randomString());
 				friendlyUrlPath = StringUtil.toLowerCase(
 					RandomTestUtil.randomString());

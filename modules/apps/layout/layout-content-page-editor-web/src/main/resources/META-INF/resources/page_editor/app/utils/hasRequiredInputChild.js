@@ -12,25 +12,10 @@
  * details.
  */
 
-import {FREEMARKER_FRAGMENT_ENTRY_PROCESSOR} from '../config/constants/freemarkerFragmentEntryProcessor';
 import {LAYOUT_DATA_ITEM_TYPES} from '../config/constants/layoutDataItemTypes';
+import {getDescendantIds} from './getDescendantIds';
 import {getResponsiveConfig} from './getResponsiveConfig';
-import {isFormRequiredField} from './isFormRequiredField';
-import {isLayoutDataItemDeleted} from './isLayoutDataItemDeleted';
-
-function getDescendantIds(layoutData, itemId) {
-	const item = layoutData.items[itemId];
-
-	const descendantIds = [...item.children];
-
-	item.children.forEach((childId) => {
-		if (!isLayoutDataItemDeleted(layoutData, childId)) {
-			descendantIds.push(...getDescendantIds(layoutData, childId));
-		}
-	});
-
-	return descendantIds;
-}
+import {isRequiredFormInput} from './isRequiredFormInput';
 
 function isItemHidden(layoutData, itemId, selectedViewportSize) {
 	const item = layoutData?.items[itemId];
@@ -67,15 +52,10 @@ export default function hasRequiredInputChild({
 			return false;
 		}
 
-		const {inputFieldId, inputRequired} =
-			fragmentEntryLinks[item.config.fragmentEntryLinkId].editableValues[
-				FREEMARKER_FRAGMENT_ENTRY_PROCESSOR
-			] || {};
-
 		return (
 			(!checkHidden ||
 				isItemHidden(layoutData, descendantId, selectedViewportSize)) &&
-			(inputRequired || isFormRequiredField(inputFieldId, formFields))
+			isRequiredFormInput(item, fragmentEntryLinks, formFields)
 		);
 	});
 }

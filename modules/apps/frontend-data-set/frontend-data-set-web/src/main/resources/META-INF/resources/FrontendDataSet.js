@@ -12,6 +12,7 @@
  * details.
  */
 
+import ClayLoadingIndicator from '@clayui/loading-indicator';
 import {ClayPaginationBarWithBasicItems} from '@clayui/pagination-bar';
 import {useIsMounted, useThunk} from '@liferay/frontend-js-react-web';
 import {fetch, openToast} from 'frontend-js-web';
@@ -54,7 +55,7 @@ import {
 import {logError} from './utils/logError';
 import getJsModule from './utils/modules';
 import ViewsContext from './views/ViewsContext';
-import {getViewContentRenderer} from './views/index';
+import getViewComponent from './views/getViewComponent';
 import {updateViewComponent, viewsReducer} from './views/viewsReducer';
 
 const DEFAULT_PAGINATION_DELTA = 20;
@@ -140,15 +141,19 @@ const FrontendDataSet = ({
 	const [total, setTotal] = useState(0);
 
 	const getInitialViewsState = () => {
-		let initialActiveView = views[0];
+		let initialActiveView =
+			views.find(({default: defaultProp}) => defaultProp) || views[0];
+
 		let initialVisibleFieldNames = {};
 
 		if (activeViewSettings) {
-			const {name, visibleFieldNames} = JSON.parse(activeViewSettings);
+			const {name: activeViewName, visibleFieldNames} = JSON.parse(
+				activeViewSettings
+			);
 
-			if (name) {
+			if (activeViewName) {
 				initialActiveView = views.find(
-					({viewName}) => viewName === name
+					({name}) => name === activeViewName
 				);
 			}
 
@@ -158,7 +163,10 @@ const FrontendDataSet = ({
 		}
 
 		return {
-			activeView: initialActiveView,
+			activeView: {
+				component: getViewComponent(initialActiveView.contentRenderer),
+				...initialActiveView,
+			},
 			customViewsEnabled,
 			views,
 			visibleFieldNames: initialVisibleFieldNames,
@@ -170,8 +178,7 @@ const FrontendDataSet = ({
 	);
 
 	const {
-		component: CurrentViewComponent,
-		contentRenderer,
+		component: View,
 		contentRendererModuleURL,
 		name: activeViewName,
 		...currentViewProps
@@ -198,31 +205,6 @@ const FrontendDataSet = ({
 			sorting
 		);
 	}, [apiURL, currentURL, delta, filters, pageNumber, searchParam, sorting]);
-
-	const requestComponent = useCallback(() => {
-		if (
-			!CurrentViewComponent &&
-			(contentRendererModuleURL || contentRenderer)
-		) {
-			return (contentRenderer
-				? getViewContentRenderer(contentRenderer)
-				: getJsModule(contentRendererModuleURL)
-			).catch((error) => {
-				logError(
-					`Requested module: ${contentRendererModuleURL} not available`,
-					error
-				);
-				openToast({
-					message: Liferay.Language.get('unexpected-error'),
-					type: 'danger',
-				});
-
-				throw error;
-			});
-		}
-
-		return Promise.resolve(CurrentViewComponent);
-	}, [contentRenderer, contentRendererModuleURL, CurrentViewComponent]);
 
 	const isMounted = useIsMounted();
 
@@ -345,19 +327,32 @@ const FrontendDataSet = ({
 	}, [selectedItemsValue, items, selectedItemsKey]);
 
 	useEffect(() => {
+		if (View || !contentRendererModuleURL) {
+			return;
+		}
+
 		setComponentLoading(true);
 
-		requestComponent().then((component) => {
-			if (isMounted()) {
-				setComponentLoading(false);
-				dispatch(updateViewComponent(activeViewName, component));
-			}
-		});
+		getJsModule(contentRendererModuleURL)
+			.then((component) => {
+				if (isMounted()) {
+					dispatch(updateViewComponent(activeViewName, component));
+
+					setComponentLoading(false);
+				}
+			})
+			.catch(() => {
+				openToast({
+					message: Liferay.Language.get('unexpected-error'),
+					type: 'danger',
+				});
+			});
 	}, [
+		View,
 		activeViewName,
+		contentRendererModuleURL,
 		dispatch,
 		isMounted,
-		requestComponent,
 		setComponentLoading,
 	]);
 
@@ -425,7 +420,7 @@ const FrontendDataSet = ({
 	}, [id]);
 
 	const managementBar = showManagementBar ? (
-		<div className="data-set-management-bar-wrapper">
+		<div className="management-bar-wrapper">
 			<ManagementBar
 				bulkActions={bulkActions}
 				creationMenu={creationMenu}
@@ -459,7 +454,7 @@ const FrontendDataSet = ({
 				{items?.length ||
 				overrideEmptyResultView ||
 				inlineAddingSettings ? (
-					<CurrentViewComponent
+					<View
 						frontendDataSetContext={FrontendDataSetContext}
 						items={items}
 						itemsActions={itemsActions}
@@ -477,7 +472,7 @@ const FrontendDataSet = ({
 				)}
 			</div>
 		) : (
-			<span aria-hidden="true" className="loading-animation my-7" />
+			<ClayLoadingIndicator className="my-7" />
 		);
 
 	const paginationComponent =
@@ -772,10 +767,7 @@ const FrontendDataSet = ({
 };
 
 FrontendDataSet.propTypes = {
-	activeViewSettings: PropTypes.shape({
-		name: PropTypes.string,
-		visibleFieldNames: PropTypes.array,
-	}),
+	activeViewSettings: PropTypes.string,
 	apiURL: PropTypes.string,
 	appURL: PropTypes.string,
 	bulkActions: PropTypes.array,
@@ -838,6 +830,7 @@ FrontendDataSet.propTypes = {
 			contentRenderer: PropTypes.string,
 			contentRendererModuleURL: PropTypes.string,
 			label: PropTypes.string,
+			name: PropTypes.string,
 			schema: PropTypes.object,
 			thumbnail: PropTypes.string,
 		})

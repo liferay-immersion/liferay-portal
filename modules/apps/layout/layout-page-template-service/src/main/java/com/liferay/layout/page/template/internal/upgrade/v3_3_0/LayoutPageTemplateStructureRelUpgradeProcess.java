@@ -206,7 +206,8 @@ public class LayoutPageTemplateStructureRelUpgradeProcess
 						editableValuesJSONObject.toString(),
 						segmentsExperienceId),
 					newNamespace, fragmentEntryLink.getPosition(),
-					fragmentEntryLink.getRendererKey(), new ServiceContext());
+					fragmentEntryLink.getRendererKey(),
+					fragmentEntryLink.getType(), new ServiceContext());
 
 			fragmentStyledLayoutStructureItem.setFragmentEntryLinkId(
 				newFragmentEntryLink.getFragmentEntryLinkId());
@@ -225,9 +226,9 @@ public class LayoutPageTemplateStructureRelUpgradeProcess
 						"segmentsExperienceId desc");
 			PreparedStatement preparedStatement =
 				AutoBatchPreparedStatementUtil.autoBatch(
-					connection.prepareStatement(
-						"update LayoutPageTemplateStructureRel set data_ = ? " +
-							"where lPageTemplateStructureRelId = ?"))) {
+					connection,
+					"update LayoutPageTemplateStructureRel set data_ = ? " +
+						"where lPageTemplateStructureRelId = ?")) {
 
 			while (resultSet.next()) {
 				long layoutPageTemplateStructureRelId = resultSet.getLong(

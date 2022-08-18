@@ -20,11 +20,11 @@ import com.liferay.asset.kernel.model.AssetRenderer;
 import com.liferay.asset.kernel.model.AssetRendererFactory;
 import com.liferay.document.library.kernel.model.DLFileEntry;
 import com.liferay.document.library.kernel.model.DLFileEntryConstants;
-import com.liferay.friendly.url.model.FriendlyURLEntry;
-import com.liferay.friendly.url.service.FriendlyURLEntryLocalService;
+import com.liferay.friendly.url.info.item.provider.InfoItemFriendlyURLProvider;
 import com.liferay.layout.display.page.LayoutDisplayPageObjectProvider;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.language.Language;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.repository.model.FileEntry;
@@ -40,10 +40,12 @@ public class FileEntryLayoutDisplayPageObjectProvider
 
 	public FileEntryLayoutDisplayPageObjectProvider(
 		FileEntry fileEntry,
-		FriendlyURLEntryLocalService friendlyURLEntryLocalService) {
+		InfoItemFriendlyURLProvider<FileEntry> infoItemFriendlyURLProvider,
+		Language language) {
 
 		_fileEntry = fileEntry;
-		_friendlyURLEntryLocalService = friendlyURLEntryLocalService;
+		_infoItemFriendlyURLProvider = infoItemFriendlyURLProvider;
+		_language = language;
 
 		_assetEntry = _getAssetEntry(fileEntry);
 	}
@@ -94,16 +96,8 @@ public class FileEntryLayoutDisplayPageObjectProvider
 
 	@Override
 	public String getURLTitle(Locale locale) {
-		FriendlyURLEntry mainFriendlyURLEntry =
-			_friendlyURLEntryLocalService.fetchMainFriendlyURLEntry(
-				PortalUtil.getClassNameId(FileEntry.class),
-				_fileEntry.getFileEntryId());
-
-		if (mainFriendlyURLEntry == null) {
-			return String.valueOf(_fileEntry.getFileEntryId());
-		}
-
-		return mainFriendlyURLEntry.getUrlTitle();
+		return _infoItemFriendlyURLProvider.getFriendlyURL(
+			_fileEntry, _language.getLanguageId(locale));
 	}
 
 	private AssetEntry _getAssetEntry(FileEntry fileEntry) {
@@ -139,6 +133,8 @@ public class FileEntryLayoutDisplayPageObjectProvider
 
 	private final AssetEntry _assetEntry;
 	private final FileEntry _fileEntry;
-	private final FriendlyURLEntryLocalService _friendlyURLEntryLocalService;
+	private final InfoItemFriendlyURLProvider<FileEntry>
+		_infoItemFriendlyURLProvider;
+	private final Language _language;
 
 }

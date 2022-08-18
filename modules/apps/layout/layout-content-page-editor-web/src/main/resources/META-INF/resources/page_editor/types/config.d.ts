@@ -133,7 +133,7 @@ export interface Config {
 	getLayoutFriendlyURL: string;
 	getLayoutPageTemplateCollectionsURL: string;
 	getPageContentsURL: string;
-	getWidgetsURL: string;
+	getPortletsURL: string;
 	imageSelectorURL: string;
 	infoItemPreviewSelectorURL: string;
 	infoItemSelectorURL: string;
@@ -213,6 +213,7 @@ export interface Config {
 	unmarkItemForDeletionURL: string;
 	updateCollectionDisplayConfigURL: string;
 	updateConfigurationValuesURL: string;
+	updateFormItemConfigURL: string;
 	updateItemConfigURL: string;
 	updateLayoutPageTemplateDataURL: string;
 	updateRowColumnsURL: string;

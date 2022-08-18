@@ -45,6 +45,7 @@ public class SXPBlueprintWrapper
 
 		attributes.put("mvccVersion", getMvccVersion());
 		attributes.put("uuid", getUuid());
+		attributes.put("externalReferenceCode", getExternalReferenceCode());
 		attributes.put("sxpBlueprintId", getSXPBlueprintId());
 		attributes.put("companyId", getCompanyId());
 		attributes.put("userId", getUserId());
@@ -54,7 +55,6 @@ public class SXPBlueprintWrapper
 		attributes.put("configurationJSON", getConfigurationJSON());
 		attributes.put("description", getDescription());
 		attributes.put("elementInstancesJSON", getElementInstancesJSON());
-		attributes.put("key", getKey());
 		attributes.put("schemaVersion", getSchemaVersion());
 		attributes.put("title", getTitle());
 		attributes.put("version", getVersion());
@@ -78,6 +78,13 @@ public class SXPBlueprintWrapper
 
 		if (uuid != null) {
 			setUuid(uuid);
+		}
+
+		String externalReferenceCode = (String)attributes.get(
+			"externalReferenceCode");
+
+		if (externalReferenceCode != null) {
+			setExternalReferenceCode(externalReferenceCode);
 		}
 
 		Long sxpBlueprintId = (Long)attributes.get("sxpBlueprintId");
@@ -133,12 +140,6 @@ public class SXPBlueprintWrapper
 
 		if (elementInstancesJSON != null) {
 			setElementInstancesJSON(elementInstancesJSON);
-		}
-
-		String key = (String)attributes.get("key");
-
-		if (key != null) {
-			setKey(key);
 		}
 
 		String schemaVersion = (String)attributes.get("schemaVersion");
@@ -316,13 +317,13 @@ public class SXPBlueprintWrapper
 	}
 
 	/**
-	 * Returns the key of this sxp blueprint.
+	 * Returns the external reference code of this sxp blueprint.
 	 *
-	 * @return the key of this sxp blueprint
+	 * @return the external reference code of this sxp blueprint
 	 */
 	@Override
-	public String getKey() {
-		return model.getKey();
+	public String getExternalReferenceCode() {
+		return model.getExternalReferenceCode();
 	}
 
 	/**
@@ -759,13 +760,13 @@ public class SXPBlueprintWrapper
 	}
 
 	/**
-	 * Sets the key of this sxp blueprint.
+	 * Sets the external reference code of this sxp blueprint.
 	 *
-	 * @param key the key of this sxp blueprint
+	 * @param externalReferenceCode the external reference code of this sxp blueprint
 	 */
 	@Override
-	public void setKey(String key) {
-		model.setKey(key);
+	public void setExternalReferenceCode(String externalReferenceCode) {
+		model.setExternalReferenceCode(externalReferenceCode);
 	}
 
 	/**

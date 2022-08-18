@@ -116,6 +116,8 @@ renderResponse.setTitle((structure == null) ? LanguageUtil.get(request, "new-ele
 					).put(
 						"localizedName", ddmFormAdminDisplayContext.getFormLocalizedNameJSONObject(structure)
 					).put(
+						"mainRequire", ddmFormAdminDisplayContext.getMainRequire()
+					).put(
 						"portletNamespace", liferayPortletResponse.getNamespace()
 					).put(
 						"redirectURL", HtmlUtil.escape(redirect)

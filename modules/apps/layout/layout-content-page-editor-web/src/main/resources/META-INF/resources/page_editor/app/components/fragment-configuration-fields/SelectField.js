@@ -15,13 +15,16 @@
 import ClayButton from '@clayui/button';
 import ClayDropDown from '@clayui/drop-down';
 import ClayForm, {ClayCheckbox, ClaySelectWithOption} from '@clayui/form';
+import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import React, {useState} from 'react';
 
 import useControlledState from '../../../core/hooks/useControlledState';
 import {useStyleBook} from '../../../plugins/page-design-options/hooks/useStyleBook';
 import {ConfigurationFieldPropTypes} from '../../../prop-types/index';
+import isNullOrUndefined from '../../utils/isNullOrUndefined';
 import {useId} from '../../utils/useId';
+import {AdvancedSelectField} from './AdvancedSelectField';
 
 export function SelectField({
 	className,
@@ -32,13 +35,11 @@ export function SelectField({
 }) {
 	const {tokenValues} = useStyleBook();
 
-	const validValues = field.typeOptions
-		? field.typeOptions.validValues
-		: field.validValues;
+	const validValues = field.typeOptions?.validValues || field.validValues;
 
 	const multiSelect = field.typeOptions?.multiSelect ?? false;
 
-	const defaultValue = value || field.defaultValue;
+	const defaultValue = isNullOrUndefined(value) ? field.defaultValue : value;
 
 	const getFrontendTokenOption = (option) => {
 		const token = tokenValues[option.frontendTokenName];
@@ -75,13 +76,26 @@ export function SelectField({
 							: []
 					}
 				/>
+			) : field.icon && Liferay.FeatureFlags['LPS-143206'] ? (
+				<AdvancedSelectField
+					disabled={disabled}
+					field={field}
+					onValueSelect={onValueSelect}
+					options={getOptions(validValues)}
+					tokenValues={tokenValues}
+					value={
+						isNullOrUndefined(value) ? field.defaultValue : value
+					}
+				/>
 			) : (
 				<SingleSelect
 					disabled={disabled}
 					field={field}
 					onValueSelect={onValueSelect}
 					options={getOptions(validValues)}
-					value={value || field.defaultValue}
+					value={
+						isNullOrUndefined(value) ? field.defaultValue : value
+					}
 				/>
 			)}
 		</ClayForm.Group>
@@ -131,7 +145,7 @@ const MultiSelect = ({
 				setNextValue(changedValue);
 				onValueSelect(
 					field.name,
-					changedValue.length > 0 ? changedValue : null
+					changedValue.length ? changedValue : null
 				);
 			},
 			type: 'checkbox',
@@ -142,7 +156,12 @@ const MultiSelect = ({
 
 	return (
 		<>
-			<label id={labelId}>{field.label}</label>
+			<label
+				className={classNames({'sr-only': field.hideLabel})}
+				id={labelId}
+			>
+				{field.label}
+			</label>
 
 			<ClayDropDown
 				active={active}
@@ -189,7 +208,12 @@ const SingleSelect = ({disabled, field, onValueSelect, options, value}) => {
 
 	return (
 		<>
-			<label htmlFor={inputId}>{field.label}</label>
+			<label
+				className={classNames({'sr-only': field.hideLabel})}
+				htmlFor={inputId}
+			>
+				{field.label}
+			</label>
 
 			<ClaySelectWithOption
 				aria-describedby={helpTextId}

@@ -316,6 +316,12 @@ public class FragmentCollectionContributorTrackerImpl
 				modified = true;
 			}
 
+			if (fragmentEntryLink.getType() != fragmentEntry.getType()) {
+				fragmentEntryLink.setType(fragmentEntry.getType());
+
+				modified = true;
+			}
+
 			if (modified) {
 				_fragmentEntryLinkLocalService.updateFragmentEntryLink(
 					fragmentEntryLink);
@@ -328,7 +334,7 @@ public class FragmentCollectionContributorTrackerImpl
 			fragmentEntryValidator.validateConfiguration(
 				fragmentEntry.getConfiguration());
 			fragmentEntryValidator.validateTypeOptions(
-				fragmentEntry.getTypeOptions());
+				fragmentEntry.getType(), fragmentEntry.getTypeOptions());
 
 			fragmentEntryProcessorRegistry.validateFragmentEntryHTML(
 				fragmentEntry.getHtml(), fragmentEntry.getConfiguration());

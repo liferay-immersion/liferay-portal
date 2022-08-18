@@ -123,7 +123,7 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.json.JSONUtil;
-import com.liferay.portal.kernel.language.LanguageUtil;
+import com.liferay.portal.kernel.language.Language;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Group;
@@ -531,10 +531,6 @@ public class JournalArticleLocalServiceImpl
 			articleId = String.valueOf(counterLocalService.increment());
 		}
 
-		if (Validator.isNull(externalReferenceCode)) {
-			externalReferenceCode = articleId;
-		}
-
 		sanitize(user.getCompanyId(), groupId, userId, classPK, descriptionMap);
 
 		if (validate) {
@@ -759,14 +755,41 @@ public class JournalArticleLocalServiceImpl
 			long userId, long groupId, long classNameId, long classPK,
 			Map<Locale, String> titleMap, Map<Locale, String> descriptionMap,
 			String content, String ddmStructureKey, String ddmTemplateKey,
-			String layoutUuid, boolean indexable, boolean smallImage,
-			String smallImageURL, File smallImageFile,
+			String layoutUuid, int displayDateMonth, int displayDateDay,
+			int displayDateYear, int displayDateHour, int displayDateMinute,
+			int expirationDateMonth, int expirationDateDay,
+			int expirationDateYear, int expirationDateHour,
+			int expirationDateMinute, boolean neverExpire, int reviewDateMonth,
+			int reviewDateDay, int reviewDateYear, int reviewDateHour,
+			int reviewDateMinute, boolean neverReview, boolean indexable,
+			boolean smallImage, String smallImageURL, File smallImageFile,
 			ServiceContext serviceContext)
 		throws PortalException {
 
 		// Article
 
 		User user = _userLocalService.getUser(userId);
+
+		Date displayDate = _portal.getDate(
+			displayDateMonth, displayDateDay, displayDateYear, displayDateHour,
+			displayDateMinute, user.getTimeZone(), null);
+
+		Date expirationDate = null;
+		Date reviewDate = null;
+
+		if (!neverExpire) {
+			expirationDate = _portal.getDate(
+				expirationDateMonth, expirationDateDay, expirationDateYear,
+				expirationDateHour, expirationDateMinute, user.getTimeZone(),
+				ArticleExpirationDateException.class);
+		}
+
+		if (!neverReview) {
+			reviewDate = _portal.getDate(
+				reviewDateMonth, reviewDateDay, reviewDateYear, reviewDateHour,
+				reviewDateMinute, user.getTimeZone(),
+				ArticleReviewDateException.class);
+		}
 
 		byte[] smallImageBytes = null;
 
@@ -788,8 +811,8 @@ public class JournalArticleLocalServiceImpl
 		validate(
 			externalReferenceCode, user.getCompanyId(), groupId, classNameId,
 			articleId, true, 0, titleMap, content, ddmStructureKey,
-			ddmTemplateKey, null, null, smallImage, smallImageURL,
-			smallImageFile, smallImageBytes, serviceContext);
+			ddmTemplateKey, displayDate, expirationDate, smallImage,
+			smallImageURL, smallImageFile, smallImageBytes, serviceContext);
 
 		serviceContext.setAttribute("articleId", articleId);
 
@@ -822,6 +845,9 @@ public class JournalArticleLocalServiceImpl
 		article.setDefaultLanguageId(LocaleUtil.toLanguageId(locale));
 
 		article.setLayoutUuid(layoutUuid);
+		article.setDisplayDate(displayDate);
+		article.setExpirationDate(expirationDate);
+		article.setReviewDate(reviewDate);
 		article.setIndexable(indexable);
 		article.setSmallImage(smallImage);
 		article.setSmallImageId(counterLocalService.increment());
@@ -1113,7 +1139,7 @@ public class JournalArticleLocalServiceImpl
 
 			String urlTitle = StringBundler.concat(
 				entry.getValue(), StringPool.SPACE,
-				LanguageUtil.get(locale, "duplicate"), StringPool.SPACE,
+				_language.get(locale, "duplicate"), StringPool.SPACE,
 				uniqueUrlTitleCount);
 
 			newTitleMap.put(locale, urlTitle);
@@ -5776,7 +5802,6 @@ public class JournalArticleLocalServiceImpl
 			article.setUserId(latestArticle.getUserId());
 			article.setUserName(latestArticle.getUserName());
 			article.setCreateDate(latestArticle.getCreateDate());
-			article.setModifiedDate(serviceContext.getModifiedDate(date));
 			article.setExternalReferenceCode(
 				latestArticle.getExternalReferenceCode());
 			article.setClassNameId(latestArticle.getClassNameId());
@@ -5784,9 +5809,6 @@ public class JournalArticleLocalServiceImpl
 			article.setArticleId(articleId);
 			article.setVersion(version);
 			article.setSmallImageId(latestArticle.getSmallImageId());
-			article.setStatusByUserId(user.getUserId());
-			article.setStatusByUserName(user.getFullName());
-			article.setStatusDate(serviceContext.getModifiedDate(date));
 
 			serviceContext.setAttribute("version", version);
 
@@ -5814,7 +5836,12 @@ public class JournalArticleLocalServiceImpl
 			Group companyGroup = _groupLocalService.getCompanyGroup(
 				article.getCompanyId());
 
-			if (article.getGroupId() != companyGroup.getGroupId()) {
+			Group companyStagingGroup = companyGroup.getStagingGroup();
+
+			if ((article.getGroupId() != companyGroup.getGroupId()) &&
+				((companyStagingGroup == null) ||
+				 (companyStagingGroup.getGroupId() != article.getGroupId()))) {
+
 				throw new ArticleFriendlyURLException();
 			}
 		}
@@ -5858,6 +5885,11 @@ public class JournalArticleLocalServiceImpl
 		ExpandoBridgeUtil.setExpandoBridgeAttributes(
 			latestArticle.getExpandoBridge(), article.getExpandoBridge(),
 			serviceContext);
+
+		article.setModifiedDate(serviceContext.getModifiedDate(date));
+		article.setStatusByUserId(user.getUserId());
+		article.setStatusByUserName(user.getFullName());
+		article.setStatusDate(serviceContext.getModifiedDate(date));
 
 		article = journalArticlePersistence.update(article);
 
@@ -6178,7 +6210,7 @@ public class JournalArticleLocalServiceImpl
 				groupId,
 				_classNameLocalService.getClassNameId(JournalArticle.class),
 				article.getResourcePrimKey(), title,
-				LanguageUtil.getLanguageId(entry.getKey()));
+				_language.getLanguageId(entry.getKey()));
 
 			friendlyURLMap.put(entry.getKey(), urlTitle);
 		}
@@ -6264,8 +6296,14 @@ public class JournalArticleLocalServiceImpl
 			long userId, long groupId, String articleId,
 			Map<Locale, String> titleMap, Map<Locale, String> descriptionMap,
 			String content, String ddmStructureKey, String ddmTemplateKey,
-			String layoutUuid, boolean indexable, boolean smallImage,
-			String smallImageURL, File smallImageFile,
+			String layoutUuid, int displayDateMonth, int displayDateDay,
+			int displayDateYear, int displayDateHour, int displayDateMinute,
+			int expirationDateMonth, int expirationDateDay,
+			int expirationDateYear, int expirationDateHour,
+			int expirationDateMinute, boolean neverExpire, int reviewDateMonth,
+			int reviewDateDay, int reviewDateYear, int reviewDateHour,
+			int reviewDateMinute, boolean neverReview, boolean indexable,
+			boolean smallImage, String smallImageURL, File smallImageFile,
 			ServiceContext serviceContext)
 		throws PortalException {
 
@@ -6285,6 +6323,27 @@ public class JournalArticleLocalServiceImpl
 			}
 		}
 
+		Date displayDate = _portal.getDate(
+			displayDateMonth, displayDateDay, displayDateYear, displayDateHour,
+			displayDateMinute, user.getTimeZone(), null);
+
+		Date expirationDate = null;
+		Date reviewDate = null;
+
+		if (!neverExpire) {
+			expirationDate = _portal.getDate(
+				expirationDateMonth, expirationDateDay, expirationDateYear,
+				expirationDateHour, expirationDateMinute, user.getTimeZone(),
+				ArticleExpirationDateException.class);
+		}
+
+		if (!neverReview) {
+			reviewDate = _portal.getDate(
+				reviewDateMonth, reviewDateDay, reviewDateYear, reviewDateHour,
+				reviewDateMinute, user.getTimeZone(),
+				ArticleReviewDateException.class);
+		}
+
 		JournalArticle article = getArticle(groupId, articleId);
 
 		serviceContext.validateModifiedDate(
@@ -6296,8 +6355,9 @@ public class JournalArticleLocalServiceImpl
 
 		validate(
 			user.getCompanyId(), groupId, article.getClassNameId(), titleMap,
-			content, ddmStructureKey, ddmTemplateKey, null, null, smallImage,
-			smallImageURL, smallImageFile, smallImageBytes, serviceContext);
+			content, ddmStructureKey, ddmTemplateKey, displayDate,
+			expirationDate, smallImage, smallImageURL, smallImageFile,
+			smallImageBytes, serviceContext);
 
 		_updateArticleLocalizedFields(
 			article.getCompanyId(), article.getId(), titleMap, descriptionMap);
@@ -6310,6 +6370,9 @@ public class JournalArticleLocalServiceImpl
 		article.setDefaultLanguageId(LocaleUtil.toLanguageId(locale));
 
 		article.setLayoutUuid(layoutUuid);
+		article.setDisplayDate(displayDate);
+		article.setExpirationDate(expirationDate);
+		article.setReviewDate(reviewDate);
 		article.setIndexable(indexable);
 		article.setSmallImage(smallImage);
 
@@ -7772,11 +7835,16 @@ public class JournalArticleLocalServiceImpl
 				cacheable = _journalDefaultTemplateProvider.isCacheable();
 			}
 
+			Map<String, String> friendlyURLMap = _getFriendlyURLMap(
+				article, themeDisplay);
+
 			content = JournalUtil.transform(
 				themeDisplay, tokens, viewMode, languageId, document,
 				portletRequestModel, script, propagateException,
 				HashMapBuilder.<String, Object>put(
-					"friendlyURLs", _getFriendlyURLMap(article, themeDisplay)
+					"friendlyURL", _getFriendlyURL(friendlyURLMap, themeDisplay)
+				).put(
+					"friendlyURLs", friendlyURLMap
 				).build());
 
 			if (!pageFlow) {
@@ -8197,12 +8265,12 @@ public class JournalArticleLocalServiceImpl
 		else if (article.getFolderId() ==
 					JournalFolderConstants.DEFAULT_PARENT_FOLDER_ID) {
 
-			folderName = LanguageUtil.get(LocaleUtil.getSiteDefault(), "home");
+			folderName = _language.get(LocaleUtil.getSiteDefault(), "home");
 		}
 
 		subscriptionSender.setContextAttributes(
 			"[$FOLDER_NAME$]", folderName, "[$ARTICLE_STATUS$]",
-			LanguageUtil.get(
+			_language.get(
 				LocaleUtil.getSiteDefault(),
 				WorkflowConstants.getStatusLabel(article.getStatus())));
 		subscriptionSender.setCurrentUserId(userId);
@@ -8905,6 +8973,26 @@ public class JournalArticleLocalServiceImpl
 		return StringPool.BLANK;
 	}
 
+	private String _getFriendlyURL(
+			Map<String, String> friendlyURLMap, ThemeDisplay themeDisplay)
+		throws PortalException {
+
+		String friendlyURL = friendlyURLMap.get(themeDisplay.getLanguageId());
+
+		if (Validator.isNotNull(friendlyURL)) {
+			return friendlyURL;
+		}
+
+		friendlyURL = friendlyURLMap.get(
+			LocaleUtil.toLanguageId(LocaleUtil.getSiteDefault()));
+
+		if (Validator.isNotNull(friendlyURL)) {
+			return friendlyURL;
+		}
+
+		return StringPool.BLANK;
+	}
+
 	private Map<String, String> _getFriendlyURLMap(
 			JournalArticle article, ThemeDisplay themeDisplay)
 		throws PortalException {
@@ -9154,13 +9242,12 @@ public class JournalArticleLocalServiceImpl
 
 			if (Validator.isNull(friendlyURL)) {
 				urlTitleMap.put(
-					LanguageUtil.getLanguageId(entry.getKey()),
-					StringPool.BLANK);
+					_language.getLanguageId(entry.getKey()), StringPool.BLANK);
 
 				continue;
 			}
 
-			String languageId = LanguageUtil.getLanguageId(entry.getKey());
+			String languageId = _language.getLanguageId(entry.getKey());
 
 			String urlTitle = friendlyURLEntryLocalService.getUniqueUrlTitle(
 				groupId,
@@ -9390,6 +9477,9 @@ public class JournalArticleLocalServiceImpl
 
 	@Reference
 	private JournalHelper _journalHelper;
+
+	@Reference
+	private Language _language;
 
 	@Reference
 	private LayoutDisplayPageProviderTracker _layoutDisplayPageProviderTracker;

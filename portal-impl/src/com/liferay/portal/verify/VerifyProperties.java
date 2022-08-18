@@ -1862,10 +1862,11 @@ public class VerifyProperties {
 		"layout.view.page[control_panel]", "layout.view.page[embedded]",
 		"layout.view.page[link_to_layout]", "layout.view.page[panel]",
 		"layout.view.page[url]", "library.download.url.resin.jar",
-		"library.download.url.script-10.jar", "look.and.feel.modifiable",
-		"lucene.analyzer", "lucene.cluster.index.loading.sync.timeout",
-		"lucene.file.extractor", "lucene.file.extractor.regexp.strip",
-		"lucene.replicate.write", "lucene.store.jdbc.auto.clean.up",
+		"library.download.url.script-10.jar", "liferay.lib.global.shared.dir",
+		"liferay.web.portal.dir", "look.and.feel.modifiable", "lucene.analyzer",
+		"lucene.cluster.index.loading.sync.timeout", "lucene.file.extractor",
+		"lucene.file.extractor.regexp.strip", "lucene.replicate.write",
+		"lucene.store.jdbc.auto.clean.up",
 		"lucene.store.jdbc.auto.clean.up.enabled",
 		"lucene.store.jdbc.auto.clean.up.interval",
 		"lucene.store.jdbc.dialect.db2", "lucene.store.jdbc.dialect.derby",
@@ -1886,6 +1887,8 @@ public class VerifyProperties {
 		"microsoft.translator.client.id", "microsoft.translator.client.secret",
 		"minifier.inline.content.cache.size",
 		"mobile.device.styling.wap.enabled", "module.framework.initial.bundles",
+		"module.framework.properties.ds.lock.timeout.milliseconds",
+		"module.framework.properties.ds.stop.timeout.milliseconds",
 		"module.framework.properties.felix.fileinstall.disableNio2",
 		"module.framework.properties.felix.fileinstall.log.level",
 		"module.framework.properties.file.install.disableNio2",
@@ -1893,7 +1896,8 @@ public class VerifyProperties {
 		"module.framework.properties.file.install.optionalImportRefreshScope",
 		"module.framework.properties.lpkg.deployer.dir",
 		"module.framework.properties.lpkg.index.validator.enabled",
-		"module.framework.register.liferay.services", "msn.login",
+		"module.framework.register.liferay.services",
+		"module.framework.resolver.revision.batch.size", "msn.login",
 		"msn.password", "multicast.group.address[\"hibernate\"]",
 		"multicast.group.port[\"hibernate\"]", "my.sites.display.style",
 		"multi.value.map.com.liferay.portal.convert." +
@@ -2103,6 +2107,15 @@ public class VerifyProperties {
 			"velocity.engine.restricted.variables"
 		},
 		{
+			"module.framework.properties.dependency.manager.sync.timeout",
+			"dependency.manager.sync.timeout"
+		},
+		{
+			"module.framework.properties.dependency.manager.thread.pool." +
+				"enabled",
+			"dependency.manager.thread.pool.enabled"
+		},
+		{
 			"module.framework.properties.felix.fileinstall.bundles.new.start",
 			"module.framework.file.install.bundles.start.new"
 		},
@@ -2144,6 +2157,10 @@ public class VerifyProperties {
 		{
 			"module.framework.properties.file.install.subdir.mode",
 			"module.framework.file.install.subdir.mode"
+		},
+		{
+			"module.framework.properties.initial.system.check.enabled",
+			"initial.system.check.enabled"
 		},
 		{
 			"passwords.passwordpolicytoolkit.charset.lowercase",

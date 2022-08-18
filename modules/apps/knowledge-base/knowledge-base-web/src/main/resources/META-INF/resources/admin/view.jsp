@@ -26,10 +26,19 @@ long parentResourcePrimKey = ParamUtil.getLong(request, "parentResourcePrimKey",
 boolean kbFolderView = parentResourceClassNameId == kbFolderClassNameId;
 
 KBAdminManagementToolbarDisplayContext kbAdminManagementToolbarDisplayContext = new KBAdminManagementToolbarDisplayContext(request, liferayPortletRequest, liferayPortletResponse, renderRequest, renderResponse, portletConfig);
-KBArticleURLHelper kbArticleURLHelper = new KBArticleURLHelper(renderRequest, renderResponse, templatePath);
+KBArticleURLHelper kbArticleURLHelper = new KBArticleURLHelper(renderRequest, renderResponse);
 %>
 
-<liferay-util:include page="/admin/common/top_tabs.jsp" servletContext="<%= application %>" />
+<c:choose>
+	<c:when test='<%= GetterUtil.getBoolean(PropsUtil.get("feature.flag.LPS-156421")) %>'>
+		<liferay-util:include page="/admin/common/vertical_menu.jsp" servletContext="<%= application %>" />
+
+		<div class="knowledge-base-admin-content">
+	</c:when>
+	<c:otherwise>
+		<liferay-util:include page="/admin/common/top_tabs.jsp" servletContext="<%= application %>" />
+	</c:otherwise>
+</c:choose>
 
 <clay:management-toolbar
 	actionDropdownItems="<%= kbAdminManagementToolbarDisplayContext.getActionDropdownItems() %>"
@@ -84,7 +93,7 @@ KBArticleURLHelper kbArticleURLHelper = new KBArticleURLHelper(renderRequest, re
 			showParentGroups="<%= false %>"
 		/>
 
-		<liferay-portlet:actionURL name="deleteKBArticlesAndFolders" varImpl="deleteKBArticlesAndFoldersURL" />
+		<liferay-portlet:actionURL name="/knowledge_base/delete_kb_articles_and_folders" varImpl="deleteKBArticlesAndFoldersURL" />
 
 		<aui:form action="<%= deleteKBArticlesAndFoldersURL %>" name="fm">
 			<aui:input name="redirect" type="hidden" value="<%= currentURL %>" />
@@ -155,7 +164,7 @@ KBArticleURLHelper kbArticleURLHelper = new KBArticleURLHelper(renderRequest, re
 								</span>
 
 								<liferay-portlet:renderURL varImpl="rowURL">
-									<portlet:param name="mvcPath" value="/admin/view_folders.jsp" />
+									<portlet:param name="mvcPath" value="/admin/view_kb_folders.jsp" />
 									<portlet:param name="parentResourceClassNameId" value="<%= String.valueOf(kbFolder.getClassNameId()) %>" />
 									<portlet:param name="parentResourcePrimKey" value="<%= String.valueOf(kbFolder.getKbFolderId()) %>" />
 									<portlet:param name="redirect" value="<%= currentURL %>" />
@@ -202,7 +211,7 @@ KBArticleURLHelper kbArticleURLHelper = new KBArticleURLHelper(renderRequest, re
 							</liferay-ui:search-container-column-text>
 
 							<liferay-ui:search-container-column-jsp
-								path="/admin/folder_action.jsp"
+								path="/admin/kb_folder_action.jsp"
 							/>
 						</c:when>
 						<c:otherwise>
@@ -257,7 +266,7 @@ KBArticleURLHelper kbArticleURLHelper = new KBArticleURLHelper(renderRequest, re
 
 									<c:if test="<%= childKBArticlesCount > 0 %>">
 										<liferay-portlet:renderURL varImpl="childKBArticlesURL">
-											<portlet:param name="mvcPath" value="/admin/view_articles.jsp" />
+											<portlet:param name="mvcPath" value="/admin/view_kb_articles.jsp" />
 											<portlet:param name="parentResourceClassNameId" value="<%= String.valueOf(kbArticle.getClassNameId()) %>" />
 											<portlet:param name="parentResourcePrimKey" value="<%= String.valueOf(kbArticle.getResourcePrimKey()) %>" />
 											<portlet:param name="redirect" value="<%= currentURL %>" />
@@ -282,7 +291,7 @@ KBArticleURLHelper kbArticleURLHelper = new KBArticleURLHelper(renderRequest, re
 							<liferay-ui:search-container-column-jsp
 								align="right"
 								cssClass="entry-action"
-								path="/admin/article_action.jsp"
+								path="/admin/kb_article_action.jsp"
 							/>
 						</c:otherwise>
 					</c:choose>
@@ -297,3 +306,7 @@ KBArticleURLHelper kbArticleURLHelper = new KBArticleURLHelper(renderRequest, re
 		</aui:form>
 	</clay:container-fluid>
 </div>
+
+<c:if test='<%= GetterUtil.getBoolean(PropsUtil.get("feature.flag.LPS-156421")) %>'>
+	</div>
+</c:if>

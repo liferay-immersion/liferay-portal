@@ -63,6 +63,25 @@ definition {
 			option = "${option}");
 	}
 
+	macro configureFederatedSearchKeyForOptionsWidget {
+		Portlet.gotoPortletOptions(
+			portletName = "Blueprints Options",
+			portletOption = "Configuration");
+
+		SelectFrame(locator1 = "IFrame#CONFIGURATION");
+
+		Type(
+			key_fieldLabel = "Federated Search Key",
+			locator1 = "TextInput#GENERIC_TEXT_INPUT",
+			value1 = "${federatedSearchKey}");
+
+		Button.clickSave();
+
+		Alert.viewSuccessMessage();
+
+		IFrame.closeFrame();
+	}
+
 	macro createBlueprint {
 		Click(locator1 = "Button#PLUS");
 
@@ -227,22 +246,6 @@ definition {
 			locator1 = "Blueprints#BLUEPRINTS_ADDED_ELEMENT_VERTICAL_ELLIPSIS");
 
 		MenuItem.clickNoError(menuItem = "${menuItem}");
-	}
-
-	macro viewCopiedContent {
-		WebContentNavigator.openToAddBasicArticle(
-			groupName = "Guest",
-			siteURLKey = "guest");
-
-		SelectFrame.selectFrameNoLoading(locator1 = "CKEditor#BODY_FIELD_IFRAME_2");
-
-		Click(locator1 = "CKEditor#BODY");
-
-		RobotType.robotTypeShortcut(locator1 = "Ctrl + v");
-
-		WaitForElementPresent(
-			key_text = "${text}",
-			locator1 = "CKEditor#BODY_TEXT");
 	}
 
 	macro viewDownloadedContent {

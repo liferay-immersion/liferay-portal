@@ -19,7 +19,7 @@ import com.liferay.object.admin.rest.dto.v1_0.ObjectViewColumn;
 import com.liferay.object.admin.rest.dto.v1_0.ObjectViewFilterColumn;
 import com.liferay.object.admin.rest.dto.v1_0.ObjectViewSortColumn;
 import com.liferay.object.field.filter.parser.ObjectFieldFilterParser;
-import com.liferay.object.field.filter.parser.ObjectFieldFilterParserServicesTracker;
+import com.liferay.object.field.filter.parser.ObjectFieldFilterParserTracker;
 import com.liferay.object.model.ObjectField;
 import com.liferay.object.service.ObjectFieldLocalService;
 import com.liferay.object.util.LocalizedMapUtil;
@@ -59,68 +59,57 @@ public class ObjectViewDTOConverter
 	@Override
 	public ObjectView toDTO(
 			DTOConverterContext dtoConverterContext,
-			com.liferay.object.model.ObjectView serviceBuilderObjectView)
+			com.liferay.object.model.ObjectView objectView)
 		throws Exception {
 
-		if (serviceBuilderObjectView == null) {
+		if (objectView == null) {
 			return null;
 		}
 
-		ObjectView objectView = new ObjectView() {
+		return new ObjectView() {
 			{
-				dateCreated = serviceBuilderObjectView.getCreateDate();
-				dateModified = serviceBuilderObjectView.getModifiedDate();
-				defaultObjectView =
-					serviceBuilderObjectView.getDefaultObjectView();
-				id = serviceBuilderObjectView.getObjectViewId();
+				actions = dtoConverterContext.getActions();
+				dateCreated = objectView.getCreateDate();
+				dateModified = objectView.getModifiedDate();
+				defaultObjectView = objectView.getDefaultObjectView();
+				id = objectView.getObjectViewId();
 				name = LocalizedMapUtil.getLanguageIdMap(
-					serviceBuilderObjectView.getNameMap());
-				objectDefinitionId =
-					serviceBuilderObjectView.getObjectDefinitionId();
+					objectView.getNameMap());
+				objectDefinitionId = objectView.getObjectDefinitionId();
 				objectViewColumns = TransformUtil.transformToArray(
-					serviceBuilderObjectView.getObjectViewColumns(),
-					(com.liferay.object.model.ObjectViewColumn
-						objectViewColumn) -> _toObjectViewColumn(
-							objectViewColumn),
+					objectView.getObjectViewColumns(),
+					objectViewColumn -> _toObjectViewColumn(objectViewColumn),
 					ObjectViewColumn.class);
 				objectViewFilterColumns = TransformUtil.transformToArray(
-					serviceBuilderObjectView.getObjectViewFilterColumns(),
-					(com.liferay.object.model.ObjectViewFilterColumn
-						objectViewFilterColumn) -> _toObjectViewFilterColumn(
-							dtoConverterContext.getLocale(),
-							serviceBuilderObjectView.getObjectDefinitionId(),
-							objectViewFilterColumn),
+					objectView.getObjectViewFilterColumns(),
+					objectViewFilterColumn -> _toObjectViewFilterColumn(
+						dtoConverterContext.getLocale(),
+						objectView.getObjectDefinitionId(),
+						objectViewFilterColumn),
 					ObjectViewFilterColumn.class);
 				objectViewSortColumns = TransformUtil.transformToArray(
-					serviceBuilderObjectView.getObjectViewSortColumns(),
-					(com.liferay.object.model.ObjectViewSortColumn
-						objectViewSortColumn) -> _toObjectViewSortColumn(
-							objectViewSortColumn),
+					objectView.getObjectViewSortColumns(),
+					objectViewSortColumn -> _toObjectViewSortColumn(
+						objectViewSortColumn),
 					ObjectViewSortColumn.class);
 			}
 		};
-
-		objectView.setActions(dtoConverterContext.getActions());
-
-		return objectView;
 	}
 
 	private ObjectViewColumn _toObjectViewColumn(
-		com.liferay.object.model.ObjectViewColumn
-			serviceBuilderObjectViewColumn) {
+		com.liferay.object.model.ObjectViewColumn objectViewColumn) {
 
-		if (serviceBuilderObjectViewColumn == null) {
+		if (objectViewColumn == null) {
 			return null;
 		}
 
 		return new ObjectViewColumn() {
 			{
-				id = serviceBuilderObjectViewColumn.getObjectViewColumnId();
+				id = objectViewColumn.getObjectViewColumnId();
 				label = LocalizedMapUtil.getLanguageIdMap(
-					serviceBuilderObjectViewColumn.getLabelMap());
-				objectFieldName =
-					serviceBuilderObjectViewColumn.getObjectFieldName();
-				priority = serviceBuilderObjectViewColumn.getPriority();
+					objectViewColumn.getLabelMap());
+				objectFieldName = objectViewColumn.getObjectFieldName();
+				priority = objectViewColumn.getPriority();
 			}
 		};
 	}
@@ -156,14 +145,12 @@ public class ObjectViewDTOConverter
 			ObjectViewFilterColumn.FilterType.create(
 				serviceBuilderObjectViewFilterColumn.getFilterType()));
 		objectViewFilterColumn.setJson(
-			serviceBuilderObjectViewFilterColumn.getJson());
+			serviceBuilderObjectViewFilterColumn.getJSON());
 		objectViewFilterColumn.setValueSummary(
 			() -> {
 				ObjectFieldFilterParser objectFieldFilterParser =
-					_objectFieldFilterParserServicesTracker.
-						getObjectFieldFilterParser(
-							serviceBuilderObjectViewFilterColumn.
-								getFilterType());
+					_objectFieldFilterParserTracker.getObjectFieldFilterParser(
+						serviceBuilderObjectViewFilterColumn.getFilterType());
 
 				if (Objects.equals(
 						serviceBuilderObjectViewFilterColumn.
@@ -209,23 +196,19 @@ public class ObjectViewDTOConverter
 	}
 
 	private ObjectViewSortColumn _toObjectViewSortColumn(
-		com.liferay.object.model.ObjectViewSortColumn
-			serviceBuilderObjectViewSortColumn) {
+		com.liferay.object.model.ObjectViewSortColumn objectViewSortColumn) {
 
-		if (serviceBuilderObjectViewSortColumn == null) {
+		if (objectViewSortColumn == null) {
 			return null;
 		}
 
 		return new ObjectViewSortColumn() {
 			{
-				id =
-					serviceBuilderObjectViewSortColumn.
-						getObjectViewSortColumnId();
-				objectFieldName =
-					serviceBuilderObjectViewSortColumn.getObjectFieldName();
-				priority = serviceBuilderObjectViewSortColumn.getPriority();
+				id = objectViewSortColumn.getObjectViewSortColumnId();
+				objectFieldName = objectViewSortColumn.getObjectFieldName();
+				priority = objectViewSortColumn.getPriority();
 				sortOrder = ObjectViewSortColumn.SortOrder.create(
-					serviceBuilderObjectViewSortColumn.getSortOrder());
+					objectViewSortColumn.getSortOrder());
 			}
 		};
 	}
@@ -234,8 +217,7 @@ public class ObjectViewDTOConverter
 	private Language _language;
 
 	@Reference
-	private ObjectFieldFilterParserServicesTracker
-		_objectFieldFilterParserServicesTracker;
+	private ObjectFieldFilterParserTracker _objectFieldFilterParserTracker;
 
 	@Reference
 	private ObjectFieldLocalService _objectFieldLocalService;

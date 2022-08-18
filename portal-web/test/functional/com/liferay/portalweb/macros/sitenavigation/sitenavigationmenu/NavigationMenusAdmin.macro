@@ -1,11 +1,9 @@
 definition {
 
 	macro _addItemPage {
-		if (!(isSet(privacy))) {
-			var privacy = "Pages";
+		if (isSet(privacy)) {
+			Navigator.gotoNavItem(navItem = "${privacy}");
 		}
-
-		Navigator.gotoNavItem(navItem = "${privacy}");
 
 		Portlet.expandTree();
 
@@ -28,22 +26,14 @@ definition {
 			value1 = "${url}");
 
 		if ("${target}" == "Blank") {
-			while (IsNotChecked.isNotCheckedNotVisible(checkboxName = "Open in a new tab.", locator1 = "Checkbox#ANY_CHECKBOX")) {
-				Click.clickAtNotVisible(
-					checkboxName = "Open in a new tab.",
-					locator1 = "Checkbox#ANY_CHECKBOX");
-			}
-
-			Pause(locator1 = "3000");
+			Check.checkToggleSwitch(
+				checkboxName = "Open in a new tab.",
+				locator1 = "Checkbox#ANY_CHECKBOX");
 		}
 		else if ("${target}" == "Self") {
-			while (IsChecked.isNotCheckedNotVisible(checkboxName = "Open in a new tab.", locator1 = "Checkbox#ANY_CHECKBOX")) {
-				Click.clickAtNotVisible(
-					checkboxName = "Open in a new tab.",
-					locator1 = "Checkbox#ANY_CHECKBOX");
-			}
-
-			Pause(locator1 = "3000");
+			Uncheck.uncheckToggleSwitch(
+				checkboxName = "Open in a new tab.",
+				locator1 = "Checkbox#ANY_CHECKBOX");
 		}
 	}
 
@@ -85,9 +75,7 @@ definition {
 
 		MenuItem.click(menuItem = "${item}");
 
-		Pause(locator1 = "1000");
-
-		IFrame.selectConfigurationFrame();
+		SelectFrame(locator1 = "IFrame#MODAL_BODY");
 
 		if ("${item}" == "Page") {
 			NavigationMenusAdmin._addItemPage(
@@ -188,8 +176,6 @@ definition {
 
 	macro addTranslation {
 		NavigationMenusAdmin.openItemSidebar(itemName = "${itemName}");
-
-		Pause(locator1 = "3000");
 
 		if (IsElementPresent(locator1 = "SiteNavigationMenu#USE_CUSTOM_NAME_CHECKBOX")) {
 			Check.checkToggleSwitch(locator1 = "SiteNavigationMenu#USE_CUSTOM_NAME_CHECKBOX");
@@ -300,9 +286,7 @@ definition {
 			if (isSet(pageName)) {
 				Click(locator1 = "Button#CHOOSE");
 
-				Pause(locator1 = "1000");
-
-				IFrame.selectConfigurationFrame();
+				SelectFrame(locator1 = "IFrame#MODAL_BODY");
 
 				Portlet.expandTree();
 
@@ -395,12 +379,12 @@ definition {
 			key_itemName = "${itemName}",
 			locator1 = "SiteNavigationMenu#ITEM_ENTRY");
 
+		WaitForElementPresent(locator1 = "SiteNavigationMenu#SIDEBAR_OPEN");
+
 		AssertTextEquals(
 			key_itemName = "${itemName}",
 			locator1 = "SiteNavigationMenu#SIDEBAR_ITEM_NAME",
 			value1 = "${itemName}");
-
-		AssertElementPresent(locator1 = "SiteNavigationMenu#SIDEBAR");
 	}
 
 	macro openNavigationMenusAdmin {
@@ -537,7 +521,7 @@ definition {
 
 			AssertTextEquals(
 				locator1 = "Message#SUBTITLE",
-				value1 = "This item does not have a display page. Items without display page do not have links and are hidden from menus.");
+				value1 = "This item does not have a display page. Items without a display page do not have links and are hidden from menus.");
 		}
 		else if ("${warningMessage}" == "No categories inside") {
 			AssertElementPresent(

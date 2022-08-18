@@ -47,6 +47,7 @@ const InviteTeamMembersPage = ({
 }) => {
 	const {
 		articleAccountSupportURL,
+		client,
 		provisioningServerAPI,
 	} = useAppPropertiesContext();
 
@@ -59,7 +60,7 @@ const InviteTeamMembersPage = ({
 		{error: associateUserAccountError},
 	] = useMutation(associateUserAccountWithAccountAndAccountRole);
 
-	const [baseButtonDisabled, setBaseButtonDisabled] = useState();
+	const [baseButtonDisabled, setBaseButtonDisabled] = useState(true);
 	const [hasInitialError, setInitialError] = useState();
 	const [accountMemberRole, setAccountMemberRole] = useState();
 	const [accountRolesOptions, setAccountRolesOptions] = useState([]);
@@ -76,7 +77,7 @@ const InviteTeamMembersPage = ({
 
 	useEffect(() => {
 		const getRoles = async () => {
-			const roles = await getProjectRoles(project);
+			const roles = await getProjectRoles(client, project);
 
 			if (roles) {
 				const accountMember = roles?.find(
@@ -114,6 +115,7 @@ const InviteTeamMembersPage = ({
 		getRoles();
 	}, [
 		availableAdministratorAssets,
+		client,
 		project,
 		projectHasSLAGoldPlatinum,
 		setFieldValue,

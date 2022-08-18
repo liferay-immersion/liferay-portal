@@ -15,19 +15,19 @@
 import {useLocation, useNavigate, useParams} from 'react-router-dom';
 
 import Container from '../../../components/Layout/Container';
-import ListView, {ListViewProps} from '../../../components/ListView/ListView';
+import ListView, {ListViewProps} from '../../../components/ListView';
 import {TableProps} from '../../../components/Table';
-import {getCases} from '../../../graphql/queries';
 import {FormModal} from '../../../hooks/useFormModal';
 import i18n from '../../../i18n';
 import {filters} from '../../../schema/filter';
+import {casesResource, getCasesTransformData} from '../../../services/rest';
+import {Action} from '../../../types';
 import dayjs from '../../../util/date';
 import {searchUtil} from '../../../util/search';
-import CaseModal from './CaseModal';
 import useCaseActions from './useCaseActions';
 
 type CaseListViewProps = {
-	actions?: any[];
+	actions?: Action[];
 	formModal?: FormModal;
 	projectId?: number | string;
 	variables?: any;
@@ -54,7 +54,7 @@ const CaseListView: React.FC<CaseListViewProps> = ({
 				filterFields: filters.case as any,
 				title: i18n.translate('cases'),
 			}}
-			query={getCases}
+			resource={casesResource}
 			tableProps={{
 				actions,
 				columns: [
@@ -102,7 +102,7 @@ const CaseListView: React.FC<CaseListViewProps> = ({
 				navigateTo: ({id}) => id?.toString(),
 				...tableProps,
 			}}
-			transformData={(data) => data?.cases}
+			transformData={getCasesTransformData}
 			variables={variables}
 			{...listViewProps}
 		/>
@@ -115,30 +115,26 @@ const Cases = () => {
 	const {actions, formModal} = useCaseActions();
 
 	return (
-		<>
-			<Container>
-				<CaseListView
-					actions={actions}
-					formModal={formModal}
-					listViewProps={{
-						initialContext: {
-							columns: {
-								caseType: false,
-								dateCreated: false,
-								dateModified: false,
-								issues: false,
-								team: false,
-							},
+		<Container>
+			<CaseListView
+				actions={actions}
+				formModal={formModal}
+				listViewProps={{
+					initialContext: {
+						columns: {
+							caseType: false,
+							dateCreated: false,
+							dateModified: false,
+							issues: false,
+							team: false,
 						},
-					}}
-					variables={{
-						filter: searchUtil.eq('projectId', projectId as string),
-					}}
-				/>
-			</Container>
-
-			<CaseModal modal={formModal.modal} projectId={Number(projectId)} />
-		</>
+					},
+				}}
+				variables={{
+					filter: searchUtil.eq('projectId', projectId as string),
+				}}
+			/>
+		</Container>
 	);
 };
 

@@ -32,9 +32,9 @@ definition {
 			key_lastName = "${userLastName}",
 			locator1 = "ExportPersonalData#HEADER");
 
-		while (IsElementPresent(key_status = "In Progress", locator1 = "ExportPersonalData#EXPORT_PROCESS_STATUS")) {
-			Pause(locator1 = "3000");
-		}
+		WaitForElementNotPresent(
+			key_status = "In Progress",
+			locator1 = "ExportPersonalData#EXPORT_PROCESS_STATUS");
 
 		if (isSet(applications)) {
 			for (var application : list "${applications}") {
@@ -263,7 +263,7 @@ definition {
 
 			Click(locator1 = "ContentRow#ENTRY_CONTENT_ENTRY_ELLIPSIS");
 
-			AssertClick.assertPartialTextClickAt(
+			WaitForElementPresent(
 				locator1 = "MenuItem#DOWNLOAD",
 				value1 = "Download");
 		}

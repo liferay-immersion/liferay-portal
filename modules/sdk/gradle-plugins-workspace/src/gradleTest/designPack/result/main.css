@@ -1,6 +1,6 @@
 @charset "UTF-8";
 /**
- * Clay 3.37.0
+ * Clay 3.63.0
  *
  * SPDX-FileCopyrightText: © 2020 Liferay, Inc. <https://liferay.com>
  * SPDX-FileCopyrightText: © 2020 Contributors to the project Clay <https://github.com/liferay/clay/graphs/contributors>
@@ -16,7 +16,7 @@
  * SPDX-License-Identifier: LicenseRef-MIT-Bootstrap
  */
 /**
- * Clay 3.37.0
+ * Clay 3.63.0
  *
  * SPDX-FileCopyrightText: © 2020 Liferay, Inc. <https://liferay.com>
  * SPDX-FileCopyrightText: © 2020 Contributors to the project Clay <https://github.com/liferay/clay/graphs/contributors>
@@ -1490,7 +1490,7 @@ body > .lfr-menu-list ul {
 .lfr-search-container-wrapper.lfr-search-container-fixed-first-column .table-responsive .table th {
   height: auto;
 }
-.lfr-search-container-wrapper a:not(.component-action) {
+.lfr-search-container-wrapper a:not(.component-action):not(.btn) {
   color: #343a40;
 }
 .lfr-search-container-wrapper .dropdown-action .dropdown-toggle {
@@ -3153,8 +3153,3 @@ html:not(#__):not(#___) .controls-visible .cadmin .portlet-topper-toolbar {
 .form-group.form-inline.input-boolean-wrapper label, .form-group.form-inline.input-checkbox-wrapper label {
   gap: 0.3125rem;
 }
-
-/* These inject tags are used for dynamically creating imports for themelet styles, you can place them where ever you like in this file. */
-/* inject:imports */
-/* ---------- endinject ---------- */
-/* ---------- This file allows you to override default styles in one central location for easier upgrade and maintenance. ---------- */

@@ -16,6 +16,7 @@ package com.liferay.layout.page.template.admin.web.internal.portlet.action.test;
 
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.fragment.constants.FragmentConstants;
+import com.liferay.fragment.entry.processor.constants.FragmentEntryProcessorConstants;
 import com.liferay.fragment.model.FragmentCollection;
 import com.liferay.fragment.model.FragmentEntry;
 import com.liferay.fragment.model.FragmentEntryLink;
@@ -139,7 +140,8 @@ public class ExportImportLayoutPageTemplateEntriesTest {
 				StringPool.BLANK,
 				_read("export_import_fragment_field_text_config.json"),
 				_read("export_import_fragment_field_text_editable_values.json"),
-				StringPool.BLANK, 0, null, _serviceContext1);
+				StringPool.BLANK, 0, null, fragmentEntry.getType(),
+				_serviceContext1);
 
 		_layoutPageTemplateStructureLocalService.
 			updateLayoutPageTemplateStructureData(
@@ -366,11 +368,22 @@ public class ExportImportLayoutPageTemplateEntriesTest {
 		ContainerStyledLayoutStructureItem
 			actualContainerStyledLayoutStructureItem) {
 
-		Assert.assertEquals(
+		JSONObject expectedItemConfigJSONObject =
 			expectedContainerStyledLayoutStructureItem.
-				getBackgroundColorCssClass(),
-			actualContainerStyledLayoutStructureItem.
-				getBackgroundColorCssClass());
+				getItemConfigJSONObject();
+
+		JSONObject actualItemConfigJSONObject =
+			actualContainerStyledLayoutStructureItem.getItemConfigJSONObject();
+
+		JSONObject expectedStylesJSONObject =
+			expectedItemConfigJSONObject.getJSONObject("styles");
+
+		JSONObject actualStylesJSONObject =
+			actualItemConfigJSONObject.getJSONObject("styles");
+
+		Assert.assertEquals(
+			expectedStylesJSONObject.getString("backgroundColor"),
+			actualStylesJSONObject.getString("backgroundColor"));
 
 		JSONObject expectedBackgroundImageJSONObject =
 			expectedContainerStyledLayoutStructureItem.
@@ -384,17 +397,17 @@ public class ExportImportLayoutPageTemplateEntriesTest {
 			actualBackgroundImageJSONObject.toString());
 
 		Assert.assertEquals(
-			expectedContainerStyledLayoutStructureItem.getPaddingBottom(),
-			actualContainerStyledLayoutStructureItem.getPaddingBottom());
+			expectedStylesJSONObject.getString("paddingBottom"),
+			actualStylesJSONObject.getString("paddingBottom"));
 		Assert.assertEquals(
-			expectedContainerStyledLayoutStructureItem.getPaddingLeft(),
-			actualContainerStyledLayoutStructureItem.getPaddingLeft());
+			expectedStylesJSONObject.getString("paddingLeft"),
+			actualStylesJSONObject.getString("paddingLeft"));
 		Assert.assertEquals(
-			expectedContainerStyledLayoutStructureItem.getPaddingRight(),
-			actualContainerStyledLayoutStructureItem.getPaddingRight());
+			expectedStylesJSONObject.getString("paddingRight"),
+			actualStylesJSONObject.getString("paddingRight"));
 		Assert.assertEquals(
-			expectedContainerStyledLayoutStructureItem.getPaddingTop(),
-			actualContainerStyledLayoutStructureItem.getPaddingTop());
+			expectedStylesJSONObject.getString("paddingTop"),
+			actualStylesJSONObject.getString("paddingTop"));
 		Assert.assertEquals(
 			expectedContainerStyledLayoutStructureItem.getWidthType(),
 			actualContainerStyledLayoutStructureItem.getWidthType());
@@ -431,12 +444,12 @@ public class ExportImportLayoutPageTemplateEntriesTest {
 
 		JSONObject expectedBackgroundImageFragmentEntryProcessorJSONObject =
 			expectedEditableValuesJSONObject.getJSONObject(
-				"com.liferay.fragment.entry.processor.background.image." +
-					"BackgroundImageFragmentEntryProcessor");
+				FragmentEntryProcessorConstants.
+					KEY_BACKGROUND_IMAGE_FRAGMENT_ENTRY_PROCESSOR);
 		JSONObject actualBackgroundImageFragmentEntryProcessorJSONObject =
 			actualEditableValuesJSONObject.getJSONObject(
-				"com.liferay.fragment.entry.processor.background.image." +
-					"BackgroundImageFragmentEntryProcessor");
+				FragmentEntryProcessorConstants.
+					KEY_BACKGROUND_IMAGE_FRAGMENT_ENTRY_PROCESSOR);
 
 		if (expectedBackgroundImageFragmentEntryProcessorJSONObject == null) {
 			Assert.assertNull(
@@ -452,12 +465,12 @@ public class ExportImportLayoutPageTemplateEntriesTest {
 
 		JSONObject expectedEditableFragmentEntryProcessorJSONObject =
 			expectedEditableValuesJSONObject.getJSONObject(
-				"com.liferay.fragment.entry.processor.editable." +
-					"EditableFragmentEntryProcessor");
+				FragmentEntryProcessorConstants.
+					KEY_EDITABLE_FRAGMENT_ENTRY_PROCESSOR);
 		JSONObject actualEditableFragmentEntryProcessorJSONObject =
 			actualEditableValuesJSONObject.getJSONObject(
-				"com.liferay.fragment.entry.processor.editable." +
-					"EditableFragmentEntryProcessor");
+				FragmentEntryProcessorConstants.
+					KEY_EDITABLE_FRAGMENT_ENTRY_PROCESSOR);
 
 		if (expectedEditableFragmentEntryProcessorJSONObject == null) {
 			Assert.assertNull(actualEditableFragmentEntryProcessorJSONObject);
@@ -490,12 +503,12 @@ public class ExportImportLayoutPageTemplateEntriesTest {
 
 		JSONObject expectedFreeMarkerFragmentEntryProcessorJSONObject =
 			expectedEditableValuesJSONObject.getJSONObject(
-				"com.liferay.fragment.entry.processor.freemarker." +
-					"FreeMarkerFragmentEntryProcessor");
+				FragmentEntryProcessorConstants.
+					KEY_FREEMARKER_FRAGMENT_ENTRY_PROCESSOR);
 		JSONObject actualFreeMarkerFragmentEntryProcessorJSONObject =
 			actualEditableValuesJSONObject.getJSONObject(
-				"com.liferay.fragment.entry.processor.freemarker." +
-					"FreeMarkerFragmentEntryProcessor");
+				FragmentEntryProcessorConstants.
+					KEY_FREEMARKER_FRAGMENT_ENTRY_PROCESSOR);
 
 		if (expectedFreeMarkerFragmentEntryProcessorJSONObject == null) {
 			Assert.assertNull(actualFreeMarkerFragmentEntryProcessorJSONObject);

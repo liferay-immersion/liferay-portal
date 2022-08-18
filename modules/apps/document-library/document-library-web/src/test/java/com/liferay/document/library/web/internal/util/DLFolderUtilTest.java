@@ -15,8 +15,8 @@
 package com.liferay.document.library.web.internal.util;
 
 import com.liferay.depot.model.DepotEntry;
-import com.liferay.depot.service.DepotEntryService;
-import com.liferay.depot.service.DepotEntryServiceUtil;
+import com.liferay.depot.service.DepotEntryLocalService;
+import com.liferay.depot.service.DepotEntryLocalServiceUtil;
 import com.liferay.document.library.kernel.exception.NoSuchFolderException;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.Group;
@@ -33,7 +33,6 @@ import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
 
-import org.mockito.Matchers;
 import org.mockito.Mockito;
 
 /**
@@ -59,23 +58,24 @@ public class DLFolderUtilTest {
 			GroupLocalServiceUtil.class, "_service", groupLocalService);
 
 		Mockito.when(
-			groupLocalService.getGroup(Matchers.anyLong())
+			groupLocalService.getGroup(Mockito.anyLong())
 		).thenReturn(
 			depotGroup
 		);
 
-		DepotEntryService depotEntryService = Mockito.mock(
-			DepotEntryService.class);
+		DepotEntryLocalService depotEntryLocalService = Mockito.mock(
+			DepotEntryLocalService.class);
 
 		List<DepotEntry> depotEntries = _getGroupConnectedDepotEntries(
 			depotGroupId);
 
 		ReflectionTestUtil.setFieldValue(
-			DepotEntryServiceUtil.class, "_service", depotEntryService);
+			DepotEntryLocalServiceUtil.class, "_service",
+			depotEntryLocalService);
 
 		Mockito.when(
-			depotEntryService.getGroupConnectedDepotEntries(
-				Matchers.anyLong(), Matchers.anyInt(), Matchers.anyInt())
+			depotEntryLocalService.getGroupConnectedDepotEntries(
+				Mockito.anyLong(), Mockito.anyInt(), Mockito.anyInt())
 		).thenReturn(
 			depotEntries
 		);
@@ -95,7 +95,7 @@ public class DLFolderUtilTest {
 		Group depotGroup = _getDepotGroup(depotGroupId);
 
 		Mockito.when(
-			groupLocalService.getGroup(Matchers.anyLong())
+			groupLocalService.getGroup(Mockito.anyLong())
 		).thenReturn(
 			depotGroup
 		);
@@ -103,21 +103,22 @@ public class DLFolderUtilTest {
 		ReflectionTestUtil.setFieldValue(
 			GroupLocalServiceUtil.class, "_service", groupLocalService);
 
-		DepotEntryService depotEntryService = Mockito.mock(
-			DepotEntryService.class);
+		DepotEntryLocalService depotEntryLocalService = Mockito.mock(
+			DepotEntryLocalService.class);
 
 		List<DepotEntry> depotEntries = _getGroupConnectedDepotEntries(
 			RandomTestUtil.randomLong());
 
 		Mockito.when(
-			depotEntryService.getGroupConnectedDepotEntries(
-				Matchers.anyLong(), Matchers.anyInt(), Matchers.anyInt())
+			depotEntryLocalService.getGroupConnectedDepotEntries(
+				Mockito.anyLong(), Mockito.anyInt(), Mockito.anyInt())
 		).thenReturn(
 			depotEntries
 		);
 
 		ReflectionTestUtil.setFieldValue(
-			DepotEntryServiceUtil.class, "_service", depotEntryService);
+			DepotEntryLocalServiceUtil.class, "_service",
+			depotEntryLocalService);
 
 		DLFolderUtil.validateDepotFolder(
 			RandomTestUtil.randomLong(), depotGroup.getGroupId(),

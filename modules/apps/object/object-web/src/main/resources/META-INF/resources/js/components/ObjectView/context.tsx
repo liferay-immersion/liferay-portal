@@ -14,12 +14,8 @@
 
 import React, {createContext, useReducer} from 'react';
 
-import {defaultLanguageId} from '../../utils/locale';
 import {
-	TAction,
-	TLabelValueObject,
 	TName,
-	TObjectField,
 	TObjectView,
 	TObjectViewColumn,
 	TObjectViewFilterColumn,
@@ -37,84 +33,8 @@ interface TInitialFilterColumn extends TObjectViewFilterColumn {
 	valueSummary: string;
 }
 
+const defaultLanguageId = Liferay.ThemeDisplay.getDefaultLanguageId();
 const ViewContext = createContext({} as IViewContextProps);
-
-export const METADATA = [
-	{
-		businessType: 'Author',
-		checked: false,
-		filtered: true,
-		id: 1,
-		indexed: true,
-		indexedAsKeyword: true,
-		indexedLanguageId: '',
-		label: {[defaultLanguageId]: Liferay.Language.get('author')},
-		listTypeDefinitionId: true,
-		name: 'creator',
-		required: false,
-		type: 'metadata',
-	},
-	{
-		businessType: 'Creation Date',
-		checked: false,
-		filtered: true,
-		id: 2,
-		indexed: true,
-		indexedAsKeyword: true,
-		indexedLanguageId: '',
-		label: {[defaultLanguageId]: Liferay.Language.get('creation-date')},
-		listTypeDefinitionId: true,
-		name: 'dateCreated',
-		required: false,
-		type: 'metadata',
-	},
-	{
-		businessType: 'Modified Date',
-		checked: false,
-		filtered: true,
-		id: 3,
-		indexed: true,
-		indexedAsKeyword: true,
-		indexedLanguageId: '',
-		label: {[defaultLanguageId]: Liferay.Language.get('modified-date')},
-		listTypeDefinitionId: true,
-		name: 'dateModified',
-		required: false,
-		type: 'metadata',
-	},
-	{
-		businessType: 'Workflow Status',
-		checked: false,
-		filtered: true,
-		id: 4,
-		indexed: true,
-		indexedAsKeyword: true,
-		indexedLanguageId: '',
-		label: {
-			[defaultLanguageId]: Liferay.Language.get(
-				'workflow-status[object]'
-			),
-		},
-		listTypeDefinitionId: true,
-		name: 'status',
-		required: false,
-		type: 'metadata',
-	},
-	{
-		businessType: 'Id',
-		checked: false,
-		filtered: true,
-		id: 5,
-		indexed: true,
-		indexedAsKeyword: true,
-		indexedLanguageId: '',
-		label: {[defaultLanguageId]: Liferay.Language.get('id')},
-		listTypeDefinitionId: true,
-		name: 'id',
-		required: false,
-		type: 'metadata',
-	},
-];
 
 export enum TYPES {
 	ADD_OBJECT_FIELDS = 'ADD_OBJECT_FIELDS',
@@ -137,7 +57,7 @@ export enum TYPES {
 }
 
 const initialState = {
-	objectFields: [] as TObjectField[],
+	objectFields: [] as ObjectField[],
 	objectView: {} as TObjectView,
 } as TState;
 
@@ -161,6 +81,111 @@ const handleChangeColumnOrder = (
 	return newColumn;
 };
 
+type TSortOptions = {
+	label: string;
+	value: string;
+};
+
+export type TAction =
+	| {
+			payload: {objectView: TObjectView};
+			type: TYPES.ADD_OBJECT_VIEW;
+	  }
+	| {
+			payload: {selectedObjectFields: ObjectField[]};
+			type: TYPES.ADD_OBJECT_VIEW_COLUMN;
+	  }
+	| {
+			payload: {
+				filterType?: string;
+				objectFieldName: string;
+				valueList?: IItem[];
+			};
+			type: TYPES.ADD_OBJECT_VIEW_FILTER_COLUMN;
+	  }
+	| {
+			payload: {
+				objectFieldName: string;
+				objectFields: ObjectField[];
+				objectViewSortColumns?: TObjectViewSortColumn[];
+				selectedObjetSort: TSortOptions;
+			};
+			type: TYPES.ADD_OBJECT_VIEW_SORT_COLUMN;
+	  }
+	| {
+			payload: {
+				objectFields: ObjectField[];
+				objectView: TObjectView;
+			};
+			type: TYPES.ADD_OBJECT_FIELDS;
+	  }
+	| {
+			payload: {
+				newName: string;
+			};
+			type: TYPES.CHANGE_OBJECT_VIEW_NAME;
+	  }
+	| {
+			payload: {
+				draggedIndex: number;
+				targetIndex: number;
+			};
+			type: TYPES.CHANGE_OBJECT_VIEW_COLUMN_ORDER;
+	  }
+	| {
+			payload: {
+				draggedIndex: number;
+				targetIndex: number;
+			};
+			type: TYPES.CHANGE_OBJECT_VIEW_SORT_COLUMN_ORDER;
+	  }
+	| {
+			payload: {
+				objectFieldName?: string;
+			};
+			type: TYPES.DELETE_OBJECT_VIEW_COLUMN;
+	  }
+	| {
+			payload: {
+				objectFieldName?: string;
+			};
+			type: TYPES.DELETE_OBJECT_VIEW_FILTER_COLUMN;
+	  }
+	| {
+			payload: {
+				objectFieldName?: string;
+			};
+			type: TYPES.DELETE_OBJECT_VIEW_SORT_COLUMN;
+	  }
+	| {
+			payload: {
+				editingObjectFieldName: string;
+				translations: TName;
+			};
+			type: TYPES.EDIT_OBJECT_VIEW_COLUMN_LABEL;
+	  }
+	| {
+			payload: {
+				filterType?: string;
+				objectFieldName?: string;
+				valueList?: IItem[];
+			};
+			type: TYPES.EDIT_OBJECT_VIEW_FILTER_COLUMN;
+	  }
+	| {
+			payload: {
+				editingObjectFieldName: string;
+				selectedObjectSort: string;
+			};
+			type: TYPES.EDIT_OBJECT_VIEW_SORT_COLUMN_SORT_ORDER;
+	  }
+	| {
+			payload: {
+				checked: boolean;
+			};
+			type: TYPES.SET_OBJECT_VIEW_AS_DEFAULT;
+	  };
+
 const viewReducer = (state: TState, action: TAction) => {
 	switch (action.type) {
 		case TYPES.ADD_OBJECT_VIEW: {
@@ -172,14 +197,19 @@ const viewReducer = (state: TState, action: TAction) => {
 			};
 		}
 		case TYPES.ADD_OBJECT_VIEW_COLUMN: {
-			const {checkedItems, filteredItems} = action.payload;
+			const {selectedObjectFields} = action.payload;
 
 			const {objectView} = state;
 
-			const newObjectViewColumns = checkedItems.map(
-				(viewColumn: TObjectViewColumn, index: number) => {
+			const newObjectViewColumns = selectedObjectFields.map(
+				(item: ObjectField, index: number) => {
 					return {
-						...viewColumn,
+						...item,
+						defaultSort: false,
+						fieldLabel: item.label[defaultLanguageId],
+						label: item.label,
+						objectFieldBusinessType: item.businessType,
+						objectFieldName: item.name,
 						priority: index,
 					};
 				}
@@ -192,7 +222,6 @@ const viewReducer = (state: TState, action: TAction) => {
 
 			return {
 				...state,
-				objectFields: filteredItems,
 				objectView: newObjectView,
 			};
 		}
@@ -203,7 +232,7 @@ const viewReducer = (state: TState, action: TAction) => {
 			let objectFieldBusinessType;
 			const {objectFields} = state;
 
-			objectFields.forEach((objectField: TObjectField) => {
+			objectFields.forEach((objectField: ObjectFieldView) => {
 				if (objectField.name === objectFieldName) {
 					labels.push(objectField.label);
 					objectField.hasFilter = true;
@@ -215,16 +244,23 @@ const viewReducer = (state: TState, action: TAction) => {
 
 			let filterTypeValue = filterType || null;
 
-			if (valueList.length === 0) {
+			if (!valueList) {
 				filterTypeValue = null;
 			}
 
 			const newFilterColumnItem: TObjectViewFilterColumn = {
-				definition: filterTypeValue && {
-					[filterTypeValue]: valueList.map(
-						(item: {label: string; value: string}) => item.value
-					),
-				},
+				definition: filterTypeValue
+					? {
+							[filterTypeValue]: valueList
+								? valueList.map(
+										(item: {
+											label: string;
+											value: string;
+										}) => item.value
+								  )
+								: [],
+					  }
+					: null,
 				fieldLabel: label[defaultLanguageId],
 				filterBy: label[defaultLanguageId],
 				filterType: filterTypeValue,
@@ -283,7 +319,7 @@ const viewReducer = (state: TState, action: TAction) => {
 			});
 
 			const labels: TName[] = [];
-			objectFields.forEach((objectField: TObjectField) => {
+			objectFields.forEach((objectField: ObjectField) => {
 				if (objectField.name === objectFieldName) {
 					labels.push(objectField.label);
 				}
@@ -351,7 +387,7 @@ const viewReducer = (state: TState, action: TAction) => {
 			} = objectView;
 
 			const objectFieldsWithCheck = objectFields.map(
-				(field: TObjectField) => {
+				(field: ObjectField) => {
 					return {
 						...field,
 						checked: false,
@@ -360,21 +396,15 @@ const viewReducer = (state: TState, action: TAction) => {
 				}
 			);
 
-			const newObjectFields: TObjectField[] = [];
+			const newObjectFields: ObjectFieldView[] = [];
 
-			if (!Liferay.FeatureFlags['LPS-154872']) {
-				METADATA.map((field) => {
-					newObjectFields.push(field);
-				});
-			}
-
-			objectFieldsWithCheck.map((field: TObjectField) => {
+			objectFieldsWithCheck.map((field: ObjectField) => {
 				newObjectFields.push(field);
 			});
 
 			newObjectFields.forEach((field) => {
 				objectViewColumns.forEach(
-					(column: {objectFieldName: string}) => {
+					(column: {objectFieldName?: string}) => {
 						if (column.objectFieldName === field.name) {
 							field.checked = true;
 						}
@@ -382,42 +412,49 @@ const viewReducer = (state: TState, action: TAction) => {
 				);
 
 				const existingFilter = objectViewFilterColumns.find(
-					(filter: {objectFieldName: string}) => {
+					(filter: {objectFieldName?: string}) => {
 						if (filter.objectFieldName === field.name) {
 							return filter;
 						}
 					}
 				);
 
-				field.hasFilter = existingFilter;
+				field.hasFilter = !!existingFilter;
 			});
 
 			const newObjectViewColumns: TObjectViewColumn[] = [];
 			const newObjectViewSortColumns: TObjectViewSortColumn[] = [];
 
 			objectViewColumns.forEach((viewColumn: TObjectViewColumn) => {
-				newObjectFields.forEach((objectField: TObjectField) => {
+				newObjectFields.forEach((objectField: ObjectField) => {
 					if (objectField.name === viewColumn.objectFieldName) {
 						newObjectViewColumns.push({
 							...viewColumn,
 							defaultSort: false,
-							fieldLabel: objectField.label[defaultLanguageId],
+							fieldLabel: objectField.label[
+								defaultLanguageId
+							] as string,
 							label: viewColumn.label,
+							objectFieldBusinessType: objectField.businessType,
 						});
 					}
 				});
 			});
 
-			objectViewSortColumns.forEach((sortColumn: TObjectViewColumn) => {
-				newObjectFields.forEach((objectField: TObjectField) => {
-					if (objectField.name === sortColumn.objectFieldName) {
-						newObjectViewSortColumns.push({
-							...sortColumn,
-							fieldLabel: objectField.label[defaultLanguageId],
-						});
-					}
-				});
-			});
+			objectViewSortColumns.forEach(
+				(sortColumn: TObjectViewSortColumn) => {
+					newObjectFields.forEach((objectField: ObjectField) => {
+						if (objectField.name === sortColumn.objectFieldName) {
+							newObjectViewSortColumns.push({
+								...sortColumn,
+								fieldLabel: objectField.label[
+									defaultLanguageId
+								] as string,
+							});
+						}
+					});
+				}
+			);
 
 			newObjectViewSortColumns.forEach(
 				(sortColumn: TObjectViewSortColumn) => {
@@ -434,14 +471,15 @@ const viewReducer = (state: TState, action: TAction) => {
 				}
 			);
 
-			const newObjectViewFilterColumns = objectViewFilterColumns.map(
-				(filterColumn: TInitialFilterColumn) => {
-					const definition =
-						filterColumn.json && JSON.parse(filterColumn.json);
+			const newObjectViewFilterColumns = (objectViewFilterColumns as TInitialFilterColumn[]).map(
+				(filterColumn) => {
+					const definition = filterColumn.json
+						? JSON.parse(filterColumn.json)
+						: null;
 					const filterType = filterColumn.filterType;
 					const objectFieldName = filterColumn.objectFieldName;
 					const objectField = newObjectFields.find(
-						(field: TObjectField) => {
+						(field: ObjectField) => {
 							if (field.name === objectFieldName) {
 								return field;
 							}
@@ -468,7 +506,9 @@ const viewReducer = (state: TState, action: TAction) => {
 					return {
 						...filterColumn,
 						definition,
-						fieldLabel: objectField?.label[defaultLanguageId],
+						fieldLabel: objectField
+							? objectField.label[defaultLanguageId]
+							: '',
 						filterBy: objectFieldName,
 						filterType,
 						objectFieldBusinessType: objectField?.businessType,
@@ -569,7 +609,7 @@ const viewReducer = (state: TState, action: TAction) => {
 				};
 			});
 
-			objectFields.forEach((field) => {
+			objectFields.forEach((field: ObjectFieldView) => {
 				if (objectFieldName === field.name) {
 					field.checked = false;
 				}
@@ -592,7 +632,7 @@ const viewReducer = (state: TState, action: TAction) => {
 			const {objectViewFilterColumns} = state.objectView;
 			const {objectFields} = state;
 
-			objectFields.forEach((objectField) => {
+			objectFields.forEach((objectField: ObjectFieldView) => {
 				if (objectField.name === objectFieldName) {
 					objectField.hasFilter = false;
 				}
@@ -682,7 +722,7 @@ const viewReducer = (state: TState, action: TAction) => {
 
 			let filterTypeValue = filterType || null;
 
-			if (valueList.length === 0) {
+			if (!valueList) {
 				filterTypeValue = null;
 			}
 
@@ -691,11 +731,16 @@ const viewReducer = (state: TState, action: TAction) => {
 					if (filterColumn.objectFieldName === objectFieldName) {
 						return {
 							...filterColumn,
-							definition: filterTypeValue && {
-								[filterTypeValue]: valueList.map(
-									(item: TLabelValueObject) => item.value
-								),
-							},
+							definition: filterTypeValue
+								? {
+										[filterTypeValue]: valueList
+											? valueList.map(
+													(item: LabelValueObject) =>
+														item.value
+											  )
+											: [],
+								  }
+								: null,
 							filterType: filterTypeValue,
 							valueList: filterTypeValue ? valueList : [],
 						};
@@ -767,6 +812,7 @@ const viewReducer = (state: TState, action: TAction) => {
 
 interface IViewContextProviderProps extends React.HTMLAttributes<HTMLElement> {
 	value: {
+		filterOperators: TFilterOperators;
 		isViewOnly: boolean;
 		objectViewId: string;
 		workflowStatusJSONArray: TWorkflowStatus[];

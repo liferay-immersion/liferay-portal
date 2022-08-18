@@ -12,11 +12,15 @@
  * details.
  */
 
+import {getOpener} from 'frontend-js-web';
+
 import {
 	acceptAllCookies,
 	declineAllCookies,
 	getCookie,
 	setCookie,
+	setUserConfigCookie,
+	userConfigCookieName,
 } from '../../js/CookiesUtil';
 
 export default function ({
@@ -34,21 +38,22 @@ export default function ({
 	toggleSwitches.forEach((toggleSwitch) => {
 		const cookieKey = toggleSwitch.dataset.cookieKey;
 
-		toggleSwitch.addEventListener('click', () => {
-			Liferay.Util.getOpener().Liferay.fire('cookiePreferenceUpdate', {
+		const notifyCookiePreferenceUpdate = () =>
+			getOpener().Liferay.fire('cookiePreferenceUpdate', {
 				key: cookieKey,
 				value: toggleSwitch.checked ? 'true' : 'false',
 			});
-		});
 
-		const cookie = getCookie(cookieKey);
+		toggleSwitch.addEventListener('click', notifyCookiePreferenceUpdate);
 
-		if (cookie === null) {
-			toggleSwitch.checked = toggleSwitch.dataset.prechecked === 'true';
+		if (getCookie(userConfigCookieName)) {
+			toggleSwitch.checked = getCookie(cookieKey) === 'true';
 		}
 		else {
-			toggleSwitch.checked = cookie === 'true';
+			toggleSwitch.checked = toggleSwitch.dataset.prechecked === 'true';
 		}
+
+		notifyCookiePreferenceUpdate();
 
 		toggleSwitch.removeAttribute('disabled');
 	});
@@ -70,6 +75,8 @@ export default function ({
 				requiredConsentCookieTypeNames
 			);
 
+			setUserConfigCookie();
+
 			window.location.reload();
 		});
 
@@ -87,6 +94,8 @@ export default function ({
 				}
 			);
 
+			setUserConfigCookie();
+
 			window.location.reload();
 		});
 
@@ -95,6 +104,8 @@ export default function ({
 				optionalConsentCookieTypeNames,
 				requiredConsentCookieTypeNames
 			);
+
+			setUserConfigCookie();
 
 			window.location.reload();
 		});

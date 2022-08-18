@@ -18,8 +18,9 @@ import com.liferay.frontend.token.definition.FrontendToken;
 import com.liferay.frontend.token.definition.FrontendTokenDefinition;
 import com.liferay.frontend.token.definition.FrontendTokenDefinitionRegistry;
 import com.liferay.frontend.token.definition.FrontendTokenMapping;
+import com.liferay.layout.page.template.util.LayoutStructureUtil;
 import com.liferay.layout.responsive.ViewportSize;
-import com.liferay.layout.taglib.internal.util.LayoutStructureUtil;
+import com.liferay.layout.taglib.internal.util.SegmentsExperienceUtil;
 import com.liferay.layout.util.structure.CommonStylesUtil;
 import com.liferay.layout.util.structure.ContainerStyledLayoutStructureItem;
 import com.liferay.layout.util.structure.LayoutStructure;
@@ -109,7 +110,9 @@ public class LayoutStructureCommonStylesCSSServlet extends HttpServlet {
 
 		LayoutStructure layoutStructure =
 			LayoutStructureUtil.getLayoutStructure(
-				httpServletRequest, layout.getPlid());
+				layout.getPlid(),
+				SegmentsExperienceUtil.getSegmentsExperienceId(
+					httpServletRequest));
 
 		if (layoutStructure == null) {
 			httpServletResponse.setStatus(HttpServletResponse.SC_NOT_FOUND);
@@ -118,6 +121,8 @@ public class LayoutStructureCommonStylesCSSServlet extends HttpServlet {
 		}
 
 		PrintWriter printWriter = httpServletResponse.getWriter();
+
+		printWriter.write(".lfr-layout-structure-item-row {overflow: hidden;}");
 
 		JSONObject frontendTokensJSONObject = _getFrontendTokensJSONObject(
 			layout.getGroupId(), layout,
@@ -132,10 +137,29 @@ public class LayoutStructureCommonStylesCSSServlet extends HttpServlet {
 			for (LayoutStructureItem layoutStructureItem :
 					layoutStructureItems) {
 
+				if (!(layoutStructureItem instanceof
+						StyledLayoutStructureItem)) {
+
+					continue;
+				}
+
+				StyledLayoutStructureItem styledLayoutStructureItem =
+					(StyledLayoutStructureItem)layoutStructureItem;
+
 				cssSB.append(
 					_getLayoutStructureItemCSS(
-						frontendTokensJSONObject, layoutStructureItem,
+						frontendTokensJSONObject, styledLayoutStructureItem,
 						viewportSize));
+
+				String customCSS = _getCustomCSS(
+					styledLayoutStructureItem, viewportSize);
+
+				if (Validator.isNotNull(customCSS)) {
+					cssSB.append(
+						StringUtil.replace(
+							customCSS, _FRAGMENT_CLASS_PLACEHOLDER,
+							styledLayoutStructureItem.getUniqueCssClass()));
+				}
 			}
 
 			if (cssSB.length() == 0) {
@@ -166,6 +190,20 @@ public class LayoutStructureCommonStylesCSSServlet extends HttpServlet {
 
 			return JSONFactoryUtil.createJSONObject();
 		}
+	}
+
+	private String _getCustomCSS(
+		StyledLayoutStructureItem styledLayoutStructureItem,
+		ViewportSize viewportSize) {
+
+		if (Objects.equals(viewportSize, ViewportSize.DESKTOP)) {
+			return styledLayoutStructureItem.getCustomCSS();
+		}
+
+		Map<String, String> customCSSViewports =
+			styledLayoutStructureItem.getCustomCSSViewports();
+
+		return customCSSViewports.get(viewportSize.getViewportSizeId());
 	}
 
 	private JSONObject _getFrontendTokensJSONObject(
@@ -243,14 +281,8 @@ public class LayoutStructureCommonStylesCSSServlet extends HttpServlet {
 
 	private String _getLayoutStructureItemCSS(
 		JSONObject frontendTokensJSONObject,
-		LayoutStructureItem layoutStructureItem, ViewportSize viewportSize) {
-
-		if (!(layoutStructureItem instanceof StyledLayoutStructureItem)) {
-			return StringPool.BLANK;
-		}
-
-		StyledLayoutStructureItem styledLayoutStructureItem =
-			(StyledLayoutStructureItem)layoutStructureItem;
+		StyledLayoutStructureItem styledLayoutStructureItem,
+		ViewportSize viewportSize) {
 
 		JSONObject stylesJSONObject = _getStylesJSONObject(
 			styledLayoutStructureItem.getItemConfigJSONObject(), viewportSize);
@@ -273,7 +305,7 @@ public class LayoutStructureCommonStylesCSSServlet extends HttpServlet {
 			(availableStyles.size() * 2) + 4);
 
 		cssSB.append(".lfr-layout-structure-item-");
-		cssSB.append(layoutStructureItem.getItemId());
+		cssSB.append(styledLayoutStructureItem.getItemId());
 		cssSB.append(" {\n");
 
 		for (String styleName : availableStyles) {
@@ -391,6 +423,9 @@ public class LayoutStructureCommonStylesCSSServlet extends HttpServlet {
 
 		return true;
 	}
+
+	private static final String _FRAGMENT_CLASS_PLACEHOLDER =
+		"[$FRAGMENT_CLASS$]";
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		LayoutStructureCommonStylesCSSServlet.class);

@@ -26,16 +26,20 @@ import com.liferay.headless.admin.user.client.dto.v1_0.PostalAddress;
 import com.liferay.headless.admin.user.client.dto.v1_0.UserAccount;
 import com.liferay.headless.admin.user.client.dto.v1_0.UserAccountContactInformation;
 import com.liferay.headless.admin.user.client.dto.v1_0.WebUrl;
+import com.liferay.headless.admin.user.client.http.HttpInvoker;
 import com.liferay.headless.admin.user.client.pagination.Page;
 import com.liferay.headless.admin.user.client.pagination.Pagination;
 import com.liferay.headless.admin.user.client.problem.Problem;
 import com.liferay.headless.admin.user.client.resource.v1_0.UserAccountResource;
 import com.liferay.headless.admin.user.client.serdes.v1_0.UserAccountSerDes;
 import com.liferay.petra.function.UnsafeRunnable;
+import com.liferay.petra.function.UnsafeSupplier;
 import com.liferay.petra.function.UnsafeTriConsumer;
 import com.liferay.portal.configuration.test.util.ConfigurationTemporarySwapper;
 import com.liferay.portal.kernel.captcha.Captcha;
 import com.liferay.portal.kernel.captcha.CaptchaException;
+import com.liferay.portal.kernel.exception.UserPasswordException;
+import com.liferay.portal.kernel.json.JSONFactory;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.json.JSONUtil;
 import com.liferay.portal.kernel.model.Organization;
@@ -66,8 +70,11 @@ import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.odata.entity.EntityField;
 import com.liferay.portal.security.service.access.policy.model.SAPEntry;
 import com.liferay.portal.security.service.access.policy.service.SAPEntryLocalService;
+import com.liferay.portal.test.log.LogCapture;
+import com.liferay.portal.test.log.LoggerTestUtil;
 import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.SynchronousMailTestRule;
+import com.liferay.portal.vulcan.jaxrs.exception.mapper.BaseExceptionMapper;
 import com.liferay.portal.vulcan.util.TransformUtil;
 
 import java.util.Arrays;
@@ -76,8 +83,11 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.function.Consumer;
 
 import javax.servlet.http.HttpServletRequest;
+
+import javax.ws.rs.core.Response;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -517,6 +527,64 @@ public class UserAccountResourceTest extends BaseUserAccountResourceTestCase {
 		user = _userLocalService.getUser(userAccount.getId());
 
 		Assert.assertEquals(portraitId, user.getPortraitId());
+
+		String newPassword = RandomTestUtil.randomString();
+		UserAccount patchUserAccount = testPatchUserAccount_addUserAccount();
+
+		_assertAuthenticationResult(
+			Authenticator.FAILURE, patchUserAccount.getEmailAddress(),
+			newPassword);
+
+		userAccountResource.patchUserAccount(
+			patchUserAccount.getId(),
+			new UserAccount() {
+				{
+					password = newPassword;
+				}
+			});
+
+		_assertAuthenticationResult(
+			Authenticator.SUCCESS, patchUserAccount.getEmailAddress(),
+			newPassword);
+
+		_setUpTestUserAccountResource();
+
+		_assertProblem(
+			UserPasswordException.MustMatchCurrentPassword.class,
+			() -> _regularUserAccountResource.patchUserAccountHttpResponse(
+				_regularUserAccount.getId(),
+				new UserAccount() {
+					{
+						password = newPassword;
+					}
+				}));
+
+		_assertAuthenticationResult(
+			Authenticator.FAILURE, _regularUserAccount.getEmailAddress(),
+			newPassword);
+
+		_regularUserAccountResource.patchUserAccount(
+			_regularUserAccount.getId(),
+			new UserAccount() {
+				{
+					currentPassword = _regularUserAccountCurrentPassword;
+					password = newPassword;
+				}
+			});
+
+		_assertAuthenticationResult(
+			Authenticator.SUCCESS, _regularUserAccount.getEmailAddress(),
+			newPassword);
+
+		_setUpTestUserAccountResource();
+
+		_regularUserAccountResource.patchUserAccount(
+			_regularUserAccount.getId(),
+			new UserAccount() {
+				{
+					givenName = RandomTestUtil.randomString();
+				}
+			});
 	}
 
 	@Override
@@ -671,12 +739,8 @@ public class UserAccountResourceTest extends BaseUserAccountResourceTestCase {
 		assertEquals(userAccount, postUserAccount);
 		assertValid(postUserAccount);
 
-		Assert.assertEquals(
-			Authenticator.SUCCESS,
-			_userLocalService.authenticateByEmailAddress(
-				testCompany.getCompanyId(), postUserAccount.getEmailAddress(),
-				password, Collections.emptyMap(), Collections.emptyMap(),
-				new HashMap<>()));
+		_assertAuthenticationResult(
+			Authenticator.SUCCESS, postUserAccount.getEmailAddress(), password);
 
 		SAPEntry sapEntry = _sapEntryLocalService.addSAPEntry(
 			TestPropsValues.getUserId(),
@@ -713,6 +777,121 @@ public class UserAccountResourceTest extends BaseUserAccountResourceTestCase {
 		}
 
 		_sapEntryLocalService.deleteSAPEntry(sapEntry);
+	}
+
+	@Override
+	@Test
+	public void testPutUserAccount() throws Exception {
+		super.testPutUserAccount();
+
+		String newPassword = RandomTestUtil.randomString();
+		UserAccount putUserAccount = testPutUserAccount_addUserAccount();
+
+		_assertAuthenticationResult(
+			Authenticator.FAILURE, putUserAccount.getEmailAddress(),
+			newPassword);
+
+		putUserAccount.setPassword(newPassword);
+
+		userAccountResource.putUserAccount(
+			putUserAccount.getId(), putUserAccount);
+
+		_assertAuthenticationResult(
+			Authenticator.SUCCESS, putUserAccount.getEmailAddress(),
+			newPassword);
+
+		_setUpTestUserAccountResource();
+
+		_regularUserAccount.setPassword(newPassword);
+
+		_assertProblem(
+			UserPasswordException.MustMatchCurrentPassword.class,
+			() -> _regularUserAccountResource.putUserAccountHttpResponse(
+				_regularUserAccount.getId(), _regularUserAccount));
+
+		_assertAuthenticationResult(
+			Authenticator.FAILURE, _regularUserAccount.getEmailAddress(),
+			newPassword);
+
+		_regularUserAccount.setCurrentPassword(
+			_regularUserAccountCurrentPassword);
+
+		_regularUserAccountResource.putUserAccount(
+			_regularUserAccount.getId(), _regularUserAccount);
+
+		_assertAuthenticationResult(
+			Authenticator.SUCCESS, _regularUserAccount.getEmailAddress(),
+			newPassword);
+
+		_setUpTestUserAccountResource();
+
+		_regularUserAccountResource.putUserAccount(
+			_regularUserAccount.getId(),
+			_randomUserAccount(
+				userAccount -> {
+					userAccount.setCurrentPassword(() -> null);
+					userAccount.setPassword(() -> null);
+				}));
+	}
+
+	@Override
+	@Test
+	public void testPutUserAccountByExternalReferenceCode() throws Exception {
+		super.testPutUserAccountByExternalReferenceCode();
+
+		String newPassword = RandomTestUtil.randomString();
+		UserAccount putUserAccount =
+			testPutUserAccountByExternalReferenceCode_addUserAccount();
+
+		_assertAuthenticationResult(
+			Authenticator.FAILURE, putUserAccount.getEmailAddress(),
+			newPassword);
+
+		putUserAccount.setPassword(newPassword);
+
+		userAccountResource.putUserAccountByExternalReferenceCode(
+			putUserAccount.getExternalReferenceCode(), putUserAccount);
+
+		_assertAuthenticationResult(
+			Authenticator.SUCCESS, putUserAccount.getEmailAddress(),
+			newPassword);
+
+		_setUpTestUserAccountResource();
+
+		_regularUserAccount.setPassword(newPassword);
+
+		_assertProblem(
+			UserPasswordException.MustMatchCurrentPassword.class,
+			() ->
+				_regularUserAccountResource.
+					putUserAccountByExternalReferenceCodeHttpResponse(
+						_regularUserAccount.getExternalReferenceCode(),
+						_regularUserAccount));
+
+		_assertAuthenticationResult(
+			Authenticator.FAILURE, _regularUserAccount.getEmailAddress(),
+			newPassword);
+
+		_regularUserAccount.setCurrentPassword(
+			_regularUserAccountCurrentPassword);
+
+		_regularUserAccountResource.putUserAccountByExternalReferenceCode(
+			_regularUserAccount.getExternalReferenceCode(),
+			_regularUserAccount);
+
+		_assertAuthenticationResult(
+			Authenticator.SUCCESS, _regularUserAccount.getEmailAddress(),
+			newPassword);
+
+		_setUpTestUserAccountResource();
+
+		_regularUserAccountResource.putUserAccountByExternalReferenceCode(
+			_regularUserAccount.getExternalReferenceCode(),
+			_randomUserAccount(
+				userAccount -> {
+					userAccount.setCurrentPassword(() -> null);
+					userAccount.setPassword(() -> null);
+				}));
 	}
 
 	@Override
@@ -1001,6 +1180,44 @@ public class UserAccountResourceTest extends BaseUserAccountResourceTestCase {
 		return userAccount;
 	}
 
+	private void _assertAuthenticationResult(
+			int authenticatorResult, String emailAddress, String password)
+		throws Exception {
+
+		Assert.assertEquals(
+			authenticatorResult,
+			_userLocalService.authenticateByEmailAddress(
+				testCompany.getCompanyId(), emailAddress, password,
+				Collections.emptyMap(), Collections.emptyMap(),
+				new HashMap<>()));
+	}
+
+	private <T extends Exception> void _assertProblem(
+			Class<T> exceptionClass,
+			UnsafeSupplier<HttpInvoker.HttpResponse, Exception>
+				httpResponseUnsafeSupplier)
+		throws Exception {
+
+		try (LogCapture logCapture = LoggerTestUtil.configureLog4JLogger(
+				BaseExceptionMapper.class.getName(), LoggerTestUtil.OFF)) {
+
+			HttpInvoker.HttpResponse httpResponse =
+				httpResponseUnsafeSupplier.get();
+
+			Assert.assertEquals(
+				Response.Status.BAD_REQUEST.getStatusCode(),
+				httpResponse.getStatusCode());
+
+			if (exceptionClass != null) {
+				JSONObject jsonObject = _jsonFactory.createJSONObject(
+					httpResponse.getContent());
+
+				Assert.assertEquals(
+					exceptionClass.getSimpleName(), jsonObject.get("type"));
+			}
+		}
+	}
+
 	private void _assertUserAccountContactInformation(
 		UserAccountContactInformation userAccountContactInformation1,
 		UserAccountContactInformation userAccountContactInformation2,
@@ -1093,6 +1310,17 @@ public class UserAccountResourceTest extends BaseUserAccountResourceTestCase {
 		};
 	}
 
+	private UserAccount _randomUserAccount(
+			Consumer<UserAccount> userAccountConsumer)
+		throws Exception {
+
+		UserAccount randomUserAccount = randomUserAccount();
+
+		userAccountConsumer.accept(randomUserAccount);
+
+		return randomUserAccount;
+	}
+
 	private UserAccountContactInformation _randomUserAccountContactInformation()
 		throws Exception {
 
@@ -1120,6 +1348,26 @@ public class UserAccountResourceTest extends BaseUserAccountResourceTestCase {
 				setUrlType("personal");
 			}
 		};
+	}
+
+	private void _setUpTestUserAccountResource() throws Exception {
+		_regularUserAccountCurrentPassword = RandomTestUtil.randomString();
+
+		_regularUserAccount = _addUserAccount(
+			testGroup.getGroupId(), randomUserAccount());
+
+		_userLocalService.updatePassword(
+			_regularUserAccount.getId(), _regularUserAccountCurrentPassword,
+			_regularUserAccountCurrentPassword, false, true);
+
+		UserAccountResource.Builder builder = UserAccountResource.builder();
+
+		_regularUserAccountResource = builder.authentication(
+			_regularUserAccount.getEmailAddress(),
+			_regularUserAccountCurrentPassword
+		).locale(
+			LocaleUtil.getDefault()
+		).build();
 	}
 
 	private void _testGetUserAccountsPage(
@@ -1206,7 +1454,13 @@ public class UserAccountResourceTest extends BaseUserAccountResourceTestCase {
 	@Inject
 	private AccountEntryUserRelLocalService _accountEntryUserRelLocalService;
 
+	@Inject
+	private JSONFactory _jsonFactory;
+
 	private Organization _organization;
+	private UserAccount _regularUserAccount;
+	private String _regularUserAccountCurrentPassword;
+	private UserAccountResource _regularUserAccountResource;
 
 	@Inject
 	private SAPEntryLocalService _sapEntryLocalService;

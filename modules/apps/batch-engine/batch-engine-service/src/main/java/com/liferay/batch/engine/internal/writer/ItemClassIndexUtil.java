@@ -14,6 +14,8 @@
 
 package com.liferay.batch.engine.internal.writer;
 
+import com.liferay.object.rest.dto.v1_0.ListEntry;
+import com.liferay.object.rest.dto.v1_0.ObjectEntry;
 import com.liferay.petra.concurrent.ConcurrentReferenceKeyHashMap;
 import com.liferay.petra.concurrent.ConcurrentReferenceValueHashMap;
 import com.liferay.petra.memory.FinalizeManager;
@@ -30,6 +32,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * @author Shuyang Zhou
@@ -61,6 +64,25 @@ public class ItemClassIndexUtil {
 
 				return fieldMap;
 			});
+	}
+
+	public static boolean isListEntry(Object object) {
+		if (object instanceof ListEntry) {
+			return true;
+		}
+
+		return false;
+	}
+
+	public static boolean isObjectEntryProperties(Field field) {
+		if ((field == null) ||
+			!Objects.equals(field.getDeclaringClass(), ObjectEntry.class) ||
+			!Objects.equals(field.getType(), Map.class)) {
+
+			return false;
+		}
+
+		return true;
 	}
 
 	public static boolean isSingleColumnAdoptableArray(Class<?> valueClass) {

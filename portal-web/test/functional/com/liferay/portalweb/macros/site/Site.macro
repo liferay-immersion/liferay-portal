@@ -26,11 +26,11 @@ definition {
 
 		SelectFrameTop();
 
-		Pause(locator1 = "3000");
+		WaitForElementPresent(
+			key_text = "Done",
+			locator1 = "Button#ANY_ENABLED");
 
-		AssertClick(
-			locator1 = "Button#DONE",
-			value1 = "Done");
+		Click(locator1 = "Button#DONE");
 
 		Alert.viewSuccessMessage();
 	}
@@ -60,7 +60,7 @@ definition {
 
 			PortletEntry.inputName(name = "${siteName}");
 
-			Button.clickAdd();
+			Button.click(button = "Add");
 
 			SelectFrameTop();
 
@@ -446,16 +446,11 @@ definition {
 
 		LexiconEntry.gotoAdd();
 
-		AssertVisible(locator1 = "Button#DONE");
+		SelectFrame(locator1 = "IFrame#ADD_USERS_TO_SITE");
 
 		if (isSet(depotName)) {
 			SelectFrame(locator1 = "IFrame#ADD_USERS_TO_ASSET_LIBRARY");
 		}
-		else {
-			SelectFrame(locator1 = "IFrame#ADD_USERS_TO_SITE");
-		}
-
-		Pause(locator1 = "3000");
 
 		LexiconEntry.changeDisplayStyle(displayStyle = "cards");
 
@@ -476,13 +471,9 @@ definition {
 	macro assignUserGroupAsMemberCP {
 		Navigator.gotoNavItem(navItem = "User Groups");
 
-		Pause(locator1 = "5000");
-
 		LexiconEntry.gotoAdd();
 
 		SelectFrame(locator1 = "IFrame#MODAL_BODY");
-
-		Pause(locator1 = "3000");
 
 		LexiconEntry.selectEntry(rowEntry = "${userGroupName}");
 
@@ -643,9 +634,9 @@ definition {
 				value1 = "${localizedSaveButton}");
 		}
 		else {
-			while (IsElementNotPresent(locator1 = "Button#SAVE")) {
-				Pause(locator1 = "1000");
-			}
+			WaitForElementPresent(
+				key_text = "Save",
+				locator1 = "Button#ANY_ENABLED");
 
 			Click(locator1 = "Button#SAVE");
 		}
@@ -776,7 +767,7 @@ definition {
 			locator1 = "SiteSettingsSiteURL#SITE_URL_FRIENDLY_URL_LABEL",
 			value1 = "Friendly URL");
 
-		Pause(locator1 = "5000");
+		WaitForEditable(locator1 = "TextInput#FRIENDLY_URL_SITE_SETTINGS");
 
 		Type(
 			locator1 = "TextInput#FRIENDLY_URL_SITE_SETTINGS",
@@ -812,14 +803,14 @@ definition {
 		PortletEntry.save();
 	}
 
-	macro editPiwikCP {
+	macro editMatomoCP {
 		Click(
 			key_itemName = "Analytics",
 			locator1 = "ListGroupItem#ITEM_TEXT");
 
 		Type(
-			locator1 = "TextInput#PIWIK",
-			value1 = "${piwik}");
+			locator1 = "TextInput#MATOMO",
+			value1 = "${matomo}");
 
 		Button.click(button = "Save");
 
@@ -894,8 +885,6 @@ definition {
 			value1 = "No sites were found.");
 
 		Navigator.gotoNavItem(navItem = "Available Sites");
-
-		Pause(locator1 = "3000");
 
 		if ("${membershipType}" == "Private") {
 			LexiconList.viewListEntryNotPresent(listEntry = "${siteName}");
@@ -1017,7 +1006,7 @@ definition {
 			key_itemName = "Site Configuration",
 			locator1 = "ListGroupItem#ITEM_TEXT");
 
-		Pause(locator1 = "5000");
+		WaitForPageLoad();
 
 		if ("${selectMembershipType}" == "true") {
 			AssertTextEquals(
@@ -1316,6 +1305,8 @@ definition {
 		else {
 			Alert.viewErrorMessage(errorMessage = "The Site Name cannot be blank, numeric or a reserved word such as null. The Site Name cannot contain the following invalid characters: *.");
 		}
+
+		SelectFrameTop();
 	}
 
 	macro viewChildCP {
@@ -1368,8 +1359,6 @@ definition {
 		ProductMenuHelper.openWorkspace();
 
 		SelectFrame(locator1 = "IFrame#MODAL_BODY");
-
-		Pause(locator1 = "3000");
 
 		Navigator.gotoNavItem(navItem = "All Sites");
 

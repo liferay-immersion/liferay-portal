@@ -19,10 +19,10 @@ import com.liferay.dynamic.data.mapping.test.util.DDMFormTestUtil;
 import com.liferay.dynamic.data.mapping.test.util.DDMFormValuesTestUtil;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.language.Language;
-import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.portlet.LiferayPortletURL;
 import com.liferay.portal.kernel.portlet.PortletURLFactory;
 import com.liferay.portal.kernel.portlet.PortletURLFactoryUtil;
+import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.test.portlet.MockLiferayPortletURL;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ArrayUtil;
@@ -44,7 +44,6 @@ import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
 
-import org.mockito.Matchers;
 import org.mockito.Mockito;
 
 import org.springframework.mock.web.MockHttpServletRequest;
@@ -76,7 +75,7 @@ public class RedirectButtonDDMFormFieldTemplateContextContributorTest {
 		).when(
 			portletURLFactory
 		).create(
-			Matchers.any(PortletRequest.class), Mockito.anyString(),
+			Mockito.any(PortletRequest.class), Mockito.anyString(),
 			Mockito.anyString()
 		);
 
@@ -85,7 +84,7 @@ public class RedirectButtonDDMFormFieldTemplateContextContributorTest {
 		).when(
 			portletURLFactory
 		).create(
-			Matchers.any(HttpServletRequest.class), Mockito.anyString(),
+			Mockito.any(HttpServletRequest.class), Mockito.anyString(),
 			Mockito.anyLong(), Mockito.anyString()
 		);
 
@@ -94,7 +93,7 @@ public class RedirectButtonDDMFormFieldTemplateContextContributorTest {
 
 	@Test
 	public void testGetParametersWithMessageArgumentsAndParameters() {
-		_mockLanguageUtilFormat(
+		_setLanguage(
 			"message1", new Object[] {"messageArgument1", "messageArgument2"});
 
 		Map<String, Object> parameters =
@@ -129,7 +128,7 @@ public class RedirectButtonDDMFormFieldTemplateContextContributorTest {
 
 	@Test
 	public void testGetParametersWithoutMessageArgumentsAndParameters() {
-		_mockLanguageUtilFormat("message2", new Object[0]);
+		_setLanguage("message2", new Object[0]);
 
 		Map<String, Object> parameters =
 			_redirectButtonDDMFormFieldTemplateContextContributor.getParameters(
@@ -173,23 +172,21 @@ public class RedirectButtonDDMFormFieldTemplateContextContributorTest {
 		return ddmFormFieldRenderingContext;
 	}
 
-	private void _mockLanguageUtilFormat(
-		String message, Object[] messageArguments) {
-
-		LanguageUtil languageUtil = new LanguageUtil();
-
+	private void _setLanguage(String message, Object[] messageArguments) {
 		Language language = Mockito.mock(Language.class);
 
 		Mockito.when(
 			language.format(
-				Matchers.any(Locale.class), Matchers.eq(message),
-				Matchers.eq(messageArguments))
+				Mockito.any(Locale.class), Mockito.eq(message),
+				Mockito.eq(messageArguments))
 		).thenReturn(
 			StringUtil.merge(
 				ArrayUtil.append(messageArguments, message), StringPool.COMMA)
 		);
 
-		languageUtil.setLanguage(language);
+		ReflectionTestUtil.setFieldValue(
+			_redirectButtonDDMFormFieldTemplateContextContributor, "_language",
+			language);
 	}
 
 	private static final String _PORTLET_ID = "portletId";

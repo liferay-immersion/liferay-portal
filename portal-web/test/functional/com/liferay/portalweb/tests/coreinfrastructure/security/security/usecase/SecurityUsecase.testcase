@@ -41,11 +41,9 @@ definition {
 		}
 
 		task ("Assert message present in HTML source") {
-			Pause(locator1 = "3000");
-
-			User.viewWelcomeMEssageHTML(
-				userfn = "${userfn}",
-				userln = "${userln}");
+			while (IsElementPresent(locator1 = "JSONWS#SECURITY_RESULT", value1 = "Welcome ${userfn} ${userln}!")) {
+				Pause(locator1 = "500");
+			}
 		}
 
 		task ("Assert user created in users page") {
@@ -128,6 +126,8 @@ out.println(PortalUtil.escapeRedirect("/"));
 			var portalURL = PropsUtil.get("portal.url");
 
 			Navigator.openSpecificURL(url = '''${portalURL}/c/portal/update_layout?cmd=add&p_p_col_id=column-1&p_p_col_pos=0&p_p_id=com_liferay_marketplace_store_web_portlet_MarketplacePurchasedPortlet&p_auth=${authToken}&p_l_id=${plid}''');
+
+			Navigator.openURL();
 
 			UserBar.gotoDropdownItem(dropdownItem = "My Profile");
 

@@ -123,9 +123,7 @@ function EditSXPElementForm({
 	type,
 	sxpElementId,
 }) {
-	const {defaultLocale, featureFlagLps148749, redirectURL} = useContext(
-		ThemeContext
-	);
+	const {defaultLocale, redirectURL} = useContext(ThemeContext);
 
 	const formRef = useRef();
 	const elementJSONEditorRef = useRef();
@@ -181,7 +179,11 @@ function EditSXPElementForm({
 			predefinedVariables.map((variable) => {
 				const category = variable.templateVariable.match(/\w+/g)[0];
 
-				if (variable.description.toLowerCase().includes(value)) {
+				if (
+					variable.description
+						.toLowerCase()
+						.includes(value.toLowerCase())
+				) {
 					filteredCategories[category] = [
 						...(filteredCategories[category] || []),
 						variable,
@@ -669,11 +671,7 @@ function EditSXPElementForm({
 									size={showVariablesSidebar ? 9 : 12}
 								>
 									<CodeMirrorEditor
-										autocompleteSchema={
-											featureFlagLps148749
-												? sxpElementSchema
-												: null
-										}
+										autocompleteSchema={sxpElementSchema}
 										onChange={(value) =>
 											setElementJSONEditorValue(value)
 										}

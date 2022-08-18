@@ -32,7 +32,7 @@ const BaseEditor = forwardRef(
 			Liferay.once('beforeScreenFlip', () => {
 				if (
 					window.CKEDITOR &&
-					Object.keys(window.CKEDITOR.instances).length === 0
+					!Object.keys(window.CKEDITOR.instances).length
 				) {
 					delete window.CKEDITOR;
 				}
@@ -65,17 +65,11 @@ const BaseEditor = forwardRef(
 				return;
 			}
 
-			const editor = editorRef.current.editor;
-
-			if (editor.checkDirty()) {
-				if (onChangeMethodName) {
-					window[onChangeMethodName](getHTML());
-				}
-				else {
-					onChange(getHTML());
-				}
-
-				editor.resetDirty();
+			if (onChangeMethodName) {
+				window[onChangeMethodName](getHTML());
+			}
+			else {
+				onChange(getHTML());
 			}
 		};
 

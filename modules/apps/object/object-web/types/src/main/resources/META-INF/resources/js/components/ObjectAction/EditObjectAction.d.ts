@@ -14,19 +14,23 @@
 
 /// <reference types="react" />
 
-import {CustomItem} from '@liferay/object-js-components-web';
+import {CustomItem, SidebarCategory} from '@liferay/object-js-components-web';
 export default function EditObjectAction({
-	ffNotificationTemplates,
 	objectAction: {id, ...values},
+	objectActionCodeEditorElements,
 	objectActionExecutors,
 	objectActionTriggers,
+	objectDefinitionsRelationshipsURL,
 	readOnly,
+	validateExpressionURL,
 }: IProps): JSX.Element;
 interface IProps {
-	ffNotificationTemplates: boolean;
 	objectAction: ObjectAction;
+	objectActionCodeEditorElements: SidebarCategory[];
 	objectActionExecutors: CustomItem[];
 	objectActionTriggers: CustomItem[];
+	objectDefinitionsRelationshipsURL: string;
 	readOnly?: boolean;
+	validateExpressionURL: string;
 }
 export {};

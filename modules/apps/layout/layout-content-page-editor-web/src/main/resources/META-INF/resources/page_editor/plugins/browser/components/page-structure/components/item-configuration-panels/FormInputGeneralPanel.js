@@ -20,6 +20,7 @@ import React, {useMemo} from 'react';
 import {FRAGMENT_ENTRY_TYPES} from '../../../../../../app/config/constants/fragmentEntryTypes';
 import {FREEMARKER_FRAGMENT_ENTRY_PROCESSOR} from '../../../../../../app/config/constants/freemarkerFragmentEntryProcessor';
 import {LAYOUT_DATA_ITEM_TYPES} from '../../../../../../app/config/constants/layoutDataItemTypes';
+import {config} from '../../../../../../app/config/index';
 import {
 	useDispatch,
 	useSelector,
@@ -31,10 +32,9 @@ import selectFragmentEntryLink from '../../../../../../app/selectors/selectFragm
 import selectLanguageId from '../../../../../../app/selectors/selectLanguageId';
 import selectSegmentsExperienceId from '../../../../../../app/selectors/selectSegmentsExperienceId';
 import FormService from '../../../../../../app/services/FormService';
-import InfoItemService from '../../../../../../app/services/InfoItemService';
 import updateEditableValues from '../../../../../../app/thunks/updateEditableValues';
 import {CACHE_KEYS} from '../../../../../../app/utils/cache';
-import {isFormRequiredField} from '../../../../../../app/utils/isFormRequiredField';
+import {isRequiredFormField} from '../../../../../../app/utils/isRequiredFormField';
 import {setIn} from '../../../../../../app/utils/setIn';
 import useCache from '../../../../../../app/utils/useCache';
 import Collapse from '../../../../../../common/components/Collapse';
@@ -51,22 +51,17 @@ const LABEL_CONFIGURATION_KEY = 'inputLabel';
 const REQUIRED_CONFIGURATION_KEY = 'inputRequired';
 const SHOW_HELP_TEXT_CONFIGURATION_KEY = 'inputShowHelpText';
 
-function getFieldLabel(fieldKey, fields) {
-	const flattenedFields = fields.flatMap((fieldSet) => fieldSet.fields);
-
-	return flattenedFields.find((field) => field.key === fieldKey)?.label;
-}
-
 function getInputCommonConfiguration(configurationValues, formFields) {
 	const fields = [];
 
 	if (configurationValues[FIELD_ID_CONFIGURATION_KEY]) {
-		const isRequiredField = isFormRequiredField(
+		const isRequiredField = isRequiredFormField(
 			configurationValues[FIELD_ID_CONFIGURATION_KEY],
 			formFields
 		);
 
 		fields.push({
+			cssClass: 'mb-4',
 			defaultValue: isRequiredField,
 			disabled: isRequiredField,
 			label: Liferay.Language.get('mark-as-required'),
@@ -84,6 +79,7 @@ function getInputCommonConfiguration(configurationValues, formFields) {
 			typeOptions: {displayType: 'toggle'},
 		},
 		{
+			cssClass: 'mb-4',
 			defaultValue: '',
 			label: Liferay.Language.get('label'),
 			localizable: true,
@@ -91,39 +87,33 @@ function getInputCommonConfiguration(configurationValues, formFields) {
 			type: 'text',
 		},
 		{
-			defaultValue: true,
+			defaultValue: false,
 			label: Liferay.Language.get('show-help-text'),
 			name: SHOW_HELP_TEXT_CONFIGURATION_KEY,
 			type: 'checkbox',
 			typeOptions: {displayType: 'toggle'},
-		}
-	);
-
-	if (configurationValues[SHOW_HELP_TEXT_CONFIGURATION_KEY] !== false) {
-		fields.push({
-			defaultValue: '',
+		},
+		{
+			cssClass: 'mb-4',
+			defaultValue: Liferay.Language.get('add-your-help-text-here'),
 			label: Liferay.Language.get('help-text'),
 			localizable: true,
 			name: HELP_TEXT_CONFIGURATION_KEY,
 			type: 'text',
-			typeOptions: {
-				component: 'textarea',
-				placeholder: Liferay.Language.get(
-					'guide-your-users-to-fill-in-the-field-by-adding-help-text-here'
-				),
-			},
-		});
-	}
+		}
+	);
 
 	return fields;
 }
 
-function getTypeLabels(itemTypes, classNameId, classTypeId) {
-	if (!itemTypes || !classNameId) {
+function getTypeLabels(classNameId, classTypeId) {
+	if (!classNameId) {
 		return {};
 	}
 
-	const selectedType = itemTypes.find(({value}) => value === classNameId);
+	const selectedType = config.formTypes.find(
+		({value}) => value === classNameId
+	);
 
 	const selectedSubtype = selectedType.subtypes.length
 		? selectedType.subtypes.find(({value}) => value === classTypeId)
@@ -166,15 +156,33 @@ export function FormInputGeneralPanel({item}) {
 
 	const {fragmentEntryKey} = fragmentEntryLinkRef.current;
 
+	const fragmentName = useSelectorCallback(
+		(state) => {
+			const fragment = state.fragments
+				.flatMap((collection) => collection.fragmentEntries)
+				.find(
+					(fragment) => fragment.fragmentEntryKey === fragmentEntryKey
+				);
+
+			return fragment ? fragment.name : Liferay.Language.get('fragment');
+		},
+		[fragmentEntryKey]
+	);
+
 	const allowedInputTypes = useCache({
 		fetcher: () =>
 			FormService.getFragmentEntryInputFieldTypes({fragmentEntryKey}),
 		key: [CACHE_KEYS.allowedInputTypes, fragmentEntryKey],
 	});
 
+	const isCaptchaInput = useMemo(
+		() => allowedInputTypes?.includes('captcha'),
+		[allowedInputTypes]
+	);
+
 	const filteredFormFields = useSelectorCallback(
 		(state) => {
-			if (!formFields || !allowedInputTypes) {
+			if (!formFields || !allowedInputTypes || isCaptchaInput) {
 				return [];
 			}
 
@@ -197,9 +205,9 @@ export function FormInputGeneralPanel({item}) {
 
 						if (
 							fragmentEntryType === FRAGMENT_ENTRY_TYPES.input &&
-							editableValues[FREEMARKER_FRAGMENT_ENTRY_PROCESSOR][
-								FIELD_ID_CONFIGURATION_KEY
-							]
+							editableValues[
+								FREEMARKER_FRAGMENT_ENTRY_PROCESSOR
+							]?.[FIELD_ID_CONFIGURATION_KEY]
 						) {
 							selectedFields.push(
 								editableValues[
@@ -236,27 +244,28 @@ export function FormInputGeneralPanel({item}) {
 
 			return nextFields;
 		},
-		[allowedInputTypes, item.itemId, formFields]
+		[allowedInputTypes, formFields, isCaptchaInput, item.itemId]
 	);
 
 	const configFields = useMemo(() => {
-		let nextFields = getInputCommonConfiguration(
+		const fieldSetsWithoutLabel =
+			fragmentEntryLinkRef.current.configuration?.fieldSets
+				?.filter(
+					(fieldSet) => !fieldSet.configurationRole && !fieldSet.label
+				)
+				.flatMap((fieldSet) => fieldSet.fields) ?? [];
+
+		if (isCaptchaInput) {
+			return fieldSetsWithoutLabel;
+		}
+
+		const inputCommonFields = getInputCommonConfiguration(
 			configurationValues,
 			formFields
 		);
 
-		const fieldSetsWithoutLabel =
-			fragmentEntryLinkRef.current.configuration?.fieldSets?.filter(
-				(fieldSet) => !fieldSet.configurationRole && !fieldSet.label
-			) ?? [];
-
-		nextFields = [
-			...nextFields,
-			...fieldSetsWithoutLabel.flatMap((fieldSet) => fieldSet.fields),
-		];
-
-		return nextFields;
-	}, [configurationValues, fragmentEntryLinkRef, formFields]);
+		return [...inputCommonFields, ...fieldSetsWithoutLabel];
+	}, [configurationValues, fragmentEntryLinkRef, formFields, isCaptchaInput]);
 
 	const handleValueSelect = (key, value) => {
 		const keyPath = [FREEMARKER_FRAGMENT_ENTRY_PROCESSOR, key];
@@ -274,17 +283,8 @@ export function FormInputGeneralPanel({item}) {
 		if (key === FIELD_ID_CONFIGURATION_KEY) {
 			editableValues = setIn(
 				fragmentEntryLinkRef.current.editableValues,
-				[
-					FREEMARKER_FRAGMENT_ENTRY_PROCESSOR,
-					REQUIRED_CONFIGURATION_KEY,
-				],
-				isFormRequiredField(value, formFields)
-			);
-
-			editableValues = setIn(
-				editableValues,
-				[FREEMARKER_FRAGMENT_ENTRY_PROCESSOR, LABEL_CONFIGURATION_KEY],
-				getFieldLabel(value, formFields)
+				[FREEMARKER_FRAGMENT_ENTRY_PROCESSOR],
+				DEFAULT_CONFIGURATION_VALUES
 			);
 		}
 
@@ -299,15 +299,21 @@ export function FormInputGeneralPanel({item}) {
 		);
 	};
 
+	if (isCaptchaInput && !configFields.length) {
+		return <FragmentGeneralPanel item={item} />;
+	}
+
 	return (
 		<>
 			<div className="mb-3">
 				<Collapse
-					label={Liferay.Language.get('form-input-options')}
+					label={Liferay.Util.sub(
+						Liferay.Language.get('x-options'),
+						fragmentName
+					)}
 					open
 				>
-					{filteredFormFields.flatMap((fieldSet) => fieldSet.fields)
-						.length ? (
+					{!isCaptchaInput && (
 						<FormInputMappingOptions
 							allowedInputTypes={allowedInputTypes}
 							configurationValues={configurationValues}
@@ -319,23 +325,27 @@ export function FormInputGeneralPanel({item}) {
 							item={item}
 							onValueSelect={handleValueSelect}
 						/>
-					) : (
-						<ClayAlert displayType="info">
-							{Liferay.Language.get(
-								'there-are-no-suitable-fields-in-the-item-to-be-mapped-to-the-fragment'
-							)}
-						</ClayAlert>
 					)}
 
-					{configurationValues[FIELD_ID_CONFIGURATION_KEY] && (
-						<FieldSet
-							fields={configFields}
-							item={item}
-							label=""
-							languageId={languageId}
-							onValueSelect={handleValueSelect}
-							values={configurationValues}
-						/>
+					{(configurationValues[FIELD_ID_CONFIGURATION_KEY] ||
+						isCaptchaInput) && (
+						<>
+							<span className="sr-only">
+								{Liferay.Util.sub(
+									Liferay.Language.get('x-configuration'),
+									fragmentName
+								)}
+							</span>
+
+							<FieldSet
+								fields={configFields}
+								item={item}
+								label=""
+								languageId={languageId}
+								onValueSelect={handleValueSelect}
+								values={configurationValues}
+							/>
+						</>
 					)}
 				</Collapse>
 			</div>
@@ -348,22 +358,20 @@ export function FormInputGeneralPanel({item}) {
 function FormInputMappingOptions({configurationValues, form, onValueSelect}) {
 	const {classNameId, classTypeId, fields} = form;
 
-	const itemTypes = useCache({
-		fetcher: () =>
-			InfoItemService.getAvailableEditPageInfoItemFormProviders(),
-		key: [CACHE_KEYS.itemTypes],
-	});
-
 	const {subtype, type} = useMemo(
-		() => getTypeLabels(itemTypes, classNameId, classTypeId),
-		[itemTypes, classNameId, classTypeId]
+		() => getTypeLabels(classNameId, classTypeId),
+		[classNameId, classTypeId]
 	);
 
 	if (!classNameId || !classTypeId) {
 		return null;
 	}
 
-	return fields ? (
+	if (!fields) {
+		return <ClayLoadingIndicator />;
+	}
+
+	return fields.flatMap((fieldSet) => fieldSet.fields).length ? (
 		<>
 			<MappingFieldSelector
 				fields={fields}
@@ -382,7 +390,7 @@ function FormInputMappingOptions({configurationValues, form, onValueSelect}) {
 					className={classNames(
 						'page-editor__mapping-panel__type-label',
 						{
-							'mb-0': subtype,
+							'mb-1': subtype,
 							'mb-3': !subtype,
 						}
 					)}
@@ -406,6 +414,10 @@ function FormInputMappingOptions({configurationValues, form, onValueSelect}) {
 			)}
 		</>
 	) : (
-		<ClayLoadingIndicator />
+		<ClayAlert displayType="info">
+			{Liferay.Language.get(
+				'there-are-no-suitable-fields-in-the-item-to-be-mapped-to-the-fragment'
+			)}
+		</ClayAlert>
 	);
 }

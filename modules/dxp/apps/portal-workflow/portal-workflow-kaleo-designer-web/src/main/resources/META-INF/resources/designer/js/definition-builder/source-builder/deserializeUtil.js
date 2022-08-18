@@ -72,7 +72,10 @@ DeserializeUtil.prototype = {
 
 				const metadata = node.metadata && JSON.parse(node.metadata);
 
-				if (metadata?.terminal) {
+				if (
+					metadata?.terminal ||
+					(type === 'state' && !node.transitions && !metadata)
+				) {
 					type = 'end';
 				}
 
@@ -98,9 +101,14 @@ DeserializeUtil.prototype = {
 					script: node.script,
 				};
 
+				if (type === 'condition') {
+					data.scriptLanguage =
+						node.scriptLanguage || DEFAULT_LANGUAGE;
+				}
+
 				if (type === 'task') {
 					node.assignments?.forEach((assignment) => {
-						var roleTypes = assignment['role-type'];
+						const roleTypes = assignment['role-type'];
 
 						roleTypes?.forEach((type, index) => {
 							if (type === 'depot') {
@@ -126,7 +134,7 @@ DeserializeUtil.prototype = {
 					node.notifications?.length && parseNotifications(node);
 
 				node.notifications?.forEach((notification) => {
-					var roleTypes = notification['role-type'];
+					const roleTypes = notification['role-type'];
 
 					roleTypes?.forEach((type, index) => {
 						if (type === 'depot') {

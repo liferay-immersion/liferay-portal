@@ -13,18 +13,21 @@
  */
 
 import 'codemirror/mode/groovy/groovy';
+import ClayAlert from '@clayui/alert';
 import ClayTabs from '@clayui/tabs';
 import {
+	API,
 	CustomItem,
 	FormError,
 	SidePanelForm,
-	closeSidePanel,
+	SidebarCategory,
 	invalidateRequired,
 	openToast,
+	saveAndReload,
 	useForm,
 } from '@liferay/object-js-components-web';
 import {fetch} from 'frontend-js-web';
-import React, {useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 
 import {HEADERS} from '../../utils/constants';
 import ActionBuilder from './tabs/ActionBuilder';
@@ -38,15 +41,25 @@ const TABS = [
 ];
 
 export default function Action({
-	ffNotificationTemplates,
 	objectAction: initialValues,
+	objectActionCodeEditorElements,
 	objectActionExecutors,
 	objectActionTriggers,
+	objectDefinitionsRelationshipsURL,
 	readOnly,
 	requestParams: {method, url},
 	successMessage,
+	validateExpressionURL,
 }: IProps) {
+	const [warningAlert, setWarningAlert] = useState(false);
+
+	const [backEndErrors, setBackEndErrors] = useState<Error>({});
+
 	const onSubmit = async (objectAction: ObjectAction) => {
+		if (objectAction.parameters) {
+			delete objectAction?.parameters['lineCount'];
+		}
+
 		const response = await fetch(url, {
 			body: JSON.stringify(objectAction),
 			headers: HEADERS,
@@ -57,17 +70,61 @@ export default function Action({
 			window.location.reload();
 		}
 		else if (response.ok) {
-			closeSidePanel();
+			saveAndReload();
 			openToast({message: successMessage});
 
 			return;
 		}
 
-		const {
-			title = Liferay.Language.get('an-error-occurred'),
-		} = (await response.json()) as {title?: string};
+		const {detail}: {detail: string} = await response.json();
 
-		openToast({message: title, type: 'danger'});
+		const newErrors: Error = {};
+
+		const details = JSON.parse(detail);
+
+		const parseError = (details: ErrorMessage[], errors: Error) => {
+			details.forEach(({fieldName, message, messages}) => {
+				if (message) {
+					errors[fieldName] = message;
+				}
+				else {
+					errors[fieldName] = {};
+					parseError(
+						messages as ErrorMessage[],
+						errors[fieldName] as Error
+					);
+				}
+			});
+		};
+
+		parseError(details, newErrors);
+
+		setBackEndErrors(newErrors);
+
+		const errorMessages = new Set<string>();
+
+		const getErrorMessage = (errors: Error) => {
+			Object.values(errors).forEach((value) => {
+				if (typeof value === 'string') {
+					if (!errorMessages.has(value)) {
+						errorMessages.add(value);
+					}
+				}
+				else {
+					getErrorMessage(value);
+				}
+			});
+		};
+
+		if (newErrors) {
+			getErrorMessage(newErrors);
+			errorMessages.forEach((message) => {
+				openToast({
+					message,
+					type: 'danger',
+				});
+			});
+		}
 	};
 
 	const {
@@ -97,6 +154,19 @@ export default function Action({
 				))}
 			</ClayTabs>
 
+			{warningAlert && (
+				<ClayAlert
+					className="lfr-objects__side-panel-content-container"
+					displayType="warning"
+					onClose={() => setWarningAlert(false)}
+					title={`${Liferay.Language.get('warning')}:`}
+				>
+					{Liferay.Language.get(
+						'required-fields-must-have-predefined-values'
+					)}
+				</ClayAlert>
+			)}
+
 			<ClayTabs.Content activeIndex={activeIndex} fade>
 				<ClayTabs.TabPane>
 					<BasicInfo
@@ -110,11 +180,20 @@ export default function Action({
 
 				<ClayTabs.TabPane>
 					<ActionBuilder
-						errors={errors}
-						ffNotificationTemplates={ffNotificationTemplates}
+						errors={
+							Object.keys(errors).length ? errors : backEndErrors
+						}
+						objectActionCodeEditorElements={
+							objectActionCodeEditorElements
+						}
 						objectActionExecutors={objectActionExecutors}
 						objectActionTriggers={objectActionTriggers}
+						objectDefinitionsRelationshipsURL={
+							objectDefinitionsRelationshipsURL
+						}
 						setValues={setValues}
+						setWarningAlert={setWarningAlert}
+						validateExpressionURL={validateExpressionURL}
 						values={values}
 					/>
 				</ClayTabs.TabPane>
@@ -124,8 +203,20 @@ export default function Action({
 }
 
 function useObjectActionForm({initialValues, onSubmit}: IUseObjectActionForm) {
+	const [fields, setFields] = useState<ObjectField[]>([]);
+
+	const objectFieldsMap = useMemo(() => {
+		const fieldMap = new Map<string, ObjectField>();
+
+		fields.forEach((field) => {
+			fieldMap.set(field.name, field);
+		});
+
+		return fieldMap;
+	}, [fields]);
+
 	const validate = (values: Partial<ObjectAction>) => {
-		const errors: FormError<ObjectAction & ObjectActionParameters> = {};
+		const errors: ActionError = {};
 		if (invalidateRequired(values.name)) {
 			errors.name = REQUIRED_MSG;
 		}
@@ -143,6 +234,35 @@ function useObjectActionForm({initialValues, onSubmit}: IUseObjectActionForm) {
 		) {
 			errors.url = REQUIRED_MSG;
 		}
+		else if (
+			values.objectActionExecutorKey === 'groovy' &&
+			!!values.parameters?.lineCount &&
+			values.parameters.lineCount > 2987
+		) {
+			errors.script = Liferay.Language.get(
+				'the-maximum-number-of-lines-available-is-2987'
+			);
+		}
+		else if (values.objectActionExecutorKey === 'add-object-entry') {
+			if (!values.parameters?.objectDefinitionId) {
+				errors.objectDefinitionId = REQUIRED_MSG;
+			}
+			else if (values.parameters?.predefinedValues) {
+				const predefinedValues = values.parameters?.predefinedValues;
+
+				predefinedValues.forEach(({name, value}) => {
+					if (
+						objectFieldsMap.get(name)?.required &&
+						invalidateRequired(value)
+					) {
+						if (!errors.predefinedValues) {
+							errors.predefinedValues = {} as any;
+						}
+						errors.predefinedValues![name] = REQUIRED_MSG;
+					}
+				});
+			}
+		}
 
 		if (
 			typeof values.conditionExpression === 'string' &&
@@ -153,7 +273,7 @@ function useObjectActionForm({initialValues, onSubmit}: IUseObjectActionForm) {
 
 		if (Object.keys(errors).length) {
 			openToast({
-				message: Liferay.Language.get('an-error-occurred'),
+				message: REQUIRED_MSG,
 				type: 'danger',
 			});
 		}
@@ -161,28 +281,69 @@ function useObjectActionForm({initialValues, onSubmit}: IUseObjectActionForm) {
 		return errors;
 	};
 
-	return useForm<ObjectAction, ObjectActionParameters>({
+	const {errors, values, ...otherProps} = useForm<
+		ObjectAction,
+		ObjectActionParameters
+	>({
 		initialValues,
 		onSubmit,
 		validate,
 	});
+
+	useEffect(() => {
+		if (values.parameters?.objectDefinitionId) {
+			API.getObjectFields(values.parameters.objectDefinitionId).then(
+				(fields) => {
+					const filteredFields = fields.filter(
+						({businessType, system}) =>
+							businessType !== 'Aggregation' &&
+							businessType !== 'Relationship' &&
+							!system
+					);
+
+					setFields(filteredFields);
+				}
+			);
+		}
+		else {
+			setFields([]);
+		}
+	}, [values.parameters?.objectDefinitionId]);
+
+	return {errors: errors as ActionError, values, ...otherProps};
 }
 
 interface IProps {
-	ffNotificationTemplates: boolean;
 	objectAction: Partial<ObjectAction>;
+	objectActionCodeEditorElements: SidebarCategory[];
 	objectActionExecutors: CustomItem[];
 	objectActionTriggers: CustomItem[];
+	objectDefinitionsRelationshipsURL: string;
 	readOnly?: boolean;
 	requestParams: {
-		method: HTTPMethods;
+		method: 'POST' | 'PUT';
 		url: string;
 	};
 	successMessage: string;
 	title: string;
+	validateExpressionURL: string;
+}
+
+interface ErrorMessage {
+	fieldName: keyof ObjectAction;
+	message?: string;
+	messages?: ErrorMessage[];
+}
+
+interface Error {
+	[key: string]: string | Error;
 }
 
 interface IUseObjectActionForm {
 	initialValues: Partial<ObjectAction>;
 	onSubmit: (field: ObjectAction) => void;
 }
+
+export type ActionError = FormError<ObjectAction & ObjectActionParameters> & {
+	predefinedValues?: {[key: string]: string};
+};

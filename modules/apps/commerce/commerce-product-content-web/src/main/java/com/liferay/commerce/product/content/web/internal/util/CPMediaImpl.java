@@ -38,10 +38,11 @@ public class CPMediaImpl implements CPMedia {
 		_downloadURL = defaultURL;
 
 		_id = fileEntry.getFileEntryId();
-		_url = defaultURL;
-		_thumbnailURL = defaultURL;
 		_mimeType = fileEntry.getMimeType();
+		_size = 0;
+		_thumbnailURL = defaultURL;
 		_title = fileEntry.getTitle();
+		_url = defaultURL;
 	}
 
 	public CPMediaImpl(long groupId) throws PortalException {
@@ -51,6 +52,7 @@ public class CPMediaImpl implements CPMedia {
 
 		_id = 0;
 		_mimeType = null;
+		_size = 0;
 		_thumbnailURL = defaultURL;
 		_title = null;
 		_url = defaultURL;
@@ -70,9 +72,11 @@ public class CPMediaImpl implements CPMedia {
 
 		if (fileEntry == null) {
 			_mimeType = StringPool.BLANK;
+			_size = 0;
 		}
 		else {
 			_mimeType = fileEntry.getMimeType();
+			_size = fileEntry.getSize();
 		}
 
 		_thumbnailURL = CommerceMediaResolverUtil.getThumbnailURL(
@@ -92,6 +96,11 @@ public class CPMediaImpl implements CPMedia {
 	@Override
 	public long getId() {
 		return _id;
+	}
+
+	@Override
+	public long getSize() {
+		return _size;
 	}
 
 	@Override
@@ -117,6 +126,7 @@ public class CPMediaImpl implements CPMedia {
 	private final String _downloadURL;
 	private final long _id;
 	private final String _mimeType;
+	private final long _size;
 	private final String _thumbnailURL;
 	private final String _title;
 	private final String _url;

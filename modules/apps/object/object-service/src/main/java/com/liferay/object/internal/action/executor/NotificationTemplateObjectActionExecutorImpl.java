@@ -20,6 +20,7 @@ import com.liferay.object.constants.ObjectActionExecutorConstants;
 import com.liferay.object.internal.action.util.ObjectActionVariablesUtil;
 import com.liferay.object.model.ObjectDefinition;
 import com.liferay.object.service.ObjectDefinitionLocalService;
+import com.liferay.object.system.SystemObjectDefinitionMetadataTracker;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.UnicodeProperties;
@@ -51,7 +52,8 @@ public class NotificationTemplateObjectActionExecutorImpl
 				parametersUnicodeProperties.get("notificationTemplateId")),
 			objectDefinition.getClassName(),
 			ObjectActionVariablesUtil.toVariables(
-				_dtoConverterRegistry, objectDefinition, payloadJSONObject));
+				_dtoConverterRegistry, objectDefinition, payloadJSONObject,
+				_systemObjectDefinitionMetadataTracker));
 	}
 
 	@Override
@@ -67,5 +69,9 @@ public class NotificationTemplateObjectActionExecutorImpl
 
 	@Reference
 	private ObjectDefinitionLocalService _objectDefinitionLocalService;
+
+	@Reference
+	private SystemObjectDefinitionMetadataTracker
+		_systemObjectDefinitionMetadataTracker;
 
 }

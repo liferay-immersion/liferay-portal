@@ -14,8 +14,12 @@
 
 package com.liferay.portal.upgrade.v7_4_x;
 
+import com.liferay.portal.kernel.upgrade.BaseExternalReferenceCodeUpgradeProcess;
 import com.liferay.portal.kernel.upgrade.CTModelUpgradeProcess;
+import com.liferay.portal.kernel.upgrade.DummyUpgradeProcess;
 import com.liferay.portal.kernel.upgrade.UpgradeProcess;
+import com.liferay.portal.kernel.upgrade.UpgradeProcessFactory;
+import com.liferay.portal.kernel.upgrade.util.UpgradeModulesFactory;
 import com.liferay.portal.kernel.version.Version;
 import com.liferay.portal.upgrade.util.PortalUpgradeProcessRegistry;
 
@@ -33,7 +37,25 @@ public class PortalUpgradeProcessRegistryImpl
 
 		upgradeProcesses.put(new Version(9, 0, 0), new UpgradeAddress());
 
-		upgradeProcesses.put(new Version(9, 0, 1), new UpgradeModules());
+		upgradeProcesses.put(
+			new Version(9, 0, 1),
+			UpgradeModulesFactory.create(
+				new String[] {
+					"com.liferay.change.tracking.web",
+					"com.liferay.document.library.asset.auto.tagger.tensorflow",
+					"com.liferay.portal.bundle.blacklist.impl",
+					"com.liferay.portal.component.blacklist.impl",
+					"com.liferay.portal.search", "com.liferay.template.web"
+				},
+				new String[][] {
+					{"opensocial-portlet", "opensocial-portlet", "OpenSocial"}
+				},
+				new String[][] {
+					{
+						"com.liferay.softwarecatalog.service",
+						"SCFrameworkVersion"
+					}
+				}));
 
 		upgradeProcesses.put(new Version(9, 1, 0), new UpgradeRegion());
 
@@ -57,12 +79,18 @@ public class PortalUpgradeProcessRegistryImpl
 
 		upgradeProcesses.put(new Version(12, 1, 0), new UpgradeDLFileEntry());
 
-		upgradeProcesses.put(new Version(12, 1, 1), new UpgradeDLFileVersion());
+		upgradeProcesses.put(
+			new Version(12, 1, 1),
+			UpgradeProcessFactory.addColumns(
+				"DLFileVersion", "expirationDate DATE null",
+				"reviewDate DATE null"));
 
 		upgradeProcesses.put(new Version(12, 2, 0), new UpgradeCompanyId());
 
 		upgradeProcesses.put(
-			new Version(12, 2, 1), new UpgradeAssetEntryTitle());
+			new Version(12, 2, 1),
+			UpgradeProcessFactory.alterColumnType(
+				"AssetEntry", "title", "TEXT null"));
 
 		upgradeProcesses.put(
 			new Version(12, 2, 2), new UpgradePortalPreferenceValue());
@@ -88,7 +116,15 @@ public class PortalUpgradeProcessRegistryImpl
 
 		upgradeProcesses.put(new Version(13, 3, 4), new UpgradeExpandoColumn());
 
-		upgradeProcesses.put(new Version(13, 3, 5), new UpgradeContact());
+		upgradeProcesses.put(
+			new Version(13, 3, 5),
+			UpgradeProcessFactory.alterColumnType(
+				"Contact_", "prefixId", "LONG NULL"));
+
+		upgradeProcesses.put(
+			new Version(13, 3, 6),
+			UpgradeProcessFactory.alterColumnType(
+				"Contact_", "suffixId", "LONG NULL"));
 
 		upgradeProcesses.put(
 			new Version(14, 0, 0), new UpgradeExternalReferenceCode());
@@ -97,6 +133,21 @@ public class PortalUpgradeProcessRegistryImpl
 			new Version(14, 0, 1), new UpgradeFaviconFileEntryIdColumn());
 
 		upgradeProcesses.put(new Version(14, 0, 2), new UpgradeCountryCode());
+
+		upgradeProcesses.put(new Version(15, 0, 0), new UpgradeOrgGroupRole());
+
+		upgradeProcesses.put(new Version(16, 0, 0), new DummyUpgradeProcess());
+
+		upgradeProcesses.put(
+			new Version(16, 1, 0),
+			new BaseExternalReferenceCodeUpgradeProcess() {
+
+				@Override
+				protected String[][] getTableAndPrimaryKeyColumnNames() {
+					return new String[][] {{"DLFolder", "folderId"}};
+				}
+
+			});
 	}
 
 }

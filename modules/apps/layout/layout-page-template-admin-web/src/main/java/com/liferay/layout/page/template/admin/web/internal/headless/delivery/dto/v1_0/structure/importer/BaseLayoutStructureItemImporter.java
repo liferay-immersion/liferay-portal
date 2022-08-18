@@ -16,7 +16,15 @@ package com.liferay.layout.page.template.admin.web.internal.headless.delivery.dt
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import com.liferay.document.library.kernel.model.DLFileEntryConstants;
 import com.liferay.headless.delivery.dto.v1_0.ContextReference;
+import com.liferay.info.exception.NoSuchFormVariationException;
+import com.liferay.info.field.InfoField;
+import com.liferay.info.form.InfoForm;
+import com.liferay.info.item.InfoItemServiceTracker;
+import com.liferay.info.item.provider.InfoItemFormProvider;
+import com.liferay.layout.page.template.model.LayoutPageTemplateEntry;
+import com.liferay.layout.page.template.service.LayoutPageTemplateEntryLocalService;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
@@ -26,6 +34,7 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.Layout;
+import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.service.GroupLocalService;
 import com.liferay.portal.kernel.service.LayoutLocalService;
 import com.liferay.portal.kernel.util.GetterUtil;
@@ -33,7 +42,6 @@ import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.MapUtil;
 import com.liferay.portal.kernel.util.Portal;
-import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.Validator;
 
 import java.util.List;
@@ -46,6 +54,63 @@ import org.osgi.service.component.annotations.Reference;
  * @author Pavel Savinov
  */
 public abstract class BaseLayoutStructureItemImporter {
+
+	public JSONObject getLayoutFromItemReferenceJSONObject(
+		Map<String, Object> itemReferenceMap,
+		LayoutStructureItemImporterContext layoutStructureItemImporterContext) {
+
+		String friendlyURL = null;
+		Boolean privatePage = null;
+		String siteKey = null;
+
+		List<Map<String, String>> fields =
+			(List<Map<String, String>>)itemReferenceMap.get("fields");
+
+		for (Map<String, String> field : fields) {
+			String key = field.get("fieldName");
+
+			if (Objects.equals(key, "friendlyURL")) {
+				friendlyURL = field.get("fieldValue");
+			}
+			else if (Objects.equals(key, "privatePage")) {
+				privatePage = Boolean.valueOf(field.get("fieldValue"));
+			}
+			else if (Objects.equals(key, "siteKey")) {
+				siteKey = field.get("fieldValue");
+			}
+		}
+
+		if ((friendlyURL == null) || (privatePage == null)) {
+			return null;
+		}
+
+		Layout currentLayout = layoutStructureItemImporterContext.getLayout();
+
+		long groupId = currentLayout.getGroupId();
+
+		if (Validator.isNotNull(siteKey)) {
+			Group group = groupLocalService.fetchGroup(
+				currentLayout.getCompanyId(), siteKey);
+
+			if (group == null) {
+				if (_log.isWarnEnabled()) {
+					_log.warn(
+						StringBundler.concat(
+							"Unable to process mapping because group ", siteKey,
+							" does not exist"));
+				}
+
+				return null;
+			}
+
+			groupId = group.getGroupId();
+		}
+
+		Layout layout = layoutLocalService.fetchLayoutByFriendlyURL(
+			groupId, privatePage, friendlyURL);
+
+		return _getLayoutJSONObject("friendlyURL", friendlyURL, layout);
+	}
 
 	protected Map<String, Object> getDefinitionMap(Object definition)
 		throws Exception {
@@ -116,7 +181,11 @@ public abstract class BaseLayoutStructureItemImporter {
 				ContextReference.ContextSource.DISPLAY_PAGE_ITEM.getValue(),
 				contextSource)) {
 
-			jsonObject.put("mappedField", fieldKey);
+			if (_isValidInfoField(
+					fieldKey, layoutStructureItemImporterContext)) {
+
+				jsonObject.put("mappedField", fieldKey);
+			}
 
 			return;
 		}
@@ -135,7 +204,8 @@ public abstract class BaseLayoutStructureItemImporter {
 			Layout layout = layoutLocalService.fetchLayout(
 				GetterUtil.getLong(fieldValue));
 
-			_processLayout("PLID", fieldValue, jsonObject, layout);
+			jsonObject.put(
+				"layout", _getLayoutJSONObject("PLID", fieldValue, layout));
 
 			return;
 		}
@@ -143,58 +213,10 @@ public abstract class BaseLayoutStructureItemImporter {
 		if (Objects.equals(className, Layout.class.getName()) &&
 			itemReferenceMap.containsKey("fields")) {
 
-			String friendlyURL = null;
-			Boolean privatePage = null;
-			String siteKey = null;
-
-			List<Map<String, String>> fields =
-				(List<Map<String, String>>)itemReferenceMap.get("fields");
-
-			for (Map<String, String> field : fields) {
-				String key = field.get("fieldName");
-
-				if (Objects.equals(key, "friendlyURL")) {
-					friendlyURL = field.get("fieldValue");
-				}
-				else if (Objects.equals(key, "privatePage")) {
-					privatePage = Boolean.valueOf(field.get("fieldValue"));
-				}
-				else if (Objects.equals(key, "siteKey")) {
-					siteKey = field.get("fieldValue");
-				}
-			}
-
-			if ((friendlyURL == null) || (privatePage == null)) {
-				return;
-			}
-
-			Layout currentLayout =
-				layoutStructureItemImporterContext.getLayout();
-
-			long groupId = currentLayout.getGroupId();
-
-			if (Validator.isNotNull(siteKey)) {
-				Group group = groupLocalService.fetchGroup(
-					currentLayout.getCompanyId(), siteKey);
-
-				if (group == null) {
-					if (_log.isWarnEnabled()) {
-						_log.warn(
-							StringBundler.concat(
-								"Unable to process mapping because group ",
-								siteKey, " does not exist"));
-					}
-
-					return;
-				}
-
-				groupId = group.getGroupId();
-			}
-
-			Layout layout = layoutLocalService.fetchLayoutByFriendlyURL(
-				groupId, privatePage, friendlyURL);
-
-			_processLayout("friendlyURL", friendlyURL, jsonObject, layout);
+			jsonObject.put(
+				"layout",
+				getLayoutFromItemReferenceJSONObject(
+					itemReferenceMap, layoutStructureItemImporterContext));
 		}
 
 		String classNameId = null;
@@ -227,52 +249,20 @@ public abstract class BaseLayoutStructureItemImporter {
 	protected JSONObject toFragmentViewportStylesJSONObject(
 		Map<String, Object> fragmentViewport) {
 
-		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
-
 		if (MapUtil.isEmpty(fragmentViewport)) {
-			return jsonObject;
+			return JSONFactoryUtil.createJSONObject();
 		}
 
 		Map<String, Object> fragmentViewportStyle =
 			(Map<String, Object>)fragmentViewport.get("fragmentViewportStyle");
 
 		if (MapUtil.isEmpty(fragmentViewportStyle)) {
-			return jsonObject;
+			return JSONFactoryUtil.createJSONObject();
 		}
 
-		Object hidden = fragmentViewportStyle.get("hidden");
-
-		if (hidden != null) {
-			if (GetterUtil.getBoolean(hidden)) {
-				jsonObject.put("display", "none");
-			}
-			else {
-				jsonObject.put("display", "block");
-			}
-		}
-
-		jsonObject.put(
-			"marginBottom", fragmentViewportStyle.get("marginBottom")
-		).put(
-			"marginLeft", fragmentViewportStyle.get("marginLeft")
-		).put(
-			"marginRight", fragmentViewportStyle.get("marginRight")
-		).put(
-			"marginTop", fragmentViewportStyle.get("marginTop")
-		).put(
-			"paddingBottom", fragmentViewportStyle.get("paddingBottom")
-		).put(
-			"paddingLeft", fragmentViewportStyle.get("paddingLeft")
-		).put(
-			"paddingRight", fragmentViewportStyle.get("paddingRight")
-		).put(
-			"paddingTop", fragmentViewportStyle.get("paddingTop")
-		).put(
-			"textAlign", fragmentViewportStyle.get("textAlign")
-		);
-
-		if (GetterUtil.getBoolean(PropsUtil.get("feature.flag.LPS-132571"))) {
-			jsonObject.put(
+		return JSONUtil.put(
+			"styles",
+			JSONUtil.put(
 				"backgroundColor", fragmentViewportStyle.get("backgroundColor")
 			).put(
 				"borderColor", fragmentViewportStyle.get("borderColor")
@@ -281,6 +271,21 @@ public abstract class BaseLayoutStructureItemImporter {
 			).put(
 				"borderWidth", fragmentViewportStyle.get("borderWidth")
 			).put(
+				"display",
+				() -> {
+					Object hidden = fragmentViewportStyle.get("hidden");
+
+					if (hidden != null) {
+						if (GetterUtil.getBoolean(hidden)) {
+							return "none";
+						}
+
+						return "block";
+					}
+
+					return null;
+				}
+			).put(
 				"fontFamily", fragmentViewportStyle.get("fontFamily")
 			).put(
 				"fontSize", fragmentViewportStyle.get("fontSize")
@@ -288,6 +293,14 @@ public abstract class BaseLayoutStructureItemImporter {
 				"fontWeight", fragmentViewportStyle.get("fontWeight")
 			).put(
 				"height", fragmentViewportStyle.get("height")
+			).put(
+				"marginBottom", fragmentViewportStyle.get("marginBottom")
+			).put(
+				"marginLeft", fragmentViewportStyle.get("marginLeft")
+			).put(
+				"marginRight", fragmentViewportStyle.get("marginRight")
+			).put(
+				"marginTop", fragmentViewportStyle.get("marginTop")
 			).put(
 				"maxHeight", fragmentViewportStyle.get("maxHeight")
 			).put(
@@ -301,15 +314,22 @@ public abstract class BaseLayoutStructureItemImporter {
 			).put(
 				"overflow", fragmentViewportStyle.get("overflow")
 			).put(
+				"paddingBottom", fragmentViewportStyle.get("paddingBottom")
+			).put(
+				"paddingLeft", fragmentViewportStyle.get("paddingLeft")
+			).put(
+				"paddingRight", fragmentViewportStyle.get("paddingRight")
+			).put(
+				"paddingTop", fragmentViewportStyle.get("paddingTop")
+			).put(
 				"shadow", fragmentViewportStyle.get("shadow")
+			).put(
+				"textAlign", fragmentViewportStyle.get("textAlign")
 			).put(
 				"textColor", fragmentViewportStyle.get("textColor")
 			).put(
 				"width", fragmentViewportStyle.get("width")
-			);
-		}
-
-		return JSONUtil.put("styles", jsonObject);
+			));
 	}
 
 	protected JSONObject toStylesJSONObject(
@@ -458,14 +478,20 @@ public abstract class BaseLayoutStructureItemImporter {
 	protected GroupLocalService groupLocalService;
 
 	@Reference
+	protected InfoItemServiceTracker infoItemServiceTracker;
+
+	@Reference
 	protected LayoutLocalService layoutLocalService;
+
+	@Reference
+	protected LayoutPageTemplateEntryLocalService
+		layoutPageTemplateEntryLocalService;
 
 	@Reference
 	protected Portal portal;
 
-	private void _processLayout(
-		String fieldKey, String fieldValue, JSONObject jsonObject,
-		Layout layout) {
+	private JSONObject _getLayoutJSONObject(
+		String fieldKey, String fieldValue, Layout layout) {
 
 		if (layout == null) {
 			if (_log.isWarnEnabled()) {
@@ -475,26 +501,85 @@ public abstract class BaseLayoutStructureItemImporter {
 						"be obtained for ", fieldKey, " ", fieldValue));
 			}
 
-			return;
+			return JSONFactoryUtil.createJSONObject();
 		}
 
-		jsonObject.put(
-			"layout",
-			JSONUtil.put(
-				"groupId", String.valueOf(layout.getGroupId())
-			).put(
-				"id", layout.getUuid()
-			).put(
-				"layoutId", String.valueOf(layout.getLayoutId())
-			).put(
-				"layoutUuid", layout.getUuid()
-			).put(
-				"privateLayout", layout.isPrivateLayout()
-			).put(
-				"title", layout.getName(LocaleUtil.getMostRelevantLocale())
-			).put(
-				"value", layout.getFriendlyURL()
-			));
+		return JSONUtil.put(
+			"groupId", String.valueOf(layout.getGroupId())
+		).put(
+			"id", layout.getUuid()
+		).put(
+			"layoutId", String.valueOf(layout.getLayoutId())
+		).put(
+			"layoutUuid", layout.getUuid()
+		).put(
+			"privateLayout", layout.isPrivateLayout()
+		).put(
+			"title", layout.getName(LocaleUtil.getMostRelevantLocale())
+		).put(
+			"value", layout.getFriendlyURL()
+		);
+	}
+
+	private boolean _isValidInfoField(
+		String fieldKey,
+		LayoutStructureItemImporterContext layoutStructureItemImporterContext) {
+
+		Layout layout = layoutStructureItemImporterContext.getLayout();
+
+		if (!layout.isTypeAssetDisplay()) {
+			return false;
+		}
+
+		if (layout.isDraftLayout()) {
+			layout = layoutLocalService.fetchLayout(layout.getClassPK());
+		}
+
+		if (layout == null) {
+			return false;
+		}
+
+		LayoutPageTemplateEntry layoutPageTemplateEntry =
+			layoutPageTemplateEntryLocalService.
+				fetchLayoutPageTemplateEntryByPlid(layout.getPlid());
+
+		if (layoutPageTemplateEntry == null) {
+			return false;
+		}
+
+		String className = portal.getClassName(
+			layoutPageTemplateEntry.getClassNameId());
+
+		if (Objects.equals(DLFileEntryConstants.getClassName(), className)) {
+			className = FileEntry.class.getName();
+		}
+
+		InfoItemFormProvider<Object> infoItemFormProvider =
+			infoItemServiceTracker.getFirstInfoItemService(
+				InfoItemFormProvider.class, className);
+
+		if (infoItemFormProvider == null) {
+			return false;
+		}
+
+		try {
+			InfoForm infoForm = infoItemFormProvider.getInfoForm(
+				String.valueOf(layoutPageTemplateEntry.getClassTypeId()),
+				layout.getGroupId());
+
+			InfoField<?> infoField = infoForm.getInfoField(fieldKey);
+
+			if (infoField != null) {
+				return true;
+			}
+		}
+		catch (NoSuchFormVariationException noSuchFormVariationException) {
+			if (_log.isWarnEnabled()) {
+				_log.warn(noSuchFormVariationException);
+			}
+		}
+
+		return false;
 	}
 
 	private static final String[] _ALIGN_KEYS = {

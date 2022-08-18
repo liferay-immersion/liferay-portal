@@ -28,12 +28,13 @@ import com.liferay.petra.string.CharPool;
 import com.liferay.petra.string.StringPool;
 import com.liferay.petra.string.StringUtil;
 import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.language.LanguageUtil;
+import com.liferay.portal.kernel.language.Language;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.ResourceBundleUtil;
 import com.liferay.portal.kernel.util.SetUtil;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.vulcan.extension.PropertyDefinition;
 
 import java.math.BigDecimal;
 
@@ -79,7 +80,7 @@ public class AttachmentObjectFieldBusinessType
 
 	@Override
 	public String getDescription(Locale locale) {
-		return LanguageUtil.get(
+		return _language.get(
 			ResourceBundleUtil.getModuleAndPortalResourceBundle(
 				locale, getClass()),
 			"upload-files-or-select-from-documents-and-media");
@@ -87,7 +88,7 @@ public class AttachmentObjectFieldBusinessType
 
 	@Override
 	public String getLabel(Locale locale) {
-		return LanguageUtil.get(
+		return _language.get(
 			ResourceBundleUtil.getModuleAndPortalResourceBundle(
 				locale, getClass()),
 			"attachment");
@@ -110,7 +111,7 @@ public class AttachmentObjectFieldBusinessType
 		).build();
 
 		ListUtil.isNotEmptyForEach(
-			_objectFieldSettingLocalService.getObjectFieldSettings(
+			_objectFieldSettingLocalService.getObjectFieldObjectFieldSettings(
 				objectField.getObjectFieldId()),
 			objectFieldSetting -> properties.put(
 				objectFieldSetting.getName(), objectFieldSetting.getValue()));
@@ -122,6 +123,11 @@ public class AttachmentObjectFieldBusinessType
 	}
 
 	@Override
+	public PropertyDefinition.PropertyType getPropertyType() {
+		return PropertyDefinition.PropertyType.LONG;
+	}
+
+	@Override
 	public Set<String> getRequiredObjectFieldSettingsNames() {
 		return SetUtil.fromArray(
 			"acceptedFileExtensions", "fileSource", "maximumFileSize");
@@ -129,12 +135,12 @@ public class AttachmentObjectFieldBusinessType
 
 	@Override
 	public void validateObjectFieldSettings(
-			String objectFieldName,
+			long objectDefinitionId, String objectFieldName,
 			List<ObjectFieldSetting> objectFieldSettings)
 		throws PortalException {
 
 		ObjectFieldBusinessType.super.validateObjectFieldSettings(
-			objectFieldName, objectFieldSettings);
+			objectDefinitionId, objectFieldName, objectFieldSettings);
 
 		Stream<ObjectFieldSetting> stream = objectFieldSettings.stream();
 
@@ -218,6 +224,12 @@ public class AttachmentObjectFieldBusinessType
 						objectFieldName,
 						Collections.singleton("storageDLFolderPath"));
 			}
+			else if (Validator.isNotNull(storageDLFolderPath) &&
+					 (storageDLFolderPath.length() > 255)) {
+
+				throw new ObjectFieldSettingValueException.
+					MustBeLessThan256Characters();
+			}
 
 			for (String directoryName :
 					StringUtil.split(
@@ -253,6 +265,9 @@ public class AttachmentObjectFieldBusinessType
 				numberFormatException);
 		}
 	}
+
+	@Reference
+	private Language _language;
 
 	@Reference
 	private ObjectFieldSettingLocalService _objectFieldSettingLocalService;

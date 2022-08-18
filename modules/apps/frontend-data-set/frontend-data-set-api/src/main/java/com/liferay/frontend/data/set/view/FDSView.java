@@ -17,7 +17,6 @@ package com.liferay.frontend.data.set.view;
 import com.liferay.frontend.data.set.view.table.FDSTableSchema;
 
 import java.util.Locale;
-import java.util.Map;
 
 /**
  * @author Marco Leo
@@ -39,10 +38,10 @@ public interface FDSView {
 
 	public String getName();
 
-	public default Map<String, Object> getOptions() {
-		return null;
-	}
-
 	public String getThumbnail();
+
+	public default boolean isDefault() {
+		return false;
+	}
 
 }

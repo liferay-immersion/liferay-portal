@@ -16,16 +16,18 @@ package com.liferay.object.internal.action.engine;
 
 import com.liferay.dynamic.data.mapping.expression.CreateExpressionRequest;
 import com.liferay.dynamic.data.mapping.expression.DDMExpression;
-import com.liferay.dynamic.data.mapping.expression.DDMExpressionException;
 import com.liferay.dynamic.data.mapping.expression.DDMExpressionFactory;
 import com.liferay.object.action.engine.ObjectActionEngine;
 import com.liferay.object.action.executor.ObjectActionExecutor;
 import com.liferay.object.action.executor.ObjectActionExecutorRegistry;
+import com.liferay.object.constants.ObjectActionConstants;
 import com.liferay.object.internal.action.util.ObjectActionVariablesUtil;
 import com.liferay.object.model.ObjectAction;
 import com.liferay.object.model.ObjectDefinition;
 import com.liferay.object.service.ObjectActionLocalService;
 import com.liferay.object.service.ObjectDefinitionLocalService;
+import com.liferay.object.system.SystemObjectDefinitionMetadataTracker;
+import com.liferay.petra.lang.CentralizedThreadLocal;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -34,8 +36,9 @@ import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.vulcan.dto.converter.DTOConverterRegistry;
 
-import java.util.List;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -63,28 +66,22 @@ public class ObjectActionEngineImpl implements ObjectActionEngine {
 	}
 
 	private boolean _evaluateConditionExpression(
-		String conditionExpression, Map<String, Object> variables) {
+			String conditionExpression, Map<String, Object> variables)
+		throws Exception {
 
 		if (Validator.isNull(conditionExpression)) {
 			return true;
 		}
 
-		try {
-			DDMExpression<Boolean> ddmExpression =
-				_ddmExpressionFactory.createExpression(
-					CreateExpressionRequest.Builder.newBuilder(
-						conditionExpression
-					).build());
+		DDMExpression<Boolean> ddmExpression =
+			_ddmExpressionFactory.createExpression(
+				CreateExpressionRequest.Builder.newBuilder(
+					conditionExpression
+				).build());
 
-			ddmExpression.setVariables(variables);
+		ddmExpression.setVariables(variables);
 
-			return ddmExpression.evaluate();
-		}
-		catch (DDMExpressionException ddmExpressionException) {
-			_log.error(ddmExpressionException);
-
-			return false;
-		}
+		return ddmExpression.evaluate();
 	}
 
 	private void _executeObjectActions(
@@ -118,33 +115,57 @@ public class ObjectActionEngineImpl implements ObjectActionEngine {
 			"userId", userId
 		);
 
+		Set<Long> objectActionIds = _objectActionIdsThreadLocal.get();
 		Map<String, Object> variables = ObjectActionVariablesUtil.toVariables(
-			_dtoConverterRegistry, objectDefinition, payloadJSONObject);
+			_dtoConverterRegistry, objectDefinition, payloadJSONObject,
+			_systemObjectDefinitionMetadataTracker);
 
-		List<ObjectAction> objectActions =
-			_objectActionLocalService.getObjectActions(
-				objectDefinition.getObjectDefinitionId(),
-				objectActionTriggerKey);
+		for (ObjectAction objectAction :
+				_objectActionLocalService.getObjectActions(
+					objectDefinition.getObjectDefinitionId(),
+					objectActionTriggerKey)) {
 
-		for (ObjectAction objectAction : objectActions) {
-			if (!_evaluateConditionExpression(
-					objectAction.getConditionExpression(), variables)) {
+			try {
+				if (objectActionIds.contains(
+						objectAction.getObjectActionId()) ||
+					!_evaluateConditionExpression(
+						objectAction.getConditionExpression(), variables)) {
 
-				continue;
+					continue;
+				}
+
+				objectActionIds.add(objectAction.getObjectActionId());
+
+				ObjectActionExecutor objectActionExecutor =
+					_objectActionExecutorRegistry.getObjectActionExecutor(
+						objectAction.getObjectActionExecutorKey());
+
+				objectActionExecutor.execute(
+					companyId, objectAction.getParametersUnicodeProperties(),
+					payloadJSONObject, userId);
+
+				_objectActionLocalService.updateStatus(
+					objectAction.getObjectActionId(),
+					ObjectActionConstants.STATUS_SUCCESS);
 			}
+			catch (Exception exception) {
+				_log.error(exception);
 
-			ObjectActionExecutor objectActionExecutor =
-				_objectActionExecutorRegistry.getObjectActionExecutor(
-					objectAction.getObjectActionExecutorKey());
-
-			objectActionExecutor.execute(
-				companyId, objectAction.getParametersUnicodeProperties(),
-				payloadJSONObject, userId);
+				_objectActionLocalService.updateStatus(
+					objectAction.getObjectActionId(),
+					ObjectActionConstants.STATUS_FAILED);
+			}
 		}
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		ObjectActionEngineImpl.class);
+
+	private static final ThreadLocal<Set<Long>> _objectActionIdsThreadLocal =
+		new CentralizedThreadLocal<>(
+			ObjectActionEngineImpl.class.getName() +
+				"._objectActionIdsThreadLocal",
+			HashSet::new);
 
 	@Reference
 	private DDMExpressionFactory _ddmExpressionFactory;
@@ -160,6 +181,10 @@ public class ObjectActionEngineImpl implements ObjectActionEngine {
 
 	@Reference
 	private ObjectDefinitionLocalService _objectDefinitionLocalService;
+
+	@Reference
+	private SystemObjectDefinitionMetadataTracker
+		_systemObjectDefinitionMetadataTracker;
 
 	@Reference
 	private UserLocalService _userLocalService;

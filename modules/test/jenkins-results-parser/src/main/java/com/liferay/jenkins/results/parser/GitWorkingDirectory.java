@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.Callable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -417,29 +418,48 @@ public class GitWorkingDirectory {
 	}
 
 	public String createPullRequest(
-			String body, String pullRequestBranchName, String receiverUserName,
-			String senderUserName, String title)
+			final String body, final String pullRequestBranchName,
+			final String receiverUserName, final String senderUserName,
+			final String title)
 		throws IOException {
 
-		JSONObject requestJSONObject = new JSONObject();
+		Retryable<String> retryable = new Retryable<String>(true, 5, 0, true) {
 
-		requestJSONObject.put("base", _upstreamBranchName);
-		requestJSONObject.put("body", body);
-		requestJSONObject.put(
-			"head", senderUserName + ":" + pullRequestBranchName);
-		requestJSONObject.put("title", title);
+			@Override
+			public String execute() {
+				JSONObject requestJSONObject = new JSONObject();
 
-		String url = JenkinsResultsParserUtil.getGitHubApiUrl(
-			_gitRepositoryName, receiverUserName, "pulls");
+				requestJSONObject.put("base", _upstreamBranchName);
+				requestJSONObject.put("body", body);
+				requestJSONObject.put(
+					"head", senderUserName + ":" + pullRequestBranchName);
+				requestJSONObject.put("title", title);
 
-		JSONObject responseJSONObject = JenkinsResultsParserUtil.toJSONObject(
-			url, requestJSONObject.toString());
+				String url = JenkinsResultsParserUtil.getGitHubApiUrl(
+					_gitRepositoryName, receiverUserName, "pulls");
 
-		String pullRequestURL = responseJSONObject.getString("html_url");
+				JSONObject responseJSONObject;
 
-		System.out.println("Created a pull request at " + pullRequestURL);
+				try {
+					responseJSONObject = JenkinsResultsParserUtil.toJSONObject(
+						url, requestJSONObject.toString());
+				}
+				catch (IOException ioException) {
+					throw new RuntimeException(ioException);
+				}
 
-		return pullRequestURL;
+				String pullRequestURL = responseJSONObject.getString(
+					"html_url");
+
+				System.out.println(
+					"Created a pull request at " + pullRequestURL);
+
+				return pullRequestURL;
+			}
+
+		};
+
+		return retryable.executeWithRetries();
 	}
 
 	public void deleteLocalGitBranch(LocalGitBranch localGitBranch) {
@@ -495,6 +515,10 @@ public class GitWorkingDirectory {
 	public void deleteRemoteGitBranches(
 		List<RemoteGitBranch> remoteGitBranches) {
 
+		if (remoteGitBranches.isEmpty()) {
+			return;
+		}
+
 		Map<String, Set<String>> remoteURLGitBranchNameMap = new HashMap<>();
 
 		for (RemoteGitBranch remoteGitBranch : remoteGitBranches) {
@@ -515,21 +539,48 @@ public class GitWorkingDirectory {
 			remoteURLGitBranchNameMap.put(remoteURL, remoteGitBranchNames);
 		}
 
-		for (Map.Entry<String, Set<String>> remoteURLBranchNamesEntry :
+		List<Callable<Boolean>> callables = new ArrayList<>(
+			remoteURLGitBranchNameMap.size());
+
+		for (final Map.Entry<String, Set<String>> remoteURLBranchNamesEntry :
 				remoteURLGitBranchNameMap.entrySet()) {
 
-			String remoteURL = remoteURLBranchNamesEntry.getKey();
+			Callable<Boolean> callable = new Callable<Boolean>() {
 
-			for (List<String> branchNames :
-					Lists.partition(
-						new ArrayList<String>(
-							remoteURLBranchNamesEntry.getValue()),
-						_BRANCHES_DELETE_BATCH_SIZE)) {
+				@Override
+				public Boolean call() throws Exception {
+					Set<String> allBranchNames =
+						remoteURLBranchNamesEntry.getValue();
 
-				_deleteRemoteGitBranches(
-					remoteURL, branchNames.toArray(new String[0]));
-			}
+					if (allBranchNames.isEmpty()) {
+						return true;
+					}
+
+					String remoteURL = remoteURLBranchNamesEntry.getKey();
+
+					for (List<String> branchNames :
+							Lists.partition(
+								new ArrayList<String>(allBranchNames),
+								_BRANCHES_DELETE_BATCH_SIZE)) {
+
+						_deleteRemoteGitBranches(
+							remoteURL, branchNames.toArray(new String[0]));
+					}
+
+					return true;
+				}
+
+			};
+
+			callables.add(callable);
 		}
+
+		ParallelExecutor<Boolean> parallelExecutor = new ParallelExecutor<>(
+			callables, true,
+			JenkinsResultsParserUtil.getNewThreadPoolExecutor(
+				callables.size(), true));
+
+		parallelExecutor.execute();
 	}
 
 	public void displayLog() {

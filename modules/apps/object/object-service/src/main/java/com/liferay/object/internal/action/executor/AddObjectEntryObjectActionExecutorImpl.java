@@ -28,6 +28,7 @@ import com.liferay.object.scope.ObjectScopeProviderRegistry;
 import com.liferay.object.service.ObjectDefinitionLocalService;
 import com.liferay.object.service.ObjectEntryLocalService;
 import com.liferay.object.service.ObjectRelationshipLocalService;
+import com.liferay.object.system.SystemObjectDefinitionMetadataTracker;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactory;
 import com.liferay.portal.kernel.json.JSONObject;
@@ -37,8 +38,8 @@ import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.MapUtil;
-import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.UnicodeProperties;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.vulcan.dto.converter.DTOConverterRegistry;
 
 import java.io.Serializable;
@@ -64,19 +65,13 @@ public class AddObjectEntryObjectActionExecutorImpl
 			JSONObject payloadJSONObject, long userId)
 		throws Exception {
 
-		if (!GetterUtil.getBoolean(PropsUtil.get("feature.flag.LPS-152180"))) {
-			throw new UnsupportedOperationException();
-		}
-
 		ObjectDefinition targetObjectDefinition =
-			_objectDefinitionLocalService.fetchObjectDefinition(
+			_objectDefinitionLocalService.getObjectDefinition(
 				GetterUtil.getLong(
 					parametersUnicodeProperties.get("objectDefinitionId")));
 
-		if ((targetObjectDefinition == null) ||
-			targetObjectDefinition.isSystem()) {
-
-			return;
+		if (targetObjectDefinition.isSystem()) {
+			throw new UnsupportedOperationException();
 		}
 
 		long defaultUserId = _userLocalService.getDefaultUserId(companyId);
@@ -196,7 +191,8 @@ public class AddObjectEntryObjectActionExecutorImpl
 		Map<String, Serializable> values = new HashMap<>();
 
 		Map<String, Object> variables = ObjectActionVariablesUtil.toVariables(
-			_dtoConverterRegistry, objectDefinition, payloadJSONObject);
+			_dtoConverterRegistry, objectDefinition, payloadJSONObject,
+			_systemObjectDefinitionMetadataTracker);
 
 		JSONArray jsonArray = _jsonFactory.createJSONArray(
 			parametersUnicodeProperties.get("predefinedValues"));
@@ -205,6 +201,10 @@ public class AddObjectEntryObjectActionExecutorImpl
 			JSONObject jsonObject = jsonArray.getJSONObject(i);
 
 			Serializable value = (Serializable)jsonObject.get("value");
+
+			if (Validator.isNull(value)) {
+				continue;
+			}
 
 			if (!jsonObject.getBoolean("inputAsValue")) {
 				value = _evaluateExpression(value.toString(), variables);
@@ -239,6 +239,10 @@ public class AddObjectEntryObjectActionExecutorImpl
 
 	@Reference
 	private ObjectScopeProviderRegistry _objectScopeProviderRegistry;
+
+	@Reference
+	private SystemObjectDefinitionMetadataTracker
+		_systemObjectDefinitionMetadataTracker;
 
 	@Reference
 	private UserLocalService _userLocalService;

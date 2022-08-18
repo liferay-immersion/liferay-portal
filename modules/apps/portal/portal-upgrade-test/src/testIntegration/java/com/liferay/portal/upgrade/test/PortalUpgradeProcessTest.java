@@ -16,9 +16,13 @@ package com.liferay.portal.upgrade.test;
 
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.portal.kernel.dao.jdbc.DataAccess;
+import com.liferay.portal.kernel.model.Release;
+import com.liferay.portal.kernel.model.ReleaseConstants;
+import com.liferay.portal.kernel.service.ReleaseLocalService;
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.version.Version;
+import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.portal.upgrade.PortalUpgradeProcess;
 
@@ -49,7 +53,7 @@ public class PortalUpgradeProcessTest {
 		new LiferayIntegrationTestRule();
 
 	@BeforeClass
-	public static void setUpClass() throws SQLException {
+	public static void setUpClass() throws Exception {
 		try (Connection connection = DataAccess.getConnection()) {
 			_currentSchemaVersion =
 				PortalUpgradeProcess.getCurrentSchemaVersion(connection);
@@ -57,7 +61,7 @@ public class PortalUpgradeProcessTest {
 	}
 
 	@Before
-	public void setUp() throws SQLException {
+	public void setUp() throws Exception {
 		_innerPortalUpgradeProcess = new InnerPortalUpgradeProcess();
 	}
 
@@ -225,6 +229,16 @@ public class PortalUpgradeProcessTest {
 	}
 
 	@Test
+	public void testSupportsRetry() throws Exception {
+		try (Connection connection = DataAccess.getConnection()) {
+			Assert.assertTrue(PortalUpgradeProcess.supportsRetry(connection));
+		}
+
+		_testSupportsRetry(6210);
+		_testSupportsRetry(7010);
+	}
+
+	@Test
 	public void testUpgradeWhenCoreIsInLatestSchemaVersion() throws Exception {
 		_updateSchemaVersion(PortalUpgradeProcess.getLatestSchemaVersion());
 
@@ -270,15 +284,36 @@ public class PortalUpgradeProcessTest {
 	}
 
 	@Test
-	public void testValidateCoreIsInRequiredSchemaVersion()
-		throws SQLException {
-
+	public void testValidateCoreIsInRequiredSchemaVersion() throws Exception {
 		try (Connection connection = DataAccess.getConnection()) {
 			Assert.assertTrue(
 				"You must first upgrade the portal to the required schema " +
 					"version " +
 						PortalUpgradeProcess.getRequiredSchemaVersion(),
 				PortalUpgradeProcess.isInRequiredSchemaVersion(connection));
+		}
+	}
+
+	private void _testSupportsRetry(int buildNumber) throws Exception {
+		Release release = _releaseLocalService.fetchRelease(
+			ReleaseConstants.DEFAULT_SERVLET_CONTEXT_NAME);
+
+		int currentBuildNumber = release.getBuildNumber();
+
+		release.setBuildNumber(buildNumber);
+
+		_releaseLocalService.updateRelease(release);
+
+		try (Connection connection = DataAccess.getConnection()) {
+			Assert.assertFalse(PortalUpgradeProcess.supportsRetry(connection));
+		}
+		finally {
+			release = _releaseLocalService.fetchRelease(
+				ReleaseConstants.DEFAULT_SERVLET_CONTEXT_NAME);
+
+			release.setBuildNumber(currentBuildNumber);
+
+			_releaseLocalService.updateRelease(release);
 		}
 	}
 
@@ -294,6 +329,9 @@ public class PortalUpgradeProcessTest {
 	private static Version _currentSchemaVersion;
 
 	private InnerPortalUpgradeProcess _innerPortalUpgradeProcess;
+
+	@Inject
+	private ReleaseLocalService _releaseLocalService;
 
 	private static class InnerPortalUpgradeProcess
 		extends PortalUpgradeProcess {

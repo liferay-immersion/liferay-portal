@@ -15,31 +15,16 @@
 
 import {ReactNode, createContext, useEffect, useReducer} from 'react';
 
-import apolloClient from '../graphql/apolloClient';
-import {UserAccount, getLiferayMyUserAccount} from '../graphql/queries';
-import {Security} from '../security';
+import {useFetch} from '../hooks/useFetch';
+import {UserAccount} from '../services/rest';
 import {ActionMap} from '../types';
 
 type InitialState = {
 	myUserAccount?: UserAccount;
-	security: Security;
 };
 
 const initialState: InitialState = {
 	myUserAccount: undefined,
-	security: new Security(
-		{
-			additionalName: '',
-			alternateName: '',
-			emailAddress: '',
-			familyName: '',
-			givenName: '',
-			id: 0,
-			image: '',
-			roleBriefs: [],
-		},
-		true
-	),
 };
 
 export enum AccountTypes {
@@ -49,7 +34,6 @@ export enum AccountTypes {
 type AccountPayload = {
 	[AccountTypes.SET_MY_USER_ACCOUNT]: {
 		account: UserAccount;
-		skipRoleCheck: boolean;
 	};
 };
 
@@ -62,13 +46,11 @@ export const AccountContext = createContext<
 const reducer = (state: InitialState, action: AppActions) => {
 	switch (action.type) {
 		case AccountTypes.SET_MY_USER_ACCOUNT:
-			const {account, skipRoleCheck} = action.payload;
-			const security = new Security(account, skipRoleCheck);
+			const {account} = action.payload;
 
 			return {
 				...state,
 				myUserAccount: account,
-				security,
 			};
 
 		default:
@@ -78,28 +60,37 @@ const reducer = (state: InitialState, action: AppActions) => {
 
 const AccountContextProvider: React.FC<{
 	children: ReactNode;
-	skipRoleCheck: boolean;
-}> = ({children, skipRoleCheck}) => {
+}> = ({children}) => {
 	const [state, dispatch] = useReducer(reducer, initialState);
+	const {data: myUserAccount} = useFetch(
+		'/my-user-account',
+		(user: UserAccount) => ({
+			additionalName: user?.additionalName,
+			alternateName: user?.alternateName,
+			emailAddress: user?.emailAddress,
+			familyName: user?.familyName,
+			givenName: user?.givenName,
+			id: user?.id,
+			image: '',
+			roleBriefs: user?.roleBriefs,
+			uuid: user?.uuid,
+		})
+	);
 
 	useEffect(() => {
-		apolloClient
-			.query({query: getLiferayMyUserAccount})
-			.then((response) =>
-				dispatch({
-					payload: {
-						account: response.data.myUserAccount as UserAccount,
-						skipRoleCheck,
-					},
-					type: AccountTypes.SET_MY_USER_ACCOUNT,
-				})
-			)
-			.catch(console.error);
-	}, [skipRoleCheck]);
+		if (myUserAccount) {
+			dispatch({
+				payload: {
+					account: myUserAccount,
+				},
+				type: AccountTypes.SET_MY_USER_ACCOUNT,
+			});
+		}
+	}, [myUserAccount]);
 
 	return (
 		<AccountContext.Provider value={[state, dispatch]}>
-			{state.security.ready && children}
+			{children}
 		</AccountContext.Provider>
 	);
 };

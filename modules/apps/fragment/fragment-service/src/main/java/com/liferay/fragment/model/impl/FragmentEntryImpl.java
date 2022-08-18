@@ -65,10 +65,10 @@ public class FragmentEntryImpl extends FragmentEntryBaseImpl {
 	@Override
 	public String getIcon() {
 		if (Validator.isNull(_icon)) {
-			if (getType() == FragmentConstants.TYPE_INPUT) {
+			if (isTypeInput()) {
 				_icon = "forms";
 			}
-			else if (getType() == FragmentConstants.TYPE_REACT) {
+			else if (isTypeReact()) {
 				_icon = "react";
 			}
 			else {
@@ -144,13 +144,49 @@ public class FragmentEntryImpl extends FragmentEntryBaseImpl {
 	}
 
 	@Override
+	public boolean isTypeComponent() {
+		if (getType() == FragmentConstants.TYPE_COMPONENT) {
+			return true;
+		}
+
+		return false;
+	}
+
+	@Override
+	public boolean isTypeInput() {
+		if (getType() == FragmentConstants.TYPE_INPUT) {
+			return true;
+		}
+
+		return false;
+	}
+
+	@Override
+	public boolean isTypeReact() {
+		if (getType() == FragmentConstants.TYPE_REACT) {
+			return true;
+		}
+
+		return false;
+	}
+
+	@Override
+	public boolean isTypeSection() {
+		if (getType() == FragmentConstants.TYPE_SECTION) {
+			return true;
+		}
+
+		return false;
+	}
+
+	@Override
 	public void populateZipWriter(ZipWriter zipWriter, String path)
 		throws Exception {
 
 		path = path + StringPool.SLASH + getFragmentEntryKey();
 
 		JSONObject jsonObject = JSONUtil.put(
-			"configurationPath", "index.json"
+			"configurationPath", "configuration.json"
 		).put(
 			"cssPath", "index.css"
 		).put(
@@ -186,7 +222,7 @@ public class FragmentEntryImpl extends FragmentEntryBaseImpl {
 
 		String typeOptions = getTypeOptions();
 
-		if (GetterUtil.getBoolean(PropsUtil.get("feature.flag.LPS-152938")) &&
+		if (GetterUtil.getBoolean(PropsUtil.get("feature.flag.LPS-149720")) &&
 			Validator.isNotNull(typeOptions)) {
 
 			jsonObject.put(
@@ -198,9 +234,9 @@ public class FragmentEntryImpl extends FragmentEntryBaseImpl {
 				FragmentExportImportConstants.FILE_NAME_FRAGMENT,
 			jsonObject.toString(2));
 
+		zipWriter.addEntry(path + "/configuration.json", getConfiguration());
 		zipWriter.addEntry(path + "/index.css", getCss());
 		zipWriter.addEntry(path + "/index.js", getJs());
-		zipWriter.addEntry(path + "/index.json", getConfiguration());
 		zipWriter.addEntry(path + "/index.html", getHtml());
 
 		if (previewFileEntry != null) {

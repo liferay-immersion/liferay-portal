@@ -14,27 +14,18 @@
 
 package com.liferay.batch.engine.internal.writer;
 
+import com.liferay.object.rest.dto.v1_0.ListEntry;
 import com.liferay.petra.function.UnsafeFunction;
 import com.liferay.petra.string.CharPool;
 import com.liferay.petra.string.StringPool;
 import com.liferay.petra.string.StringUtil;
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.CSVUtil;
-
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
 
 import java.lang.reflect.Field;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVPrinter;
 
 /**
  * @author Shuyang Zhou
@@ -88,64 +79,53 @@ public class ColumnValuesExtractor {
 			}
 
 			if (ItemClassIndexUtil.isSingleColumnAdoptableArray(fieldClass)) {
-				if (!Objects.equals(
-						fieldClass.getComponentType(), String.class)) {
-
-					_unsafeFunctions.add(
-						item -> {
-							if (field.get(item) == null) {
-								return StringPool.BLANK;
-							}
-
-							return CSVUtil.encode(field.get(item));
-						});
-
-					return;
-				}
-
 				_unsafeFunctions.add(
 					item -> {
 						if (field.get(item) == null) {
 							return StringPool.BLANK;
 						}
 
-						ByteArrayOutputStream byteArrayOutputStream =
-							new ByteArrayOutputStream();
-
-						try (CSVPrinter csvPrinter = new CSVPrinter(
-								new OutputStreamWriter(byteArrayOutputStream),
-								CSVFormat.DEFAULT)) {
-
-							csvPrinter.print(
-								StringUtil.merge(
-									(String[])field.get(item),
-									value -> CSVUtil.encode(value),
-									StringPool.COMMA));
-						}
-						catch (IOException ioException) {
-							_log.error(
-								"Unable to export array to column",
-								ioException);
-
-							return StringPool.BLANK;
-						}
-
-						return new String(byteArrayOutputStream.toByteArray());
+						return StringUtil.merge(
+							(Object[])field.get(item), CSVUtil::encode,
+							StringPool.COMMA);
 					});
 
 				return;
 			}
-
-			_unsafeFunctions.add(item -> StringPool.BLANK);
-
-			return;
 		}
 
 		int index = fieldName.indexOf(CharPool.UNDERLINE);
 
 		if (index == -1) {
-			throw new IllegalArgumentException(
-				"Invalid field name : " + fieldName);
+			Field propertiesField = fieldMap.get("properties");
+
+			if (!ItemClassIndexUtil.isObjectEntryProperties(propertiesField)) {
+				throw new IllegalArgumentException(
+					"Invalid field name : " + fieldName);
+			}
+
+			_unsafeFunctions.add(
+				item -> {
+					Map<?, ?> map = (Map<?, ?>)propertiesField.get(item);
+
+					Object value = map.get(fieldName);
+
+					if (value == null) {
+						return StringPool.BLANK;
+					}
+
+					if (ItemClassIndexUtil.isListEntry(value)) {
+						return _getListEntryKey(value);
+					}
+
+					if (value instanceof String) {
+						return CSVUtil.encode(value);
+					}
+
+					return value;
+				});
+
+			return;
 		}
 
 		String prefixFieldName = fieldName.substring(0, index);
@@ -178,8 +158,11 @@ public class ColumnValuesExtractor {
 			});
 	}
 
-	private static final Log _log = LogFactoryUtil.getLog(
-		ColumnValuesExtractor.class);
+	private String _getListEntryKey(Object object) {
+		ListEntry listEntry = (ListEntry)object;
+
+		return listEntry.getKey();
+	}
 
 	private final List
 		<UnsafeFunction<Object, Object, ReflectiveOperationException>>

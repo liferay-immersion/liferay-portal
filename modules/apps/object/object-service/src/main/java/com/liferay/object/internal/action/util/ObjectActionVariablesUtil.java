@@ -15,6 +15,8 @@
 package com.liferay.object.internal.action.util;
 
 import com.liferay.object.model.ObjectDefinition;
+import com.liferay.object.system.SystemObjectDefinitionMetadata;
+import com.liferay.object.system.SystemObjectDefinitionMetadataTracker;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.vulcan.dto.converter.DTOConverter;
@@ -30,15 +32,16 @@ public class ObjectActionVariablesUtil {
 
 	public static Map<String, Object> toVariables(
 		DTOConverterRegistry dtoConverterRegistry,
-		ObjectDefinition objectDefinition, JSONObject payloadJSONObject) {
+		ObjectDefinition objectDefinition, JSONObject payloadJSONObject,
+		SystemObjectDefinitionMetadataTracker
+			systemObjectDefinitionMetadataTracker) {
 
 		if (objectDefinition.isSystem()) {
-			DTOConverter<?, ?> dtoConverter =
-				dtoConverterRegistry.getDTOConverter(
-					objectDefinition.getClassName());
+			String contentType = _getContentType(
+				dtoConverterRegistry, objectDefinition,
+				systemObjectDefinitionMetadataTracker);
 
-			Object object = payloadJSONObject.get(
-				"modelDTO" + dtoConverter.getContentType());
+			Object object = payloadJSONObject.get("modelDTO" + contentType);
 
 			if (object == null) {
 				return payloadJSONObject.toMap();
@@ -46,6 +49,8 @@ public class ObjectActionVariablesUtil {
 
 			return HashMapBuilder.<String, Object>putAll(
 				(Map<String, Object>)object
+			).putAll(
+				(Map<String, Object>)payloadJSONObject.get("extendedProperties")
 			).put(
 				"companyId", payloadJSONObject.getLong("companyId")
 			).put(
@@ -70,6 +75,27 @@ public class ObjectActionVariablesUtil {
 		variables.put("currentUserId", payloadJSONObject.getLong("userId"));
 
 		return variables;
+	}
+
+	private static String _getContentType(
+		DTOConverterRegistry dtoConverterRegistry,
+		ObjectDefinition objectDefinition,
+		SystemObjectDefinitionMetadataTracker
+			systemObjectDefinitionMetadataTracker) {
+
+		DTOConverter<?, ?> dtoConverter = dtoConverterRegistry.getDTOConverter(
+			objectDefinition.getClassName());
+
+		if (dtoConverter == null) {
+			SystemObjectDefinitionMetadata systemObjectDefinitionMetadata =
+				systemObjectDefinitionMetadataTracker.
+					getSystemObjectDefinitionMetadata(
+						objectDefinition.getName());
+
+			return systemObjectDefinitionMetadata.getModelClassName();
+		}
+
+		return dtoConverter.getContentType();
 	}
 
 }

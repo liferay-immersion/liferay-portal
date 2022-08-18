@@ -30,6 +30,7 @@ import selectLanguageId from '../../selectors/selectLanguageId';
 import selectSegmentsExperienceId from '../../selectors/selectSegmentsExperienceId';
 import CollectionService from '../../services/CollectionService';
 import updateItemConfig from '../../thunks/updateItemConfig';
+import {collectionIsMapped} from '../../utils/collectionIsMapped';
 import getLayoutDataItemClassName from '../../utils/getLayoutDataItemClassName';
 import getLayoutDataItemUniqueClassName from '../../utils/getLayoutDataItemUniqueClassName';
 import {getResponsiveConfig} from '../../utils/getResponsiveConfig';
@@ -41,10 +42,6 @@ const COLLECTION_ID_DIVIDER = '$';
 
 function paginationIsEnabled(collectionConfig) {
 	return collectionConfig.paginationType !== 'none';
-}
-
-function collectionIsMapped(collectionConfig) {
-	return collectionConfig.collection;
 }
 
 function getCollectionPrefix(collectionId, index) {
@@ -224,7 +221,7 @@ const ColumnContext = ({
 };
 
 const Collection = React.memo(
-	React.forwardRef(({children, item, withinTopper = false}, ref) => {
+	React.forwardRef(({children, item}, ref) => {
 		const child = React.Children.toArray(children)[0];
 		const collectionConfig = item.config;
 		const emptyCollection = useMemo(
@@ -301,8 +298,7 @@ const Collection = React.memo(
 						const {itemSubtype, itemType, ...collection} = response;
 
 						setCollection(
-							collection.length > 0 &&
-								collection.items?.length > 0
+							!!collection.length && collection.items?.length > 0
 								? collection
 								: {...collection, ...emptyCollection}
 						);
@@ -377,14 +373,6 @@ const Collection = React.memo(
 			selectedViewportSize
 		);
 
-		const {display} = responsiveConfig.styles;
-
-		const style = {};
-
-		if (!withinTopper) {
-			style.display = display;
-		}
-
 		const showEmptyMessage =
 			collectionConfig.listStyle !== '' && collection.fakeCollection;
 
@@ -393,14 +381,9 @@ const Collection = React.memo(
 				className={classNames(
 					'page-editor__collection',
 					getLayoutDataItemUniqueClassName(item.itemId),
-					{
-						[getLayoutDataItemClassName(
-							item.type
-						)]: config.featureFlagLps132571,
-					}
+					getLayoutDataItemClassName(item.type)
 				)}
 				ref={ref}
-				style={style}
 			>
 				{loading ? (
 					<ClayLoadingIndicator />

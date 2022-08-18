@@ -29,6 +29,8 @@ definition {
 	tearDown {
 		var testPortalInstance = PropsUtil.get("test.portal.instance");
 
+		ACUtils.tearDownAC();
+
 		ACUtils.tearDownDXP();
 
 		if ("${testPortalInstance}" == "true") {
@@ -36,11 +38,7 @@ definition {
 		}
 		else {
 			JSONGroup.deleteGroupByName(groupName = "Site Name");
-
-			JSONUser.tearDownNonAdminUsers();
 		}
-
-		ACUtils.tearDownAC();
 	}
 
 	@description = "Feature ID: Legacy | Automation ID: LRAC-9018 | Test Summary: Search an Individual's Activities List with a query that won't return results"
@@ -301,7 +299,7 @@ definition {
 			ACSegments.saveSegment();
 		}
 
-		task ("Navigate to Individule Segments") {
+		task ("Navigate to Known Individuals") {
 			ACNavigation.goToIndividuals();
 
 			ACNavigation.switchTab(tabName = "Known Individuals");
@@ -316,7 +314,7 @@ definition {
 		}
 
 		task ("Assert there are no segments found") {
-			ACUtils.viewGenericText(textValueList = "There are no segments found.,Create a segment to get started.,Learn more about segments.");
+			ACUtils.viewGenericText(textValueList = "There are no results found.,Please try a different search term.");
 		}
 	}
 

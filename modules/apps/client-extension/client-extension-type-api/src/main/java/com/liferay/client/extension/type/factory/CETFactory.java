@@ -16,14 +16,11 @@ package com.liferay.client.extension.type.factory;
 
 import com.liferay.client.extension.model.ClientExtensionEntry;
 import com.liferay.client.extension.type.CET;
-import com.liferay.client.extension.type.CETCustomElement;
-import com.liferay.client.extension.type.CETGlobalCSS;
-import com.liferay.client.extension.type.CETGlobalJS;
-import com.liferay.client.extension.type.CETIFrame;
-import com.liferay.client.extension.type.CETThemeCSS;
-import com.liferay.client.extension.type.CETThemeFavicon;
-import com.liferay.client.extension.type.CETThemeJS;
+import com.liferay.client.extension.type.configuration.CETConfiguration;
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.util.UnicodeProperties;
+
+import java.util.Collection;
 
 import javax.portlet.PortletRequest;
 
@@ -35,40 +32,22 @@ import org.osgi.annotation.versioning.ProviderType;
 @ProviderType
 public interface CETFactory {
 
-	public CET cet(ClientExtensionEntry clientExtensionEntry)
+	public CET create(
+			CETConfiguration cetConfiguration, long companyId,
+			String externalReferenceCode)
 		throws PortalException;
 
-	public CETCustomElement cetCustomElement(
-		ClientExtensionEntry clientExtensionEntry);
+	public CET create(ClientExtensionEntry clientExtensionEntry)
+		throws PortalException;
 
-	public CETCustomElement cetCustomElement(PortletRequest portletRequest);
+	public CET create(PortletRequest portletRequest, String type)
+		throws PortalException;
 
-	public CETGlobalCSS cetGlobalCSS(ClientExtensionEntry clientExtensionEntry);
+	public Collection<String> getTypes();
 
-	public CETGlobalCSS cetGlobalCSS(PortletRequest portletRequest);
-
-	public CETGlobalJS cetGlobalJS(ClientExtensionEntry clientExtensionEntry);
-
-	public CETGlobalJS cetGlobalJS(PortletRequest portletRequest);
-
-	public CETIFrame cetIFrame(ClientExtensionEntry clientExtensionEntry);
-
-	public CETIFrame cetIFrame(PortletRequest portletRequest);
-
-	public CETThemeCSS cetThemeCSS(ClientExtensionEntry clientExtensionEntry);
-
-	public CETThemeCSS cetThemeCSS(PortletRequest portletRequest);
-
-	public CETThemeFavicon cetThemeFavicon(
-		ClientExtensionEntry clientExtensionEntry);
-
-	public CETThemeFavicon cetThemeFavicon(PortletRequest portletRequest);
-
-	public CETThemeJS cetThemeJS(ClientExtensionEntry clientExtensionEntry);
-
-	public CETThemeJS cetThemeJS(PortletRequest portletRequest);
-
-	public String typeSettings(PortletRequest portletRequest, String type)
+	public void validate(
+			UnicodeProperties newTypeSettingsUnicodeProperties,
+			UnicodeProperties oldTypeSettingsUnicodeProperties, String type)
 		throws PortalException;
 
 }

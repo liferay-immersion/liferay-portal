@@ -11,8 +11,6 @@ definition {
 	}
 
 	macro addApp {
-		LexiconEntry.gotoAdd();
-
 		RemoteAppsEntry.addEntry(
 			entryName = "${entryName}",
 			entryURL = "${entryURL}");
@@ -21,11 +19,7 @@ definition {
 	}
 
 	macro addCustomElement {
-		LexiconEntry.gotoAdd();
-
-		Select(
-			locator1 = "Select#TYPE",
-			value1 = "Custom Element");
+		RemoteApps.addType(type = "Custom Element");
 
 		RemoteAppsEntry.addCustomElement(
 			entryHtmlName = "${entryHtmlName}",
@@ -36,11 +30,7 @@ definition {
 	}
 
 	macro addCustomElementAllFields {
-		LexiconEntry.gotoAdd();
-
-		Select(
-			locator1 = "Select#TYPE",
-			value1 = "Custom Element");
+		RemoteApps.addType(type = "Custom Element");
 
 		RemoteAppsEntry.addCustomElementAllFields(
 			entryCssurl = "${entryCssurl}",
@@ -49,17 +39,15 @@ definition {
 			entryProperties = "${entryProperties}",
 			entryURL = "${entryURL}");
 
+		Click(locator1 = "RemoteAppsEntry#USE_ES_MODULES");
+
 		Click(locator1 = "RemoteAppsEntry#REMOTE_APPS_INSTANCEABLE");
 
 		PortletEntry.publish();
 	}
 
 	macro addCustomElementMultipleURLs {
-		LexiconEntry.gotoAdd();
-
-		Select(
-			locator1 = "Select#TYPE",
-			value1 = "Custom Element");
+		RemoteApps.addType(type = "Custom Element");
 
 		RemoteAppsEntry.addCustomElementMultipleURLs(
 			entryCssurl1 = "https://liferay.github.io/liferay-frontend-projects/index1.css",
@@ -73,7 +61,7 @@ definition {
 	}
 
 	macro addEntryWithPortletCategory {
-		LexiconEntry.gotoAdd();
+		RemoteApps.addType(type = "IFrame");
 
 		RemoteAppsEntry.addEntry(
 			entryName = "Test Remote App",
@@ -82,6 +70,14 @@ definition {
 		RemoteAppsEntry.addPortletCategory(categoryName = "Collaboration");
 
 		PortletEntry.publish();
+	}
+
+	macro addType {
+		LexiconEntry.gotoAdd();
+
+		Click(
+			key_itemName = "${type}",
+			locator1 = "FormFields#FIELD_DROPDOWN_ITEM");
 	}
 
 	macro assertCustomElementFields {
@@ -99,7 +95,7 @@ definition {
 
 		AssertTextEquals(
 			custom_entryURL = "${entryURL}",
-			key_id = "customElementURLs",
+			key_id = "ClientExtensionAdminPortlet_url",
 			locator1 = "RemoteAppsEntry#URL",
 			value1 = "${entryURL}");
 
@@ -130,25 +126,25 @@ definition {
 			value1 = "vanilla-counter");
 
 		AssertTextEquals(
-			key_id = "customElementURLs",
+			key_id = "ClientExtensionAdminPortlet_url",
 			key_index = "1",
 			locator1 = "RemoteAppsEntry#URL_ROW_INDEX",
 			value1 = "https://liferay.github.io/liferay-frontend-projects/vanilla-counter/index1.js");
 
 		AssertTextEquals(
-			key_id = "customElementURLs",
+			key_id = "ClientExtensionAdminPortlet_url",
 			key_index = "2",
 			locator1 = "RemoteAppsEntry#URL_ROW_INDEX",
 			value1 = "https://liferay.github.io/liferay-frontend-projects/vanilla-counter/index2.js");
 
 		AssertTextEquals(
-			key_id = "customElementCSSURLs",
+			key_id = "cssURLs",
 			key_index = "1",
 			locator1 = "RemoteAppsEntry#URL_ROW_INDEX",
 			value1 = "https://liferay.github.io/liferay-frontend-projects/index1.css");
 
 		AssertTextEquals(
-			key_id = "customElementCSSURLs",
+			key_id = "cssURLs",
 			key_index = "2",
 			locator1 = "RemoteAppsEntry#URL_ROW_INDEX",
 			value1 = "https://liferay.github.io/liferay-frontend-projects/index2.css");

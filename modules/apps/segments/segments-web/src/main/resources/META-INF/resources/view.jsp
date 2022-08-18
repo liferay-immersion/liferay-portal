@@ -43,11 +43,31 @@ request.setAttribute("view.jsp-eventName", eventName);
 
 <c:if test="<%= !segmentsDisplayContext.isSegmentationEnabled(themeDisplay.getCompanyId()) %>">
 	<clay:stripe
+		defaultTitleDisabled="<%= true %>"
+		dismissible="<%= true %>"
 		displayType="warning"
 	>
-		<strong class="lead"><%= LanguageUtil.get(request, "segmentation-is-disabled") %></strong>
+		<strong><%= LanguageUtil.get(request, "segmentation-is-disabled") %></strong>
 
-		<span><%= LanguageUtil.get(request, "to-enable-segmentation-go-to-system-settings-segments-segments-service") %></span>
+		<%
+		String segmentsConfigurationURL = segmentsDisplayContext.getSegmentsCompanyConfigurationURL(request);
+		%>
+
+		<c:choose>
+			<c:when test="<%= segmentsConfigurationURL != null %>">
+				<clay:link
+					href="<%= segmentsConfigurationURL %>"
+					label='<%=
+						LanguageUtil.get(request, "to-enable,-go-to-instance-settings")
+%>'
+				/>
+			</c:when>
+			<c:otherwise>
+				<span><%=
+				LanguageUtil.get(
+					request, "contact-your-system-administrator-to-enable-it") %></span>
+			</c:otherwise>
+		</c:choose>
 	</clay:stripe>
 </c:if>
 

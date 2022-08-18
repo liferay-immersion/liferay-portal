@@ -348,9 +348,10 @@ public class ObjectViewLocalServiceTest {
 
 		ObjectField objectField = _objectFieldLocalService.addCustomObjectField(
 			TestPropsValues.getUserId(), 0,
-			_objectDefinition.getObjectDefinitionId(), "Text", "String", false,
-			false, null, LocalizedMapUtil.getLocalizedMap(objectFieldLabel),
-			objectFieldName, true, Collections.emptyList());
+			_objectDefinition.getObjectDefinitionId(), "Text", "String", null,
+			false, false, null,
+			LocalizedMapUtil.getLocalizedMap(objectFieldLabel), objectFieldName,
+			true, false, Collections.emptyList());
 
 		return objectField.getName();
 	}
@@ -515,7 +516,7 @@ public class ObjectViewLocalServiceTest {
 			_objectViewFilterColumnPersistence.create(0);
 
 		objectViewFilterColumn.setFilterType(filterType);
-		objectViewFilterColumn.setJson(json);
+		objectViewFilterColumn.setJSON(json);
 		objectViewFilterColumn.setObjectFieldName(objectFieldName);
 
 		return objectViewFilterColumn;

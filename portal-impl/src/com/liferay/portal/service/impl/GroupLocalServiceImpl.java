@@ -99,7 +99,7 @@ import com.liferay.portal.kernel.security.permission.RolePermissions;
 import com.liferay.portal.kernel.security.permission.UserBag;
 import com.liferay.portal.kernel.service.ClassNameLocalService;
 import com.liferay.portal.kernel.service.CompanyLocalService;
-import com.liferay.portal.kernel.service.GroupService;
+import com.liferay.portal.kernel.service.GroupServiceUtil;
 import com.liferay.portal.kernel.service.LayoutLocalService;
 import com.liferay.portal.kernel.service.LayoutSetBranchLocalService;
 import com.liferay.portal.kernel.service.LayoutSetLocalService;
@@ -4989,17 +4989,14 @@ public class GroupLocalServiceImpl extends GroupLocalServiceBaseImpl {
 		String[] languageIdsArray = StringUtil.split(languageIds);
 
 		for (String languageId : languageIdsArray) {
-			if (!LanguageUtil.isAvailableLocale(
-					groupId, LocaleUtil.fromLanguageId(languageId))) {
-
+			if (!LanguageUtil.isAvailableLocale(groupId, languageId)) {
 				LocaleException localeException = new LocaleException(
 					LocaleException.TYPE_DISPLAY_SETTINGS);
 
 				localeException.setSourceAvailableLocales(
 					LanguageUtil.getAvailableLocales());
-				localeException.setTargetAvailableLocales(
-					Arrays.asList(
-						LocaleUtil.fromLanguageIds(languageIdsArray)));
+				localeException.setTargetAvailableLanguageIds(
+					Arrays.asList(languageIdsArray));
 
 				throw localeException;
 			}
@@ -5011,8 +5008,8 @@ public class GroupLocalServiceImpl extends GroupLocalServiceBaseImpl {
 
 			localeException.setSourceAvailableLocales(
 				LanguageUtil.getAvailableLocales());
-			localeException.setTargetAvailableLocales(
-				Arrays.asList(LocaleUtil.fromLanguageIds(languageIdsArray)));
+			localeException.setTargetAvailableLanguageIds(
+				Arrays.asList(languageIdsArray));
 
 			throw localeException;
 		}
@@ -5101,7 +5098,7 @@ public class GroupLocalServiceImpl extends GroupLocalServiceBaseImpl {
 
 			try {
 				MethodKey methodKey = new MethodKey(
-					GroupService.class, "checkRemoteStagingGroup",
+					GroupServiceUtil.class, "checkRemoteStagingGroup",
 					_CHECK_REMOTE_STAGING_GROUP_PARAMETER_TYPES);
 
 				MethodHandler methodHandler = new MethodHandler(

@@ -25,24 +25,13 @@ public class RemoteAppEntryUpgradeProcess extends UpgradeProcess {
 
 	@Override
 	protected void doUpgrade() throws Exception {
-		if (!hasColumn("RemoteAppEntry", "customElementCSSURLs")) {
-			alterTableAddColumn(
-				"RemoteAppEntry", "customElementCSSURLs", "TEXT");
-		}
+		alterTableAddColumn("RemoteAppEntry", "customElementCSSURLs", "TEXT");
+		alterTableAddColumn(
+			"RemoteAppEntry", "customElementHTMLElementName", "VARCHAR(255)");
+		alterTableAddColumn("RemoteAppEntry", "customElementURLs", "TEXT");
 
-		if (!hasColumn("RemoteAppEntry", "customElementHTMLElementName")) {
-			alterTableAddColumn(
-				"RemoteAppEntry", "customElementHTMLElementName",
-				"VARCHAR(255)");
-		}
-
-		if (!hasColumn("RemoteAppEntry", "customElementURLs")) {
-			alterTableAddColumn("RemoteAppEntry", "customElementURLs", "TEXT");
-		}
-
-		if (hasColumn("RemoteAppEntry", "url")) {
-			alterColumnName("RemoteAppEntry", "url", "iFrameURL STRING null");
-		}
+		alterColumnName(
+			"RemoteAppEntry", "url", "iFrameURL VARCHAR(1024) null");
 
 		if (!hasColumn("RemoteAppEntry", "instanceable")) {
 			alterTableAddColumn("RemoteAppEntry", "instanceable", "BOOLEAN");
@@ -59,9 +48,7 @@ public class RemoteAppEntryUpgradeProcess extends UpgradeProcess {
 					"'category.remote-apps'");
 		}
 
-		if (!hasColumn("RemoteAppEntry", "properties")) {
-			alterTableAddColumn("RemoteAppEntry", "properties", "TEXT");
-		}
+		alterTableAddColumn("RemoteAppEntry", "properties", "TEXT");
 
 		if (!hasColumn("RemoteAppEntry", "type_")) {
 			alterTableAddColumn("RemoteAppEntry", "type_", "VARCHAR(75)");

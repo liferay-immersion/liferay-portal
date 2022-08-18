@@ -15,7 +15,9 @@
 /// <reference types="react" />
 
 import './FormCustomSelect.scss';
-export declare function FormCustomSelect<T extends CustomItem = CustomItem>({
+export declare function FormCustomSelect<
+	T extends CustomItem<number | string> = CustomItem
+>({
 	className,
 	disabled,
 	error,
@@ -31,13 +33,13 @@ export declare function FormCustomSelect<T extends CustomItem = CustomItem>({
 	setOptions,
 	value,
 }: IProps<T>): JSX.Element;
-export interface CustomItem {
+export interface CustomItem<T = string> {
 	checked?: boolean;
 	description?: string;
 	label: string;
-	value?: string;
+	value?: T;
 }
-interface IProps<T extends CustomItem = CustomItem> {
+interface IProps<T extends CustomItem<number | string> = CustomItem> {
 	className?: string;
 	disabled?: boolean;
 	error?: string;

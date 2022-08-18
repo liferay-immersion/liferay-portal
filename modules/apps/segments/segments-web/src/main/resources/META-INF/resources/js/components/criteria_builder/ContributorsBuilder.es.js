@@ -40,6 +40,7 @@ class ContributorBuilder extends React.Component {
 		contributors: PropTypes.arrayOf(contributorShape),
 		editing: PropTypes.bool.isRequired,
 		emptyContributors: PropTypes.bool.isRequired,
+		isSegmentationDisabledAlertDismissed: PropTypes.bool,
 		isSegmentationEnabled: PropTypes.bool,
 		membersCount: PropTypes.number,
 		membersCountLoading: PropTypes.bool,
@@ -101,6 +102,7 @@ class ContributorBuilder extends React.Component {
 			contributors,
 			editing,
 			emptyContributors,
+			isSegmentationDisabledAlertDismissed,
 			isSegmentationEnabled,
 			membersCount,
 			membersCountLoading,
@@ -120,8 +122,11 @@ class ContributorBuilder extends React.Component {
 			editing,
 		});
 
+		const showDisabledSegmentationAlert =
+			!isSegmentationEnabled && !isSegmentationDisabledAlertDismissed;
+
 		const sidebarClasses = getCN('criteria-builder-section-sidebar', {
-			'criteria-builder-section-sidebar--with-warning': !isSegmentationEnabled,
+			'criteria-builder-section-sidebar--with-warning': showDisabledSegmentationAlert,
 		});
 
 		return (

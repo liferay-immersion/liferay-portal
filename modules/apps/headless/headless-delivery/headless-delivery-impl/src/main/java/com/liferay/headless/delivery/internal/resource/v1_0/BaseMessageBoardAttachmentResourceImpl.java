@@ -169,6 +169,14 @@ public abstract class BaseMessageBoardAttachmentResourceImpl
 			@io.swagger.v3.oas.annotations.Parameter(
 				in = io.swagger.v3.oas.annotations.enums.ParameterIn.PATH,
 				name = "messageBoardAttachmentId"
+			),
+			@io.swagger.v3.oas.annotations.Parameter(
+				in = io.swagger.v3.oas.annotations.enums.ParameterIn.QUERY,
+				name = "fields"
+			),
+			@io.swagger.v3.oas.annotations.Parameter(
+				in = io.swagger.v3.oas.annotations.enums.ParameterIn.QUERY,
+				name = "restrictFields"
 			)
 		}
 	)
@@ -206,6 +214,18 @@ public abstract class BaseMessageBoardAttachmentResourceImpl
 			@io.swagger.v3.oas.annotations.Parameter(
 				in = io.swagger.v3.oas.annotations.enums.ParameterIn.PATH,
 				name = "messageBoardMessageId"
+			),
+			@io.swagger.v3.oas.annotations.Parameter(
+				in = io.swagger.v3.oas.annotations.enums.ParameterIn.QUERY,
+				name = "fields"
+			),
+			@io.swagger.v3.oas.annotations.Parameter(
+				in = io.swagger.v3.oas.annotations.enums.ParameterIn.QUERY,
+				name = "nestedFields"
+			),
+			@io.swagger.v3.oas.annotations.Parameter(
+				in = io.swagger.v3.oas.annotations.enums.ParameterIn.QUERY,
+				name = "restrictFields"
 			)
 		}
 	)
@@ -347,6 +367,18 @@ public abstract class BaseMessageBoardAttachmentResourceImpl
 			@io.swagger.v3.oas.annotations.Parameter(
 				in = io.swagger.v3.oas.annotations.enums.ParameterIn.PATH,
 				name = "messageBoardThreadId"
+			),
+			@io.swagger.v3.oas.annotations.Parameter(
+				in = io.swagger.v3.oas.annotations.enums.ParameterIn.QUERY,
+				name = "fields"
+			),
+			@io.swagger.v3.oas.annotations.Parameter(
+				in = io.swagger.v3.oas.annotations.enums.ParameterIn.QUERY,
+				name = "nestedFields"
+			),
+			@io.swagger.v3.oas.annotations.Parameter(
+				in = io.swagger.v3.oas.annotations.enums.ParameterIn.QUERY,
+				name = "restrictFields"
 			)
 		}
 	)
@@ -490,11 +522,24 @@ public abstract class BaseMessageBoardAttachmentResourceImpl
 			"createStrategy", "INSERT");
 
 		if ("INSERT".equalsIgnoreCase(createStrategy)) {
-			messageBoardAttachmentUnsafeConsumer = messageBoardAttachment ->
-				postMessageBoardMessageMessageBoardAttachment(
-					Long.parseLong(
-						(String)parameters.get("messageBoardMessageId")),
-					(MultipartBody)parameters.get("multipartBody"));
+			if (parameters.containsKey("messageBoardMessageId")) {
+				messageBoardAttachmentUnsafeConsumer = messageBoardAttachment ->
+					postMessageBoardMessageMessageBoardAttachment(
+						Long.parseLong(
+							(String)parameters.get("messageBoardMessageId")),
+						(MultipartBody)parameters.get("multipartBody"));
+			}
+			else if (parameters.containsKey("messageBoardThreadId")) {
+				messageBoardAttachmentUnsafeConsumer = messageBoardAttachment ->
+					postMessageBoardThreadMessageBoardAttachment(
+						Long.parseLong(
+							(String)parameters.get("messageBoardThreadId")),
+						(MultipartBody)parameters.get("multipartBody"));
+			}
+			else {
+				throw new NotSupportedException(
+					"One of the following parameters must be specified: [messageBoardMessageId, messageBoardThreadId]");
+			}
 		}
 
 		if (messageBoardAttachmentUnsafeConsumer == null) {
@@ -564,8 +609,19 @@ public abstract class BaseMessageBoardAttachmentResourceImpl
 			Map<String, Serializable> parameters, String search)
 		throws Exception {
 
-		return getMessageBoardMessageMessageBoardAttachmentsPage(
-			Long.parseLong((String)parameters.get("messageBoardMessageId")));
+		if (parameters.containsKey("messageBoardMessageId")) {
+			return getMessageBoardMessageMessageBoardAttachmentsPage(
+				Long.parseLong(
+					(String)parameters.get("messageBoardMessageId")));
+		}
+		else if (parameters.containsKey("messageBoardThreadId")) {
+			return getMessageBoardThreadMessageBoardAttachmentsPage(
+				Long.parseLong((String)parameters.get("messageBoardThreadId")));
+		}
+		else {
+			throw new NotSupportedException(
+				"One of the following parameters must be specified: [messageBoardMessageId, messageBoardThreadId]");
+		}
 	}
 
 	@Override
@@ -596,6 +652,9 @@ public abstract class BaseMessageBoardAttachmentResourceImpl
 				messageBoardAttachments,
 			Map<String, Serializable> parameters)
 		throws Exception {
+
+		throw new UnsupportedOperationException(
+			"This method needs to be implemented");
 	}
 
 	public void setContextAcceptLanguage(AcceptLanguage contextAcceptLanguage) {

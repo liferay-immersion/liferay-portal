@@ -36,6 +36,85 @@ public class InfoFormValidationException extends InfoFormException {
 		return _infoFieldUniqueId;
 	}
 
+	public String getLocalizedMessage(String fieldLabel, Locale locale) {
+		return LanguageUtil.format(
+			locale, "x-an-error-occurred", fieldLabel, false);
+	}
+
+	public static class ExceedsMaxLength extends InvalidInfoFieldValue {
+
+		public ExceedsMaxLength(String infoFieldUniqueId, int maxLength) {
+			super(infoFieldUniqueId);
+
+			_maxLength = maxLength;
+		}
+
+		@Override
+		public String getLocalizedMessage(Locale locale) {
+			return LanguageUtil.get(
+				locale, "value-exceeds-maximum-length-of-x");
+		}
+
+		@Override
+		public String getLocalizedMessage(String fieldLabel, Locale locale) {
+			return LanguageUtil.format(
+				locale, "value-exceeds-maximum-length-of-x-for-field-x",
+				new String[] {String.valueOf(_maxLength), fieldLabel}, false);
+		}
+
+		private final int _maxLength;
+
+	}
+
+	public static class ExceedsMaxValue extends InvalidInfoFieldValue {
+
+		public ExceedsMaxValue(String infoFieldUniqueId, long maxValue) {
+			super(infoFieldUniqueId);
+
+			_maxValue = maxValue;
+		}
+
+		@Override
+		public String getLocalizedMessage(Locale locale) {
+			return LanguageUtil.get(locale, "value-exceeds-maximum-value-of-x");
+		}
+
+		@Override
+		public String getLocalizedMessage(String fieldLabel, Locale locale) {
+			return LanguageUtil.format(
+				locale, "value-exceeds-maximum-value-of-x-for-field-x",
+				new String[] {String.valueOf(_maxValue), fieldLabel}, false);
+		}
+
+		private final long _maxValue;
+
+	}
+
+	public static class ExceedsMinValue extends InvalidInfoFieldValue {
+
+		public ExceedsMinValue(String infoFieldUniqueId, long minValue) {
+			super(infoFieldUniqueId);
+
+			_minValue = minValue;
+		}
+
+		@Override
+		public String getLocalizedMessage(Locale locale) {
+			return LanguageUtil.get(
+				locale, "value-falls-bellow-the-minimum-value-of-x");
+		}
+
+		@Override
+		public String getLocalizedMessage(String fieldLabel, Locale locale) {
+			return LanguageUtil.format(
+				locale, "value-falls-bellow-the-minimum-value-of-x-for-field-x",
+				new String[] {String.valueOf(_minValue), fieldLabel}, false);
+		}
+
+		private final long _minValue;
+
+	}
+
 	public static class FileSize extends InfoFormValidationException {
 
 		public FileSize(String infoFieldUniqueId, String maximumSizeAllowed) {
@@ -53,11 +132,33 @@ public class InfoFormValidationException extends InfoFormException {
 				_maximumSizeAllowed);
 		}
 
+		@Override
+		public String getLocalizedMessage(String fieldLabel, Locale locale) {
+			return LanguageUtil.format(
+				locale,
+				"x-file-size-is-larger-than-the-allowed-maximum-upload-size-x",
+				new String[] {fieldLabel, _maximumSizeAllowed}, false);
+		}
+
 		public String getMaximumSizeAllowed() {
 			return _maximumSizeAllowed;
 		}
 
 		private final String _maximumSizeAllowed;
+
+	}
+
+	public static class InvalidCaptcha extends InfoFormValidationException {
+
+		@Override
+		public String getLocalizedMessage(Locale locale) {
+			return LanguageUtil.get(locale, "captcha-verification-failed");
+		}
+
+		@Override
+		public String getLocalizedMessage(String fieldLabel, Locale locale) {
+			return getLocalizedMessage(locale);
+		}
 
 	}
 
@@ -77,6 +178,13 @@ public class InfoFormValidationException extends InfoFormException {
 			return LanguageUtil.format(
 				locale, "please-enter-a-file-with-a-valid-extension-x",
 				_validFileExtensions);
+		}
+
+		@Override
+		public String getLocalizedMessage(String fieldLabel, Locale locale) {
+			return LanguageUtil.format(
+				locale, "x-please-enter-a-file-with-a-valid-extension-x",
+				new String[] {fieldLabel, _validFileExtensions}, false);
 		}
 
 		public String getValidFileExtensions() {
@@ -99,6 +207,12 @@ public class InfoFormValidationException extends InfoFormException {
 			return LanguageUtil.get(locale, "this-field-is-invalid");
 		}
 
+		@Override
+		public String getLocalizedMessage(String fieldLabel, Locale locale) {
+			return LanguageUtil.format(
+				locale, "the-x-is-invalid", fieldLabel, false);
+		}
+
 	}
 
 	public static class RequiredInfoField extends InfoFormValidationException {
@@ -110,6 +224,12 @@ public class InfoFormValidationException extends InfoFormException {
 		@Override
 		public String getLocalizedMessage(Locale locale) {
 			return LanguageUtil.get(locale, "this-field-is-required");
+		}
+
+		@Override
+		public String getLocalizedMessage(String fieldLabel, Locale locale) {
+			return LanguageUtil.format(
+				locale, "the-x-is-required", fieldLabel, false);
 		}
 
 	}

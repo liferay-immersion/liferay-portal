@@ -15,15 +15,39 @@
 import ClayAlert from '@clayui/alert';
 import ClayButton from '@clayui/button';
 import ClayDropDown, {Align} from '@clayui/drop-down';
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useMemo, useRef, useState} from 'react';
 
 import FrontendTokenSet from './FrontendTokenSet';
-import {useFrontendTokensValues} from './StyleBookContext';
 import {config} from './config';
+import {useFrontendTokensValues} from './contexts/StyleBookEditorContext';
 
-export default function Sidebar() {
-	const frontendTokensValues = useFrontendTokensValues();
+export default React.memo(function Sidebar() {
 	const sidebarRef = useRef();
+
+	return (
+		<div className="style-book-editor__sidebar" ref={sidebarRef}>
+			<div className="style-book-editor__sidebar-content">
+				<ThemeInformation />
+
+				{config.frontendTokenDefinition.frontendTokenCategories ? (
+					<>
+						<FrontendTokenCategories />
+						<UpdateStyle sidebarRef={sidebarRef} />
+					</>
+				) : (
+					<ClayAlert className="m-3" displayType="info">
+						{Liferay.Language.get(
+							'this-theme-does-not-include-a-token-definition'
+						)}
+					</ClayAlert>
+				)}
+			</div>
+		</div>
+	);
+});
+
+function UpdateStyle({sidebarRef}) {
+	const frontendTokensValues = useFrontendTokensValues();
 
 	useEffect(() => {
 		if (sidebarRef.current) {
@@ -38,25 +62,9 @@ export default function Sidebar() {
 				}
 			);
 		}
-	}, [frontendTokensValues]);
+	}, [frontendTokensValues, sidebarRef]);
 
-	return (
-		<div className="style-book-editor__sidebar" ref={sidebarRef}>
-			<div className="style-book-editor__sidebar-content">
-				<ThemeInformation />
-
-				{config.frontendTokenDefinition.frontendTokenCategories ? (
-					<FrontendTokenCategories />
-				) : (
-					<ClayAlert className="m-3" displayType="info">
-						{Liferay.Language.get(
-							'this-theme-does-not-include-a-token-definition'
-						)}
-					</ClayAlert>
-				)}
-			</div>
-		</div>
-	);
+	return null;
 }
 
 function ThemeInformation() {
@@ -84,12 +92,27 @@ function ThemeInformation() {
 }
 
 function FrontendTokenCategories() {
+	const frontendTokensValues = useFrontendTokensValues();
+
 	const frontendTokenCategories =
 		config.frontendTokenDefinition.frontendTokenCategories;
 	const [active, setActive] = useState(false);
 	const [selectedCategory, setSelectedCategory] = useState(
 		frontendTokenCategories[0]
 	);
+
+	const tokenValues = useMemo(() => {
+		const nextTokenValues = {...config.frontendTokens};
+
+		for (const [name, {value}] of Object.entries(frontendTokensValues)) {
+			nextTokenValues[name] = {
+				...nextTokenValues[name],
+				value: value || nextTokenValues[name].defaultValue,
+			};
+		}
+
+		return nextTokenValues;
+	}, [frontendTokensValues]);
 
 	return (
 		<>
@@ -142,6 +165,7 @@ function FrontendTokenCategories() {
 						key={name}
 						label={label}
 						open={index === 0}
+						tokenValues={tokenValues}
 					/>
 				)
 			)}

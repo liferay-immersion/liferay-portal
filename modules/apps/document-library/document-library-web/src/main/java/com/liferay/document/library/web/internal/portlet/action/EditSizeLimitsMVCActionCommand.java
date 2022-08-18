@@ -17,9 +17,11 @@ package com.liferay.document.library.web.internal.portlet.action;
 import com.liferay.configuration.admin.constants.ConfigurationAdminPortletKeys;
 import com.liferay.document.library.configuration.DLSizeLimitConfigurationProvider;
 import com.liferay.portal.configuration.metatype.annotations.ExtendedObjectClassDefinition;
+import com.liferay.portal.configuration.persistence.listener.ConfigurationModelListenerException;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
+import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
@@ -68,6 +70,56 @@ public class EditSizeLimitsMVCActionCommand extends BaseMVCActionCommand {
 				"Invalid scope primary key 0 for " + scope + " scope");
 		}
 
+		try {
+			_updateSizeLimit(actionRequest, scope, scopePK);
+		}
+		catch (ConfigurationModelListenerException
+					configurationModelListenerException) {
+
+			SessionErrors.add(
+				actionRequest, configurationModelListenerException.getClass());
+
+			actionResponse.sendRedirect(
+				ParamUtil.getString(actionRequest, "redirect"));
+		}
+	}
+
+	private Map<String, Long> _getMimeTypeSizeLimits(
+		ActionRequest actionRequest) {
+
+		Map<String, Long> mimeTypeSizeLimits = new LinkedHashMap<>();
+
+		Map<String, String[]> parameterMap = actionRequest.getParameterMap();
+
+		for (int i = 0; parameterMap.containsKey("mimeType_" + i); i++) {
+			String mimeType = null;
+
+			String[] mimeTypes = parameterMap.get("mimeType_" + i);
+
+			if ((mimeTypes.length != 0) && Validator.isNotNull(mimeTypes[0])) {
+				mimeType = mimeTypes[0];
+			}
+
+			Long size = null;
+
+			String[] sizes = parameterMap.get("size_" + i);
+
+			if ((sizes.length != 0) && Validator.isNotNull(sizes[0])) {
+				size = GetterUtil.getLong(sizes[0]);
+			}
+
+			if ((mimeType != null) || (size != null)) {
+				mimeTypeSizeLimits.put(mimeType, size);
+			}
+		}
+
+		return mimeTypeSizeLimits;
+	}
+
+	private void _updateSizeLimit(
+			ActionRequest actionRequest, String scope, long scopePK)
+		throws Exception {
+
 		long fileMaxSize = ParamUtil.getLong(actionRequest, "fileMaxSize");
 
 		if (scope.equals(
@@ -91,32 +143,6 @@ public class EditSizeLimitsMVCActionCommand extends BaseMVCActionCommand {
 		else {
 			throw new PortalException("Unsupported scope: " + scope);
 		}
-	}
-
-	private Map<String, Long> _getMimeTypeSizeLimits(
-		ActionRequest actionRequest) {
-
-		Map<String, Long> mimeTypeSizeLimits = new LinkedHashMap<>();
-
-		Map<String, String[]> parameterMap = actionRequest.getParameterMap();
-
-		for (int i = 0; parameterMap.containsKey("mimeType_" + i); i++) {
-			String[] mimeType = parameterMap.get("mimeType_" + i);
-
-			if ((mimeType.length == 0) || Validator.isNull(mimeType[0])) {
-				continue;
-			}
-
-			String[] size = parameterMap.get("size_" + i);
-
-			if ((size.length == 0) || Validator.isNull(size[0])) {
-				continue;
-			}
-
-			mimeTypeSizeLimits.put(mimeType[0], GetterUtil.getLong(size[0]));
-		}
-
-		return mimeTypeSizeLimits;
 	}
 
 	@Reference

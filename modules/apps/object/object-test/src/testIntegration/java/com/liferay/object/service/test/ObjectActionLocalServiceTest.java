@@ -15,13 +15,15 @@
 package com.liferay.object.service.test;
 
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
+import com.liferay.object.action.engine.ObjectActionEngine;
 import com.liferay.object.action.executor.ObjectActionExecutorRegistry;
+import com.liferay.object.constants.ObjectActionConstants;
 import com.liferay.object.constants.ObjectActionExecutorConstants;
 import com.liferay.object.constants.ObjectActionTriggerConstants;
 import com.liferay.object.model.ObjectAction;
 import com.liferay.object.model.ObjectDefinition;
 import com.liferay.object.model.ObjectEntry;
-import com.liferay.object.runtime.scripting.executor.GroovyScriptingExecutor;
+import com.liferay.object.scripting.executor.ObjectScriptingExecutor;
 import com.liferay.object.service.ObjectActionLocalService;
 import com.liferay.object.service.ObjectDefinitionLocalService;
 import com.liferay.object.service.ObjectEntryLocalService;
@@ -51,7 +53,9 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
+import java.util.Objects;
 import java.util.Queue;
+import java.util.Set;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -74,6 +78,9 @@ public class ObjectActionLocalServiceTest {
 
 	@Before
 	public void setUp() throws Exception {
+		_objectActionIdsThreadLocal = ReflectionTestUtil.getFieldValue(
+			_objectActionEngine, "_objectActionIdsThreadLocal");
+
 		_objectDefinition = ObjectDefinitionTestUtil.addObjectDefinition(
 			_objectDefinitionLocalService,
 			Arrays.asList(
@@ -86,24 +93,26 @@ public class ObjectActionLocalServiceTest {
 				TestPropsValues.getUserId(),
 				_objectDefinition.getObjectDefinitionId());
 
-		_originalGroovyScriptingExecutor =
-			(GroovyScriptingExecutor)_getAndSetFieldValue(
-				GroovyScriptingExecutor.class, "_groovyScriptingExecutor",
-				ObjectActionExecutorConstants.KEY_GROOVY);
 		_originalHttp = (Http)_getAndSetFieldValue(
 			Http.class, "_http", ObjectActionExecutorConstants.KEY_WEBHOOK);
+		_originalObjectScriptingExecutor =
+			(ObjectScriptingExecutor)_getAndSetFieldValue(
+				ObjectScriptingExecutor.class, "_objectScriptingExecutor",
+				ObjectActionExecutorConstants.KEY_GROOVY);
 	}
 
 	@After
 	public void tearDown() {
-		ReflectionTestUtil.setFieldValue(
-			_objectActionExecutorRegistry.getObjectActionExecutor(
-				ObjectActionExecutorConstants.KEY_GROOVY),
-			"_groovyScriptingExecutor", _originalGroovyScriptingExecutor);
+		_objectActionIdsThreadLocal.remove();
+
 		ReflectionTestUtil.setFieldValue(
 			_objectActionExecutorRegistry.getObjectActionExecutor(
 				ObjectActionExecutorConstants.KEY_WEBHOOK),
 			"_http", _originalHttp);
+		ReflectionTestUtil.setFieldValue(
+			_objectActionExecutorRegistry.getObjectActionExecutor(
+				ObjectActionExecutorConstants.KEY_GROOVY),
+			"_objectScriptingExecutor", _originalObjectScriptingExecutor);
 	}
 
 	@Test
@@ -242,6 +251,8 @@ public class ObjectActionLocalServiceTest {
 
 		// Update object entry
 
+		_objectActionIdsThreadLocal.remove();
+
 		Assert.assertEquals(0, _argumentsList.size());
 
 		_objectEntryLocalService.updateObjectEntry(
@@ -300,6 +311,8 @@ public class ObjectActionLocalServiceTest {
 		Assert.assertEquals("https://onafterupdate.com", options.getLocation());
 
 		// Delete object entry
+
+		_objectActionIdsThreadLocal.remove();
 
 		Assert.assertEquals(0, _argumentsList.size());
 
@@ -403,8 +416,9 @@ public class ObjectActionLocalServiceTest {
 				"firstName", "João"
 			).build(),
 			arguments[0]);
-		Assert.assertEquals(Collections.emptySet(), arguments[1]);
-		Assert.assertEquals("println \"Hello World\"", arguments[2]);
+		Assert.assertEquals("groovy", arguments[1]);
+		Assert.assertEquals(Collections.emptySet(), arguments[2]);
+		Assert.assertEquals("println \"Hello World\"", arguments[3]);
 
 		_objectActionLocalService.deleteObjectAction(objectAction);
 	}
@@ -414,16 +428,19 @@ public class ObjectActionLocalServiceTest {
 		ObjectAction objectAction = _objectActionLocalService.addObjectAction(
 			TestPropsValues.getUserId(),
 			_objectDefinition.getObjectDefinitionId(), true,
-			"Able Condition Expression", "Able Description", "Able",
+			"equals(firstName, \"John\")", "Able Description", "Able",
 			ObjectActionExecutorConstants.KEY_WEBHOOK,
 			ObjectActionTriggerConstants.KEY_ON_AFTER_ADD,
 			UnicodePropertiesBuilder.put(
 				"secret", "0123456789"
+			).put(
+				"url", "https://onafteradd.com"
 			).build());
 
 		Assert.assertTrue(objectAction.isActive());
 		Assert.assertEquals(
-			"Able Condition Expression", objectAction.getConditionExpression());
+			"equals(firstName, \"John\")",
+			objectAction.getConditionExpression());
 		Assert.assertEquals("Able Description", objectAction.getDescription());
 		Assert.assertEquals("Able", objectAction.getName());
 		Assert.assertEquals(
@@ -435,21 +452,27 @@ public class ObjectActionLocalServiceTest {
 		Assert.assertEquals(
 			UnicodePropertiesBuilder.put(
 				"secret", "0123456789"
+			).put(
+				"url", "https://onafteradd.com"
 			).build(),
 			objectAction.getParametersUnicodeProperties());
+		Assert.assertEquals(
+			ObjectActionConstants.STATUS_NEVER_RAN, objectAction.getStatus());
 
 		objectAction = _objectActionLocalService.updateObjectAction(
 			objectAction.getObjectActionId(), false,
-			"Baker Condition Expression", "Baker Description", "Baker",
+			"equals(firstName, \"João\")", "Baker Description", "Baker",
 			ObjectActionExecutorConstants.KEY_GROOVY,
 			ObjectActionTriggerConstants.KEY_ON_AFTER_DELETE,
 			UnicodePropertiesBuilder.put(
 				"secret", "30624700"
+			).put(
+				"url", "https://onafterdelete.com"
 			).build());
 
 		Assert.assertFalse(objectAction.isActive());
 		Assert.assertEquals(
-			"Baker Condition Expression",
+			"equals(firstName, \"João\")",
 			objectAction.getConditionExpression());
 		Assert.assertEquals("Baker Description", objectAction.getDescription());
 		Assert.assertEquals("Baker", objectAction.getName());
@@ -462,8 +485,12 @@ public class ObjectActionLocalServiceTest {
 		Assert.assertEquals(
 			UnicodePropertiesBuilder.put(
 				"secret", "30624700"
+			).put(
+				"url", "https://onafterdelete.com"
 			).build(),
 			objectAction.getParametersUnicodeProperties());
+		Assert.assertEquals(
+			ObjectActionConstants.STATUS_NEVER_RAN, objectAction.getStatus());
 	}
 
 	private Object _getAndSetFieldValue(
@@ -478,6 +505,14 @@ public class ObjectActionLocalServiceTest {
 				(proxy, method, arguments) -> {
 					_argumentsList.add(arguments);
 
+					if (Objects.equals(
+							method.getDeclaringClass(),
+							ObjectScriptingExecutor.class) &&
+						Objects.equals(method.getName(), "execute")) {
+
+						return Collections.emptyMap();
+					}
+
 					return null;
 				}));
 	}
@@ -488,7 +523,12 @@ public class ObjectActionLocalServiceTest {
 	private JSONFactory _jsonFactory;
 
 	@Inject
+	private ObjectActionEngine _objectActionEngine;
+
+	@Inject
 	private ObjectActionExecutorRegistry _objectActionExecutorRegistry;
+
+	private ThreadLocal<Set<Long>> _objectActionIdsThreadLocal;
 
 	@Inject
 	private ObjectActionLocalService _objectActionLocalService;
@@ -502,7 +542,7 @@ public class ObjectActionLocalServiceTest {
 	@Inject
 	private ObjectEntryLocalService _objectEntryLocalService;
 
-	private GroovyScriptingExecutor _originalGroovyScriptingExecutor;
 	private Http _originalHttp;
+	private ObjectScriptingExecutor _originalObjectScriptingExecutor;
 
 }

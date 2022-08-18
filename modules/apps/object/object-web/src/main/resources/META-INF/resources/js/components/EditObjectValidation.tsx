@@ -16,20 +16,18 @@ import ClayTabs from '@clayui/tabs';
 import {
 	SidePanelForm,
 	SidebarCategory,
-	closeSidePanel,
 	openToast,
+	saveAndReload,
 } from '@liferay/object-js-components-web';
 import {fetch} from 'frontend-js-web';
 import React, {useEffect, useState} from 'react';
 
 import {HEADERS} from '../utils/constants';
-import {
-	availableLocales,
-	defaultLanguageId,
-	defaultLocale,
-} from '../utils/locale';
 import {BasicInfo, Conditions} from './DataValidation/ObjectValidationTabs';
-import {useObjectValidationForm} from './ObjectValidationFormBase';
+import {
+	ObjectValidationErrors,
+	useObjectValidationForm,
+} from './ObjectValidationFormBase';
 
 const TABS = [
 	{
@@ -48,8 +46,13 @@ export default function EditObjectValidation({
 	readOnly,
 }: IProps) {
 	const [activeIndex, setActiveIndex] = useState<number>(0);
+	const [errorMessage, setErrorMessage] = useState<ObjectValidationErrors>(
+		{}
+	);
 
 	const onSubmit = async (objectValidation: ObjectValidation) => {
+		delete objectValidation.lineCount;
+
 		const response = await fetch(
 			`/o/object-admin/v1.0/object-validation-rules/${objectValidation.id}`,
 			{
@@ -60,7 +63,7 @@ export default function EditObjectValidation({
 		);
 
 		if (response.ok) {
-			closeSidePanel();
+			saveAndReload();
 			openToast({
 				message: Liferay.Language.get(
 					'the-object-validation-was-updated-successfully'
@@ -68,9 +71,17 @@ export default function EditObjectValidation({
 			});
 		}
 		else {
-			const message = Liferay.Language.get('an-error-occurred');
+			const {detail}: {detail: string} = await response.json();
+			const {fieldName, message} = JSON.parse(detail) as {
+				fieldName: keyof ObjectValidationErrors;
+				message: string;
+			};
 
-			openToast({message, type: 'danger'});
+			setErrorMessage({[fieldName]: message});
+			openToast({
+				message: Liferay.Language.get('an-error-occurred'),
+				type: 'danger',
+			});
 		}
 	};
 
@@ -92,7 +103,11 @@ export default function EditObjectValidation({
 	return (
 		<SidePanelForm
 			onSubmit={handleSubmit}
-			title={initialValues.name?.[defaultLanguageId] as string}
+			title={
+				initialValues.name?.[
+					Liferay.ThemeDisplay.getDefaultLanguageId()
+				]!
+			}
 		>
 			<ClayTabs className="side-panel-iframe__tabs">
 				{TABS.map(({label}, index) => (
@@ -112,11 +127,13 @@ export default function EditObjectValidation({
 						<ClayTabs.TabPane key={index}>
 							<Component
 								componentLabel={label}
-								defaultLocale={defaultLocale!}
 								disabled={readOnly}
-								errors={errors}
+								errors={
+									Object.keys(errors).length !== 0
+										? errors
+										: errorMessage
+								}
 								handleChange={handleChange}
-								locales={availableLocales}
 								objectValidationRuleElements={
 									objectValidationRuleElements
 								}

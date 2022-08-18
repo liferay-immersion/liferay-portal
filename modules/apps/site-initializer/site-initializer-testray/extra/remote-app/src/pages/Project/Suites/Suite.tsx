@@ -16,39 +16,53 @@ import {useOutletContext} from 'react-router-dom';
 
 import {BoxItem} from '../../../components/Form/DualListBox';
 import Container from '../../../components/Layout/Container';
-import ListView from '../../../components/ListView/ListView';
+import ListView from '../../../components/ListView';
 import QATable from '../../../components/Table/QATable';
+import i18n from '../../../i18n';
 import {
 	APIResponse,
 	TestrayCase,
 	TestraySuite,
-	TypePagination,
-	getCases,
-} from '../../../graphql/queries';
-import {
 	TestraySuiteCase,
-	getSuiteCases,
-} from '../../../graphql/queries/testraySuiteCase';
-import i18n from '../../../i18n';
+	casesResource,
+	suitesCasesResource,
+} from '../../../services/rest';
 import dayjs from '../../../util/date';
 import useSuiteCaseFilter, {getCaseParameters} from './useSuiteCaseFilter';
 import useSuiteCasesActions from './useSuiteCasesActions';
 
-const transformData = (
-	data:
-		| TypePagination<'cases', TestrayCase>
-		| TypePagination<'suitescaseses', TestraySuiteCase>
+const transformData = (isSmartSuite: boolean) => (
+	response: APIResponse<TestrayCase> | APIResponse<TestraySuiteCase>
 ): APIResponse<TestraySuiteCase> => {
-	const response: any =
-		(data as TypePagination<'cases', TestrayCase>)?.cases ||
-		(data as TypePagination<'suitescaseses', TestraySuiteCase>)
-			?.suitescaseses;
+	let items: TestraySuiteCase[] = (response?.items as any) || [];
 
-	let items: TestraySuiteCase[] = response?.items || [];
-
-	if ((data as TypePagination<'cases', TestrayCase>)?.cases) {
-		items = response.items.map((item: TestrayCase) => ({
-			case: item,
+	if (isSmartSuite) {
+		items = (items as any[]).map((testrayCase) => ({
+			...testrayCase,
+			case: {
+				...testrayCase,
+				component: testrayCase.r_componentToCases_c_component,
+			},
+			id: testrayCase.id,
+		}));
+	}
+	else {
+		items = (items as any[]).map((suiteCase) => ({
+			...suiteCase,
+			case: suiteCase.r_caseToSuitesCases_c_case
+				? {
+						...suiteCase.r_caseToSuitesCases_c_case,
+						component:
+							suiteCase.r_caseToSuitesCases_c_case
+								.r_componentToCases_c_component,
+				  }
+				: undefined,
+			id: suiteCase.id,
+			suite: suiteCase.r_suiteToSuitesCases_c_suite
+				? {
+						...suiteCase.r_suiteToSuitesCases_c_suite,
+				  }
+				: undefined,
 		}));
 	}
 
@@ -149,8 +163,8 @@ const Suite = () => {
 				<ListView
 					forceRefetch={suiteCaseActions.formModal.forceRefetch}
 					managementToolbarProps={{visible: false}}
-					query={
-						testraySuite.caseParameters ? getCases : getSuiteCases
+					resource={
+						isSmartSuite ? casesResource : suitesCasesResource
 					}
 					tableProps={{
 						actions: suiteCaseActions.actions,
@@ -158,13 +172,13 @@ const Suite = () => {
 							{
 								key: 'priority',
 								render: (_, suiteCase: TestraySuiteCase) =>
-									suiteCase.case.priority,
+									suiteCase?.case?.priority,
 								value: i18n.translate('priority'),
 							},
 							{
 								key: 'component',
 								render: (_, suiteCase: TestraySuiteCase) =>
-									suiteCase.case.component?.name,
+									suiteCase?.case?.component?.name,
 								value: i18n.translate('component'),
 							},
 							{
@@ -177,9 +191,9 @@ const Suite = () => {
 							},
 						],
 						navigateTo: (suiteCase: TestraySuiteCase) =>
-							`/project/${projectId}/cases/${suiteCase.case.id}`,
+							`/project/${projectId}/cases/${suiteCase?.case?.id}`,
 					}}
-					transformData={transformData}
+					transformData={transformData(isSmartSuite)}
 					variables={{
 						filter: suiteCaseFilter,
 					}}

@@ -14,7 +14,6 @@ import ClayForm from '@clayui/form';
 import {FieldArray, Formik} from 'formik';
 import {useEffect, useMemo, useState} from 'react';
 
-import client from '../../../../apolloClient';
 import {
 	addAdminDXPCloud,
 	addDXPCloudEnvironment,
@@ -35,6 +34,7 @@ const INITIAL_SETUP_ADMIN_COUNT = 1;
 const MAXIMUM_NUMBER_OF_CHARACTERS = 77;
 
 const SetupDXPCloudPage = ({
+	client,
 	errors,
 	handlePage,
 	leftButton,
@@ -156,6 +156,7 @@ const SetupDXPCloudPage = ({
 					mutation: updateAccountSubscriptionGroups,
 					variables: {
 						accountSubscriptionGroup: {
+							accountKey: project.accountKey,
 							activationStatus: STATUS_TAG_TYPE_NAMES.inProgress,
 						},
 						id: subscriptionGroupId,
@@ -188,9 +189,9 @@ const SetupDXPCloudPage = ({
 			}}
 			headerProps={{
 				helper: i18n.translate(
-					'we-ll-need-a-few-details-to-finish-building-your-dxp-environment'
+					'we-ll-need-a-few-details-to-finish-building-your-lxc-sm-environment'
 				),
-				title: i18n.translate('set-up-dxp-cloud'),
+				title: i18n.translate('set-up-lxc-sm'),
 			}}
 		>
 			<FieldArray
@@ -201,7 +202,7 @@ const SetupDXPCloudPage = ({
 							<div className="mr-4 pr-2">
 								<label>{i18n.translate('project-name')}</label>
 
-								<p className="dxp-cloud-project-name text-neutral-6 text-paragraph-lg">
+								<p className="lxc-sm-project-name text-neutral-6 text-paragraph-lg">
 									<strong>
 										{project.name.length >
 										MAXIMUM_NUMBER_OF_CHARACTERS
@@ -285,7 +286,7 @@ const SetupDXPCloudPage = ({
 							</Button>
 						)}
 						<Button
-							className="btn-outline-primary cp-btn-add-dxp-cloud ml-3 my-2 rounded-xs"
+							className="btn-outline-primary cp-btn-add-lxc-sm ml-3 my-2 rounded-xs"
 							disabled={baseButtonDisabled}
 							onClick={() => {
 								push(getInitialDXPAdmin(values?.dxp?.admins));

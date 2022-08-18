@@ -14,7 +14,8 @@
 
 package com.liferay.object.storage.salesforce.internal.http;
 
-import com.liferay.object.storage.salesforce.internal.configuration.SalesforceConfiguration;
+import com.liferay.object.rest.manager.exception.ObjectEntryManagerHttpException;
+import com.liferay.object.storage.salesforce.configuration.SalesforceConfiguration;
 import com.liferay.object.storage.salesforce.internal.web.cache.SalesforceAccessTokenWebCacheItem;
 import com.liferay.petra.reflect.ReflectionUtil;
 import com.liferay.petra.string.StringBundler;
@@ -33,8 +34,18 @@ import org.osgi.service.component.annotations.Reference;
 /**
  * @author Guilherme Camacho
  */
-@Component(enabled = false, immediate = true, service = SalesforceHttp.class)
+@Component(immediate = true, service = SalesforceHttp.class)
 public class SalesforceHttp {
+
+	public JSONObject delete(long companyId, long groupId, String location) {
+		try {
+			return _invoke(
+				companyId, groupId, location, Http.Method.DELETE, null);
+		}
+		catch (Exception exception) {
+			return ReflectionUtil.throwException(exception);
+		}
+	}
 
 	public JSONObject get(long companyId, long groupId, String location) {
 		try {
@@ -45,10 +56,45 @@ public class SalesforceHttp {
 		}
 	}
 
+	public JSONObject patch(
+		long companyId, long groupId, String location,
+		JSONObject bodyJSONObject) {
+
+		try {
+			return _invoke(
+				companyId, groupId, location, Http.Method.PATCH,
+				bodyJSONObject);
+		}
+		catch (Exception exception) {
+			return ReflectionUtil.throwException(exception);
+		}
+	}
+
+	public JSONObject post(
+		long companyId, long groupId, String location,
+		JSONObject bodyJSONObject) {
+
+		try {
+			return _invoke(
+				companyId, groupId, location, Http.Method.POST, bodyJSONObject);
+		}
+		catch (Exception exception) {
+			return ReflectionUtil.throwException(exception);
+		}
+	}
+
 	private JSONObject _getSalesforceAccessTokenJSONObject(
 		SalesforceConfiguration salesforceConfiguration) {
 
-		return SalesforceAccessTokenWebCacheItem.get(salesforceConfiguration);
+		JSONObject jSONObject = SalesforceAccessTokenWebCacheItem.get(
+			salesforceConfiguration);
+
+		if (jSONObject == null) {
+			throw new ObjectEntryManagerHttpException(
+				"Unable to authenticate with Salesforce");
+		}
+
+		return jSONObject;
 	}
 
 	private SalesforceConfiguration _getSalesforceConfiguration(
@@ -107,6 +153,7 @@ public class SalesforceHttp {
 				StringPool.UTF8);
 		}
 
+		options.setFollowRedirects(false);
 		options.setLocation(
 			StringBundler.concat(
 				jsonObject.getString("instance_url"), "/services/data/v54.0/",

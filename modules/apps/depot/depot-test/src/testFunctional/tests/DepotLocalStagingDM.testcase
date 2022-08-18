@@ -176,7 +176,7 @@ definition {
 			layoutName = "Test Page",
 			siteURLKey = "site-name");
 
-		BlogsEntry.viewInlineImage(uploadFileName = "Document_2.jpg");
+		BlogsEntry.viewInlineImage(uploadFileName = "document_2-jpg");
 
 		DepotNavigator.openDepotDocumentsAndMediaAdminStaging(depotName = "Test Depot Name");
 
@@ -199,7 +199,7 @@ definition {
 			layoutName = "Test Page",
 			siteURLKey = "site-name-staging");
 
-		BlogsEntry.viewInlineImage(uploadFileName = "Document_2.jpg");
+		BlogsEntry.viewInlineImage(uploadFileName = "document_2-jpg");
 
 		Staging.gotoPublishToLive();
 
@@ -210,7 +210,7 @@ definition {
 			layoutName = "Test Page",
 			siteURLKey = "site-name");
 
-		BlogsEntry.viewInlineImage(uploadFileName = "Document_2.jpg");
+		BlogsEntry.viewInlineImage(uploadFileName = "document_2-jpg");
 	}
 
 	@description = "This ensures that the blog small image from a depot can be removed and republished when enabling local staging."
@@ -954,7 +954,7 @@ definition {
 			layoutName = "Test Page",
 			siteURLKey = "site-name-staging");
 
-		BlogsEntry.viewInlineImage(uploadFileName = "Document_2.jpg");
+		BlogsEntry.viewInlineImage(uploadFileName = "document_2-jpg");
 
 		Staging.gotoPublishToLive();
 
@@ -965,7 +965,7 @@ definition {
 			layoutName = "Test Page",
 			siteURLKey = "site-name");
 
-		BlogsEntry.viewInlineImage(uploadFileName = "Document_2.jpg");
+		BlogsEntry.viewInlineImage(uploadFileName = "document_2-jpg");
 
 		Navigator.gotoStagedSitePage(
 			pageName = "Test Page",
@@ -991,7 +991,7 @@ definition {
 			layoutName = "Test Page",
 			siteURLKey = "site-name-staging");
 
-		BlogsEntry.viewInlineImage(uploadFileName = "Document_1.jpg");
+		BlogsEntry.viewInlineImage(uploadFileName = "document_1-jpg");
 
 		Staging.gotoPublishToLive();
 
@@ -1002,7 +1002,7 @@ definition {
 			layoutName = "Test Page",
 			siteURLKey = "site-name");
 
-		BlogsEntry.viewInlineImage(uploadFileName = "Document_1.jpg");
+		BlogsEntry.viewInlineImage(uploadFileName = "document_1-jpg");
 	}
 
 	@description = "This ensures that the blog small image from a depot can be edited and republished when enabling local staging."
@@ -1388,8 +1388,6 @@ definition {
 			siteName = "Site Name");
 
 		while (IsElementNotPresent(key_thumbnailName = "Document_1.mp4", locator1 = "AP#ASSET_ABSTRACT_DETAIL_EXTERNAL_VIDEO_THUMBNAIL")) {
-			Pause(locator1 = "2000");
-
 			Refresh();
 		}
 
@@ -1404,8 +1402,6 @@ definition {
 			siteName = "Site Name");
 
 		while (IsElementNotPresent(key_thumbnailName = "Document_1.mp4", locator1 = "AP#ASSET_ABSTRACT_DETAIL_EXTERNAL_VIDEO_THUMBNAIL")) {
-			Pause(locator1 = "3000");
-
 			Refresh();
 		}
 
@@ -1428,8 +1424,6 @@ definition {
 			siteName = "Site Name");
 
 		while (IsElementNotPresent(key_thumbnailName = "Document_2.mp4", locator1 = "AP#ASSET_ABSTRACT_DETAIL_EXTERNAL_VIDEO_THUMBNAIL")) {
-			Pause(locator1 = "2000");
-
 			Refresh();
 		}
 
@@ -1448,8 +1442,6 @@ definition {
 			siteName = "Site Name");
 
 		while (IsElementNotPresent(key_thumbnailName = "Document_2.mp4", locator1 = "AP#ASSET_ABSTRACT_DETAIL_EXTERNAL_VIDEO_THUMBNAIL")) {
-			Pause(locator1 = "3000");
-
 			Refresh();
 		}
 
@@ -3360,9 +3352,6 @@ definition {
 	@description = "This test covers LPS-154420. It ensures that an image with a custom friendlyURL can be correctly rendered in the Blogs cover image field on a site after its friendlyURL is edited and published from an asset library."
 	@priority = "5"
 	test CanViewBlogsCoverImageAfterFriendlyURLIsUpdated {
-		property osgi.module.configuration.file.names = "com.liferay.document.library.configuration.FFFriendlyURLEntryFileEntryConfiguration.config";
-		property osgi.module.configurations = "enabled=B&quot;true&quot;";
-
 		JSONDocument.addFileWithUploadedFile(
 			dmDocumentDescription = "DM Image Description",
 			dmDocumentTitle = "Document_1.jpg",
@@ -3435,9 +3424,6 @@ definition {
 	@description = "This test covers LPS-154421. It ensures that an image with a custom friendlyURL can be correctly rendered in the Blogs small image field on a site after its friendlyURL is edited and published from an asset library."
 	@priority = "3"
 	test CanViewBlogsSmallImageAfterFriendlyURLIsUpdated {
-		property osgi.module.configuration.file.names = "com.liferay.document.library.configuration.FFFriendlyURLEntryFileEntryConfiguration.config";
-		property osgi.module.configurations = "enabled=B&quot;true&quot;";
-
 		JSONDocument.addFileWithUploadedFile(
 			dmDocumentDescription = "DM Image Description",
 			dmDocumentTitle = "Document_1.jpg",
@@ -3513,9 +3499,6 @@ definition {
 	@description = "This test covers LPS-154419. It validates that an external video with a custom friendlyURL can be correctly rendered in the Blog content field on a site after its friendlyURL is edited and published from an asset library"
 	@priority = "5"
 	test CanViewExternalVideoFromBlogsContentFieldAfterFriendlyURLIsUpdated {
-		property osgi.module.configuration.file.names = "com.liferay.document.library.configuration.FFFriendlyURLEntryFileEntryConfiguration.config";
-		property osgi.module.configurations = "enabled=B&quot;true&quot;";
-
 		DepotNavigator.openDepotDocumentsAndMediaAdminStaging(depotName = "Test Depot Name");
 
 		VideoShortcut.addCP(
@@ -3587,9 +3570,6 @@ definition {
 	@description = "This test covers LPS-154426. This ensures that an external video with a custom friendlyURL added to the Web content field can be rendered properly on a site after its friendlyURL is edited and published from an asset library"
 	@priority = "4"
 	test CanViewExternalVideotInWCAfterFriendlyURLIsUpdated {
-		property osgi.module.configuration.file.names = "com.liferay.document.library.configuration.FFFriendlyURLEntryFileEntryConfiguration.config";
-		property osgi.module.configurations = "enabled=B&quot;true&quot;";
-
 		DepotNavigator.openDepotDocumentsAndMediaAdminStaging(depotName = "Test Depot Name");
 
 		VideoShortcut.addCP(
@@ -3654,9 +3634,6 @@ definition {
 	@description = "This test covers LPS-154401. This ensures that an external video with a custom friendlyURL can be published from an asset library and rendered correctly in the Web content field on a site."
 	@priority = "4"
 	test CanViewExternalVideotInWCAfterPublish {
-		property osgi.module.configuration.file.names = "com.liferay.document.library.configuration.FFFriendlyURLEntryFileEntryConfiguration.config";
-		property osgi.module.configurations = "enabled=B&quot;true&quot;";
-
 		DepotNavigator.openDepotDocumentsAndMediaAdminStaging(depotName = "Test Depot Name");
 
 		VideoShortcut.addCP(
@@ -3738,9 +3715,6 @@ definition {
 	@description = "This test covers LPS-154418. It validates that an image with a custom friendlyURL can be correctly rendered in the Blog content field on a site after its friendlyURL is edited and published from an asset library"
 	@priority = "5"
 	test CanViewImageFromBlogsContentFieldAfterFriendlyURLIsUpdated {
-		property osgi.module.configuration.file.names = "com.liferay.document.library.configuration.FFFriendlyURLEntryFileEntryConfiguration.config";
-		property osgi.module.configurations = "enabled=B&quot;true&quot;";
-
 		JSONDocument.addFileWithUploadedFile(
 			dmDocumentDescription = "DM Document Description",
 			dmDocumentTitle = "DM Document Title",
@@ -3812,9 +3786,6 @@ definition {
 	@description = "This test covers LPS-154422. It ensures that an image with a custom friendlyURL added to a dynamic collection displayed in an Asset Publisher can be rendered properly on a site after its friendlyURL is edited and published from an asset library."
 	@priority = "4"
 	test CanViewImageInDynamicCollectionViaAPAfterFriendlyURLIsUpdated {
-		property osgi.module.configuration.file.names = "com.liferay.document.library.configuration.FFFriendlyURLEntryFileEntryConfiguration.config";
-		property osgi.module.configurations = "enabled=B&quot;true&quot;";
-
 		JSONDocument.addFileWithUploadedFile(
 			dmDocumentDescription = "DM Image Description",
 			dmDocumentTitle = "Document_1.jpg",
@@ -3886,13 +3857,83 @@ definition {
 		AssetPublisherPortlet.viewAssetPG(assetTitle = "Document_1.jpg");
 	}
 
-	@description = "This test covers LPS-154425."
-	@ignore = "Test Stub"
+	@description = "This test covers LPS-154425. It ensures that an image with a custom friendlyURL added to the Web content field can be rendered properly on a site after its friendlyURL is edited and published from an asset library."
 	@priority = "4"
 	test CanViewImagetInWCAfterFriendlyURLIsUpdated {
+		JSONDocument.addFileWithUploadedFile(
+			dmDocumentDescription = "DM Document Description",
+			dmDocumentTitle = "DM Document Title",
+			groupName = "Test Depot Name-staging",
+			mimeType = "image/jpeg",
+			sourceFileName = "Document_1.jpg");
 
-		// TODO LPS-154425
+		DepotNavigator.openDepotDocumentsAndMediaAdminStaging(depotName = "Test Depot Name");
 
+		DepotNavigator.switchStagingStatus(stagingItem = "Publish to Live");
+
+		Staging.publishToLive();
+
+		JSONLayout.addWidgetToPublicLayout(
+			groupName = "Site Name (Staging)",
+			layoutName = "Test Page",
+			site = "false",
+			widgetName = "Web Content Display");
+
+		WebContentNavigator.openWebContentAdmin(siteURLKey = "site-name-staging");
+
+		WebContentNavigator.gotoAddCP();
+
+		WebContent.addCP(
+			depotName = "Test Depot Name",
+			embedImage = "true",
+			imageFileName = "DM Document Title",
+			webContentContent = "Web Content Content",
+			webContentTitle = "Web Content Title");
+
+		PortletEntry.publish();
+
+		Navigator.gotoStagedSitePage(
+			pageName = "Test Page",
+			siteName = "Site Name");
+
+		WebContentDisplayPortlet.selectWebContent(webContentTitle = "Web Content Title");
+
+		Navigator.gotoStagedSitePage(
+			pageName = "Test Page",
+			siteName = "Site Name");
+
+		Staging.gotoPublishToLive();
+
+		Staging.publishToLive();
+
+		DepotNavigator.openToEditDMEntryInDepot(
+			depotName = "Test Depot Name",
+			dmDocumentTitle = "DM Document Title",
+			staging = "true");
+
+		DMDocument.editFriendlyURL(friendlyURLEdit = "custom-url");
+
+		DepotNavigator.openDepotDocumentsAndMediaAdminStaging(depotName = "Test Depot Name");
+
+		DepotNavigator.switchStagingStatus(stagingItem = "Publish to Live");
+
+		Staging.publishToLive();
+
+		Navigator.gotoStagedSitePage(
+			pageName = "Test Page",
+			siteName = "Site Name");
+
+		Staging.gotoPublishToLive();
+
+		Staging.publishToLive();
+
+		Navigator.gotoSitePage(
+			pageName = "Test Page",
+			siteName = "Site Name");
+
+		WebContentDisplayPortlet.viewContent(
+			imageFileName = "dm-document-title",
+			webContentTitle = "Web Content Title");
 	}
 
 	@description = "This test covers LPS-120955. It validates that a depot cannot be connected to a staged site."
@@ -3909,13 +3950,44 @@ definition {
 			siteList = "Site Name");
 	}
 
-	@description = "This test covers LPS-155796."
-	@ignore = "Test Stub"
+	@description = "This test covers LPS-155796. It ensures that an image that was published in a depot can still be accessed after local staging is disabled."
 	@priority = "5"
 	test ImageIsStillAccessibleAfterDisablingStaging {
+		JSONDocument.addFileWithUploadedFile(
+			dmDocumentDescription = "DM Image Description",
+			dmDocumentTitle = "Document_1",
+			groupName = "Test Depot Name-staging",
+			mimeType = "image/jpeg",
+			sourceFileName = "Document_1.jpg");
 
-		// TODO LPS-155796
+		DepotNavigator.openToEditDMEntryInDepot(
+			depotName = "Test Depot Name",
+			dmDocumentTitle = "Document_1",
+			staging = "true");
 
+		DMDocument.editFriendlyURL(
+			dmDocumentTitle = "Document_1",
+			friendlyURLEdit = "document_1_edit");
+
+		DepotNavigator.openDepotDocumentsAndMediaAdminStaging(depotName = "Test Depot Name");
+
+		DepotNavigator.switchStagingStatus(stagingItem = "Publish to Live");
+
+		Staging.publishToLive();
+
+		DepotNavigator.openToDMEntryInDepot(
+			depotName = "Test Depot Name",
+			dmDocumentTitle = "Document_1");
+
+		var latestVersionURL = DMDocument.getLatestVersionURL();
+
+		Depot.disableStagingDepot(depotName = "Test Depot Name");
+
+		Navigator.openSpecificURL(url = "${latestVersionURL}");
+
+		AssertVisible(
+			key_imageSourceURL = "document_1_edit",
+			locator1 = "DocumentsAndMediaDocument#DOCUMENT_VIEWPORT_PREVIEW");
 	}
 
 }

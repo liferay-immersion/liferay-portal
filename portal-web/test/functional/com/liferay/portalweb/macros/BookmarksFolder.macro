@@ -215,7 +215,7 @@ definition {
 			pageName = "${pageName}",
 			siteName = "${siteName}");
 
-		while (IsElementPresent.pauseIsElementPresent(locator1 = "Icon#BACK")) {
+		while (IsElementPresent(locator1 = "Icon#BACK")) {
 			Click(locator1 = "Icon#BACK");
 		}
 
@@ -273,9 +273,7 @@ definition {
 	macro moveToRecycleBinCP {
 		Navigator.openURL();
 
-		ProductMenu.gotoPortlet(
-			category = "Content & Data",
-			portlet = "Bookmarks");
+		Bookmark.openBookmarksAdmin(siteURLKey = "guest");
 
 		AssertTextEquals(
 			key_assetName = "${folderName}",
@@ -289,27 +287,8 @@ definition {
 		VerifyElementPresent(locator1 = "Message#SUCCESS");
 	}
 
-	macro subscribePG {
-		AssertTextEquals.assertPartialText(
-			key_assetDescription = "${folderDescription}",
-			locator1 = "Bookmarks#DESCRIPTIVE_ENTRY_DESCRIPTION",
-			value1 = "${folderDescription}");
-
-		Click.clickAt(locator1 = "Icon#INFO");
-
-		Pause(locator1 = "1000");
-
-		Click(locator1 = "Icon#SUBSCRIBE");
-
-		Alert.viewSuccessMessage();
-	}
-
 	macro tearDownCP {
-		Navigator.openURL();
-
-		ProductMenu.gotoPortlet(
-			category = "Content & Data",
-			portlet = "Bookmarks");
+		Bookmark.openBookmarksAdmin(siteURLKey = "guest");
 
 		if (IsElementNotPresent(locator1 = "Message#EMPTY_INFO")) {
 			PortletEntry.selectAll();

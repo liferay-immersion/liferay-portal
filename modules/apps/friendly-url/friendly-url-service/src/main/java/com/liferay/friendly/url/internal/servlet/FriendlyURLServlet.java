@@ -22,6 +22,7 @@ import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.encryptor.Encryptor;
 import com.liferay.portal.kernel.encryptor.EncryptorException;
+import com.liferay.portal.kernel.exception.LayoutPermissionException;
 import com.liferay.portal.kernel.exception.NoSuchGroupException;
 import com.liferay.portal.kernel.exception.NoSuchLayoutException;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -90,6 +91,7 @@ import javax.servlet.http.HttpSession;
 
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
 import org.osgi.service.component.annotations.ReferencePolicyOption;
 
 /**
@@ -137,12 +139,15 @@ public class FriendlyURLServlet extends HttpServlet {
 					0, layoutFriendlyURL.length() - 1);
 			}
 
-			if (redirectEntryLocalService != null) {
+			RedirectEntryLocalService currentRedirectEntryLocalService =
+				redirectEntryLocalService;
+
+			if (currentRedirectEntryLocalService != null) {
 				HttpServletRequest originalHttpServletRequest =
 					portal.getOriginalServletRequest(httpServletRequest);
 
 				RedirectEntry redirectEntry =
-					redirectEntryLocalService.fetchRedirectEntry(
+					currentRedirectEntryLocalService.fetchRedirectEntry(
 						group.getGroupId(),
 						_normalizeFriendlyURL(
 							originalHttpServletRequest.getRequestURI()),
@@ -150,7 +155,7 @@ public class FriendlyURLServlet extends HttpServlet {
 
 				if (redirectEntry == null) {
 					redirectEntry =
-						redirectEntryLocalService.fetchRedirectEntry(
+						currentRedirectEntryLocalService.fetchRedirectEntry(
 							group.getGroupId(),
 							_normalizeFriendlyURL(layoutFriendlyURL), true);
 				}
@@ -171,15 +176,8 @@ public class FriendlyURLServlet extends HttpServlet {
 			"request", httpServletRequest
 		).build();
 
-		ServiceContext serviceContext =
-			ServiceContextThreadLocal.getServiceContext();
-
-		if (serviceContext == null) {
-			serviceContext = ServiceContextFactory.getInstance(
-				httpServletRequest);
-
-			ServiceContextThreadLocal.pushServiceContext(serviceContext);
-		}
+		ServiceContextThreadLocal.pushServiceContext(
+			_getServiceContext(group, httpServletRequest));
 
 		Layout defaultLayout = null;
 
@@ -241,7 +239,7 @@ public class FriendlyURLServlet extends HttpServlet {
 				if (!LayoutPermissionUtil.contains(
 						permissionChecker, layout, ActionKeys.VIEW)) {
 
-					throw new NoSuchLayoutException();
+					throw new LayoutPermissionException();
 				}
 			}
 
@@ -284,7 +282,9 @@ public class FriendlyURLServlet extends HttpServlet {
 
 				if (Validator.isNotNull(i18nLanguageId) &&
 					!LanguageUtil.isAvailableLocale(
-						group.getGroupId(), i18nLanguageId)) {
+						group.getGroupId(), i18nLanguageId) &&
+					(!portal.isGroupControlPanelPath(path) ||
+					 !LanguageUtil.isAvailableLocale(i18nLanguageId))) {
 
 					localeUnavailable = true;
 				}
@@ -329,7 +329,7 @@ public class FriendlyURLServlet extends HttpServlet {
 				}
 			}
 		}
-		catch (NoSuchLayoutException noSuchLayoutException) {
+		catch (LayoutPermissionException | NoSuchLayoutException exception) {
 			Layout redirectLayout = null;
 
 			if (layoutFriendlyURL == null) {
@@ -356,23 +356,31 @@ public class FriendlyURLServlet extends HttpServlet {
 				return new Redirect(redirect);
 			}
 
-			if (redirectNotFoundTracker != null) {
-				redirectNotFoundTracker.trackURL(
+			RedirectNotFoundTracker currentRedirectNotFoundTracker =
+				redirectNotFoundTracker;
+
+			if (currentRedirectNotFoundTracker != null) {
+				currentRedirectNotFoundTracker.trackURL(
 					group, _normalizeFriendlyURL(layoutFriendlyURL));
 			}
 
-			if (Validator.isNotNull(
-					PropsValues.LAYOUT_FRIENDLY_URL_PAGE_NOT_FOUND)) {
+			if (exception instanceof NoSuchLayoutException) {
+				if (Validator.isNotNull(
+						PropsValues.LAYOUT_FRIENDLY_URL_PAGE_NOT_FOUND)) {
 
-				throw noSuchLayoutException;
+					throw exception;
+				}
+
+				httpServletResponse.setStatus(HttpServletResponse.SC_NOT_FOUND);
+
+				httpServletRequest.setAttribute(
+					NoSuchLayoutException.class.getName(), Boolean.TRUE);
 			}
 
-			httpServletResponse.setStatus(HttpServletResponse.SC_NOT_FOUND);
-
-			httpServletRequest.setAttribute(
-				NoSuchLayoutException.class.getName(), Boolean.TRUE);
-
 			layoutFriendlyURL = null;
+		}
+		finally {
+			ServiceContextThreadLocal.popServiceContext();
 		}
 
 		String actualURL = portal.getActualURL(
@@ -668,15 +676,17 @@ public class FriendlyURLServlet extends HttpServlet {
 
 	@Reference(
 		cardinality = ReferenceCardinality.OPTIONAL,
+		policy = ReferencePolicy.DYNAMIC,
 		policyOption = ReferencePolicyOption.GREEDY
 	)
-	protected RedirectEntryLocalService redirectEntryLocalService;
+	protected volatile RedirectEntryLocalService redirectEntryLocalService;
 
 	@Reference(
 		cardinality = ReferenceCardinality.OPTIONAL,
+		policy = ReferencePolicy.DYNAMIC,
 		policyOption = ReferencePolicyOption.GREEDY
 	)
-	protected RedirectNotFoundTracker redirectNotFoundTracker;
+	protected volatile RedirectNotFoundTracker redirectNotFoundTracker;
 
 	@Reference
 	protected SiteFriendlyURLLocalService siteFriendlyURLLocalService;
@@ -794,6 +804,28 @@ public class FriendlyURLServlet extends HttpServlet {
 		}
 
 		return requestURI.substring(_pathInfoOffset, pos);
+	}
+
+	private ServiceContext _getServiceContext(
+			Group group, HttpServletRequest httpServletRequest)
+		throws PortalException {
+
+		ServiceContext serviceContext =
+			ServiceContextThreadLocal.getServiceContext();
+
+		if (serviceContext == null) {
+			serviceContext = ServiceContextFactory.getInstance(
+				httpServletRequest);
+
+			ServiceContextThreadLocal.pushServiceContext(serviceContext);
+		}
+
+		serviceContext = (ServiceContext)serviceContext.clone();
+
+		serviceContext.setCompanyId(group.getCompanyId());
+		serviceContext.setScopeGroupId(group.getGroupId());
+
+		return serviceContext;
 	}
 
 	private User _getUser(HttpServletRequest httpServletRequest)

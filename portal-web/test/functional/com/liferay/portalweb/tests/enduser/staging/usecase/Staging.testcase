@@ -1827,6 +1827,8 @@ definition {
 
 		AssetPublisherPortlet.configureDynamicAssetSelectionPG(portletName = "Asset Publisher");
 
+		Refresh();
+
 		AssetPublisherPortlet.viewAssetPG(
 			assetContent = "Blogs Entry2 Content",
 			assetTitle = "Blogs Entry2 Title");
@@ -2165,7 +2167,6 @@ definition {
 	@description = "This is a use case for LPS-79092. Specific for Bookmarks"
 	@priority = "4"
 	test ViewLastPublishDateBehaviourAfterInitialPublication {
-		property portal.release = "false";
 		property test.name.skip.portal.instance = "Staging#ViewLastPublishDateBehaviourAfterInitialPublication";
 
 		JSONWebcontent.addWebContent(

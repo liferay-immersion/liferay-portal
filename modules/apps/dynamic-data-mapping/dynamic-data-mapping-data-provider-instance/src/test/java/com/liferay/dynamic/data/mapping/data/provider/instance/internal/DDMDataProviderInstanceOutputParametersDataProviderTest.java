@@ -29,6 +29,7 @@ import com.liferay.dynamic.data.mapping.storage.DDMFormValues;
 import com.liferay.dynamic.data.mapping.test.util.DDMFormValuesTestUtil;
 import com.liferay.dynamic.data.mapping.util.DDMFormFactory;
 import com.liferay.petra.string.StringPool;
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.language.Language;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.resource.bundle.ResourceBundleLoader;
@@ -53,7 +54,6 @@ import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
 
-import org.mockito.Matchers;
 import org.mockito.Mockito;
 
 /**
@@ -184,7 +184,7 @@ public class DDMDataProviderInstanceOutputParametersDataProviderTest {
 
 		Mockito.when(
 			_ddmFormValuesDeserializer.deserialize(
-				Matchers.any(DDMFormValuesDeserializerDeserializeRequest.class))
+				Mockito.any(DDMFormValuesDeserializerDeserializeRequest.class))
 		).thenReturn(
 			ddmFormValuesDeserializerDeserializeResponse
 		);
@@ -230,7 +230,7 @@ public class DDMDataProviderInstanceOutputParametersDataProviderTest {
 		Mockito.when(
 			_ddmDataProviderInstanceService.getDataProviderInstance(1)
 		).thenThrow(
-			Exception.class
+			PortalException.class
 		);
 
 		DDMDataProviderResponse ddmDataProviderResponse =
@@ -339,7 +339,7 @@ public class DDMDataProviderInstanceOutputParametersDataProviderTest {
 		ResourceBundle resourceBundle = Mockito.mock(ResourceBundle.class);
 
 		Mockito.when(
-			portal.getResourceBundle(Matchers.any(Locale.class))
+			portal.getResourceBundle(Mockito.any(Locale.class))
 		).thenReturn(
 			resourceBundle
 		);
@@ -355,7 +355,7 @@ public class DDMDataProviderInstanceOutputParametersDataProviderTest {
 			resourceBundleLoader);
 
 		Mockito.when(
-			resourceBundleLoader.loadResourceBundle(Matchers.any(Locale.class))
+			resourceBundleLoader.loadResourceBundle(Mockito.any(Locale.class))
 		).thenReturn(
 			ResourceBundleUtil.EMPTY_RESOURCE_BUNDLE
 		);

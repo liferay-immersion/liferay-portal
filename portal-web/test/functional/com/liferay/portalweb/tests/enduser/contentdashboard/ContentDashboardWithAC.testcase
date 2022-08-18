@@ -70,8 +70,6 @@ definition {
 
 			Button.clickPublish();
 
-			DisplayPageTemplatesAdmin.openDisplayPagesAdmin(siteURLKey = "test-site-name");
-
 			DisplayPageTemplatesAdmin.markDisplayPageAsDefault(displayPageName = "Display Page Name");
 		}
 
@@ -86,13 +84,7 @@ definition {
 		task ("Go to Content Dashboard and click on View Metrics") {
 			ContentDashboard.goToContentDashboard();
 
-			MouseOver(
-				key_individualAttribute = "DM Document Title",
-				locator1 = "ACIndividualsDashboard#KNOWN_INDIVIDUAL_ATTRIBUTE");
-
-			Click(
-				keyButtonAction = "View Metrics",
-				locator1 = "ContentDashboard#QUICK_ACTION_BUTTON_MENU");
+			ContentDashboard.openViewMetricsByIcon(assetTitle = "DM Document Title");
 		}
 
 		task ("Assert the Content Performance is present") {
@@ -341,8 +333,6 @@ definition {
 
 			Button.clickPublish();
 
-			DisplayPageTemplatesAdmin.openDisplayPagesAdmin(siteURLKey = "test-site-name");
-
 			DisplayPageTemplatesAdmin.markDisplayPageAsDefault(displayPageName = "Display Page Name");
 		}
 
@@ -357,13 +347,7 @@ definition {
 		task ("Go to Content Dashboard and click on View Mtrics") {
 			ContentDashboard.goToContentDashboard();
 
-			MouseOver(
-				key_individualAttribute = "DM Document Title",
-				locator1 = "ACIndividualsDashboard#KNOWN_INDIVIDUAL_ATTRIBUTE");
-
-			Click(
-				keyButtonAction = "View Metrics",
-				locator1 = "ContentDashboard#QUICK_ACTION_BUTTON_MENU");
+			ContentDashboard.openViewMetricsByIcon(assetTitle = "DM Document Title");
 		}
 
 		task ("Assert the Content Performance is present") {

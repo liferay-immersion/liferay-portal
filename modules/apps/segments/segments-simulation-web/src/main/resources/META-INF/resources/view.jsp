@@ -34,13 +34,27 @@ SegmentsSimulationDisplayContext segmentsSimulationDisplayContext = (SegmentsSim
 			<aui:form method="post" name="segmentsSimulationFm">
 				<ul class="list-unstyled">
 					<c:if test="<%= !segmentsSimulationDisplayContext.isSegmentationEnabled() %>">
-						<clay:stripe
+						<clay:alert
+							defaultTitleDisabled="<%= true %>"
+							dismissible="<%= true %>"
 							displayType="warning"
 						>
-							<strong class="lead"><%= LanguageUtil.get(request, "experiences-cannot-be-displayed-because-segmentation-is-disabled") %></strong>
+							<strong><%= LanguageUtil.get(request, "experiences-cannot-be-displayed-because-segmentation-is-disabled") %></strong>
 
-							<span><%= LanguageUtil.get(request, "to-enable-segmentation-go-to-system-settings-segments-segments-service") %></span>
-						</clay:stripe>
+							<c:choose>
+								<c:when test="<%= segmentsSimulationDisplayContext.getSegmentsCompanyConfigurationURL() != null %>">
+									<clay:link
+										href="<%= segmentsSimulationDisplayContext.getSegmentsCompanyConfigurationURL() %>"
+										label='<%=
+											LanguageUtil.get(request, "to-enable,-go-to-instance-settings")
+										%>'
+									/>
+								</c:when>
+								<c:otherwise>
+									<span><%= LanguageUtil.get(request, "contact-your-system-administrator-to-enable-it") %></span>
+								</c:otherwise>
+							</c:choose>
+						</clay:alert>
 					</c:if>
 
 					<%

@@ -55,6 +55,7 @@ import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.security.permission.PermissionThreadLocal;
 import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermission;
 import com.liferay.portal.kernel.service.ServiceContext;
+import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.CalendarFactoryUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HashMapBuilder;
@@ -62,7 +63,6 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.odata.entity.EntityModel;
 import com.liferay.portal.vulcan.pagination.Page;
 import com.liferay.portal.vulcan.pagination.Pagination;
-import com.liferay.portal.vulcan.resource.EntityModelResource;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -74,6 +74,7 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 import javax.ws.rs.HttpMethod;
@@ -93,8 +94,7 @@ import org.osgi.service.component.annotations.ServiceScope;
 	enabled = false, properties = "OSGI-INF/liferay/rest/v1_0/order.properties",
 	scope = ServiceScope.PROTOTYPE, service = OrderResource.class
 )
-public class OrderResourceImpl
-	extends BaseOrderResourceImpl implements EntityModelResource {
+public class OrderResourceImpl extends BaseOrderResourceImpl {
 
 	@Override
 	public Response deleteOrder(Long id) throws Exception {
@@ -483,23 +483,39 @@ public class OrderResourceImpl
 
 		Stream<OrderItem> stream = Arrays.stream(orderItems);
 
-		return stream.map(
+		String[] strings = stream.map(
 			OrderItem::getExternalReferenceCode
+		).filter(
+			Objects::nonNull
 		).distinct(
 		).toArray(
 			String[]::new
 		);
+
+		if (ArrayUtil.isEmpty(strings)) {
+			strings = null;
+		}
+
+		return strings;
 	}
 
 	private Long[] _getOrderItemIds(OrderItem[] orderItems) {
 		Stream<OrderItem> stream = Arrays.stream(orderItems);
 
-		return stream.map(
+		Long[] longs = stream.map(
 			OrderItem::getId
+		).filter(
+			Objects::nonNull
 		).distinct(
 		).toArray(
 			Long[]::new
 		);
+
+		if (ArrayUtil.isEmpty(longs)) {
+			longs = new Long[] {0L};
+		}
+
+		return longs;
 	}
 
 	private String _getVersion(UriInfo uriInfo) {

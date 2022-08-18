@@ -42,19 +42,23 @@ import com.liferay.layout.page.template.importer.LayoutPageTemplatesImporter;
 import com.liferay.layout.page.template.service.LayoutPageTemplateEntryLocalService;
 import com.liferay.layout.page.template.service.LayoutPageTemplateStructureLocalService;
 import com.liferay.layout.util.LayoutCopyHelper;
+import com.liferay.notification.rest.resource.v1_0.NotificationTemplateResource;
 import com.liferay.object.admin.rest.resource.v1_0.ObjectDefinitionResource;
 import com.liferay.object.admin.rest.resource.v1_0.ObjectRelationshipResource;
 import com.liferay.object.service.ObjectActionLocalService;
 import com.liferay.object.service.ObjectDefinitionLocalService;
 import com.liferay.object.service.ObjectEntryLocalService;
 import com.liferay.portal.kernel.json.JSONFactory;
+import com.liferay.portal.kernel.module.configuration.ConfigurationProvider;
 import com.liferay.portal.kernel.service.GroupLocalService;
 import com.liferay.portal.kernel.service.LayoutLocalService;
 import com.liferay.portal.kernel.service.LayoutSetLocalService;
+import com.liferay.portal.kernel.service.OrganizationLocalService;
 import com.liferay.portal.kernel.service.ResourceActionLocalService;
 import com.liferay.portal.kernel.service.ResourcePermissionLocalService;
 import com.liferay.portal.kernel.service.RoleLocalService;
 import com.liferay.portal.kernel.service.ThemeLocalService;
+import com.liferay.portal.kernel.service.UserGroupLocalService;
 import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.service.WorkflowDefinitionLinkLocalService;
 import com.liferay.portal.kernel.settings.SettingsFactory;
@@ -64,6 +68,7 @@ import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.security.service.access.policy.service.SAPEntryLocalService;
 import com.liferay.portal.util.PropsValues;
+import com.liferay.segments.service.SegmentsEntryLocalService;
 import com.liferay.site.initializer.extender.internal.file.backed.osgi.FileBackedBundleDelegate;
 import com.liferay.site.initializer.extender.internal.file.backed.servlet.FileBackedServletContextDelegate;
 import com.liferay.site.navigation.service.SiteNavigationMenuItemLocalService;
@@ -117,11 +122,12 @@ public class SiteInitializerExtender
 				_accountResourceFactory, _accountRoleLocalService,
 				_accountRoleResourceFactory, _assetCategoryLocalService,
 				_assetListEntryLocalService, bundle,
-				_clientExtensionEntryLocalService, _ddmStructureLocalService,
-				_ddmTemplateLocalService, _defaultDDMStructureHelper,
-				_dlURLHelper, _documentFolderResourceFactory,
-				_documentResourceFactory, _fragmentsImporter,
-				_groupLocalService, _journalArticleLocalService, _jsonFactory,
+				_clientExtensionEntryLocalService, _configurationProvider,
+				_ddmStructureLocalService, _ddmTemplateLocalService,
+				_defaultDDMStructureHelper, _dlURLHelper,
+				_documentFolderResourceFactory, _documentResourceFactory,
+				_fragmentsImporter, _groupLocalService,
+				_journalArticleLocalService, _jsonFactory,
 				_knowledgeBaseArticleResourceFactory,
 				_knowledgeBaseFolderResourceFactory, _layoutCopyHelper,
 				_layoutLocalService, _layoutPageTemplateEntryLocalService,
@@ -129,20 +135,22 @@ public class SiteInitializerExtender
 				_layoutPageTemplateStructureLocalService,
 				_layoutSetLocalService, _listTypeDefinitionResource,
 				_listTypeDefinitionResourceFactory, _listTypeEntryResource,
-				_listTypeEntryResourceFactory, _objectActionLocalService,
+				_listTypeEntryResourceFactory,
+				_notificationTemplateResourceFactory, _objectActionLocalService,
 				_objectDefinitionLocalService, _objectDefinitionResourceFactory,
 				_objectRelationshipResourceFactory, _objectEntryLocalService,
-				_organizationResourceFactory, _portal,
-				_resourceActionLocalService, _resourcePermissionLocalService,
-				_roleLocalService, _sapEntryLocalService, null,
+				_organizationLocalService, _organizationResourceFactory,
+				_portal, _resourceActionLocalService,
+				_resourcePermissionLocalService, _roleLocalService,
+				_sapEntryLocalService, _segmentsEntryLocalService, null,
 				_settingsFactory, _siteNavigationMenuItemLocalService,
 				_siteNavigationMenuItemTypeRegistry,
 				_siteNavigationMenuLocalService,
 				_structuredContentFolderResourceFactory,
 				_styleBookEntryZipProcessor, _taxonomyCategoryResourceFactory,
 				_taxonomyVocabularyResourceFactory, _themeLocalService,
-				_userAccountResourceFactory, _userLocalService,
-				_workflowDefinitionLinkLocalService,
+				_userAccountResourceFactory, _userGroupLocalService,
+				_userLocalService, _workflowDefinitionLinkLocalService,
 				_workflowDefinitionResourceFactory);
 
 		siteInitializerExtension.start();
@@ -223,11 +231,12 @@ public class SiteInitializerExtender
 					new FileBackedBundleDelegate(
 						_bundleContext, file, _jsonFactory, symbolicName),
 					null),
-				_clientExtensionEntryLocalService, _ddmStructureLocalService,
-				_ddmTemplateLocalService, _defaultDDMStructureHelper,
-				_dlURLHelper, _documentFolderResourceFactory,
-				_documentResourceFactory, _fragmentsImporter,
-				_groupLocalService, _journalArticleLocalService, _jsonFactory,
+				_clientExtensionEntryLocalService, _configurationProvider,
+				_ddmStructureLocalService, _ddmTemplateLocalService,
+				_defaultDDMStructureHelper, _dlURLHelper,
+				_documentFolderResourceFactory, _documentResourceFactory,
+				_fragmentsImporter, _groupLocalService,
+				_journalArticleLocalService, _jsonFactory,
 				_knowledgeBaseArticleResourceFactory,
 				_knowledgeBaseFolderResourceFactory, _layoutCopyHelper,
 				_layoutLocalService, _layoutPageTemplateEntryLocalService,
@@ -235,12 +244,14 @@ public class SiteInitializerExtender
 				_layoutPageTemplateStructureLocalService,
 				_layoutSetLocalService, _listTypeDefinitionResource,
 				_listTypeDefinitionResourceFactory, _listTypeEntryResource,
-				_listTypeEntryResourceFactory, _objectActionLocalService,
+				_listTypeEntryResourceFactory,
+				_notificationTemplateResourceFactory, _objectActionLocalService,
 				_objectDefinitionLocalService, _objectDefinitionResourceFactory,
 				_objectRelationshipResourceFactory, _objectEntryLocalService,
-				_organizationResourceFactory, _portal,
-				_resourceActionLocalService, _resourcePermissionLocalService,
-				_roleLocalService, _sapEntryLocalService,
+				_organizationLocalService, _organizationResourceFactory,
+				_portal, _resourceActionLocalService,
+				_resourcePermissionLocalService, _roleLocalService,
+				_sapEntryLocalService, _segmentsEntryLocalService,
 				ProxyUtil.newDelegateProxyInstance(
 					ServletContext.class.getClassLoader(), ServletContext.class,
 					new FileBackedServletContextDelegate(
@@ -252,8 +263,8 @@ public class SiteInitializerExtender
 				_structuredContentFolderResourceFactory,
 				_styleBookEntryZipProcessor, _taxonomyCategoryResourceFactory,
 				_taxonomyVocabularyResourceFactory, _themeLocalService,
-				_userAccountResourceFactory, _userLocalService,
-				_workflowDefinitionLinkLocalService,
+				_userAccountResourceFactory, _userGroupLocalService,
+				_userLocalService, _workflowDefinitionLinkLocalService,
 				_workflowDefinitionResourceFactory);
 
 		siteInitializerExtension.start();
@@ -281,6 +292,9 @@ public class SiteInitializerExtender
 
 	@Reference
 	private ClientExtensionEntryLocalService _clientExtensionEntryLocalService;
+
+	@Reference
+	private ConfigurationProvider _configurationProvider;
 
 	@Reference
 	private DDMStructureLocalService _ddmStructureLocalService;
@@ -358,6 +372,10 @@ public class SiteInitializerExtender
 	private ListTypeEntryResource.Factory _listTypeEntryResourceFactory;
 
 	@Reference
+	private NotificationTemplateResource.Factory
+		_notificationTemplateResourceFactory;
+
+	@Reference
 	private ObjectActionLocalService _objectActionLocalService;
 
 	@Reference
@@ -372,6 +390,9 @@ public class SiteInitializerExtender
 	@Reference
 	private ObjectRelationshipResource.Factory
 		_objectRelationshipResourceFactory;
+
+	@Reference
+	private OrganizationLocalService _organizationLocalService;
 
 	@Reference
 	private OrganizationResource.Factory _organizationResourceFactory;
@@ -390,6 +411,9 @@ public class SiteInitializerExtender
 
 	@Reference
 	private SAPEntryLocalService _sapEntryLocalService;
+
+	@Reference
+	private SegmentsEntryLocalService _segmentsEntryLocalService;
 
 	@Reference
 	private SettingsFactory _settingsFactory;
@@ -424,6 +448,9 @@ public class SiteInitializerExtender
 
 	@Reference
 	private UserAccountResource.Factory _userAccountResourceFactory;
+
+	@Reference
+	private UserGroupLocalService _userGroupLocalService;
 
 	@Reference
 	private UserLocalService _userLocalService;

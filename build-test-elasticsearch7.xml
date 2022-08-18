@@ -3,20 +3,13 @@
 <project basedir="." name="portal-test-elasticsearch" xmlns:antelope="antlib:ise.antelope.tasks" xmlns:if="ant:if" xmlns:unless="ant:unless">
 	<import file="build-test.xml" />
 
-	<get-testcase-property if:set="env.JENKINS_HOME" property.name="elastic.override.version" />
 	<propertycopy from="suite.elastic.version[${env.CI_TEST_SUITE}]" name="suite.elastic.version" silent="true" />
 
 	<if>
-		<isset property="elastic.override.version" />
+		<isset property="suite.elastic.version" />
 		<then>
-			<property name="elasticsearch.version" value="${elastic.override.version}" />
+			<property name="elasticsearch.version" value="${suite.elastic.version}" />
 		</then>
-		<elseif>
-			<isset property="suite.elastic.version" />
-			<then>
-				<property name="elasticsearch.version" value="${suite.elastic.version}" />
-			</then>
-		</elseif>
 		<else>
 			<property name="elasticsearch.version" value="7.17.0" />
 		</else>
@@ -104,6 +97,17 @@
 			>
 				<replacetoken><![CDATA[JAVA="$JAVA_HOME/bin/java"]]></replacetoken>
 				<replacevalue><![CDATA[JAVA="/opt/java/jdk11/bin/java"]]></replacevalue>
+			</replace>
+		</sequential>
+	</macrodef>
+
+	<macrodef name="configure-elasticsearch-jdk17">
+		<sequential>
+			<replace
+				file="${elasticsearch.dir}/bin/elasticsearch-env"
+			>
+				<replacetoken><![CDATA[JAVA="$JAVA_HOME/bin/java"]]></replacetoken>
+				<replacevalue><![CDATA[JAVA="/opt/java/openjdk17/bin/java"]]></replacevalue>
 			</replace>
 		</sequential>
 	</macrodef>
@@ -638,7 +642,7 @@ ${line.separator}CATALINA_OPTS="${CATALINA_OPTS} -Djavax.net.ssl.trustStore=${el
 		<sequential>
 			<lstopwatch action="start" name="prepare.elasticsearch.ltr" />
 
-			<property name="ltr.plugin.version" value="1.5.7" />
+			<property name="ltr.plugin.version" value="1.5.8" />
 
 			<property name="elasticsearch.ltr.zip.name" value="ltr-plugin-v${ltr.plugin.version}-es${elasticsearch.version}.zip" />
 
@@ -744,6 +748,8 @@ ${line.separator}CATALINA_OPTS="${CATALINA_OPTS} -Djavax.net.ssl.trustStore=${el
 			<configure-elasticsearch-discovery-type-single-node />
 
 			<configure-elasticsearch-ltr-properties />
+
+			<configure-elasticsearch-jdk17 />
 
 			<prepare-elasticsearch-ltr />
 

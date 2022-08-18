@@ -42,7 +42,6 @@ import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
 
-import org.mockito.Matchers;
 import org.mockito.Mockito;
 import org.mockito.stubbing.Answer;
 
@@ -70,7 +69,7 @@ public class PollsToDDMUpgradeProcessTest extends BaseDDMTestCase {
 			HashMapBuilder.put(
 				"radio-field-type-label", "Single Selection"
 			).build());
-		setUpLocaleUtil();
+		setUpLanguageUtil();
 		_setUpLocalizationUtil();
 		_setUpPollsToDDMUpgradeProcess();
 	}
@@ -204,14 +203,15 @@ public class PollsToDDMUpgradeProcessTest extends BaseDDMTestCase {
 		LocalizationUtil localizationUtil = new LocalizationUtil();
 
 		Mockito.when(
-			_localization.getAvailableLanguageIds(Matchers.anyString())
+			_localization.getAvailableLanguageIds(
+				Mockito.nullable(String.class))
 		).thenReturn(
 			new String[] {"en_US", "pt_BR"}
 		);
 
 		Mockito.when(
 			_localization.getLocalization(
-				Matchers.anyString(), Matchers.anyString())
+				Mockito.nullable(String.class), Mockito.nullable(String.class))
 		).then(
 			(Answer<String>)invocationOnMock -> {
 				Object[] arguments = invocationOnMock.getArguments();

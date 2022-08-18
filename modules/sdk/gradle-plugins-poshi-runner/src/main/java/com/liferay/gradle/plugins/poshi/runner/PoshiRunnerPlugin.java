@@ -28,6 +28,7 @@ import java.io.IOException;
 
 import java.nio.charset.StandardCharsets;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -689,21 +690,27 @@ public class PoshiRunnerPlugin implements Plugin<Project> {
 
 		Properties poshiProperties = new Properties();
 
-		File poshiPropertiesFile =
-			poshiRunnerExtension.getPoshiPropertiesFile();
+		List<File> poshiPropertiesFiles = new ArrayList<>();
 
-		if (poshiPropertiesFile != null) {
-			if (poshiPropertiesFile.exists()) {
-				poshiProperties.putAll(
-					GUtil.loadProperties(poshiPropertiesFile));
-			}
+		poshiPropertiesFiles.add(poshiRunnerExtension.getPoshiPropertiesFile());
 
-			File poshiExtPropertiesFile = _getPoshiExtPropertiesFile(
-				poshiPropertiesFile);
+		poshiPropertiesFiles.addAll(
+			poshiRunnerExtension.getPoshiPropertiesFiles());
 
-			if (poshiExtPropertiesFile.exists()) {
-				poshiProperties.putAll(
-					GUtil.loadProperties(poshiExtPropertiesFile));
+		for (File poshiPropertiesFile : poshiPropertiesFiles) {
+			if (poshiPropertiesFile != null) {
+				if (poshiPropertiesFile.exists()) {
+					poshiProperties.putAll(
+						GUtil.loadProperties(poshiPropertiesFile));
+				}
+
+				File poshiExtPropertiesFile = _getPoshiExtPropertiesFile(
+					poshiPropertiesFile);
+
+				if (poshiExtPropertiesFile.exists()) {
+					poshiProperties.putAll(
+						GUtil.loadProperties(poshiExtPropertiesFile));
+				}
 			}
 		}
 
@@ -909,6 +916,10 @@ public class PoshiRunnerPlugin implements Plugin<Project> {
 				put("98", "98.0.4758.102");
 				put("99", "99.0.4844.51");
 				put("100", "100.0.4896.60");
+				put("101", "101.0.4951.15");
+				put("102", "102.0.5005.61");
+				put("103", "103.0.5060.53");
+				put("104", "104.0.5112.20");
 			}
 		};
 	private static final Pattern _chromeVersionPattern = Pattern.compile(

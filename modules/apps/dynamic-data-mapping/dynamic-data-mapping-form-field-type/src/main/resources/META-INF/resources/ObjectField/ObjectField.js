@@ -80,12 +80,6 @@ const ObjectField = ({
 					return false;
 				}
 				else if (
-					focusedFieldType === 'document_library' &&
-					type === 'Long'
-				) {
-					return true;
-				}
-				else if (
 					(focusedFieldType === 'rich_text' ||
 						focusedFieldType === 'text') &&
 					type === 'Clob'

@@ -90,6 +90,41 @@ public class FormConfig implements Serializable {
 	@JsonProperty(access = JsonProperty.Access.READ_WRITE)
 	protected Object formReference;
 
+	@Schema(description = "The definition for the success message of the form.")
+	@Valid
+	public Object getFormSuccessSubmissionResult() {
+		return formSuccessSubmissionResult;
+	}
+
+	public void setFormSuccessSubmissionResult(
+		Object formSuccessSubmissionResult) {
+
+		this.formSuccessSubmissionResult = formSuccessSubmissionResult;
+	}
+
+	@JsonIgnore
+	public void setFormSuccessSubmissionResult(
+		UnsafeSupplier<Object, Exception>
+			formSuccessSubmissionResultUnsafeSupplier) {
+
+		try {
+			formSuccessSubmissionResult =
+				formSuccessSubmissionResultUnsafeSupplier.get();
+		}
+		catch (RuntimeException re) {
+			throw re;
+		}
+		catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	@GraphQLField(
+		description = "The definition for the success message of the form."
+	)
+	@JsonProperty(access = JsonProperty.Access.READ_WRITE)
+	protected Object formSuccessSubmissionResult;
+
 	@Override
 	public boolean equals(Object object) {
 		if (this == object) {
@@ -135,6 +170,28 @@ public class FormConfig implements Serializable {
 			}
 			else {
 				sb.append(formReference);
+			}
+		}
+
+		if (formSuccessSubmissionResult != null) {
+			if (sb.length() > 1) {
+				sb.append(", ");
+			}
+
+			sb.append("\"formSuccessSubmissionResult\": ");
+
+			if (formSuccessSubmissionResult instanceof Map) {
+				sb.append(
+					JSONFactoryUtil.createJSONObject(
+						(Map<?, ?>)formSuccessSubmissionResult));
+			}
+			else if (formSuccessSubmissionResult instanceof String) {
+				sb.append("\"");
+				sb.append(_escape((String)formSuccessSubmissionResult));
+				sb.append("\"");
+			}
+			else {
+				sb.append(formSuccessSubmissionResult);
 			}
 		}
 

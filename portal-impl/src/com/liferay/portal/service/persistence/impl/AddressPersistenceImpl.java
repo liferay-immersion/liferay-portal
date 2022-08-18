@@ -4867,7 +4867,7 @@ public class AddressPersistenceImpl
 	 * @param companyId the company ID
 	 * @param classNameId the class name ID
 	 * @param classPK the class pk
-	 * @param typeId the type ID
+	 * @param typeIds the type IDs
 	 * @param start the lower bound of the range of addresses
 	 * @param end the upper bound of the range of addresses (not inclusive)
 	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
@@ -6927,15 +6927,14 @@ public class AddressPersistenceImpl
 
 		AddressModelImpl addressModelImpl = (AddressModelImpl)address;
 
-		if (Validator.isNull(address.getExternalReferenceCode())) {
-			address.setExternalReferenceCode(
-				String.valueOf(address.getPrimaryKey()));
-		}
-
 		if (Validator.isNull(address.getUuid())) {
 			String uuid = PortalUUIDUtil.generate();
 
 			address.setUuid(uuid);
+		}
+
+		if (Validator.isNull(address.getExternalReferenceCode())) {
+			address.setExternalReferenceCode(address.getUuid());
 		}
 
 		ServiceContext serviceContext =

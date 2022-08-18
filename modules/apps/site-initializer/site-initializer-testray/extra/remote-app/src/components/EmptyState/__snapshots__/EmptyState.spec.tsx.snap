@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1
 
-exports[`EmptyState renders with default properties 1`] = `
+exports[`EmptyState > renders with default properties 1`] = `
 <DocumentFragment>
   <div
     class="c-empty-state c-empty-state-animation"
@@ -14,7 +14,7 @@ exports[`EmptyState renders with default properties 1`] = `
         <img
           alt="c-empty-state-image"
           class="aspect-ratio-item aspect-ratio-item-fluid"
-          src="https://clayui.com/images/empty_state.gif"
+          src="/states/empty_state.gif"
         />
       </div>
     </div>

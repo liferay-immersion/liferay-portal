@@ -19,7 +19,7 @@
 <liferay-util:dynamic-include key="/html/common/themes/bottom.jsp#pre" />
 
 <%
-List<Portlet> portlets = (List<Portlet>)request.getAttribute(WebKeys.LAYOUT_PORTLETS);
+PortletTreeSet portletTreeSet = (PortletTreeSet)request.getAttribute(WebKeys.LAYOUT_PORTLETS);
 %>
 
 <%-- Portlet CSS References --%>

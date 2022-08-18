@@ -32,7 +32,18 @@ import org.json.JSONObject;
  */
 public interface Job {
 
+	public Long getAverageBatchDuration(String batchName);
+
+	public Long getAverageBatchOverheadDuration(String batchName);
+
+	public Long getAverageTestDuration(String batchName, String testName);
+
+	public Long getAverageTestOverheadDuration(
+		String batchName, String testName);
+
 	public int getAxisCount();
+
+	public AxisTestClassGroup getAxisTestClassGroup(String axisName);
 
 	public List<AxisTestClassGroup> getAxisTestClassGroups();
 

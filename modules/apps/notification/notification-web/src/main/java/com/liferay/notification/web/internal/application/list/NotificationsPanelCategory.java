@@ -18,13 +18,11 @@ import com.liferay.application.list.BasePanelCategory;
 import com.liferay.application.list.PanelCategory;
 import com.liferay.application.list.constants.PanelCategoryKeys;
 import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.language.LanguageUtil;
+import com.liferay.portal.kernel.language.Language;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.security.permission.PermissionChecker;
 import com.liferay.portal.kernel.service.permission.PortalPermission;
-import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.PropsUtil;
 
 import java.util.Locale;
 
@@ -51,20 +49,19 @@ public class NotificationsPanelCategory extends BasePanelCategory {
 
 	@Override
 	public String getLabel(Locale locale) {
-		return LanguageUtil.get(locale, "notifications");
+		return _language.get(locale, "notifications");
 	}
 
 	@Override
 	public boolean isShow(PermissionChecker permissionChecker, Group group)
 		throws PortalException {
 
-		if (!GetterUtil.getBoolean(PropsUtil.get("feature.flag.LPS-149050"))) {
-			return false;
-		}
-
 		return _portalPermission.contains(
 			permissionChecker, ActionKeys.VIEW_CONTROL_PANEL);
 	}
+
+	@Reference
+	private Language _language;
 
 	@Reference
 	private PortalPermission _portalPermission;

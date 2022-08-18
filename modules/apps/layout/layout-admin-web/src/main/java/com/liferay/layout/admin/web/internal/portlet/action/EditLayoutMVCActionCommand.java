@@ -17,9 +17,11 @@ package com.liferay.layout.admin.web.internal.portlet.action;
 import com.liferay.asset.kernel.model.AssetEntry;
 import com.liferay.asset.kernel.service.AssetEntryLocalService;
 import com.liferay.client.extension.constants.ClientExtensionEntryConstants;
+import com.liferay.client.extension.model.ClientExtensionEntryRel;
 import com.liferay.client.extension.service.ClientExtensionEntryRelLocalService;
 import com.liferay.document.library.kernel.service.DLAppLocalService;
 import com.liferay.layout.admin.constants.LayoutAdminPortletKeys;
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.events.EventsProcessorUtil;
 import com.liferay.portal.kernel.exception.ModelListenerException;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -44,7 +46,9 @@ import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.PropertiesParamUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.UnicodeProperties;
+import com.liferay.portal.kernel.util.UnicodePropertiesBuilder;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.util.PropsValues;
@@ -163,27 +167,8 @@ public class EditLayoutMVCActionCommand extends BaseMVCActionCommand {
 				friendlyURLMap, !deleteLogo, iconBytes, styleBookEntryId,
 				faviconFileEntryId, masterLayoutPlid, serviceContext);
 
-			String faviconCETExternalReferenceCode = ParamUtil.getString(
-				uploadPortletRequest, "faviconCETExternalReferenceCode");
-
-			if (Validator.isNotNull(faviconCETExternalReferenceCode)) {
-				_clientExtensionEntryRelLocalService.addClientExtensionEntryRel(
-					themeDisplay.getUserId(),
-					_portal.getClassNameId(Layout.class), layout.getPlid(),
-					faviconCETExternalReferenceCode,
-					ClientExtensionEntryConstants.TYPE_THEME_FAVICON);
-			}
-
-			String themeCSSCETExternalReferenceCode = ParamUtil.getString(
-				actionRequest, "themeCSSCETExternalReferenceCode");
-
-			if (Validator.isNotNull(themeCSSCETExternalReferenceCode)) {
-				_clientExtensionEntryRelLocalService.addClientExtensionEntryRel(
-					themeDisplay.getUserId(),
-					_portal.getClassNameId(Layout.class), layout.getPlid(),
-					themeCSSCETExternalReferenceCode,
-					ClientExtensionEntryConstants.TYPE_THEME_CSS);
-			}
+			_updateClientExtensions(
+				actionRequest, layout, themeDisplay.getUserId());
 
 			UnicodeProperties formTypeSettingsUnicodeProperties =
 				PropertiesParamUtil.getProperties(
@@ -207,24 +192,8 @@ public class EditLayoutMVCActionCommand extends BaseMVCActionCommand {
 					styleBookEntryId, faviconFileEntryId,
 					draftLayout.getMasterLayoutPlid(), serviceContext);
 
-				if (Validator.isNotNull(faviconCETExternalReferenceCode)) {
-					_clientExtensionEntryRelLocalService.
-						addClientExtensionEntryRel(
-							themeDisplay.getUserId(),
-							_portal.getClassNameId(Layout.class),
-							draftLayout.getPlid(),
-							faviconCETExternalReferenceCode,
-							ClientExtensionEntryConstants.TYPE_THEME_FAVICON);
-				}
-
-				if (Validator.isNotNull(themeCSSCETExternalReferenceCode)) {
-					_clientExtensionEntryRelLocalService.
-						addClientExtensionEntryRel(
-							themeDisplay.getUserId(),
-							_portal.getClassNameId(Layout.class),
-							layout.getPlid(), themeCSSCETExternalReferenceCode,
-							ClientExtensionEntryConstants.TYPE_THEME_CSS);
-				}
+				_updateClientExtensions(
+					actionRequest, layout, themeDisplay.getUserId());
 			}
 
 			themeDisplay.clearLayoutFriendlyURL(layout);
@@ -314,6 +283,99 @@ public class EditLayoutMVCActionCommand extends BaseMVCActionCommand {
 
 			throw modelListenerException;
 		}
+	}
+
+	private void _addClientExtensionEntryRel(
+			String cetExternalReferenceCode, Layout layout, String type,
+			long userId)
+		throws PortalException {
+
+		if (Validator.isNotNull(cetExternalReferenceCode)) {
+			ClientExtensionEntryRel clientExtensionEntryRel =
+				_clientExtensionEntryRelLocalService.
+					fetchClientExtensionEntryRelByExternalReferenceCode(
+						layout.getCompanyId(), cetExternalReferenceCode);
+
+			if (clientExtensionEntryRel == null) {
+				_clientExtensionEntryRelLocalService.
+					deleteClientExtensionEntryRels(
+						_portal.getClassNameId(Layout.class), layout.getPlid(),
+						type);
+
+				_clientExtensionEntryRelLocalService.addClientExtensionEntryRel(
+					userId, _portal.getClassNameId(Layout.class),
+					layout.getPlid(), cetExternalReferenceCode, type,
+					StringPool.BLANK);
+			}
+		}
+		else {
+			_clientExtensionEntryRelLocalService.deleteClientExtensionEntryRels(
+				_portal.getClassNameId(Layout.class), layout.getPlid(), type);
+		}
+	}
+
+	private void _updateClientExtensions(
+			ActionRequest actionRequest, Layout layout, long userId)
+		throws PortalException {
+
+		String themeFaviconCETExternalReferenceCode = ParamUtil.getString(
+			actionRequest, "themeFaviconCETExternalReferenceCode");
+
+		_addClientExtensionEntryRel(
+			themeFaviconCETExternalReferenceCode, layout,
+			ClientExtensionEntryConstants.TYPE_THEME_FAVICON, userId);
+
+		_clientExtensionEntryRelLocalService.deleteClientExtensionEntryRels(
+			_portal.getClassNameId(Layout.class), layout.getPlid(),
+			ClientExtensionEntryConstants.TYPE_GLOBAL_CSS);
+
+		String[] globalCSSCETExternalReferenceCodes = ParamUtil.getStringValues(
+			actionRequest, "globalCSSCETExternalReferenceCodes");
+
+		for (String globalCSSCETExternalReferenceCode :
+				globalCSSCETExternalReferenceCodes) {
+
+			_clientExtensionEntryRelLocalService.addClientExtensionEntryRel(
+				userId, _portal.getClassNameId(Layout.class), layout.getPlid(),
+				globalCSSCETExternalReferenceCode,
+				ClientExtensionEntryConstants.TYPE_GLOBAL_CSS,
+				StringPool.BLANK);
+		}
+
+		_clientExtensionEntryRelLocalService.deleteClientExtensionEntryRels(
+			_portal.getClassNameId(Layout.class), layout.getPlid(),
+			ClientExtensionEntryConstants.TYPE_GLOBAL_JS);
+
+		String[] globalJSCETExternalReferenceCodes = ParamUtil.getStringValues(
+			actionRequest, "globalJSCETExternalReferenceCodes");
+
+		for (String globalJSCETExternalReferenceCode :
+				globalJSCETExternalReferenceCodes) {
+
+			String[] typeSettings = StringUtil.split(
+				globalJSCETExternalReferenceCode, StringPool.UNDERLINE);
+
+			UnicodeProperties typeSettingsUnicodeProperties =
+				UnicodePropertiesBuilder.create(
+					true
+				).put(
+					"loadType", typeSettings[1]
+				).put(
+					"scriptLocation", typeSettings[2]
+				).build();
+
+			_clientExtensionEntryRelLocalService.addClientExtensionEntryRel(
+				userId, _portal.getClassNameId(Layout.class), layout.getPlid(),
+				typeSettings[0], ClientExtensionEntryConstants.TYPE_GLOBAL_JS,
+				typeSettingsUnicodeProperties.toString());
+		}
+
+		String themeCSSCETExternalReferenceCode = ParamUtil.getString(
+			actionRequest, "themeCSSCETExternalReferenceCode");
+
+		_addClientExtensionEntryRel(
+			themeCSSCETExternalReferenceCode, layout,
+			ClientExtensionEntryConstants.TYPE_THEME_CSS, userId);
 	}
 
 	@Reference

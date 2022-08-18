@@ -17,12 +17,25 @@
 import './EditNotificationTemplate.scss';
 export default function EditNotificationTemplate({
 	baseResourceURL,
-	editingNotificationTemplateId,
 	editorConfig,
+	notificationTemplateId,
 }: IProps): JSX.Element;
 interface IProps {
 	baseResourceURL: string;
-	editingNotificationTemplateId: number;
-	editorConfig: string;
+	editorConfig: object;
+	notificationTemplateId: number;
 }
+export declare type TNotificationTemplate = {
+	attachmentObjectFieldIds: string[] | number[];
+	bcc: string;
+	body: LocalizedValue<string>;
+	cc: string;
+	description: string;
+	from: string;
+	fromName: LocalizedValue<string>;
+	name: string;
+	objectDefinitionId: number | null;
+	subject: LocalizedValue<string>;
+	to: LocalizedValue<string>;
+};
 export {};

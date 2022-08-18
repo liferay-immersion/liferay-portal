@@ -83,6 +83,8 @@ public class SXPElementCacheModel
 		sb.append(mvccVersion);
 		sb.append(", uuid=");
 		sb.append(uuid);
+		sb.append(", externalReferenceCode=");
+		sb.append(externalReferenceCode);
 		sb.append(", sxpElementId=");
 		sb.append(sxpElementId);
 		sb.append(", companyId=");
@@ -101,8 +103,6 @@ public class SXPElementCacheModel
 		sb.append(elementDefinitionJSON);
 		sb.append(", hidden=");
 		sb.append(hidden);
-		sb.append(", key=");
-		sb.append(key);
 		sb.append(", readOnly=");
 		sb.append(readOnly);
 		sb.append(", schemaVersion=");
@@ -131,6 +131,13 @@ public class SXPElementCacheModel
 		}
 		else {
 			sxpElementImpl.setUuid(uuid);
+		}
+
+		if (externalReferenceCode == null) {
+			sxpElementImpl.setExternalReferenceCode("");
+		}
+		else {
+			sxpElementImpl.setExternalReferenceCode(externalReferenceCode);
 		}
 
 		sxpElementImpl.setSXPElementId(sxpElementId);
@@ -173,14 +180,6 @@ public class SXPElementCacheModel
 		}
 
 		sxpElementImpl.setHidden(hidden);
-
-		if (key == null) {
-			sxpElementImpl.setKey("");
-		}
-		else {
-			sxpElementImpl.setKey(key);
-		}
-
 		sxpElementImpl.setReadOnly(readOnly);
 
 		if (schemaVersion == null) {
@@ -219,6 +218,7 @@ public class SXPElementCacheModel
 
 		mvccVersion = objectInput.readLong();
 		uuid = objectInput.readUTF();
+		externalReferenceCode = objectInput.readUTF();
 
 		sxpElementId = objectInput.readLong();
 
@@ -232,7 +232,6 @@ public class SXPElementCacheModel
 		elementDefinitionJSON = (String)objectInput.readObject();
 
 		hidden = objectInput.readBoolean();
-		key = objectInput.readUTF();
 
 		readOnly = objectInput.readBoolean();
 		schemaVersion = objectInput.readUTF();
@@ -253,6 +252,13 @@ public class SXPElementCacheModel
 		}
 		else {
 			objectOutput.writeUTF(uuid);
+		}
+
+		if (externalReferenceCode == null) {
+			objectOutput.writeUTF("");
+		}
+		else {
+			objectOutput.writeUTF(externalReferenceCode);
 		}
 
 		objectOutput.writeLong(sxpElementId);
@@ -287,13 +293,6 @@ public class SXPElementCacheModel
 
 		objectOutput.writeBoolean(hidden);
 
-		if (key == null) {
-			objectOutput.writeUTF("");
-		}
-		else {
-			objectOutput.writeUTF(key);
-		}
-
 		objectOutput.writeBoolean(readOnly);
 
 		if (schemaVersion == null) {
@@ -324,6 +323,7 @@ public class SXPElementCacheModel
 
 	public long mvccVersion;
 	public String uuid;
+	public String externalReferenceCode;
 	public long sxpElementId;
 	public long companyId;
 	public long userId;
@@ -333,7 +333,6 @@ public class SXPElementCacheModel
 	public String description;
 	public String elementDefinitionJSON;
 	public boolean hidden;
-	public String key;
 	public boolean readOnly;
 	public String schemaVersion;
 	public String title;

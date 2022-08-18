@@ -445,8 +445,22 @@ public class EditSegmentsEntryDisplayContext {
 		).put(
 			"requestMembersCountURL", _getSegmentsEntryClassPKsCountURL()
 		).put(
+			"segmentsConfigurationURL", _getSegmentsCompanyConfigurationURL()
+		).put(
 			"showInEditMode", _isShowInEditMode()
 		).build();
+	}
+
+	private String _getSegmentsCompanyConfigurationURL() {
+		try {
+			return _segmentsConfigurationProvider.getCompanyConfigurationURL(
+				_httpServletRequest);
+		}
+		catch (PortalException portalException) {
+			_log.error(portalException);
+		}
+
+		return StringPool.BLANK;
 	}
 
 	private List<SegmentsCriteriaContributor> _getSegmentsCriteriaContributors()

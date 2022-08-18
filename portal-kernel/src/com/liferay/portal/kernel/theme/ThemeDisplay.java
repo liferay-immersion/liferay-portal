@@ -552,12 +552,21 @@ public class ThemeDisplay
 	}
 
 	public String getMainJSURL() {
-		if (Validator.isNotNull(_mainCSSURL)) {
+		if (Validator.isNotNull(_mainJSURL)) {
 			return _mainJSURL;
 		}
 
 		return PortalUtil.getStaticResourceURL(
 			getRequest(), getPathThemeJavaScript() + "/main.js");
+	}
+
+	public List<NavItem> getNavItems() throws PortalException {
+		if (_navItems == null) {
+			_navItems = NavItem.fromLayouts(
+				_httpServletRequest, _layouts, this);
+		}
+
+		return _navItems;
 	}
 
 	public String getPathApplet() {
@@ -787,6 +796,14 @@ public class ThemeDisplay
 
 	public long getRefererPlid() {
 		return _refererPlid;
+	}
+
+	public String getRemoteAddr() {
+		return _remoteAddr;
+	}
+
+	public String getRemoteHost() {
+		return _remoteHost;
 	}
 
 	/**
@@ -1496,6 +1513,10 @@ public class ThemeDisplay
 		_mainJSURL = mainJSURL;
 	}
 
+	public void setNavItems(List<NavItem> navItems) {
+		_navItems = navItems;
+	}
+
 	public void setPathApplet(String pathApplet) {
 		_pathApplet = pathApplet;
 	}
@@ -1617,8 +1638,21 @@ public class ThemeDisplay
 		_refererPlid = refererPlid;
 	}
 
+	public void setRemoteAddr(String remoteAddr) {
+		_remoteAddr = remoteAddr;
+	}
+
+	public void setRemoteHost(String remoteHost) {
+		_remoteHost = remoteHost;
+	}
+
 	public void setRequest(HttpServletRequest httpServletRequest) {
 		_httpServletRequest = httpServletRequest;
+
+		if (httpServletRequest != null) {
+			_remoteAddr = httpServletRequest.getRemoteAddr();
+			_remoteHost = httpServletRequest.getRemoteHost();
+		}
 	}
 
 	public void setResponse(HttpServletResponse httpServletResponse) {
@@ -1937,6 +1971,7 @@ public class ThemeDisplay
 	private Locale _locale;
 	private String _mainCSSURL;
 	private String _mainJSURL;
+	private List<NavItem> _navItems;
 	private String _pathApplet = StringPool.BLANK;
 	private String _pathCms = StringPool.BLANK;
 	private String _pathColorSchemeImages = StringPool.BLANK;
@@ -1968,6 +2003,8 @@ public class ThemeDisplay
 	private Group _refererGroup;
 	private long _refererGroupId;
 	private long _refererPlid;
+	private String _remoteAddr;
+	private String _remoteHost;
 	private Group _scopeGroup;
 	private long _scopeGroupId;
 	private boolean _secure;

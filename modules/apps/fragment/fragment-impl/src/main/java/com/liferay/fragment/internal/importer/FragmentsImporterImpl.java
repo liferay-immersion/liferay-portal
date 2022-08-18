@@ -40,7 +40,7 @@ import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
-import com.liferay.portal.kernel.language.LanguageUtil;
+import com.liferay.portal.kernel.language.Language;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Company;
@@ -170,7 +170,7 @@ public class FragmentsImporterImpl implements FragmentsImporter {
 						fragmentCollection =
 							_fragmentCollectionService.addFragmentCollection(
 								groupId, _FRAGMENT_COLLECTION_KEY_DEFAULT,
-								LanguageUtil.get(
+								_language.get(
 									locale, _FRAGMENT_COLLECTION_KEY_DEFAULT),
 								StringPool.BLANK,
 								ServiceContextThreadLocal.getServiceContext());
@@ -251,7 +251,7 @@ public class FragmentsImporterImpl implements FragmentsImporter {
 				html, configuration);
 
 			_fragmentEntryValidator.validateConfiguration(configuration);
-			_fragmentEntryValidator.validateTypeOptions(typeOptions);
+			_fragmentEntryValidator.validateTypeOptions(type, typeOptions);
 		}
 		catch (PortalException portalException) {
 			if (_log.isDebugEnabled()) {
@@ -639,41 +639,50 @@ public class FragmentsImporterImpl implements FragmentsImporter {
 				_fragmentCompositionService.fetchFragmentComposition(
 					groupId, entry.getKey());
 
-			if (fragmentComposition == null) {
-				fragmentComposition =
-					_fragmentCompositionService.addFragmentComposition(
-						groupId, fragmentCollectionId, entry.getKey(), name,
-						description, definitionData, 0L,
-						WorkflowConstants.STATUS_APPROVED,
-						ServiceContextThreadLocal.getServiceContext());
-			}
-			else if (!overwrite) {
-				throw new DuplicateFragmentCompositionKeyException();
-			}
-			else {
-				fragmentComposition =
+			try {
+				if (fragmentComposition == null) {
+					fragmentComposition =
+						_fragmentCompositionService.addFragmentComposition(
+							groupId, fragmentCollectionId, entry.getKey(), name,
+							description, definitionData, 0L,
+							WorkflowConstants.STATUS_APPROVED,
+							ServiceContextThreadLocal.getServiceContext());
+				}
+				else if (!overwrite) {
+					throw new DuplicateFragmentCompositionKeyException();
+				}
+				else {
+					fragmentComposition =
+						_fragmentCompositionService.updateFragmentComposition(
+							fragmentComposition.getFragmentCompositionId(),
+							fragmentCollectionId, name, description,
+							definitionData,
+							fragmentComposition.getPreviewFileEntryId(),
+							fragmentComposition.getStatus());
+				}
+
+				if (fragmentComposition.getPreviewFileEntryId() > 0) {
+					PortletFileRepositoryUtil.deletePortletFileEntry(
+						fragmentComposition.getPreviewFileEntryId());
+				}
+
+				String thumbnailPath = jsonObject.getString("thumbnailPath");
+
+				if (Validator.isNotNull(thumbnailPath)) {
 					_fragmentCompositionService.updateFragmentComposition(
 						fragmentComposition.getFragmentCompositionId(),
-						fragmentCollectionId, name, description, definitionData,
-						fragmentComposition.getPreviewFileEntryId(),
-						fragmentComposition.getStatus());
+						_getPreviewFileEntryId(
+							userId, groupId, zipFile,
+							FragmentComposition.class.getName(),
+							fragmentComposition.getFragmentCompositionId(),
+							entry.getValue(), thumbnailPath));
+				}
 			}
-
-			if (fragmentComposition.getPreviewFileEntryId() > 0) {
-				PortletFileRepositoryUtil.deletePortletFileEntry(
-					fragmentComposition.getPreviewFileEntryId());
-			}
-
-			String thumbnailPath = jsonObject.getString("thumbnailPath");
-
-			if (Validator.isNotNull(thumbnailPath)) {
-				_fragmentCompositionService.updateFragmentComposition(
-					fragmentComposition.getFragmentCompositionId(),
-					_getPreviewFileEntryId(
-						userId, groupId, zipFile,
-						FragmentComposition.class.getName(),
-						fragmentComposition.getFragmentCompositionId(),
-						entry.getValue(), thumbnailPath));
+			catch (PortalException portalException) {
+				_fragmentsImporterResultEntries.add(
+					new FragmentsImporterResultEntry(
+						name, FragmentsImporterResultEntry.Status.INVALID,
+						portalException.getMessage()));
 			}
 		}
 	}
@@ -724,7 +733,7 @@ public class FragmentsImporterImpl implements FragmentsImporter {
 				typeLabel = jsonObject.getString("type");
 
 				if (GetterUtil.getBoolean(
-						PropsUtil.get("feature.flag.LPS-152938"))) {
+						PropsUtil.get("feature.flag.LPS-149720"))) {
 
 					typeOptions = jsonObject.getString("typeOptions");
 				}
@@ -991,6 +1000,9 @@ public class FragmentsImporterImpl implements FragmentsImporter {
 	private FragmentEntryValidator _fragmentEntryValidator;
 
 	private List<FragmentsImporterResultEntry> _fragmentsImporterResultEntries;
+
+	@Reference
+	private Language _language;
 
 	@Reference
 	private Portal _portal;

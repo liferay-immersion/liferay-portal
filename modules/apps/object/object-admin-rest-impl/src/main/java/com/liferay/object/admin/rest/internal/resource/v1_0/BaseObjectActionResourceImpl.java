@@ -343,15 +343,15 @@ public abstract class BaseObjectActionResourceImpl
 			),
 			@io.swagger.v3.oas.annotations.Parameter(
 				in = io.swagger.v3.oas.annotations.enums.ParameterIn.QUERY,
-				name = "search"
-			),
-			@io.swagger.v3.oas.annotations.Parameter(
-				in = io.swagger.v3.oas.annotations.enums.ParameterIn.QUERY,
 				name = "page"
 			),
 			@io.swagger.v3.oas.annotations.Parameter(
 				in = io.swagger.v3.oas.annotations.enums.ParameterIn.QUERY,
 				name = "pageSize"
+			),
+			@io.swagger.v3.oas.annotations.Parameter(
+				in = io.swagger.v3.oas.annotations.enums.ParameterIn.QUERY,
+				name = "search"
 			)
 		}
 	)
@@ -476,11 +476,17 @@ public abstract class BaseObjectActionResourceImpl
 			"createStrategy", "INSERT");
 
 		if ("INSERT".equalsIgnoreCase(createStrategy)) {
-			objectActionUnsafeConsumer =
-				objectAction -> postObjectDefinitionObjectAction(
-					Long.parseLong(
-						(String)parameters.get("objectDefinitionId")),
-					objectAction);
+			if (parameters.containsKey("objectDefinitionId")) {
+				objectActionUnsafeConsumer =
+					objectAction -> postObjectDefinitionObjectAction(
+						Long.parseLong(
+							(String)parameters.get("objectDefinitionId")),
+						objectAction);
+			}
+			else {
+				throw new NotSupportedException(
+					"One of the following parameters must be specified: [objectDefinitionId]");
+			}
 		}
 
 		if (objectActionUnsafeConsumer == null) {
@@ -544,9 +550,15 @@ public abstract class BaseObjectActionResourceImpl
 			Map<String, Serializable> parameters, String search)
 		throws Exception {
 
-		return getObjectDefinitionObjectActionsPage(
-			Long.parseLong((String)parameters.get("objectDefinitionId")),
-			search, pagination);
+		if (parameters.containsKey("objectDefinitionId")) {
+			return getObjectDefinitionObjectActionsPage(
+				Long.parseLong((String)parameters.get("objectDefinitionId")),
+				search, pagination);
+		}
+		else {
+			throw new NotSupportedException(
+				"One of the following parameters must be specified: [objectDefinitionId]");
+		}
 	}
 
 	@Override

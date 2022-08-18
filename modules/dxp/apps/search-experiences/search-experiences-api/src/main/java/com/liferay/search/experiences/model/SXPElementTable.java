@@ -37,6 +37,10 @@ public class SXPElementTable extends BaseTable<SXPElementTable> {
 		"mvccVersion", Long.class, Types.BIGINT, Column.FLAG_NULLITY);
 	public final Column<SXPElementTable, String> uuid = createColumn(
 		"uuid_", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
+	public final Column<SXPElementTable, String> externalReferenceCode =
+		createColumn(
+			"externalReferenceCode", String.class, Types.VARCHAR,
+			Column.FLAG_DEFAULT);
 	public final Column<SXPElementTable, Long> sxpElementId = createColumn(
 		"sxpElementId", Long.class, Types.BIGINT, Column.FLAG_PRIMARY);
 	public final Column<SXPElementTable, Long> companyId = createColumn(
@@ -57,8 +61,6 @@ public class SXPElementTable extends BaseTable<SXPElementTable> {
 			Column.FLAG_DEFAULT);
 	public final Column<SXPElementTable, Boolean> hidden = createColumn(
 		"hidden_", Boolean.class, Types.BOOLEAN, Column.FLAG_DEFAULT);
-	public final Column<SXPElementTable, String> key = createColumn(
-		"key_", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
 	public final Column<SXPElementTable, Boolean> readOnly = createColumn(
 		"readOnly", Boolean.class, Types.BOOLEAN, Column.FLAG_DEFAULT);
 	public final Column<SXPElementTable, String> schemaVersion = createColumn(

@@ -98,6 +98,13 @@ definition {
 		SelectFrame.selectFrameTop();
 	}
 
+	macro addShippingMethodTrackingURL {
+		Type(
+			key_fieldLabel = "Tracking URL",
+			locator1 = "TextInput#GENERIC_TEXT_INPUT",
+			value1 = "${trackingURL}");
+	}
+
 	macro addShippingOption {
 		Variables.assertDefined(parameterList = "${name},${key}");
 
@@ -604,6 +611,22 @@ definition {
 		Button.clickSave();
 
 		AssertElementPresent(locator1 = "Message#SUCCESS");
+	}
+
+	macro uploadPrintOrderTemplate {
+		Click(locator1 = "CommerceOrders#PRINT_ORDER_TEMPLATE");
+
+		SelectFrame(
+			key_frameTitle = "Select File",
+			locator1 = "CommerceEntry#ANY_IFRAME");
+
+		Click(locator1 = "CommerceOrders#PRINT_ORDER_TEMPLATE_SELECT_FILE");
+
+		SelectFrameTop();
+
+		CommerceItemSelector.uploadSingleFile(uploadFileName = "${uploadFileName}");
+
+		Button.clickSave();
 	}
 
 }

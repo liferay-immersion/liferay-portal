@@ -86,7 +86,7 @@ public interface ClientExtensionEntryRelLocalService
 
 	public ClientExtensionEntryRel addClientExtensionEntryRel(
 			long userId, long classNameId, long classPK,
-			String cetExternalReferenceCode, String type)
+			String cetExternalReferenceCode, String type, String typeSettings)
 		throws PortalException;
 
 	/**
@@ -136,6 +136,12 @@ public interface ClientExtensionEntryRelLocalService
 		throws PortalException;
 
 	public void deleteClientExtensionEntryRels(long classNameId, long classPK);
+
+	public void deleteClientExtensionEntryRels(
+		long classNameId, long classPK, String type);
+
+	public void deleteClientExtensionEntryRels(
+		long companyId, String cetExternalReferenceCode);
 
 	/**
 	 * @throws PortalException
@@ -316,6 +322,10 @@ public interface ClientExtensionEntryRelLocalService
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public List<ClientExtensionEntryRel> getClientExtensionEntryRels(
 		long classNameId, long classPK);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<ClientExtensionEntryRel> getClientExtensionEntryRels(
+		long classNameId, long classPK, String type);
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public List<ClientExtensionEntryRel> getClientExtensionEntryRels(

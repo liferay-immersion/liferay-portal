@@ -192,7 +192,11 @@ export default function QuestionRow({
 					</Link>
 
 					<span className="c-ml-2 small">
-						{'- ' + dateToInternationalHuman(question.dateModified)}
+						{'- ' +
+							dateToInternationalHuman(
+								question.dateModified,
+								Liferay.ThemeDisplay.getBCP47LanguageId()
+							)}
 					</span>
 				</div>
 

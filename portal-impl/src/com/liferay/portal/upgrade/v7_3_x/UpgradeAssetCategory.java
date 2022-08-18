@@ -29,11 +29,9 @@ public class UpgradeAssetCategory extends UpgradeProcess {
 
 	@Override
 	protected void doUpgrade() throws Exception {
-		if (!hasColumn("AssetCategory", "treePath")) {
-			alterTableDropColumn("AssetCategory", "leftCategoryId");
-			alterTableDropColumn("AssetCategory", "rightCategoryId");
-			alterTableAddColumn("AssetCategory", "treePath", "STRING null");
-		}
+		alterTableDropColumn("AssetCategory", "leftCategoryId");
+		alterTableDropColumn("AssetCategory", "rightCategoryId");
+		alterTableAddColumn("AssetCategory", "treePath", "STRING null");
 
 		try (PreparedStatement preparedStatement = connection.prepareStatement(
 				SQLTransformer.transform(
@@ -59,12 +57,12 @@ public class UpgradeAssetCategory extends UpgradeProcess {
 						"TEMP_TABLE.treePath is null"));
 			PreparedStatement updatePreparedStatement =
 				AutoBatchPreparedStatementUtil.autoBatch(
-					connection.prepareStatement(
-						SQLTransformer.transform(
-							StringBundler.concat(
-								"update AssetCategory set treePath = ",
-								"CONCAT(?, CAST_TEXT(categoryId), '/') where ",
-								"parentCategoryId = ?"))))) {
+					connection,
+					SQLTransformer.transform(
+						StringBundler.concat(
+							"update AssetCategory set treePath = CONCAT(?, ",
+							"CAST_TEXT(categoryId), '/') where ",
+							"parentCategoryId = ?")))) {
 
 			while (true) {
 				try (ResultSet resultSet =

@@ -346,6 +346,58 @@ definition {
 		}
 	}
 
+	@description = "Verify products with long names are truncated in the mini-cart."
+	@priority = "3"
+	test CanSeeProductNameTruncated {
+		property custom.properties = "jsonws.web.service.paths.excludes=${line.separator}company.security.strangers.verify=false";
+		property portal.acceptance = "false";
+
+		task ("Given a Minium site with a buyer user") {
+			CommerceAccelerators.initializeNewSiteViaAccelerator(siteName = "Minium");
+
+			CommerceEntry.addAccountEntryUser(
+				accountName = "Commerce Account",
+				accountType = "Business",
+				agreeToTermsAndAnswerReminderQuery = "true",
+				createNewAccount = "true",
+				requireReset = "false",
+				userEmailAddress = "buyer@liferay.com",
+				userFirstName = "Buyer",
+				userLastName = "User",
+				userRole = "Buyer",
+				userScreenName = "buyeruser",
+				userSiteMembership = "Minium");
+		}
+
+		task ("And given a product with a very long name") {
+			CommerceJSONProductsAPI._addCommerceProduct(
+				catalogName = "Minium",
+				productName = "This Is a Product With a Very Long Name That Will Be Truncated",
+				productType = "Simple");
+		}
+
+		task ("When the buyer adds the product to the cart and opens the mini-cart") {
+			User.logoutPG();
+
+			CommerceLogin.miniumLogin(
+				password = "test",
+				urlAppend = "web/minium",
+				userEmailAddress = "buyer@liferay.com");
+
+			CommerceNavigator.gotoMiniumSidebarItem(menuItem = "Catalog");
+
+			FrontStore.addInitializerProductToCart(
+				productName = "This Is a Product With a Very Long Name That Will Be Truncated",
+				productQuantity = "1");
+
+			CommerceNavigator.gotoMiniCart();
+		}
+
+		task ("Then the product name is shown truncated") {
+			TestUtils.assertTruncatedText(element = "//div[contains(@class,'mini-cart-item-info')]//h5[contains(text(),'This Is a Product With a Very Long Name That Will Be Truncated')]");
+		}
+	}
+
 	@description = "This is a test for COMMERCE-7870. CanUpdateSubscriptionProductQuantity"
 	@priority = "4"
 	test CanUpdateSubscriptionProductQuantity {
@@ -601,7 +653,7 @@ definition {
 
 		Click(locator1 = "Button#PLUS");
 
-		SelectFrame(locator1 = "IFrame#MODAL_BODY");
+		SelectFrame.selectFrameNoLoading(locator1 = "IFrame#MODAL_BODY");
 
 		CommerceEntry.addOptionValue(
 			valueName = "Black",
@@ -698,7 +750,7 @@ definition {
 
 		Button.click(button = "Publish");
 
-		Pause(locator1 = "1000");
+		CommerceUtilities.checkSuccessAlertAppearsAndDisappears();
 
 		Refresh();
 
@@ -1184,7 +1236,7 @@ definition {
 
 		Click(locator1 = "Button#PLUS");
 
-		SelectFrame(locator1 = "IFrame#MODAL_BODY");
+		SelectFrame.selectFrameNoLoading(locator1 = "IFrame#MODAL_BODY");
 
 		CommerceEntry.addOptionValue(
 			valueName = "Black",
@@ -1281,7 +1333,7 @@ definition {
 
 		Button.click(button = "Publish");
 
-		Pause(locator1 = "1000");
+		CommerceUtilities.checkSuccessAlertAppearsAndDisappears();
 
 		Refresh();
 
@@ -1430,6 +1482,8 @@ definition {
 
 		Click(locator1 = "Button#SUBMIT");
 
+		SelectFrameTop();
+
 		SelectFrame.selectFrameNoLoading(locator1 = "CommerceEntry#IFRAME_SIDE_PANEL");
 
 		Button.clickSave();
@@ -1559,7 +1613,7 @@ definition {
 
 		Button.clickSave();
 
-		Pause(locator1 = "1000");
+		CommerceUtilities.checkSuccessAlertAppearsAndDisappears();
 
 		CommerceNavigator.gotoPortlet(
 			category = "Pricing",

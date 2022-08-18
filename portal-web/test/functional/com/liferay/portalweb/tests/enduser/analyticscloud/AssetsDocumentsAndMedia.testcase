@@ -33,6 +33,8 @@ definition {
 	tearDown {
 		var testPortalInstance = PropsUtil.get("test.portal.instance");
 
+		ACUtils.tearDownAC();
+
 		ACUtils.tearDownDXP();
 
 		if ("${testPortalInstance}" == "true") {
@@ -41,10 +43,6 @@ definition {
 		else {
 			JSONGroup.deleteGroupByName(groupName = "Site Name");
 		}
-
-		JSONUser.tearDownNonAdminUsers();
-
-		ACUtils.tearDownAC();
 	}
 
 	@description = "Feature ID: Legacy | Automation ID: LRAC-8419 | Test Summary: Document asset appears on list shows pages that the document exists on"
@@ -336,12 +334,8 @@ definition {
 	}
 
 	@description = "Feature ID: Legacy | Automation ID: LRAC-8396 | Test Summary: Documents list is searchable"
-	@ignore = "true"
 	@priority = "4"
 	test CanDocumentsAndMediaListSearchable {
-
-		// AC Story ticket: LRAC-10405
-
 		var documentNameList = "DM AC Title,New Document";
 		var propertyName = ACDXPSettings.connectDXPtoAnalyticsCloud(siteName = "Site Name");
 
@@ -386,9 +380,7 @@ definition {
 
 			ACUtils.searchBar(searchItem = "Should not be here");
 
-			// This test is being ignored due to a history that makes changes to empty state messages.
-
-			ACUtils.viewNoResultsMessage(noResultMessage = "There are no Documents and Media found.");
+			ACUtils.viewNoResultsMessage(noResultMessage = "There are no results found.");
 		}
 	}
 
@@ -446,6 +438,64 @@ definition {
 		}
 	}
 
+	@description = "Bug: LRAC-11450 | Automation ID: LRAC-11509 | Test Summary: The number of documents and media rating show the expected value"
+	@priority = "4"
+	test CheckDocumentsAndMediaRatingShowExpectedValue {
+		task ("Connect the DXP to AC") {
+			ACDXPSettings.connectDXPtoAnalyticsCloud(siteName = "Site Name");
+		}
+
+		task ("View the documents and media page") {
+			ACUtils.navigateToSitePage(
+				actionType = "View DM",
+				documentTitleList = "DM AC Title",
+				pageName = "AC Page",
+				siteName = "Site Name");
+		}
+
+		task ("Choose a rating star for the DM") {
+			DMDocument.expandInfo();
+
+			Ratings.rateStar(ratingStarCount = "4");
+		}
+
+		task ("Close sessions") {
+			ACUtils.closeAllSessionsAndWait();
+		}
+
+		task ("Switch to new property in AC") {
+			ACUtils.launchAC();
+
+			ACProperties.switchProperty(propertyName = "${assignedPropertyName}");
+		}
+
+		task ("Navigate to documents and media assets list") {
+			ACNavigation.goToAssets();
+
+			ACNavigation.switchTab(tabName = "Documents and Media");
+		}
+
+		task ("Change the time filter") {
+			ACTimeFilter.clickTimeFilterButton();
+
+			ACTimeFilter.setLast24Hours();
+		}
+
+		task ("Check DM rating") {
+			ACUtils.viewTableInformation(
+				nameList = "DM AC Title",
+				numberValueList = "8.00/10");
+		}
+
+		task ("Check DM rating in visitor behavior") {
+			ACNavigation.openItem(itemName = "DM AC Title");
+
+			ACAssets.viewVisitorsBehaviorMetric(
+				metricTitle = "Rating",
+				metricValue = "8.00");
+		}
+	}
+
 	@description = "Bug: LRAC-7848 | Automation ID: LRAC-10590 | Test Summary: Number of Documents and Media ratings is not getting negative when we delete a vote"
 	@priority = "3"
 	test DocumentsAndMediaRatingsNotGettingNegativeWhenDeleteVote {
@@ -467,7 +517,7 @@ definition {
 		}
 
 		task ("Choose a rating star for the DM") {
-			Click(locator1 = "Icon#INFO");
+			DMDocument.expandInfo();
 
 			Ratings.rateStar(ratingStarCount = "4");
 		}
@@ -513,7 +563,7 @@ definition {
 		}
 
 		task ("Delete the rating star for the DM") {
-			Click(locator1 = "Icon#INFO");
+			DMDocument.expandInfo();
 
 			Ratings.revokeStarsRating();
 		}
@@ -854,7 +904,9 @@ definition {
 
 		task ("Download the documents and media") {
 			for (var n : list "1,2") {
-				DMDocument.downloadCP(dmDocumentTitle = "DM AC Title");
+				DMDocument.downloadCP(
+					dmDocumentSize = "13 KB",
+					dmDocumentTitle = "DM AC Title");
 			}
 		}
 

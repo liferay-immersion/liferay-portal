@@ -419,10 +419,18 @@ definition {
 	@priority = "4"
 	@refactorneeded
 	test CannotAddEntryWhenTeamRoleHasNoPermissions {
+		JSONGroup.addGroup(groupName = "Site Name");
+
+		JSONLayout.addPublicLayout(
+			groupName = "Site Name",
+			layoutName = "Blogs Page");
+
+		JSONLayout.addWidgetToPublicLayout(
+			groupName = "Site Name",
+			layoutName = "Blogs Page",
+			widgetName = "Blogs");
+
 		Permissions.setUpSiteTeamRoleLoginUserPG(
-			page = "Public Pages",
-			pageName = "Blogs Page",
-			portletName = "Blogs",
 			siteName = "Site Name",
 			teamDescription = "Site Team Description",
 			teamName = "Site Team Name",
@@ -961,10 +969,18 @@ definition {
 	@priority = "4"
 	@refactorneeded
 	test CannotDeleteEntryWhenTeamRoleHasNoPermissions {
+		JSONGroup.addGroup(groupName = "Site Name");
+
+		JSONLayout.addPublicLayout(
+			groupName = "Site Name",
+			layoutName = "Blogs Page");
+
+		JSONLayout.addWidgetToPublicLayout(
+			groupName = "Site Name",
+			layoutName = "Blogs Page",
+			widgetName = "Blogs");
+
 		Permissions.setUpSiteTeamRoleLoginUserPG(
-			page = "Public Pages",
-			pageName = "Blogs Page",
-			portletName = "Blogs",
 			siteName = "Site Name",
 			teamDescription = "Site Team Description",
 			teamName = "Site Team Name",

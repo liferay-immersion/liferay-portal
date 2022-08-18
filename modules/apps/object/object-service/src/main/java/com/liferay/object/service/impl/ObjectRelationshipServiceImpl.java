@@ -48,8 +48,8 @@ public class ObjectRelationshipServiceImpl
 	@Override
 	public ObjectRelationship addObjectRelationship(
 			long objectDefinitionId1, long objectDefinitionId2,
-			String deletionType, Map<Locale, String> labelMap, String name,
-			String type)
+			long parameterObjectFieldId, String deletionType,
+			Map<Locale, String> labelMap, String name, String type)
 		throws PortalException {
 
 		ObjectDefinition objectDefinition =
@@ -60,8 +60,8 @@ public class ObjectRelationshipServiceImpl
 			ActionKeys.UPDATE);
 
 		return objectRelationshipLocalService.addObjectRelationship(
-			getUserId(), objectDefinitionId1, objectDefinitionId2, deletionType,
-			labelMap, name, type);
+			getUserId(), objectDefinitionId1, objectDefinitionId2,
+			parameterObjectFieldId, deletionType, labelMap, name, type);
 	}
 
 	@Override
@@ -146,8 +146,8 @@ public class ObjectRelationshipServiceImpl
 
 	@Override
 	public ObjectRelationship updateObjectRelationship(
-			long objectRelationshipId, String deletionType,
-			Map<Locale, String> labelMap)
+			long objectRelationshipId, long parameterObjectFieldId,
+			String deletionType, Map<Locale, String> labelMap)
 		throws PortalException {
 
 		ObjectRelationship objectRelationship =
@@ -159,7 +159,8 @@ public class ObjectRelationshipServiceImpl
 			ActionKeys.UPDATE);
 
 		return objectRelationshipLocalService.updateObjectRelationship(
-			objectRelationshipId, deletionType, labelMap);
+			objectRelationshipId, parameterObjectFieldId, deletionType,
+			labelMap);
 	}
 
 	@Reference(

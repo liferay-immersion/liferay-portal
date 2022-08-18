@@ -157,6 +157,9 @@ public class ClientExtensionEntryRelPersistenceTest {
 
 		newClientExtensionEntryRel.setType(RandomTestUtil.randomString());
 
+		newClientExtensionEntryRel.setTypeSettings(
+			RandomTestUtil.randomString());
+
 		_clientExtensionEntryRels.add(
 			_persistence.update(newClientExtensionEntryRel));
 
@@ -209,6 +212,9 @@ public class ClientExtensionEntryRelPersistenceTest {
 		Assert.assertEquals(
 			existingClientExtensionEntryRel.getType(),
 			newClientExtensionEntryRel.getType());
+		Assert.assertEquals(
+			existingClientExtensionEntryRel.getTypeSettings(),
+			newClientExtensionEntryRel.getTypeSettings());
 	}
 
 	@Test
@@ -227,6 +233,15 @@ public class ClientExtensionEntryRelPersistenceTest {
 		_persistence.countByUuid_C("null", 0L);
 
 		_persistence.countByUuid_C((String)null, 0L);
+	}
+
+	@Test
+	public void testCountByC_CETERC() throws Exception {
+		_persistence.countByC_CETERC(RandomTestUtil.nextLong(), "");
+
+		_persistence.countByC_CETERC(0L, "null");
+
+		_persistence.countByC_CETERC(0L, (String)null);
 	}
 
 	@Test
@@ -634,6 +649,8 @@ public class ClientExtensionEntryRelPersistenceTest {
 			RandomTestUtil.randomString());
 
 		clientExtensionEntryRel.setType(RandomTestUtil.randomString());
+
+		clientExtensionEntryRel.setTypeSettings(RandomTestUtil.randomString());
 
 		_clientExtensionEntryRels.add(
 			_persistence.update(clientExtensionEntryRel));

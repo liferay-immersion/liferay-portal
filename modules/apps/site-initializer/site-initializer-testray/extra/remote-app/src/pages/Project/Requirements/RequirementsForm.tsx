@@ -12,36 +12,34 @@
  * details.
  */
 
-import {useQuery} from '@apollo/client';
 import ClayForm from '@clayui/form';
 import {FocusEvent, useEffect} from 'react';
 import {useForm} from 'react-hook-form';
 import {useOutletContext, useParams} from 'react-router-dom';
+import {KeyedMutator} from 'swr';
 
 import Form from '../../../components/Form';
 import Container from '../../../components/Layout/Container';
 import MarkdownPreview from '../../../components/Markdown';
-import {CreateRequirement, UpdateRequirement} from '../../../graphql/mutations';
-import {
-	CTypePagination,
-	TestrayComponent,
-	TestrayRequirement,
-	getComponents,
-	getRequirements,
-} from '../../../graphql/queries';
 import {useHeader} from '../../../hooks';
+import {useFetch} from '../../../hooks/useFetch';
 import useFormActions from '../../../hooks/useFormActions';
 import i18n from '../../../i18n';
 import yupSchema, {yupResolver} from '../../../schema/yup';
+import {
+	APIResponse,
+	TestrayComponent,
+	TestrayRequirement,
+	createRequirement,
+	updateRequirement,
+} from '../../../services/rest';
+import {searchUtil} from '../../../util/search';
 
-type RequirementsFormType = {
-	componentId: number;
-	description: string;
-	descriptionType: string;
-	id: number;
-	linkTitle: string;
-	linkURL: string;
-	summary: string;
+type RequirementsFormType = typeof yupSchema.requirement.__outputType;
+
+type OutletContext = {
+	mutateTestrayRequirement: KeyedMutator<TestrayRequirement>;
+	testrayRequirement: TestrayRequirement;
 };
 
 const descriptionTypes = [
@@ -55,16 +53,16 @@ const descriptionTypes = [
 	},
 ];
 
-const RequirementsForm: React.FC = () => {
+const RequirementsForm = () => {
 	const {
-		form: {onClose, onSubmitAndSave},
+		form: {onClose, onError, onSave, onSubmit},
 	} = useFormActions();
-	const {projectId} = useParams();
-
-	const {setTabs} = useHeader({shouldUpdate: false});
-
-	const context: {requirement?: TestrayRequirement} = useOutletContext();
-
+	useHeader({timeout: 100, useTabs: []});
+	const {projectId, requirementId} = useParams();
+	const {
+		mutateTestrayRequirement,
+		testrayRequirement,
+	}: OutletContext = useOutletContext();
 	const {
 		formState: {errors},
 		handleSubmit,
@@ -72,33 +70,36 @@ const RequirementsForm: React.FC = () => {
 		setValue,
 		watch,
 	} = useForm<RequirementsFormType>({
-		defaultValues: context?.requirement
-			? ({
-					...context?.requirement,
-					componentId: context?.requirement?.component?.id,
-			  } as any)
-			: {},
+		defaultValues: requirementId ? (testrayRequirement as any) : {},
 		resolver: yupResolver(yupSchema.requirement),
 	});
-
-	const {data: testrayComponentsData} = useQuery<
-		CTypePagination<'components', TestrayComponent>
-	>(getComponents);
+	const {data: testrayComponentsData} = useFetch<
+		APIResponse<TestrayComponent>
+	>(
+		`/components?fields=id,name&filter=${searchUtil.eq(
+			'projectId',
+			projectId as string
+		)}&pageSize=100`
+	);
 
 	// eslint-disable-next-line react-hooks/exhaustive-deps
-	const testrayComponents = testrayComponentsData?.c?.components.items || [];
+	const testrayComponents = testrayComponentsData?.items || [];
 
 	const _onSubmit = (form: RequirementsFormType) => {
-		onSubmitAndSave(
+		if (!form.id) {
+			form.key = `R-${Math.ceil(Math.random() * 1000)}`;
+		}
+
+		onSubmit(
 			{...form, projectId},
 			{
-				createMutation: CreateRequirement,
-				updateMutation: UpdateRequirement,
-			},
-			{
-				refetchQueries: [{query: getRequirements}],
+				create: createRequirement,
+				update: updateRequirement,
 			}
-		);
+		)
+			.then(mutateTestrayRequirement)
+			.then(onSave)
+			.catch(onError);
 	};
 
 	const descriptionType = watch('description');
@@ -121,17 +122,9 @@ const RequirementsForm: React.FC = () => {
 
 	useEffect(() => {
 		if (testrayComponents.length) {
-			setValue('componentId', testrayComponents[0].id);
+			setValue('componentId', String(testrayComponents[0].id));
 		}
 	}, [testrayComponents, setValue]);
-
-	useEffect(() => {
-		if (!context.requirement) {
-			setTimeout(() => {
-				setTabs([]);
-			}, 10);
-		}
-	}, [context.requirement, setTabs]);
 
 	return (
 		<Container className="container">

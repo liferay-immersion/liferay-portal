@@ -275,7 +275,8 @@ public class SystemObject1toMObjectRelatedModelsProviderImpl
 			));
 	}
 
-	private DynamicObjectDefinitionTable _getDynamicObjectDefinitionTable() {
+	private DynamicObjectDefinitionTable _getDynamicObjectDefinitionTable()
+		throws PortalException {
 
 		// TODO Cache this across the cluster with proper invalidation when the
 		// object definition or its object fields are updated

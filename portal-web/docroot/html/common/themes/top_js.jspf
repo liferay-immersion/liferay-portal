@@ -156,7 +156,7 @@
 
 		Liferay.FeatureFlags = Object.keys(featureFlags).reduce(
 			(acc, key) => ({
-				...acc, [key]: Boolean(featureFlags[key])
+				...acc, [key]: featureFlags[key] === 'true'
 			}), {}
 		);
 
@@ -280,6 +280,12 @@
 			},
 			getRealUserId: function() {
 				return '<%= themeDisplay.getRealUserId() %>';
+			},
+			getRemoteAddr: function() {
+				return '<%= themeDisplay.getRemoteAddr() %>';
+			},
+			getRemoteHost: function() {
+				return '<%= themeDisplay.getRemoteHost() %>';
 			},
 			getScopeGroupId: function() {
 				return '<%= scopeGroup.getGroupId() %>';

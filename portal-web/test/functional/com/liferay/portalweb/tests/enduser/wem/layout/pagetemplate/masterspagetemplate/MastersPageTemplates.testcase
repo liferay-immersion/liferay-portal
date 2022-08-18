@@ -70,16 +70,14 @@ definition {
 			PageEditor.gotoStyle(fragmentName = "Button");
 
 			PageEditor.configureFragment(
-				alignment = "Center",
+				alignment = "Align Center",
 				backgroundColor = "Gray 300");
 
 			PageEditor.viewFragmentStyle(
 				backgroundColor = "gray-300",
-				fragmentName = "button");
+				fragmentName = "Button");
 
-			Button.click(button = "Publish Master");
-
-			Alert.viewSuccessMessage();
+			MastersPageTemplates.publishMaster();
 		}
 
 		task ("Assert custom masters as an option when add a new page") {
@@ -96,13 +94,21 @@ definition {
 				locator1 = "PageEditor#FRAGMENT_INHERITED_FROM_CUSTOM_MASTERS");
 
 			PageEditor.viewFragmentStyle(
-				fragmentName = "button",
+				fragmentName = "Button",
 				size = "lg",
 				type = "link");
 
-			AssertElementPresent(locator1 = "//div[contains(@class,'fragment-content--master')][contains(@class,'text-center')][//div[contains(@class,'component-button')]]");
+			AssertCssValue(
+				key_fragmentName = "button",
+				locator1 = "PageEditor#FRAGMENT_INHERITED_FROM_CUSTOM_MASTERS",
+				locator2 = "text-align",
+				value1 = "center");
 
-			AssertElementPresent(locator1 = "//div[contains(@class,'fragment-content--master')][contains(@style,'color: var(--gray-300)')][//div[contains(@class,'component-button')]]");
+			AssertCssValue(
+				key_fragmentName = "button",
+				locator1 = "PageEditor#FRAGMENT_INHERITED_FROM_CUSTOM_MASTERS",
+				locator2 = "background-color",
+				value1 = "rgba(231, 231, 237, 1)");
 		}
 	}
 
@@ -162,9 +168,7 @@ definition {
 				fragmentName = "Footer Nav Dark",
 				scope = "Master");
 
-			Button.click(button = "Publish Master");
-
-			Alert.viewSuccessMessage();
+			MastersPageTemplates.publishMaster();
 		}
 
 		task ("Add a content page based on custom master") {
@@ -246,9 +250,7 @@ definition {
 				fragmentName = "Footer Nav Dark",
 				scope = "Master");
 
-			Button.click(button = "Publish Master");
-
-			Alert.viewSuccessMessage();
+			MastersPageTemplates.publishMaster();
 		}
 
 		task ("Add a content page based on Blank") {
@@ -383,9 +385,7 @@ definition {
 				fragmentName = "Footer Nav Dark",
 				scope = "Master");
 
-			Button.click(button = "Publish Master");
-
-			Alert.viewSuccessMessage();
+			MastersPageTemplates.publishMaster();
 		}
 
 		task ("Add a page template collection") {
@@ -528,9 +528,7 @@ definition {
 		task ("Add a page based on custom master") {
 			MastersPageTemplatesAdmin.gotoMasters(masterLayoutName = "Custom Masters Page Template");
 
-			Button.click(button = "Publish Master");
-
-			Alert.viewSuccessMessage();
+			MastersPageTemplates.publishMaster();
 
 			PagesAdmin.openPagesAdmin(siteURLKey = "test-site-name");
 
@@ -548,7 +546,7 @@ definition {
 		}
 
 		task ("Type content in the HTML Title field") {
-			Navigator.gotoEditPageViaControlMenu(pageName = "Test Page Name");
+			LexiconEntry.gotoHeaderMenuItem(menuItem = "Configure");
 
 			Navigator.gotoNavTab(navTab = "SEO");
 
@@ -592,9 +590,7 @@ definition {
 				fragmentName = "Footer Nav Dark",
 				scope = "Master");
 
-			Button.click(button = "Publish Master");
-
-			Alert.viewSuccessMessage();
+			MastersPageTemplates.publishMaster();
 		}
 
 		task ("Add a display page template based on Blank") {
@@ -735,9 +731,7 @@ definition {
 				fragmentName = "Footer Nav Dark",
 				scope = "Master");
 
-			Button.click(button = "Publish Master");
-
-			Alert.viewSuccessMessage();
+			MastersPageTemplates.publishMaster();
 		}
 
 		task ("Add a widget page") {
@@ -869,9 +863,7 @@ definition {
 				fragmentName = "Footer Nav Dark",
 				scope = "Master");
 
-			Button.click(button = "Publish Master");
-
-			Alert.viewSuccessMessage();
+			MastersPageTemplates.publishMaster();
 		}
 
 		task ("Add a page template collection") {
@@ -900,7 +892,7 @@ definition {
 		}
 
 		task ("Assert can change master from Blank to custom master") {
-			Click.pauseClickAt(locator1 = "ControlMenu#EDIT_COG");
+			Click(locator1 = "ControlMenu#EDIT_COG");
 
 			Navigator.gotoNavTab(navTab = "Look and Feel");
 
@@ -949,7 +941,9 @@ definition {
 
 			PageTemplatesAdmin.gotoPageTemplate(pageTemplateName = "Page Template Name");
 
-			Click.pauseClickAt(locator1 = "ControlMenu#EDIT_COG");
+			WaitForPageLoad();
+
+			Click(locator1 = "ControlMenu#EDIT_COG");
 
 			Navigator.gotoNavTab(navTab = "Look and Feel");
 
@@ -1255,7 +1249,7 @@ definition {
 		task ("Wait for page load and All the fragments in Basic Components are visible") {
 			WaitForPageLoad();
 
-			PageEditor.gotoTab(tabName = "Fragments");
+			Navigator.gotoNavTab(navTab = "Fragments");
 
 			PageEditor.expandFragmentCollection(collectionName = "Basic Components");
 
@@ -1286,9 +1280,7 @@ definition {
 				fragmentName = "Footer Nav Dark",
 				scope = "Master");
 
-			Button.click(button = "Publish Master");
-
-			Alert.viewSuccessMessage();
+			MastersPageTemplates.publishMaster();
 		}
 
 		task ("Add a content page based on custom master") {
@@ -1361,9 +1353,7 @@ definition {
 				fragmentName = "Footer Nav Dark",
 				scope = "Master");
 
-			Button.click(button = "Publish Master");
-
-			Alert.viewSuccessMessage();
+			MastersPageTemplates.publishMaster();
 		}
 
 		task ("Add a widget page and Add an Asset Publisher and Web Content Display portlet to page ") {
@@ -1543,9 +1533,7 @@ definition {
 				portletName = "Asset Publisher",
 				scope = "Master");
 
-			Button.click(button = "Publish Master");
-
-			Alert.viewSuccessMessage();
+			MastersPageTemplates.publishMaster();
 		}
 
 		task ("Add a content page based on custom master") {
@@ -1623,9 +1611,7 @@ definition {
 				fragmentName = "Heading",
 				index = "1");
 
-			Button.click(button = "Publish Master");
-
-			Alert.viewSuccessMessage();
+			MastersPageTemplates.publishMaster();
 		}
 
 		task ("Add a new content page and use created master page") {
@@ -1726,9 +1712,7 @@ definition {
 				portletName = "Asset Publisher",
 				scope = "Master");
 
-			Button.click(button = "Publish Master");
-
-			Alert.viewSuccessMessage();
+			MastersPageTemplates.publishMaster();
 		}
 
 		task ("Assert elements inherited from custom masters are changeless") {
@@ -1822,9 +1806,7 @@ definition {
 
 			Portlet.saveAndCloseConfig();
 
-			Button.click(button = "Publish Master");
-
-			Alert.viewSuccessMessage();
+			MastersPageTemplates.publishMaster();
 		}
 
 		task ("Add a page based on custom masters") {

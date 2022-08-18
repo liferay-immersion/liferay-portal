@@ -17,12 +17,10 @@ package com.liferay.notification.rest.resource.v1_0.test;
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.notification.rest.client.dto.v1_0.NotificationTemplate;
 import com.liferay.portal.kernel.test.util.RandomTestUtil;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.odata.entity.EntityField;
-import com.liferay.portal.util.PropsUtil;
 import com.liferay.portal.vulcan.util.LocalizedMapUtil;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,22 +31,6 @@ import org.junit.runner.RunWith;
 @RunWith(Arquillian.class)
 public class NotificationTemplateResourceTest
 	extends BaseNotificationTemplateResourceTestCase {
-
-	@Before
-	@Override
-	public void setUp() throws Exception {
-		super.setUp();
-
-		PropsUtil.set("feature.flag.LPS-149050", Boolean.TRUE.toString());
-	}
-
-	@After
-	@Override
-	public void tearDown() throws Exception {
-		super.tearDown();
-
-		PropsUtil.set("feature.flag.LPS-149050", Boolean.FALSE.toString());
-	}
 
 	@Override
 	@Test
@@ -96,20 +78,26 @@ public class NotificationTemplateResourceTest
 	protected NotificationTemplate randomNotificationTemplate()
 		throws Exception {
 
-		NotificationTemplate notificationTemplate =
-			super.randomNotificationTemplate();
-
-		notificationTemplate.setBody(
-			LocalizedMapUtil.getI18nMap(
-				RandomTestUtil.randomLocaleStringMap()));
-		notificationTemplate.setFromName(
-			LocalizedMapUtil.getI18nMap(
-				RandomTestUtil.randomLocaleStringMap()));
-		notificationTemplate.setSubject(
-			LocalizedMapUtil.getI18nMap(
-				RandomTestUtil.randomLocaleStringMap()));
-
-		return notificationTemplate;
+		return new NotificationTemplate() {
+			{
+				bcc = StringUtil.toLowerCase(RandomTestUtil.randomString());
+				body = LocalizedMapUtil.getI18nMap(
+					RandomTestUtil.randomLocaleStringMap());
+				cc = StringUtil.toLowerCase(RandomTestUtil.randomString());
+				dateCreated = RandomTestUtil.nextDate();
+				dateModified = RandomTestUtil.nextDate();
+				description = StringUtil.toLowerCase(
+					RandomTestUtil.randomString());
+				from = StringUtil.toLowerCase(RandomTestUtil.randomString());
+				fromName = LocalizedMapUtil.getI18nMap(
+					RandomTestUtil.randomLocaleStringMap());
+				id = RandomTestUtil.randomLong();
+				name = StringUtil.toLowerCase(RandomTestUtil.randomString());
+				objectDefinitionId = 0L;
+				subject = LocalizedMapUtil.getI18nMap(
+					RandomTestUtil.randomLocaleStringMap());
+			}
+		};
 	}
 
 	@Override

@@ -19,7 +19,7 @@ import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
 import com.liferay.portal.k8s.agent.PortalK8sConfigMapModifier;
-import com.liferay.portal.k8s.agent.configuration.v1.PortalK8sAgentConfiguration;
+import com.liferay.portal.k8s.agent.configuration.PortalK8sAgentConfiguration;
 import com.liferay.portal.k8s.agent.mutator.PortalK8sConfigurationPropertiesMutator;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -69,7 +69,7 @@ import org.osgi.service.component.annotations.ReferencePolicyOption;
  * @author Raymond Augé
  */
 @Component(
-	configurationPid = "com.liferay.portal.k8s.agent.configuration.v1.PortalK8sAgentConfiguration",
+	configurationPid = "com.liferay.portal.k8s.agent.configuration.PortalK8sAgentConfiguration",
 	configurationPolicy = ConfigurationPolicy.REQUIRE, immediate = true,
 	property = "portalK8sConfigurationPropertiesMutators.cardinality.minimum:Integer=3",
 	service = PortalK8sConfigMapModifier.class
@@ -116,13 +116,13 @@ public class PortalK8sAgentImpl implements PortalK8sConfigMapModifier {
 
 	@Override
 	public Result modifyConfigMap(
-		Consumer<Map<String, String>> configMapDataConsumer, String serviceId) {
+		Consumer<PortalK8sConfigMapModifier.ConfigMapModel>
+			configMapModelConsumer,
+		String configMapName) {
 
 		Objects.requireNonNull(
-			configMapDataConsumer, "Config map data consumer is null");
-		Objects.requireNonNull(serviceId, "Service ID is null");
-
-		String configMapName = serviceId.concat("-lxc-ext-init-metadata");
+			configMapModelConsumer, "Config map model consumer is null");
+		Objects.requireNonNull(configMapName, "Config map name is null");
 
 		ConfigMap configMap = _kubernetesClient.configMaps(
 		).inNamespace(
@@ -132,13 +132,41 @@ public class PortalK8sAgentImpl implements PortalK8sConfigMapModifier {
 		).get();
 
 		if (configMap != null) {
-			Map<String, String> data = configMap.getData();
+			Map<String, String> annotations = _getAnnotations(configMap);
+			Map<String, String> binaryData = _getBinaryData(configMap);
+			Map<String, String> data = _getData(configMap);
+			Map<String, String> labels = _getLabels(configMap);
 
-			Map<String, String> originalData = new TreeMap<>(data);
+			ConfigMap originalConfigMap = new ConfigMapBuilder(
+				configMap
+			).build();
 
-			configMapDataConsumer.accept(data);
+			configMapModelConsumer.accept(
+				new ConfigMapModel() {
 
-			if (data.isEmpty()) {
+					@Override
+					public Map<String, String> annotations() {
+						return annotations;
+					}
+
+					@Override
+					public Map<String, String> binaryData() {
+						return binaryData;
+					}
+
+					@Override
+					public Map<String, String> data() {
+						return data;
+					}
+
+					@Override
+					public Map<String, String> labels() {
+						return labels;
+					}
+
+				});
+
+			if (binaryData.isEmpty() && data.isEmpty()) {
 				_kubernetesClient.configMaps(
 				).delete(
 					configMap
@@ -150,7 +178,12 @@ public class PortalK8sAgentImpl implements PortalK8sConfigMapModifier {
 
 				return Result.DELETED;
 			}
-			else if (!Objects.equals(data, originalData)) {
+			else if (!Objects.equals(
+						binaryData, originalConfigMap.getBinaryData()) ||
+					 !Objects.equals(data, originalConfigMap.getData())) {
+
+				_validateLabels(configMapName, _getLabels(configMap));
+
 				configMap = _kubernetesClient.configMaps(
 				).withName(
 					configMapName
@@ -173,16 +206,52 @@ public class PortalK8sAgentImpl implements PortalK8sConfigMapModifier {
 			}
 		}
 		else {
+			Map<String, String> annotations = new TreeMap<>();
+			Map<String, String> binaryData = new TreeMap<>();
 			Map<String, String> data = new TreeMap<>();
+			Map<String, String> labels = new TreeMap<>();
 
-			configMapDataConsumer.accept(data);
+			configMapModelConsumer.accept(
+				new ConfigMapModel() {
 
-			configMap = new ConfigMapBuilder().withNewMetadata(
+					@Override
+					public Map<String, String> annotations() {
+						return annotations;
+					}
+
+					@Override
+					public Map<String, String> binaryData() {
+						return binaryData;
+					}
+
+					@Override
+					public Map<String, String> data() {
+						return data;
+					}
+
+					@Override
+					public Map<String, String> labels() {
+						return labels;
+					}
+
+				});
+
+			_validateLabels(configMapName, labels);
+
+			ConfigMapBuilder configMapBuilder = new ConfigMapBuilder();
+
+			configMap = configMapBuilder.withNewMetadata(
 			).withNamespace(
 				_portalK8sAgentConfiguration.namespace()
 			).withName(
 				configMapName
+			).addToAnnotations(
+				annotations
+			).addToLabels(
+				labels
 			).endMetadata(
+			).addToBinaryData(
+				binaryData
 			).addToData(
 				data
 			).build();
@@ -284,6 +353,28 @@ public class PortalK8sAgentImpl implements PortalK8sConfigMapModifier {
 		}
 	}
 
+	private Map<String, String> _getAnnotations(ConfigMap configMap) {
+		Map<String, String> annotations = Collections.emptyMap();
+
+		ObjectMeta objectMeta = configMap.getMetadata();
+
+		if (objectMeta != null) {
+			annotations = objectMeta.getAnnotations();
+		}
+
+		return annotations;
+	}
+
+	private Map<String, String> _getBinaryData(ConfigMap configMap) {
+		Map<String, String> binaryData = configMap.getBinaryData();
+
+		if (binaryData == null) {
+			binaryData = Collections.emptyMap();
+		}
+
+		return binaryData;
+	}
+
 	private Configuration _getConfiguration(
 			org.apache.felix.configurator.impl.model.Config config)
 		throws Exception {
@@ -314,6 +405,28 @@ public class PortalK8sAgentImpl implements PortalK8sConfigMapModifier {
 		}
 
 		return _configurationAdmin.getConfiguration(pid, StringPool.QUESTION);
+	}
+
+	private Map<String, String> _getData(ConfigMap configMap) {
+		Map<String, String> data = configMap.getData();
+
+		if (data == null) {
+			data = Collections.emptyMap();
+		}
+
+		return data;
+	}
+
+	private Map<String, String> _getLabels(ConfigMap configMap) {
+		Map<String, String> labels = Collections.emptyMap();
+
+		ObjectMeta objectMeta = configMap.getMetadata();
+
+		if (objectMeta != null) {
+			labels = objectMeta.getLabels();
+		}
+
+		return labels;
 	}
 
 	private void _processConfiguration(
@@ -486,7 +599,7 @@ public class PortalK8sAgentImpl implements PortalK8sConfigMapModifier {
 		return config;
 	}
 
-	private SharedIndexInformer _toSharedIndexInformer(
+	private SharedIndexInformer<ConfigMap> _toSharedIndexInformer(
 		KubernetesClient kubernetesClient,
 		PortalK8sAgentConfiguration portalK8sAgentConfiguration) {
 
@@ -586,11 +699,95 @@ public class PortalK8sAgentImpl implements PortalK8sConfigMapModifier {
 		}
 	}
 
+	private void _validateLabels(
+		String configMapName, Map<String, String> labels) {
+
+		if (!configMapName.endsWith("-lxc-dxp-metadata") &&
+			!configMapName.endsWith("-lxc-ext-init-metadata")) {
+
+			throw new IllegalArgumentException(
+				StringBundler.concat(
+					"Config map name ", configMapName,
+					" does not follow a recognized pattern"));
+		}
+
+		String metadataType = labels.get("lxc.liferay.com/metadataType");
+
+		if ((metadataType == null) ||
+			(!Objects.equals(metadataType, "dxp") &&
+			 !Objects.equals(metadataType, "ext-init"))) {
+
+			throw new IllegalArgumentException(
+				StringBundler.concat(
+					"Config map labels must contain the key ",
+					"\"lxc.liferay.com/metadataType\" with a value of \"dxp\" ",
+					"or \"ext-init\""));
+		}
+
+		String virtualInstanceId = labels.get(
+			"dxp.lxc.liferay.com/virtualInstanceId");
+
+		if (virtualInstanceId == null) {
+			throw new IllegalArgumentException(
+				StringBundler.concat(
+					"Config map labels must contain the key ",
+					"\"dxp.lxc.liferay.com/virtualInstanceId\" whose value is ",
+					"the web ID of the virtual instance from which the ",
+					"configuration originated"));
+		}
+
+		// <virtualInstanceId>-lxc-dxp-metadata
+
+		if (configMapName.endsWith("-lxc-dxp-metadata") &&
+			!Objects.equals(
+				virtualInstanceId.concat("-lxc-dxp-metadata"), configMapName)) {
+
+			throw new IllegalArgumentException(
+				StringBundler.concat(
+					"A config map name with the suffix \"-lxc-dxp-metadata\" ",
+					"must begin with the value of the label ",
+					"\"dxp.lxc.liferay.com/virtualInstanceId\" followed by ",
+					"\"-lxc-dxp-metadata\""));
+		}
+
+		// <serviceId>-<virtualInstanceId>-lxc-ext-init-metadata
+
+		else if (configMapName.endsWith("-lxc-ext-init-metadata")) {
+			String serviceId = labels.get("ext.lxc.liferay.com/serviceId");
+
+			if (serviceId == null) {
+				throw new IllegalArgumentException(
+					StringBundler.concat(
+						"A config map with the suffix ",
+						"\"-lxc-ext-init-metadata\" must have a label with ",
+						"the key \"ext.lxc.liferay.com/serviceId\" whose ",
+						"value is the target service ID"));
+			}
+
+			if (!Objects.equals(
+					configMapName,
+					StringBundler.concat(
+						serviceId, "-", virtualInstanceId,
+						"-lxc-ext-init-metadata"))) {
+
+				throw new IllegalArgumentException(
+					StringBundler.concat(
+						"A config map name with suffix ",
+						"\"-lxc-ext-init-metadata\" must begin with the value ",
+						"of the label \"ext.lxc.liferay.com/serviceId\" ",
+						"followed by a \"-\" and then the value of the label ",
+						"\"dxp.lxc.liferay.com/virtualInstanceId\" followed ",
+						"by \"-lxc-ext-init-metadata\""));
+			}
+		}
+	}
+
 	private static final String _ERROR_MESSAGE =
 		"Configured service account does not have access. Service account " +
 			"may have been revoked.";
 
-	private static final String _FILE_EXTENSION = ".config.json";
+	private static final String _FILE_EXTENSION =
+		".client-extension-config.json";
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		PortalK8sAgentImpl.class);

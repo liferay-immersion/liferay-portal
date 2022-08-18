@@ -99,6 +99,21 @@ public interface SXPBlueprintModel
 	public void setUuid(String uuid);
 
 	/**
+	 * Returns the external reference code of this sxp blueprint.
+	 *
+	 * @return the external reference code of this sxp blueprint
+	 */
+	@AutoEscape
+	public String getExternalReferenceCode();
+
+	/**
+	 * Sets the external reference code of this sxp blueprint.
+	 *
+	 * @param externalReferenceCode the external reference code of this sxp blueprint
+	 */
+	public void setExternalReferenceCode(String externalReferenceCode);
+
+	/**
 	 * Returns the sxp blueprint ID of this sxp blueprint.
 	 *
 	 * @return the sxp blueprint ID of this sxp blueprint
@@ -339,21 +354,6 @@ public interface SXPBlueprintModel
 	 * @param elementInstancesJSON the element instances json of this sxp blueprint
 	 */
 	public void setElementInstancesJSON(String elementInstancesJSON);
-
-	/**
-	 * Returns the key of this sxp blueprint.
-	 *
-	 * @return the key of this sxp blueprint
-	 */
-	@AutoEscape
-	public String getKey();
-
-	/**
-	 * Sets the key of this sxp blueprint.
-	 *
-	 * @param key the key of this sxp blueprint
-	 */
-	public void setKey(String key);
 
 	/**
 	 * Returns the schema version of this sxp blueprint.

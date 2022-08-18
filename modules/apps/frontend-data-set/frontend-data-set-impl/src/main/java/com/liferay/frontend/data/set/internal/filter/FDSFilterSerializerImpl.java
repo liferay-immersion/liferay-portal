@@ -23,7 +23,7 @@ import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactory;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.json.JSONUtil;
-import com.liferay.portal.kernel.language.LanguageUtil;
+import com.liferay.portal.kernel.language.Language;
 import com.liferay.portal.kernel.util.ResourceBundleUtil;
 
 import java.util.List;
@@ -62,9 +62,11 @@ public class FDSFilterSerializerImpl implements FDSFilterSerializer {
 
 		for (FDSFilter fdsFilter : fdsFilters) {
 			JSONObject jsonObject = JSONUtil.put(
+				"entityFieldType", fdsFilter.getEntityFieldType()
+			).put(
 				"id", fdsFilter.getId()
 			).put(
-				"label", LanguageUtil.get(resourceBundle, fdsFilter.getLabel())
+				"label", _language.get(resourceBundle, fdsFilter.getLabel())
 			).put(
 				"preloadedData", fdsFilter.getPreloadedData()
 			).put(
@@ -106,5 +108,8 @@ public class FDSFilterSerializerImpl implements FDSFilterSerializer {
 
 	@Reference
 	private JSONFactory _jsonFactory;
+
+	@Reference
+	private Language _language;
 
 }

@@ -25,10 +25,6 @@ public class SearchBarPortletDisplayContext {
 		return _currentSiteSearchScopeParameterString;
 	}
 
-	public String getDestination() {
-		return _destination;
-	}
-
 	public long getDisplayStyleGroupId() {
 		return _displayStyleGroupId;
 	}
@@ -119,6 +115,10 @@ public class SearchBarPortletDisplayContext {
 		return _suggestionsEnabled;
 	}
 
+	public boolean isSuggestionsEndpointEnabled() {
+		return _suggestionsEndpointEnabled;
+	}
+
 	public void setAvailableEverythingSearchScope(
 		boolean availableEverythingSearchScope) {
 
@@ -130,10 +130,6 @@ public class SearchBarPortletDisplayContext {
 
 		_currentSiteSearchScopeParameterString =
 			searchScopeCurrentSiteParameterString;
-	}
-
-	public void setDestination(String destination) {
-		_destination = destination;
 	}
 
 	public void setDestinationUnreachable(boolean destinationUnreachable) {
@@ -239,13 +235,18 @@ public class SearchBarPortletDisplayContext {
 		_suggestionsEnabled = suggestionsEnabled;
 	}
 
+	public void setSuggestionsEndpointEnabled(
+		boolean suggestionsEndpointEnabled) {
+
+		_suggestionsEndpointEnabled = suggestionsEndpointEnabled;
+	}
+
 	public void setSuggestionsURL(String suggestionsURL) {
 		_suggestionsURL = suggestionsURL;
 	}
 
 	private boolean _availableEverythingSearchScope;
 	private String _currentSiteSearchScopeParameterString;
-	private String _destination;
 	private boolean _destinationUnreachable;
 	private long _displayStyleGroupId;
 	private boolean _displayWarningIgnoredConfiguration;
@@ -267,6 +268,7 @@ public class SearchBarPortletDisplayContext {
 	private String _suggestionsContributorConfiguration;
 	private int _suggestionsDisplayThreshold;
 	private boolean _suggestionsEnabled;
+	private boolean _suggestionsEndpointEnabled;
 	private String _suggestionsURL;
 
 }

@@ -35,7 +35,7 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
-import com.liferay.portal.kernel.security.permission.PermissionCheckerFactoryUtil;
+import com.liferay.portal.kernel.security.permission.PermissionCheckerFactory;
 import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ListUtil;
@@ -88,7 +88,7 @@ public class FriendlyURLServlet extends HttpServlet {
 					InfoItemPermissionProvider.class, className);
 
 			if (!infoItemPermissionProvider.hasPermission(
-					PermissionCheckerFactoryUtil.create(
+					_permissionCheckerFactory.create(
 						_portal.getUser(httpServletRequest)),
 					new InfoItemReference(
 						className, _getClassPK(httpServletRequest)),
@@ -121,15 +121,32 @@ public class FriendlyURLServlet extends HttpServlet {
 		try {
 			User user = _portal.getUser(httpServletRequest);
 
-			if (user.isDefaultUser()) {
+			if ((user == null) || user.isDefaultUser()) {
 				_writeJSON(httpServletResponse, JSONUtil.put("success", false));
 			}
 			else {
-				_writeJSON(
-					httpServletResponse,
-					_getFriendlyURLEntryLocalizationsJSONObject(
-						_getClassName(httpServletRequest),
-						_getClassPK(httpServletRequest)));
+				String className = _getClassName(httpServletRequest);
+				long classPK = _getClassPK(httpServletRequest);
+
+				InfoItemPermissionProvider<Object> infoItemPermissionProvider =
+					_infoItemServiceTracker.getFirstInfoItemService(
+						InfoItemPermissionProvider.class, className);
+
+				if (!infoItemPermissionProvider.hasPermission(
+						_permissionCheckerFactory.create(
+							_portal.getUser(httpServletRequest)),
+						new InfoItemReference(className, classPK),
+						ActionKeys.VIEW)) {
+
+					_writeJSON(
+						httpServletResponse, JSONUtil.put("success", false));
+				}
+				else {
+					_writeJSON(
+						httpServletResponse,
+						_getFriendlyURLEntryLocalizationsJSONObject(
+							className, classPK));
+				}
 			}
 		}
 		catch (Exception exception) {
@@ -154,7 +171,7 @@ public class FriendlyURLServlet extends HttpServlet {
 					InfoItemPermissionProvider.class, className);
 
 			if (!infoItemPermissionProvider.hasPermission(
-					PermissionCheckerFactoryUtil.create(
+					_permissionCheckerFactory.create(
 						_portal.getUser(httpServletRequest)),
 					new InfoItemReference(className, classPK),
 					ActionKeys.UPDATE)) {
@@ -339,6 +356,9 @@ public class FriendlyURLServlet extends HttpServlet {
 
 	@Reference
 	private InfoItemServiceTracker _infoItemServiceTracker;
+
+	@Reference
+	private PermissionCheckerFactory _permissionCheckerFactory;
 
 	@Reference
 	private Portal _portal;

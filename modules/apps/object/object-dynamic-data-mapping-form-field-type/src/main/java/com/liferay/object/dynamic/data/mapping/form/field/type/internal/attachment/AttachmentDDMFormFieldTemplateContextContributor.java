@@ -28,7 +28,7 @@ import com.liferay.petra.portlet.url.builder.PortletURLBuilder;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
 import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.language.LanguageUtil;
+import com.liferay.portal.kernel.language.Language;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.RequestBackedPortletURLFactory;
@@ -45,8 +45,6 @@ import com.liferay.portal.kernel.util.WebKeys;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-
-import javax.portlet.PortletURL;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -87,7 +85,7 @@ public class AttachmentDDMFormFieldTemplateContextContributor
 			_uploadServletRequestConfigurationHelper.getMaxSize()
 		).put(
 			"tip",
-			LanguageUtil.format(
+			_language.format(
 				ddmFormFieldRenderingContext.getLocale(),
 				"upload-a-x-no-larger-than-x-mb",
 				new Object[] {
@@ -168,13 +166,12 @@ public class AttachmentDDMFormFieldTemplateContextContributor
 		fileItemSelectorCriterion.setDesiredItemSelectorReturnTypes(
 			new FileEntryItemSelectorReturnType());
 
-		PortletURL itemSelectorURL = _itemSelector.getItemSelectorURL(
-			requestBackedPortletURLFactory,
-			_groupLocalService.fetchGroup(groupId), groupId,
-			portletNamespace + "selectAttachmentEntry",
-			fileItemSelectorCriterion);
-
-		return itemSelectorURL.toString();
+		return String.valueOf(
+			_itemSelector.getItemSelectorURL(
+				requestBackedPortletURLFactory,
+				_groupLocalService.fetchGroup(groupId), groupId,
+				portletNamespace + "selectAttachmentEntry",
+				fileItemSelectorCriterion));
 	}
 
 	private int _getMaximumFileSize(
@@ -249,6 +246,9 @@ public class AttachmentDDMFormFieldTemplateContextContributor
 
 	@Reference
 	private ItemSelector _itemSelector;
+
+	@Reference
+	private Language _language;
 
 	private volatile ObjectConfiguration _objectConfiguration;
 

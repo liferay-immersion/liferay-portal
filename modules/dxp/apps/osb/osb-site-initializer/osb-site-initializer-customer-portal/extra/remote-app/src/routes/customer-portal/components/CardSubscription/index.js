@@ -14,10 +14,10 @@ import {useState} from 'react';
 import i18n from '../../../../common/I18n';
 import {StatusTag} from '../../../../common/components';
 import {useAppPropertiesContext} from '../../../../common/contexts/AppPropertiesContext';
+import {SLA_STATUS_TYPES} from '../../../../common/utils/constants';
 import getDateCustomFormat from '../../../../common/utils/getDateCustomFormat';
 import getKebabCase from '../../../../common/utils/getKebabCase';
 import ModalCardSubscription from '../../containers/ModalCardSubscription';
-import {STATUS_TAG_TYPES} from '../../utils/constants';
 
 const dateFormat = {
 	day: '2-digit',
@@ -29,8 +29,9 @@ const SUBSCRIPTION_IMAGE_FILE = {
 	'Analytics': 'analytics_icon.svg',
 	'Commerce': 'commerce_icon.svg',
 	'DXP': 'dxp_icon.svg',
-	'DXP Cloud': 'dxp_icon.svg',
 	'Enterprise Search': 'enterprise_icon.svg',
+	'LXC - SM': 'dxp_icon.svg',
+	'Liferay Experience Cloud': 'dxp_icon.svg',
 	'Portal': 'portal_icon.svg',
 };
 
@@ -105,7 +106,7 @@ const CardSubscription = ({
 					<div className="d-flex justify-content-center">
 						<StatusTag
 							currentStatus={i18n.translate(
-								STATUS_TAG_TYPES[subscriptionStatus]
+								SLA_STATUS_TYPES[subscriptionStatus]
 							)}
 						/>
 					</div>

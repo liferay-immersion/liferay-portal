@@ -21,7 +21,6 @@ String backURL = ParamUtil.getString(request, "backURL", String.valueOf(renderRe
 
 ObjectEntryDisplayContext objectEntryDisplayContext = (ObjectEntryDisplayContext)request.getAttribute(WebKeys.PORTLET_DISPLAY_CONTEXT);
 
-ObjectLayoutBox categorizationObjectLayoutBox = objectEntryDisplayContext.getCategorizationObjectLayoutBox();
 ObjectDefinition objectDefinition = objectEntryDisplayContext.getObjectDefinition();
 ObjectEntry objectEntry = objectEntryDisplayContext.getObjectEntry();
 
@@ -53,55 +52,7 @@ portletDisplay.setURLBack(backURL);
 			</clay:sheet-section>
 		</liferay-frontend:fieldset-group>
 
-		<c:if test="<%= categorizationObjectLayoutBox != null %>">
-			<liferay-frontend:fieldset-group>
-				<div class="lfr-form-content" id="<portlet:namespace />categorization">
-					<c:choose>
-						<c:when test="<%= objectEntryDisplayContext.isReadOnly() %>">
-							<liferay-asset:asset-categories-error />
-
-							<liferay-asset:asset-tags-error />
-
-							<aui:fieldset-group markupView="lexicon">
-								<aui:fieldset collapsed="<%= categorizationObjectLayoutBox.isCollapsable() %>" collapsible="<%= categorizationObjectLayoutBox.isCollapsable() %>" label="categorization">
-									<liferay-asset:asset-categories-summary
-										className="<%= objectDefinition.getClassName() %>"
-										classPK="<%= (objectEntry == null) ? 0 : GetterUtil.getLong(objectEntry.getExternalReferenceCode()) %>"
-										visibleTypes="<%= AssetVocabularyConstants.VISIBILITY_TYPES %>"
-									/>
-
-									<liferay-asset:asset-tags-summary
-										className="<%= objectDefinition.getClassName() %>"
-										classPK="<%= (objectEntry == null) ? 0 : GetterUtil.getLong(objectEntry.getExternalReferenceCode()) %>"
-										message="tags"
-									/>
-								</aui:fieldset>
-							</aui:fieldset-group>
-						</c:when>
-						<c:otherwise>
-							<liferay-asset:asset-categories-error />
-
-							<liferay-asset:asset-tags-error />
-
-							<aui:fieldset-group markupView="lexicon">
-								<aui:fieldset collapsed="<%= categorizationObjectLayoutBox.isCollapsable() %>" collapsible="<%= categorizationObjectLayoutBox.isCollapsable() %>" label="categorization">
-									<liferay-asset:asset-categories-selector
-										className="<%= objectDefinition.getClassName() %>"
-										classPK="<%= (objectEntry == null) ? 0 : GetterUtil.getLong(objectEntry.getExternalReferenceCode()) %>"
-										visibilityTypes="<%= AssetVocabularyConstants.VISIBILITY_TYPES %>"
-									/>
-
-									<liferay-asset:asset-tags-selector
-										className="<%= objectDefinition.getClassName() %>"
-										classPK="<%= (objectEntry == null) ? 0 : GetterUtil.getLong(objectEntry.getExternalReferenceCode()) %>"
-									/>
-								</aui:fieldset>
-							</aui:fieldset-group>
-						</c:otherwise>
-					</c:choose>
-				</div>
-			</liferay-frontend:fieldset-group>
-		</c:if>
+		<%@ include file="/object_entries/object_entry/categorization.jspf" %>
 	</liferay-frontend:edit-form-body>
 
 	<c:if test="<%= !objectEntryDisplayContext.isReadOnly() %>">

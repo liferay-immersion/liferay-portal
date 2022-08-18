@@ -256,6 +256,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>COLOR_PICKER_BUTTON</td>
+	<td>//div[contains(@class,'input-group')]//button[contains(@class,'clay-color-btn')]</td>
+	<td></td>
+</tr>
+<tr>
 	<td>COLOR_PICKER</td>
 	<td>//label[normalize-space(text())='${key_fieldLabel}']/following-sibling::div//div[contains(@class,'color-picker')]//button[contains(@class,'clay-color-btn')] | //div[contains(@class,'color-picker')][./label[normalize-space(text())='${key_fieldLabel}']]//button[contains(@class,'clay-color-btn')] | //label[normalize-space(text())='${key_fieldLabel}']/following-sibling::div//div[contains(@class,'color-picker')]//button[contains(@class,'color-picker__selector')]</td>
 	<td></td>
@@ -326,6 +331,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>EXPAND</td>
+	<td>//button[*[name()='svg'][contains(@class,'lexicon-icon-expand')]]</td>
+	<td></td>
+</tr>
+<tr>
 	<td>SECONDARY_BY_TITLE</td>
 	<td>//button[contains(@class,'btn-secondary') and contains (@title,'${key_value}')]</td>
 	<td></td>
@@ -392,7 +402,7 @@
 </tr>
 <tr>
 	<td>EXECUTE</td>
-	<td>//button[contains(.,'Execute')]</td>
+	<td>//button[contains(.,'Execute')] | //div[contains(@id,'${method}')]//button[contains(.,'Execute')]</td>
 	<td></td>
 </tr>
 <tr>
@@ -776,6 +786,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>SELECT_BUTTON</td>
+	<td>//label[text()='${key_fieldName}']/..//*[text()='Select']</td>
+	<td></td>
+</tr>
+<tr>
 	<td>SELECT_CONTENT</td>
 	<td>//div[@data-fieldname='${key_fieldName}']//button[contains(.,'Select')]</td>
 	<td></td>
@@ -973,6 +988,11 @@
 <tr>
 	<td>BUTTON_PLUS_PRODUCT_VISIBILITY</td>
 	<td>//li[contains(@class,'nav-item')]//button[contains(@title,'${key_webContentTitle}')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>BUTTON_WITH_VALUE</td>
+	<td>//button[contains(.,'${value}') or contains(@title,'${value}')]</td>
 	<td></td>
 </tr>
 </tbody>

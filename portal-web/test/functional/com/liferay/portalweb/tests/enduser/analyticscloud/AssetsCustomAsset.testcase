@@ -57,6 +57,8 @@ definition {
 	tearDown {
 		var testPortalInstance = PropsUtil.get("test.portal.instance");
 
+		ACUtils.tearDownAC();
+
 		ACUtils.tearDownDXP();
 
 		if ("${testPortalInstance}" == "true") {
@@ -65,8 +67,6 @@ definition {
 		else {
 			JSONGroup.deleteGroupByName(groupName = "Site Name");
 		}
-
-		ACUtils.tearDownAC();
 	}
 
 	@description = "Feature ID: LRAC-7532 | Automation ID: LRAC-8538 | Test Summary: Create custom asset report"
@@ -339,6 +339,8 @@ definition {
 	@description = "Feature ID: Legacy | Automation ID: LRAC-8132 | Test Summary: Custom asset list shows a list of custom assets"
 	@priority = "5"
 	test CanShowsCustomAssetList {
+		property analytics.cloud.upstream = "false";
+
 		var assetName = "Custom Asset Analytics Cloud,Custom Asset Analytics Cloud 2,Custom Asset Analytics Cloud 3";
 
 		for (var layoutName : list "AC Page 2,AC Page 3") {

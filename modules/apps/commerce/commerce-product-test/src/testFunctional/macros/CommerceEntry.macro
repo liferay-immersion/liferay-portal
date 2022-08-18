@@ -1,5 +1,26 @@
 definition {
 
+	macro activeProductPaymentSubscription {
+		ApplicationsMenu.gotoPortlet(
+			category = "Product Management",
+			panel = "Commerce",
+			portlet = "Products");
+
+		CommerceNavigator.searchEntry(entryName = "${productName}");
+
+		CommerceNavigator.gotoEntry(entryName = "${productName}");
+
+		CommerceEntry.gotoMenuTab(menuTab = "Subscription");
+
+		if (IsElementNotPresent(locator1 = "CommerceEntry#PAYMENT_SUBSCRIPTION_TOGGLE_ACTIVE")) {
+			Click(locator1 = "CommerceEntry#PAYMENT_SUBSCRIPTION_TOGGLE");
+
+			Button.clickPublish();
+		}
+
+		AssertElementPresent(locator1 = "CommerceEntry#PAYMENT_SUBSCRIPTION_TOGGLE_ACTIVE");
+	}
+
 	@summary = "Add a new user that is part of an account(the creation of a new account, the membership and the user's role are optional)"
 	macro addAccountEntryUser {
 		Variables.assertDefined(parameterList = "${accountName},${userEmailAddress},${userFirstName},${userLastName},${userScreenName}");
@@ -10,17 +31,30 @@ definition {
 				accountEntryType = "${accountType}");
 		}
 
-		JSONAccountEntryUser.addAccountEntryUser(
-			accountEntryName = "${accountName}",
-			userEmailAddress = "${userEmailAddress}",
-			userFirstName = "${userFirstName}",
-			userLastName = "${userLastName}",
-			userScreenName = "${userScreenName}");
+		if (isSet(existingUser) && ("${existingUser}" == "true")) {
+			Accounts.openAccountsAdmin();
 
-		JSONUser.setFirstPassword(
-			agreeToTermsAndAnswerReminderQuery = "${agreeToTermsAndAnswerReminderQuery}",
-			requireReset = "${requireReset}",
-			userEmailAddress = "${userEmailAddress}");
+			LexiconEntry.gotoEntry(rowEntry = "${accountName}");
+
+			Accounts.assignUsers(
+				accountName = "${accountName}",
+				assigneeName = "${userEmailAddress}");
+		}
+		else {
+			JSONAccountEntryUser.addAccountEntryUser(
+				accountEntryName = "${accountName}",
+				userEmailAddress = "${userEmailAddress}",
+				userFirstName = "${userFirstName}",
+				userLastName = "${userLastName}",
+				userScreenName = "${userScreenName}");
+		}
+
+		if (isSet(requireReset) || isSet(agreeToTermsAndAnswerReminderQuery)) {
+			JSONUser.setFirstPassword(
+				agreeToTermsAndAnswerReminderQuery = "${agreeToTermsAndAnswerReminderQuery}",
+				requireReset = "${requireReset}",
+				userEmailAddress = "${userEmailAddress}");
+		}
 
 		if (isSet(userSiteMembership)) {
 			JSONUser.addUserToSite(
@@ -103,11 +137,11 @@ definition {
 	}
 
 	macro addNewChannelsEntry {
-		Pause(locator1 = "6000");
+		WaitForElementPresent(locator1 = "IFrame#MODAL_IFRAME");
 
 		SelectFrame.selectFrameNoLoading(locator1 = "IFrame#MODAL_IFRAME");
 
-		Pause(locator1 = "3000");
+		WaitForElementPresent(locator1 = "TextInput#NAME");
 
 		Type(
 			locator1 = "TextInput#NAME",
@@ -125,6 +159,8 @@ definition {
 		Click(
 			key_text = "Add",
 			locator1 = "Button#ANY");
+
+		SelectFrameTop();
 
 		WaitForPageLoad();
 
@@ -148,7 +184,7 @@ definition {
 			Button.clickSave();
 		}
 
-		Pause(locator1 = "5000");
+		WaitForPageLoad();
 	}
 
 	macro addNewCountriesEntry {
@@ -229,7 +265,7 @@ definition {
 	}
 
 	macro addNewDiscountsEntry {
-		Pause(locator1 = "3000");
+		WaitForElementPresent(locator1 = "IFrame#MODAL_IFRAME");
 
 		SelectFrame.selectFrameNoLoading(locator1 = "IFrame#MODAL_IFRAME");
 
@@ -248,6 +284,12 @@ definition {
 			value1 = "${discountTarget}");
 
 		Button.click(button = "Submit");
+
+		SelectFrameTop();
+
+		WaitForElementPresent(locator1 = "CommerceEntry#DISCOUNT_AMOUNT");
+
+		Refresh();
 
 		Type(
 			locator1 = "CommerceEntry#DISCOUNT_AMOUNT",
@@ -388,7 +430,9 @@ definition {
 			locator1 = "CommerceEntry#FIELD_TYPE_SELECT",
 			value1 = "${optionFieldType}");
 
-		Button.click(button = "Submit");
+		Button.clickSubmitButton();
+
+		SelectFrameTop();
 
 		Type(
 			locator1 = "CommerceEntry#DESCRIPTION_FIELD",
@@ -426,9 +470,14 @@ definition {
 
 		CommerceEntry.addFullDescriptionViaCKEditor(entryFullDescription = "${productFullDescription}");
 
-		Click(
-			key_text = "Save as Draft",
-			locator1 = "Button#ANY");
+		if (isSet(publishProduct) && ("${publishProduct}" == "true")) {
+			CommerceEntry.publishEntry(status = "Approved");
+		}
+		else {
+			Click(
+				key_text = "Save as Draft",
+				locator1 = "Button#ANY");
+		}
 	}
 
 	macro addProductsEntry {
@@ -444,7 +493,7 @@ definition {
 			entryName = "${productCatalog}",
 			label = "Catalog");
 
-		Click(locator1 = "Button#SUBMIT");
+		Button.clickSubmitButton();
 
 		WaitForElementPresent(
 			key_title = "${productName}",
@@ -655,6 +704,21 @@ definition {
 		}
 	}
 
+	macro clickButtonWithName {
+		Click.javaScriptClick(
+			key_buttonName = "${buttonName}",
+			key_text = "${text}",
+			locator1 = "CommerceEntry#BUTTON_WITH_NAME");
+	}
+
+	macro clickEntryDropdownMenuItem {
+		Click(
+			key_value = "${entryName}",
+			locator1 = "CommerceEntry#BODY_VERTICAL_ELLIPSIS");
+
+		DropdownMenuItem.click(menuItem = "${menuItem}");
+	}
+
 	macro clickNoError {
 		ClickNoError(
 			key_menuItem = "${menuItem}",
@@ -662,10 +726,19 @@ definition {
 	}
 
 	macro clickTableEntryEditButton {
-		Click(
-			key_entryName = "${entryName}",
-			key_table = "${table}",
-			locator1 = "CommerceEntry#TABLE_ENTRY_EDIT_BUTTON");
+		WaitForPageLoad();
+
+		if (IsElementPresent(key_value = "${entryName}", locator1 = "CommerceEntry#BODY_VERTICAL_ELLIPSIS")) {
+			CommerceEntry.clickEntryDropdownMenuItem(
+				entryName = "${entryName}",
+				menuItem = "Edit");
+		}
+		else {
+			Click(
+				key_entryName = "${entryName}",
+				key_table = "${table}",
+				locator1 = "CommerceEntry#TABLE_ENTRY_EDIT_BUTTON");
+		}
 	}
 
 	macro createNewAccountGroup {
@@ -948,7 +1021,7 @@ definition {
 
 		AssertElementPresent(locator1 = "Message#SUCCESS");
 
-		Pause(locator1 = "3000");
+		WaitForElementNotPresent(locator1 = "Message#SUCCESS");
 	}
 
 	macro saveEntry {
@@ -956,7 +1029,7 @@ definition {
 
 		AssertElementPresent(locator1 = "Message#SUCCESS");
 
-		Pause(locator1 = "3000");
+		WaitForElementNotPresent(locator1 = "Message#SUCCESS");
 	}
 
 	macro saveEntryAsDraft {
@@ -971,8 +1044,6 @@ definition {
 				locator1 = "CommerceEntry#WORKFLOW_STATUS",
 				value1 = "${status}");
 		}
-
-		Pause(locator1 = "3000");
 	}
 
 	macro selectAssociatedOptionsValue {

@@ -18,9 +18,9 @@ import com.liferay.client.extension.constants.ClientExtensionEntryConstants;
 import com.liferay.client.extension.model.ClientExtensionEntryRel;
 import com.liferay.client.extension.service.ClientExtensionEntryRelLocalService;
 import com.liferay.client.extension.type.CET;
-import com.liferay.client.extension.type.CETThemeCSS;
-import com.liferay.client.extension.type.CETThemeFavicon;
-import com.liferay.client.extension.type.CETThemeJS;
+import com.liferay.client.extension.type.ThemeCSSCET;
+import com.liferay.client.extension.type.ThemeFaviconCET;
+import com.liferay.client.extension.type.ThemeJSCET;
 import com.liferay.client.extension.type.manager.CETManager;
 import com.liferay.portal.kernel.events.Action;
 import com.liferay.portal.kernel.events.LifecycleAction;
@@ -58,23 +58,23 @@ public class ClientExtensionsServicePreAction extends Action {
 
 		Layout layout = themeDisplay.getLayout();
 
-		if (layout == null) {
+		if ((layout == null) || layout.isTypeControlPanel()) {
 			return;
 		}
 
 		themeDisplay.setFaviconURL(_getFaviconURL(layout));
 
-		CETThemeCSS cetThemeCSS = _getCETThemeCSS(layout);
+		ThemeCSSCET themeCSSCET = _getThemeCSSCET(layout);
 
-		if (cetThemeCSS != null) {
-			themeDisplay.setClayCSSURL(cetThemeCSS.getClayURL());
-			themeDisplay.setMainCSSURL(cetThemeCSS.getMainURL());
+		if (themeCSSCET != null) {
+			themeDisplay.setClayCSSURL(themeCSSCET.getClayURL());
+			themeDisplay.setMainCSSURL(themeCSSCET.getMainURL());
 		}
 
-		CETThemeJS cetThemeJS = _getCETThemeJS(layout);
+		ThemeJSCET themeJSCET = _getThemeJSCET(layout);
 
-		if (cetThemeJS != null) {
-			themeDisplay.setMainJSURL(cetThemeJS.getURL());
+		if (themeJSCET != null) {
+			themeDisplay.setMainJSURL(themeJSCET.getURL());
 		}
 	}
 
@@ -93,67 +93,8 @@ public class ClientExtensionsServicePreAction extends Action {
 			companyId, clientExtensionEntryRel.getCETExternalReferenceCode());
 	}
 
-	private CETThemeCSS _getCETThemeCSS(Layout layout) {
-		CET cet = _getCET(
-			_portal.getClassNameId(Layout.class), layout.getPlid(),
-			layout.getCompanyId(),
-			ClientExtensionEntryConstants.TYPE_THEME_CSS);
-
-		if (cet == null) {
-			LayoutSet layoutSet = layout.getLayoutSet();
-
-			cet = _getCET(
-				_portal.getClassNameId(LayoutSet.class),
-				layoutSet.getLayoutSetId(), layout.getCompanyId(),
-				ClientExtensionEntryConstants.TYPE_THEME_CSS);
-		}
-
-		if (cet != null) {
-			return (CETThemeCSS)cet;
-		}
-
-		return null;
-	}
-
-	private String _getCETThemeFaviconURL(
-		long classNameId, long classPK, long companyId) {
-
-		CET cet = _getCET(
-			classNameId, classPK, companyId,
-			ClientExtensionEntryConstants.TYPE_THEME_FAVICON);
-
-		if (cet == null) {
-			return null;
-		}
-
-		CETThemeFavicon cetThemeFavicon = (CETThemeFavicon)cet;
-
-		return cetThemeFavicon.getURL();
-	}
-
-	private CETThemeJS _getCETThemeJS(Layout layout) {
-		CET cet = _getCET(
-			_portal.getClassNameId(Layout.class), layout.getPlid(),
-			layout.getCompanyId(), ClientExtensionEntryConstants.TYPE_THEME_JS);
-
-		if (cet == null) {
-			LayoutSet layoutSet = layout.getLayoutSet();
-
-			cet = _getCET(
-				_portal.getClassNameId(LayoutSet.class),
-				layoutSet.getLayoutSetId(), layout.getCompanyId(),
-				ClientExtensionEntryConstants.TYPE_THEME_JS);
-		}
-
-		if (cet != null) {
-			return (CETThemeJS)cet;
-		}
-
-		return null;
-	}
-
 	private String _getFaviconURL(Layout layout) {
-		String faviconURL = _getCETThemeFaviconURL(
+		String faviconURL = _getThemeFaviconCETURL(
 			_portal.getClassNameId(Layout.class), layout.getPlid(),
 			layout.getCompanyId());
 
@@ -171,7 +112,7 @@ public class ClientExtensionsServicePreAction extends Action {
 			layout.getMasterLayoutPlid());
 
 		if (masterLayout != null) {
-			faviconURL = _getCETThemeFaviconURL(
+			faviconURL = _getThemeFaviconCETURL(
 				_portal.getClassNameId(Layout.class), masterLayout.getPlid(),
 				layout.getCompanyId());
 
@@ -188,7 +129,7 @@ public class ClientExtensionsServicePreAction extends Action {
 
 		LayoutSet layoutSet = layout.getLayoutSet();
 
-		faviconURL = _getCETThemeFaviconURL(
+		faviconURL = _getThemeFaviconCETURL(
 			_portal.getClassNameId(LayoutSet.class), layoutSet.getLayoutSetId(),
 			layout.getCompanyId());
 
@@ -200,6 +141,79 @@ public class ClientExtensionsServicePreAction extends Action {
 
 		if (Validator.isNotNull(faviconURL)) {
 			return faviconURL;
+		}
+
+		return null;
+	}
+
+	private ThemeCSSCET _getThemeCSSCET(Layout layout) {
+		CET cet = _getCET(
+			_portal.getClassNameId(Layout.class), layout.getPlid(),
+			layout.getCompanyId(),
+			ClientExtensionEntryConstants.TYPE_THEME_CSS);
+
+		if (cet == null) {
+			cet = _getCET(
+				_portal.getClassNameId(Layout.class),
+				layout.getMasterLayoutPlid(), layout.getCompanyId(),
+				ClientExtensionEntryConstants.TYPE_THEME_CSS);
+		}
+
+		if (cet == null) {
+			LayoutSet layoutSet = layout.getLayoutSet();
+
+			cet = _getCET(
+				_portal.getClassNameId(LayoutSet.class),
+				layoutSet.getLayoutSetId(), layout.getCompanyId(),
+				ClientExtensionEntryConstants.TYPE_THEME_CSS);
+		}
+
+		if (cet != null) {
+			return (ThemeCSSCET)cet;
+		}
+
+		return null;
+	}
+
+	private String _getThemeFaviconCETURL(
+		long classNameId, long classPK, long companyId) {
+
+		CET cet = _getCET(
+			classNameId, classPK, companyId,
+			ClientExtensionEntryConstants.TYPE_THEME_FAVICON);
+
+		if (cet == null) {
+			return null;
+		}
+
+		ThemeFaviconCET themeFaviconCET = (ThemeFaviconCET)cet;
+
+		return themeFaviconCET.getURL();
+	}
+
+	private ThemeJSCET _getThemeJSCET(Layout layout) {
+		CET cet = _getCET(
+			_portal.getClassNameId(Layout.class), layout.getPlid(),
+			layout.getCompanyId(), ClientExtensionEntryConstants.TYPE_THEME_JS);
+
+		if (cet == null) {
+			cet = _getCET(
+				_portal.getClassNameId(Layout.class),
+				layout.getMasterLayoutPlid(), layout.getCompanyId(),
+				ClientExtensionEntryConstants.TYPE_THEME_JS);
+		}
+
+		if (cet == null) {
+			LayoutSet layoutSet = layout.getLayoutSet();
+
+			cet = _getCET(
+				_portal.getClassNameId(LayoutSet.class),
+				layoutSet.getLayoutSetId(), layout.getCompanyId(),
+				ClientExtensionEntryConstants.TYPE_THEME_JS);
+		}
+
+		if (cet != null) {
+			return (ThemeJSCET)cet;
 		}
 
 		return null;

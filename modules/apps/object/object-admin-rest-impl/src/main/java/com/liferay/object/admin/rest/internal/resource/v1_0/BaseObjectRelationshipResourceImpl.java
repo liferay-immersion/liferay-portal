@@ -85,10 +85,6 @@ public abstract class BaseObjectRelationshipResourceImpl
 			),
 			@io.swagger.v3.oas.annotations.Parameter(
 				in = io.swagger.v3.oas.annotations.enums.ParameterIn.QUERY,
-				name = "search"
-			),
-			@io.swagger.v3.oas.annotations.Parameter(
-				in = io.swagger.v3.oas.annotations.enums.ParameterIn.QUERY,
 				name = "filter"
 			),
 			@io.swagger.v3.oas.annotations.Parameter(
@@ -98,6 +94,10 @@ public abstract class BaseObjectRelationshipResourceImpl
 			@io.swagger.v3.oas.annotations.Parameter(
 				in = io.swagger.v3.oas.annotations.enums.ParameterIn.QUERY,
 				name = "pageSize"
+			),
+			@io.swagger.v3.oas.annotations.Parameter(
+				in = io.swagger.v3.oas.annotations.enums.ParameterIn.QUERY,
+				name = "search"
 			)
 		}
 	)
@@ -130,7 +130,7 @@ public abstract class BaseObjectRelationshipResourceImpl
 	/**
 	 * Invoke this method with the command line:
 	 *
-	 * curl -X 'POST' 'http://localhost:8080/o/object-admin/v1.0/object-definitions/{objectDefinitionId}/object-relationships' -d $'{"deletionType": ___, "label": ___, "name": ___, "objectDefinitionId1": ___, "objectDefinitionId2": ___, "objectDefinitionName2": ___, "type": ___}' --header 'Content-Type: application/json' -u 'test@liferay.com:test'
+	 * curl -X 'POST' 'http://localhost:8080/o/object-admin/v1.0/object-definitions/{objectDefinitionId}/object-relationships' -d $'{"deletionType": ___, "label": ___, "name": ___, "objectDefinitionId1": ___, "objectDefinitionId2": ___, "objectDefinitionName2": ___, "parameterObjectFieldId": ___, "type": ___}' --header 'Content-Type: application/json' -u 'test@liferay.com:test'
 	 */
 	@io.swagger.v3.oas.annotations.Parameters(
 		value = {
@@ -330,7 +330,7 @@ public abstract class BaseObjectRelationshipResourceImpl
 	/**
 	 * Invoke this method with the command line:
 	 *
-	 * curl -X 'PUT' 'http://localhost:8080/o/object-admin/v1.0/object-relationships/{objectRelationshipId}' -d $'{"deletionType": ___, "label": ___, "name": ___, "objectDefinitionId1": ___, "objectDefinitionId2": ___, "objectDefinitionName2": ___, "type": ___}' --header 'Content-Type: application/json' -u 'test@liferay.com:test'
+	 * curl -X 'PUT' 'http://localhost:8080/o/object-admin/v1.0/object-relationships/{objectRelationshipId}' -d $'{"deletionType": ___, "label": ___, "name": ___, "objectDefinitionId1": ___, "objectDefinitionId2": ___, "objectDefinitionName2": ___, "parameterObjectFieldId": ___, "type": ___}' --header 'Content-Type: application/json' -u 'test@liferay.com:test'
 	 */
 	@io.swagger.v3.oas.annotations.Parameters(
 		value = {
@@ -421,11 +421,18 @@ public abstract class BaseObjectRelationshipResourceImpl
 			"createStrategy", "INSERT");
 
 		if ("INSERT".equalsIgnoreCase(createStrategy)) {
-			objectRelationshipUnsafeConsumer =
-				objectRelationship -> postObjectDefinitionObjectRelationship(
-					Long.parseLong(
-						(String)parameters.get("objectDefinitionId")),
-					objectRelationship);
+			if (parameters.containsKey("objectDefinitionId")) {
+				objectRelationshipUnsafeConsumer =
+					objectRelationship ->
+						postObjectDefinitionObjectRelationship(
+							Long.parseLong(
+								(String)parameters.get("objectDefinitionId")),
+							objectRelationship);
+			}
+			else {
+				throw new NotSupportedException(
+					"One of the following parameters must be specified: [objectDefinitionId]");
+			}
 		}
 
 		if (objectRelationshipUnsafeConsumer == null) {
@@ -489,9 +496,15 @@ public abstract class BaseObjectRelationshipResourceImpl
 			Map<String, Serializable> parameters, String search)
 		throws Exception {
 
-		return getObjectDefinitionObjectRelationshipsPage(
-			Long.parseLong((String)parameters.get("objectDefinitionId")),
-			search, filter, pagination);
+		if (parameters.containsKey("objectDefinitionId")) {
+			return getObjectDefinitionObjectRelationshipsPage(
+				Long.parseLong((String)parameters.get("objectDefinitionId")),
+				search, filter, pagination);
+		}
+		else {
+			throw new NotSupportedException(
+				"One of the following parameters must be specified: [objectDefinitionId]");
+		}
 	}
 
 	@Override

@@ -9105,7 +9105,7 @@ public class MBMessagePersistenceImpl
 	 * </p>
 	 *
 	 * @param userId the user ID
-	 * @param classNameId the class name ID
+	 * @param classNameIds the class name IDs
 	 * @param start the lower bound of the range of message-boards messages
 	 * @param end the upper bound of the range of message-boards messages (not inclusive)
 	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
@@ -17430,7 +17430,7 @@ public class MBMessagePersistenceImpl
 	 * </p>
 	 *
 	 * @param userId the user ID
-	 * @param classNameId the class name ID
+	 * @param classNameIds the class name IDs
 	 * @param status the status
 	 * @param start the lower bound of the range of message-boards messages
 	 * @param end the upper bound of the range of message-boards messages (not inclusive)
@@ -21665,15 +21665,14 @@ public class MBMessagePersistenceImpl
 
 		MBMessageModelImpl mbMessageModelImpl = (MBMessageModelImpl)mbMessage;
 
-		if (Validator.isNull(mbMessage.getExternalReferenceCode())) {
-			mbMessage.setExternalReferenceCode(
-				String.valueOf(mbMessage.getPrimaryKey()));
-		}
-
 		if (Validator.isNull(mbMessage.getUuid())) {
 			String uuid = _portalUUID.generate();
 
 			mbMessage.setUuid(uuid);
+		}
+
+		if (Validator.isNull(mbMessage.getExternalReferenceCode())) {
+			mbMessage.setExternalReferenceCode(mbMessage.getUuid());
 		}
 
 		ServiceContext serviceContext =
@@ -21819,7 +21818,7 @@ public class MBMessagePersistenceImpl
 	 */
 	@Override
 	public MBMessage fetchByPrimaryKey(Serializable primaryKey) {
-		if (ctPersistenceHelper.isProductionMode(MBMessage.class)) {
+		if (ctPersistenceHelper.isProductionMode(MBMessage.class, primaryKey)) {
 			return super.fetchByPrimaryKey(primaryKey);
 		}
 

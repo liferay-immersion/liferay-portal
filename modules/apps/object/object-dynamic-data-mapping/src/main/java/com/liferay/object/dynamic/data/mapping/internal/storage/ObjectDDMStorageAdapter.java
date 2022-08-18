@@ -36,7 +36,7 @@ import com.liferay.object.model.ObjectDefinition;
 import com.liferay.object.model.ObjectField;
 import com.liferay.object.rest.dto.v1_0.ObjectEntry;
 import com.liferay.object.rest.manager.v1_0.ObjectEntryManager;
-import com.liferay.object.rest.manager.v1_0.ObjectEntryManagerServicesTracker;
+import com.liferay.object.rest.manager.v1_0.ObjectEntryManagerTracker;
 import com.liferay.object.scope.ObjectScopeProviderRegistry;
 import com.liferay.object.service.ObjectDefinitionLocalService;
 import com.liferay.object.service.ObjectEntryService;
@@ -99,7 +99,7 @@ public class ObjectDDMStorageAdapter implements DDMStorageAdapter {
 				objectEntryId);
 
 			ObjectEntryManager objectEntryManager =
-				_objectEntryManagerServicesTracker.getObjectEntryManager(
+				_objectEntryManagerTracker.getObjectEntryManager(
 					objectDefinition.getStorageType());
 
 			ObjectEntry objectEntry = objectEntryManager.fetchObjectEntry(
@@ -134,7 +134,7 @@ public class ObjectDDMStorageAdapter implements DDMStorageAdapter {
 				objectEntryId);
 
 			ObjectEntryManager objectEntryManager =
-				_objectEntryManagerServicesTracker.getObjectEntryManager(
+				_objectEntryManagerTracker.getObjectEntryManager(
 					objectDefinition.getStorageType());
 
 			return DDMStorageAdapterGetResponse.Builder.newBuilder(
@@ -173,7 +173,7 @@ public class ObjectDDMStorageAdapter implements DDMStorageAdapter {
 					objectDefinitionId);
 
 			ObjectEntryManager objectEntryManager =
-				_objectEntryManagerServicesTracker.getObjectEntryManager(
+				_objectEntryManagerTracker.getObjectEntryManager(
 					objectDefinition.getStorageType());
 
 			ObjectEntry addObjectEntry = objectEntryManager.addObjectEntry(
@@ -540,8 +540,7 @@ public class ObjectDDMStorageAdapter implements DDMStorageAdapter {
 	private ObjectDefinitionLocalService _objectDefinitionLocalService;
 
 	@Reference
-	private ObjectEntryManagerServicesTracker
-		_objectEntryManagerServicesTracker;
+	private ObjectEntryManagerTracker _objectEntryManagerTracker;
 
 	@Reference
 	private ObjectEntryService _objectEntryService;

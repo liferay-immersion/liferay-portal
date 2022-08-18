@@ -607,14 +607,13 @@ definition {
 		property portal.acceptance = "true";
 		property testray.component.names = "Training";
 
-		JSONDocument.deleteFile(
-			dmDocumentTitle = "tree.png",
-			groupName = "Guest");
+		JSONGroup.addGroup(groupName = "Site Name");
 
 		Permissions.setUpRegRoleLoginUserPG(
 			pageName = "Documents and Media Page",
 			portletName = "Documents and Media",
 			roleTitle = "Regrole Name",
+			siteName = "Site Name",
 			userEmailAddress = "userea@liferay.com",
 			userFirstName = "userfn",
 			userLastName = "userln",
@@ -622,7 +621,9 @@ definition {
 			userLoginFullName = "Test Test",
 			userScreenName = "usersn");
 
-		Navigator.gotoPage(pageName = "Documents and Media Page");
+		Navigator.gotoSitePage(
+			pageName = "Documents and Media Page",
+			siteName = "Site Name");
 
 		DMDocument.enableActionsMenuOnPortlet();
 
@@ -630,6 +631,7 @@ definition {
 			dmFolderDescription = "DM Folder Description",
 			dmFolderName = "DM Folder Name",
 			pageName = "Documents and Media Page",
+			siteName = "Site Name",
 			userLoginEmailAddress = "userea@liferay.com",
 			userLoginFullName = "userfn userln");
 
@@ -637,7 +639,9 @@ definition {
 			userLoginEmailAddress = "test@liferay.com",
 			userLoginFullName = "Test Test");
 
-		Navigator.gotoPage(pageName = "Documents and Media Page");
+		Navigator.gotoSitePage(
+			pageName = "Documents and Media Page",
+			siteName = "Site Name");
 
 		DMDocument.enableActionsMenuOnPortlet();
 
@@ -655,7 +659,9 @@ definition {
 			userLoginEmailAddress = "userea@liferay.com",
 			userLoginFullName = "userfn userln");
 
-		Navigator.gotoPage(pageName = "Documents and Media Page");
+		Navigator.gotoSitePage(
+			pageName = "Documents and Media Page",
+			siteName = "Site Name");
 
 		AssertTextEquals(
 			key_dmFolderName = "DM Folder Name",
@@ -672,7 +678,9 @@ definition {
 			userLoginEmailAddress = "test@liferay.com",
 			userLoginFullName = "Test Test");
 
-		Navigator.gotoPage(pageName = "Documents and Media Page");
+		Navigator.gotoSitePage(
+			pageName = "Documents and Media Page",
+			siteName = "Site Name");
 
 		DMNavigator.gotoFolderPermissions(dmFolderName = "DM Folder Name");
 
@@ -684,7 +692,9 @@ definition {
 			userLoginEmailAddress = "userea@liferay.com",
 			userLoginFullName = "userfn userln");
 
-		Navigator.gotoPage(pageName = "Documents and Media Page");
+		Navigator.gotoSitePage(
+			pageName = "Documents and Media Page",
+			siteName = "Site Name");
 
 		LexiconEntry.changeDisplayStyle(displayStyle = "list");
 
@@ -694,7 +704,9 @@ definition {
 			userLoginEmailAddress = "test@liferay.com",
 			userLoginFullName = "Test Test");
 
-		Navigator.gotoPage(pageName = "Documents and Media Page");
+		Navigator.gotoSitePage(
+			pageName = "Documents and Media Page",
+			siteName = "Site Name");
 
 		DMPortlet.viewDefaultPG();
 	}
@@ -744,7 +756,7 @@ definition {
 			menuItem = "Edit",
 			rowEntry = "DM Document Type Name");
 
-		Pause(locator1 = "3000");
+		WaitForSPARefresh();
 
 		var documentTypeURL = selenium.getLocation();
 
@@ -764,8 +776,10 @@ definition {
 	}
 
 	@description = "This is a test for LPS-136852. It checks that a guest cannot access a folder image without permissions."
-	@priority = "3"
+	@priority = "4"
 	test GuestCannotAccessFolderImageThroughURLWithoutPermissions {
+		property portal.upstream = "true";
+
 		JSONFolder.addFolder(
 			dmFolderDescription = "DM Folder Description",
 			dmFolderName = "DM Folder Name",
@@ -1095,7 +1109,7 @@ definition {
 		Navigator.openSpecificURL(url = "${dmDocumentURL}");
 
 		AssertVisible(
-			key_imageSourceURL = "Document_1",
+			key_imageSourceURL = "dm-document-title",
 			locator1 = "DocumentsAndMediaDocument#DOCUMENT_VIEWPORT_PREVIEW");
 	}
 
@@ -1159,7 +1173,7 @@ definition {
 			webContentTitle = "WC WebContent Title");
 
 		WebContentDisplayPortlet.viewContent(
-			imageFileName = "Document_1.png",
+			imageFileName = "document_1",
 			webContentTitle = "WC WebContent Title");
 	}
 
@@ -1176,12 +1190,7 @@ definition {
 			groupName = "Moon Rocks 101",
 			layoutName = "Moon Rocks Page");
 
-		ApplicationsMenu.gotoPortlet(
-			category = "Users",
-			panel = "Control Panel",
-			portlet = "Roles");
-
-		Role.add(roleTitle = "Regular Role Name");
+		JSONRole.addRegularRole(roleTitle = "Regular Role Name");
 
 		ApplicationsMenu.gotoPortlet(
 			category = "Users",
@@ -1203,25 +1212,13 @@ definition {
 			requireReset = "false",
 			userEmailAddress = "userea@liferay.com");
 
-		PagesAdmin.openPagesAdmin(siteURLKey = "Moon Rocks 101");
+		JSONUser.addUserToSite(
+			groupName = "Moon Rocks 101",
+			userEmailAddress = "userea@liferay.com");
 
-		ProductMenu.gotoPortlet(
-			category = "People",
-			portlet = "Memberships");
-
-		Site.assignUserAsMemberCP(
-			userFirstName = "userfn",
-			userLastName = "userln",
-			userScreenName = "usersn");
-
-		ApplicationsMenu.gotoPortlet(
-			category = "Users",
-			panel = "Control Panel",
-			portlet = "Users and Organizations");
-
-		User.assignRegularRoleCP(
+		JSONRole.assignRoleToUser(
 			roleTitle = "Regular Role Name",
-			userScreenName = "usersn");
+			userEmailAddress = "userea@liferay.com");
 
 		User.logoutPG();
 
@@ -2084,7 +2081,7 @@ definition {
 		Navigator.openSpecificURL(url = "${dmDocumentURL}");
 
 		AssertVisible(
-			key_imageSourceURL = "Document_1",
+			key_imageSourceURL = "dm-document-title",
 			locator1 = "DocumentsAndMediaDocument#DOCUMENT_VIEWPORT_PREVIEW");
 	}
 
@@ -2876,18 +2873,15 @@ definition {
 			mimeType = "text/plain",
 			sourceFileName = "Document_1.doc");
 
+		JSONUser.addUserToSite(
+			groupName = "Site Name",
+			userEmailAddress = "userea@liferay.com");
+
 		Navigator.openSitePage(
 			pageName = "Documents and Media Page",
 			siteName = "Site Name");
 
 		DMDocument.enableActionsMenuOnPortlet();
-
-		Site.openSiteMembershipsAdmin(siteURLKey = "site-name");
-
-		Site.assignUserAsMemberCP(
-			userFirstName = "userfn",
-			userLastName = "userln",
-			userScreenName = "usersn");
 
 		Navigator.openSitePage(
 			pageName = "Documents and Media Page",
@@ -3099,8 +3093,7 @@ definition {
 	@refactorneeded
 	test ViewSearchResultsForChildObjectRespectsParentFolderPermissions {
 		property custom.properties = "jsonws.web.service.paths.excludes=";
-		property portal.acceptance = "true";
-		property test.name.skip.portal.instance = "DMPermissions#ViewSearchResultsForChildObjectRespectsParentFolderPermissions";
+		property portal.acceptance = "quarantine";
 		property testray.component.names = "Training";
 
 		SearchAdministration.executeReindex();
@@ -3260,10 +3253,6 @@ definition {
 		PermissionsInline.viewPermissionsChecked(
 			permissionDefinitionKey = "CONFIGURATION_PERMISSIONS_VIEW_CHECKBOX",
 			roleTitle = "Guest");
-
-		IFrame.closeFrame();
-
-		Pause(locator1 = "3000");
 
 		PagesAdmin.openPagesAdmin(siteURLKey = "Site Name 1");
 

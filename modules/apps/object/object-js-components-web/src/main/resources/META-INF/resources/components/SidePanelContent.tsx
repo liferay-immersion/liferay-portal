@@ -24,6 +24,16 @@ export function closeSidePanel() {
 	parentWindow.Liferay.fire('close-side-panel');
 }
 
+export function saveAndReload() {
+	const parentWindow = Liferay.Util.getOpener();
+
+	closeSidePanel();
+
+	setTimeout(() => {
+		parentWindow.location.reload();
+	}, 300);
+}
+
 export function openToast(options: {
 	message: string;
 	type?: 'danger' | 'success';

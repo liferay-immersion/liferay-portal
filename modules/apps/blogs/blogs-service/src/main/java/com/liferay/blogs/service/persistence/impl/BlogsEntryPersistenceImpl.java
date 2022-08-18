@@ -10988,7 +10988,7 @@ public class BlogsEntryPersistenceImpl
 	 *
 	 * @param groupId the group ID
 	 * @param userId the user ID
-	 * @param status the status
+	 * @param statuses the statuses
 	 * @param start the lower bound of the range of blogs entries
 	 * @param end the upper bound of the range of blogs entries (not inclusive)
 	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
@@ -21921,15 +21921,14 @@ public class BlogsEntryPersistenceImpl
 		BlogsEntryModelImpl blogsEntryModelImpl =
 			(BlogsEntryModelImpl)blogsEntry;
 
-		if (Validator.isNull(blogsEntry.getExternalReferenceCode())) {
-			blogsEntry.setExternalReferenceCode(
-				String.valueOf(blogsEntry.getPrimaryKey()));
-		}
-
 		if (Validator.isNull(blogsEntry.getUuid())) {
 			String uuid = _portalUUID.generate();
 
 			blogsEntry.setUuid(uuid);
+		}
+
+		if (Validator.isNull(blogsEntry.getExternalReferenceCode())) {
+			blogsEntry.setExternalReferenceCode(blogsEntry.getUuid());
 		}
 
 		ServiceContext serviceContext =
@@ -22088,7 +22087,9 @@ public class BlogsEntryPersistenceImpl
 	 */
 	@Override
 	public BlogsEntry fetchByPrimaryKey(Serializable primaryKey) {
-		if (ctPersistenceHelper.isProductionMode(BlogsEntry.class)) {
+		if (ctPersistenceHelper.isProductionMode(
+				BlogsEntry.class, primaryKey)) {
+
 			return super.fetchByPrimaryKey(primaryKey);
 		}
 

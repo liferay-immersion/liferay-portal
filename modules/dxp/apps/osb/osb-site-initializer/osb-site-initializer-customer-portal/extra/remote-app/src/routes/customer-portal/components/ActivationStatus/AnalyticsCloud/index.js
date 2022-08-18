@@ -14,14 +14,13 @@ import {Align} from '@clayui/drop-down';
 import ClayIcon from '@clayui/icon';
 import {useModal} from '@clayui/modal';
 import React, {useEffect, useState} from 'react';
-import client from '../../../../../apolloClient';
 import i18n from '../../../../../common/I18n';
 import {Button, ButtonDropDown} from '../../../../../common/components';
 import {useAppPropertiesContext} from '../../../../../common/contexts/AppPropertiesContext';
 import {
 	getAccountSubscriptionGroups,
-	getAccountSubscriptionsTerms,
 	getAnalyticsCloudWorkspace,
+	getCommerceOrderItems,
 	updateAccountSubscriptionGroups,
 	updateAnalyticsCloudWorkspace,
 } from '../../../../../common/services/liferay/graphql/queries';
@@ -45,7 +44,7 @@ const ActivationStatusAnalyticsCloud = ({
 	userAccount,
 }) => {
 	const [, dispatch] = useCustomerPortal();
-	const {liferayWebDAV} = useAppPropertiesContext();
+	const {client, liferayWebDAV} = useAppPropertiesContext();
 	const [groupIdValue, setGroupIdValue] = useState('');
 	const [activationStatusDate, setActivationStatusDate] = useState('');
 	const [isVisible, setIsVisible] = useState(false);
@@ -172,10 +171,10 @@ const ActivationStatusAnalyticsCloud = ({
 		];
 
 	useEffect(() => {
-		const getSubscriptionTerms = async () => {
-			const filterAccountSubscriptionERC = `accountSubscriptionGroupERC eq '${project.accountKey}_analytics-cloud'`;
+		const fetchCommerceOrderItems = async () => {
+			const filterAccountSubscriptionERC = `customFields/accountSubscriptionGroupERC eq '${project.accountKey}_analytics-cloud'`;
 			const {data} = await client.query({
-				query: getAccountSubscriptionsTerms,
+				query: getCommerceOrderItems,
 				variables: {
 					filter: filterAccountSubscriptionERC,
 				},
@@ -183,14 +182,14 @@ const ActivationStatusAnalyticsCloud = ({
 
 			if (data) {
 				const activationStatusDateRange = getActivationStatusDateRange(
-					data.c?.accountSubscriptionTerms?.items
+					data?.orderItems?.items
 				);
 				setActivationStatusDate(activationStatusDateRange);
 			}
 		};
 
-		getSubscriptionTerms();
-	}, [project]);
+		fetchCommerceOrderItems();
+	}, [client, project]);
 
 	const updateAnalyticsCloudWorkspaceId = async () => {
 		const {data} = await client.query({
@@ -224,6 +223,7 @@ const ActivationStatusAnalyticsCloud = ({
 				mutation: updateAccountSubscriptionGroups,
 				variables: {
 					accountSubscriptionGroup: {
+						accountKey: project.accountKey,
 						activationStatus: STATUS_TAG_TYPE_NAMES.active,
 					},
 					id:

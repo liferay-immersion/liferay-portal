@@ -141,7 +141,7 @@ public class ObjectViewFilterColumnPersistenceTest {
 
 		newObjectViewFilterColumn.setFilterType(RandomTestUtil.randomString());
 
-		newObjectViewFilterColumn.setJson(RandomTestUtil.randomString());
+		newObjectViewFilterColumn.setJSON(RandomTestUtil.randomString());
 
 		newObjectViewFilterColumn.setObjectFieldName(
 			RandomTestUtil.randomString());
@@ -187,8 +187,8 @@ public class ObjectViewFilterColumnPersistenceTest {
 			existingObjectViewFilterColumn.getFilterType(),
 			newObjectViewFilterColumn.getFilterType());
 		Assert.assertEquals(
-			existingObjectViewFilterColumn.getJson(),
-			newObjectViewFilterColumn.getJson());
+			existingObjectViewFilterColumn.getJSON(),
+			newObjectViewFilterColumn.getJSON());
 		Assert.assertEquals(
 			existingObjectViewFilterColumn.getObjectFieldName(),
 			newObjectViewFilterColumn.getObjectFieldName());
@@ -259,8 +259,7 @@ public class ObjectViewFilterColumnPersistenceTest {
 			"ObjectViewFilterColumn", "mvccVersion", true, "uuid", true,
 			"objectViewFilterColumnId", true, "companyId", true, "userId", true,
 			"userName", true, "createDate", true, "modifiedDate", true,
-			"objectViewId", true, "filterType", true, "json", true,
-			"objectFieldName", true);
+			"objectViewId", true, "filterType", true, "objectFieldName", true);
 	}
 
 	@Test
@@ -497,7 +496,7 @@ public class ObjectViewFilterColumnPersistenceTest {
 
 		objectViewFilterColumn.setFilterType(RandomTestUtil.randomString());
 
-		objectViewFilterColumn.setJson(RandomTestUtil.randomString());
+		objectViewFilterColumn.setJSON(RandomTestUtil.randomString());
 
 		objectViewFilterColumn.setObjectFieldName(
 			RandomTestUtil.randomString());

@@ -14,8 +14,10 @@
 
 package com.liferay.portal.bootstrap.log;
 
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.util.StringUtil;
 
 import org.eclipse.equinox.log.SynchronousLogListener;
 
@@ -37,6 +39,13 @@ public class PortalSynchronousLogListener implements SynchronousLogListener {
 		LogLevel level = logEntry.getLogLevel();
 
 		String message = logEntry.getMessage();
+
+		if (StringUtil.equals(message, "ServiceEvent REGISTERING") ||
+			StringUtil.equals(message, "ServiceEvent UNREGISTERING")) {
+
+			message =
+				message + StringPool.SPACE + logEntry.getServiceReference();
+		}
 
 		Throwable throwable = logEntry.getException();
 

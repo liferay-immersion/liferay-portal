@@ -85,7 +85,7 @@ public abstract class BaseObjectFieldResourceImpl
 			),
 			@io.swagger.v3.oas.annotations.Parameter(
 				in = io.swagger.v3.oas.annotations.enums.ParameterIn.QUERY,
-				name = "search"
+				name = "filter"
 			),
 			@io.swagger.v3.oas.annotations.Parameter(
 				in = io.swagger.v3.oas.annotations.enums.ParameterIn.QUERY,
@@ -94,6 +94,14 @@ public abstract class BaseObjectFieldResourceImpl
 			@io.swagger.v3.oas.annotations.Parameter(
 				in = io.swagger.v3.oas.annotations.enums.ParameterIn.QUERY,
 				name = "pageSize"
+			),
+			@io.swagger.v3.oas.annotations.Parameter(
+				in = io.swagger.v3.oas.annotations.enums.ParameterIn.QUERY,
+				name = "search"
+			),
+			@io.swagger.v3.oas.annotations.Parameter(
+				in = io.swagger.v3.oas.annotations.enums.ParameterIn.QUERY,
+				name = "sort"
 			)
 		}
 	)
@@ -112,7 +120,9 @@ public abstract class BaseObjectFieldResourceImpl
 			@io.swagger.v3.oas.annotations.Parameter(hidden = true)
 			@javax.ws.rs.QueryParam("search")
 			String search,
-			@javax.ws.rs.core.Context Pagination pagination)
+			@javax.ws.rs.core.Context Filter filter,
+			@javax.ws.rs.core.Context Pagination pagination,
+			@javax.ws.rs.core.Context Sort[] sorts)
 		throws Exception {
 
 		return Page.of(Collections.emptyList());
@@ -121,7 +131,7 @@ public abstract class BaseObjectFieldResourceImpl
 	/**
 	 * Invoke this method with the command line:
 	 *
-	 * curl -X 'POST' 'http://localhost:8080/o/object-admin/v1.0/object-definitions/{objectDefinitionId}/object-fields' -d $'{"DBType": ___, "businessType": ___, "indexed": ___, "indexedAsKeyword": ___, "indexedLanguageId": ___, "label": ___, "listTypeDefinitionId": ___, "name": ___, "objectFieldSettings": ___, "required": ___, "type": ___}' --header 'Content-Type: application/json' -u 'test@liferay.com:test'
+	 * curl -X 'POST' 'http://localhost:8080/o/object-admin/v1.0/object-definitions/{objectDefinitionId}/object-fields' -d $'{"DBType": ___, "businessType": ___, "defaultValue": ___, "externalReferenceCode": ___, "indexed": ___, "indexedAsKeyword": ___, "indexedLanguageId": ___, "label": ___, "listTypeDefinitionId": ___, "name": ___, "objectFieldSettings": ___, "required": ___, "state": ___, "system": ___, "type": ___}' --header 'Content-Type: application/json' -u 'test@liferay.com:test'
 	 */
 	@io.swagger.v3.oas.annotations.Parameters(
 		value = {
@@ -309,7 +319,7 @@ public abstract class BaseObjectFieldResourceImpl
 	/**
 	 * Invoke this method with the command line:
 	 *
-	 * curl -X 'PATCH' 'http://localhost:8080/o/object-admin/v1.0/object-fields/{objectFieldId}' -d $'{"DBType": ___, "businessType": ___, "indexed": ___, "indexedAsKeyword": ___, "indexedLanguageId": ___, "label": ___, "listTypeDefinitionId": ___, "name": ___, "objectFieldSettings": ___, "required": ___, "type": ___}' --header 'Content-Type: application/json' -u 'test@liferay.com:test'
+	 * curl -X 'PATCH' 'http://localhost:8080/o/object-admin/v1.0/object-fields/{objectFieldId}' -d $'{"DBType": ___, "businessType": ___, "defaultValue": ___, "externalReferenceCode": ___, "indexed": ___, "indexedAsKeyword": ___, "indexedLanguageId": ___, "label": ___, "listTypeDefinitionId": ___, "name": ___, "objectFieldSettings": ___, "required": ___, "state": ___, "system": ___, "type": ___}' --header 'Content-Type: application/json' -u 'test@liferay.com:test'
 	 */
 	@io.swagger.v3.oas.annotations.Parameters(
 		value = {
@@ -349,6 +359,15 @@ public abstract class BaseObjectFieldResourceImpl
 			existingObjectField.setBusinessType(objectField.getBusinessType());
 		}
 
+		if (objectField.getDefaultValue() != null) {
+			existingObjectField.setDefaultValue(objectField.getDefaultValue());
+		}
+
+		if (objectField.getExternalReferenceCode() != null) {
+			existingObjectField.setExternalReferenceCode(
+				objectField.getExternalReferenceCode());
+		}
+
 		if (objectField.getIndexed() != null) {
 			existingObjectField.setIndexed(objectField.getIndexed());
 		}
@@ -385,6 +404,14 @@ public abstract class BaseObjectFieldResourceImpl
 			existingObjectField.setRequired(objectField.getRequired());
 		}
 
+		if (objectField.getState() != null) {
+			existingObjectField.setState(objectField.getState());
+		}
+
+		if (objectField.getSystem() != null) {
+			existingObjectField.setSystem(objectField.getSystem());
+		}
+
 		if (objectField.getType() != null) {
 			existingObjectField.setType(objectField.getType());
 		}
@@ -397,7 +424,7 @@ public abstract class BaseObjectFieldResourceImpl
 	/**
 	 * Invoke this method with the command line:
 	 *
-	 * curl -X 'PUT' 'http://localhost:8080/o/object-admin/v1.0/object-fields/{objectFieldId}' -d $'{"DBType": ___, "businessType": ___, "indexed": ___, "indexedAsKeyword": ___, "indexedLanguageId": ___, "label": ___, "listTypeDefinitionId": ___, "name": ___, "objectFieldSettings": ___, "required": ___, "type": ___}' --header 'Content-Type: application/json' -u 'test@liferay.com:test'
+	 * curl -X 'PUT' 'http://localhost:8080/o/object-admin/v1.0/object-fields/{objectFieldId}' -d $'{"DBType": ___, "businessType": ___, "defaultValue": ___, "externalReferenceCode": ___, "indexed": ___, "indexedAsKeyword": ___, "indexedLanguageId": ___, "label": ___, "listTypeDefinitionId": ___, "name": ___, "objectFieldSettings": ___, "required": ___, "state": ___, "system": ___, "type": ___}' --header 'Content-Type: application/json' -u 'test@liferay.com:test'
 	 */
 	@io.swagger.v3.oas.annotations.Parameters(
 		value = {
@@ -483,11 +510,17 @@ public abstract class BaseObjectFieldResourceImpl
 			"createStrategy", "INSERT");
 
 		if ("INSERT".equalsIgnoreCase(createStrategy)) {
-			objectFieldUnsafeConsumer =
-				objectField -> postObjectDefinitionObjectField(
-					Long.parseLong(
-						(String)parameters.get("objectDefinitionId")),
-					objectField);
+			if (parameters.containsKey("objectDefinitionId")) {
+				objectFieldUnsafeConsumer =
+					objectField -> postObjectDefinitionObjectField(
+						Long.parseLong(
+							(String)parameters.get("objectDefinitionId")),
+						objectField);
+			}
+			else {
+				throw new NotSupportedException(
+					"One of the following parameters must be specified: [objectDefinitionId]");
+			}
 		}
 
 		if (objectFieldUnsafeConsumer == null) {
@@ -551,9 +584,15 @@ public abstract class BaseObjectFieldResourceImpl
 			Map<String, Serializable> parameters, String search)
 		throws Exception {
 
-		return getObjectDefinitionObjectFieldsPage(
-			Long.parseLong((String)parameters.get("objectDefinitionId")),
-			search, pagination);
+		if (parameters.containsKey("objectDefinitionId")) {
+			return getObjectDefinitionObjectFieldsPage(
+				Long.parseLong((String)parameters.get("objectDefinitionId")),
+				search, filter, pagination, sorts);
+		}
+		else {
+			throw new NotSupportedException(
+				"One of the following parameters must be specified: [objectDefinitionId]");
+		}
 	}
 
 	@Override

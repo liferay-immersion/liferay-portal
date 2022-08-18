@@ -12,20 +12,23 @@
  * details.
  */
 
-import {useContext, useEffect} from 'react';
-import {Outlet} from 'react-router-dom';
+import {useEffect} from 'react';
+import {Outlet, useParams} from 'react-router-dom';
 
-import {AccountContext} from '../../../context/AccountContext';
 import {useHeader} from '../../../hooks';
+import {useFetch} from '../../../hooks/useFetch';
 import i18n from '../../../i18n';
+import {getUserAccountQuery} from '../../../services/rest';
 
 const UserOutlet = () => {
-	const [{myUserAccount}] = useContext(AccountContext);
+	const {userId} = useParams();
+	const {data} = useFetch(getUserAccountQuery(userId as string));
 
+	const userAccount = data;
 	const {setHeading, setTabs} = useHeader();
 
 	useEffect(() => {
-		if (myUserAccount) {
+		if (userAccount) {
 			setTimeout(() => {
 				setHeading(
 					[
@@ -38,16 +41,16 @@ const UserOutlet = () => {
 				);
 			}, 0);
 		}
-	}, [setHeading, myUserAccount]);
+	}, [setHeading, userAccount]);
 
 	useEffect(() => {
 		setTabs([]);
 	}, [setTabs]);
 
-	if (!myUserAccount) {
+	if (!userAccount) {
 		return null;
 	}
 
-	return <Outlet context={myUserAccount} />;
+	return <Outlet context={{userAccount}} />;
 };
 export default UserOutlet;

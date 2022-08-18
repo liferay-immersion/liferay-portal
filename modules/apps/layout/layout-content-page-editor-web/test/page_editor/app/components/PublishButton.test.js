@@ -13,13 +13,11 @@
  */
 
 import '@testing-library/jest-dom/extend-expect';
-import {fireEvent, render, screen} from '@testing-library/react';
+import {act, fireEvent, render, screen} from '@testing-library/react';
 import React from 'react';
 
 import PublishButton from '../../../../src/main/resources/META-INF/resources/page_editor/app/components/PublishButton';
-import {StyleErrorsContextProvider} from '../../../../src/main/resources/META-INF/resources/page_editor/app/contexts/StyleErrorsContext';
-import openWarningModal from '../../../../src/main/resources/META-INF/resources/page_editor/app/utils/openWarningModal';
-import useIsSomeFormIncomplete from '../../../../src/main/resources/META-INF/resources/page_editor/app/utils/useIsSomeFormIncomplete';
+import useCheckFormsValidity from '../../../../src/main/resources/META-INF/resources/page_editor/app/utils/useCheckFormsValidity';
 
 jest.mock(
 	'../../../../src/main/resources/META-INF/resources/page_editor/app/config',
@@ -34,46 +32,36 @@ jest.mock(
 );
 
 jest.mock(
-	'../../../../src/main/resources/META-INF/resources/page_editor/app/utils/useIsSomeFormIncomplete',
-	() => jest.fn()
+	'../../../../src/main/resources/META-INF/resources/page_editor/app/components/FormValidationModal',
+	() => ({FormValidationModal: () => 'Form Validation Modal'})
 );
 
 jest.mock(
-	'../../../../src/main/resources/META-INF/resources/page_editor/app/utils/openWarningModal',
+	'../../../../src/main/resources/META-INF/resources/page_editor/app/utils/useCheckFormsValidity',
 	() => jest.fn()
 );
 
-const ERRORS = {
-	defaultId: {background: {error: 'I am an error', value: 'error'}},
-};
-
-const renderComponent = ({
-	onPublish = () => {},
-	errors,
-	canPublish = true,
-} = {}) => {
+const renderComponent = ({onPublish = () => {}, canPublish = true} = {}) => {
 	const ref = React.createRef();
 
 	return render(
-		<StyleErrorsContextProvider initialState={errors}>
-			<PublishButton
-				canPublish={canPublish}
-				formRef={ref}
-				label="publish"
-				onPublish={onPublish}
-			/>
-		</StyleErrorsContextProvider>
+		<PublishButton
+			canPublish={canPublish}
+			formRef={ref}
+			label="publish"
+			onPublish={onPublish}
+		/>
 	);
 };
 
 describe('PublishButton', () => {
 	afterEach(() => {
-		useIsSomeFormIncomplete.mockClear();
+		useCheckFormsValidity.mockClear();
 	});
 
 	it('renders PublishButton component', () => {
-		useIsSomeFormIncomplete.mockImplementation(() => () =>
-			Promise.resolve(false)
+		useCheckFormsValidity.mockImplementation(() => () =>
+			Promise.resolve(true)
 		);
 
 		renderComponent();
@@ -93,18 +81,6 @@ describe('PublishButton', () => {
 		expect(onPublish).toHaveBeenCalled();
 	});
 
-	it('opens a modal when the button is clicked and there are errors', async () => {
-		renderComponent({errors: ERRORS});
-
-		const button = screen.getByLabelText('publish');
-
-		fireEvent.click(button);
-
-		expect(
-			screen.getByLabelText('style-errors-detected')
-		).toBeInTheDocument();
-	});
-
 	it('does not allow to publish if canPublish is false', () => {
 		const onPublish = jest.fn(() => {});
 
@@ -121,17 +97,21 @@ describe('PublishButton', () => {
 		expect(button).toBeDisabled();
 	});
 
-	it('calls openWarningModal when there is some incomplete form', async () => {
-		useIsSomeFormIncomplete.mockImplementation(() => () =>
-			Promise.resolve(true)
+	it('does not call onPublish when some form is invalid', async () => {
+		useCheckFormsValidity.mockImplementation(() => () =>
+			Promise.resolve(false)
 		);
 
-		renderComponent();
+		const onPublish = jest.fn(() => {});
+
+		renderComponent({onPublish});
 
 		const button = screen.getByLabelText('publish');
 
-		await fireEvent.click(button);
+		await act(async () => {
+			fireEvent.click(button);
+		});
 
-		expect(openWarningModal).toHaveBeenCalled();
+		expect(onPublish).not.toHaveBeenCalled();
 	});
 });

@@ -19,7 +19,6 @@ import {DndProvider} from 'react-dnd';
 import {HTML5Backend} from 'react-dnd-html5-backend';
 
 import {RowWithControls} from '../../../../../src/main/resources/META-INF/resources/page_editor/app/components/layout-data-items';
-import {config} from '../../../../../src/main/resources/META-INF/resources/page_editor/app/config';
 import {LAYOUT_DATA_ITEM_TYPES} from '../../../../../src/main/resources/META-INF/resources/page_editor/app/config/constants/layoutDataItemTypes';
 import {VIEWPORT_SIZES} from '../../../../../src/main/resources/META-INF/resources/page_editor/app/config/constants/viewportSizes';
 import {
@@ -89,6 +88,7 @@ const renderRow = ({
 			<ControlsProvider>
 				<StoreAPIContextProvider
 					getState={() => ({
+						fragmentEntryLinks: {},
 						layoutData,
 						permissions: {
 							LOCKED_SEGMENTS_EXPERIMENT: lockedExperience,
@@ -160,37 +160,7 @@ describe('RowWithControls', () => {
 		).toBeInTheDocument();
 	});
 
-	it('does not show the row if it has been hidden by the user', async () => {
-		const {baseElement} = renderRow({
-			rowConfig: {
-				styles: {
-					display: 'none',
-				},
-			},
-		});
-
-		const row = baseElement.querySelector('.page-editor__row');
-
-		expect(row).not.toBeVisible();
-	});
-
-	it('shows the row if it has not been hidden by the user', async () => {
-		const {baseElement} = renderRow({
-			rowConfig: {
-				styles: {
-					display: 'block',
-				},
-			},
-		});
-
-		const row = baseElement.querySelector('.page-editor__row');
-
-		expect(row).toBeVisible();
-	});
-
 	it('set classes for referencing the item', () => {
-		config.featureFlagLps132571 = true;
-
 		const {baseElement} = renderRow();
 
 		const classes = [

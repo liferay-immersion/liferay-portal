@@ -4005,15 +4005,15 @@ public class CPMeasurementUnitPersistenceImpl
 		CPMeasurementUnitModelImpl cpMeasurementUnitModelImpl =
 			(CPMeasurementUnitModelImpl)cpMeasurementUnit;
 
-		if (Validator.isNull(cpMeasurementUnit.getExternalReferenceCode())) {
-			cpMeasurementUnit.setExternalReferenceCode(
-				String.valueOf(cpMeasurementUnit.getPrimaryKey()));
-		}
-
 		if (Validator.isNull(cpMeasurementUnit.getUuid())) {
 			String uuid = _portalUUID.generate();
 
 			cpMeasurementUnit.setUuid(uuid);
+		}
+
+		if (Validator.isNull(cpMeasurementUnit.getExternalReferenceCode())) {
+			cpMeasurementUnit.setExternalReferenceCode(
+				cpMeasurementUnit.getUuid());
 		}
 
 		ServiceContext serviceContext =
@@ -4139,7 +4139,9 @@ public class CPMeasurementUnitPersistenceImpl
 	 */
 	@Override
 	public CPMeasurementUnit fetchByPrimaryKey(Serializable primaryKey) {
-		if (ctPersistenceHelper.isProductionMode(CPMeasurementUnit.class)) {
+		if (ctPersistenceHelper.isProductionMode(
+				CPMeasurementUnit.class, primaryKey)) {
+
 			return super.fetchByPrimaryKey(primaryKey);
 		}
 

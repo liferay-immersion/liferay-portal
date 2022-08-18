@@ -72,7 +72,10 @@ export default function AddIconPackModal({
 
 	const containsWhiteSpace = !!iconPackName.match(/\s/);
 
-	const hasError = nameTaken || containsWhiteSpace;
+	const hasError =
+		nameTaken ||
+		containsWhiteSpace ||
+		(!!Object.keys(selectedIcons).length && !iconPackName);
 
 	const handleUploadSpritemapSubmit = () => {
 		if (hasError) {
@@ -182,7 +185,11 @@ export default function AddIconPackModal({
 				>
 					<ClayForm.Group className={hasError ? 'has-error' : ''}>
 						<label htmlFor={portletNamespace + 'name'}>
-							{Liferay.Language.get('pack-name')}
+							{Liferay.Language.get('icon-pack-name')}
+
+							<span className="ml-1 reference-mark text-warning">
+								<ClayIcon symbol="asterisk" />
+							</span>
 						</label>
 
 						<ClayInput
@@ -209,7 +216,11 @@ export default function AddIconPackModal({
 											  )
 											: containsWhiteSpace
 											? Liferay.Language.get(
-													'name-of-icon-pack-cannot-contain-whitespace'
+													'the-icon-pack-name-cannot-contain-whitespace'
+											  )
+											: !iconPackName
+											? Liferay.Language.get(
+													'the-icon-pack-name-is-required'
 											  )
 											: ''
 									}`}
@@ -246,9 +257,23 @@ export default function AddIconPackModal({
 				last={
 					<ClayButton.Group spaced>
 						<ClayButton
-							disabled={loading || !iconPackName || hasError}
+							disabled={loading || hasError}
 							onClick={() => {
-								handleSubmit();
+								if (!iconPackName) {
+									openToast({
+										message: Liferay.Language.get(
+											'please-enter-an-icon-pack-name'
+										),
+										title: Liferay.Language.get('warning'),
+										toastProps: {
+											autoClose: 5000,
+										},
+										type: 'warning',
+									});
+								}
+								else {
+									handleSubmit();
+								}
 							}}
 							type="submit"
 						>

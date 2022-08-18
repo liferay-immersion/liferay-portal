@@ -14,16 +14,14 @@
 
 import ClayTabs from '@clayui/tabs';
 import {
+	API,
 	SidePanelContent,
-	closeSidePanel,
 	invalidateRequired,
 	openToast,
+	saveAndReload,
 } from '@liferay/object-js-components-web';
-import {fetch} from 'frontend-js-web';
 import React, {useContext, useEffect, useState} from 'react';
 
-import {HEADERS} from '../../utils/constants';
-import {defaultLanguageId} from '../../utils/locale';
 import {TabsVisitor} from '../../utils/visitor';
 import InfoScreen from './InfoScreen/InfoScreen';
 import LayoutScreen from './LayoutScreen/LayoutScreen';
@@ -34,6 +32,8 @@ import {
 	TObjectLayoutTab,
 	TObjectRelationship,
 } from './types';
+
+const defaultLanguageId = Liferay.ThemeDisplay.getDefaultLanguageId();
 
 const TABS = [
 	{
@@ -113,40 +113,25 @@ const Layout: React.FC<React.HTMLAttributes<HTMLElement>> = () => {
 
 	useEffect(() => {
 		const makeFetch = async () => {
-			const objectLayoutResponse = await fetch(
-				`/o/object-admin/v1.0/object-layouts/${objectLayoutId}`,
-				{
-					headers: HEADERS,
-					method: 'GET',
-				}
-			);
-
 			const {
 				defaultObjectLayout,
 				name,
 				objectDefinitionId,
 				objectLayoutTabs,
-			} = (await objectLayoutResponse.json()) as any;
-
-			const objectFieldsResponse = await fetch(
-				`/o/object-admin/v1.0/object-definitions/${objectDefinitionId}/object-fields`,
-				{
-					headers: HEADERS,
-					method: 'GET',
-				}
+			} = await API.fetchJSON<TObjectLayout>(
+				`/o/object-admin/v1.0/object-layouts/${objectLayoutId}`
 			);
 
-			const objectRelationshipsResponse = await fetch(
-				`/o/object-admin/v1.0/object-definitions/${objectDefinitionId}/object-relationships`,
-				{
-					headers: HEADERS,
-					method: 'GET',
-				}
+			const objectFields = await API.getObjectFields(objectDefinitionId);
+
+			const objectRelationships = await API.getObjectRelationships(
+				objectDefinitionId
 			);
 
 			const objectLayout = {
 				defaultObjectLayout,
 				name,
+				objectDefinitionId,
 				objectLayoutTabs,
 			};
 
@@ -157,44 +142,19 @@ const Layout: React.FC<React.HTMLAttributes<HTMLElement>> = () => {
 				type: TYPES.ADD_OBJECT_LAYOUT,
 			});
 
-			const {
-				items: objectFields,
-			}: {
-				items: TObjectField[];
-			} = (await objectFieldsResponse.json()) as any;
+			const filteredObjectFields = objectFields.filter(
+				({system}) => !system
+			);
 
-			if (Liferay.FeatureFlags['LPS-154872']) {
-				const filteredObjectFields = objectFields.filter(
-					({system}) => !system
-				);
-
-				dispatch({
-					payload: {
-						objectFields: normalizeObjectFields({
-							objectFields: filteredObjectFields,
-							objectLayout,
-						}),
-					},
-					type: TYPES.ADD_OBJECT_FIELDS,
-				});
-			}
-			else {
-				dispatch({
-					payload: {
-						objectFields: normalizeObjectFields({
-							objectFields,
-							objectLayout,
-						}),
-					},
-					type: TYPES.ADD_OBJECT_FIELDS,
-				});
-			}
-
-			const {
-				items: objectRelationships,
-			}: {
-				items: TObjectRelationship[];
-			} = (await objectRelationshipsResponse.json()) as any;
+			dispatch({
+				payload: {
+					objectFields: normalizeObjectFields({
+						objectFields: filteredObjectFields,
+						objectLayout,
+					}),
+				},
+				type: TYPES.ADD_OBJECT_FIELDS,
+			});
 
 			dispatch({
 				payload: {
@@ -235,36 +195,31 @@ const Layout: React.FC<React.HTMLAttributes<HTMLElement>> = () => {
 			return;
 		}
 
-		const response = await fetch(
-			`/o/object-admin/v1.0/object-layouts/${objectLayoutId}`,
-			{
-				body: JSON.stringify(objectLayout),
-				headers: HEADERS,
-				method: 'PUT',
-			}
-		);
+		if (objectLayout.objectLayoutTabs[0].objectRelationshipId > 0) {
+			openToast({
+				message: Liferay.Language.get(
+					'the-layouts-first-tab-must-be-a-field-tab'
+				),
+				type: 'danger',
+			});
 
-		if (response.status === 401) {
-			window.location.reload();
+			return;
 		}
-		else if (response.ok) {
-			closeSidePanel();
 
+		try {
+			await API.save(
+				`/o/object-admin/v1.0/object-layouts/${objectLayoutId}`,
+				objectLayout
+			);
+			saveAndReload();
 			openToast({
 				message: Liferay.Language.get(
 					'the-object-layout-was-updated-successfully'
 				),
 			});
 		}
-		else {
-			const {
-				title = Liferay.Language.get('an-error-occurred'),
-			} = (await response.json()) as {title: any};
-
-			openToast({
-				message: title,
-				type: 'danger',
-			});
+		catch ({message}) {
+			openToast({message: message as string, type: 'danger'});
 		}
 	};
 

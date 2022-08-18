@@ -12,7 +12,6 @@
  * details.
  */
 
-import {useQuery} from '@apollo/client';
 import ClayIcon from '@clayui/icon';
 import {useEffect} from 'react';
 import {Link, useParams} from 'react-router-dom';
@@ -20,19 +19,40 @@ import {Link, useParams} from 'react-router-dom';
 import Avatar from '../../components/Avatar';
 import Code from '../../components/Code';
 import Container from '../../components/Layout/Container';
-import ListView from '../../components/ListView/ListView';
+import ListView from '../../components/ListView';
 import Loading from '../../components/Loading';
-import ProgressBar from '../../components/ProgressBar';
+import TaskbarProgress from '../../components/ProgressBar/TaskbarProgress';
 import StatusBadge from '../../components/StatusBadge';
 import QATable from '../../components/Table/QATable';
 import useCaseResultGroupBy from '../../data/useCaseResultGroupBy';
-import {getSubTasks} from '../../graphql/queries/testraySubTask';
-import {TestrayTask, getTask} from '../../graphql/queries/testrayTask';
+import {useFetch} from '../../hooks/useFetch';
 import useHeader from '../../hooks/useHeader';
 import i18n from '../../i18n';
-import {SUBTASK_STATUS} from '../../util/constants';
+import {getTaskQuery, getTaskTransformData} from '../../services/rest';
+import {
+	SUBTASK_STATUS,
+	StatusesProgressScore,
+	chartClassNames,
+} from '../../util/constants';
 import {getTimeFromNow} from '../../util/date';
 import {assigned} from '../../util/mock';
+
+export const progressScoreItems = [
+	[StatusesProgressScore.SELF, 7000],
+	[StatusesProgressScore.OTHER, 8967],
+	[StatusesProgressScore.INCOMPLETE, 1000],
+];
+function getTotalCompletedScore(scores: [string, number][]) {
+	let totalCompleted = 0;
+
+	for (const [scoreName, score] of scores) {
+		if (scoreName !== StatusesProgressScore.INCOMPLETE) {
+			totalCompleted += score;
+		}
+	}
+
+	return totalCompleted;
+}
 
 const ShortcutIcon = () => (
 	<ClayIcon className="ml-2" fontSize={12} symbol="shortcut" />
@@ -41,15 +61,15 @@ const ShortcutIcon = () => (
 const TestFlowTasks = () => {
 	const {testrayTaskId} = useParams();
 
-	const {data, loading} = useQuery<{task: TestrayTask}>(getTask, {
-		variables: {taskId: testrayTaskId},
-	});
-
-	const testrayTask = data?.task;
-
-	const {status: testrayCaseResultOverview} = useCaseResultGroupBy(
-		testrayTask?.build?.id
+	const {data, loading} = useFetch(
+		getTaskQuery(testrayTaskId),
+		getTaskTransformData
 	);
+	const testrayTask = data;
+
+	const {
+		donut: {columns},
+	} = useCaseResultGroupBy(testrayTask?.build?.id);
 
 	const {setHeading, setTabs} = useHeader();
 
@@ -74,7 +94,7 @@ const TestFlowTasks = () => {
 
 	return (
 		<>
-			<Container collapsable title="Task Details">
+			<Container collapsable title={i18n.translate('task-details')}>
 				<div className="d-flex flex-wrap">
 					<div className="col-4 col-lg-4 col-md-12 p-0">
 						<QATable
@@ -102,7 +122,7 @@ const TestFlowTasks = () => {
 									value: (
 										<Avatar.Group
 											assignedUsers={assigned}
-											groupSize={5}
+											groupSize={3}
 										/>
 									),
 								},
@@ -162,10 +182,11 @@ const TestFlowTasks = () => {
 						/>
 
 						<div className="pb-4">
-							<ProgressBar
+							<TaskbarProgress
 								displayTotalCompleted={false}
-								items={testrayCaseResultOverview}
-								legend
+								items={columns as any}
+								legend={true}
+								taskbarClassNames={chartClassNames}
 							/>
 						</div>
 					</div>
@@ -178,13 +199,14 @@ const TestFlowTasks = () => {
 				title={i18n.translate('progress-score')}
 			>
 				<div className="pb-5">
-					<ProgressBar
-						items={{
-							incomplete: 3517,
-							other: 4115,
-							self: 0,
-						}}
+					<TaskbarProgress
+						displayTotalCompleted
+						items={progressScoreItems as any}
 						legend
+						taskbarClassNames={chartClassNames}
+						totalCompleted={getTotalCompletedScore(
+							progressScoreItems as any
+						)}
 					/>
 				</div>
 			</Container>
@@ -192,7 +214,7 @@ const TestFlowTasks = () => {
 			<Container className="mt-3">
 				<ListView
 					managementToolbarProps={{title: i18n.translate('subtasks')}}
-					query={getSubTasks}
+					resource="/subtasks"
 					tableProps={{
 						columns: [
 							{
@@ -250,7 +272,6 @@ const TestFlowTasks = () => {
 						],
 						navigateTo: () => '/testflow/subtasks',
 					}}
-					transformData={(data) => data?.c?.subtasks}
 				/>
 			</Container>
 		</>

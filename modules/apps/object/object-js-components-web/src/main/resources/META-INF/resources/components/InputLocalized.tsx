@@ -14,28 +14,52 @@
 
 import ClayLocalizedInput from '@clayui/localized-input';
 import classNames from 'classnames';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 
 import {FieldBase} from './FieldBase';
 
 import './InputLocalized.scss';
 
+const defaultLanguageId = Liferay.ThemeDisplay.getDefaultLanguageId();
+
+const availableLocales = Object.keys(Liferay.Language.available)
+	.sort((languageId) => (languageId === defaultLanguageId ? -1 : 1))
+	.map((language) => ({
+		label: language as Locale,
+		symbol: language.replace('_', '-').toLowerCase(),
+	}));
+
 export function InputLocalized({
-	defaultLanguageId,
+	disableFlag,
 	disabled,
 	error,
 	id,
 	label,
-	locales,
 	name,
-	onSelectedLocaleChange,
-	onTranslationsChange,
+	onChange,
 	placeholder,
 	required,
 	selectedLocale,
 	translations,
 	...otherProps
 }: IProps) {
+	const [locale, setLocale] = useState<InputLocale>(availableLocales[0]);
+
+	useEffect(() => {
+		if (disableFlag) {
+			const localizationButton = document.querySelector(
+				'.dropdown-toggle'
+			);
+
+			localizationButton?.setAttribute('disabled', 'true');
+		}
+
+		const locale =
+			availableLocales.find(({label}) => label === selectedLocale)! ??
+			availableLocales[0];
+		setLocale(locale);
+	}, [disableFlag, selectedLocale]);
+
 	return (
 		<FieldBase
 			className="lfr-objects__input-localized"
@@ -49,47 +73,42 @@ export function InputLocalized({
 				{...otherProps}
 				className={classNames({
 					'lfr-objects__input-localized--rtl':
-
-						// @ts-ignore
-
-						Liferay.Language.direction[selectedLocale.label] ===
-						'rtl',
+						Liferay.Language.direction[locale.label] === 'rtl',
 				})}
 				disabled={disabled}
 				id={id}
 				label=""
-				locales={locales.sort((a) =>
-					a.label === defaultLanguageId ? -1 : 1
-				)}
+				locales={availableLocales}
 				name={name}
-				onSelectedLocaleChange={onSelectedLocaleChange}
-				onTranslationsChange={onTranslationsChange}
+				onSelectedLocaleChange={(locale) => {
+					setLocale(locale as InputLocale);
+					onChange(translations, locale as InputLocale);
+				}}
+				onTranslationsChange={(value) => onChange(value, locale)}
 				placeholder={placeholder}
-				selectedLocale={selectedLocale}
+				selectedLocale={locale}
 				translations={translations}
 			/>
 		</FieldBase>
 	);
 }
 
-interface ILocale {
-	label: string;
-	symbol: string;
-}
-
 interface IProps {
 	className?: string;
-	defaultLanguageId: Locale;
+	disableFlag?: boolean;
 	disabled?: boolean;
 	error?: string;
 	id?: string;
 	label: string;
-	locales: ILocale[];
 	name?: string;
-	onSelectedLocaleChange: (value: ILocale) => void;
-	onTranslationsChange: (value: LocalizedValue<string>) => void;
+	onChange: (value: LocalizedValue<string>, locale: InputLocale) => void;
 	placeholder?: string;
 	required?: boolean;
-	selectedLocale: ILocale;
+	selectedLocale?: Locale;
 	translations: LocalizedValue<string>;
+}
+
+interface InputLocale {
+	label: Locale;
+	symbol: string;
 }

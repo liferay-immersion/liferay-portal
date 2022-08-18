@@ -80,7 +80,7 @@ public class ClientExtensionEntryRelModelImpl
 		{"userName", Types.VARCHAR}, {"createDate", Types.TIMESTAMP},
 		{"modifiedDate", Types.TIMESTAMP}, {"classNameId", Types.BIGINT},
 		{"classPK", Types.BIGINT}, {"cetExternalReferenceCode", Types.VARCHAR},
-		{"type_", Types.VARCHAR}
+		{"type_", Types.VARCHAR}, {"typeSettings", Types.CLOB}
 	};
 
 	public static final Map<String, Integer> TABLE_COLUMNS_MAP =
@@ -101,10 +101,11 @@ public class ClientExtensionEntryRelModelImpl
 		TABLE_COLUMNS_MAP.put("classPK", Types.BIGINT);
 		TABLE_COLUMNS_MAP.put("cetExternalReferenceCode", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("type_", Types.VARCHAR);
+		TABLE_COLUMNS_MAP.put("typeSettings", Types.CLOB);
 	}
 
 	public static final String TABLE_SQL_CREATE =
-		"create table ClientExtensionEntryRel (mvccVersion LONG default 0 not null,ctCollectionId LONG default 0 not null,uuid_ VARCHAR(75) null,externalReferenceCode VARCHAR(75) null,clientExtensionEntryRelId LONG not null,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,classNameId LONG,classPK LONG,cetExternalReferenceCode VARCHAR(75) null,type_ VARCHAR(75) null,primary key (clientExtensionEntryRelId, ctCollectionId))";
+		"create table ClientExtensionEntryRel (mvccVersion LONG default 0 not null,ctCollectionId LONG default 0 not null,uuid_ VARCHAR(75) null,externalReferenceCode VARCHAR(75) null,clientExtensionEntryRelId LONG not null,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,classNameId LONG,classPK LONG,cetExternalReferenceCode VARCHAR(75) null,type_ VARCHAR(75) null,typeSettings TEXT null,primary key (clientExtensionEntryRelId, ctCollectionId))";
 
 	public static final String TABLE_SQL_DROP =
 		"drop table ClientExtensionEntryRel";
@@ -125,44 +126,50 @@ public class ClientExtensionEntryRelModelImpl
 	 * @deprecated As of Athanasius (7.3.x), replaced by {@link #getColumnBitmask(String)}
 	 */
 	@Deprecated
-	public static final long CLASSNAMEID_COLUMN_BITMASK = 1L;
+	public static final long CETEXTERNALREFERENCECODE_COLUMN_BITMASK = 1L;
 
 	/**
 	 * @deprecated As of Athanasius (7.3.x), replaced by {@link #getColumnBitmask(String)}
 	 */
 	@Deprecated
-	public static final long CLASSPK_COLUMN_BITMASK = 2L;
+	public static final long CLASSNAMEID_COLUMN_BITMASK = 2L;
 
 	/**
 	 * @deprecated As of Athanasius (7.3.x), replaced by {@link #getColumnBitmask(String)}
 	 */
 	@Deprecated
-	public static final long COMPANYID_COLUMN_BITMASK = 4L;
+	public static final long CLASSPK_COLUMN_BITMASK = 4L;
 
 	/**
 	 * @deprecated As of Athanasius (7.3.x), replaced by {@link #getColumnBitmask(String)}
 	 */
 	@Deprecated
-	public static final long EXTERNALREFERENCECODE_COLUMN_BITMASK = 8L;
+	public static final long COMPANYID_COLUMN_BITMASK = 8L;
 
 	/**
 	 * @deprecated As of Athanasius (7.3.x), replaced by {@link #getColumnBitmask(String)}
 	 */
 	@Deprecated
-	public static final long TYPE_COLUMN_BITMASK = 16L;
+	public static final long EXTERNALREFERENCECODE_COLUMN_BITMASK = 16L;
 
 	/**
 	 * @deprecated As of Athanasius (7.3.x), replaced by {@link #getColumnBitmask(String)}
 	 */
 	@Deprecated
-	public static final long UUID_COLUMN_BITMASK = 32L;
+	public static final long TYPE_COLUMN_BITMASK = 32L;
+
+	/**
+	 * @deprecated As of Athanasius (7.3.x), replaced by {@link #getColumnBitmask(String)}
+	 */
+	@Deprecated
+	public static final long UUID_COLUMN_BITMASK = 64L;
 
 	/**
 	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
 	 *		#getColumnBitmask(String)}
 	 */
 	@Deprecated
-	public static final long CLIENTEXTENSIONENTRYRELID_COLUMN_BITMASK = 64L;
+	public static final long CLIENTEXTENSIONENTRYRELID_COLUMN_BITMASK = 128L;
 
 	/**
 	 * @deprecated As of Athanasius (7.3.x), with no direct replacement
@@ -365,6 +372,12 @@ public class ClientExtensionEntryRelModelImpl
 			"type",
 			(BiConsumer<ClientExtensionEntryRel, String>)
 				ClientExtensionEntryRel::setType);
+		attributeGetterFunctions.put(
+			"typeSettings", ClientExtensionEntryRel::getTypeSettings);
+		attributeSetterBiConsumers.put(
+			"typeSettings",
+			(BiConsumer<ClientExtensionEntryRel, String>)
+				ClientExtensionEntryRel::setTypeSettings);
 
 		_attributeGetterFunctions = Collections.unmodifiableMap(
 			attributeGetterFunctions);
@@ -663,6 +676,15 @@ public class ClientExtensionEntryRelModelImpl
 		_cetExternalReferenceCode = cetExternalReferenceCode;
 	}
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
+	 *             #getColumnOriginalValue(String)}
+	 */
+	@Deprecated
+	public String getOriginalCETExternalReferenceCode() {
+		return getColumnOriginalValue("cetExternalReferenceCode");
+	}
+
 	@Override
 	public String getType() {
 		if (_type == null) {
@@ -689,6 +711,25 @@ public class ClientExtensionEntryRelModelImpl
 	@Deprecated
 	public String getOriginalType() {
 		return getColumnOriginalValue("type_");
+	}
+
+	@Override
+	public String getTypeSettings() {
+		if (_typeSettings == null) {
+			return "";
+		}
+		else {
+			return _typeSettings;
+		}
+	}
+
+	@Override
+	public void setTypeSettings(String typeSettings) {
+		if (_columnOriginalValues == Collections.EMPTY_MAP) {
+			_setColumnOriginalValues();
+		}
+
+		_typeSettings = typeSettings;
 	}
 
 	@Override
@@ -797,6 +838,7 @@ public class ClientExtensionEntryRelModelImpl
 		clientExtensionEntryRelImpl.setCETExternalReferenceCode(
 			getCETExternalReferenceCode());
 		clientExtensionEntryRelImpl.setType(getType());
+		clientExtensionEntryRelImpl.setTypeSettings(getTypeSettings());
 
 		clientExtensionEntryRelImpl.resetOriginalValues();
 
@@ -836,6 +878,8 @@ public class ClientExtensionEntryRelModelImpl
 			this.<String>getColumnOriginalValue("cetExternalReferenceCode"));
 		clientExtensionEntryRelImpl.setType(
 			this.<String>getColumnOriginalValue("type_"));
+		clientExtensionEntryRelImpl.setTypeSettings(
+			this.<String>getColumnOriginalValue("typeSettings"));
 
 		return clientExtensionEntryRelImpl;
 	}
@@ -997,6 +1041,14 @@ public class ClientExtensionEntryRelModelImpl
 			clientExtensionEntryRelCacheModel.type = null;
 		}
 
+		clientExtensionEntryRelCacheModel.typeSettings = getTypeSettings();
+
+		String typeSettings = clientExtensionEntryRelCacheModel.typeSettings;
+
+		if ((typeSettings != null) && (typeSettings.length() == 0)) {
+			clientExtensionEntryRelCacheModel.typeSettings = null;
+		}
+
 		return clientExtensionEntryRelCacheModel;
 	}
 
@@ -1107,6 +1159,7 @@ public class ClientExtensionEntryRelModelImpl
 	private long _classPK;
 	private String _cetExternalReferenceCode;
 	private String _type;
+	private String _typeSettings;
 
 	public <T> T getColumnValue(String columnName) {
 		columnName = _attributeNames.getOrDefault(columnName, columnName);
@@ -1154,6 +1207,7 @@ public class ClientExtensionEntryRelModelImpl
 		_columnOriginalValues.put(
 			"cetExternalReferenceCode", _cetExternalReferenceCode);
 		_columnOriginalValues.put("type_", _type);
+		_columnOriginalValues.put("typeSettings", _typeSettings);
 	}
 
 	private static final Map<String, String> _attributeNames;
@@ -1205,6 +1259,8 @@ public class ClientExtensionEntryRelModelImpl
 		columnBitmasks.put("cetExternalReferenceCode", 4096L);
 
 		columnBitmasks.put("type_", 8192L);
+
+		columnBitmasks.put("typeSettings", 16384L);
 
 		_columnBitmasks = Collections.unmodifiableMap(columnBitmasks);
 	}

@@ -31,7 +31,6 @@ import com.liferay.portal.vulcan.fields.NestedField;
 import com.liferay.portal.vulcan.fields.NestedFieldSupport;
 import com.liferay.portal.vulcan.pagination.Page;
 import com.liferay.portal.vulcan.pagination.Pagination;
-import com.liferay.portal.vulcan.resource.EntityModelResource;
 import com.liferay.portal.vulcan.util.SearchUtil;
 
 import java.util.Collections;
@@ -52,8 +51,7 @@ import org.osgi.service.component.annotations.ServiceScope;
 	service = {NestedFieldSupport.class, ObjectRelationshipResource.class}
 )
 public class ObjectRelationshipResourceImpl
-	extends BaseObjectRelationshipResourceImpl
-	implements EntityModelResource, NestedFieldSupport {
+	extends BaseObjectRelationshipResourceImpl implements NestedFieldSupport {
 
 	@Override
 	public void deleteObjectRelationship(Long objectRelationshipId)
@@ -114,6 +112,8 @@ public class ObjectRelationshipResourceImpl
 		return _toObjectRelationship(
 			_objectRelationshipService.addObjectRelationship(
 				objectDefinitionId, objectRelationship.getObjectDefinitionId2(),
+				GetterUtil.getLong(
+					objectRelationship.getParameterObjectFieldId()),
 				objectRelationship.getDeletionTypeAsString(),
 				LocalizedMapUtil.getLocalizedMap(objectRelationship.getLabel()),
 				objectRelationship.getName(),
@@ -128,6 +128,8 @@ public class ObjectRelationshipResourceImpl
 		return _toObjectRelationship(
 			_objectRelationshipService.updateObjectRelationship(
 				objectRelationshipId,
+				GetterUtil.getLong(
+					objectRelationship.getParameterObjectFieldId()),
 				objectRelationship.getDeletionTypeAsString(),
 				LocalizedMapUtil.getLocalizedMap(
 					objectRelationship.getLabel())));
@@ -162,6 +164,8 @@ public class ObjectRelationshipResourceImpl
 				objectDefinitionId2 =
 					objectRelationship.getObjectDefinitionId2();
 				objectDefinitionName2 = objectDefinition.getShortName();
+				parameterObjectFieldId =
+					objectRelationship.getParameterObjectFieldId();
 				reverse = objectRelationship.isReverse();
 				type = ObjectRelationship.Type.create(
 					objectRelationship.getType());

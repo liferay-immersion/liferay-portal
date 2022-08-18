@@ -6,7 +6,7 @@ definition {
 		AssetPublisherPortlet.addAsset(assetType = "Bookmarks Entry");
 
 		if (isSet(bookmarkFolderName)) {
-			AssertClick.pauseAssertTextClickAt(
+			AssertClick(
 				locator1 = "Button#SELECT",
 				value1 = "Select");
 
@@ -31,7 +31,7 @@ definition {
 
 		PortletEntry.inputDescription(description = "${bookmarkDescription}");
 
-		AssertClick.pauseAssertTextClickAt(
+		AssertClick(
 			locator1 = "Button#SAVE",
 			value1 = "Save");
 	}
@@ -436,11 +436,7 @@ definition {
 			locator1 = "Message#EMPTY_INFO",
 			value1 = "There are no bookmarks in this folder.");
 
-		Navigator.openURL();
-
-		ProductMenu.gotoPortlet(
-			category = "Content & Data",
-			portlet = "Bookmarks");
+		Bookmark.openBookmarksAdmin(siteURLKey = "guest");
 
 		var key_assetName = "${bookmarkName}";
 
@@ -450,11 +446,7 @@ definition {
 	}
 
 	macro moveToRecycleBinCP {
-		Navigator.openURL();
-
-		ProductMenu.gotoPortlet(
-			category = "Content & Data",
-			portlet = "Bookmarks");
+		Bookmark.openBookmarksAdmin(siteURLKey = "guest");
 
 		var key_assetName = "${bookmarkName}";
 
@@ -502,11 +494,7 @@ definition {
 	}
 
 	macro tearDownCP {
-		Navigator.openURL();
-
-		ProductMenu.gotoPortlet(
-			category = "Content & Data",
-			portlet = "Bookmarks");
+		Bookmark.openBookmarksAdmin(siteURLKey = "guest");
 
 		if (IsElementNotPresent(locator1 = "Message#EMPTY_INFO")) {
 			PortletEntry.selectAll();

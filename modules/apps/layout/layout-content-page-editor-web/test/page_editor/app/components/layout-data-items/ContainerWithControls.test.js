@@ -19,7 +19,6 @@ import {DndProvider} from 'react-dnd';
 import {HTML5Backend} from 'react-dnd-html5-backend';
 
 import {ContainerWithControls} from '../../../../../src/main/resources/META-INF/resources/page_editor/app/components/layout-data-items';
-import {config} from '../../../../../src/main/resources/META-INF/resources/page_editor/app/config';
 import {LAYOUT_DATA_ITEM_TYPES} from '../../../../../src/main/resources/META-INF/resources/page_editor/app/config/constants/layoutDataItemTypes';
 import {VIEWPORT_SIZES} from '../../../../../src/main/resources/META-INF/resources/page_editor/app/config/constants/viewportSizes';
 import {
@@ -62,6 +61,7 @@ const renderContainer = ({
 			<ControlsProvider>
 				<StoreAPIContextProvider
 					getState={() => ({
+						fragmentEntryLinks: {},
 						permissions: {
 							LOCKED_SEGMENTS_EXPERIMENT: lockedExperience,
 							UPDATE: hasUpdatePermissions,
@@ -97,37 +97,7 @@ describe('ContainerWithControls', () => {
 		expect(queryByText(baseElement, 'duplicate')).not.toBeInTheDocument();
 	});
 
-	it('does not show the container if it has been hidden by the user', async () => {
-		const {baseElement} = renderContainer({
-			containerConfig: {
-				styles: {
-					display: 'none',
-				},
-			},
-		});
-
-		const container = baseElement.querySelector('.page-editor__container');
-
-		expect(container).not.toBeVisible();
-	});
-
-	it('shows the container if it has not been hidden by the user', async () => {
-		const {baseElement} = renderContainer({
-			containerConfig: {
-				styles: {
-					display: 'block',
-				},
-			},
-		});
-
-		const container = baseElement.querySelector('.page-editor__container');
-
-		expect(container).toBeVisible();
-	});
-
 	it('set classes for referencing the item', () => {
-		config.featureFlagLps132571 = true;
-
 		const {baseElement} = renderContainer();
 
 		const classes = [

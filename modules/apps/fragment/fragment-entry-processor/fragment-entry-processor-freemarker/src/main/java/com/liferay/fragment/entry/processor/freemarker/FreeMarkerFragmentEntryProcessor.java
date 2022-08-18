@@ -14,25 +14,23 @@
 
 package com.liferay.fragment.entry.processor.freemarker;
 
+import com.liferay.document.library.kernel.service.DLAppLocalService;
 import com.liferay.fragment.entry.processor.freemarker.internal.configuration.FreeMarkerFragmentEntryProcessorConfiguration;
-import com.liferay.fragment.entry.processor.freemarker.internal.templateparser.InputTemplateNode;
 import com.liferay.fragment.exception.FragmentEntryContentException;
+import com.liferay.fragment.helper.FragmentEntryLinkHelper;
+import com.liferay.fragment.input.template.parser.FragmentEntryInputTemplateNodeContextHelper;
+import com.liferay.fragment.input.template.parser.InputTemplateNode;
 import com.liferay.fragment.model.FragmentEntryLink;
 import com.liferay.fragment.processor.FragmentEntryProcessor;
 import com.liferay.fragment.processor.FragmentEntryProcessorContext;
-import com.liferay.fragment.util.configuration.FragmentConfigurationField;
 import com.liferay.fragment.util.configuration.FragmentEntryConfigurationParser;
-import com.liferay.info.exception.InfoFormValidationException;
-import com.liferay.info.field.InfoField;
-import com.liferay.info.field.type.InfoFieldType;
-import com.liferay.info.field.type.SelectInfoFieldType;
-import com.liferay.info.form.InfoForm;
+import com.liferay.item.selector.ItemSelector;
 import com.liferay.petra.io.DummyWriter;
 import com.liferay.petra.io.unsync.UnsyncStringWriter;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.json.JSONObject;
-import com.liferay.portal.kernel.language.LanguageUtil;
+import com.liferay.portal.kernel.language.Language;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.module.configuration.ConfigurationProvider;
@@ -40,14 +38,12 @@ import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceContextThreadLocal;
 import com.liferay.portal.kernel.servlet.DummyHttpServletResponse;
-import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.template.StringTemplateResource;
 import com.liferay.portal.kernel.template.Template;
 import com.liferay.portal.kernel.template.TemplateConstants;
 import com.liferay.portal.kernel.template.TemplateException;
 import com.liferay.portal.kernel.template.TemplateManagerUtil;
 import com.liferay.portal.kernel.util.Constants;
-import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Portal;
@@ -55,10 +51,6 @@ import com.liferay.portal.kernel.util.ResourceBundleUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
 import java.util.ResourceBundle;
 
 import javax.servlet.http.HttpServletRequest;
@@ -151,13 +143,6 @@ public class FreeMarkerFragmentEntryProcessor
 			).put(
 				"fragmentEntryLinkNamespace", fragmentEntryLink.getNamespace()
 			).put(
-				"input",
-				_toInputTemplateNode(
-					fragmentEntryLink,
-					fragmentEntryProcessorContext.getHttpServletRequest(),
-					fragmentEntryProcessorContext.getInfoFormOptional(),
-					fragmentEntryProcessorContext.getLocale())
-			).put(
 				"layoutMode",
 				_getLayoutMode(
 					fragmentEntryProcessorContext.getHttpServletRequest())
@@ -167,6 +152,25 @@ public class FreeMarkerFragmentEntryProcessor
 					fragmentEntryLink.getConfiguration(),
 					fragmentEntryProcessorContext.getSegmentsEntryIds())
 			).build());
+
+		if (fragmentEntryLink.isTypeInput()) {
+			FragmentEntryInputTemplateNodeContextHelper
+				fragmentEntryInputTemplateNodeContextHelper =
+					new FragmentEntryInputTemplateNodeContextHelper(
+						_fragmentEntryLinkHelper.getFragmentEntryName(
+							fragmentEntryLink,
+							fragmentEntryProcessorContext.getLocale()),
+						_dlAppLocalService, _fragmentEntryConfigurationParser,
+						_itemSelector);
+
+			template.put(
+				"input",
+				fragmentEntryInputTemplateNodeContextHelper.toInputTemplateNode(
+					fragmentEntryLink,
+					fragmentEntryProcessorContext.getHttpServletRequest(),
+					fragmentEntryProcessorContext.getInfoFormOptional(),
+					fragmentEntryProcessorContext.getLocale()));
+		}
 
 		template.prepareTaglib(
 			fragmentEntryProcessorContext.getHttpServletRequest(),
@@ -273,7 +277,7 @@ public class FreeMarkerFragmentEntryProcessor
 		ResourceBundle resourceBundle = ResourceBundleUtil.getBundle(
 			"content.Language", getClass());
 
-		String message = LanguageUtil.get(
+		String message = _language.get(
 			resourceBundle, "freemarker-syntax-is-invalid");
 
 		Throwable causeThrowable = templateException.getCause();
@@ -295,117 +299,6 @@ public class FreeMarkerFragmentEntryProcessor
 		return false;
 	}
 
-	private InputTemplateNode _toInputTemplateNode(
-		FragmentEntryLink fragmentEntryLink,
-		HttpServletRequest httpServletRequest,
-		Optional<InfoForm> infoFormOptional, Locale locale) {
-
-		InfoField infoField = null;
-
-		InfoForm infoForm = infoFormOptional.orElse(null);
-
-		if (infoForm != null) {
-			String fieldName = GetterUtil.getString(
-				_fragmentEntryConfigurationParser.getFieldValue(
-					fragmentEntryLink.getEditableValues(),
-					new FragmentConfigurationField(
-						"inputFieldId", "string", "", false, "text"),
-					locale));
-
-			infoField = infoForm.getInfoField(fieldName);
-		}
-
-		String inputHelpText = GetterUtil.getString(
-			_fragmentEntryConfigurationParser.getFieldValue(
-				fragmentEntryLink.getEditableValues(),
-				new FragmentConfigurationField(
-					"inputHelpText", "string", "", true, "text"),
-				locale));
-
-		String inputLabel = GetterUtil.getString(
-			_fragmentEntryConfigurationParser.getFieldValue(
-				fragmentEntryLink.getEditableValues(),
-				new FragmentConfigurationField(
-					"inputLabel", "string", StringPool.BLANK, true, "text"),
-				locale));
-
-		String name = "name";
-
-		if (infoField != null) {
-			name = infoField.getName();
-		}
-
-		boolean required = false;
-
-		boolean inputRequired = GetterUtil.getBoolean(
-			_fragmentEntryConfigurationParser.getFieldValue(
-				fragmentEntryLink.getEditableValues(),
-				new FragmentConfigurationField(
-					"inputRequired", "boolean", "false", false, "checkbox"),
-				locale));
-
-		if (((infoField != null) && infoField.isRequired()) || inputRequired) {
-			required = true;
-		}
-
-		boolean inputShowHelpText = GetterUtil.getBoolean(
-			_fragmentEntryConfigurationParser.getFieldValue(
-				fragmentEntryLink.getEditableValues(),
-				new FragmentConfigurationField(
-					"inputShowHelpText", "boolean", "true", false, "checkbox"),
-				locale));
-
-		boolean inputShowLabel = GetterUtil.getBoolean(
-			_fragmentEntryConfigurationParser.getFieldValue(
-				fragmentEntryLink.getEditableValues(),
-				new FragmentConfigurationField(
-					"inputShowLabel", "boolean", "true", false, "checkbox"),
-				locale));
-
-		String type = "type";
-
-		if (infoField != null) {
-			InfoFieldType infoFieldType = infoField.getInfoFieldType();
-
-			type = infoFieldType.getName();
-		}
-
-		String errorMessage = StringPool.BLANK;
-
-		if ((infoField != null) &&
-			SessionErrors.contains(
-				httpServletRequest, infoField.getUniqueId())) {
-
-			InfoFormValidationException infoFormValidationException =
-				(InfoFormValidationException)SessionErrors.get(
-					httpServletRequest, infoField.getUniqueId());
-
-			errorMessage = infoFormValidationException.getLocalizedMessage(
-				locale);
-		}
-
-		InputTemplateNode inputTemplateNode = new InputTemplateNode(
-			errorMessage, inputHelpText, inputLabel, name, required,
-			inputShowHelpText, inputShowLabel, type, "value");
-
-		if ((infoField != null) &&
-			(infoField.getInfoFieldType() == SelectInfoFieldType.INSTANCE)) {
-
-			Optional<List<SelectInfoFieldType.Option>> optionsOptional =
-				infoField.getAttributeOptional(SelectInfoFieldType.OPTIONS);
-
-			List<SelectInfoFieldType.Option> options = optionsOptional.orElse(
-				new ArrayList<>());
-
-			for (SelectInfoFieldType.Option option : options) {
-				inputTemplateNode.addOption(
-					option.getLabel(locale), option.getValue());
-			}
-		}
-
-		return inputTemplateNode;
-	}
-
 	private static final Log _log = LogFactoryUtil.getLog(
 		FreeMarkerFragmentEntryProcessor.class);
 
@@ -413,7 +306,19 @@ public class FreeMarkerFragmentEntryProcessor
 	private ConfigurationProvider _configurationProvider;
 
 	@Reference
+	private DLAppLocalService _dlAppLocalService;
+
+	@Reference
 	private FragmentEntryConfigurationParser _fragmentEntryConfigurationParser;
+
+	@Reference
+	private FragmentEntryLinkHelper _fragmentEntryLinkHelper;
+
+	@Reference
+	private ItemSelector _itemSelector;
+
+	@Reference
+	private Language _language;
 
 	@Reference
 	private Portal _portal;

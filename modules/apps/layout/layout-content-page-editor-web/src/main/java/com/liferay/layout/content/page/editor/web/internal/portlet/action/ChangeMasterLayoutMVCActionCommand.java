@@ -15,8 +15,6 @@
 package com.liferay.layout.content.page.editor.web.internal.portlet.action;
 
 import com.liferay.fragment.model.FragmentEntryLink;
-import com.liferay.fragment.renderer.FragmentRendererController;
-import com.liferay.fragment.renderer.FragmentRendererTracker;
 import com.liferay.fragment.service.FragmentEntryLinkLocalService;
 import com.liferay.frontend.token.definition.FrontendTokenDefinitionRegistry;
 import com.liferay.layout.content.page.editor.constants.ContentPageEditorPortletKeys;
@@ -104,17 +102,12 @@ public class ChangeMasterLayoutMVCActionCommand
 			JSONFactoryUtil.createJSONObject();
 
 		for (FragmentEntryLink fragmentEntryLink : fragmentEntryLinks) {
-			JSONObject editableValuesJSONObject =
-				JSONFactoryUtil.createJSONObject(
-					fragmentEntryLink.getEditableValues());
-
 			JSONObject fragmentEntryLinkJSONObject =
 				_fragmentEntryLinkManager.getFragmentEntryLinkJSONObject(
 					fragmentEntryLink,
 					_portal.getHttpServletRequest(actionRequest),
 					_portal.getHttpServletResponse(actionResponse),
-					layoutStructure,
-					editableValuesJSONObject.getString("portletId"));
+					layoutStructure);
 
 			fragmentEntryLinkJSONObject.put("masterLayout", Boolean.TRUE);
 
@@ -176,12 +169,6 @@ public class ChangeMasterLayoutMVCActionCommand
 
 	@Reference
 	private FragmentEntryLinkManager _fragmentEntryLinkManager;
-
-	@Reference
-	private FragmentRendererController _fragmentRendererController;
-
-	@Reference
-	private FragmentRendererTracker _fragmentRendererTracker;
 
 	@Reference
 	private FrontendTokenDefinitionRegistry _frontendTokenDefinitionRegistry;

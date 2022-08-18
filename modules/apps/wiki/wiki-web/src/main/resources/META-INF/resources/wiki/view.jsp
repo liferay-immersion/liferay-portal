@@ -135,6 +135,8 @@ if (Validator.isNotNull(ParamUtil.getString(request, "title"))) {
 
 request.setAttribute(WebKeys.LAYOUT_ASSET_ENTRY, layoutAssetEntry);
 
+LinkedAssetEntryIdsUtil.addLinkedAssetEntryId(request, layoutAssetEntry.getEntryId());
+
 boolean portletTitleBasedNavigation = GetterUtil.getBoolean(portletConfig.getInitParameter("portlet-title-based-navigation"));
 
 if (portletTitleBasedNavigation) {
@@ -150,16 +152,27 @@ if (portletTitleBasedNavigation) {
 <c:if test="<%= portletTitleBasedNavigation %>">
 	<div class="lfr-alert-container"></div>
 
-	<liferay-frontend:info-bar>
-		<aui:workflow-status markupView="lexicon" showHelpMessage="<%= false %>" showIcon="<%= false %>" showLabel="<%= false %>" status="<%= wikiPage.getStatus() %>" version="<%= String.valueOf(wikiPage.getVersion()) %>" />
+	<div class="management-bar management-bar-light navbar navbar-expand-md">
+		<clay:container-fluid>
+			<ul class="m-auto navbar-nav"></ul>
 
-		<liferay-frontend:info-bar-buttons>
-			<liferay-frontend:info-bar-sidenav-toggler-button
-				icon="info-circle-open"
-				label="info"
-			/>
-		</liferay-frontend:info-bar-buttons>
-	</liferay-frontend:info-bar>
+			<ul class="m-auto middle navbar-nav">
+				<li class="nav-item">
+					<aui:workflow-status markupView="lexicon" showHelpMessage="<%= false %>" showIcon="<%= false %>" showLabel="<%= false %>" status="<%= wikiPage.getStatus() %>" version="<%= String.valueOf(wikiPage.getVersion()) %>" />
+				</li>
+			</ul>
+
+			<ul class="end m-auto navbar-nav">
+				<li class="nav-item">
+					<liferay-frontend:management-bar-sidenav-toggler-button
+						cssClass="btn-secondary"
+						icon="info-circle-open"
+						label="info"
+					/>
+				</li>
+			</ul>
+		</clay:container-fluid>
+	</div>
 </c:if>
 
 <div <%= portletTitleBasedNavigation ? "class=\"closed sidenav-container sidenav-right\" id=\"" + liferayPortletResponse.getNamespace() + "infoPanelId\"" : StringPool.BLANK %>>

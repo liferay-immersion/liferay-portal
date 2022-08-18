@@ -26,6 +26,8 @@ ObjectField objectField = (ObjectField)request.getAttribute(ObjectWebKeys.OBJECT
 	module="js/components/EditObjectField"
 	props='<%=
 		HashMapBuilder.<String, Object>put(
+			"filterOperators", LocalizedJSONArrayUtil.getFilterOperatorsJSONObject(locale)
+		).put(
 			"forbiddenChars", PropsUtil.getArray(PropsKeys.DL_CHAR_BLACKLIST)
 		).put(
 			"forbiddenLastChars", objectDefinitionsFieldsDisplayContext.getForbiddenLastCharacters()
@@ -34,7 +36,9 @@ ObjectField objectField = (ObjectField)request.getAttribute(ObjectWebKeys.OBJECT
 		).put(
 			"isApproved", objectDefinition.isApproved()
 		).put(
-			"isSystemObject", objectDefinition.isSystem()
+			"isDefaultStorageType", objectDefinition.isDefaultStorageType()
+		).put(
+			"objectDefinitionId", objectDefinition.getObjectDefinitionId()
 		).put(
 			"objectField", objectDefinitionsFieldsDisplayContext.getObjectFieldJSONObject(objectField)
 		).put(
@@ -43,6 +47,8 @@ ObjectField objectField = (ObjectField)request.getAttribute(ObjectWebKeys.OBJECT
 			"objectName", objectDefinition.getShortName()
 		).put(
 			"readOnly", !objectDefinitionsFieldsDisplayContext.hasUpdateObjectDefinitionPermission()
+		).put(
+			"workflowStatusJSONArray", LocalizedJSONArrayUtil.getWorkflowStatusJSONArray(locale)
 		).build()
 	%>'
 />

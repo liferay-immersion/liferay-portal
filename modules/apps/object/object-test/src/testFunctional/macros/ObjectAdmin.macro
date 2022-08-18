@@ -1,21 +1,5 @@
 definition {
 
-	macro addEntryOnRelationshipFieldViaUI {
-		LexiconEntry.gotoAdd();
-
-		WaitForSPARefresh();
-
-		Click(locator1 = "ObjectPortlet#SEARCH_RELATIONSHIP_ENTRY");
-
-		Click(
-			key_picklistOption = "${entryOption}",
-			locator1 = "ObjectAdmin#ENTRY_PICKLIST_OPTION");
-
-		Button.clickSave();
-
-		WaitForSPARefresh();
-	}
-
 	macro addLayoutBlockViaUI {
 		Click(locator1 = "ObjectAdmin#ADD_BLOCK_BUTTON");
 
@@ -59,7 +43,7 @@ definition {
 			whenAction = "${whenAction}");
 	}
 
-	macro addObjectBoleanFieldEntryViaUI {
+	macro addObjectBooleanFieldEntryViaUI {
 		ObjectAdmin.goToCustomObject(objectName = "${objectName}");
 
 		LexiconEntry.gotoAdd();
@@ -93,12 +77,14 @@ definition {
 			fieldLabelName = "${fieldLabelName}",
 			fieldName = "${fieldName}",
 			fieldType = "${fieldType}",
+			fileSource = "${fileSource}",
 			indexed = "${indexed}",
 			indexedAsKeyword = "${indexedAsKeyword}",
 			indexedLanguageId = "${indexedLanguageId}",
 			isRequired = "${isRequired}",
 			objectName = "${objectName}",
 			picklistName = "${picklistName}",
+			showFilesInDocumentsAndMedia = "${showFilesInDocumentsAndMedia}",
 			userEmailAddress = "${userEmailAddress}",
 			userPassword = "${userPassword}");
 	}
@@ -125,6 +111,14 @@ definition {
 				Click(
 					key_fieldType = "${fieldAttachment}",
 					locator1 = "ObjectField#TYPE_OPTION");
+
+				var enableShowFiles = "${enableShowFiles}";
+
+				if (isSet(enableShowFiles)) {
+					Check.checkNotVisible(
+						key_toggleSwitchLabel = "Show Files in Documents and Media",
+						locator1 = "ToggleSwitch#ANY_TOGGLE_SWITCH");
+				}
 			}
 		}
 
@@ -279,7 +273,7 @@ definition {
 	}
 
 	macro addTabFieldsOnLayout {
-		LexiconEntry.gotoAdd();
+		LexiconEntry.gotoAddNoSelectFrame();
 
 		Click(
 			key_type = "Fields",
@@ -348,7 +342,7 @@ definition {
 	}
 
 	macro addTabRelationshipsOnLayout {
-		LexiconEntry.gotoAdd();
+		LexiconEntry.gotoAddNoSelectFrame();
 
 		Click(
 			key_type = "Relationships",
@@ -435,10 +429,6 @@ definition {
 			locator1 = "ObjectAdmin#FIELDS_RADIO_OPTION");
 	}
 
-	macro assertLabelFieldRequired {
-		AssertElementPresent(locator1 = "ObjectField#LABEL_ERROR_REQUIRED");
-	}
-
 	macro assertNoItemsWereFound {
 		AssertTextEquals(
 			locator1 = "Message#EMPTY_INFO",
@@ -449,18 +439,6 @@ definition {
 		AssertTextEquals(
 			locator1 = "Message#EMPTY_STATE_INFO",
 			value1 = "No Results Found");
-	}
-
-	macro assertNotPossibleAddFieldOnBlockWithoutChooseOptionField {
-		Click(locator1 = "ObjectAdmin#ADD_FIELD_ON_BLOCK");
-
-		Click(
-			key_tab = "Save",
-			locator1 = "Button#TAB_SUBMIT_BTN");
-
-		AssertElementPresent(locator1 = "ObjectAdmin#OBJECT_LAYOUTS_FIELD_INPUT_HAS_REQUIRED_ERROR");
-
-		AssertElementPresent(locator1 = "ObjectAdmin#REQUIRED_ERROR_MESSAGE");
 	}
 
 	macro assertObjectActions {
@@ -531,10 +509,6 @@ definition {
 		AssertElementNotPresent(locator1 = "ObjectAdmin#VIEW_OBJECT_FIELD_LABEL");
 	}
 
-	macro assertObjectLabelFieldRequired {
-		AssertElementPresent(locator1 = "ObjectAdmin#OBJECT_LABEL_FIELD_REQUIRED");
-	}
-
 	macro assertObjectLayout {
 		var key_layoutLabel = "${layoutLabel}";
 
@@ -547,14 +521,10 @@ definition {
 		AssertElementNotPresent(locator1 = "ObjectAdmin#VIEW_OBJECT_LAYOUT_LABEL");
 	}
 
-	macro assertObjectLayoutRelationshipFieldRequiredError {
-		AssertElementPresent(locator1 = "ObjectAdmin#OBJECT_LAYOUTS_RELATIONSHIP_FIELD_HAD_REQUIRED_ERROR");
-
-		AssertElementPresent(locator1 = "ObjectAdmin#REQUIRED_ERROR_MESSAGE");
-	}
-
-	macro assertObjectNameFieldRequired {
-		AssertElementPresent(locator1 = "ObjectAdmin#OBJECT_NAME_FIELD_REQUIRED");
+	macro assertObjectRelationshipNotPresent {
+		AssertElementNotPresent(
+			key_label = "${relationshipLabel}",
+			locator1 = "ObjectAdmin#RELATIONSHIP_LABEL");
 	}
 
 	macro assertObjectStatus {
@@ -587,10 +557,6 @@ definition {
 		AssertTextEquals.assertPartialText(
 			locator1 = "TextInput#REQUIRED_ALERT",
 			value1 = "Required");
-	}
-
-	macro assertTypeFieldRequired {
-		AssertElementPresent(locator1 = "ObjectField#TYPE_ERROR_REQUIRED");
 	}
 
 	macro assertUpdateEntryModalIsNotPresent {
@@ -734,6 +700,24 @@ definition {
 			objectName = "${objectName}",
 			userEmailAddress = "${userEmailAddress}",
 			userPassword = "${userPassword}");
+	}
+
+	macro deleteRelationshipViaUI {
+		Click(
+			key_objectLabel = "${relationshipLabel}",
+			locator1 = "ObjectAdmin#OBJECT_KEBAB_MENU");
+
+		MenuItem.clickNoError(menuItem = "Delete");
+
+		SelectFrame(locator1 = "ObjectCustomViews#VIEW_MODAL_ADD_COLUMNS");
+
+		Type(
+			locator1 = "ObjectAdmin#PLACEHOLDER_DELETE_RELATIONSHIP",
+			value1 = "${relationshipName}");
+
+		Click(locator1 = "Form#SIDEBAR_DELETE_FIELD_MODAL_DELETE_BUTTON");
+
+		Refresh();
 	}
 
 	macro editClobEntryName {
@@ -1025,8 +1009,6 @@ definition {
 		ProductMenuHelper.openWorkspace();
 
 		SelectFrame(locator1 = "IFrame#MODAL_BODY");
-
-		Pause(locator1 = "3000");
 
 		Navigator.gotoNavItem(navItem = "My Sites");
 

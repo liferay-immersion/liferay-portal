@@ -27,6 +27,7 @@ import com.liferay.fragment.service.FragmentEntryLocalService;
 import com.liferay.fragment.util.comparator.FragmentEntryCreateDateComparator;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
+import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.model.CompanyConstants;
@@ -47,6 +48,7 @@ import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.zip.ZipWriter;
 import com.liferay.portal.kernel.zip.ZipWriterFactoryUtil;
+import com.liferay.portal.props.test.util.PropsTemporarySwapper;
 import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.portal.test.rule.PermissionCheckerMethodTestRule;
@@ -380,6 +382,74 @@ public class FragmentsImporterTest {
 		FragmentEntry fragmentEntry = filteredFragmentEntries.get(0);
 
 		Assert.assertTrue(fragmentEntry.isDraft());
+	}
+
+	@Test
+	public void testImportInputFragmentWithTypeOptions() throws Exception {
+		try (PropsTemporarySwapper propsTemporarySwapper =
+				new PropsTemporarySwapper(
+					"feature.flag.LPS-149720", Boolean.TRUE.toString())) {
+
+			List<FragmentCollection> fragmentCollections =
+				_fragmentCollectionLocalService.getFragmentCollections(
+					_group.getGroupId(), QueryUtil.ALL_POS, QueryUtil.ALL_POS);
+
+			Assert.assertEquals(
+				fragmentCollections.toString(), 0, fragmentCollections.size());
+
+			ServiceContextThreadLocal.pushServiceContext(
+				ServiceContextTestUtil.getServiceContext(_group.getGroupId()));
+
+			try {
+				_fragmentsImporter.importFragmentEntries(
+					_user.getUserId(), _group.getGroupId(), 0, _file, false);
+			}
+			finally {
+				ServiceContextThreadLocal.popServiceContext();
+			}
+
+			fragmentCollections =
+				_fragmentCollectionLocalService.getFragmentCollections(
+					_group.getGroupId(), QueryUtil.ALL_POS, QueryUtil.ALL_POS);
+
+			Assert.assertEquals(
+				fragmentCollections.toString(), 1, fragmentCollections.size());
+
+			FragmentCollection fragmentCollection = fragmentCollections.get(0);
+
+			List<FragmentEntry> fragmentEntries =
+				_fragmentEntryLocalService.getFragmentEntries(
+					fragmentCollection.getFragmentCollectionId());
+
+			Stream<FragmentEntry> stream = fragmentEntries.stream();
+
+			List<FragmentEntry> filteredFragmentEntries = stream.filter(
+				fragmentEntry -> Objects.equals(
+					fragmentEntry.getName(), "Input Fragment With Type Options")
+			).collect(
+				Collectors.toList()
+			);
+
+			Assert.assertEquals(
+				filteredFragmentEntries.toString(), 1,
+				filteredFragmentEntries.size());
+
+			FragmentEntry fragmentEntry = filteredFragmentEntries.get(0);
+
+			Assert.assertNotNull(fragmentEntry.getTypeOptions());
+
+			JSONObject jsonObject = JSONFactoryUtil.createJSONObject(
+				fragmentEntry.getTypeOptions());
+
+			JSONArray jsonArray = jsonObject.getJSONArray("fieldTypes");
+
+			Assert.assertNotNull(jsonArray);
+			Assert.assertEquals(1, jsonArray.length());
+
+			String fieldType = jsonArray.getString(0);
+
+			Assert.assertEquals("string", fieldType);
+		}
 	}
 
 	@Test

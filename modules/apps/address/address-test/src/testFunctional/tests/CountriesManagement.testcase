@@ -1,0 +1,165 @@
+@component-name = "portal-user-management-and-portal-configuration"
+definition {
+
+	property custom.properties = "feature.flag.LPS-122223=true";
+	property portal.release = "true";
+	property portal.upstream = "true";
+	property testray.main.component.name = "Address";
+
+	setUp {
+		TestCase.setUpPortalInstance();
+
+		User.firstLoginPG();
+	}
+
+	tearDown {
+		var testPortalInstance = PropsUtil.get("test.portal.instance");
+
+		if ("${testPortalInstance}" == "true") {
+			PortalInstances.tearDownCP();
+		}
+	}
+
+	@description = "This test asserts that a user can activate an inactive country."
+	@priority = "5"
+	test CanActivateAnInactiveCountry {
+		task ("Given that Brazil is set to inactive") {
+			CountriesManagement.openCountriesManagementPortlet();
+
+			CountriesManagement.deactivateCountry(countryName = "Brazil");
+
+			CountriesManagement.openCountriesManagementPortlet();
+
+			ManagementBar.setFilterAndOrder(filterBy = "Inactive");
+		}
+
+		task ("When a user activates this country") {
+			CountriesManagement.activateCountry(countryName = "Brazil");
+
+			AssertTextEquals(
+				locator1 = "Message#EMPTY_INFO",
+				value1 = "There are no inactive countries.");
+		}
+
+		task ("and searches for country in Active filter") {
+			CountriesManagement.openCountriesManagementPortlet();
+
+			ManagementBar.setFilterAndOrder(filterBy = "Active");
+
+			Search.searchCP(searchTerm = "Brazil");
+		}
+
+		task ("Then the country is active and displays in that filter") {
+			CountriesManagement.viewCountryInTable(
+				billingAllowed = "true",
+				countryName = "Brazil",
+				countryStatus = "Active",
+				shippingAllowed = "true",
+				twoLetterISOCode = "BR");
+		}
+	}
+
+	@description = "This test asserts that a user can add a new country and by default this country will have the Active status, will not allow Billing and Shipping, and will not be subject to VAT."
+	@priority = "5"
+	test CanAddCountry {
+		task ("Given that a user is in the Countries Management portlet") {
+			ApplicationsMenu.gotoPortlet(
+				category = "Configuration",
+				panel = "Control Panel",
+				portlet = "Countries Management");
+		}
+
+		task ("When a user adds a new country, only filling out the required fields") {
+			CountriesManagement.addCountry(
+				countryName = "Test Country",
+				countryNumber = "01",
+				threeLetterISOCode = "AAA",
+				twoLetterISOCode = "AA");
+		}
+
+		task ("Then the country is saved successfully") {
+			CountriesManagement.openCountriesManagementPortlet();
+
+			Search.searchCP(searchTerm = "Test Country");
+		}
+
+		task ("and by default, status is active, billing and shipping are not allowed, and country is not subject to VAT") {
+			CountriesManagement.viewCountryInTable(
+				billingAllowed = "false",
+				countryName = "Test Country",
+				countryPriority = "0.0",
+				countryStatus = "Inactive",
+				shippingAllowed = "false",
+				twoLetterISOCode = "AA");
+		}
+	}
+
+	@description = "This test asserts that a user can deactivate an active country"
+	@priority = "5"
+	test CanDeactivateAnActiveCountry {
+		task ("Given that China is set to Active") {
+			CountriesManagement.openCountriesManagementPortlet();
+
+			Search.searchCP(searchTerm = "China");
+
+			CountriesManagement.viewCountryInTable(
+				billingAllowed = "true",
+				countryName = "China",
+				countryStatus = "Active",
+				shippingAllowed = "true",
+				twoLetterISOCode = "CN");
+		}
+
+		task ("When a user deactivates this country") {
+			CountriesManagement.deactivateCountry(countryName = "China");
+		}
+
+		task ("and filters by Inactive Status") {
+			CountriesManagement.openCountriesManagementPortlet();
+
+			ManagementBar.setFilterAndOrder(filterBy = "Inactive");
+		}
+
+		task ("Then the country is inactive and displays in that filter") {
+			CountriesManagement.viewCountryInTable(
+				billingAllowed = "true",
+				countryName = "China",
+				countryStatus = "Inactive",
+				shippingAllowed = "true",
+				twoLetterISOCode = "CN");
+		}
+	}
+
+	@description = "This test asserts that a user can delete an existing country."
+	@priority = "5"
+	test CanDeleteCountry {
+		task ("Given that a country named Angola exists in Countries Management portlet") {
+			CountriesManagement.openCountriesManagementPortlet();
+
+			Search.searchCP(searchTerm = "Angola");
+
+			CountriesManagement.viewCountryInTable(
+				billingAllowed = "true",
+				countryName = "Angola",
+				countryPriority = "0.0",
+				countryStatus = "Active",
+				shippingAllowed = "true",
+				twoLetterISOCode = "AO");
+		}
+
+		task ("When a user deletes this country") {
+			CountriesManagement.deleteCountry(countryName = "Angola");
+		}
+
+		task ("Then the country does not display in search results") {
+			CountriesManagement.openCountriesManagementPortlet();
+
+			Search.searchCP(searchTerm = "Angola");
+
+			AssertTextEquals(
+				locator1 = "Message#EMPTY_INFO",
+				value1 = "There are no countries.");
+		}
+	}
+
+}

@@ -3162,14 +3162,10 @@ public class CalendarBookingLocalServiceTest {
 			long calendarBookingId, int count)
 		throws PortalException {
 
-		CalendarBooking calendarBookingInstance = null;
-
 		for (int i = 0; i < count; i++) {
-			calendarBookingInstance =
+			Assert.assertNotNull(
 				_calendarBookingLocalService.getCalendarBookingInstance(
-					calendarBookingId, i);
-
-			Assert.assertNotNull(calendarBookingInstance);
+					calendarBookingId, i));
 		}
 
 		Assert.assertNull(
@@ -3337,7 +3333,6 @@ public class CalendarBookingLocalServiceTest {
 		ServiceContext serviceContext = new ServiceContext();
 
 		serviceContext.setCompanyId(_user.getCompanyId());
-
 		serviceContext.setUserId(_user.getUserId());
 
 		return serviceContext;

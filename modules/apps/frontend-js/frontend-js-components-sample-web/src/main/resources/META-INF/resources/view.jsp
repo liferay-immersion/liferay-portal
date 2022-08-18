@@ -18,15 +18,19 @@
 
 <div class="frontend-js-components-sample-web">
 	<liferay-ui:tabs
-		names="Translation Manager, Management Toolbar, Walkable"
+		names="Management Toolbar, Test Walkable, Translation Manager, Walkable"
 		refresh="<%= false %>"
 	>
 		<liferay-ui:section>
-			<liferay-util:include page="/partials/translation_manager.jsp" servletContext="<%= application %>" />
+			<liferay-util:include page="/partials/management_toolbar.jsp" servletContext="<%= application %>" />
 		</liferay-ui:section>
 
 		<liferay-ui:section>
-			<liferay-util:include page="/partials/management_toolbar.jsp" servletContext="<%= application %>" />
+			<liferay-util:include page="/partials/test_walkable.jsp" servletContext="<%= application %>" />
+		</liferay-ui:section>
+
+		<liferay-ui:section>
+			<liferay-util:include page="/partials/translation_manager.jsp" servletContext="<%= application %>" />
 		</liferay-ui:section>
 
 		<liferay-ui:section>

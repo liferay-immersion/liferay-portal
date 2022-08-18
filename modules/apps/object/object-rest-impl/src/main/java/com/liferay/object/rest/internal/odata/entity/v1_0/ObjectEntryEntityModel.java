@@ -18,7 +18,9 @@ import com.liferay.object.constants.ObjectFieldConstants;
 import com.liferay.object.model.ObjectField;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.search.Field;
+import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HashMapBuilder;
+import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.odata.entity.BooleanEntityField;
 import com.liferay.portal.odata.entity.CollectionEntityField;
 import com.liferay.portal.odata.entity.DateEntityField;
@@ -50,15 +52,26 @@ public class ObjectEntryEntityModel implements EntityModel {
 		).put(
 			"dateCreated",
 			new DateTimeEntityField(
-				"dateCreated",
-				locale -> Field.getSortableFieldName(Field.CREATE_DATE),
+				"dateCreated", locale -> Field.CREATE_DATE,
 				locale -> Field.CREATE_DATE)
 		).put(
 			"dateModified",
 			new DateTimeEntityField(
-				"dateModified",
-				locale -> Field.getSortableFieldName(Field.MODIFIED_DATE),
-				locale -> Field.MODIFIED_DATE)
+				"dateModified", locale -> "modifiedDate",
+				locale -> "modifiedDate")
+		).put(
+			"externalReferenceCode",
+			() -> {
+				if (GetterUtil.getBoolean(
+						PropsUtil.get("feature.flag.LPS-158821"))) {
+
+					return new StringEntityField(
+						"externalReferenceCode",
+						locale -> "externalReferenceCode");
+				}
+
+				return new StringEntityField("id", locale -> "id");
+			}
 		).put(
 			"id",
 			new IdEntityField(
@@ -100,7 +113,7 @@ public class ObjectEntryEntityModel implements EntityModel {
 				_getEntityField(
 					objectField
 				).ifPresent(
-					entityField -> _entityFieldsMap.put(
+					entityField -> _entityFieldsMap.putIfAbsent(
 						objectField.getName(), entityField)
 				);
 			}

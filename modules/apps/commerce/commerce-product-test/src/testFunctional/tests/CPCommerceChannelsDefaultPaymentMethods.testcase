@@ -38,7 +38,9 @@ definition {
 		}
 
 		task ("And clicks on the Set Default Account Payment Methods button") {
-			Button.click(button = "Set Default Commerce Payment Method");
+			Click(
+				key_text = "Set Default Commerce Payment Method",
+				locator1 = "Button#ANY");
 		}
 
 		task ("Then a dropdown appears with all the payment methods entries created by default using Minium") {
@@ -69,7 +71,9 @@ definition {
 		}
 
 		task ("When the user clicks on the Remove button next to the Payment Method") {
-			Button.clickRemove();
+			Click(
+				key_text = "Remove",
+				locator1 = "Button#ANY_SECONDARY");
 		}
 
 		task ("Then the Default Account Commerce Payment Method should be 'Use Priority Settings'") {

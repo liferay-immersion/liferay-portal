@@ -23,6 +23,8 @@ definition {
 	tearDown {
 		var testPortalInstance = PropsUtil.get("test.portal.instance");
 
+		ACUtils.tearDownAC();
+
 		ACUtils.tearDownDXP();
 
 		if ("${testPortalInstance}" == "true") {
@@ -31,10 +33,6 @@ definition {
 		else {
 			JSONGroup.deleteGroupByName(groupName = "Site Name");
 		}
-
-		JSONUser.tearDownNonAdminUsers();
-
-		ACUtils.tearDownAC();
 	}
 
 	@description = "Feature ID: LRAC-10405 | Automation ID: LRAC-11120 | Test Summary: Empty state Assets page with assets with data source and property no data"
@@ -42,12 +40,14 @@ definition {
 	test CheckAllAssetsMessagesWhenHasPropertyAndDataSource {
 		property test.name.skip.portal.instance = "EmptyState#CheckAllAssetsMessagesWhenHasPropertyAndDataSource";
 
-		task ("Close the onboarding modal") {
-			ACUtils.closeModal();
+		task ("Check the first screen of the onboarding modal") {
+			ACUtils.viewGenericText(textValueList = "Welcome to Analytics Cloud,Just a few more steps to set up your workspace.");
 		}
 
-		task ("Copy the token from AC") {
-			ACSettings.takeTokenFromAnalyticsCloud();
+		task ("Copy the AC token through the modal") {
+			Button.clickNext();
+
+			Copy(locator1 = "ACSettings#TOKEN_INPUT_FIELD");
 		}
 
 		task ("Create the pages and assets in DXP") {
@@ -552,12 +552,14 @@ definition {
 	test CheckAllMessagesWhenHasPropertyAndDataSourceButNoData {
 		property test.name.skip.portal.instance = "EmptyState#CheckAllMessagesWhenHasPropertyAndDataSourceButNoData";
 
-		task ("Close the onboarding modal") {
-			ACUtils.closeModal();
+		task ("Check the first screen of the onboarding modal") {
+			ACUtils.viewGenericText(textValueList = "Welcome to Analytics Cloud,Just a few more steps to set up your workspace.");
 		}
 
-		task ("Copy the token from AC") {
-			ACSettings.takeTokenFromAnalyticsCloud();
+		task ("Copy the AC token through the modal") {
+			Button.clickNext();
+
+			Copy(locator1 = "ACSettings#TOKEN_INPUT_FIELD");
 		}
 
 		task ("Connect DXP to AC no data") {
@@ -794,6 +796,8 @@ definition {
 	test CheckAllMessageWhenHasPropertyNoDataSource {
 		property test.name.skip.portal.instance = "EmptyState#CheckAllMessageWhenHasPropertyNoDataSource";
 
+		// Accounts and Salesforce tests are no longer possible to run after this one from LRAC-11571
+
 		task ("Close the onboarding modal") {
 			ACUtils.closeModal();
 		}
@@ -854,15 +858,13 @@ definition {
 			}
 		}
 
-		task ("Navigate to accounts page") {
-			ACNavigation.goToSidebarOption(sidebarOption = "accounts");
-		}
-
-		task ("Check the empty page status message and the connect button") {
-			ACUtils.viewGenericText(textValueList = "No Accounts Synced from Data Sources,Connect a data source to get started.,Access our documentation to learn more.");
-
-			ACUtils.viewGenericButton(buttonName = "Connect Data Source");
-		}
+		//task ("Navigate to accounts page") {
+		//	ACNavigation.goToSidebarOption(sidebarOption = "accounts");
+		//}
+		//task ("Check the empty page status message and the connect button") {
+		//	ACUtils.viewGenericText(textValueList = "No Accounts Synced from Data Sources,Connect a data source to get started.,Access our documentation to learn more.");
+		//	ACUtils.viewGenericButton(buttonName = "Connect Data Source");
+		//}
 
 		for (var pageName : list "event-analysis,segments") {
 			task ("Navigate to AC pages") {
@@ -929,12 +931,14 @@ definition {
 		property analytics.cloud.upstream = "false";
 		property test.name.skip.portal.instance = "EmptyState#CheckAllPagesMessagesWhenHasPropertyAndDataSource";
 
-		task ("Close the onboarding modal") {
-			ACUtils.closeModal();
+		task ("Check the first screen of the onboarding modal") {
+			ACUtils.viewGenericText(textValueList = "Welcome to Analytics Cloud,Just a few more steps to set up your workspace.");
 		}
 
-		task ("Copy the token from AC") {
-			ACSettings.takeTokenFromAnalyticsCloud();
+		task ("Copy the AC token through the modal") {
+			Button.clickNext();
+
+			Copy(locator1 = "ACSettings#TOKEN_INPUT_FIELD");
 		}
 
 		task ("Connect DXP to AC") {
@@ -1188,12 +1192,14 @@ definition {
 	test CheckAllSegmentMessagesWhenHasPropertyAndDataSourceButNoData {
 		property test.name.skip.portal.instance = "EmptyState#CheckAllSegmentMessagesWhenHasPropertyAndDataSourceButNoData";
 
-		task ("Close the onboarding modal") {
-			ACUtils.closeModal();
+		task ("Check the first screen of the onboarding modal") {
+			ACUtils.viewGenericText(textValueList = "Welcome to Analytics Cloud,Just a few more steps to set up your workspace.");
 		}
 
-		task ("Copy the token from AC") {
-			ACSettings.takeTokenFromAnalyticsCloud();
+		task ("Copy the AC token through the modal") {
+			Button.clickNext();
+
+			Copy(locator1 = "ACSettings#TOKEN_INPUT_FIELD");
 		}
 
 		task ("Connect DXP to AC") {
@@ -1314,12 +1320,14 @@ definition {
 	test CheckAllSitesMessagesWhenHasPropertyAndDataSourceButNoData {
 		property test.name.skip.portal.instance = "EmptyState#CheckAllSitesMessagesWhenHasPropertyAndDataSourceButNoData";
 
-		task ("Close the onboarding modal") {
-			ACUtils.closeModal();
+		task ("Check the first screen of the onboarding modal") {
+			ACUtils.viewGenericText(textValueList = "Welcome to Analytics Cloud,Just a few more steps to set up your workspace.");
 		}
 
-		task ("Copy the token from AC") {
-			ACSettings.takeTokenFromAnalyticsCloud();
+		task ("Copy the AC token through the modal") {
+			Button.clickNext();
+
+			Copy(locator1 = "ACSettings#TOKEN_INPUT_FIELD");
 		}
 
 		task ("Connect DXP to AC") {
@@ -1544,7 +1552,7 @@ definition {
 			AssertElementPresent(locator1 = "TextInput#NO_PROPERTIES_AVAILABLE_TEXT");
 		}
 
-		for (var pageName : list "sites,assets,event-analysis,segments,accounts,individuals,tests") {
+		for (var pageName : list "sites,assets,event-analysis,segments,individuals,tests") {
 			task ("Navigate to AC pages") {
 				ACNavigation.goToSidebarOption(sidebarOption = "${pageName}");
 			}
@@ -1577,12 +1585,14 @@ definition {
 	test CheckSearchMessagesWithNoResults {
 		property test.name.skip.portal.instance = "EmptyState#CheckSearchMessagesWithNoResults";
 
-		task ("Close the onboarding modal") {
-			ACUtils.closeModal();
+		task ("Check the first screen of the onboarding modal") {
+			ACUtils.viewGenericText(textValueList = "Welcome to Analytics Cloud,Just a few more steps to set up your workspace.");
 		}
 
-		task ("Copy the token from AC") {
-			ACSettings.takeTokenFromAnalyticsCloud();
+		task ("Copy the AC token through the modal") {
+			Button.clickNext();
+
+			Copy(locator1 = "ACSettings#TOKEN_INPUT_FIELD");
 		}
 
 		task ("Connect DXP to AC") {
@@ -1618,7 +1628,7 @@ definition {
 		}
 
 		task ("Check search messages with no results found") {
-			for (var pageName : list "assets,event-analysis,segments,accounts,tests") {
+			for (var pageName : list "assets,event-analysis,segments,tests") {
 				ACNavigation.goToSidebarOption(sidebarOption = "${pageName}");
 
 				ACUtils.searchBar(searchItem = "empty state");

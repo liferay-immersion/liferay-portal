@@ -30,6 +30,7 @@ import com.liferay.expando.kernel.service.ExpandoTableLocalService;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.BaseModel;
+import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.Organization;
 import com.liferay.portal.kernel.model.ShardedModel;
 import com.liferay.portal.kernel.model.User;
@@ -42,6 +43,8 @@ import com.liferay.portal.vulcan.dto.converter.DTOConverter;
 import com.liferay.portal.vulcan.dto.converter.DTOConverterContext;
 
 import java.io.Serializable;
+
+import java.lang.reflect.Array;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -251,7 +254,7 @@ public class DXPEntityDTOConverterImpl implements DXPEntityDTOConverter {
 				{
 					columnId = expandoColumn.getColumnId();
 					name = key;
-					value = String.valueOf(entry.getValue());
+					value = _parseValue(entry.getValue());
 				}
 			};
 
@@ -325,6 +328,20 @@ public class DXPEntityDTOConverterImpl implements DXPEntityDTOConverter {
 			fields.add(field);
 		}
 
+		if (StringUtil.equals(
+				baseModel.getModelClassName(), Group.class.getName())) {
+
+			for (Field field : fields) {
+				if (StringUtil.equals(field.getName(), "name")) {
+					Group group = (Group)baseModel;
+
+					field.setValue(group.getNameCurrentValue());
+
+					break;
+				}
+			}
+		}
+
 		return fields.toArray(new Field[0]);
 	}
 
@@ -352,6 +369,26 @@ public class DXPEntityDTOConverterImpl implements DXPEntityDTOConverter {
 		return false;
 	}
 
+	private String _parseValue(Object value) {
+		if (value != null) {
+			Class<?> clazz = value.getClass();
+
+			if (!clazz.isArray()) {
+				return String.valueOf(value);
+			}
+
+			List<Object> objects = new ArrayList<>();
+
+			for (int i = 0; i < Array.getLength(value); i++) {
+				objects.add(Array.get(value, i));
+			}
+
+			return "[" + StringUtil.merge(objects.toArray(), ",") + "]";
+		}
+
+		return null;
+	}
+
 	private DXPEntity _toDXPEntity(
 		ExpandoField[] expandoFields, Field[] fields, String id,
 		Date modifiedDate, String type) {
@@ -369,7 +406,6 @@ public class DXPEntityDTOConverterImpl implements DXPEntityDTOConverter {
 		}
 
 		dxpEntity.setFields(fields);
-
 		dxpEntity.setId(id);
 		dxpEntity.setModifiedDate(modifiedDate);
 		dxpEntity.setType(type);

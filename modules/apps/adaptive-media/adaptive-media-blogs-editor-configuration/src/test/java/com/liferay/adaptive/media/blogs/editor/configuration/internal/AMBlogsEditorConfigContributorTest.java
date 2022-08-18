@@ -49,9 +49,7 @@ import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
 
-import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
 
 import org.skyscreamer.jsonassert.JSONAssert;
 
@@ -67,8 +65,6 @@ public class AMBlogsEditorConfigContributorTest {
 
 	@Before
 	public void setUp() {
-		MockitoAnnotations.initMocks(this);
-
 		_inputEditorTaglibAttributes.put(
 			"liferay-ui:input-editor:name", "testEditor");
 	}
@@ -294,7 +290,7 @@ public class AMBlogsEditorConfigContributorTest {
 		Mockito.when(
 			_itemSelector.getItemSelectorURL(
 				Mockito.any(RequestBackedPortletURLFactory.class),
-				Mockito.anyString(), Mockito.<ItemSelectorCriterion>anyVararg())
+				Mockito.anyString(), Mockito.<ItemSelectorCriterion>any())
 		).thenReturn(
 			_portletURL
 		);
@@ -672,17 +668,11 @@ public class AMBlogsEditorConfigContributorTest {
 
 	private final Map<String, Object> _inputEditorTaglibAttributes =
 		new HashMap<>();
-
-	@Mock
-	private ItemSelector _itemSelector;
-
-	@Mock
-	private PortletURL _portletURL;
-
-	@Mock
-	private RequestBackedPortletURLFactory _requestBackedPortletURLFactory;
-
-	@Mock
-	private ThemeDisplay _themeDisplay;
+	private final ItemSelector _itemSelector = Mockito.mock(ItemSelector.class);
+	private final PortletURL _portletURL = Mockito.mock(PortletURL.class);
+	private final RequestBackedPortletURLFactory
+		_requestBackedPortletURLFactory = Mockito.mock(
+			RequestBackedPortletURLFactory.class);
+	private final ThemeDisplay _themeDisplay = Mockito.mock(ThemeDisplay.class);
 
 }

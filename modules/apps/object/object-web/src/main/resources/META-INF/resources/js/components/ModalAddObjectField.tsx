@@ -16,18 +16,18 @@ import ClayAlert from '@clayui/alert';
 import ClayButton from '@clayui/button';
 import ClayForm from '@clayui/form';
 import ClayModal, {ClayModalProvider, useModal} from '@clayui/modal';
-import {Input} from '@liferay/object-js-components-web';
-import {fetch} from 'frontend-js-web';
+import {Observer} from '@clayui/modal/lib/types';
+import {API, Input} from '@liferay/object-js-components-web';
 import React, {useEffect, useState} from 'react';
 
-import {HEADERS} from '../utils/constants';
-import {ERRORS} from '../utils/errors';
-import {defaultLanguageId} from '../utils/locale';
 import {toCamelCase} from '../utils/string';
 import ObjectFieldFormBase, {useObjectFieldForm} from './ObjectFieldFormBase';
 
+const defaultLanguageId = Liferay.ThemeDisplay.getDefaultLanguageId();
+
 function ModalAddObjectField({
 	apiURL,
+	objectDefinitionId,
 	objectFieldTypes,
 	objectName,
 	observer,
@@ -44,31 +44,23 @@ function ModalAddObjectField({
 	};
 
 	const onSubmit = async (field: ObjectField) => {
-		const response = await fetch(apiURL, {
-			body: JSON.stringify({
-				...field,
-				name:
-					field.name ||
-					toCamelCase(field.label[defaultLanguageId] as string),
-			}),
-			headers: HEADERS,
-			method: 'POST',
-		});
+		try {
+			await API.save(
+				apiURL,
+				{
+					...field,
+					name:
+						field.name ||
+						toCamelCase(field.label[defaultLanguageId] as string),
+				},
+				'POST'
+			);
 
-		if (response.status === 401) {
-			window.location.reload();
-		}
-		else if (response.ok) {
 			onClose();
-
 			window.location.reload();
 		}
-		else {
-			const {type} = (await response.json()) as any;
-			const errorMessage =
-				ERRORS[type] ?? Liferay.Language.get('an-error-occurred');
-
-			setError(errorMessage);
+		catch (error) {
+			setError((error as Error).message);
 		}
 	};
 
@@ -109,6 +101,7 @@ function ModalAddObjectField({
 					<ObjectFieldFormBase
 						errors={errors}
 						handleChange={handleChange}
+						objectDefinitionId={objectDefinitionId}
 						objectField={values}
 						objectFieldTypes={objectFieldTypes}
 						objectName={objectName}
@@ -139,6 +132,7 @@ function ModalAddObjectField({
 
 export default function ModalWithProvider({
 	apiURL,
+	objectDefinitionId,
 	objectFieldTypes,
 	objectName,
 }: IProps) {
@@ -156,7 +150,16 @@ export default function ModalWithProvider({
 			{isVisible && (
 				<ModalAddObjectField
 					apiURL={apiURL}
-					objectFieldTypes={objectFieldTypes}
+					objectDefinitionId={objectDefinitionId}
+					objectFieldTypes={
+						!Liferay.FeatureFlags['LPS-149625']
+							? objectFieldTypes.filter(
+									(filterType) =>
+										filterType.businessType !==
+										'Aggregation'
+							  )
+							: objectFieldTypes
+					}
 					objectName={objectName}
 					observer={observer}
 					onClose={onClose}
@@ -167,12 +170,13 @@ export default function ModalWithProvider({
 }
 
 interface IModal extends IProps {
-	observer: any;
+	observer: Observer;
 	onClose: () => void;
 }
 
 interface IProps {
 	apiURL: string;
+	objectDefinitionId: number;
 	objectFieldTypes: ObjectFieldType[];
 	objectName: string;
 }

@@ -12,12 +12,17 @@
  * details.
  */
 
-import {Security} from '../security';
-import {
-	TestrayActions,
-	TestrayEntities,
-	TestrayRoles,
-} from '../security/RolePermission';
+import {KeyedMutator} from 'swr';
+
+export type ActionsHookParameter = {isHeaderActions?: boolean};
+
+export type Action<T = any> = {
+	action?: (item: T, mutate: KeyedMutator<any>) => void;
+	disabled?: boolean;
+	icon?: string;
+	name: ((item: T) => string) | string;
+	permission?: keyof typeof TestrayActions | boolean;
+};
 
 export type ActionMap<M extends {[index: string]: any}> = {
 	[Key in keyof M]: M[Key] extends undefined
@@ -30,32 +35,24 @@ export type ActionMap<M extends {[index: string]: any}> = {
 		  };
 };
 
+export type Actions = keyof typeof TestrayActions;
+
 export enum DescriptionType {
 	MARKDOWN = 'markdown',
 	PLAINTEXT = 'plaintext',
 }
 
 export enum SortOption {
-	ASC = 'asc',
-	DESC = 'desc',
+	ASC = 'ASC',
+	DESC = 'DESC',
 }
 
-export type Action<T = any> = {
-	action?: (item: T) => void;
-	name: string;
-	permission?: keyof typeof TestrayActions | boolean;
-};
+export type SortDirection = keyof typeof SortOption;
 
-export type SecurityPermissions = {
-	permissions: PermissionCheck;
-	security: Security;
-};
-
-export type Actions = keyof typeof TestrayActions;
-export type Entity = keyof TestrayEntities;
-export type Roles = keyof typeof TestrayRoles;
-export type PermissionCheck = Partial<
-	{
-		[key in Actions]: boolean;
-	}
->;
+export enum TestrayActions {
+	'CREATE',
+	'DELETE',
+	'INDEX',
+	'PERMISSIONS',
+	'UPDATE',
+}

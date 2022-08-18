@@ -16,10 +16,12 @@ package com.liferay.client.extension.web.internal.portlet.action;
 
 import com.liferay.client.extension.model.ClientExtensionEntry;
 import com.liferay.client.extension.service.ClientExtensionEntryService;
+import com.liferay.client.extension.type.CET;
 import com.liferay.client.extension.type.factory.CETFactory;
 import com.liferay.client.extension.web.internal.constants.ClientExtensionAdminPortletKeys;
 import com.liferay.client.extension.web.internal.constants.ClientExtensionAdminWebKeys;
 import com.liferay.client.extension.web.internal.display.context.EditClientExtensionEntryDisplayContext;
+import com.liferay.client.extension.web.internal.display.context.EditClientExtensionEntryPartDisplayContext;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
@@ -84,12 +86,29 @@ public class EditClientExtensionEntryMVCActionCommand
 
 			SessionErrors.add(actionRequest, exception.getClass(), exception);
 
+			CET cet = null;
+
+			ClientExtensionEntry clientExtensionEntry =
+				_fetchClientExtensionEntry(actionRequest);
+
+			if (clientExtensionEntry != null) {
+				cet = _cetFactory.create(clientExtensionEntry);
+			}
+			else {
+				cet = _cetFactory.create(
+					actionRequest, ParamUtil.getString(actionRequest, "type"));
+			}
+
 			actionRequest.setAttribute(
 				ClientExtensionAdminWebKeys.
 					EDIT_CLIENT_EXTENSION_ENTRY_DISPLAY_CONTEXT,
 				new EditClientExtensionEntryDisplayContext(
-					_cetFactory, _fetchClientExtensionEntry(actionRequest),
-					actionRequest));
+					cet, clientExtensionEntry, actionRequest));
+			actionRequest.setAttribute(
+				ClientExtensionAdminWebKeys.
+					EDIT_CLIENT_EXTENSION_ENTRY_PART_DISPLAY_CONTEXT,
+				new EditClientExtensionEntryPartDisplayContext(
+					cet, clientExtensionEntry, actionRequest));
 
 			actionResponse.setRenderParameter(
 				"mvcPath", "/admin/edit_client_extension_entry.jsp");
@@ -102,12 +121,15 @@ public class EditClientExtensionEntryMVCActionCommand
 			actionRequest, "name");
 		String sourceCodeURL = ParamUtil.getString(
 			actionRequest, "sourceCodeURL");
+
 		String type = ParamUtil.getString(actionRequest, "type");
+
+		CET cet = _cetFactory.create(actionRequest, type);
 
 		_clientExtensionEntryService.addClientExtensionEntry(
 			StringPool.BLANK, description, nameMap,
 			ParamUtil.getString(actionRequest, "properties"), sourceCodeURL,
-			type, _cetFactory.typeSettings(actionRequest, type));
+			type, cet.getTypeSettings());
 	}
 
 	private ClientExtensionEntry _fetchClientExtensionEntry(
@@ -137,11 +159,12 @@ public class EditClientExtensionEntryMVCActionCommand
 		String sourceCodeURL = ParamUtil.getString(
 			actionRequest, "sourceCodeURL");
 
+		CET cet = _cetFactory.create(
+			actionRequest, clientExtensionEntry.getType());
+
 		_clientExtensionEntryService.updateClientExtensionEntry(
 			clientExtensionEntry.getClientExtensionEntryId(), description,
-			nameMap, properties, sourceCodeURL,
-			_cetFactory.typeSettings(
-				actionRequest, clientExtensionEntry.getType()));
+			nameMap, properties, sourceCodeURL, cet.getTypeSettings());
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(

@@ -34,7 +34,7 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.json.JSONUtil;
-import com.liferay.portal.kernel.language.LanguageUtil;
+import com.liferay.portal.kernel.language.Language;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceContextFactory;
@@ -104,7 +104,8 @@ public class AddFragmentEntryLinkMVCActionCommand
 				serviceContext.getPlid(), fragmentEntry.getCss(),
 				fragmentEntry.getHtml(), fragmentEntry.getJs(),
 				fragmentEntry.getConfiguration(), null, StringPool.BLANK, 0,
-				contributedRendererKey, serviceContext);
+				contributedRendererKey, fragmentEntry.getType(),
+				serviceContext);
 		}
 
 		DefaultFragmentRendererContext defaultFragmentRendererContext =
@@ -116,7 +117,7 @@ public class AddFragmentEntryLinkMVCActionCommand
 			StringPool.BLANK,
 			fragmentRenderer.getConfiguration(defaultFragmentRendererContext),
 			StringPool.BLANK, StringPool.BLANK, 0, fragmentEntryKey,
-			serviceContext);
+			fragmentRenderer.getType(), serviceContext);
 	}
 
 	@Override
@@ -149,7 +150,7 @@ public class AddFragmentEntryLinkMVCActionCommand
 
 		return JSONUtil.put(
 			"error",
-			LanguageUtil.get(
+			_language.get(
 				_portal.getHttpServletRequest(actionRequest), errorMessage));
 	}
 
@@ -201,8 +202,7 @@ public class AddFragmentEntryLinkMVCActionCommand
 			"fragmentEntryLink",
 			_fragmentEntryLinkManager.getFragmentEntryLinkJSONObject(
 				fragmentEntryLink, _portal.getHttpServletRequest(actionRequest),
-				_portal.getHttpServletResponse(actionResponse), layoutStructure,
-				StringPool.BLANK)
+				_portal.getHttpServletResponse(actionResponse), layoutStructure)
 		).put(
 			"layoutData", layoutStructure.toJSONObject()
 		);
@@ -219,6 +219,9 @@ public class AddFragmentEntryLinkMVCActionCommand
 
 	@Reference
 	private FragmentRendererTracker _fragmentRendererTracker;
+
+	@Reference
+	private Language _language;
 
 	@Reference
 	private Portal _portal;

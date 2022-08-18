@@ -110,6 +110,51 @@ definition {
 		}
 	}
 
+	@description = "COMMERCE-7704 Verify user cannot upload a CSV file with an invalid External Reference Code"
+	@priority = "3"
+	test CannotUploadInvalidExternalReferenceCodeCSVFile {
+		task ("Given a Minium site with a buyer user") {
+			User.logoutPG();
+
+			CommerceLogin.miniumLogin(
+				password = "test",
+				urlAppend = "web/minium",
+				userEmailAddress = "buyer@liferay.com");
+		}
+
+		task ("And given the user is creating a new order") {
+			CommerceAcceleratorsInitializer.createNewOrderFromPendingOrders();
+		}
+
+		task ("When the user imports a CSV file with a string External Reference Code") {
+			CommerceOrders.importOrderFromType(orderType = "CSV");
+
+			UploadDependencyFile.uploadFile(fileName = "commerce_invalid_stringERC.csv");
+
+			Button.clickImport();
+		}
+
+		task ("Then an error message is displayed because string ERCs are not valid") {
+			Alert.viewErrorMessage(errorMessage = "The CSV could not be imported.");
+
+			IFrame.closeFrame();
+		}
+
+		task ("When the user imports a CSV file with a decimal External Reference Code") {
+			CommerceOrders.importOrderFromType(orderType = "CSV");
+
+			UploadDependencyFile.uploadFile(fileName = "commerce_invalid_decimalERC.csv");
+
+			Button.clickImport();
+		}
+
+		task ("Then an error message is displayed because decimal ERCs are not valid") {
+			Alert.viewErrorMessage(errorMessage = "The CSV could not be imported.");
+
+			IFrame.closeFrame();
+		}
+	}
+
 	@description = "COMMERCE-7705 Verify user can not upload a CSV with invalid quantity"
 	@priority = "3"
 	test CannotUploadInvalidQuantityCSVOrderFile {
@@ -145,6 +190,59 @@ definition {
 		}
 	}
 
+	@description = "COMMERCE-7702 Verify user can not upload a CSV with invalid SkuID"
+	@priority = "3"
+	test CannotUploadInvalidSkuIDCSVOrderFile {
+		task ("Given a Minium site with a buyer user") {
+			User.logoutPG();
+
+			CommerceLogin.miniumLogin(
+				password = "test",
+				urlAppend = "web/minium",
+				userEmailAddress = "buyer@liferay.com");
+		}
+
+		task ("And given the user is creating a new order") {
+			CommerceAcceleratorsInitializer.createNewOrderFromPendingOrders();
+		}
+
+		task ("When the user go to start a new order by Import 1st file from CSV") {
+			CommerceOrders.importOrderFromType(orderType = "CSV");
+		}
+
+		task ("And when the user try to import a file with invalid SkuID") {
+			UploadDependencyFile.uploadFile(fileName = "commerce_invalid_skuID.csv");
+
+			Button.clickImport();
+		}
+
+		task ("Then assert the product status display 'The product is no longer available'") {
+			CommerceOrders.assertOrderImportPreviewEntry(
+				importStatus = "The product is no longer available",
+				productName = "123.36");
+
+			IFrame.closeFrame();
+		}
+
+		task ("When the user go to start a new order by Import 2nd file from CSV") {
+			CommerceOrders.importOrderFromType(orderType = "CSV");
+		}
+
+		task ("And when the user try to import a file with invalid string SkuID") {
+			UploadDependencyFile.uploadFile(fileName = "commerce_invalid_stringSkuID.csv");
+
+			Button.clickImport();
+		}
+
+		task ("Then assert the product status display 'The product is no longer available'") {
+			CommerceOrders.assertOrderImportPreviewEntry(
+				importStatus = "The product is no longer available",
+				productName = "1,2345");
+
+			IFrame.closeFrame();
+		}
+	}
+
 	@description = "COMMERCE-7707 Verify user can not upload non CSV files"
 	@priority = "3"
 	test CannotUploadNonCSVOrderFile {
@@ -166,7 +264,7 @@ definition {
 		}
 
 		task ("And when the user try to import a pdf file") {
-			UploadDependencyFile.uploadFile(fileName = "Commerce_1.pdf");
+			UploadDependencyFile.uploadFile(fileName = "commerce.pdf");
 
 			Button.clickImport();
 		}
@@ -182,7 +280,7 @@ definition {
 		}
 
 		task ("And when the user try to import a text file") {
-			UploadDependencyFile.uploadFile(fileName = "Commerce_1.txt");
+			UploadDependencyFile.uploadFile(fileName = "commerce.txt");
 
 			Button.clickImport();
 		}
@@ -198,7 +296,7 @@ definition {
 		}
 
 		task ("And when the user try to import a image file") {
-			UploadDependencyFile.uploadFile(fileName = "Commerce_1.jpeg");
+			UploadDependencyFile.uploadFile(fileName = "commerce.jpeg");
 
 			Button.clickImport();
 		}

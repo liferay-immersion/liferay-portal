@@ -16,13 +16,16 @@ import ClayAlert from '@clayui/alert';
 import ClayButton from '@clayui/button';
 import ClayForm from '@clayui/form';
 import ClayModal, {ClayModalProvider, useModal} from '@clayui/modal';
-import {Input, Select, useForm} from '@liferay/object-js-components-web';
-import {fetch} from 'frontend-js-web';
+import {Observer} from '@clayui/modal/lib/types';
+import {
+	API,
+	FormError,
+	Input,
+	Select,
+	useForm,
+} from '@liferay/object-js-components-web';
 import React, {useEffect, useState} from 'react';
 
-import {HEADERS} from '../utils/constants';
-import {ERRORS} from '../utils/errors';
-import {defaultLanguageId} from '../utils/locale';
 import {
 	firstLetterUppercase,
 	removeAllSpecialCharacters,
@@ -48,7 +51,7 @@ const ModalAddObjectDefinition: React.FC<IProps> = ({
 		label: '',
 		name: undefined,
 		pluralLabel: '',
-		storageType: 'default',
+		storageType: storageTypes[0],
 	};
 	const [error, setError] = useState<string>('');
 
@@ -58,6 +61,7 @@ const ModalAddObjectDefinition: React.FC<IProps> = ({
 		pluralLabel,
 		storageType,
 	}: TInitialValues) => {
+		const defaultLanguageId = Liferay.ThemeDisplay.getDefaultLanguageId();
 		const objectDefinition: ObjectDefinition = {
 			label: {
 				[defaultLanguageId]: label,
@@ -73,33 +77,19 @@ const ModalAddObjectDefinition: React.FC<IProps> = ({
 		if (Liferay.FeatureFlags['LPS-135430']) {
 			objectDefinition.storageType = storageType.toLowerCase();
 		}
-		const response = await fetch(apiURL, {
-			body: JSON.stringify(objectDefinition),
-			headers: HEADERS,
-			method: 'POST',
-		});
+		try {
+			await API.save(apiURL, objectDefinition, 'POST');
 
-		if (response.status === 401) {
-			window.location.reload();
-		}
-		else if (response.ok) {
 			onClose();
-
 			window.location.reload();
 		}
-		else {
-			const {type} = (await response.json()) as any;
-			const isMapped = Object.prototype.hasOwnProperty.call(ERRORS, type);
-			const errorMessage = isMapped
-				? ERRORS[type]
-				: Liferay.Language.get('an-error-occurred');
-
-			setError(errorMessage);
+		catch (error) {
+			setError((error as Error).message);
 		}
 	};
 
 	const validate = (values: TInitialValues) => {
-		const errors: any = {};
+		const errors: FormError<TInitialValues> = {};
 
 		if (!values.label) {
 			errors.label = Liferay.Language.get('required');
@@ -174,10 +164,10 @@ const ModalAddObjectDefinition: React.FC<IProps> = ({
 						<Select
 							label={Liferay.Language.get('storage-type')}
 							name="storageType"
-							onChange={({target: {value}}: any) => {
+							onChange={({target: {value}}) => {
 								setValues({
 									...values,
-									storageType: storageTypes[value],
+									storageType: storageTypes[Number(value)],
 								});
 							}}
 							options={storageTypes}
@@ -212,7 +202,7 @@ const ModalAddObjectDefinition: React.FC<IProps> = ({
 
 interface IProps extends React.HTMLAttributes<HTMLElement> {
 	apiURL: string;
-	observer: any;
+	observer: Observer;
 	onClose: () => void;
 	storageTypes: string[];
 }

@@ -70,6 +70,23 @@ public class FormConfigSerDes {
 			}
 		}
 
+		if (formConfig.getFormSuccessSubmissionResult() != null) {
+			if (sb.length() > 1) {
+				sb.append(", ");
+			}
+
+			sb.append("\"formSuccessSubmissionResult\": ");
+
+			if (formConfig.getFormSuccessSubmissionResult() instanceof String) {
+				sb.append("\"");
+				sb.append((String)formConfig.getFormSuccessSubmissionResult());
+				sb.append("\"");
+			}
+			else {
+				sb.append(formConfig.getFormSuccessSubmissionResult());
+			}
+		}
+
 		sb.append("}");
 
 		return sb.toString();
@@ -96,6 +113,15 @@ public class FormConfigSerDes {
 				"formReference", String.valueOf(formConfig.getFormReference()));
 		}
 
+		if (formConfig.getFormSuccessSubmissionResult() == null) {
+			map.put("formSuccessSubmissionResult", null);
+		}
+		else {
+			map.put(
+				"formSuccessSubmissionResult",
+				String.valueOf(formConfig.getFormSuccessSubmissionResult()));
+		}
+
 		return map;
 	}
 
@@ -120,6 +146,14 @@ public class FormConfigSerDes {
 			if (Objects.equals(jsonParserFieldName, "formReference")) {
 				if (jsonParserFieldValue != null) {
 					formConfig.setFormReference((Object)jsonParserFieldValue);
+				}
+			}
+			else if (Objects.equals(
+						jsonParserFieldName, "formSuccessSubmissionResult")) {
+
+				if (jsonParserFieldValue != null) {
+					formConfig.setFormSuccessSubmissionResult(
+						(Object)jsonParserFieldValue);
 				}
 			}
 		}

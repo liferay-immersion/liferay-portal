@@ -13,16 +13,15 @@
  */
 
 export declare type BoxType = 'regular' | 'categorization';
-export declare type TName = {
-	[key: string]: string;
-};
+export declare type TName = LocalizedValue<string>;
 export declare type TObjectLayout = {
 	defaultObjectLayout: boolean;
 	name: TName;
+	objectDefinitionId: number;
 	objectLayoutTabs: TObjectLayoutTab[];
 };
 export declare type TObjectLayoutTab = {
-	name: TName;
+	name: LocalizedValue<string>;
 	objectLayoutBoxes: TObjectLayoutBox[];
 	objectRelationshipId: number;
 	priority: number;
@@ -43,26 +42,9 @@ export declare type TObjectLayoutColumn = {
 	priority: number;
 	size: number;
 };
-export declare type TObjectField = {
-	DBType: string;
-	businessType: string;
-	id: number;
-	indexed: boolean;
-	indexedAsKeyword: boolean;
-	indexedLanguageId: string;
+export interface TObjectField extends ObjectField {
 	inLayout?: boolean;
-	label: TName;
-	listTypeDefinitionId: boolean;
-	name: string;
-	required: boolean;
-	system: boolean;
-};
-export declare type TObjectRelationship = {
-	id: number;
+}
+export interface TObjectRelationship extends ObjectRelationship {
 	inLayout?: boolean;
-	label: TName;
-	name: string;
-	objectDefinitionId1: number;
-	objectDefinitionId2: number;
-	type: string;
-};
+}

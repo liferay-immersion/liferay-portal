@@ -15,54 +15,47 @@
 package com.liferay.object.internal.notification.type;
 
 import com.liferay.notification.type.NotificationType;
-import com.liferay.object.model.ObjectEntry;
-import com.liferay.petra.string.StringPool;
+import com.liferay.object.model.ObjectDefinition;
 
 import java.util.Locale;
+import java.util.Map;
 
 /**
  * @author Gustavo Lima
  */
 public class ObjectDefinitionNotificationType implements NotificationType {
 
-	public ObjectDefinitionNotificationType(String key, String label) {
-		_key = key;
-		_label = label;
+	public ObjectDefinitionNotificationType(ObjectDefinition objectDefinition) {
+		_objectDefinition = objectDefinition;
 	}
 
 	@Override
 	public String getClassName(Object object) {
-		if (!(object instanceof ObjectEntry)) {
-			throw new IllegalArgumentException(
-				"Object " + object + " is not an object entry");
-		}
-
-		return ObjectEntry.class.getName();
+		return _objectDefinition.getClassName();
 	}
 
 	@Override
 	public long getClassPK(Object object) {
-		if (!(object instanceof ObjectEntry)) {
+		if (!(object instanceof Map)) {
 			throw new IllegalArgumentException(
-				"Object " + object + " is not an object entry");
+				"Object " + object + " is not a map");
 		}
 
-		ObjectEntry objectEntry = (ObjectEntry)object;
+		Map<String, Object> values = (Map<String, Object>)object;
 
-		return objectEntry.getObjectEntryId();
+		return (Long)values.get("objectEntryId");
 	}
 
 	@Override
 	public String getKey() {
-		return _key;
+		return _objectDefinition.getClassName();
 	}
 
 	@Override
 	public String getLabel(Locale locale) {
-		return StringPool.BLANK;
+		return _objectDefinition.getShortName();
 	}
 
-	private final String _key;
-	private final String _label;
+	private final ObjectDefinition _objectDefinition;
 
 }

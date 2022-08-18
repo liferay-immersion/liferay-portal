@@ -11,9 +11,6 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
-
-import {TYPES} from './context';
-
 export type TName = {
 	[key: string]: string;
 };
@@ -21,27 +18,6 @@ export type TName = {
 export type TWorkflowStatus = {
 	label: string;
 	value: string;
-};
-
-export type TLabelValueObject = {
-	label: string;
-	value: string;
-};
-
-export type TObjectField = {
-	businessType: string;
-	checked: boolean;
-	filtered?: boolean;
-	hasFilter?: boolean;
-	id: number;
-	indexed: boolean;
-	indexedAsKeyword: boolean;
-	indexedLanguageId: string;
-	label: TName;
-	listTypeDefinitionId: boolean;
-	name: string;
-	required: boolean;
-	type: string;
 };
 
 export type TObjectColumn = {
@@ -55,19 +31,20 @@ export type TObjectColumn = {
 	sortOrder?: string;
 	type?: string;
 	value?: string;
-	valueList?: TLabelValueObject[];
+	valueList?: LabelValueObject[];
 };
 
 export type TObjectViewColumn = {
-	defaultSort: boolean;
-	fieldLabel: string;
+	defaultSort?: boolean;
+	fieldLabel?: string;
 	label: TName;
+	objectFieldBusinessType?: string;
 	objectFieldName: string;
 	priority?: number;
 };
 
 export type TObjectViewSortColumn = {
-	fieldLabel: string;
+	fieldLabel?: string;
 	label: TName;
 	objectFieldName: string;
 	priority?: number;
@@ -76,33 +53,31 @@ export type TObjectViewSortColumn = {
 
 export type TObjectViewFilterColumn = {
 	definition: {[key: string]: string[]} | null;
-	fieldLabel: string;
-	filterBy: string;
+	disableEdit?: boolean;
+	fieldLabel?: string;
+	filterBy?: string;
 	filterType: string | null;
 	label: TName;
 	objectFieldBusinessType?: string;
 	objectFieldName: string;
 	value?: string;
-	valueList?: TLabelValueObject[];
+	valueList?: LabelValueObject[];
 };
 
 export type TObjectView = {
 	defaultObjectView: boolean;
 	name: TName;
+	objectDefinitionId: number;
 	objectViewColumns: TObjectViewColumn[];
 	objectViewFilterColumns: TObjectViewFilterColumn[];
 	objectViewSortColumns: TObjectViewSortColumn[];
 };
 
 export type TState = {
+	filterOperators: TFilterOperators;
 	isViewOnly: boolean;
-	objectFields: TObjectField[];
+	objectFields: ObjectField[];
 	objectView: TObjectView;
 	objectViewId: string;
 	workflowStatusJSONArray: TWorkflowStatus[];
-};
-
-export type TAction = {
-	payload: {[key: string]: any};
-	type: keyof typeof TYPES;
 };

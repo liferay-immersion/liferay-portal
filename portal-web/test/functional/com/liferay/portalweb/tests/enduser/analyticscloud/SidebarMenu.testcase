@@ -33,6 +33,8 @@ definition {
 	tearDown {
 		var testPortalInstance = PropsUtil.get("test.portal.instance");
 
+		ACUtils.tearDownAC();
+
 		ACUtils.tearDownDXP();
 
 		if ("${testPortalInstance}" == "true") {
@@ -41,8 +43,6 @@ definition {
 		else {
 			JSONGroup.deleteGroupByName(groupName = "Site Name");
 		}
-
-		ACUtils.tearDownAC();
 	}
 
 	@description = "Feature ID: Legacy | Automation ID: LRAC-8972 | Test Summary: Assert the Property Menu after deleting a Property"
@@ -142,10 +142,14 @@ definition {
 	}
 
 	@description = "Bug: LRAC-10856 | Automation ID: LRAC-10892 | Test Summary: Change the AC page default language"
+	@ignore = "true"
 	@priority = "2"
 	test ChangeDefaultLanguage {
+
+		// AC Bug ticket: LRAC-11185
+
 		var sidebarList1 = "Sites,Recursos,Eventos,Segmentos,Contas,Indivíduos,Testes";
-		var sidebarList2 = "Sites,Assets,Events,Segments,Accounts,Individuals,Tests";
+		var sidebarList2 = "Sites,Assets,Events,Segments,Individuals,Tests";
 
 		task ("Switch to property in AC") {
 			ACUtils.launchAC();

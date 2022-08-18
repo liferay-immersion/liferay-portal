@@ -32,34 +32,38 @@ export const getDXPCloudPageInfo = gql`
 	}
 `;
 
-export const getAccountSubscriptionsTerms = gql`
-	query getAccountSubscriptionsTerms(
+export const getCommerceOrderItems = gql`
+	query getCommerceOrderItems(
 		$filter: String
 		$page: Int = 1
 		$pageSize: Int = 20
 	) {
-		c {
-			accountSubscriptionTerms(
-				filter: $filter
-				page: $page
-				pageSize: $pageSize
-			) {
-				items {
-					accountKey
-					accountSubscriptionERC
-					accountSubscriptionGroupERC
-					accountSubscriptionTermId
-					c_accountSubscriptionTermId
-					endDate
-					instanceSize
-					provisioned
-					quantity
-					startDate
-					subscriptionTermStatus
+		orderItems(filter: $filter, page: $page, pageSize: $pageSize) {
+			items {
+				externalReferenceCode
+				quantity
+				customFields {
+					name
+					customValue {
+						data
+					}
 				}
-				totalCount
+				options
 			}
+			totalCount
 		}
+	}
+`;
+
+export const patchOrderItemByExternalReferenceCode = gql`
+	mutation patchOrderItemByExternalReferenceCode(
+		$externalReferenceCode: String
+		$orderItem: InputOrderItem
+	) {
+		patchOrderItemByExternalReferenceCode(
+			externalReferenceCode: $externalReferenceCode
+			orderItem: $orderItem
+		)
 	}
 `;
 
@@ -492,9 +496,11 @@ export const getUserAccount = gql`
 			image
 			name
 			roleBriefs {
+				id
 				name
 			}
 			organizationBriefs {
+				id
 				name
 			}
 		}

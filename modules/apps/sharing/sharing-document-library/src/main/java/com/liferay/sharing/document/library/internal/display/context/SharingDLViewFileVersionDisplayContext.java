@@ -25,7 +25,6 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.repository.model.FileVersion;
 import com.liferay.portal.kernel.servlet.taglib.ui.BaseUIItem;
-import com.liferay.portal.kernel.servlet.taglib.ui.Menu;
 import com.liferay.portal.kernel.servlet.taglib.ui.ToolbarItem;
 import com.liferay.portal.kernel.settings.PortletInstanceSettingsLocator;
 import com.liferay.portal.kernel.settings.Settings;
@@ -100,23 +99,6 @@ public class SharingDLViewFileVersionDisplayContext
 	}
 
 	@Override
-	public Menu getMenu() throws PortalException {
-		Menu menu = super.getMenu();
-
-		if (!_isShowShareAction() || !_sharingConfiguration.isEnabled()) {
-			return menu;
-		}
-
-		_addSharingUIItem(
-			menu.getMenuItems(),
-			_sharingMenuItemFactory.createShareMenuItem(
-				DLFileEntryConstants.getClassName(),
-				_fileEntry.getFileEntryId(), _httpServletRequest));
-
-		return menu;
-	}
-
-	@Override
 	public List<ToolbarItem> getToolbarItems() throws PortalException {
 		List<ToolbarItem> toolbarItems = super.getToolbarItems();
 
@@ -181,7 +163,9 @@ public class SharingDLViewFileVersionDisplayContext
 					return dropdownItems;
 				}
 			}
-			else if (Objects.equals("download", dropdownItem.get("icon"))) {
+			else if (Objects.equals(
+						DLUIItemKeys.DOWNLOAD, dropdownItem.get("key"))) {
+
 				break;
 			}
 
@@ -215,7 +199,9 @@ public class SharingDLViewFileVersionDisplayContext
 					return true;
 				}
 			}
-			else if (Objects.equals("download", dropdownItem.get("icon"))) {
+			else if (Objects.equals(
+						DLUIItemKeys.DOWNLOAD, dropdownItem.get("key"))) {
+
 				break;
 			}
 

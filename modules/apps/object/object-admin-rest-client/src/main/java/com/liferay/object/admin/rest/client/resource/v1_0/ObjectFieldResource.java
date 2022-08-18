@@ -41,12 +41,14 @@ public interface ObjectFieldResource {
 	}
 
 	public Page<ObjectField> getObjectDefinitionObjectFieldsPage(
-			Long objectDefinitionId, String search, Pagination pagination)
+			Long objectDefinitionId, String search, String filterString,
+			Pagination pagination, String sortString)
 		throws Exception;
 
 	public HttpInvoker.HttpResponse
 			getObjectDefinitionObjectFieldsPageHttpResponse(
-				Long objectDefinitionId, String search, Pagination pagination)
+				Long objectDefinitionId, String search, String filterString,
+				Pagination pagination, String sortString)
 		throws Exception;
 
 	public ObjectField postObjectDefinitionObjectField(
@@ -187,12 +189,14 @@ public interface ObjectFieldResource {
 	public static class ObjectFieldResourceImpl implements ObjectFieldResource {
 
 		public Page<ObjectField> getObjectDefinitionObjectFieldsPage(
-				Long objectDefinitionId, String search, Pagination pagination)
+				Long objectDefinitionId, String search, String filterString,
+				Pagination pagination, String sortString)
 			throws Exception {
 
 			HttpInvoker.HttpResponse httpResponse =
 				getObjectDefinitionObjectFieldsPageHttpResponse(
-					objectDefinitionId, search, pagination);
+					objectDefinitionId, search, filterString, pagination,
+					sortString);
 
 			String content = httpResponse.getContent();
 
@@ -233,8 +237,8 @@ public interface ObjectFieldResource {
 
 		public HttpInvoker.HttpResponse
 				getObjectDefinitionObjectFieldsPageHttpResponse(
-					Long objectDefinitionId, String search,
-					Pagination pagination)
+					Long objectDefinitionId, String search, String filterString,
+					Pagination pagination, String sortString)
 			throws Exception {
 
 			HttpInvoker httpInvoker = HttpInvoker.newHttpInvoker();
@@ -262,11 +266,19 @@ public interface ObjectFieldResource {
 				httpInvoker.parameter("search", String.valueOf(search));
 			}
 
+			if (filterString != null) {
+				httpInvoker.parameter("filter", filterString);
+			}
+
 			if (pagination != null) {
 				httpInvoker.parameter(
 					"page", String.valueOf(pagination.getPage()));
 				httpInvoker.parameter(
 					"pageSize", String.valueOf(pagination.getPageSize()));
+			}
+
+			if (sortString != null) {
+				httpInvoker.parameter("sort", sortString);
 			}
 
 			httpInvoker.path(

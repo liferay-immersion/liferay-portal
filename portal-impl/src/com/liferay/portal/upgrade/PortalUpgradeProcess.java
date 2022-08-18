@@ -22,6 +22,7 @@ import com.liferay.portal.kernel.upgrade.DummyUpgradeProcess;
 import com.liferay.portal.kernel.upgrade.UpgradeException;
 import com.liferay.portal.kernel.upgrade.UpgradeProcess;
 import com.liferay.portal.kernel.util.ClassUtil;
+import com.liferay.portal.kernel.util.ReleaseInfo;
 import com.liferay.portal.kernel.util.TreeMapBuilder;
 import com.liferay.portal.kernel.version.Version;
 import com.liferay.portal.upgrade.util.PortalUpgradeProcessRegistry;
@@ -132,6 +133,32 @@ public class PortalUpgradeProcess extends UpgradeProcess {
 		return false;
 	}
 
+	public static boolean supportsRetry(Connection connection)
+		throws SQLException {
+
+		try (PreparedStatement preparedStatement = connection.prepareStatement(
+				"select buildNumber from Release_ where servletContextName = " +
+					"?")) {
+
+			preparedStatement.setString(
+				1, ReleaseConstants.DEFAULT_SERVLET_CONTEXT_NAME);
+
+			try (ResultSet resultSet = preparedStatement.executeQuery()) {
+				if (resultSet.next()) {
+					if (resultSet.getInt("buildNumber") >=
+							ReleaseInfo.RELEASE_7_1_0_BUILD_NUMBER) {
+
+						return true;
+					}
+
+					return false;
+				}
+			}
+		}
+
+		return false;
+	}
+
 	@Override
 	public void upgrade() throws UpgradeException {
 		long start = System.currentTimeMillis();
@@ -168,7 +195,7 @@ public class PortalUpgradeProcess extends UpgradeProcess {
 
 	@Override
 	protected void doUpgrade() throws Exception {
-		_initializeSchemaVersion(connection);
+		_initializeRelease(connection);
 
 		for (Version pendingSchemaVersion :
 				getPendingSchemaVersions(getCurrentSchemaVersion(connection))) {
@@ -203,16 +230,16 @@ public class PortalUpgradeProcess extends UpgradeProcess {
 		}
 	}
 
-	private void _initializeSchemaVersion(Connection connection)
-		throws Exception {
-
+	private void _initializeRelease(Connection connection) throws Exception {
 		try (PreparedStatement preparedStatement = connection.prepareStatement(
-				"update Release_ set schemaVersion = ? where " +
-					"servletContextName = ? and buildNumber < 7100")) {
+				"update Release_ set schemaVersion = ?, buildNumber = ? " +
+					"where servletContextName = ? and buildNumber < ?")) {
 
 			preparedStatement.setString(1, _initialSchemaVersion.toString());
+			preparedStatement.setInt(2, ReleaseInfo.RELEASE_7_1_0_BUILD_NUMBER);
 			preparedStatement.setString(
-				2, ReleaseConstants.DEFAULT_SERVLET_CONTEXT_NAME);
+				3, ReleaseConstants.DEFAULT_SERVLET_CONTEXT_NAME);
+			preparedStatement.setInt(4, ReleaseInfo.RELEASE_7_1_0_BUILD_NUMBER);
 
 			preparedStatement.execute();
 		}

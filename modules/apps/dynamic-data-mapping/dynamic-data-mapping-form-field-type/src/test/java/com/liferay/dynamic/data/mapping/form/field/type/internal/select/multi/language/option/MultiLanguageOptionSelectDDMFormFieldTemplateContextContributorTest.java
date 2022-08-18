@@ -18,7 +18,6 @@ import com.liferay.dynamic.data.mapping.form.field.type.internal.select.SelectDD
 import com.liferay.dynamic.data.mapping.model.DDMFormField;
 import com.liferay.dynamic.data.mapping.render.DDMFormFieldRenderingContext;
 import com.liferay.portal.kernel.language.Language;
-import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.resource.bundle.ResourceBundleLoader;
 import com.liferay.portal.kernel.resource.bundle.ResourceBundleLoaderUtil;
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
@@ -40,7 +39,6 @@ import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
 
-import org.mockito.Matchers;
 import org.mockito.Mockito;
 import org.mockito.stubbing.Answer;
 
@@ -57,7 +55,7 @@ public class
 
 	@Before
 	public void setUp() throws Exception {
-		_setUpLanguageUtil();
+		_setLanguage();
 		_setUpResourceBundle();
 	}
 
@@ -119,8 +117,8 @@ public class
 
 		Mockito.when(
 			mockSelectDDMFormFieldTemplateContextContributor.getParameters(
-				Matchers.any(DDMFormField.class),
-				Matchers.any(DDMFormFieldRenderingContext.class))
+				Mockito.any(DDMFormField.class),
+				Mockito.any(DDMFormFieldRenderingContext.class))
 		).thenReturn(
 			optionsMap
 		);
@@ -131,9 +129,7 @@ public class
 			mockSelectDDMFormFieldTemplateContextContributor);
 	}
 
-	private void _setUpLanguageUtil() {
-		LanguageUtil languageUtil = new LanguageUtil();
-
+	private void _setLanguage() {
 		Mockito.when(
 			_language.getAvailableLocales()
 		).thenReturn(
@@ -141,18 +137,20 @@ public class
 		);
 
 		Mockito.when(
-			_language.getLanguageId(Matchers.eq(LocaleUtil.BRAZIL))
+			_language.getLanguageId(Mockito.eq(LocaleUtil.BRAZIL))
 		).thenReturn(
 			LocaleUtil.toLanguageId(LocaleUtil.BRAZIL)
 		);
 
 		Mockito.when(
-			_language.getLanguageId(Matchers.eq(LocaleUtil.US))
+			_language.getLanguageId(Mockito.eq(LocaleUtil.US))
 		).thenReturn(
 			LocaleUtil.toLanguageId(LocaleUtil.US)
 		);
 
-		languageUtil.setLanguage(_language);
+		ReflectionTestUtil.setFieldValue(
+			_multiLanguageOptionSelectDDMFormFieldTemplateContextContributor,
+			"_language", _language);
 	}
 
 	private void _setUpResourceBundle() {
@@ -171,14 +169,14 @@ public class
 		ResourceBundle resourceBundle1 = Mockito.mock(ResourceBundle.class);
 
 		Mockito.when(
-			portal.getResourceBundle(Matchers.eq(LocaleUtil.BRAZIL))
+			portal.getResourceBundle(Mockito.eq(LocaleUtil.BRAZIL))
 		).thenReturn(
 			resourceBundle1
 		);
 
 		Mockito.when(
 			resourceBundleLoader.loadResourceBundle(
-				Matchers.eq(LocaleUtil.BRAZIL))
+				Mockito.eq(LocaleUtil.BRAZIL))
 		).thenReturn(
 			resourceBundle1
 		);
@@ -192,13 +190,13 @@ public class
 		ResourceBundle resourceBundle2 = Mockito.mock(ResourceBundle.class);
 
 		Mockito.when(
-			portal.getResourceBundle(Matchers.eq(LocaleUtil.US))
+			portal.getResourceBundle(Mockito.eq(LocaleUtil.US))
 		).thenReturn(
 			resourceBundle2
 		);
 
 		Mockito.when(
-			resourceBundleLoader.loadResourceBundle(Matchers.eq(LocaleUtil.US))
+			resourceBundleLoader.loadResourceBundle(Mockito.eq(LocaleUtil.US))
 		).thenReturn(
 			resourceBundle2
 		);
@@ -235,7 +233,7 @@ public class
 
 		Mockito.when(
 			_language.get(
-				Matchers.any(ResourceBundle.class), Matchers.anyString())
+				Mockito.any(ResourceBundle.class), Mockito.anyString())
 		).then(
 			(Answer<String>)invocationOnMock -> {
 				Object[] arguments = invocationOnMock.getArguments();

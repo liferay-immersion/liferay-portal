@@ -15,9 +15,10 @@
 package com.liferay.oauth.client.persistence.service.impl;
 
 import com.liferay.oauth.client.persistence.exception.DuplicateOAuthClientEntryException;
+import com.liferay.oauth.client.persistence.exception.OAuthClientEntryAuthRequestParametersJSONException;
 import com.liferay.oauth.client.persistence.exception.OAuthClientEntryAuthServerWellKnownURIException;
 import com.liferay.oauth.client.persistence.exception.OAuthClientEntryInfoJSONException;
-import com.liferay.oauth.client.persistence.exception.OAuthClientEntryParametersJSONException;
+import com.liferay.oauth.client.persistence.exception.OAuthClientEntryTokenRequestParametersJSONException;
 import com.liferay.oauth.client.persistence.model.OAuthClientEntry;
 import com.liferay.oauth.client.persistence.model.OAuthClientEntryTable;
 import com.liferay.oauth.client.persistence.service.OAuthClientASLocalMetadataLocalService;
@@ -34,16 +35,21 @@ import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 
 import com.nimbusds.oauth2.sdk.ParseException;
+import com.nimbusds.oauth2.sdk.ResponseType;
+import com.nimbusds.oauth2.sdk.Scope;
 import com.nimbusds.oauth2.sdk.client.ClientInformation;
+import com.nimbusds.oauth2.sdk.client.ClientMetadata;
 import com.nimbusds.oauth2.sdk.http.HTTPRequest;
 import com.nimbusds.oauth2.sdk.http.HTTPResponse;
 import com.nimbusds.oauth2.sdk.util.JSONObjectUtils;
 import com.nimbusds.openid.connect.sdk.rp.OIDCClientInformation;
 
+import java.net.URI;
 import java.net.URL;
 
 import java.util.List;
 
+import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
 
 import org.osgi.service.component.annotations.Component;
@@ -61,30 +67,43 @@ public class OAuthClientEntryLocalServiceImpl
 
 	@Override
 	public OAuthClientEntry addOAuthClientEntry(
-			long userId, String authServerWellKnownURI, String infoJSON,
-			String parametersJSON)
+			long userId, String authRequestParametersJSON,
+			String authServerWellKnownURI, String infoJSON,
+			String tokenRequestParametersJSON)
 		throws PortalException {
 
 		User user = _userLocalService.getUser(userId);
 
-		_validateAuthServerWellKnownURI(
-			user.getCompanyId(), authServerWellKnownURI);
+		_validateAuthServerWellKnownURI(authServerWellKnownURI);
 
-		JSONObject infoJSONObject = _getInfoJSONObject(infoJSON);
+		ClientInformation clientInformation = _parseClientInformation(
+			authServerWellKnownURI, infoJSON);
 
-		_validateInfoJSON(authServerWellKnownURI, infoJSONObject);
+		ClientMetadata clientMetadata = clientInformation.getMetadata();
 
-		String clientId = infoJSONObject.getAsString("client_id");
+		clientMetadata.applyDefaults();
+
+		String clientId = String.valueOf(clientInformation.getID());
 
 		_validateClientId(
 			0, user.getCompanyId(), authServerWellKnownURI, clientId);
 
-		if (Validator.isNull(parametersJSON)) {
-			parametersJSON = "{}";
+		if (Validator.isNull(authRequestParametersJSON)) {
+			authRequestParametersJSON = "{}";
 		}
 		else {
-			_validateParametersJSON(parametersJSON);
+			_validateAuthRequestParametersJSON(authRequestParametersJSON);
 		}
+
+		if (Validator.isNull(tokenRequestParametersJSON)) {
+			tokenRequestParametersJSON = "{}";
+		}
+		else {
+			_validateTokenRequestParametersJSON(tokenRequestParametersJSON);
+		}
+
+		JSONObject clientInformationJSONObject =
+			clientInformation.toJSONObject();
 
 		OAuthClientEntry oAuthClientEntry = oAuthClientEntryPersistence.create(
 			counterLocalService.increment());
@@ -92,10 +111,13 @@ public class OAuthClientEntryLocalServiceImpl
 		oAuthClientEntry.setCompanyId(user.getCompanyId());
 		oAuthClientEntry.setUserId(user.getUserId());
 		oAuthClientEntry.setUserName(user.getFullName());
+		oAuthClientEntry.setAuthRequestParametersJSON(
+			authRequestParametersJSON);
 		oAuthClientEntry.setAuthServerWellKnownURI(authServerWellKnownURI);
 		oAuthClientEntry.setClientId(clientId);
-		oAuthClientEntry.setInfoJSON(infoJSON);
-		oAuthClientEntry.setParametersJSON(parametersJSON);
+		oAuthClientEntry.setInfoJSON(clientInformationJSONObject.toString());
+		oAuthClientEntry.setTokenRequestParametersJSON(
+			tokenRequestParametersJSON);
 
 		oAuthClientEntry = oAuthClientEntryPersistence.update(oAuthClientEntry);
 
@@ -194,66 +216,100 @@ public class OAuthClientEntryLocalServiceImpl
 
 	@Override
 	public OAuthClientEntry updateOAuthClientEntry(
-			long oAuthClientEntryId, String authServerWellKnownURI,
-			String infoJSON, String parametersJSON)
+			long oAuthClientEntryId, String authRequestParametersJSON,
+			String authServerWellKnownURI, String infoJSON,
+			String tokenRequestParametersJSON)
 		throws PortalException {
 
 		OAuthClientEntry oAuthClientEntry =
 			oAuthClientEntryLocalService.getOAuthClientEntry(
 				oAuthClientEntryId);
 
-		_validateAuthServerWellKnownURI(
-			oAuthClientEntry.getCompanyId(), authServerWellKnownURI);
+		_validateAuthServerWellKnownURI(authServerWellKnownURI);
 
-		JSONObject infoJSONObject = _getInfoJSONObject(infoJSON);
+		ClientInformation clientInformation = _parseClientInformation(
+			authServerWellKnownURI, infoJSON);
 
-		_validateInfoJSON(authServerWellKnownURI, infoJSONObject);
+		ClientMetadata clientMetadata = clientInformation.getMetadata();
 
-		String clientId = infoJSONObject.getAsString("client_id");
+		clientMetadata.applyDefaults();
+
+		String clientId = String.valueOf(clientInformation.getID());
 
 		_validateClientId(
 			oAuthClientEntryId, oAuthClientEntry.getCompanyId(),
 			authServerWellKnownURI, clientId);
 
-		if (Validator.isNull(parametersJSON)) {
-			parametersJSON = "{}";
+		if (Validator.isNull(authRequestParametersJSON)) {
+			authRequestParametersJSON = "{}";
 		}
 		else {
-			_validateParametersJSON(parametersJSON);
+			_validateAuthRequestParametersJSON(authRequestParametersJSON);
 		}
 
+		if (Validator.isNull(tokenRequestParametersJSON)) {
+			tokenRequestParametersJSON = "{}";
+		}
+		else {
+			_validateTokenRequestParametersJSON(tokenRequestParametersJSON);
+		}
+
+		JSONObject clientInformationJSONObject =
+			clientInformation.toJSONObject();
+
+		oAuthClientEntry.setAuthRequestParametersJSON(
+			authRequestParametersJSON);
 		oAuthClientEntry.setAuthServerWellKnownURI(authServerWellKnownURI);
 		oAuthClientEntry.setClientId(clientId);
-		oAuthClientEntry.setInfoJSON(infoJSON);
-		oAuthClientEntry.setParametersJSON(parametersJSON);
+		oAuthClientEntry.setInfoJSON(clientInformationJSONObject.toString());
+		oAuthClientEntry.setTokenRequestParametersJSON(
+			tokenRequestParametersJSON);
 
 		return oAuthClientEntryPersistence.update(oAuthClientEntry);
 	}
 
-	private JSONObject _getInfoJSONObject(String infoJSON)
+	private ClientInformation _parseClientInformation(
+			String authServerWellKnownURI, String infoJSON)
 		throws PortalException {
 
 		try {
-			return JSONObjectUtils.parse(infoJSON);
+			if (authServerWellKnownURI.contains("openid-configuration")) {
+				return OIDCClientInformation.parse(
+					JSONObjectUtils.parse(infoJSON));
+			}
+
+			return ClientInformation.parse(JSONObjectUtils.parse(infoJSON));
 		}
-		catch (ParseException parseException) {
-			throw new PortalException(parseException);
+		catch (Exception exception) {
+			throw new OAuthClientEntryInfoJSONException(
+				exception.getMessage(), exception);
 		}
 	}
 
-	private void _validateAuthServerWellKnownURI(
-			long companyId, String authServerWellKnownURI)
+	private void _validateAuthRequestParametersJSON(
+			String authRequestParametersJSON)
 		throws PortalException {
 
-		if (authServerWellKnownURI.endsWith("local")) {
-			_oAuthClientASLocalMetadataLocalService.
-				getOAuthClientASLocalMetadata(
-					companyId, authServerWellKnownURI);
-
-			return;
+		try {
+			_validateRequestParametersJSON(authRequestParametersJSON);
 		}
+		catch (Exception exception) {
+			throw new OAuthClientEntryAuthRequestParametersJSONException(
+				exception.getMessage(), exception);
+		}
+	}
+
+	private void _validateAuthServerWellKnownURI(String authServerWellKnownURI)
+		throws PortalException {
 
 		try {
+			if (authServerWellKnownURI.endsWith("local")) {
+				_oAuthClientASLocalMetadataLocalService.
+					getOAuthClientASLocalMetadata(authServerWellKnownURI);
+
+				return;
+			}
+
 			HTTPRequest httpRequest = new HTTPRequest(
 				HTTPRequest.Method.GET, new URL(authServerWellKnownURI));
 
@@ -298,36 +354,88 @@ public class OAuthClientEntryLocalServiceImpl
 		}
 	}
 
-	private void _validateInfoJSON(
-			String authServerWellKnownURI, JSONObject infoJSONObject)
-		throws PortalException {
+	private void _validateCustomRequestParameters(
+			JSONObject requestParametersJSONObject)
+		throws Exception {
 
-		if (authServerWellKnownURI.contains("openid-configuration")) {
-			try {
-				OIDCClientInformation.parse(infoJSONObject);
-			}
-			catch (ParseException parseException) {
-				throw new OAuthClientEntryInfoJSONException(parseException);
-			}
-		}
-		else {
-			try {
-				ClientInformation.parse(infoJSONObject);
-			}
-			catch (ParseException parseException) {
-				throw new OAuthClientEntryInfoJSONException(parseException);
+		if (requestParametersJSONObject.containsKey(
+				"custom_request_parameters")) {
+
+			JSONObject customRequestParametersJSONObject =
+				JSONObjectUtils.getJSONObject(
+					requestParametersJSONObject, "custom_request_parameters");
+
+			for (String key : customRequestParametersJSONObject.keySet()) {
+				JSONArray valueJSONArray = JSONObjectUtils.getJSONArray(
+					customRequestParametersJSONObject, key);
+
+				for (Object value : valueJSONArray) {
+					if (!(value instanceof String)) {
+						throw new ParseException("Value is not a string");
+					}
+				}
 			}
 		}
 	}
 
-	private void _validateParametersJSON(String parametersJSON)
+	private void _validateRequestParametersJSON(String requestParametersJSON)
+		throws Exception {
+
+		JSONObject requestParametersJSONObject = JSONObjectUtils.parse(
+			requestParametersJSON);
+
+		_validateSpecsRequestParameters(requestParametersJSONObject);
+
+		_validateCustomRequestParameters(requestParametersJSONObject);
+	}
+
+	private void _validateSpecsRequestParameters(
+			JSONObject requestParametersJSONObject)
+		throws Exception {
+
+		if (requestParametersJSONObject.containsKey("redirect_uri")) {
+			URI.create(
+				JSONObjectUtils.getString(
+					requestParametersJSONObject, "redirect_uri"));
+		}
+
+		if (requestParametersJSONObject.containsKey("resource")) {
+			for (Object uriObject :
+					JSONObjectUtils.getJSONArray(
+						requestParametersJSONObject, "resource")) {
+
+				if (!(uriObject instanceof String)) {
+					throw new ParseException(
+						"Resource must be a JSON array of Strings");
+				}
+
+				URI.create((String)uriObject);
+			}
+		}
+
+		if (requestParametersJSONObject.containsKey("response_type")) {
+			ResponseType.parse(
+				JSONObjectUtils.getString(
+					requestParametersJSONObject, "response_type"));
+		}
+
+		if (requestParametersJSONObject.containsKey("scope")) {
+			Scope.parse(
+				JSONObjectUtils.getString(
+					requestParametersJSONObject, "scope"));
+		}
+	}
+
+	private void _validateTokenRequestParametersJSON(
+			String tokenRequestParametersJSON)
 		throws PortalException {
 
 		try {
-			JSONObjectUtils.parse(parametersJSON);
+			_validateRequestParametersJSON(tokenRequestParametersJSON);
 		}
-		catch (ParseException parseException) {
-			throw new OAuthClientEntryParametersJSONException(parseException);
+		catch (Exception exception) {
+			throw new OAuthClientEntryTokenRequestParametersJSONException(
+				exception.getMessage(), exception);
 		}
 	}
 

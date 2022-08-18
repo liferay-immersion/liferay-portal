@@ -14,11 +14,14 @@
 
 package com.liferay.layout.content.page.editor.web.internal.portlet.action;
 
+import com.liferay.fragment.contributor.FragmentCollectionContributorTracker;
+import com.liferay.fragment.entry.processor.constants.FragmentEntryProcessorConstants;
 import com.liferay.fragment.exception.NoSuchEntryLinkException;
 import com.liferay.fragment.model.FragmentEntryLink;
 import com.liferay.fragment.processor.PortletRegistry;
 import com.liferay.fragment.service.FragmentEntryLinkLocalService;
 import com.liferay.fragment.service.FragmentEntryLinkService;
+import com.liferay.fragment.service.FragmentEntryLocalService;
 import com.liferay.layout.content.page.editor.constants.ContentPageEditorPortletKeys;
 import com.liferay.layout.content.page.editor.web.internal.exception.NoninstanceablePortletException;
 import com.liferay.layout.content.page.editor.web.internal.util.FragmentEntryLinkManager;
@@ -32,7 +35,7 @@ import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.json.JSONUtil;
-import com.liferay.portal.kernel.language.LanguageUtil;
+import com.liferay.portal.kernel.language.Language;
 import com.liferay.portal.kernel.model.Portlet;
 import com.liferay.portal.kernel.model.PortletPreferencesIds;
 import com.liferay.portal.kernel.model.ResourceConstants;
@@ -110,7 +113,7 @@ public class DuplicateItemMVCActionCommand
 		String errorMessage = StringPool.BLANK;
 
 		if (exception instanceof NoSuchEntryLinkException) {
-			errorMessage = LanguageUtil.get(
+			errorMessage = _language.get(
 				themeDisplay.getRequest(),
 				"the-section-could-not-be-duplicated-because-it-has-been-" +
 					"deleted");
@@ -128,7 +131,7 @@ public class DuplicateItemMVCActionCommand
 
 			HttpSession httpSession = httpServletRequest.getSession();
 
-			errorMessage = LanguageUtil.format(
+			errorMessage = _language.format(
 				themeDisplay.getRequest(),
 				"the-layout-could-not-be-duplicated-because-it-contains-a-" +
 					"widget-x-that-can-only-appear-once-in-the-page",
@@ -137,7 +140,7 @@ public class DuplicateItemMVCActionCommand
 					themeDisplay.getLocale()));
 		}
 		else {
-			errorMessage = LanguageUtil.get(
+			errorMessage = _language.get(
 				themeDisplay.getRequest(), "an-unexpected-error-occurred");
 		}
 
@@ -308,6 +311,18 @@ public class DuplicateItemMVCActionCommand
 				namespace);
 		}
 
+		if (fragmentEntryLink.isTypeInput()) {
+			JSONObject freemarkerFragmentEntryProcessorJSONObject =
+				editableValuesJSONObject.getJSONObject(
+					FragmentEntryProcessorConstants.
+						KEY_FREEMARKER_FRAGMENT_ENTRY_PROCESSOR);
+
+			if (freemarkerFragmentEntryProcessorJSONObject != null) {
+				freemarkerFragmentEntryProcessorJSONObject.remove(
+					"inputFieldId");
+			}
+		}
+
 		FragmentEntryLink duplicatedFragmentEntryLink =
 			_fragmentEntryLinkService.addFragmentEntryLink(
 				fragmentEntryLink.getGroupId(),
@@ -318,7 +333,8 @@ public class DuplicateItemMVCActionCommand
 				fragmentEntryLink.getHtml(), fragmentEntryLink.getJs(),
 				fragmentEntryLink.getConfiguration(),
 				editableValuesJSONObject.toString(), namespace, 0,
-				fragmentEntryLink.getRendererKey(), serviceContext);
+				fragmentEntryLink.getRendererKey(), fragmentEntryLink.getType(),
+				serviceContext);
 
 		return duplicatedFragmentEntryLink.getFragmentEntryLinkId();
 	}
@@ -337,25 +353,21 @@ public class DuplicateItemMVCActionCommand
 				segmentsExperienceId);
 
 		for (long fragmentEntryLinkId : duplicatedFragmentEntryLinkIds) {
-			FragmentEntryLink fragmentEntryLink =
-				_fragmentEntryLinkLocalService.getFragmentEntryLink(
-					fragmentEntryLinkId);
-
-			JSONObject editableValuesJSONObject =
-				JSONFactoryUtil.createJSONObject(
-					fragmentEntryLink.getEditableValues());
-
 			jsonArray.put(
 				_fragmentEntryLinkManager.getFragmentEntryLinkJSONObject(
-					fragmentEntryLink,
+					_fragmentEntryLinkLocalService.getFragmentEntryLink(
+						fragmentEntryLinkId),
 					_portal.getHttpServletRequest(actionRequest),
 					_portal.getHttpServletResponse(actionResponse),
-					layoutStructure,
-					editableValuesJSONObject.getString("portletId")));
+					layoutStructure));
 		}
 
 		return jsonArray;
 	}
+
+	@Reference
+	private FragmentCollectionContributorTracker
+		_fragmentCollectionContributorTracker;
 
 	@Reference
 	private FragmentEntryLinkLocalService _fragmentEntryLinkLocalService;
@@ -365,6 +377,12 @@ public class DuplicateItemMVCActionCommand
 
 	@Reference
 	private FragmentEntryLinkService _fragmentEntryLinkService;
+
+	@Reference
+	private FragmentEntryLocalService _fragmentEntryLocalService;
+
+	@Reference
+	private Language _language;
 
 	@Reference
 	private Portal _portal;

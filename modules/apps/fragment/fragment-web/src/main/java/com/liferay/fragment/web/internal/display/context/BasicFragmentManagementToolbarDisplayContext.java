@@ -16,6 +16,7 @@ package com.liferay.fragment.web.internal.display.context;
 
 import com.liferay.fragment.constants.FragmentActionKeys;
 import com.liferay.fragment.constants.FragmentConstants;
+import com.liferay.fragment.web.internal.info.field.type.CaptchaInfoFieldType;
 import com.liferay.fragment.web.internal.security.permission.resource.FragmentPermission;
 import com.liferay.frontend.taglib.clay.servlet.taglib.util.CreationMenu;
 import com.liferay.frontend.taglib.clay.servlet.taglib.util.CreationMenuBuilder;
@@ -23,8 +24,10 @@ import com.liferay.frontend.taglib.clay.servlet.taglib.util.DropdownItem;
 import com.liferay.frontend.taglib.clay.servlet.taglib.util.DropdownItemListBuilder;
 import com.liferay.info.field.type.BooleanInfoFieldType;
 import com.liferay.info.field.type.DateInfoFieldType;
+import com.liferay.info.field.type.FileInfoFieldType;
 import com.liferay.info.field.type.InfoFieldType;
 import com.liferay.info.field.type.NumberInfoFieldType;
+import com.liferay.info.field.type.RelationshipInfoFieldType;
 import com.liferay.info.field.type.SelectInfoFieldType;
 import com.liferay.info.field.type.TextInfoFieldType;
 import com.liferay.petra.portlet.url.builder.PortletURLBuilder;
@@ -310,9 +313,10 @@ public class BasicFragmentManagementToolbarDisplayContext
 	}
 
 	private static final InfoFieldType[] _INFO_FIELD_TYPES = {
-		BooleanInfoFieldType.INSTANCE, DateInfoFieldType.INSTANCE,
-		NumberInfoFieldType.INSTANCE, SelectInfoFieldType.INSTANCE,
-		TextInfoFieldType.INSTANCE
+		BooleanInfoFieldType.INSTANCE, CaptchaInfoFieldType.INSTANCE,
+		DateInfoFieldType.INSTANCE, FileInfoFieldType.INSTANCE,
+		NumberInfoFieldType.INSTANCE, RelationshipInfoFieldType.INSTANCE,
+		SelectInfoFieldType.INSTANCE, TextInfoFieldType.INSTANCE
 	};
 
 }

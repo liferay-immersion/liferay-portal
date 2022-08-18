@@ -29,6 +29,9 @@ import com.liferay.object.scope.ObjectScopeProviderRegistry;
 import com.liferay.object.service.ObjectDefinitionLocalService;
 import com.liferay.object.service.ObjectEntryLocalService;
 import com.liferay.object.service.ObjectFieldLocalService;
+import com.liferay.object.system.SystemObjectDefinitionMetadata;
+import com.liferay.object.system.SystemObjectDefinitionMetadataTracker;
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONException;
@@ -43,6 +46,7 @@ import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 
 import java.util.Map;
+import java.util.Objects;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -76,6 +80,10 @@ public class ObjectRelationshipDDMFormFieldTemplateContextContributor
 			"objectDefinitionId",
 			GetterUtil.getLong(ddmFormField.getProperty("objectDefinitionId"))
 		).put(
+			"parameterObjectFieldName",
+			GetterUtil.getString(
+				ddmFormField.getProperty("parameterObjectFieldName"))
+		).put(
 			"placeholder",
 			() -> {
 				LocalizedValue localizedValue =
@@ -90,9 +98,18 @@ public class ObjectRelationshipDDMFormFieldTemplateContextContributor
 						ddmFormFieldRenderingContext.getLocale()));
 			}
 		).put(
-			"value", ddmFormFieldRenderingContext.getValue()
+			"value",
+			() -> {
+				String value = ddmFormFieldRenderingContext.getValue();
+
+				if (Objects.equals(value, "0")) {
+					return StringPool.BLANK;
+				}
+
+				return value;
+			}
 		).put(
-			"valueKey", "externalReferenceCode"
+			"valueKey", _getValueKey(ddmFormField)
 		).build();
 	}
 
@@ -203,6 +220,20 @@ public class ObjectRelationshipDDMFormFieldTemplateContextContributor
 						ddmFormField.getProperty("objectDefinitionId")))));
 	}
 
+	private String _getValueKey(DDMFormField ddmFormField) {
+		ObjectDefinition objectDefinition = _getObjectDefinition(ddmFormField);
+
+		SystemObjectDefinitionMetadata systemObjectDefinitionMetadata =
+			_systemObjectDefinitionMetadataTracker.
+				getSystemObjectDefinitionMetadata(objectDefinition.getName());
+
+		if (systemObjectDefinitionMetadata == null) {
+			return "id";
+		}
+
+		return systemObjectDefinitionMetadata.getRESTDTOIdPropertyName();
+	}
+
 	private static final Log _log = LogFactoryUtil.getLog(
 		ObjectRelationshipDDMFormFieldTemplateContextContributor.class);
 
@@ -230,5 +261,9 @@ public class ObjectRelationshipDDMFormFieldTemplateContextContributor
 
 	@Reference
 	private RESTContextPathResolverRegistry _restContextPathResolverRegistry;
+
+	@Reference
+	private SystemObjectDefinitionMetadataTracker
+		_systemObjectDefinitionMetadataTracker;
 
 }

@@ -51,7 +51,6 @@ import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
 
-import org.mockito.Matchers;
 import org.mockito.Mockito;
 
 /**
@@ -324,7 +323,7 @@ public class DDMDataProviderInvokerImplTest {
 			ddmDataProviderTracker;
 
 		Mockito.when(
-			ddmDataProviderTracker.getDDMDataProvider(Matchers.anyString())
+			ddmDataProviderTracker.getDDMDataProvider(Mockito.anyString())
 		).thenReturn(
 			null
 		);
@@ -425,7 +424,7 @@ public class DDMDataProviderInvokerImplTest {
 
 		Mockito.when(
 			ddmDataProviderInvokerImpl.createDDMDataProviderErrorResponse(
-				Matchers.any(Exception.class))
+				Mockito.any(Exception.class))
 		).thenCallRealMethod();
 
 		Mockito.when(
@@ -500,10 +499,9 @@ public class DDMDataProviderInvokerImplTest {
 				ddmDataProviderRequest,
 				_createDDMRESTDataProviderSettingsWithTimeout(timeout));
 
-		int executionTimeoutInMilliseconds = _getExecutionTimeoutInMilliseconds(
-			ddmDataProviderInvokeCommand);
-
-		Assert.assertEquals(timeout, executionTimeoutInMilliseconds);
+		Assert.assertEquals(
+			timeout,
+			_getExecutionTimeoutInMilliseconds(ddmDataProviderInvokeCommand));
 
 		timeout = 15000;
 
@@ -560,7 +558,7 @@ public class DDMDataProviderInvokerImplTest {
 		ResourceBundle resourceBundle = Mockito.mock(ResourceBundle.class);
 
 		Mockito.when(
-			portal.getResourceBundle(Matchers.any(Locale.class))
+			portal.getResourceBundle(Mockito.any(Locale.class))
 		).thenReturn(
 			resourceBundle
 		);
@@ -576,7 +574,7 @@ public class DDMDataProviderInvokerImplTest {
 			resourceBundleLoader);
 
 		Mockito.when(
-			resourceBundleLoader.loadResourceBundle(Matchers.any(Locale.class))
+			resourceBundleLoader.loadResourceBundle(Mockito.any(Locale.class))
 		).thenReturn(
 			ResourceBundleUtil.EMPTY_RESOURCE_BUNDLE
 		);

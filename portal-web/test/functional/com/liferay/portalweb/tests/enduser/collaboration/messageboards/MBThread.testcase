@@ -86,7 +86,7 @@ definition {
 
 		MessageboardsThread.viewPG(
 			threadBody = "MB Thread Message Body",
-			threadBodyImageName = "Document_4.jpg",
+			threadBodyImageName = "document_4-jpg",
 			threadSubject = "MB Thread Message Subject");
 	}
 
@@ -111,7 +111,7 @@ definition {
 			threadSubject = "MB Thread Message Subject");
 
 		MessageboardsThread.viewLinkedEntry(
-			imageFileName = "Document_1.jpg",
+			imageFileName = "document_1-jpg",
 			linkedEntry = "Link to Document");
 	}
 
@@ -490,58 +490,6 @@ definition {
 			threadSubject = "MB Thread Message Subject");
 	}
 
-	@priority = "3"
-	@refactordone
-	test CanMoveMBCategory1ThreadWithExplanationPostToCategory2 {
-		property portal.acceptance = "false";
-
-		JSONMBMessage.addCategory(
-			categoryDescription = "MB Category Description",
-			categoryName = "MB Category1 Name",
-			userEmailAddress = "test@liferay.com");
-
-		JSONMBMessage.addCategory(
-			categoryDescription = "MB Category Description",
-			categoryName = "MB Category2 Name",
-			userEmailAddress = "test@liferay.com");
-
-		JSONMBMessage.addMessage(
-			categoryName = "MB Category1 Name",
-			groupName = "Guest",
-			threadBody = "MB Thread Message Body",
-			threadSubject = "MB Thread Message Subject");
-
-		Navigator.gotoPage(pageName = "Message Boards Page");
-
-		MessageboardsThread.movePG(
-			categoryName = "MB Category2 Name",
-			categoryName1 = "MB Category1 Name",
-			categoryName2 = "MB Category2 Name",
-			explanationBody = "MB Explanation Post Body",
-			explanationPost = "true",
-			explanationSubject = "MB Explanation Post Subject",
-			threadBody = "MB Thread Message Body",
-			threadSubject = "MB Thread Message Subject");
-
-		MessageboardsCategory.openToCategory(
-			categoryName = "MB Category2 Name",
-			groupName = "Guest",
-			layoutName = "message-boards-page",
-			siteURLKey = "guest");
-
-		MessageboardsThread.gotoPG(
-			lastPostUserName = "Test Test",
-			replyCount = "1",
-			threadBody = "MB Thread Message Body",
-			threadSubject = "MB Thread Message Subject");
-
-		MessageboardsThread.viewPG(
-			threadBody = "MB Thread Message Body",
-			threadBody2 = "MB Explanation Post Body",
-			threadSubject = "MB Thread Message Subject",
-			threadSubject2 = "MB Explanation Post Subject");
-	}
-
 	@description = "This test covers LPS-137634. It ensures that a user cannot publish a thread with a tag that contains Java Script."
 	@priority = "3"
 	test CannotPublishThreadWithTagContainingJavaScript {
@@ -692,9 +640,6 @@ definition {
 	@description = "This ensures that an image in the MB content field can be rendered correctly after it to a folder."
 	@priority = "4"
 	test CanViewImageInThreadAfterMovingToFolder {
-		property osgi.module.configuration.file.names = "com.liferay.document.library.configuration.FFFriendlyURLEntryFileEntryConfiguration.config";
-		property osgi.module.configurations = "enabled=B&quot;true&quot;";
-
 		JSONDocument.addFileWithUploadedFile(
 			dmDocumentDescription = "DM Document Description",
 			dmDocumentTitle = "DM Document Title",
@@ -742,10 +687,8 @@ definition {
 	@description = "This ensures that an image in the MB content field can be rendered correctly when publication is enabled."
 	@priority = "5"
 	test CanViewImageInThreadWithPublication {
-		property osgi.module.configuration.file.names = "com.liferay.document.library.configuration.FFFriendlyURLEntryFileEntryConfiguration.config";
+		property osgi.module.configuration.file.names = "com.liferay.change.tracking.configuration.CTSettingsConfiguration.config";
 		property osgi.module.configurations = "enabled=B&quot;true&quot;";
-
-		JSONPublications.enablePublications();
 
 		JSONPublications.addPublication(publicationName = "Publication Name");
 

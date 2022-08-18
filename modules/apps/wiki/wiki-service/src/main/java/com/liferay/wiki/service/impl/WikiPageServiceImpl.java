@@ -20,7 +20,7 @@ import com.liferay.portal.aop.AopService;
 import com.liferay.portal.kernel.dao.orm.QueryDefinition;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
-import com.liferay.portal.kernel.language.LanguageUtil;
+import com.liferay.portal.kernel.language.Language;
 import com.liferay.portal.kernel.module.configuration.ConfigurationProvider;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
@@ -121,6 +121,20 @@ public class WikiPageServiceImpl extends WikiPageServiceBaseImpl {
 			getUserId(), nodeId, title, WikiPageConstants.VERSION_DEFAULT,
 			content, summary, minorEdit, format, true, parentTitle,
 			redirectTitle, serviceContext);
+	}
+
+	@Override
+	public WikiPage addPage(
+			String externalReferenceCode, long nodeId, String title,
+			double version, String content, String summary, boolean minorEdit,
+			String format, boolean head, String parentTitle,
+			String redirectTitle, ServiceContext serviceContext)
+		throws PortalException {
+
+		return wikiPageLocalService.addPage(
+			externalReferenceCode, getUserId(), nodeId, title, version, content,
+			summary, minorEdit, format, head, parentTitle, redirectTitle,
+			serviceContext);
 	}
 
 	@Override
@@ -518,6 +532,16 @@ public class WikiPageServiceImpl extends WikiPageServiceBaseImpl {
 		throws PortalException {
 
 		WikiPage page = wikiPageLocalService.getPage(nodeId, title, version);
+
+		_wikiPageModelResourcePermission.check(
+			getPermissionChecker(), page, ActionKeys.VIEW);
+
+		return page;
+	}
+
+	@Override
+	public WikiPage getPageByPageId(long pageId) throws PortalException {
+		WikiPage page = wikiPageLocalService.getPageByPageId(pageId);
 
 		_wikiPageModelResourcePermission.check(
 			getPermissionChecker(), page, ActionKeys.VIEW);
@@ -962,7 +986,7 @@ public class WikiPageServiceImpl extends WikiPageServiceBaseImpl {
 			if (page.isMinorEdit()) {
 				title += StringBundler.concat(
 					StringPool.SPACE, StringPool.OPEN_PARENTHESIS,
-					LanguageUtil.get(locale, "minor-edit"),
+					_language.get(locale, "minor-edit"),
 					StringPool.CLOSE_PARENTHESIS);
 			}
 
@@ -999,6 +1023,9 @@ public class WikiPageServiceImpl extends WikiPageServiceBaseImpl {
 
 	@Reference
 	private HtmlParser _htmlParser;
+
+	@Reference
+	private Language _language;
 
 	@Reference
 	private Portal _portal;

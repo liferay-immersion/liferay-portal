@@ -14,16 +14,11 @@
 
 package com.liferay.object.rest.internal.odata.filter.expression;
 
-import com.liferay.object.constants.ObjectFieldConstants;
-import com.liferay.object.model.ObjectField;
 import com.liferay.object.service.ObjectFieldLocalService;
-import com.liferay.petra.reflect.ReflectionUtil;
 import com.liferay.petra.sql.dsl.Column;
-import com.liferay.petra.sql.dsl.Table;
 import com.liferay.petra.sql.dsl.expression.Predicate;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
-import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.util.DateFormatFactoryUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -73,6 +68,14 @@ public class PredicateExpressionVisitorImpl
 	public Predicate visitListExpressionOperation(
 			ListExpression.Operation operation, Object left, List<Object> right)
 		throws ExpressionVisitException {
+
+		if (Objects.equals(ListExpression.Operation.IN, operation)) {
+			Column<?, Object> column =
+				(Column<?, Object>)_objectFieldLocalService.getColumn(
+					_objectDefinitionId, GetterUtil.getString(left));
+
+			return column.in(right.toArray());
+		}
 
 		throw new UnsupportedOperationException(
 			"Unsupported method visitListExpressionOperation with operation " +
@@ -181,37 +184,11 @@ public class PredicateExpressionVisitorImpl
 	}
 
 	private Predicate _contains(Object fieldName, Object fieldValue) {
-		Column<?, ?> column = _getColumn(GetterUtil.getString(fieldName));
+		Column<?, ?> column = _objectFieldLocalService.getColumn(
+			_objectDefinitionId, GetterUtil.getString(fieldName));
 
 		return column.like(
 			StringPool.PERCENT + fieldValue + StringPool.PERCENT);
-	}
-
-	private Column<?, ?> _getColumn(String objectFieldName) {
-		try {
-			Table<?> table = _objectFieldLocalService.getTable(
-				_objectDefinitionId, objectFieldName);
-
-			ObjectField objectField = _objectFieldLocalService.getObjectField(
-				_objectDefinitionId, objectFieldName);
-
-			if (Objects.equals(
-					objectField.getBusinessType(),
-					ObjectFieldConstants.BUSINESS_TYPE_ATTACHMENT) ||
-				Objects.equals(
-					objectField.getBusinessType(),
-					ObjectFieldConstants.BUSINESS_TYPE_RICH_TEXT)) {
-
-				throw new UnsupportedOperationException(
-					"Unsupported operation with " +
-						objectField.getBusinessType() + " field");
-			}
-
-			return table.getColumn(objectField.getDBColumnName());
-		}
-		catch (PortalException portalException) {
-			return ReflectionUtil.throwException(portalException);
-		}
 	}
 
 	private Optional<Predicate> _getPredicateOptional(
@@ -230,8 +207,9 @@ public class PredicateExpressionVisitorImpl
 			return Optional.of(predicate);
 		}
 
-		Column<?, Object> column = (Column<?, Object>)_getColumn(
-			GetterUtil.getString(left));
+		Column<?, Object> column =
+			(Column<?, Object>)_objectFieldLocalService.getColumn(
+				_objectDefinitionId, GetterUtil.getString(left));
 
 		if (Objects.equals(BinaryExpression.Operation.EQ, operation)) {
 			predicate = column.eq(right);
@@ -259,7 +237,8 @@ public class PredicateExpressionVisitorImpl
 	}
 
 	private Predicate _startsWith(Object fieldName, Object fieldValue) {
-		Column<?, ?> column = _getColumn(GetterUtil.getString(fieldName));
+		Column<?, ?> column = _objectFieldLocalService.getColumn(
+			_objectDefinitionId, GetterUtil.getString(fieldName));
 
 		return column.like(fieldValue + StringPool.PERCENT);
 	}

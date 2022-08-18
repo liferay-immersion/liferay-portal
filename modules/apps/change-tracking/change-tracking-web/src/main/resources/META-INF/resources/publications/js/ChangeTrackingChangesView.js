@@ -227,7 +227,7 @@ export default function ChangeTrackingChangesView({
 
 			const stack = [contextView.everything];
 
-			while (stack.length > 0) {
+			while (stack.length) {
 				const element = stack.pop();
 
 				if (element.modelKey === modelKey) {
@@ -279,8 +279,15 @@ export default function ChangeTrackingChangesView({
 					model.changeTypeLabel = Liferay.Language.get('deleted');
 				}
 
-				model.portraitURL = userInfo[model.userId].portraitURL;
-				model.userName = userInfo[model.userId].userName;
+				const user = userInfo[model.userId.toString()];
+
+				if (user) {
+					model.portraitURL = user.portraitURL;
+					model.userName = user.userName;
+				}
+				else {
+					model.userName = '';
+				}
 
 				if (model.siteName === GLOBAL_SITE_NAME) {
 					let key = Liferay.Language.get('x-modified-a-x-x-ago');
@@ -483,7 +490,7 @@ export default function ChangeTrackingChangesView({
 
 			const stack = [contextViewRef.current.everything];
 
-			while (stack.length > 0) {
+			while (stack.length) {
 				const element = stack.pop();
 
 				if (
@@ -634,7 +641,7 @@ export default function ChangeTrackingChangesView({
 
 			const typeIds = filters['types'];
 
-			if (typeIds && typeIds.length > 0) {
+			if (typeIds && !!typeIds.length) {
 				filterTypes = typeIds
 					.map((typeId) => typesRef.current[typeId])
 					.filter((type) => showHideable || !type.hideable)
@@ -658,14 +665,14 @@ export default function ChangeTrackingChangesView({
 				const changeTypes = filters['changeTypes'];
 
 				if (
-					changeTypes.length > 0 &&
+					!!changeTypes.length &&
 					!changeTypes.includes(node.changeType)
 				) {
 					return false;
 				}
 
 				if (
-					filterTypes.length > 0 &&
+					!!filterTypes.length &&
 					!filterTypes.includes(node.typeName)
 				) {
 					return false;
@@ -673,7 +680,7 @@ export default function ChangeTrackingChangesView({
 
 				const siteIds = filters['sites'];
 
-				if (siteIds.length > 0) {
+				if (siteIds.length) {
 					let groupId = Number(node.groupId);
 
 					if (groupId > 0) {
@@ -692,7 +699,7 @@ export default function ChangeTrackingChangesView({
 				const userIds = filters['users'];
 
 				if (
-					userIds.length > 0 &&
+					!!userIds.length &&
 					!userIds.includes(Number(node.userId))
 				) {
 					return false;
@@ -734,9 +741,8 @@ export default function ChangeTrackingChangesView({
 		delta: initialDelta,
 		id: initialNode.nodeId,
 		nav:
-			ctMappingInfos.length > 0 &&
-			(changes.length === 0 ||
-				navigationFromURL === NAVIGATION_RELATIONSHIPS)
+			!!ctMappingInfos.length &&
+			(!changes.length || navigationFromURL === NAVIGATION_RELATIONSHIPS)
 				? NAVIGATION_RELATIONSHIPS
 				: NAVIGATION_DATA,
 		node: initialNode,
@@ -804,7 +810,7 @@ export default function ChangeTrackingChangesView({
 
 			const changeTypes = filters['changeTypes'];
 
-			if (changeTypes && changeTypes.length > 0) {
+			if (changeTypes && !!changeTypes.length) {
 				path =
 					path +
 					'&' +
@@ -823,19 +829,19 @@ export default function ChangeTrackingChangesView({
 
 			const siteIds = filters['sites'];
 
-			if (siteIds && siteIds.length > 0) {
+			if (siteIds && !!siteIds.length) {
 				path = path + '&' + PARAM_SITES + '=' + siteIds.join(',');
 			}
 
 			const typeIds = filters['types'];
 
-			if (typeIds && typeIds.length > 0) {
+			if (typeIds && !!typeIds.length) {
 				path = path + '&' + PARAM_TYPES + '=' + typeIds.join(',');
 			}
 
 			const userIds = filters['users'];
 
-			if (userIds && userIds.length > 0) {
+			if (userIds && !!userIds.length) {
 				path = path + '&' + PARAM_USERS + '=' + userIds.join(',');
 			}
 
@@ -995,9 +1001,8 @@ export default function ChangeTrackingChangesView({
 			let navigation = params.get(PARAM_NAVIGATION);
 
 			if (
-				ctMappingInfos.length > 0 &&
-				(changes.length === 0 ||
-					navigation === NAVIGATION_RELATIONSHIPS)
+				!!ctMappingInfos.length &&
+				(!changes.length || navigation === NAVIGATION_RELATIONSHIPS)
 			) {
 				navigation = NAVIGATION_RELATIONSHIPS;
 			}
@@ -1688,26 +1693,29 @@ export default function ChangeTrackingChangesView({
 					onClick={() => navigate(node.nodeId)}
 				>
 					<ClayTable.Cell>
-						<ClaySticker
-							className={`sticker-user-icon ${
-								node.portraitURL
-									? ''
-									: 'user-icon-color-' + (node.userId % 10)
-							}`}
-							data-tooltip-align="top"
-							title={node.userName}
-						>
-							{node.portraitURL ? (
-								<div className="sticker-overlay">
-									<img
-										className="sticker-img"
-										src={node.portraitURL}
-									/>
-								</div>
-							) : (
-								<ClayIcon symbol="user" />
-							)}
-						</ClaySticker>
+						{node.userId && node.userId > 0 && (
+							<ClaySticker
+								className={`sticker-user-icon ${
+									node.portraitURL
+										? ''
+										: 'user-icon-color-' +
+										  (node.userId % 10)
+								}`}
+								data-tooltip-align="top"
+								title={node.userName}
+							>
+								{node.portraitURL ? (
+									<div className="sticker-overlay">
+										<img
+											className="sticker-img"
+											src={node.portraitURL}
+										/>
+									</div>
+								) : (
+									<ClayIcon symbol="user" />
+								)}
+							</ClaySticker>
+						)}
 					</ClayTable.Cell>
 
 					<ClayTable.Cell>{node.siteName}</ClayTable.Cell>
@@ -1815,7 +1823,7 @@ export default function ChangeTrackingChangesView({
 		if (!showHideable) {
 			const typeIds = filters['types'];
 
-			if (typeIds && typeIds.length > 0) {
+			if (typeIds && !!typeIds.length) {
 				filters['types'] = typeIds.filter(
 					(typeId) => !typesRef.current[typeId].hideable
 				);
@@ -1902,7 +1910,7 @@ export default function ChangeTrackingChangesView({
 						trigger={
 							<ClayButton
 								className="nav-link"
-								disabled={changes.length === 0}
+								disabled={!changes.length}
 								displayType="unstyled"
 							>
 								<span className="navbar-breakpoint-down-d-none">
@@ -2029,7 +2037,7 @@ export default function ChangeTrackingChangesView({
 													'search'
 												)}
 												className="form-control input-group-inset input-group-inset-after"
-												disabled={changes.length === 0}
+												disabled={!changes.length}
 												onChange={(event) =>
 													setEntrySearchTerms(
 														event.target.value
@@ -2048,9 +2056,7 @@ export default function ChangeTrackingChangesView({
 											>
 												<ClayButtonWithIcon
 													className="navbar-breakpoint-d-none"
-													disabled={
-														changes.length === 0
-													}
+													disabled={!changes.length}
 													displayType="unstyled"
 													onClick={() =>
 														setSearchMobile(false)
@@ -2060,9 +2066,7 @@ export default function ChangeTrackingChangesView({
 												/>
 
 												<ClayButtonWithIcon
-													disabled={
-														changes.length === 0
-													}
+													disabled={!changes.length}
 													displayType="unstyled"
 													spritemap={spritemap}
 													symbol="search"
@@ -2079,7 +2083,7 @@ export default function ChangeTrackingChangesView({
 									<ManagementToolbar.Item className="navbar-breakpoint-d-none">
 										<ClayButton
 											className="nav-link nav-link-monospaced"
-											disabled={changes.length === 0}
+											disabled={!changes.length}
 											displayType="unstyled"
 											onClick={() =>
 												setSearchMobile(true)
@@ -2095,7 +2099,7 @@ export default function ChangeTrackingChangesView({
 
 								<ManagementToolbar.Item className="simple-toggle-switch-reverse">
 									<ClayToggle
-										disabled={changes.length === 0}
+										disabled={!changes.length}
 										label={Liferay.Language.get(
 											'show-all-items'
 										)}
@@ -2129,12 +2133,12 @@ export default function ChangeTrackingChangesView({
 							>
 								<ClayLink
 									className={
-										changes.length === 0
+										!changes.length
 											? 'btn-link disabled'
 											: undefined
 									}
 									onClick={
-										changes.length === 0
+										!changes.length
 											? null
 											: () =>
 													handleNavigationUpdate(
@@ -2153,12 +2157,12 @@ export default function ChangeTrackingChangesView({
 							>
 								<ClayLink
 									className={
-										ctMappingInfos.length === 0
+										!ctMappingInfos.length
 											? 'btn-link disabled'
 											: undefined
 									}
 									onClick={
-										ctMappingInfos.length === 0
+										!ctMappingInfos.length
 											? null
 											: () =>
 													handleNavigationUpdate(
@@ -2277,7 +2281,7 @@ export default function ChangeTrackingChangesView({
 
 		const changeTypes = filtersState['changeTypes'];
 
-		if (changeTypes && changeTypes.length > 0) {
+		if (changeTypes && !!changeTypes.length) {
 			for (let i = 0; i < changeTypes.length; i++) {
 				const changeType = changeTypes[i];
 
@@ -2299,7 +2303,7 @@ export default function ChangeTrackingChangesView({
 
 		const siteIds = filtersState['sites'];
 
-		if (siteIds && siteIds.length > 0) {
+		if (siteIds && !!siteIds.length) {
 			for (let i = 0; i < siteIds.length; i++) {
 				const siteName = siteNames[siteIds[i]];
 
@@ -2312,7 +2316,7 @@ export default function ChangeTrackingChangesView({
 
 		const typeIds = filtersState['types'];
 
-		if (typeIds && typeIds.length > 0) {
+		if (typeIds && !!typeIds.length) {
 			for (let i = 0; i < typeIds.length; i++) {
 				const type = typesRef.current[typeIds[i]];
 
@@ -2327,7 +2331,7 @@ export default function ChangeTrackingChangesView({
 
 		const userIds = filtersState['users'];
 
-		if (userIds && userIds.length > 0) {
+		if (userIds && !!userIds.length) {
 			for (let i = 0; i < userIds.length; i++) {
 				const user = userInfo[userIds[i]];
 
@@ -2338,7 +2342,7 @@ export default function ChangeTrackingChangesView({
 			}
 		}
 
-		if (!resultsKeywords && labels.length === 0) {
+		if (!resultsKeywords && !labels.length) {
 			return '';
 		}
 
@@ -2535,7 +2539,7 @@ export default function ChangeTrackingChangesView({
 			);
 		}
 
-		if (!renderState.changes || renderState.changes.length === 0) {
+		if (!renderState.changes || !renderState.changes.length) {
 			return (
 				<ClayTable.Head>
 					<ClayTable.Row>
@@ -2631,7 +2635,7 @@ export default function ChangeTrackingChangesView({
 	};
 
 	const renderMainContent = () => {
-		if (changes.length === 0 && ctMappingInfos.length === 0) {
+		if (!changes.length && !ctMappingInfos.length) {
 			return (
 				<div className="container-fluid container-fluid-max-xl">
 					{renderExpiredBanner()}
@@ -2725,8 +2729,7 @@ export default function ChangeTrackingChangesView({
 						'btn btn-' + displayType + ' btn-sm',
 						{
 							disabled:
-								(changes.length === 0 &&
-									ctMappingInfos.length === 0) ||
+								(!changes.length && !ctMappingInfos.length) ||
 								expired,
 						}
 					)}
@@ -2830,7 +2833,7 @@ export default function ChangeTrackingChangesView({
 							</ClayButton>
 						</ClayToolbar.Item>
 
-						{dropdownItems && dropdownItems.length > 0 && (
+						{dropdownItems && !!dropdownItems.length && (
 							<ClayToolbar.Item>
 								<ClayDropDownWithItems
 									items={dropdownItems}
@@ -2867,7 +2870,7 @@ export default function ChangeTrackingChangesView({
 					style={
 						showComments
 							? {
-									'height': '100%',
+									'height': '85vh',
 									'min-height': '485px',
 									'width': '320px',
 							  }

@@ -39,7 +39,7 @@ public class ClientExtensionEntryRelLocalServiceImpl
 	@Override
 	public ClientExtensionEntryRel addClientExtensionEntryRel(
 			long userId, long classNameId, long classPK,
-			String cetExternalReferenceCode, String type)
+			String cetExternalReferenceCode, String type, String typeSettings)
 		throws PortalException {
 
 		ClientExtensionEntryRel clientExtensionEntryRel =
@@ -57,6 +57,7 @@ public class ClientExtensionEntryRelLocalServiceImpl
 		clientExtensionEntryRel.setCETExternalReferenceCode(
 			cetExternalReferenceCode);
 		clientExtensionEntryRel.setType(type);
+		clientExtensionEntryRel.setTypeSettings(typeSettings);
 
 		return clientExtensionEntryRelPersistence.update(
 			clientExtensionEntryRel);
@@ -65,6 +66,22 @@ public class ClientExtensionEntryRelLocalServiceImpl
 	@Override
 	public void deleteClientExtensionEntryRels(long classNameId, long classPK) {
 		clientExtensionEntryRelPersistence.removeByC_C(classNameId, classPK);
+	}
+
+	@Override
+	public void deleteClientExtensionEntryRels(
+		long classNameId, long classPK, String type) {
+
+		clientExtensionEntryRelPersistence.removeByC_C_T(
+			classNameId, classPK, type);
+	}
+
+	@Override
+	public void deleteClientExtensionEntryRels(
+		long companyId, String cetExternalReferenceCode) {
+
+		clientExtensionEntryRelPersistence.removeByC_CETERC(
+			companyId, cetExternalReferenceCode);
 	}
 
 	@Override
@@ -81,6 +98,14 @@ public class ClientExtensionEntryRelLocalServiceImpl
 
 		return clientExtensionEntryRelPersistence.findByC_C(
 			classNameId, classPK);
+	}
+
+	@Override
+	public List<ClientExtensionEntryRel> getClientExtensionEntryRels(
+		long classNameId, long classPK, String type) {
+
+		return clientExtensionEntryRelPersistence.findByC_C_T(
+			classNameId, classPK, type);
 	}
 
 	@Override

@@ -101,7 +101,7 @@ definition {
 					videoShortcutTitle = "${videoShortcutTitle}");
 
 				if (isSet(viewInternalVideoPreview)) {
-					Pause(locator1 = "5000");
+					WaitForElementPresent(locator1 = "IFrame#EMBEDDED_VIDEO_IFRAME");
 
 					DMDocument.viewInternalVideoPreview(videoName = "${videoName}");
 				}
@@ -492,7 +492,7 @@ definition {
 
 		var key_entryContent = "${entryContent}";
 
-		AssertTextEquals.assertPartialText(
+		AssertTextEquals(
 			locator1 = "BlogsEntry#CONTENT",
 			value1 = "${entryContent}");
 
@@ -535,6 +535,37 @@ definition {
 				addOrRemoveViewPermission = "${addOrRemoveViewPermission}",
 				key_roleTitle = "${roleTitle}",
 				permissionDefinitionKeyList = "${permissionDefinitionKey}");
+		}
+	}
+
+	macro executePingbackViacURL {
+		var ip = "${ip}";
+		var portalURL = "${portalURL}";
+
+		var curl = '''
+			${portalURL}/xmlrpc/pingback \
+			-H 'Content-Type: text/xml' \
+			-u test@liferay.com:test \
+			-d '
+			<?xml version="1.0" encoding="iso-8859-1"?>
+			<methodCall>
+			<methodName>pingback.ping</methodName>
+			<params>
+			<param><value><string>http://${ip}</string></value></param>
+			<param><value><string>${portalURL}/web/guest/home/-/blogs/${entryTitle}</string></value></param>
+			</params>
+			</methodCall>'
+		''';
+
+		echo("${curl}");
+
+		var returnValue = JSONCurlUtil.post("${curl}");
+
+		if (contains("${returnValue}", "Access Denied")) {
+			echo("The return value is Access Denied");
+		}
+		else {
+			fail("FAIL!");
 		}
 	}
 
@@ -620,7 +651,7 @@ definition {
 			locator1 = "BlogsEntry#TITLE",
 			value1 = "${entryTitle}");
 
-		AssertTextEquals.assertPartialText(
+		AssertTextEquals(
 			locator1 = "BlogsEntry#CONTENT",
 			value1 = "${entryContent}");
 
@@ -932,7 +963,7 @@ definition {
 			locator1 = "BlogsEntry#TITLE",
 			value1 = "${entryTitle}");
 
-		AssertTextEquals.assertPartialText(
+		AssertTextEquals(
 			key_entryContent = "${entryContent}",
 			locator1 = "BlogsEntry#CONTENT",
 			value1 = "${entryContent}");
@@ -989,7 +1020,7 @@ definition {
 
 		var key_entryContent = "${entryContent}";
 
-		AssertTextEquals.assertPartialText(
+		AssertTextEquals(
 			locator1 = "BlogsEntry#CONTENT",
 			value1 = "${entryContent}");
 	}
@@ -1007,9 +1038,6 @@ definition {
 		var key_entryContent = "${entryContent}";
 		var key_entrySubtitle = "${entrySubtitle}";
 		var key_entryTitle = "${entryTitle}";
-
-		Pause(locator1 = "3000");
-
 		var browserType = PropsUtil.get("browser.type");
 
 		if ("${browserType}" == "safari") {
@@ -1063,7 +1091,7 @@ definition {
 		}
 
 		if (isSet(entryContent)) {
-			AssertTextEquals.assertPartialText(
+			AssertTextEquals(
 				locator1 = "BlogsEntry#CONTENT",
 				value1 = "${entryContent}");
 		}
@@ -1091,14 +1119,22 @@ definition {
 		if (isSet(entryInlineImage)) {
 			BlogsEntry.viewInlineImage(uploadFileName = "${entryInlineImage}");
 		}
+
+		if (isSet(entrySmallImage)) {
+			Panel.expandPanel(panel = "Configuration");
+
+			AssertVisible(
+				key_smallImage = "${entrySmallImage}",
+				locator1 = "BlogsEntry#SMALL_IMAGE");
+		}
 	}
 
 	macro viewEntryEmbeddedImage {
-		Click.pauseClickAt(
+		Click.clickAt(
 			key_entryContent = "${entryContent}",
 			locator1 = "BlogsEntry#CONTENT_LINK");
 
-		AssertElementPresent.pauseAssertVisible(
+		WaitForVisible(
 			key_imageSourceURL = "${imageSourceURL}",
 			locator1 = "DocumentsAndMediaDocument#DOCUMENT_VIEWPORT_PREVIEW");
 	}
@@ -1170,7 +1206,7 @@ definition {
 		if (isSet(entryContent)) {
 			var key_entryContent = "${entryContent}";
 
-			AssertTextEquals.assertPartialText(
+			AssertTextEquals(
 				locator1 = "BlogsEntry#CONTENT",
 				value1 = "${entryContent}");
 		}
@@ -1179,6 +1215,12 @@ definition {
 			AssertTextEquals.assertPartialText(
 				locator1 = "BlogsEntry#CONTENT_HTML_BOLD",
 				value1 = "${entryContentBold}");
+		}
+
+		if (isSet(entryContentCite)) {
+			AssertTextEquals.assertPartialText(
+				locator1 = "BlogsEntry#CONTENT_HTML_CITE",
+				value1 = "${entryContentCite}");
 		}
 
 		if (isSet(entryContentHtml)) {
@@ -1242,7 +1284,14 @@ definition {
 	macro viewInlineImage {
 		var key_uploadFileName = "${uploadFileName}";
 
-		AssertVisible(locator1 = "BlogsEntry#CONTENT_INLINE_IMAGE");
+		if (isSet(entryContent)) {
+			AssertVisible(
+				key_entryContent = "${entryContent}",
+				locator1 = "BlogsEntry#CONTENT_INLINE_IMAGE_SPECIFIC");
+		}
+		else {
+			AssertVisible(locator1 = "BlogsEntry#CONTENT_INLINE_IMAGE");
+		}
 	}
 
 	macro viewNoAddPermissions {
@@ -1307,18 +1356,15 @@ definition {
 
 	macro viewNoTag {
 		var key_entryTitle = "${entryTitle}";
+		var key_tagName = "${tagName}";
 
-		if (isSet(tagNameList)) {
-			for (var tagName : list "${tagNameList}") {
-				AssertElementNotPresent(
-					key_tagName = "${tagName}",
-					locator1 = "BlogsEntry#TAG",
-					tagName = StringUtil.lowerCase("${tagName}"));
-			}
+		if (isSet(duplicate)) {
+			AssertElementNotPresent(
+				locator1 = "BlogsEntry#TAG_2",
+				tagName = StringUtil.lowerCase("${tagName}"));
 		}
 		else {
 			AssertElementNotPresent(
-				key_tagName = "${tagName}",
 				locator1 = "BlogsEntry#TAG",
 				tagName = StringUtil.lowerCase("${tagName}"));
 		}
@@ -1392,7 +1438,7 @@ definition {
 
 		var key_entryContent = "${entryContent}";
 
-		AssertTextEquals.assertPartialText(
+		AssertTextEquals(
 			locator1 = "BlogsEntry#CONTENT",
 			value1 = "${entryContent}");
 	}
@@ -1440,39 +1486,6 @@ definition {
 		AssertTextEquals(
 			locator1 = "BlogsEntry#RELATED_ASSETS_TITLE",
 			value1 = "${assetTitle}");
-	}
-
-	macro viewRSS {
-		var key_text = "RSS";
-
-		AssertClick(
-			locator1 = "Button#ANY",
-			value1 = "RSS");
-
-		Pause(locator1 = "3000");
-
-		SelectWindow.selectPopUp(locator1 = "null");
-
-		AssertLocation.assertPartialLocation(value1 = "blogs/rss");
-
-		AssertTextEquals(
-			locator1 = "RSS#FEED_TITLE",
-			value1 = "${siteName}");
-
-		AssertTextEquals(
-			locator1 = "RSS#FEED_SUBTITLE",
-			value1 = "${siteName}");
-
-		var key_entryContent = "${entryContent}";
-		var key_entryTitle = "${entryTitle}";
-
-		AssertTextEquals(
-			locator1 = "RSS#ENTRY_TITLE",
-			value1 = "${entryTitle}");
-
-		AssertTextEquals(
-			locator1 = "RSS#ENTRY_CONTENT",
-			value1 = "${entryContent}");
 	}
 
 	macro viewSharedAsset {
@@ -1706,7 +1719,7 @@ definition {
 			locator1 = "BlogsEntry#TITLE_LINK",
 			value1 = "${entryTitle}");
 
-		Pause(locator1 = "3000");
+		WaitForVisible(locator1 = "BlogsEntry#TITLE");
 
 		AssertTextEquals(
 			locator1 = "BlogsEntry#TITLE",
@@ -1797,7 +1810,7 @@ definition {
 			locator1 = "BlogsEntry#TITLE",
 			value1 = "${entryTitle}");
 
-		AssertTextEquals.assertPartialText(
+		AssertTextEquals(
 			locator1 = "BlogsEntry#CONTENT",
 			value1 = "${entryContent}");
 
@@ -1820,7 +1833,7 @@ definition {
 			locator1 = "BlogsEntry#TITLE",
 			value1 = "${entryTitle2}");
 
-		AssertTextEquals.assertPartialText(
+		AssertTextEquals(
 			locator1 = "BlogsEntry#CONTENT",
 			value1 = "${entryContent2}");
 	}

@@ -132,12 +132,17 @@
 </tr>
 <tr>
 	<td>FIELD_REQUIRED</td>
-	<td>//label[text()='${key_fieldFieldLabel}']/span[contains(@class,'required')]</td>
+	<td>//label[text()='${key_fieldFieldLabel}']/span[contains(@class,'required')] | //label[contains(.,'${key_fieldFieldLabel}')]/span[contains(.,'Required')]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>FIELD_DISABLED</td>
 	<td>//label[text()='${key_fieldLabel}']//..//input[@disabled]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>FIELD_DISABLED_TEXT</td>
+	<td>//label[contains(.,"${key_fieldLabel}")]//..//input[@disabled]</td>
 	<td></td>
 </tr>
 <tr>
@@ -628,6 +633,11 @@
 <tr>
 	<td>TEXT_CONFIRMATION_FIELD_DIRECTION</td>
 	<td>//div[contains(@data-field-name,'${key_fieldName}')]//div[@class='${key_direction}']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>GENERIC_INPUT_FIELD</td>
+	<td>//div[contains(@data-field-name,'${key_fieldName}')]//div[contains(@class,'form-group')]//input[contains(@class,'form-control')]</td>
 	<td></td>
 </tr>
 <tr>

@@ -57,8 +57,6 @@ definition {
 				locator1 = "TextInput#FILE",
 				value1 = "${mbAttachmentFile}");
 
-			Pause(locator1 = "3000");
-
 			if (IsNotChecked.isNotCheckedNotVisible(key_fileName = "${mbAttachmentFile}", locator1 = "Checkbox#UPLOAD_FILE_ENTRY")) {
 				Check.checkNotVisible(
 					key_fileName = "${mbAttachmentFile}",
@@ -73,8 +71,6 @@ definition {
 		AssertClick(
 			locator1 = "Button#NEW_THREAD",
 			value1 = "New Thread");
-
-		Pause(locator1 = "3000");
 
 		Type(
 			locator1 = "TextInput#SUBJECT",
@@ -160,6 +156,8 @@ definition {
 			SelectFrame(locator1 = "ItemSelector#ITEM_SELECTOR_IFRAME");
 
 			Click(locator1 = "ItemSelector#SELECT_FILE_IMAGE_CARD");
+
+			SelectFrameTop();
 		}
 
 		if (isSet(tagName)) {
@@ -469,6 +467,26 @@ definition {
 		AssertElementNotPresent(locator1 = "MessageBoards#THREAD_LIST_THREAD");
 	}
 
+	macro deleteReply {
+		Click(locator1 = "MessageBoards#VERTICAL_ELLIPSIS_REPLY_CARD");
+
+		if (isSet(localizedMenuItem)) {
+			MenuItem.clickNoError(menuItem = "${localizedMenuItem}");
+		}
+		else {
+			MenuItem.clickNoError(menuItem = "Delete");
+		}
+
+		if (isSet(localizedConfirmMessage)) {
+			AssertConfirm(value1 = "${localizedConfirmMessage}");
+		}
+		else {
+			AssertConfirm(value1 = "Are you sure you want to delete this? It will be deleted immediately.");
+		}
+
+		Alert.viewSuccessMessage();
+	}
+
 	macro downloadAttachmentPG {
 		if (isSet(attachmentsList)) {
 			Click(
@@ -493,8 +511,6 @@ definition {
 			AssertTextEquals.assertPartialText(
 				locator1 = "CKEditor#BODY",
 				value1 = "${threadBody}");
-
-			SelectFrameTop();
 		}
 
 		if ("${threadAttachmentRemove}" == "true") {
@@ -560,6 +576,8 @@ definition {
 				Click(locator1 = "ItemSelector#SELECT_FILE_IMAGE_CARD");
 			}
 		}
+
+		SelectFrameTop();
 	}
 
 	macro editPG {
@@ -669,8 +687,6 @@ definition {
 			UploadCommonFile.uploadCommonFileHiddenNoMouseOver(
 				locator1 = "TextInput#FILE",
 				value1 = "${mbAttachmentFile}");
-
-			Pause(locator1 = "3000");
 
 			if (IsNotChecked.isNotCheckedNotVisible(key_fileName = "${mbAttachmentFile}", locator1 = "Checkbox#UPLOAD_FILE_ENTRY")) {
 				Check.checkNotVisible(
@@ -822,8 +838,6 @@ definition {
 		AssertClick(
 			locator1 = "Button#SELECT",
 			value1 = "Select");
-
-		Pause(locator1 = "3000");
 
 		SelectFrame(locator1 = "MessageBoardsSelectCategory#IFRAME");
 
@@ -990,7 +1004,7 @@ definition {
 				value1 = "Reply");
 		}
 		else {
-			AssertElementPresent.pauseAssertVisible(
+			AssertVisible(
 				key_threadSubject = "${threadSubject}",
 				locator1 = "MessageBoardsThread#THREAD_REPLY_BUTTON");
 
@@ -1587,6 +1601,12 @@ definition {
 		AssertElementNotPresent(locator1 = "MessageBoards#THREAD_TABLE_REPLIES");
 
 		AssertElementNotPresent(locator1 = "MessageBoards#THREAD_LIST_LAST_POST");
+	}
+
+	macro viewNoReplies {
+		AssertElementNotPresent(
+			key_threadBody = "${replyBody}",
+			locator1 = "MessageBoardsThread#THREAD_BODY");
 	}
 
 	macro viewNoXSSPG {

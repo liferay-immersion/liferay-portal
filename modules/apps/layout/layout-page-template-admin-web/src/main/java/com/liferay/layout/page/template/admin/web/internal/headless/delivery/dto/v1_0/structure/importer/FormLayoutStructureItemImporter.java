@@ -16,21 +16,30 @@ package com.liferay.layout.page.template.admin.web.internal.headless.delivery.dt
 
 import com.liferay.headless.delivery.dto.v1_0.ContextReference;
 import com.liferay.headless.delivery.dto.v1_0.PageElement;
+import com.liferay.layout.page.template.util.AlignConverter;
+import com.liferay.layout.page.template.util.ContentDisplayConverter;
+import com.liferay.layout.page.template.util.FlexWrapConverter;
+import com.liferay.layout.page.template.util.JustifyConverter;
 import com.liferay.layout.util.structure.FormStyledLayoutStructureItem;
 import com.liferay.layout.util.structure.LayoutStructure;
 import com.liferay.layout.util.structure.LayoutStructureItem;
+import com.liferay.petra.string.StringPool;
+import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.json.JSONUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.Portal;
+import com.liferay.portal.kernel.util.MapUtil;
+import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.util.PropsUtil;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
 import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Eudaldo Alonso
@@ -61,6 +70,31 @@ public class FormLayoutStructureItemImporter
 			return formStyledLayoutStructureItem;
 		}
 
+		if (definitionMap.containsKey("cssClasses")) {
+			List<String> cssClasses = (List<String>)definitionMap.get(
+				"cssClasses");
+
+			formStyledLayoutStructureItem.setCssClasses(
+				new HashSet<>(cssClasses));
+		}
+
+		if (definitionMap.containsKey("customCSS")) {
+			formStyledLayoutStructureItem.setCustomCSS(
+				String.valueOf(definitionMap.get("customCSS")));
+		}
+
+		if (definitionMap.containsKey("customCSSViewports")) {
+			List<Map<String, Object>> customCSSViewports =
+				(List<Map<String, Object>>)definitionMap.get(
+					"customCSSViewports");
+
+			for (Map<String, Object> customCSSViewport : customCSSViewports) {
+				formStyledLayoutStructureItem.setCustomCSSViewport(
+					(String)customCSSViewport.get("id"),
+					(String)customCSSViewport.get("customCSS"));
+			}
+		}
+
 		Map<String, Object> sourceMap = (Map<String, Object>)definitionMap.get(
 			"formConfig");
 
@@ -68,27 +102,39 @@ public class FormLayoutStructureItemImporter
 			Map<String, Object> itemReferenceMap =
 				(Map<String, Object>)sourceMap.get("formReference");
 
-			String contextSource = (String)itemReferenceMap.get(
-				"contextSource");
-
 			if (Objects.equals(
 					ContextReference.ContextSource.DISPLAY_PAGE_ITEM.getValue(),
-					contextSource)) {
+					(String)itemReferenceMap.get("contextSource"))) {
 
 				formStyledLayoutStructureItem.setFormConfig(
 					FormStyledLayoutStructureItem.
 						FORM_CONFIG_DISPLAY_PAGE_ITEM_TYPE);
 			}
 			else {
-				long classNameId = _portal.getClassNameId(
-					(String)itemReferenceMap.get("className"));
+				formStyledLayoutStructureItem.setClassNameId(
+					portal.getClassNameId(
+						(String)itemReferenceMap.get("className")));
 
-				formStyledLayoutStructureItem.setClassNameId(classNameId);
+				Integer classType = (Integer)itemReferenceMap.get("classType");
 
-				Integer subtypeId = (Integer)itemReferenceMap.get("subtypeId");
+				if (classType != null) {
+					formStyledLayoutStructureItem.setClassTypeId(classType);
+				}
 
-				if (subtypeId != null) {
-					formStyledLayoutStructureItem.setClassTypeId(subtypeId);
+				formStyledLayoutStructureItem.setFormConfig(
+					FormStyledLayoutStructureItem.FORM_CONFIG_OTHER_ITEM_TYPE);
+			}
+
+			if (GetterUtil.getBoolean(
+					PropsUtil.get("feature.flag.LPS-149720"))) {
+
+				JSONObject successMessageJSONObject =
+					_getSuccessMessageJSONObject(
+						layoutStructureItemImporterContext, sourceMap);
+
+				if (successMessageJSONObject != null) {
+					formStyledLayoutStructureItem.setSuccessMessageJSONObject(
+						successMessageJSONObject);
 				}
 			}
 		}
@@ -124,6 +170,56 @@ public class FormLayoutStructureItemImporter
 				GetterUtil.getBoolean(definitionMap.get("indexed")));
 		}
 
+		Map<String, Object> formLayout = (Map<String, Object>)definitionMap.get(
+			"layout");
+
+		if (formLayout != null) {
+			String align = String.valueOf(
+				formLayout.getOrDefault("align", StringPool.BLANK));
+
+			if (Validator.isNotNull(align)) {
+				formStyledLayoutStructureItem.setAlign(
+					AlignConverter.convertToInternalValue(align));
+			}
+
+			String contentDisplay = String.valueOf(
+				formLayout.getOrDefault("contentDisplay", StringPool.BLANK));
+
+			if (Validator.isNotNull(contentDisplay)) {
+				formStyledLayoutStructureItem.setContentDisplay(
+					ContentDisplayConverter.convertToInternalValue(
+						contentDisplay));
+			}
+
+			String flexWrap = String.valueOf(
+				formLayout.getOrDefault("flexWrap", StringPool.BLANK));
+
+			if (Validator.isNotNull(flexWrap)) {
+				formStyledLayoutStructureItem.setFlexWrap(
+					FlexWrapConverter.convertToInternalValue(flexWrap));
+			}
+
+			String justify = String.valueOf(
+				formLayout.getOrDefault("justify", StringPool.BLANK));
+
+			if (Validator.isNotNull(justify)) {
+				formStyledLayoutStructureItem.setJustify(
+					JustifyConverter.convertToInternalValue(justify));
+			}
+
+			String widthType = StringUtil.toLowerCase(
+				(String)formLayout.get("widthType"));
+
+			if (widthType != null) {
+				formStyledLayoutStructureItem.setWidthType(widthType);
+			}
+		}
+
+		if (definitionMap.containsKey("name")) {
+			formStyledLayoutStructureItem.setName(
+				GetterUtil.getString(definitionMap.get("name")));
+		}
+
 		return formStyledLayoutStructureItem;
 	}
 
@@ -132,7 +228,62 @@ public class FormLayoutStructureItemImporter
 		return PageElement.Type.FORM;
 	}
 
-	@Reference
-	private Portal _portal;
+	private JSONObject _getLocalizedValuesJSONObject(
+		String key, Map<String, Object> propertiesMap) {
+
+		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
+
+		Map<String, Object> map = (Map<String, Object>)propertiesMap.get(key);
+
+		if (MapUtil.isEmpty(map)) {
+			return jsonObject;
+		}
+
+		Map<String, Object> localizedMap = (Map<String, Object>)map.get(
+			"value_i18n");
+
+		if (localizedMap == null) {
+			return jsonObject;
+		}
+
+		for (Map.Entry<String, Object> entry : localizedMap.entrySet()) {
+			jsonObject.put(entry.getKey(), entry.getValue());
+		}
+
+		return JSONUtil.put(key, jsonObject);
+	}
+
+	private JSONObject _getSuccessMessageJSONObject(
+		LayoutStructureItemImporterContext layoutStructureItemImporterContext,
+		Map<String, Object> sourceMap) {
+
+		Map<String, Object> formSuccessSubmissionResultMap =
+			(Map<String, Object>)sourceMap.get("formSuccessSubmissionResult");
+
+		if (MapUtil.isEmpty(formSuccessSubmissionResultMap)) {
+			return null;
+		}
+
+		if (formSuccessSubmissionResultMap.containsKey("message")) {
+			return _getLocalizedValuesJSONObject(
+				"message", formSuccessSubmissionResultMap);
+		}
+		else if (formSuccessSubmissionResultMap.containsKey("itemReference")) {
+			Map<String, Object> itemReference =
+				(Map<String, Object>)formSuccessSubmissionResultMap.get(
+					"itemReference");
+
+			return JSONUtil.put(
+				"layout",
+				getLayoutFromItemReferenceJSONObject(
+					itemReference, layoutStructureItemImporterContext));
+		}
+		else if (formSuccessSubmissionResultMap.containsKey("url")) {
+			return _getLocalizedValuesJSONObject(
+				"url", formSuccessSubmissionResultMap);
+		}
+
+		return null;
+	}
 
 }

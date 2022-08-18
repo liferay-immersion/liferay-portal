@@ -417,6 +417,16 @@ definition {
 		Alert.viewSuccessMessage();
 	}
 
+	macro gotoEllipsisMenuItemInItemSelector {
+		Click(locator1 = "AssetLists#ASSET_LIST_ELLIPSIS");
+
+		Click(
+			key_menuItem = "View Items",
+			locator1 = "AssetLists#PERSONALIZATION_DROPDOWN_ITEM");
+
+		SelectFrame(locator1 = "IFrame#MODAL_BODY");
+	}
+
 	macro gotoEntry {
 		Click(
 			key_title = "${assetListName}",
@@ -629,7 +639,7 @@ definition {
 		}
 
 		if (isSet(personalizedVariation)) {
-			Navigator.gotoNavTab(navTab = "${personalizedVariation}");
+			Navigator.gotoNavItem(navItem = "${personalizedVariation}");
 		}
 
 		WaitForLiferayEvent.initializeLiferayEventLog();
@@ -658,7 +668,7 @@ definition {
 			locator1 = "AssetLists#ASSET_LIST_ENTRY_TITLE");
 
 		if (isSet(personalizedVariation)) {
-			Navigator.gotoNavTab(navTab = "${personalizedVariation}");
+			Navigator.gotoNavItem(navItem = "${personalizedVariation}");
 		}
 
 		WaitForLiferayEvent.initializeLiferayEventLog();
@@ -723,7 +733,7 @@ definition {
 			locator1 = "AssetLists#ASSET_LIST_ENTRY_TITLE");
 
 		if (isSet(personalizedVariation)) {
-			Navigator.gotoNavTab(navTab = "${personalizedVariation}");
+			Navigator.gotoNavItem(navItem = "${personalizedVariation}");
 		}
 
 		WaitForLiferayEvent.initializeLiferayEventLog();

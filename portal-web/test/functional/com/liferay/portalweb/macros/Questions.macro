@@ -108,11 +108,11 @@ definition {
 		}
 
 		if (isSet(anonymousUser)) {
-			Type.typePause(
+			Type(
 				locator1 = "TextInput#EMAIL_ADDRESS",
 				value1 = "${userEmailAddress}");
 
-			Type.typePause(
+			Type(
 				locator1 = "TextInput#PASSWORD",
 				value1 = "${password}");
 
@@ -154,6 +154,8 @@ definition {
 				Questions.addTags(tagLocator = "${tagLocator}");
 			}
 		}
+
+		SelectFrameTop();
 
 		Click(locator1 = "Questions#ASK_QUESTION_POST_YOUR_QUESTION_BUTTON");
 

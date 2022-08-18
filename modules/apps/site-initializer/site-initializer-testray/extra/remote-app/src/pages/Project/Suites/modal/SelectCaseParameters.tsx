@@ -12,18 +12,21 @@
  * details.
  */
 
-import {useQuery} from '@apollo/client';
 import React, {useCallback} from 'react';
 
 import DualListBox, {
 	BoxItem,
 	Boxes,
 } from '../../../../components/Form/DualListBox';
-import {
-	SelectCasesParameters,
-	getSelectCasesParameters,
-} from '../../../../graphql/queries';
+import {useFetch} from '../../../../hooks/useFetch';
 import i18n from '../../../../i18n';
+import {
+	APIResponse,
+	TestrayCaseType,
+	TestrayComponent,
+	TestrayRequirement,
+	TestrayTeam,
+} from '../../../../services/rest';
 
 const onMapDefault = ({id, name}: any) => ({
 	label: name,
@@ -47,20 +50,30 @@ export type State = {
 const SelectCaseParameters: React.FC<SelectCaseParametersProps> = ({
 	setState,
 }) => {
-	const {data} = useQuery<SelectCasesParameters>(getSelectCasesParameters);
+	const {data: casetypes} = useFetch<APIResponse<TestrayCaseType>>(
+		'/casetypes?fields=id,name'
+	);
+	const {data: components} = useFetch<APIResponse<TestrayComponent>>(
+		'/components?fields=id,name'
+	);
+	const {data: requirements} = useFetch<APIResponse<TestrayRequirement>>(
+		'/requirements?fields=id,name'
+	);
+	const {data: teams} = useFetch<APIResponse<TestrayTeam>>(
+		'/teams?fields=id,name'
+	);
 
 	const getSelectedCaseParameters = useCallback(() => {
-		const queries = data?.c;
 		const defaultBox: any = [];
 
-		if (!queries) {
+		if (!casetypes || !components || !requirements || !teams) {
 			return;
 		}
 
-		const testrayCaseTypes = queries?.caseTypes.items || [];
-		const testrayComponents = queries?.components.items || [];
-		const testrayRequirements = queries?.requirements.items || [];
-		const testrayTeams = queries?.teams.items || [];
+		const testrayCaseTypes = casetypes.items || [];
+		const testrayComponents = components.items || [];
+		const testrayRequirements = requirements.items || [];
+		const testrayTeams = teams?.items || [];
 
 		return {
 			testrayCaseTypes: [testrayCaseTypes.map(onMapDefault), defaultBox],
@@ -84,7 +97,7 @@ const SelectCaseParameters: React.FC<SelectCaseParametersProps> = ({
 			],
 			testrayTeams: [testrayTeams.map(onMapDefault), defaultBox],
 		};
-	}, [data?.c]);
+	}, [casetypes, components, requirements, teams]);
 
 	const selectedCaseParameters = getSelectedCaseParameters();
 

@@ -15,25 +15,28 @@
 package com.liferay.layout.admin.web.internal.display.context;
 
 import com.liferay.client.extension.constants.ClientExtensionEntryConstants;
-import com.liferay.document.library.kernel.service.DLAppLocalServiceUtil;
+import com.liferay.client.extension.model.ClientExtensionEntryRel;
+import com.liferay.client.extension.service.ClientExtensionEntryRelLocalServiceUtil;
+import com.liferay.client.extension.type.CET;
+import com.liferay.client.extension.type.manager.CETManager;
 import com.liferay.exportimport.kernel.staging.StagingUtil;
+import com.liferay.layout.admin.web.internal.util.FaviconUtil;
 import com.liferay.layout.page.template.constants.LayoutPageTemplateEntryTypeConstants;
 import com.liferay.layout.page.template.model.LayoutPageTemplateEntry;
 import com.liferay.layout.page.template.service.LayoutPageTemplateEntryLocalServiceUtil;
 import com.liferay.petra.portlet.url.builder.PortletURLBuilder;
 import com.liferay.petra.string.StringPool;
-import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
+import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.json.JSONUtil;
 import com.liferay.portal.kernel.language.LanguageUtil;
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.Layout;
 import com.liferay.portal.kernel.model.LayoutSet;
-import com.liferay.portal.kernel.model.Theme;
 import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
 import com.liferay.portal.kernel.portlet.LiferayWindowState;
-import com.liferay.portal.kernel.repository.model.FileEntry;
+import com.liferay.portal.kernel.service.GroupLocalServiceUtil;
 import com.liferay.portal.kernel.service.LayoutLocalServiceUtil;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.Constants;
@@ -41,15 +44,19 @@ import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.HttpComponentsUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
+import com.liferay.portal.kernel.util.PropsKeys;
+import com.liferay.portal.kernel.util.UnicodeProperties;
+import com.liferay.portal.kernel.util.UnicodePropertiesBuilder;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.util.PropsUtil;
 import com.liferay.style.book.model.StyleBookEntry;
 import com.liferay.style.book.service.StyleBookEntryLocalServiceUtil;
 import com.liferay.style.book.util.DefaultStyleBookEntryUtil;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-
-import javax.portlet.PortletURL;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -67,6 +74,8 @@ public class LayoutLookAndFeelDisplayContext {
 		_layoutsAdminDisplayContext = layoutsAdminDisplayContext;
 		_liferayPortletResponse = liferayPortletResponse;
 
+		_cetManager = (CETManager)_httpServletRequest.getAttribute(
+			CETManager.class.getName());
 		_themeDisplay = (ThemeDisplay)httpServletRequest.getAttribute(
 			WebKeys.THEME_DISPLAY);
 	}
@@ -79,118 +88,69 @@ public class LayoutLookAndFeelDisplayContext {
 
 	public Map<String, Object> getClearFaviconButtonAdditionalProps() {
 		return HashMapBuilder.<String, Object>put(
-			"faviconFileEntryTitleValue", _getClearFaviconButtonFileEntryTitle()
+			"faviconTitleValue", _getClearFaviconButtonTitle()
 		).build();
 	}
 
-	public Map<String, Object> getCSSExtensionsConfigurationProps() {
-		return HashMapBuilder.<String, Object>put(
-			"cssExtensions", JSONFactoryUtil.createJSONArray()
-		).put(
-			"cssExtensionSelectorURL",
-			() -> {
-				PortletURL cetItemSelectorURL =
-					_layoutsAdminDisplayContext.getCETItemSelectorURL(
-						"selectCSSClientExtensions",
-						ClientExtensionEntryConstants.TYPE_THEME_FAVICON);
+	public String getFaviconTitle() {
+		return FaviconUtil.getFaviconTitle(
+			_cetManager, _layoutsAdminDisplayContext.getSelLayout(),
+			_themeDisplay.getLocale());
+	}
 
-				return PortletURLBuilder.create(
-					cetItemSelectorURL
-				).setParameter(
-					"multipleSelection", true
-				).buildString();
-			}
+	public String getFaviconURL() {
+		String faviconURL = FaviconUtil.getFaviconURL(
+			_cetManager, _layoutsAdminDisplayContext.getSelLayout());
+
+		if (Validator.isNotNull(faviconURL)) {
+			return faviconURL;
+		}
+
+		return _themeDisplay.getPathThemeImages() + "/" +
+			PropsUtil.get(PropsKeys.THEME_SHORTCUT_ICON);
+	}
+
+	public Map<String, Object> getGlobalCSSCETsConfigurationProps(
+		String className, long classPK) {
+
+		return HashMapBuilder.<String, Object>put(
+			"globalCSSCETs",
+			_getClientExtensionEntryRelsJSONArray(
+				className, classPK,
+				ClientExtensionEntryConstants.TYPE_GLOBAL_CSS)
 		).put(
-			"selectCSSClientExtensionsEventName", "selectCSSClientExtensions"
+			"globalCSSCETSelectorURL",
+			() -> PortletURLBuilder.create(
+				_layoutsAdminDisplayContext.getCETItemSelectorURL(
+					"selectGlobalCSSCETs",
+					ClientExtensionEntryConstants.TYPE_GLOBAL_CSS)
+			).setParameter(
+				"multipleSelection", true
+			).buildString()
+		).put(
+			"selectGlobalCSSCETsEventName", "selectGlobalCSSCETs"
 		).build();
 	}
 
-	public String getFaviconFileEntryTitle() {
-		Layout selLayout = _layoutsAdminDisplayContext.getSelLayout();
+	public Map<String, Object> getGlobalJSCETsConfigurationProps(
+		String className, long classPK) {
 
-		if (selLayout.getFaviconFileEntryId() > 0) {
-			try {
-				FileEntry fileEntry = DLAppLocalServiceUtil.getFileEntry(
-					selLayout.getFaviconFileEntryId());
-
-				return fileEntry.getTitle();
-			}
-			catch (PortalException portalException) {
-				if (_log.isDebugEnabled()) {
-					_log.debug(portalException);
-				}
-			}
-		}
-
-		if (hasEditableMasterLayout() &&
-			(selLayout.getMasterLayoutPlid() > 0)) {
-
-			Layout masterLayout = LayoutLocalServiceUtil.fetchLayout(
-				selLayout.getMasterLayoutPlid());
-
-			if ((masterLayout != null) &&
-				(masterLayout.getFaviconFileEntryId() > 0)) {
-
-				return LanguageUtil.get(
-					_httpServletRequest, "favicon-from-master");
-			}
-		}
-
-		LayoutSet layoutSet = selLayout.getLayoutSet();
-
-		if (layoutSet.getFaviconFileEntryId() > 0) {
-			return LanguageUtil.format(
-				_themeDisplay.getLocale(), "favicon-from-x",
-				_layoutsAdminDisplayContext.getRootNodeName());
-		}
-
-		return LanguageUtil.get(_httpServletRequest, "favicon-from-theme");
-	}
-
-	public String getFaviconImage() {
-		Layout selLayout = _layoutsAdminDisplayContext.getSelLayout();
-
-		String faviconImage = selLayout.getFaviconURL();
-
-		if (faviconImage != null) {
-			return faviconImage;
-		}
-
-		Theme theme = null;
-
-		try {
-			theme = selLayout.getTheme();
-		}
-		catch (PortalException portalException) {
-			if (_log.isDebugEnabled()) {
-				_log.debug(portalException);
-			}
-
-			return StringPool.BLANK;
-		}
-
-		return _layoutsAdminDisplayContext.getThemeFavicon(theme);
-	}
-
-	public Map<String, Object> getJSExtensionsConfigurationProps() {
 		return HashMapBuilder.<String, Object>put(
-			"jsExtensions", JSONFactoryUtil.createJSONArray()
+			"globalJSCETs",
+			_getClientExtensionEntryRelsJSONArray(
+				className, classPK,
+				ClientExtensionEntryConstants.TYPE_GLOBAL_JS)
 		).put(
-			"jsExtensionSelectorURL",
-			() -> {
-				PortletURL cetItemSelectorURL =
-					_layoutsAdminDisplayContext.getCETItemSelectorURL(
-						"selectJSClientExtensions",
-						ClientExtensionEntryConstants.TYPE_THEME_FAVICON);
-
-				return PortletURLBuilder.create(
-					cetItemSelectorURL
-				).setParameter(
-					"multipleSelection", true
-				).buildString();
-			}
+			"globalJSCETSelectorURL",
+			() -> PortletURLBuilder.create(
+				_layoutsAdminDisplayContext.getCETItemSelectorURL(
+					"selectGlobalJSCETs",
+					ClientExtensionEntryConstants.TYPE_GLOBAL_JS)
+			).setParameter(
+				"multipleSelection", true
+			).buildString()
 		).put(
-			"selectJSClientExtensionsEventName", "selectJSClientExtensions"
+			"selectGlobalJSCETsEventName", "selectGlobalJSCETs"
 		).build();
 	}
 
@@ -328,6 +288,23 @@ public class LayoutLookAndFeelDisplayContext {
 		return LanguageUtil.get(_httpServletRequest, "styles-by-default");
 	}
 
+	public String getThemeFaviconCETExternalReferenceCode() {
+		Layout selLayout = _layoutsAdminDisplayContext.getSelLayout();
+
+		ClientExtensionEntryRel clientExtensionEntryRel =
+			ClientExtensionEntryRelLocalServiceUtil.
+				fetchClientExtensionEntryRel(
+					PortalUtil.getClassNameId(Layout.class),
+					selLayout.getPlid(),
+					ClientExtensionEntryConstants.TYPE_THEME_FAVICON);
+
+		if (clientExtensionEntryRel != null) {
+			return clientExtensionEntryRel.getCETExternalReferenceCode();
+		}
+
+		return StringPool.BLANK;
+	}
+
 	public boolean hasEditableMasterLayout() {
 		if (_hasEditableMasterLayout != null) {
 			return _hasEditableMasterLayout;
@@ -415,10 +392,62 @@ public class LayoutLookAndFeelDisplayContext {
 			return true;
 		}
 
+		ClientExtensionEntryRel clientExtensionEntryRel =
+			ClientExtensionEntryRelLocalServiceUtil.
+				fetchClientExtensionEntryRel(
+					PortalUtil.getClassNameId(Layout.class),
+					selLayout.getPlid(),
+					ClientExtensionEntryConstants.TYPE_THEME_FAVICON);
+
+		if (clientExtensionEntryRel != null) {
+			return true;
+		}
+
 		return false;
 	}
 
-	private String _getClearFaviconButtonFileEntryTitle() {
+	private JSONObject _getCETJSONObject(
+		ClientExtensionEntryRel clientExtensionEntryRel, boolean inherited,
+		String inheritedLabel) {
+
+		CETManager cetManager = (CETManager)_httpServletRequest.getAttribute(
+			CETManager.class.getName());
+
+		CET cet = cetManager.getCET(
+			_themeDisplay.getCompanyId(),
+			clientExtensionEntryRel.getCETExternalReferenceCode());
+
+		if (cet == null) {
+			return null;
+		}
+
+		UnicodeProperties typeSettingsUnicodeProperties =
+			UnicodePropertiesBuilder.create(
+				true
+			).fastLoad(
+				clientExtensionEntryRel.getTypeSettings()
+			).build();
+
+		return JSONUtil.put(
+			"cetExternalReferenceCode",
+			clientExtensionEntryRel.getCETExternalReferenceCode()
+		).put(
+			"inherited", inherited
+		).put(
+			"inheritedLabel", inheritedLabel
+		).put(
+			"loadType",
+			() -> typeSettingsUnicodeProperties.getProperty("loadType", null)
+		).put(
+			"name", cet.getName(_themeDisplay.getLocale())
+		).put(
+			"scriptLocation",
+			() -> typeSettingsUnicodeProperties.getProperty(
+				"scriptLocation", null)
+		);
+	}
+
+	private String _getClearFaviconButtonTitle() {
 		Layout selLayout = _layoutsAdminDisplayContext.getSelLayout();
 
 		if (hasEditableMasterLayout() &&
@@ -427,28 +456,103 @@ public class LayoutLookAndFeelDisplayContext {
 			Layout masterLayout = LayoutLocalServiceUtil.fetchLayout(
 				selLayout.getMasterLayoutPlid());
 
-			if ((masterLayout != null) &&
-				(masterLayout.getFaviconFileEntryId() > 0)) {
+			if (masterLayout != null) {
+				ClientExtensionEntryRel clientExtensionEntryRel =
+					ClientExtensionEntryRelLocalServiceUtil.
+						fetchClientExtensionEntryRel(
+							PortalUtil.getClassNameId(Layout.class),
+							selLayout.getPlid(),
+							ClientExtensionEntryConstants.TYPE_THEME_FAVICON);
 
-				return LanguageUtil.get(
-					_httpServletRequest, "favicon-from-master");
+				if ((masterLayout.getFaviconFileEntryId() > 0) ||
+					(clientExtensionEntryRel != null)) {
+
+					return LanguageUtil.get(
+						_httpServletRequest, "favicon-from-master");
+				}
 			}
 		}
 
-		LayoutSet layoutSet = selLayout.getLayoutSet();
-
-		if (layoutSet.getFaviconFileEntryId() > 0) {
-			return LanguageUtil.format(
-				_themeDisplay.getLocale(), "favicon-from-x",
-				_layoutsAdminDisplayContext.getRootNodeName());
-		}
-
-		return LanguageUtil.get(_httpServletRequest, "favicon-from-theme");
+		return FaviconUtil.getFaviconTitle(
+			selLayout.getLayoutSet(), _themeDisplay.getLocale());
 	}
 
-	private static final Log _log = LogFactoryUtil.getLog(
-		LayoutLookAndFeelDisplayContext.class);
+	private JSONArray _getClientExtensionEntryRelsJSONArray(
+		String className, long classPK, String type) {
 
+		JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
+
+		if (Objects.equals(className, Layout.class.getName())) {
+			LayoutSet layoutSet = _layoutsAdminDisplayContext.getSelLayoutSet();
+
+			List<ClientExtensionEntryRel> clientExtensionEntryRels =
+				ClientExtensionEntryRelLocalServiceUtil.
+					getClientExtensionEntryRels(
+						PortalUtil.getClassNameId(LayoutSet.class),
+						layoutSet.getLayoutSetId(), type);
+
+			for (ClientExtensionEntryRel clientExtensionEntryRel :
+					clientExtensionEntryRels) {
+
+				jsonArray.put(
+					() -> _getCETJSONObject(
+						clientExtensionEntryRel, true,
+						LanguageUtil.format(
+							_themeDisplay.getLocale(), "from-x",
+							_getLayoutRootNodeName(), false)));
+			}
+
+			Layout layout = _layoutsAdminDisplayContext.getSelLayout();
+
+			if ((layout != null) && (layout.getMasterLayoutPlid() > 0)) {
+				clientExtensionEntryRels =
+					ClientExtensionEntryRelLocalServiceUtil.
+						getClientExtensionEntryRels(
+							PortalUtil.getClassNameId(Layout.class),
+							layout.getMasterLayoutPlid(), type);
+
+				for (ClientExtensionEntryRel clientExtensionEntryRel :
+						clientExtensionEntryRels) {
+
+					jsonArray.put(
+						() -> _getCETJSONObject(
+							clientExtensionEntryRel, true,
+							LanguageUtil.format(
+								_themeDisplay.getLocale(), "from-x", "master",
+								true)));
+				}
+			}
+		}
+
+		List<ClientExtensionEntryRel> clientExtensionEntryRels =
+			ClientExtensionEntryRelLocalServiceUtil.getClientExtensionEntryRels(
+				PortalUtil.getClassNameId(className), classPK, type);
+
+		for (ClientExtensionEntryRel clientExtensionEntryRel :
+				clientExtensionEntryRels) {
+
+			jsonArray.put(
+				() -> _getCETJSONObject(
+					clientExtensionEntryRel, false, StringPool.DASH));
+		}
+
+		return jsonArray;
+	}
+
+	private String _getLayoutRootNodeName() {
+		LayoutSet layoutSet = _layoutsAdminDisplayContext.getSelLayoutSet();
+
+		Group group = GroupLocalServiceUtil.fetchGroup(layoutSet.getGroupId());
+
+		if (group == null) {
+			return StringPool.DASH;
+		}
+
+		return group.getLayoutRootNodeName(
+			layoutSet.isPrivateLayout(), _themeDisplay.getLocale());
+	}
+
+	private final CETManager _cetManager;
 	private Boolean _hasEditableMasterLayout;
 	private Boolean _hasMasterLayout;
 	private Boolean _hasStyleBooks;

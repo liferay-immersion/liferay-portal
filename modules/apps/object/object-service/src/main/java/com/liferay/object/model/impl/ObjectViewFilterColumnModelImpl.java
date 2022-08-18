@@ -77,7 +77,7 @@ public class ObjectViewFilterColumnModelImpl
 		{"userId", Types.BIGINT}, {"userName", Types.VARCHAR},
 		{"createDate", Types.TIMESTAMP}, {"modifiedDate", Types.TIMESTAMP},
 		{"objectViewId", Types.BIGINT}, {"filterType", Types.VARCHAR},
-		{"json", Types.VARCHAR}, {"objectFieldName", Types.VARCHAR}
+		{"json", Types.CLOB}, {"objectFieldName", Types.VARCHAR}
 	};
 
 	public static final Map<String, Integer> TABLE_COLUMNS_MAP =
@@ -94,12 +94,12 @@ public class ObjectViewFilterColumnModelImpl
 		TABLE_COLUMNS_MAP.put("modifiedDate", Types.TIMESTAMP);
 		TABLE_COLUMNS_MAP.put("objectViewId", Types.BIGINT);
 		TABLE_COLUMNS_MAP.put("filterType", Types.VARCHAR);
-		TABLE_COLUMNS_MAP.put("json", Types.VARCHAR);
+		TABLE_COLUMNS_MAP.put("json", Types.CLOB);
 		TABLE_COLUMNS_MAP.put("objectFieldName", Types.VARCHAR);
 	}
 
 	public static final String TABLE_SQL_CREATE =
-		"create table ObjectViewFilterColumn (mvccVersion LONG default 0 not null,uuid_ VARCHAR(75) null,objectViewFilterColumnId LONG not null primary key,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,objectViewId LONG,filterType VARCHAR(75) null,json VARCHAR(75) null,objectFieldName VARCHAR(75) null)";
+		"create table ObjectViewFilterColumn (mvccVersion LONG default 0 not null,uuid_ VARCHAR(75) null,objectViewFilterColumnId LONG not null primary key,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,objectViewId LONG,filterType VARCHAR(75) null,json TEXT null,objectFieldName VARCHAR(75) null)";
 
 	public static final String TABLE_SQL_DROP =
 		"drop table ObjectViewFilterColumn";
@@ -322,11 +322,11 @@ public class ObjectViewFilterColumnModelImpl
 			"filterType",
 			(BiConsumer<ObjectViewFilterColumn, String>)
 				ObjectViewFilterColumn::setFilterType);
-		attributeGetterFunctions.put("json", ObjectViewFilterColumn::getJson);
+		attributeGetterFunctions.put("json", ObjectViewFilterColumn::getJSON);
 		attributeSetterBiConsumers.put(
 			"json",
 			(BiConsumer<ObjectViewFilterColumn, String>)
-				ObjectViewFilterColumn::setJson);
+				ObjectViewFilterColumn::setJSON);
 		attributeGetterFunctions.put(
 			"objectFieldName", ObjectViewFilterColumn::getObjectFieldName);
 		attributeSetterBiConsumers.put(
@@ -547,7 +547,7 @@ public class ObjectViewFilterColumnModelImpl
 	}
 
 	@Override
-	public String getJson() {
+	public String getJSON() {
 		if (_json == null) {
 			return "";
 		}
@@ -557,7 +557,7 @@ public class ObjectViewFilterColumnModelImpl
 	}
 
 	@Override
-	public void setJson(String json) {
+	public void setJSON(String json) {
 		if (_columnOriginalValues == Collections.EMPTY_MAP) {
 			_setColumnOriginalValues();
 		}
@@ -668,7 +668,7 @@ public class ObjectViewFilterColumnModelImpl
 		objectViewFilterColumnImpl.setModifiedDate(getModifiedDate());
 		objectViewFilterColumnImpl.setObjectViewId(getObjectViewId());
 		objectViewFilterColumnImpl.setFilterType(getFilterType());
-		objectViewFilterColumnImpl.setJson(getJson());
+		objectViewFilterColumnImpl.setJSON(getJSON());
 		objectViewFilterColumnImpl.setObjectFieldName(getObjectFieldName());
 
 		objectViewFilterColumnImpl.resetOriginalValues();
@@ -701,7 +701,7 @@ public class ObjectViewFilterColumnModelImpl
 			this.<Long>getColumnOriginalValue("objectViewId"));
 		objectViewFilterColumnImpl.setFilterType(
 			this.<String>getColumnOriginalValue("filterType"));
-		objectViewFilterColumnImpl.setJson(
+		objectViewFilterColumnImpl.setJSON(
 			this.<String>getColumnOriginalValue("json"));
 		objectViewFilterColumnImpl.setObjectFieldName(
 			this.<String>getColumnOriginalValue("objectFieldName"));
@@ -838,7 +838,7 @@ public class ObjectViewFilterColumnModelImpl
 			objectViewFilterColumnCacheModel.filterType = null;
 		}
 
-		objectViewFilterColumnCacheModel.json = getJson();
+		objectViewFilterColumnCacheModel.json = getJSON();
 
 		String json = objectViewFilterColumnCacheModel.json;
 

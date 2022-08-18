@@ -168,6 +168,8 @@ public class NotificationQueueEntryPersistenceTest {
 
 		newNotificationQueueEntry.setToName(RandomTestUtil.randomString());
 
+		newNotificationQueueEntry.setStatus(RandomTestUtil.nextInt());
+
 		_notificationQueueEntries.add(
 			_persistence.update(newNotificationQueueEntry));
 
@@ -242,6 +244,9 @@ public class NotificationQueueEntryPersistenceTest {
 		Assert.assertEquals(
 			existingNotificationQueueEntry.getToName(),
 			newNotificationQueueEntry.getToName());
+		Assert.assertEquals(
+			existingNotificationQueueEntry.getStatus(),
+			newNotificationQueueEntry.getStatus());
 	}
 
 	@Test
@@ -263,6 +268,13 @@ public class NotificationQueueEntryPersistenceTest {
 		_persistence.countByLtSentDate(RandomTestUtil.nextDate());
 
 		_persistence.countByLtSentDate(RandomTestUtil.nextDate());
+	}
+
+	@Test
+	public void testCountByStatus() throws Exception {
+		_persistence.countByStatus(RandomTestUtil.nextInt());
+
+		_persistence.countByStatus(0);
 	}
 
 	@Test
@@ -296,10 +308,10 @@ public class NotificationQueueEntryPersistenceTest {
 			"NotificationQueueEntry", "mvccVersion", true,
 			"notificationQueueEntryId", true, "companyId", true, "userId", true,
 			"userName", true, "createDate", true, "modifiedDate", true,
-			"notificationTemplateId", true, "bcc", true, "body", true, "cc",
-			true, "classNameId", true, "classPK", true, "from", true,
-			"fromName", true, "priority", true, "sent", true, "sentDate", true,
-			"subject", true, "to", true, "toName", true);
+			"notificationTemplateId", true, "bcc", true, "cc", true,
+			"classNameId", true, "classPK", true, "from", true, "fromName",
+			true, "priority", true, "sent", true, "sentDate", true, "subject",
+			true, "to", true, "toName", true, "status", true);
 	}
 
 	@Test
@@ -585,6 +597,8 @@ public class NotificationQueueEntryPersistenceTest {
 		notificationQueueEntry.setTo(RandomTestUtil.randomString());
 
 		notificationQueueEntry.setToName(RandomTestUtil.randomString());
+
+		notificationQueueEntry.setStatus(RandomTestUtil.nextInt());
 
 		_notificationQueueEntries.add(
 			_persistence.update(notificationQueueEntry));

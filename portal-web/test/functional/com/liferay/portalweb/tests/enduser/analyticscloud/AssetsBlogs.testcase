@@ -25,6 +25,8 @@ definition {
 	tearDown {
 		var testPortalInstance = PropsUtil.get("test.portal.instance");
 
+		ACUtils.tearDownAC();
+
 		ACUtils.tearDownDXP();
 
 		if ("${testPortalInstance}" == "true") {
@@ -33,10 +35,6 @@ definition {
 		else {
 			JSONGroup.deleteGroupByName(groupName = "Site Name");
 		}
-
-		JSONUser.tearDownNonAdminUsers();
-
-		ACUtils.tearDownAC();
 	}
 
 	@description = "Feature ID: Legacy | Automation ID: LRAC-8387 | Test Summary: Blogs asset appears on list shows pages that the blog exists on"
@@ -439,12 +437,8 @@ definition {
 	}
 
 	@description = "Feature ID: Legacy | Automation ID: LRAC-8382 | Test Summary: The blogs list is searchable"
-	@ignore = "true"
 	@priority = "5"
 	test CanBlogsListSearchable {
-
-		// AC Story ticket: LRAC-10405
-
 		var propertyName = ACDXPSettings.connectDXPtoAnalyticsCloud(siteName = "Site Name");
 
 		ACUtils.createBlogsAndAddToPage(entryTitle = "Test 2");
@@ -479,9 +473,7 @@ definition {
 
 		ACUtils.searchBar(searchItem = "Should not be here");
 
-		// This test is being ignored due to a history that makes changes to empty state messages.
-
-		ACUtils.viewNoResultsMessage(noResultMessage = "There are no Blogs found.");
+		ACUtils.viewNoResultsMessage(noResultMessage = "There are no results found.");
 	}
 
 	@description = "Feature ID: Legacy | Automation ID: LRAC-8113 | Test Summary: Assert clicking a blog in the blogs list navigates to the blogs overview page"
@@ -593,6 +585,70 @@ definition {
 
 			// Is not possible to assert the blog because this test needs data from the past.
 
+		}
+	}
+
+	@description = "Feature ID: Legacy | Automation ID: LRAC-11508 | Test Summary: Check Blog Rating show expected value"
+	@priority = "4"
+	test CheckBlogRatingShowExpectedValue {
+		task ("Connect the DXP to AC") {
+			ACDXPSettings.connectDXPtoAnalyticsCloud(siteName = "Site Name");
+		}
+
+		task ("Change blog rating type to star") {
+			Ratings.configureRatingType(
+				applications = "Blogs",
+				portlet = "Ratings",
+				ratingType = "Stars",
+				siteName = "Site Name");
+		}
+
+		task ("View the blog page") {
+			ACUtils.navigateToSitePage(
+				actionType = "View Blog",
+				documentTitleList = "Blogs AC Title",
+				pageName = "AC Page",
+				siteName = "Site Name");
+		}
+
+		task ("Choose a rating star for the blog") {
+			Ratings.rateStar(ratingStarCount = "4");
+		}
+
+		task ("Close sessions") {
+			ACUtils.closeAllSessionsAndWait();
+		}
+
+		task ("Switch to new property in AC") {
+			ACUtils.launchAC();
+
+			ACProperties.switchProperty(propertyName = "${assignedPropertyName}");
+		}
+
+		task ("Navigate to blog assets list") {
+			ACNavigation.goToAssets();
+
+			ACNavigation.switchTab(tabName = "Blogs");
+		}
+
+		task ("Change the time filter") {
+			ACTimeFilter.clickTimeFilterButton();
+
+			ACTimeFilter.setLast24Hours();
+		}
+
+		task ("Check blog rating") {
+			ACUtils.viewTableInformation(
+				nameList = "Blogs AC Title",
+				numberValueList = "8.00/10");
+		}
+
+		task ("Check blog rating in visitor behavior") {
+			ACNavigation.openItem(itemName = "Blogs AC Title");
+
+			ACAssets.viewVisitorsBehaviorMetric(
+				metricTitle = "Rating",
+				metricValue = "8.00");
 		}
 	}
 

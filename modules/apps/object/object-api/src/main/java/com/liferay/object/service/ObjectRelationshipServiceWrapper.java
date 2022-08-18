@@ -40,14 +40,14 @@ public class ObjectRelationshipServiceWrapper
 	@Override
 	public com.liferay.object.model.ObjectRelationship addObjectRelationship(
 			long objectDefinitionId1, long objectDefinitionId2,
-			String deletionType,
+			long parameterObjectFieldId, String deletionType,
 			java.util.Map<java.util.Locale, String> labelMap, String name,
 			String type)
 		throws com.liferay.portal.kernel.exception.PortalException {
 
 		return _objectRelationshipService.addObjectRelationship(
-			objectDefinitionId1, objectDefinitionId2, deletionType, labelMap,
-			name, type);
+			objectDefinitionId1, objectDefinitionId2, parameterObjectFieldId,
+			deletionType, labelMap, name, type);
 	}
 
 	@Override
@@ -108,12 +108,14 @@ public class ObjectRelationshipServiceWrapper
 
 	@Override
 	public com.liferay.object.model.ObjectRelationship updateObjectRelationship(
-			long objectRelationshipId, String deletionType,
+			long objectRelationshipId, long parameterObjectFieldId,
+			String deletionType,
 			java.util.Map<java.util.Locale, String> labelMap)
 		throws com.liferay.portal.kernel.exception.PortalException {
 
 		return _objectRelationshipService.updateObjectRelationship(
-			objectRelationshipId, deletionType, labelMap);
+			objectRelationshipId, parameterObjectFieldId, deletionType,
+			labelMap);
 	}
 
 	@Override

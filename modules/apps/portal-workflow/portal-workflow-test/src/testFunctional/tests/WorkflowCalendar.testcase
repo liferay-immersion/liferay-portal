@@ -107,7 +107,7 @@ definition {
 
 		Button.clickNoError(button = "Delete");
 
-		AssertConfirm(value1 = "Deleting this event will cancel the meeting with your guests. Would you like to delete?");
+		AssertConfirm(value1 = "Deleting this event will cancel the meeting with your guests. Would you like to delete it?");
 
 		Navigator.gotoPage(pageName = "Calendar Page");
 

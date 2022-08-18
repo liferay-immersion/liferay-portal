@@ -19,11 +19,9 @@ import ClayIcon from '@clayui/icon';
 import ClayMultiSelect, {itemLabelFilter} from '@clayui/multi-select';
 import {usePrevious} from '@liferay/frontend-js-react-web';
 import classNames from 'classnames';
-import {openSelectionModal, sub as subUtil} from 'frontend-js-web';
+import {createPortletURL, openSelectionModal, sub} from 'frontend-js-web';
 import PropTypes from 'prop-types';
 import React, {useEffect, useState} from 'react';
-
-import Lang from '../utils/lang.es';
 
 function AssetVocabulariesCategoriesSelector({
 	eventName,
@@ -132,10 +130,7 @@ function AssetVocabulariesCategoriesSelector({
 	};
 
 	const handleSelectButtonClick = () => {
-		const sub = (str, object) =>
-			str.replace(/\{([^}]+)\}/g, (_, m) => object[m]);
-
-		const url = sub(decodeURIComponent(portletURL), {
+		const url = createPortletURL(portletURL, {
 			selectedCategories: selectedItems.map((item) => item.value).join(),
 			singleSelect,
 			vocabularyIds: sourceItemsVocabularyIds.concat(),
@@ -169,9 +164,9 @@ function AssetVocabulariesCategoriesSelector({
 			selectEventName: eventName,
 			size: 'md',
 			title: label
-				? subUtil(Liferay.Language.get('select-x'), label)
+				? sub(Liferay.Language.get('select-x'), label)
 				: Liferay.Language.get('select-categories'),
-			url,
+			url: url.toString(),
 		});
 	};
 
@@ -180,7 +175,7 @@ function AssetVocabulariesCategoriesSelector({
 			<ClayForm.Group
 				className={classNames({
 					'has-error':
-						(invalidItems && invalidItems.length > 0) || !isValid,
+						(invalidItems && !!invalidItems.length) || !isValid,
 				})}
 				id={id}
 			>
@@ -193,7 +188,7 @@ function AssetVocabulariesCategoriesSelector({
 				)}
 
 				{label && (
-					<label>
+					<label htmlFor={inputName + '_MultiSelect'}>
 						{label}
 
 						{required && (
@@ -211,6 +206,7 @@ function AssetVocabulariesCategoriesSelector({
 				<ClayInput.Group>
 					<ClayInput.GroupItem>
 						<ClayMultiSelect
+							id={inputName + '_MultiSelect'}
 							inputName={inputName}
 							items={selectedItems}
 							onChange={setInputValue}
@@ -232,20 +228,19 @@ function AssetVocabulariesCategoriesSelector({
 							value={inputValue}
 						/>
 
-						{invalidItems && invalidItems.length > 0 && (
+						{invalidItems && !!invalidItems.length && (
 							<ClayForm.FeedbackGroup>
-								<ClayForm.FeedbackItem>
+								<ClayForm.FeedbackItem aria-live="polite">
 									<ClayForm.FeedbackIndicator symbol="info-circle" />
 
-									{Lang.sub(
+									{sub(
 										Liferay.Language.get(
 											`category-x-does-not-exist`
 										),
-										[
-											invalidItems
-												.map((item) => item.label)
-												.join(','),
-										]
+
+										invalidItems
+											.map((item) => item.label)
+											.join(',')
 									)}
 								</ClayForm.FeedbackItem>
 							</ClayForm.FeedbackGroup>

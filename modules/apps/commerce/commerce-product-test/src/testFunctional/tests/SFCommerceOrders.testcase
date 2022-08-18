@@ -24,7 +24,7 @@ definition {
 		property portal.acceptance = "false";
 
 		task ("Given the Show Order Creation Time toggle is checked in the Placed Orders widget by default") {
-			Navigator.openWithAppendToBaseURL(urlAppend = "group/minium/placed-orders");
+			Navigator.openWithAppendToBaseURL(urlAppend = "web/minium/placed-orders");
 
 			Portlet.gotoPortletOptions(
 				portletName = "Placed Orders",
@@ -38,7 +38,7 @@ definition {
 		}
 
 		task ("And given a placed order") {
-			Navigator.openWithAppendToBaseURL(urlAppend = "group/minium/catalog");
+			Navigator.openWithAppendToBaseURL(urlAppend = "web/minium/catalog");
 
 			FrontStore.addInitializerProductToCart(
 				productName = "U-Joint",
@@ -59,7 +59,7 @@ definition {
 		}
 
 		task ("When the user views the order from the Placed Orders page") {
-			Navigator.openWithAppendToBaseURL(urlAppend = "group/minium/placed-orders");
+			Navigator.openWithAppendToBaseURL(urlAppend = "web/minium/placed-orders");
 		}
 
 		task ("Then the order date and time is shown") {
@@ -88,7 +88,7 @@ definition {
 		property portal.acceptance = "false";
 
 		task ("Given the Show Order Creation Time toggle is unchecked in the Placed Orders widget") {
-			Navigator.openWithAppendToBaseURL(urlAppend = "group/minium/placed-orders");
+			Navigator.openWithAppendToBaseURL(urlAppend = "web/minium/placed-orders");
 
 			Portlet.gotoPortletOptions(
 				portletName = "Placed Orders",
@@ -106,7 +106,7 @@ definition {
 		}
 
 		task ("And given a placed order") {
-			Navigator.openWithAppendToBaseURL(urlAppend = "group/minium/catalog");
+			Navigator.openWithAppendToBaseURL(urlAppend = "web/minium/catalog");
 
 			FrontStore.addInitializerProductToCart(
 				productName = "U-Joint",
@@ -127,7 +127,7 @@ definition {
 		}
 
 		task ("When the user views the order from the Placed Orders page") {
-			Navigator.openWithAppendToBaseURL(urlAppend = "group/minium/placed-orders");
+			Navigator.openWithAppendToBaseURL(urlAppend = "web/minium/placed-orders");
 		}
 
 		task ("Then the order date is shown without the time") {
@@ -150,13 +150,140 @@ definition {
 		}
 	}
 
+	@description = "Verify the external reference code (ERC) of an order is present in the placed order details."
+	@priority = "3"
+	test AssertERCInPlacedOrderDetails {
+		property custom.properties = "jsonws.web.service.paths.excludes=${line.separator}company.security.strangers.verify=false";
+		property portal.acceptance = "false";
+
+		task ("Given a buyer user connected to the Commerce Account") {
+			CommerceEntry.addAccountEntryUser(
+				accountName = "Commerce Account",
+				agreeToTermsAndAnswerReminderQuery = "true",
+				requireReset = "false",
+				userEmailAddress = "buyer@liferay.com",
+				userFirstName = "Buyer",
+				userLastName = "User",
+				userRole = "Buyer",
+				userScreenName = "buyeruser",
+				userSiteMembership = "Minium");
+		}
+
+		task ("And given the buyer completes the checkout process for an order") {
+			User.logoutPG();
+
+			CommerceLogin.miniumLogin(
+				password = "test",
+				urlAppend = "web/minium",
+				userEmailAddress = "buyer@liferay.com");
+
+			FrontStore.addInitializerProductToCart(
+				productName = "U-Joint",
+				productQuantity = "1");
+
+			CommerceCheckout.gotoCheckoutViaMiniCart();
+
+			CommerceCheckout.initializersCheckout(
+				newAddressAddress = "Test Address",
+				newAddressCity = "Test City",
+				newAddressCountry = "United States",
+				newAddressName = "Address Name",
+				newAddressZipCode = "Test Zip Code",
+				productName = "U-Joint",
+				productQuantity = "1",
+				productUnitPrice = "24",
+				shippingMethod = "Standard");
+		}
+
+		task ("And given an ERC is created for the order") {
+			CommerceJSONOrdersAPI._updateCommerceOrderERC(externalReferenceCode = "Test101");
+		}
+
+		task ("When the buyer goes to the order details") {
+			Button.click(button = "Go to Order Details");
+		}
+
+		task ("Then the ERC field is present in the order details and populated with Test101") {
+			AssertElementPresent(
+				key_ERC = "Test101",
+				locator1 = "CommerceOrders#ORDER_DETAILS_ERC");
+		}
+	}
+
+	@description = "Verify the shipping and billing addresses of an order are present in the placed order details."
+	@priority = "3"
+	test AssertNameOfTheShippingAndBillingAddressInPlacedOrderDetails {
+		property custom.properties = "jsonws.web.service.paths.excludes=${line.separator}company.security.strangers.verify=false";
+		property portal.acceptance = "false";
+
+		task ("Given a buyer user connected to the Commerce Account") {
+			CommerceEntry.addAccountEntryUser(
+				accountName = "Commerce Account",
+				agreeToTermsAndAnswerReminderQuery = "true",
+				requireReset = "false",
+				userEmailAddress = "buyer@liferay.com",
+				userFirstName = "Buyer",
+				userLastName = "User",
+				userRole = "Buyer",
+				userScreenName = "buyeruser",
+				userSiteMembership = "Minium");
+		}
+
+		task ("And given the buyer completes the checkout process for an order with a billing and shipping address set") {
+			User.logoutPG();
+
+			CommerceLogin.miniumLogin(
+				password = "test",
+				urlAppend = "web/minium",
+				userEmailAddress = "buyer@liferay.com");
+
+			FrontStore.addInitializerProductToCart(
+				productName = "U-Joint",
+				productQuantity = "1");
+
+			CommerceCheckout.gotoCheckoutViaMiniCart();
+
+			CommerceCheckout.initializersCheckout(
+				billingAddressAddress = "Test Billing Address",
+				billingAddressCity = "Test Billing City",
+				billingAddressCountry = "United States",
+				billingAddressName = "Billing Address Name",
+				billingAddressZipCode = "Test Billing Zip Code",
+				newAddressAddress = "Test Shipping Address",
+				newAddressCity = "Test Shipping City",
+				newAddressCountry = "United States",
+				newAddressName = "Shipping Address Name",
+				newAddressZipCode = "Test Shipping Zip Code",
+				productName = "U-Joint",
+				productQuantity = "1",
+				productUnitPrice = "24",
+				shippingMethod = "Standard");
+		}
+
+		task ("When the buyer goes to the order details") {
+			Button.click(button = "Go to Order Details");
+		}
+
+		task ("Then the billing and shipping addresses of the order are shown") {
+			CommerceOrders.viewOrdersDetails(
+				billingAddressAddress = "Test Billing Address",
+				billingAddressCity = "Test Billing City",
+				billingAddressName = "Billing Address Name",
+				billingAddressZipCode = "Test Billing Zip Code",
+				shippingAddressAddress = "Test Shipping Address",
+				shippingAddressCity = "Test Shipping City",
+				shippingAddressName = "Shipping Address Name",
+				shippingAddressZipCode = "Test Shipping Zip Code");
+		}
+	}
+
 	@description = "Verify the Order Date Display configuration section is displayed in the Placed Orders widget."
 	@priority = "3"
 	test AssertOrderDateDisplayIsPresent {
 		property portal.acceptance = "false";
 
 		task ("When the user goes to the Placed Orders Page") {
-			Navigator.openWithAppendToBaseURL(urlAppend = "group/minium/placed-orders");
+			Navigator.openWithAppendToBaseURL(urlAppend = "web/minium/placed-orders");
 		}
 
 		task ("And goes to the configuration segment of the Placed Orders widget") {
@@ -175,6 +302,191 @@ definition {
 			AssertElementPresent(
 				key_toggleSwitchLabel = "Show Order Create Time",
 				locator1 = "ToggleSwitch#ANY_TOGGLE_SWITCH");
+		}
+	}
+
+	@description = "Verify the status of an order is shown in the placed order details."
+	@priority = "3"
+	test AssertOrderStatusInPlacedOrderDetails {
+		property custom.properties = "jsonws.web.service.paths.excludes=${line.separator}company.security.strangers.verify=false";
+		property portal.acceptance = "false";
+
+		task ("Given a buyer user connected to the Commerce Account") {
+			CommerceEntry.addAccountEntryUser(
+				accountName = "Commerce Account",
+				agreeToTermsAndAnswerReminderQuery = "true",
+				requireReset = "false",
+				userEmailAddress = "buyer@liferay.com",
+				userFirstName = "Buyer",
+				userLastName = "User",
+				userRole = "Buyer",
+				userScreenName = "buyeruser",
+				userSiteMembership = "Minium");
+		}
+
+		task ("And given the buyer completes the checkout process for an order") {
+			User.logoutPG();
+
+			CommerceLogin.miniumLogin(
+				password = "test",
+				urlAppend = "web/minium",
+				userEmailAddress = "buyer@liferay.com");
+
+			FrontStore.addInitializerProductToCart(
+				productName = "U-Joint",
+				productQuantity = "1");
+
+			CommerceCheckout.gotoCheckoutViaMiniCart();
+
+			CommerceCheckout.initializersCheckout(
+				newAddressAddress = "Test Shipping Address",
+				newAddressCity = "Test Shipping City",
+				newAddressCountry = "United States",
+				newAddressName = "Shipping Address Name",
+				newAddressZipCode = "Test Shipping Zip Code",
+				productName = "U-Joint",
+				productQuantity = "1",
+				productUnitPrice = "24",
+				shippingMethod = "Standard");
+		}
+
+		task ("When the buyer goes to the order details") {
+			Button.click(button = "Go to Order Details");
+		}
+
+		task ("Then the status field is present and populated with Pending") {
+			AssertElementPresent(
+				key_status = "Pending",
+				locator1 = "CommerceOrders#PLACED_ORDERS_DETAILS_STATUS");
+		}
+	}
+
+	@description = "Verify the selected order type for an order is displayed in the Open Carts widget."
+	@priority = "3"
+	test AssertOrderTypeInOpenCartsWidgetList {
+		property custom.properties = "jsonws.web.service.paths.excludes=${line.separator}company.security.strangers.verify=false";
+		property portal.acceptance = "false";
+
+		task ("Given a buyer user connected to the Commerce Account") {
+			CommerceEntry.addAccountEntryUser(
+				accountName = "Commerce Account",
+				agreeToTermsAndAnswerReminderQuery = "true",
+				requireReset = "false",
+				userEmailAddress = "buyer@liferay.com",
+				userFirstName = "Buyer",
+				userLastName = "User",
+				userRole = "Buyer",
+				userScreenName = "buyeruser",
+				userSiteMembership = "Minium");
+		}
+
+		task ("And given two active order types") {
+			CommerceJSONOrdersAPI._addOrderType(
+				active = "true",
+				orderTypeDescription = "Test Order Type Description 1",
+				orderTypeName = "Test Order Type 1");
+
+			CommerceJSONOrdersAPI._addOrderType(
+				active = "true",
+				orderTypeDescription = "Test Order Type Description 2",
+				orderTypeName = "Test Order Type 2");
+		}
+
+		task ("And given the buyer creates an order from Pending Orders with Order Type 2") {
+			User.logoutPG();
+
+			CommerceLogin.miniumLogin(
+				password = "test",
+				urlAppend = "web/minium",
+				userEmailAddress = "buyer@liferay.com");
+
+			CommerceAcceleratorsInitializer.createNewOrderFromPendingOrders(orderType = "Test Order Type 2");
+		}
+
+		task ("When the buyer goes to the Pending Orders page") {
+			CommerceNavigator.gotoMiniumSidebarItem(menuItem = "Pending Orders");
+		}
+
+		task ("Then the Order Type field is present in the Open Carts Widget list and populated with Test Order Type 2") {
+			AssertElementPresent(
+				key_entry = "Commerce Account",
+				key_orderType = "Test Order Type 2",
+				locator1 = "CommerceOrders#PENDING_ORDERS_LIST_ORDER_TYPE");
+		}
+	}
+
+	@description = "Verify the selected order type for an order is displayed in the Placed Orders list."
+	@priority = "3"
+	test AssertOrderTypeInPlacedOrdersList {
+		property custom.properties = "jsonws.web.service.paths.excludes=${line.separator}company.security.strangers.verify=false";
+		property portal.acceptance = "false";
+
+		task ("Given a buyer user connected to the Commerce Account") {
+			CommerceEntry.addAccountEntryUser(
+				accountName = "Commerce Account",
+				agreeToTermsAndAnswerReminderQuery = "true",
+				requireReset = "false",
+				userEmailAddress = "buyer@liferay.com",
+				userFirstName = "Buyer",
+				userLastName = "User",
+				userRole = "Buyer",
+				userScreenName = "buyeruser",
+				userSiteMembership = "Minium");
+		}
+
+		task ("And given two active order types") {
+			CommerceJSONOrdersAPI._addOrderType(
+				active = "true",
+				orderTypeDescription = "Test Order Type Description 1",
+				orderTypeName = "Test Order Type 1");
+
+			CommerceJSONOrdersAPI._addOrderType(
+				active = "true",
+				orderTypeDescription = "Test Order Type Description 2",
+				orderTypeName = "Test Order Type 2");
+		}
+
+		task ("And given the buyer creates an order from Pending Orders with Order Type 2") {
+			User.logoutPG();
+
+			CommerceLogin.miniumLogin(
+				password = "test",
+				urlAppend = "web/minium",
+				userEmailAddress = "buyer@liferay.com");
+
+			CommerceAcceleratorsInitializer.createNewOrderFromPendingOrders(orderType = "Test Order Type 2");
+		}
+
+		task ("And given the buyer completes the checkout process for the order") {
+			CommerceNavigator.gotoMiniumSidebarItem(menuItem = "Catalog");
+
+			FrontStore.addInitializerProductToCart(
+				productName = "U-Joint",
+				productQuantity = "1");
+
+			CommerceCheckout.gotoCheckoutViaMiniCart();
+
+			CommerceCheckout.initializersCheckout(
+				newAddressAddress = "Test Address",
+				newAddressCity = "Test City",
+				newAddressCountry = "United States",
+				newAddressName = "Address Name",
+				newAddressZipCode = "Test Zip Code",
+				productName = "U-Joint",
+				productQuantity = "1",
+				productUnitPrice = "24",
+				shippingMethod = "Standard");
+		}
+
+		task ("When the buyer goes to the Placed Orders page") {
+			Navigator.openWithAppendToBaseURL(urlAppend = "web/minium/placed-orders");
+		}
+
+		task ("Then the Order Type field is present in the Placed Orders list and populated with Test Order Type 2") {
+			AssertElementPresent(
+				key_entry = "Commerce Account",
+				key_orderType = "Test Order Type 2",
+				locator1 = "CommerceOrders#PLACED_ORDERS_LIST_ORDER_TYPE");
 		}
 	}
 
@@ -438,7 +750,7 @@ definition {
 				urlAppend = "web/minium",
 				userEmailAddress = "buyer@liferay.com");
 
-			Navigator.openWithAppendToBaseURL(urlAppend = "group/minium/placed-orders");
+			Navigator.openWithAppendToBaseURL(urlAppend = "web/minium/placed-orders");
 
 			Button.click(button = "View");
 		}
@@ -474,7 +786,7 @@ definition {
 		}
 
 		task ("And given a Language Selector widget is added to the Catalog page") {
-			Navigator.openWithAppendToBaseURL(urlAppend = "group/minium/catalog");
+			Navigator.openWithAppendToBaseURL(urlAppend = "web/minium/catalog");
 
 			Portlet.addPGCmd(portletName = "Language Selector");
 		}
@@ -514,7 +826,7 @@ definition {
 		}
 
 		task ("When the buyer views the order from the Placed Orders page") {
-			Navigator.openWithAppendToBaseURL(urlAppend = "group/minium/placed-orders");
+			Navigator.openWithAppendToBaseURL(urlAppend = "web/minium/placed-orders");
 		}
 
 		task ("Then the order date is shown in yyyy.MM.dd. format") {
@@ -545,7 +857,7 @@ definition {
 		}
 
 		task ("When the buyer views the order from the Placed Orders page") {
-			Navigator.openWithAppendToBaseURL(urlAppend = "group/minium/placed-orders");
+			Navigator.openWithAppendToBaseURL(urlAppend = "web/minium/placed-orders");
 		}
 
 		task ("Then the order date is shown in dd.MM.yyyy format") {
@@ -576,7 +888,7 @@ definition {
 		}
 
 		task ("When the buyer views the order from the Placed Orders page") {
-			Navigator.openWithAppendToBaseURL(urlAppend = "group/minium/placed-orders");
+			Navigator.openWithAppendToBaseURL(urlAppend = "web/minium/placed-orders");
 		}
 
 		task ("Then the order date is shown in MMM d, yyyy format") {

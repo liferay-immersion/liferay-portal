@@ -59,18 +59,18 @@ public class FileSystemStore implements Store {
 
 		_rootDir = rootDir;
 
-		try {
-			FileUtil.mkdirs(_rootDir);
-		}
-		catch (IOException ioException) {
-			throw new SystemException(ioException);
-		}
+		_rootDir.mkdirs();
 	}
 
 	@Override
 	public void addFile(
 		long companyId, long repositoryId, String fileName, String versionLabel,
 		InputStream inputStream) {
+
+		if (Validator.isNull(versionLabel)) {
+			versionLabel = getHeadVersionLabel(
+				companyId, repositoryId, fileName);
+		}
 
 		try {
 			FileUtil.write(
@@ -105,6 +105,11 @@ public class FileSystemStore implements Store {
 		long companyId, long repositoryId, String fileName,
 		String versionLabel) {
 
+		if (Validator.isNull(versionLabel)) {
+			versionLabel = getHeadVersionLabel(
+				companyId, repositoryId, fileName);
+		}
+
 		File fileNameVersionFile = getFileNameVersionFile(
 			companyId, repositoryId, fileName, versionLabel);
 
@@ -138,7 +143,8 @@ public class FileSystemStore implements Store {
 		}
 		catch (FileNotFoundException fileNotFoundException) {
 			throw new NoSuchFileException(
-				companyId, repositoryId, fileName, fileNotFoundException);
+				companyId, repositoryId, fileName, versionLabel,
+				fileNotFoundException);
 		}
 	}
 
@@ -176,7 +182,8 @@ public class FileSystemStore implements Store {
 			companyId, repositoryId, fileName, versionLabel);
 
 		if (!fileNameVersionFile.exists()) {
-			throw new NoSuchFileException(companyId, repositoryId, fileName);
+			throw new NoSuchFileException(
+				companyId, repositoryId, fileName, versionLabel);
 		}
 
 		return fileNameVersionFile.length();
@@ -207,6 +214,11 @@ public class FileSystemStore implements Store {
 	public boolean hasFile(
 		long companyId, long repositoryId, String fileName,
 		String versionLabel) {
+
+		if (Validator.isNull(versionLabel)) {
+			versionLabel = getHeadVersionLabel(
+				companyId, repositoryId, fileName);
+		}
 
 		File fileNameVersionFile = getFileNameVersionFile(
 			companyId, repositoryId, fileName, versionLabel);

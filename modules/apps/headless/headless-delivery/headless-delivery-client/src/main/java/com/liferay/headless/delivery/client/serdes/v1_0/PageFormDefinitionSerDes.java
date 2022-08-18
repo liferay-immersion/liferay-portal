@@ -14,6 +14,7 @@
 
 package com.liferay.headless.delivery.client.serdes.v1_0;
 
+import com.liferay.headless.delivery.client.dto.v1_0.CustomCSSViewport;
 import com.liferay.headless.delivery.client.dto.v1_0.FragmentViewport;
 import com.liferay.headless.delivery.client.dto.v1_0.PageFormDefinition;
 import com.liferay.headless.delivery.client.json.BaseJSONParser;
@@ -56,6 +57,72 @@ public class PageFormDefinitionSerDes {
 		StringBuilder sb = new StringBuilder();
 
 		sb.append("{");
+
+		if (pageFormDefinition.getCssClasses() != null) {
+			if (sb.length() > 1) {
+				sb.append(", ");
+			}
+
+			sb.append("\"cssClasses\": ");
+
+			sb.append("[");
+
+			for (int i = 0; i < pageFormDefinition.getCssClasses().length;
+				 i++) {
+
+				sb.append("\"");
+
+				sb.append(_escape(pageFormDefinition.getCssClasses()[i]));
+
+				sb.append("\"");
+
+				if ((i + 1) < pageFormDefinition.getCssClasses().length) {
+					sb.append(", ");
+				}
+			}
+
+			sb.append("]");
+		}
+
+		if (pageFormDefinition.getCustomCSS() != null) {
+			if (sb.length() > 1) {
+				sb.append(", ");
+			}
+
+			sb.append("\"customCSS\": ");
+
+			sb.append("\"");
+
+			sb.append(_escape(pageFormDefinition.getCustomCSS()));
+
+			sb.append("\"");
+		}
+
+		if (pageFormDefinition.getCustomCSSViewports() != null) {
+			if (sb.length() > 1) {
+				sb.append(", ");
+			}
+
+			sb.append("\"customCSSViewports\": ");
+
+			sb.append("[");
+
+			for (int i = 0;
+				 i < pageFormDefinition.getCustomCSSViewports().length; i++) {
+
+				sb.append(
+					String.valueOf(
+						pageFormDefinition.getCustomCSSViewports()[i]));
+
+				if ((i + 1) <
+						pageFormDefinition.getCustomCSSViewports().length) {
+
+					sb.append(", ");
+				}
+			}
+
+			sb.append("]");
+		}
 
 		if (pageFormDefinition.getFormConfig() != null) {
 			if (sb.length() > 1) {
@@ -113,6 +180,30 @@ public class PageFormDefinitionSerDes {
 			sb.append(pageFormDefinition.getIndexed());
 		}
 
+		if (pageFormDefinition.getLayout() != null) {
+			if (sb.length() > 1) {
+				sb.append(", ");
+			}
+
+			sb.append("\"layout\": ");
+
+			sb.append(String.valueOf(pageFormDefinition.getLayout()));
+		}
+
+		if (pageFormDefinition.getName() != null) {
+			if (sb.length() > 1) {
+				sb.append(", ");
+			}
+
+			sb.append("\"name\": ");
+
+			sb.append("\"");
+
+			sb.append(_escape(pageFormDefinition.getName()));
+
+			sb.append("\"");
+		}
+
 		sb.append("}");
 
 		return sb.toString();
@@ -133,6 +224,32 @@ public class PageFormDefinitionSerDes {
 		}
 
 		Map<String, String> map = new TreeMap<>();
+
+		if (pageFormDefinition.getCssClasses() == null) {
+			map.put("cssClasses", null);
+		}
+		else {
+			map.put(
+				"cssClasses",
+				String.valueOf(pageFormDefinition.getCssClasses()));
+		}
+
+		if (pageFormDefinition.getCustomCSS() == null) {
+			map.put("customCSS", null);
+		}
+		else {
+			map.put(
+				"customCSS", String.valueOf(pageFormDefinition.getCustomCSS()));
+		}
+
+		if (pageFormDefinition.getCustomCSSViewports() == null) {
+			map.put("customCSSViewports", null);
+		}
+		else {
+			map.put(
+				"customCSSViewports",
+				String.valueOf(pageFormDefinition.getCustomCSSViewports()));
+		}
 
 		if (pageFormDefinition.getFormConfig() == null) {
 			map.put("formConfig", null);
@@ -168,6 +285,20 @@ public class PageFormDefinitionSerDes {
 			map.put("indexed", String.valueOf(pageFormDefinition.getIndexed()));
 		}
 
+		if (pageFormDefinition.getLayout() == null) {
+			map.put("layout", null);
+		}
+		else {
+			map.put("layout", String.valueOf(pageFormDefinition.getLayout()));
+		}
+
+		if (pageFormDefinition.getName() == null) {
+			map.put("name", null);
+		}
+		else {
+			map.put("name", String.valueOf(pageFormDefinition.getName()));
+		}
+
 		return map;
 	}
 
@@ -189,7 +320,34 @@ public class PageFormDefinitionSerDes {
 			PageFormDefinition pageFormDefinition, String jsonParserFieldName,
 			Object jsonParserFieldValue) {
 
-			if (Objects.equals(jsonParserFieldName, "formConfig")) {
+			if (Objects.equals(jsonParserFieldName, "cssClasses")) {
+				if (jsonParserFieldValue != null) {
+					pageFormDefinition.setCssClasses(
+						toStrings((Object[])jsonParserFieldValue));
+				}
+			}
+			else if (Objects.equals(jsonParserFieldName, "customCSS")) {
+				if (jsonParserFieldValue != null) {
+					pageFormDefinition.setCustomCSS(
+						(String)jsonParserFieldValue);
+				}
+			}
+			else if (Objects.equals(
+						jsonParserFieldName, "customCSSViewports")) {
+
+				if (jsonParserFieldValue != null) {
+					pageFormDefinition.setCustomCSSViewports(
+						Stream.of(
+							toStrings((Object[])jsonParserFieldValue)
+						).map(
+							object -> CustomCSSViewportSerDes.toDTO(
+								(String)object)
+						).toArray(
+							size -> new CustomCSSViewport[size]
+						));
+				}
+			}
+			else if (Objects.equals(jsonParserFieldName, "formConfig")) {
 				if (jsonParserFieldValue != null) {
 					pageFormDefinition.setFormConfig(
 						FormConfigSerDes.toDTO((String)jsonParserFieldValue));
@@ -219,6 +377,17 @@ public class PageFormDefinitionSerDes {
 				if (jsonParserFieldValue != null) {
 					pageFormDefinition.setIndexed(
 						(Boolean)jsonParserFieldValue);
+				}
+			}
+			else if (Objects.equals(jsonParserFieldName, "layout")) {
+				if (jsonParserFieldValue != null) {
+					pageFormDefinition.setLayout(
+						LayoutSerDes.toDTO((String)jsonParserFieldValue));
+				}
+			}
+			else if (Objects.equals(jsonParserFieldName, "name")) {
+				if (jsonParserFieldValue != null) {
+					pageFormDefinition.setName((String)jsonParserFieldValue);
 				}
 			}
 		}

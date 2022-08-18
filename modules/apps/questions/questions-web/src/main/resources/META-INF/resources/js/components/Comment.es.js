@@ -66,26 +66,30 @@ export default withRouter(
 
 					{editable && comment.actions.delete && (
 						<>
-							<ClayButton
-								className="c-mt-3 font-weight-bold text-secondary"
-								displayType="unstyled"
-								onClick={() => {
-									setShowDeleteCommentModal(true);
-								}}
-							>
-								{Liferay.Language.get('delete')}
-							</ClayButton>
-							<ClayButton
-								className="c-ml-3 c-mt-3 font-weight-bold text-secondary"
-								displayType="unstyled"
-							>
-								<Link
-									className="text-reset"
-									to={`${url}/answers/${comment.friendlyUrlPath}/edit`}
+							<div className="font-weight-bold text-secondary">
+								<ClayButton
+									className="btn-sm c-mr-2 c-px-2 c-py-1"
+									displayType="secondary"
+									onClick={() => {
+										setShowDeleteCommentModal(true);
+									}}
 								>
-									{Liferay.Language.get('edit')}
-								</Link>
-							</ClayButton>
+									{Liferay.Language.get('delete')}
+								</ClayButton>
+
+								<ClayButton
+									className="btn-sm c-px-2 c-py-1"
+									displayType="secondary"
+								>
+									<Link
+										className="text-reset"
+										to={`${url}/answers/${comment.friendlyUrlPath}/edit`}
+									>
+										{Liferay.Language.get('edit')}
+									</Link>
+								</ClayButton>
+							</div>
+
 							<Modal
 								body={Liferay.Language.get(
 									'do-you-want-to-delete–this-comment'

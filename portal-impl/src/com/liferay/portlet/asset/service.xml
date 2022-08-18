@@ -120,7 +120,7 @@
 		<column name="publishDate" type="Date" />
 		<column name="expirationDate" type="Date" />
 		<column name="mimeType" type="String" />
-		<column localized="true" name="title" type="String" />
+		<column change-tracking-resolution-type="merge" localized="true" name="title" type="String" />
 		<column localized="true" name="description" type="String" />
 		<column localized="true" name="summary" type="String" />
 		<column name="url" type="String" />

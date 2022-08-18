@@ -84,7 +84,7 @@ definition {
 		task ("Then the modal is closed and the buyer stays on the same page") {
 			AssertElementNotPresent(locator1 = "IFrame#MODAL_BODY");
 
-			AssertLocation.assertPartialLocation(value1 = "group/minium/pending-orders");
+			AssertLocation.assertPartialLocation(value1 = "web/minium/pending-orders");
 		}
 
 		task ("When the buyer is importing a new order from orders") {
@@ -102,7 +102,7 @@ definition {
 		task ("Then the modal is closed and the buyer stays on the same page") {
 			AssertElementNotPresent(locator1 = "IFrame#MODAL_BODY");
 
-			AssertLocation.assertPartialLocation(value1 = "group/minium/pending-orders");
+			AssertLocation.assertPartialLocation(value1 = "web/minium/pending-orders");
 		}
 
 		task ("When the buyer is importing a new order from Wish List") {
@@ -120,7 +120,7 @@ definition {
 		task ("Then the modal is closed and the buyer stays on the same page") {
 			AssertElementNotPresent(locator1 = "IFrame#MODAL_BODY");
 
-			AssertLocation.assertPartialLocation(value1 = "group/minium/pending-orders");
+			AssertLocation.assertPartialLocation(value1 = "web/minium/pending-orders");
 		}
 	}
 
@@ -175,7 +175,7 @@ definition {
 		task ("Then the modal is closed and the buyer stays on the same page") {
 			AssertElementNotPresent(locator1 = "IFrame#MODAL_BODY");
 
-			AssertLocation.assertPartialLocation(value1 = "group/minium/pending-orders");
+			AssertLocation.assertPartialLocation(value1 = "web/minium/pending-orders");
 		}
 
 		task ("Given the buyer starts the import again and arrives at the import preview") {
@@ -193,7 +193,60 @@ definition {
 		task ("Then the modal is closed and the buyer stays on the same page") {
 			AssertElementNotPresent(locator1 = "IFrame#MODAL_BODY");
 
-			AssertLocation.assertPartialLocation(value1 = "group/minium/pending-orders");
+			AssertLocation.assertPartialLocation(value1 = "web/minium/pending-orders");
+		}
+	}
+
+	@description = "Verify a csv file with a valid requested delivery date can be imported."
+	@priority = "3"
+	test CanImportCSVWithValidRequestedDeliveryDate {
+		property portal.acceptance = "false";
+
+		task ("Given an empty order") {
+			CommerceAcceleratorsInitializer.createNewOrderFromPendingOrders();
+		}
+
+		task ("When the buyer starts an import for a CSV with a valid requested delivery date") {
+			Click(locator1 = "CommerceEntry#DROPDOWN");
+
+			MenuItem.click(menuItem = "Import from CSV");
+
+			IFrame.selectModalFrame();
+
+			UploadDependencyFile.uploadFile(fileName = "commerce_valid_requested_delivery_date.csv");
+
+			Button.click(button = "Import");
+		}
+
+		task ("Then the import preview shows the Requested Delivery Date") {
+			var itemDeliveryDates = "Brake Fluid:2022-12-04,Brake Fluid:2022-08-13,Brake Fluid:2022-03-23,Premium Brake Fluid:2023-09-30,Premium Brake Pads:2022-02-23,Brake Rotors:2022-11-22";
+
+			for (var itemDeliveryDate : list "${itemDeliveryDates}") {
+				var productName = StringUtil.extractFirst("${itemDeliveryDate}", ":");
+				var requestedDeliveryDate = StringUtil.extractLast("${itemDeliveryDate}", ":");
+
+				CommerceOrders.assertOrderImportPreviewEntry(
+					productName = "${productName}",
+					requestedDeliveryDate = "${requestedDeliveryDate}");
+			}
+		}
+
+		task ("When the import is completed") {
+			Button.click(button = "Import");
+		}
+
+		task ("Then the item in the order (admin) shows the requested delivery date as empty") {
+			User.logoutAndLoginPG(
+				userLoginEmailAddress = "test@liferay.com",
+				userLoginFullName = "test test");
+
+			CommerceOrders.openOrdersAdmin();
+
+			CommerceNavigator.gotoOrderEntryViaAdmin(status = "Open");
+
+			AssertTextEquals(
+				locator1 = "CommerceOrders#ORDER_DETAILS_REQUESTED_DELIVERY_DATE",
+				value1 = "Click add to insert.");
 		}
 	}
 
@@ -233,8 +286,6 @@ definition {
 			CommerceAcceleratorsInitializer.createNewOrderFromPendingOrders();
 
 			CommerceOrders.importFromOrder(orderId = "${activeOrderId}");
-
-			Alert.viewSuccessMessageText(successMessage = "1 row was imported successfully.");
 
 			CommerceOrders.viewOrdersDetails(
 				productListPrice = "24.00",
@@ -300,8 +351,6 @@ definition {
 			CommerceAcceleratorsInitializer.createNewOrderFromPendingOrders();
 
 			CommerceOrders.importFromOrder(orderId = "${activeOrderId}");
-
-			Alert.viewSuccessMessageText(successMessage = "1 row was imported successfully.");
 
 			CommerceOrders.viewOrdersDetails(
 				productListPrice = "24.00",
@@ -373,8 +422,6 @@ definition {
 
 		task ("Then they should be able to import the existing order") {
 			CommerceOrders.importFromOrder(orderId = "${activeOrderId}");
-
-			Alert.viewSuccessMessageText(successMessage = "1 row was imported successfully.");
 
 			CommerceAcceleratorsInitializer.reviewOrder(
 				orderAuthor = "Buyer User",
@@ -480,6 +527,54 @@ definition {
 
 		task ("And an empty state message is displayed") {
 			AssertElementPresent(locator1 = "Message#EMPTY_STATE_INFO");
+		}
+	}
+
+	@description = "Verify a csv file with an invalid requested delivery date can be imported and the date is shown as invalid in the import preview."
+	@priority = "3"
+	test ValidateCSVWithInvalidRequestedDeliveryDate {
+		property portal.acceptance = "false";
+
+		task ("Given an empty order") {
+			CommerceAcceleratorsInitializer.createNewOrderFromPendingOrders();
+		}
+
+		task ("When the buyer starts an import for a CSV with an invalid requested delivery date") {
+			Click(locator1 = "CommerceEntry#DROPDOWN");
+
+			MenuItem.click(menuItem = "Import from CSV");
+
+			IFrame.selectModalFrame();
+
+			UploadDependencyFile.uploadFile(fileName = "commerce_invalid_requested_delivery_date.csv");
+
+			Button.click(button = "Import");
+		}
+
+		task ("Then the import preview shows the requested delivery date as invalid") {
+			for (var productName : list "Brake Fluid,Brake Fluid,Brake Fluid,Premium Brake Fluid") {
+				CommerceOrders.assertOrderImportPreviewEntry(
+					productName = "${productName}",
+					requestedDeliveryDate = "The requested delivery date is invalid.");
+			}
+		}
+
+		task ("When the import is completed") {
+			Button.click(button = "Import");
+		}
+
+		task ("Then the item in the order (admin) shows the requested delivery date as empty") {
+			User.logoutAndLoginPG(
+				userLoginEmailAddress = "test@liferay.com",
+				userLoginFullName = "test test");
+
+			CommerceOrders.openOrdersAdmin();
+
+			CommerceNavigator.gotoOrderEntryViaAdmin(status = "Open");
+
+			AssertTextEquals(
+				locator1 = "CommerceOrders#ORDER_DETAILS_REQUESTED_DELIVERY_DATE",
+				value1 = "Click add to insert.");
 		}
 	}
 
@@ -641,8 +736,6 @@ definition {
 		}
 
 		task ("Then only the other two products will be imported from the order") {
-			Alert.viewSuccessMessageText(successMessage = "2 rows were imported successfully.");
-
 			Refresh();
 
 			CommerceAcceleratorsInitializer.reviewOrder(

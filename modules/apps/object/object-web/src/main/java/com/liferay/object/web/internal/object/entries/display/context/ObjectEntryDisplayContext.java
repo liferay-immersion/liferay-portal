@@ -29,6 +29,7 @@ import com.liferay.dynamic.data.mapping.model.LocalizedValue;
 import com.liferay.dynamic.data.mapping.model.UnlocalizedValue;
 import com.liferay.dynamic.data.mapping.storage.DDMFormFieldValue;
 import com.liferay.dynamic.data.mapping.storage.DDMFormValues;
+import com.liferay.dynamic.data.mapping.util.NumericDDMFormFieldUtil;
 import com.liferay.frontend.taglib.clay.servlet.taglib.util.CreationMenu;
 import com.liferay.frontend.taglib.clay.servlet.taglib.util.CreationMenuBuilder;
 import com.liferay.frontend.taglib.clay.servlet.taglib.util.NavigationItem;
@@ -43,7 +44,7 @@ import com.liferay.object.constants.ObjectFieldConstants;
 import com.liferay.object.constants.ObjectLayoutBoxConstants;
 import com.liferay.object.exception.NoSuchObjectLayoutException;
 import com.liferay.object.field.business.type.ObjectFieldBusinessType;
-import com.liferay.object.field.business.type.ObjectFieldBusinessTypeServicesTracker;
+import com.liferay.object.field.business.type.ObjectFieldBusinessTypeTracker;
 import com.liferay.object.field.render.ObjectFieldRenderingContext;
 import com.liferay.object.model.ObjectDefinition;
 import com.liferay.object.model.ObjectField;
@@ -57,7 +58,7 @@ import com.liferay.object.rest.dto.v1_0.FileEntry;
 import com.liferay.object.rest.dto.v1_0.ListEntry;
 import com.liferay.object.rest.dto.v1_0.ObjectEntry;
 import com.liferay.object.rest.manager.v1_0.ObjectEntryManager;
-import com.liferay.object.rest.manager.v1_0.ObjectEntryManagerServicesTracker;
+import com.liferay.object.rest.manager.v1_0.ObjectEntryManagerTracker;
 import com.liferay.object.scope.ObjectScopeProvider;
 import com.liferay.object.scope.ObjectScopeProviderRegistry;
 import com.liferay.object.service.ObjectDefinitionLocalService;
@@ -98,6 +99,8 @@ import com.liferay.portal.vulcan.dto.converter.DefaultDTOConverterContext;
 import com.liferay.portal.vulcan.util.TransformUtil;
 import com.liferay.taglib.servlet.PipingServletResponseFactory;
 
+import java.text.DecimalFormat;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -121,10 +124,9 @@ public class ObjectEntryDisplayContext {
 		DDMFormRenderer ddmFormRenderer, HttpServletRequest httpServletRequest,
 		ItemSelector itemSelector,
 		ObjectDefinitionLocalService objectDefinitionLocalService,
-		ObjectEntryManagerServicesTracker objectEntryManagerServicesTracker,
+		ObjectEntryManagerTracker objectEntryManagerTracker,
 		ObjectEntryService objectEntryService,
-		ObjectFieldBusinessTypeServicesTracker
-			objectFieldBusinessTypeServicesTracker,
+		ObjectFieldBusinessTypeTracker objectFieldBusinessTypeTracker,
 		ObjectFieldLocalService objectFieldLocalService,
 		ObjectLayoutLocalService objectLayoutLocalService,
 		ObjectRelationshipLocalService objectRelationshipLocalService,
@@ -134,10 +136,9 @@ public class ObjectEntryDisplayContext {
 		_ddmFormRenderer = ddmFormRenderer;
 		_itemSelector = itemSelector;
 		_objectDefinitionLocalService = objectDefinitionLocalService;
-		_objectEntryManagerServicesTracker = objectEntryManagerServicesTracker;
+		_objectEntryManagerTracker = objectEntryManagerTracker;
 		_objectEntryService = objectEntryService;
-		_objectFieldBusinessTypeServicesTracker =
-			objectFieldBusinessTypeServicesTracker;
+		_objectFieldBusinessTypeTracker = objectFieldBusinessTypeTracker;
 		_objectFieldLocalService = objectFieldLocalService;
 		_objectLayoutLocalService = objectLayoutLocalService;
 		_objectRelationshipLocalService = objectRelationshipLocalService;
@@ -259,7 +260,7 @@ public class ObjectEntryDisplayContext {
 		ObjectDefinition objectDefinition = getObjectDefinition();
 
 		ObjectEntryManager objectEntryManager =
-			_objectEntryManagerServicesTracker.getObjectEntryManager(
+			_objectEntryManagerTracker.getObjectEntryManager(
 				objectDefinition.getStorageType());
 
 		try {
@@ -564,6 +565,8 @@ public class ObjectEntryDisplayContext {
 		if (objectEntry != null) {
 			objectFieldRenderingContext.setExternalReferenceCode(
 				objectEntry.getExternalReferenceCode());
+			objectFieldRenderingContext.setProperties(
+				objectEntry.getProperties());
 		}
 
 		objectFieldRenderingContext.setPortletId(
@@ -596,7 +599,7 @@ public class ObjectEntryDisplayContext {
 		}
 
 		List<ObjectField> objectFields =
-			_objectFieldLocalService.getObjectFields(
+			_objectFieldLocalService.getCustomObjectFields(
 				objectDefinition.getObjectDefinitionId());
 
 		if (objectLayoutTab == null) {
@@ -605,8 +608,17 @@ public class ObjectEntryDisplayContext {
 					continue;
 				}
 
-				ddmForm.addDDMFormField(
-					_getDDMFormField(objectField, readOnly));
+				if (Objects.equals(
+						objectField.getBusinessType(),
+						ObjectFieldConstants.BUSINESS_TYPE_AGGREGATION)) {
+
+					ddmForm.addDDMFormField(
+						_getDDMFormField(objectField, true));
+				}
+				else {
+					ddmForm.addDDMFormField(
+						_getDDMFormField(objectField, readOnly));
+				}
 			}
 		}
 		else {
@@ -625,7 +637,7 @@ public class ObjectEntryDisplayContext {
 		// TODO Store the type and the object field type in the database
 
 		ObjectFieldBusinessType objectFieldBusinessType =
-			_objectFieldBusinessTypeServicesTracker.getObjectFieldBusinessType(
+			_objectFieldBusinessTypeTracker.getObjectFieldBusinessType(
 				objectField.getBusinessType());
 
 		DDMFormField ddmFormField = new DDMFormField(
@@ -661,6 +673,18 @@ public class ObjectEntryDisplayContext {
 			ddmFormField.setProperty(
 				"objectDefinitionId",
 				String.valueOf(objectRelationship.getObjectDefinitionId1()));
+
+			long parameterObjectFieldId =
+				objectRelationship.getParameterObjectFieldId();
+
+			if (parameterObjectFieldId > 0) {
+				ObjectField parameterObjectField =
+					_objectFieldLocalService.getObjectField(
+						parameterObjectFieldId);
+
+				ddmFormField.setProperty(
+					"parameterObjectFieldName", parameterObjectField.getName());
+			}
 		}
 
 		ddmFormField.setReadOnly(readOnly);
@@ -898,8 +922,18 @@ public class ObjectEntryDisplayContext {
 					_objectFieldNames.put(
 						objectLayoutColumn.getObjectFieldId(),
 						objectField.getName());
-					nestedDDMFormFields.add(
-						_getDDMFormField(objectField, readOnly));
+
+					if (Objects.equals(
+							objectField.getBusinessType(),
+							ObjectFieldConstants.BUSINESS_TYPE_AGGREGATION)) {
+
+						nestedDDMFormFields.add(
+							_getDDMFormField(objectField, true));
+					}
+					else {
+						nestedDDMFormFields.add(
+							_getDDMFormField(objectField, readOnly));
+					}
 				}
 			}
 		}
@@ -1023,6 +1057,14 @@ public class ObjectEntryDisplayContext {
 				new UnlocalizedValue(listEntry.getKey()));
 		}
 		else {
+			if (value instanceof Double) {
+				DecimalFormat decimalFormat =
+					NumericDDMFormFieldUtil.getDecimalFormat(
+						_objectRequestHelper.getLocale());
+
+				value = decimalFormat.format(value);
+			}
+
 			ddmFormFieldValue.setValue(
 				new UnlocalizedValue(String.valueOf(value)));
 		}
@@ -1035,11 +1077,10 @@ public class ObjectEntryDisplayContext {
 	private final ItemSelector _itemSelector;
 	private final ObjectDefinitionLocalService _objectDefinitionLocalService;
 	private ObjectEntry _objectEntry;
-	private final ObjectEntryManagerServicesTracker
-		_objectEntryManagerServicesTracker;
+	private final ObjectEntryManagerTracker _objectEntryManagerTracker;
 	private final ObjectEntryService _objectEntryService;
-	private final ObjectFieldBusinessTypeServicesTracker
-		_objectFieldBusinessTypeServicesTracker;
+	private final ObjectFieldBusinessTypeTracker
+		_objectFieldBusinessTypeTracker;
 	private final ObjectFieldLocalService _objectFieldLocalService;
 	private final Map<Long, String> _objectFieldNames = new HashMap<>();
 	private final ObjectLayoutLocalService _objectLayoutLocalService;

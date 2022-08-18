@@ -27,9 +27,9 @@ import com.liferay.fragment.service.FragmentEntryLinkLocalService;
 import com.liferay.fragment.service.FragmentEntryLocalService;
 import com.liferay.layout.page.template.service.LayoutPageTemplateStructureLocalService;
 import com.liferay.layout.test.util.LayoutTestUtil;
+import com.liferay.layout.util.structure.FragmentStyledLayoutStructureItem;
 import com.liferay.layout.util.structure.LayoutStructure;
 import com.liferay.layout.util.structure.LayoutStructureItem;
-import com.liferay.layout.util.structure.LayoutStructureItemCSSUtil;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.Layout;
@@ -40,21 +40,18 @@ import com.liferay.portal.kernel.test.rule.DeleteAfterTestRun;
 import com.liferay.portal.kernel.test.util.GroupTestUtil;
 import com.liferay.portal.kernel.test.util.ServiceContextTestUtil;
 import com.liferay.portal.kernel.test.util.TestPropsValues;
-import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.portal.test.rule.PermissionCheckerMethodTestRule;
-import com.liferay.portal.util.PropsUtil;
 import com.liferay.segments.service.SegmentsExperienceLocalService;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
-import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.ClassRule;
@@ -77,24 +74,12 @@ public class FragmentEntryProcessorStylesTest {
 
 	@Before
 	public void setUp() throws Exception {
-		_originalFeatureFlagLps132571 = GetterUtil.getBoolean(
-			PropsUtil.get("feature.flag.LPS-132571"));
-
-		PropsUtil.set("feature.flag.LPS-132571", "true");
-
 		_group = GroupTestUtil.addGroup();
 
 		_layout = LayoutTestUtil.addTypeContentLayout(_group);
 
 		_serviceContext = ServiceContextTestUtil.getServiceContext(
 			TestPropsValues.getGroupId(), TestPropsValues.getUserId());
-	}
-
-	@After
-	public void tearDown() {
-		PropsUtil.set(
-			"feature.flag.LPS-132571",
-			String.valueOf(_originalFeatureFlagLps132571));
 	}
 
 	@Test
@@ -115,10 +100,11 @@ public class FragmentEntryProcessorStylesTest {
 		FragmentEntryLink fragmentEntryLink = _addFragmentEntryLink(
 			defaultSegmentsExperienceId);
 
-		LayoutStructureItem fragmentStyledLayoutStructureItem =
-			layoutStructure.addFragmentStyledLayoutStructureItem(
-				fragmentEntryLink.getFragmentEntryLinkId(),
-				containerStyledLayoutStructureItem.getItemId(), 0);
+		FragmentStyledLayoutStructureItem fragmentStyledLayoutStructureItem =
+			(FragmentStyledLayoutStructureItem)
+				layoutStructure.addFragmentStyledLayoutStructureItem(
+					fragmentEntryLink.getFragmentEntryLinkId(),
+					containerStyledLayoutStructureItem.getItemId(), 0);
 
 		_layoutPageTemplateStructureLocalService.
 			updateLayoutPageTemplateStructureData(
@@ -133,8 +119,7 @@ public class FragmentEntryProcessorStylesTest {
 					LocaleUtil.getMostRelevantLocale())));
 
 		String layoutStructureItemUniqueCssClass =
-			LayoutStructureItemCSSUtil.getLayoutStructureItemUniqueCssClass(
-				fragmentStyledLayoutStructureItem);
+			fragmentStyledLayoutStructureItem.getUniqueCssClass();
 
 		Elements elements = document.select(
 			StringPool.PERIOD + layoutStructureItemUniqueCssClass);
@@ -168,7 +153,8 @@ public class FragmentEntryProcessorStylesTest {
 			fragmentEntry.getFragmentEntryId(), segmentsExperienceId,
 			_layout.getPlid(), fragmentEntry.getCss(), fragmentEntry.getHtml(),
 			fragmentEntry.getJs(), fragmentEntry.getConfiguration(),
-			StringPool.BLANK, StringPool.BLANK, 0, null, _serviceContext);
+			StringPool.BLANK, StringPool.BLANK, 0, null,
+			fragmentEntry.getType(), _serviceContext);
 	}
 
 	private Document _getDocument(String html) {
@@ -211,8 +197,6 @@ public class FragmentEntryProcessorStylesTest {
 	@Inject
 	private LayoutPageTemplateStructureLocalService
 		_layoutPageTemplateStructureLocalService;
-
-	private boolean _originalFeatureFlagLps132571;
 
 	@Inject
 	private SegmentsExperienceLocalService _segmentsExperienceLocalService;

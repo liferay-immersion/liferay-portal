@@ -32,6 +32,10 @@ public interface ItemSelectorViewDescriptor<T> {
 		return "icon";
 	}
 
+	public default String[] getDisplayViews() {
+		return new String[] {"descriptive", "icon", "list"};
+	}
+
 	public ItemDescriptor getItemDescriptor(T t);
 
 	public ItemSelectorReturnType getItemSelectorReturnType();
@@ -69,6 +73,10 @@ public interface ItemSelectorViewDescriptor<T> {
 		}
 
 		public String getPayload();
+
+		public default Integer getStatus() {
+			return null;
+		}
 
 		/**
 		 * @deprecated As of Athanasius (7.3.x), replaced by {@link

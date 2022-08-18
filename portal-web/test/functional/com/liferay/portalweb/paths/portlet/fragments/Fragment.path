@@ -15,12 +15,12 @@
 
 <tr>
 	<td>FRAGMENT_TEXT_IN_COLLECTION_DISPLAY</td>
-	<td>//section[contains(@id,'content')]//div[contains(@class,'row')][${row}]/div[contains(@class,'col')][not(.//label)][${column}]//*[not(contains(@class,'tbar'))][normalize-space(text())]</td>
+	<td>//section[contains(@id,'content')]//div[starts-with(@class,'row')][${row}]/div[contains(@class,'col')][not(.//label)][${column}]//*[not(contains(@class,'tbar'))][normalize-space(text())]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>CONTENT_DISPLAY_FRAGMENT_IMAGE</td>
-	<td>//div[contains(@class,'content')]//div[contains(@class,'row')][${key_rowPosition}]/div[contains(@class,'col')][${key_colPosition}]//*[contains(@src,'${key_image}')] | //div[contains(@class,'content')]//div[contains(@class,'row')][${key_rowPosition}]/div[contains(@class,'col')][${key_colPosition}]//*[contains(@style,'${key_image}')]</td>
+	<td>//div[contains(@class,'content')]//div[starts-with(@class,'row')][${key_rowPosition}]/div[contains(@class,'col')][${key_colPosition}]//*[contains(@src,'${key_image}')] | //div[contains(@class,'content')]//div[starts-with(@class,'row')][${key_rowPosition}]/div[contains(@class,'col')][${key_colPosition}]//*[contains(@style,'${key_image}')]</td>
 	<td></td>
 </tr>
 
@@ -38,7 +38,12 @@
 </tr>
 <tr>
 	<td>CONTENT_DISPLAY_ASSET_SUMMARY_TEXT</td>
-	<td>//div[contains(@class, 'text-lg-left')]/ul/li</td>
+	<td>//div[contains(@class, 'text-lg-left')]/ul/li | //ul//li//div[@class='asset-summary']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>CONTENT_DISPLAY_ASSET_BULLET_LIST_TEXT</td>
+	<td>//div[contains(@class,'lfr-layout-structure-item-collection')]/ul/li</td>
 	<td></td>
 </tr>
 <tr>
@@ -89,7 +94,7 @@
 </tr>
 <tr>
 	<td>FRAGMENT_CONTENT</td>
-	<td>xpath=(//div[@aria-label='${key_fragmentName}']//div[contains(@class,'page-editor__topper__content')])[${index}]</td>
+	<td>xpath=(//div[@aria-label='${key_fragmentName}']//div[contains(@class,'page-editor__fragment-content')])[${index}]</td>
 	<td></td>
 </tr>
 <tr>
@@ -129,12 +134,50 @@
 </tr>
 <tr>
 	<td>DROP_ZONE_NO_FRAGMENTS_MESSAGE</td>
-	<td>xpath=(//*[contains(@class,'fragment-${key_fragmentClass}')]//lfr-drop-zone//div[contains(@class,'no-fragments-message__title') and contains(.,'${key_content}')])[${key_position}]</td>
+	<td>xpath=(//*[contains(@class,'fragment-${key_fragmentClass}')]//lfr-drop-zone//p[contains(@class,'no-fragments-state__message') and contains(.,'${key_content}')])[${key_position}]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>NO_FRAGMENTS_MESSAGE</td>
-	<td>xpath=(//div[@aria-label='${key_fragmentName}']//div[contains(@class,'page-editor__no-fragments-message')][normalize-space()='${key_messageInfo}'])[${key_position}]</td>
+	<td>xpath=(//div[@aria-label='${key_fragmentName}']//p[contains(@class,'page-editor__no-fragments-state__message')][normalize-space()='${key_messageInfo}'])[${key_position}]</td>
+	<td></td>
+</tr>
+
+<!--FORM COMPONENTS-->
+
+<tr>
+	<td>INPUT_CAPTCHA_BODY</td>
+	<td>xpath=(//div[contains(@id,'fragment-')]//fieldset[contains(@class,'form-input-captcha')])[${index}]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>INPUT_FIELD</td>
+	<td>xpath=(//div[contains(@id,'fragment-')]/div[contains(@class,'${type}')]//input[contains(@id,'${type}')])[${index}]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>INPUT_LABEL</td>
+	<td>xpath=(//div[contains(@id,'fragment-')]/div[contains(@class,'${type}')])[${index}]//label[normalize-space()='${fieldLabel}']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>INPUT_LABEL_INVISIBLE</td>
+	<td>xpath=(//div[contains(@id,'fragment-')]/div[contains(@class,'${type}')])[${index}]//label//span[contains(@class,'sr-only')][normalize-space(text())='${fieldLabel}'] | (//div[contains(@id,'fragment-')]/div[contains(@class,'${type}')]//label[contains(@class,'sr-only')][normalize-space(text())='${fieldLabel}'])[${index}]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>INPUT_HELP_TEXT</td>
+	<td>xpath=(//div[contains(@id,'fragment-')]/div[contains(@class,'${type}')]//p[contains(@id,'help-text')])[${index}]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>INPUT_REQUIRED</td>
+	<td>xpath=(//div[contains(@id,'fragment-')]/div[contains(@class,'${type}')]//label[normalize-space()='${fieldLabel}'])[${index}]//*[name()='svg'][contains(@class,'icon-asterisk')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>INPUT_TOGGLE</td>
+	<td>xpath=(//div[contains(@id,'fragment-')]/div[contains(@class,'${type}')]//button[*[name()='svg'][contains(@class,'icon-caret-double')]])[${index}]</td>
 	<td></td>
 </tr>
 
@@ -160,7 +203,7 @@
 </tr>
 <tr>
 	<td>BUTTON_SIZE</td>
-	<td>//div[contains(@class,'component-${key_fragmentName}')]/a[contains(@class,'btn-${key_size}')]</td>
+	<td>//div[contains(@class,'component-${key_fragmentName}')]/*[self::a or self::button][contains(@class,'btn-${key_size}')]</td>
 	<td></td>
 </tr>
 <tr>
@@ -210,83 +253,13 @@
 <!--FRAGMENT_COMMON_STYLE-->
 
 <tr>
-	<td>FRAGMENT_CONFIGURATION_ALIGNMENT</td>
-	<td>//div[contains(@class,'text-${key_alignment}')][.//*[contains(@class,'${key_fragmentName}')]]</td>
-	<td></td>
-</tr>
-<tr>
-	<td>FRAGMENT_CONFIGURATION_BACKGROUND_COLOR</td>
-	<td>//div[contains(@style,'background-color: var(--${key_paletteItem})')]</td>
-	<td></td>
-</tr>
-<tr>
-	<td>FRAGMENT_CONFIGURATION_BORDER_COLOR</td>
-	<td>//div[contains(@style,'border-color: var(--${key_paletteItem})')][.//*[contains(@class,'${key_fragmentName}')]]</td>
-	<td></td>
-</tr>
-<tr>
-	<td>FRAGMENT_CONFIGURATION_BORDER_RADIUS</td>
-	<td>//div[contains(@style,'border-radius: var(--${key_borderRadius})')][.//*[contains(@class,'${key_fragmentName}')]] | //div[contains(@style,'border-radius: ${key_borderRadius}')][.//*[contains(@class,'${key_fragmentName}')]]</td>
-	<td></td>
-</tr>
-<tr>
-	<td>FRAGMENT_CONFIGURATION_BOX_SHADOW</td>
-	<td>//div[contains(@style,'box-shadow: var(--${key_boxShadow})')][.//*[contains(@class,'${key_fragmentName}')]] | //div[contains(@style,'box-shadow: ${key_boxShadow}')][.//*[contains(@class,'${key_fragmentName}')]]</td>
-	<td></td>
-</tr>
-<tr>
-	<td>FRAGMENT_CONFIGURATION_MARGIN_BOTTOM</td>
-	<td>//div[contains(@class,'mb-${key_marginBottom}')][.//*[contains(@class,'${key_fragmentName}')]]</td>
-	<td></td>
-</tr>
-<tr>
-	<td>FRAGMENT_CONFIGURATION_MARGIN_LEFT</td>
-	<td>//div[contains(@class,'ml-${key_marginLeft}')][.//*[contains(@class,'${key_fragmentName}')]]</td>
-	<td></td>
-</tr>
-<tr>
-	<td>FRAGMENT_CONFIGURATION_MARGIN_RIGHT</td>
-	<td>//div[contains(@class,'mr-${key_marginRight}')][.//*[contains(@class,'${key_fragmentName}')]]</td>
-	<td></td>
-</tr>
-<tr>
-	<td>FRAGMENT_CONFIGURATION_MARGIN_TOP</td>
-	<td>//div[contains(@class,'mt-${key_marginTop}')][.//*[contains(@class,'${key_fragmentName}')]]</td>
-	<td></td>
-</tr>
-<tr>
-	<td>FRAGMENT_CONFIGURATION_PADDING_BOTTOM</td>
-	<td>//div[contains(@class,'pb-${key_paddingBottom}')][.//*[contains(@class,'${key_fragmentName}')]]</td>
-	<td></td>
-</tr>
-<tr>
-	<td>FRAGMENT_CONFIGURATION_PADDING_LEFT</td>
-	<td>//div[contains(@class,'pl-${key_paddingLeft}')][.//*[contains(@class,'${key_fragmentName}')]]</td>
-	<td></td>
-</tr>
-<tr>
-	<td>FRAGMENT_CONFIGURATION_PADDING_RIGHT</td>
-	<td>//div[contains(@class,'pr-${key_paddingRight}')][.//*[contains(@class,'${key_fragmentName}')]]</td>
-	<td></td>
-</tr>
-<tr>
-	<td>FRAGMENT_CONFIGURATION_PADDING_TOP</td>
-	<td>//div[contains(@class,'pt-${key_paddingTop}')][.//*[contains(@class,'${key_fragmentName}')]]</td>
-	<td></td>
-</tr>
-<tr>
 	<td>FRAGMENT_CONFIGURATION_HEADER</td>
 	<td>xpath=(//${key_headingLevel}[contains(@class,'component-${key_fragmentName}')])[${key_position}]</td>
 	<td></td>
 </tr>
 <tr>
-	<td>FRAGMENT_CONFIGURATION_TEXT_COLOR</td>
-	<td>xpath=(//div[contains(@style,'color: var(--${key_textColor})')][.//*[contains(@class,'${key_fragmentName}')]])[${key_position}] | (//div[contains(@style,'color: ${key_textColor}')][.//*[contains(@class,'${key_fragmentName}')]])[${key_position}]</td>
-	<td></td>
-</tr>
-<tr>
 	<td>FRAGMENT_CONFIGURATION_TYPE</td>
-	<td>//div[contains(@class,'component-${key_fragmentName}')]//a[contains(@class,'-${key_type}')]</td>
+	<td>//div[contains(@class,'component-${key_fragmentName}')]//*[self::a or self::button][contains(@class,'-${key_type}')]</td>
 	<td></td>
 </tr>
 
@@ -315,7 +288,7 @@
 </tr>
 <tr>
 	<td>CONTRIBUTED_FRAGMENT_INLINE_CONTENT_IN_COLLECTION_DISPLAY</td>
-	<td>//div[contains(@class,'content')]//div[contains(@class,'row')][${key_rowPosition}]/div[contains(@class,'col')][${key_colPosition}]//*[contains(@class,'component-${key_fragmentName}')]</td>
+	<td>//div[contains(@class,'content')]//div[starts-with(@class,'row')][${key_rowPosition}]/div[contains(@class,'col')][${key_colPosition}]//*[contains(@class,'component-${key_fragmentName}')]</td>
 	<td></td>
 </tr>
 <tr>

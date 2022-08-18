@@ -116,14 +116,15 @@ function File({attachment, loading, onDelete}: IFileProps) {
 					>
 						<ClayIcon symbol="download" />
 					</a>
+
+					<ClayButtonWithIcon
+						borderless
+						displayType="secondary"
+						monospaced
+						onClick={() => onDelete()}
+						symbol="times-circle-full"
+					/>
 				</div>
-				<ClayButtonWithIcon
-					borderless
-					displayType="secondary"
-					monospaced
-					onClick={() => onDelete()}
-					symbol="times-circle-full"
-				/>
 			</>
 		);
 	}
@@ -307,7 +308,7 @@ interface IProps {
 	contentURL: string;
 	fileSource: string;
 	maximumFileSize: number;
-	onChange: FieldChangeEventHandler;
+	onChange: FieldChangeEventHandler<string>;
 	overallMaximumUploadRequestSize: number;
 	title: string;
 	url: string;

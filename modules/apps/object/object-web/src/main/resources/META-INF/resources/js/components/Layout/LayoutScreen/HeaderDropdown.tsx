@@ -56,7 +56,7 @@ const HeaderDropdown: FC<IHeaderDropdown> = ({
 			}
 		>
 			<ClayDropDown.ItemList>
-				{Liferay.FeatureFlags['LPS-149014'] && addCategorization && (
+				{addCategorization && (
 					<ClayDropDown.Item
 						disabled={isThereFramework('categorization')}
 						onClick={() => handleOnClick(addCategorization)}

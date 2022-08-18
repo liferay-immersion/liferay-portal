@@ -187,6 +187,25 @@
 			"title": "The ContextReference Schema",
 			"type": "object"
 		},
+		"CustomCSSViewport": {
+			"additionalProperties": false,
+			"properties": {
+				"customCSS": {
+					"title": "The customCSS Schema",
+					"type": "string"
+				},
+				"id": {
+					"title": "The id Schema",
+					"type": "string"
+				}
+			},
+			"required": [
+				"id",
+				"customCSS"
+			],
+			"title": "The CustomCSSViewport Schema",
+			"type": "object"
+		},
 		"Fragment": {
 			"additionalProperties": false,
 			"properties": {
@@ -921,6 +940,10 @@
 					"title": "The listStyle Schema",
 					"type": "string"
 				},
+				"name": {
+					"title": "The name Schema",
+					"type": "string"
+				},
 				"numberOfColumns": {
 					"minimum": 0,
 					"title": "The numberOfColumns Schema",
@@ -1256,6 +1279,7 @@
 						"CollectionItem",
 						"Column",
 						"DropZone",
+						"Form",
 						"Fragment",
 						"FragmentDropZone",
 						"Root",
@@ -1276,6 +1300,24 @@
 		"PageFormDefinition": {
 			"additionalProperties": false,
 			"properties": {
+				"cssClasses": {
+					"items": {
+						"type": "string"
+					},
+					"title": "The CSS Classes Schema",
+					"type": "array"
+				},
+				"customCSS": {
+					"title": "The Custom CSS Schema",
+					"type": "string"
+				},
+				"customCSSViewports": {
+					"items": {
+						"$ref": "#/definitions/CustomCSSViewport"
+					},
+					"title": "The customCSSViewports Schema",
+					"type": "array"
+				},
 				"formConfig": {
 					"properties": {
 						"formReference": {
@@ -1305,6 +1347,67 @@
 				"indexed": {
 					"title": "The indexed Schema",
 					"type": "boolean"
+				},
+				"layout": {
+					"additionalProperties": false,
+					"properties": {
+						"align": {
+							"enum": [
+								"Baseline",
+								"Center",
+								"End",
+								"None",
+								"Start",
+								"Stretch"
+							],
+							"title": "The align Schema",
+							"type": "string"
+						},
+						"contentDisplay": {
+							"enum": [
+								"Block",
+								"FlexColumn",
+								"FlexRow"
+							],
+							"title": "The contentDisplay Schema",
+							"type": "string"
+						},
+						"flexWrap": {
+							"enum": [
+								"NoWrap",
+								"Wrap",
+								"WrapReverse"
+							],
+							"title": "The flexWrap Schema",
+							"type": "string"
+						},
+						"justify": {
+							"enum": [
+								"Center",
+								"End",
+								"None",
+								"SpaceAround",
+								"SpaceBetween",
+								"Start"
+							],
+							"title": "The justify Schema",
+							"type": "string"
+						},
+						"widthType": {
+							"enum": [
+								"Fixed",
+								"Fluid"
+							],
+							"title": "The widthType Schema",
+							"type": "string"
+						}
+					},
+					"title": "The layout Schema",
+					"type": "object"
+				},
+				"name": {
+					"title": "The name Schema",
+					"type": "string"
 				}
 			},
 			"title": "The PageFormDefinition Schema",
@@ -1313,6 +1416,24 @@
 		"PageFragmentInstanceDefinition": {
 			"additionalProperties": false,
 			"properties": {
+				"cssClasses": {
+					"items": {
+						"type": "string"
+					},
+					"title": "The CSS Classes Schema",
+					"type": "array"
+				},
+				"customCSS": {
+					"title": "The Custom CSS Schema",
+					"type": "string"
+				},
+				"customCSSViewports": {
+					"items": {
+						"$ref": "#/definitions/CustomCSSViewport"
+					},
+					"title": "The customCSSViewports Schema",
+					"type": "array"
+				},
 				"fragment": {
 					"$ref": "#/definitions/Fragment"
 				},
@@ -1354,6 +1475,10 @@
 					"title": "The indexed Schema",
 					"type": "boolean"
 				},
+				"name": {
+					"title": "The name Schema",
+					"type": "string"
+				},
 				"widgetInstances": {
 					"items": {
 						"$ref": "#/definitions/WidgetInstance"
@@ -1373,6 +1498,24 @@
 		"PageRowDefinition": {
 			"additionalProperties": false,
 			"properties": {
+				"cssClasses": {
+					"items": {
+						"type": "string"
+					},
+					"title": "The CSS Classes Schema",
+					"type": "array"
+				},
+				"customCSS": {
+					"title": "The Custom CSS Schema",
+					"type": "string"
+				},
+				"customCSSViewports": {
+					"items": {
+						"$ref": "#/definitions/CustomCSSViewport"
+					},
+					"title": "The customCSSViewports Schema",
+					"type": "array"
+				},
 				"fragmentStyle": {
 					"$ref": "#/definitions/FragmentStyle"
 				},
@@ -1394,6 +1537,10 @@
 				"modulesPerRow": {
 					"title": "The modulesPerRow Schema",
 					"type": "integer"
+				},
+				"name": {
+					"title": "The name Schema",
+					"type": "string"
 				},
 				"numberOfColumns": {
 					"maximum": 6,
@@ -1522,6 +1669,28 @@
 					},
 					"title": "The backgroundImage Schema",
 					"type": "object"
+				},
+				"contentVisibility": {
+					"title": "The Content Visibility Schema",
+					"type": "string"
+				},
+				"cssClasses": {
+					"items": {
+						"type": "string"
+					},
+					"title": "The CSS Classes Schema",
+					"type": "array"
+				},
+				"customCSS": {
+					"title": "The Custom CSS Schema",
+					"type": "string"
+				},
+				"customCSSViewports": {
+					"items": {
+						"$ref": "#/definitions/CustomCSSViewport"
+					},
+					"title": "The customCSSViewports Schema",
+					"type": "array"
 				},
 				"fragmentLink": {
 					"$ref": "#/definitions/FragmentLink",
@@ -1787,6 +1956,10 @@
 					},
 					"title": "The layout Schema",
 					"type": "object"
+				},
+				"name": {
+					"title": "The name Schema",
+					"type": "string"
 				}
 			},
 			"title": "The PageSectionDefinition Schema",

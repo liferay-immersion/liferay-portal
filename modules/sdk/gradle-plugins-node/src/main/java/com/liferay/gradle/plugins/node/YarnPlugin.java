@@ -15,7 +15,7 @@
 package com.liferay.gradle.plugins.node;
 
 import com.liferay.gradle.plugins.node.internal.util.GradleUtil;
-import com.liferay.gradle.plugins.node.tasks.YarnInstallTask;
+import com.liferay.gradle.plugins.node.task.YarnInstallTask;
 
 import org.gradle.api.Action;
 import org.gradle.api.Plugin;

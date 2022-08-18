@@ -30,7 +30,7 @@ import com.liferay.layout.util.structure.LayoutStructureItem;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.json.JSONUtil;
-import com.liferay.portal.kernel.language.LanguageUtil;
+import com.liferay.portal.kernel.language.Language;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
 import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
@@ -87,7 +87,7 @@ public class AddFragmentEntryLinksMVCActionCommand
 
 		return JSONUtil.put(
 			"error",
-			LanguageUtil.get(
+			_language.get(
 				_portal.getHttpServletRequest(actionRequest), errorMessage));
 	}
 
@@ -124,12 +124,6 @@ public class AddFragmentEntryLinksMVCActionCommand
 		String parentItemId = ParamUtil.getString(
 			actionRequest, "parentItemId");
 
-		LayoutStructureItem layoutStructureItem =
-			layoutStructure.getLayoutStructureItem(parentItemId);
-
-		JSONObject fragmentEntryLinksJSONObject =
-			JSONFactoryUtil.createJSONObject();
-
 		int position = ParamUtil.getInteger(actionRequest, "position");
 
 		List<FragmentEntryLink> fragmentEntryLinks =
@@ -137,24 +131,7 @@ public class AddFragmentEntryLinksMVCActionCommand
 				themeDisplay.getLayout(), layoutStructure, parentItemId,
 				fragmentComposition.getData(), position, segmentsExperienceId);
 
-		layoutStructure = LayoutStructureUtil.getLayoutStructure(
-			themeDisplay.getScopeGroupId(), themeDisplay.getPlid(),
-			segmentsExperienceId);
-
 		for (FragmentEntryLink fragmentEntryLink : fragmentEntryLinks) {
-			JSONObject editableValuesJSONObject =
-				JSONFactoryUtil.createJSONObject(
-					fragmentEntryLink.getEditableValues());
-
-			fragmentEntryLinksJSONObject.put(
-				String.valueOf(fragmentEntryLink.getFragmentEntryLinkId()),
-				_fragmentEntryLinkManager.getFragmentEntryLinkJSONObject(
-					fragmentEntryLink,
-					_portal.getHttpServletRequest(actionRequest),
-					_portal.getHttpServletResponse(actionResponse),
-					layoutStructure,
-					editableValuesJSONObject.getString("portletId")));
-
 			List<FragmentEntryLinkListener> fragmentEntryLinkListeners =
 				_fragmentEntryLinkListenerTracker.
 					getFragmentEntryLinkListeners();
@@ -165,6 +142,26 @@ public class AddFragmentEntryLinksMVCActionCommand
 				fragmentEntryLinkListener.onAddFragmentEntryLink(
 					fragmentEntryLink);
 			}
+		}
+
+		JSONObject fragmentEntryLinksJSONObject =
+			JSONFactoryUtil.createJSONObject();
+
+		layoutStructure = LayoutStructureUtil.getLayoutStructure(
+			themeDisplay.getScopeGroupId(), themeDisplay.getPlid(),
+			segmentsExperienceId);
+
+		LayoutStructureItem layoutStructureItem =
+			layoutStructure.getLayoutStructureItem(parentItemId);
+
+		for (FragmentEntryLink fragmentEntryLink : fragmentEntryLinks) {
+			fragmentEntryLinksJSONObject.put(
+				String.valueOf(fragmentEntryLink.getFragmentEntryLinkId()),
+				_fragmentEntryLinkManager.getFragmentEntryLinkJSONObject(
+					fragmentEntryLink,
+					_portal.getHttpServletRequest(actionRequest),
+					_portal.getHttpServletResponse(actionResponse),
+					layoutStructure));
 		}
 
 		return JSONUtil.put(
@@ -194,6 +191,9 @@ public class AddFragmentEntryLinksMVCActionCommand
 
 	@Reference
 	private FragmentEntryLinkManager _fragmentEntryLinkManager;
+
+	@Reference
+	private Language _language;
 
 	@Reference
 	private LayoutPageTemplatesImporter _layoutPageTemplatesImporter;

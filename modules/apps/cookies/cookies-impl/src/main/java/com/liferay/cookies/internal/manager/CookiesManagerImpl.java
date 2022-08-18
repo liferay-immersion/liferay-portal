@@ -14,7 +14,7 @@
 
 package com.liferay.cookies.internal.manager;
 
-import com.liferay.cookies.configuration.CookiesConsentConfiguration;
+import com.liferay.cookies.configuration.consent.CookiesConsentConfiguration;
 import com.liferay.petra.string.CharPool;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.configuration.Filter;
@@ -52,7 +52,7 @@ import org.osgi.service.component.annotations.Reference;
  * @author Brian Wing Shun Chan
  */
 @Component(
-	configurationPid = "com.liferay.cookies.configuration.CookiesConsentConfiguration",
+	configurationPid = "com.liferay.cookies.configuration.consent.CookiesConsentConfiguration",
 	immediate = true, service = CookiesManager.class
 )
 public class CookiesManagerImpl implements CookiesManager {
@@ -102,7 +102,6 @@ public class CookiesManagerImpl implements CookiesManager {
 		}
 
 		cookie.setValue(encodedCookieValue);
-
 		cookie.setVersion(0);
 
 		httpServletResponse.addCookie(cookie);
@@ -368,15 +367,13 @@ public class CookiesManagerImpl implements CookiesManager {
 		throws UnsupportedCookieException {
 
 		if (_SESSION_ENABLE_PERSISTENT_COOKIES &&
-			_SESSION_TEST_COOKIE_SUPPORT) {
+			_SESSION_TEST_COOKIE_SUPPORT &&
+			Validator.isNull(
+				getCookieValue(
+					CookiesConstants.NAME_COOKIE_SUPPORT, httpServletRequest,
+					false))) {
 
-			String cookieValue = getCookieValue(
-				CookiesConstants.NAME_COOKIE_SUPPORT, httpServletRequest,
-				false);
-
-			if (Validator.isNull(cookieValue)) {
-				throw new UnsupportedCookieException();
-			}
+			throw new UnsupportedCookieException();
 		}
 	}
 

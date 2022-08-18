@@ -22,6 +22,24 @@ definition {
 		}
 	}
 
+	@description = "Can add a blueprint in a non-root portal context."
+	@priority = "4"
+	test AddBlueprintInNonRootContext {
+		property portal.context = "liferay";
+		property search.environment.suite.exclude = "true";
+		property skip.clean-app-server-deploy-dir = "true";
+		property test.assert.warning.exceptions = "true";
+		property test.name.skip.portal.instance = "Blueprints#AddBlueprintInNonRootContext";
+
+		Blueprints.openBlueprintsAdmin();
+
+		Blueprints.createBlueprint(title = "Test Blueprint");
+
+		PortletEntry.save();
+
+		Blueprints.viewEntryTitle(title = "Test Blueprint");
+	}
+
 	test AddBlueprintWithDescription {
 		Blueprints.openBlueprintsAdmin();
 
@@ -122,7 +140,7 @@ definition {
 
 		AssertElementNotPresent(
 			key_text = "hits",
-			locator1 = "SearchResults#SEARCH_INSIGHTS_PORTLET_RESPONSE_QUERY");
+			locator1 = "SearchResults#SEARCH_INSIGHTS_WIDGET_RESPONSE_QUERY");
 	}
 
 	test ApplyBlueprintToContentPageViaBlueprintsOptions {
@@ -421,6 +439,29 @@ definition {
 			searchAssetType = "Web Content Article");
 	}
 
+	@description = "This is a use case for LPS-151209."
+	test AssertBlueprintsPreviewResultsPresentWithSkippedElement {
+		Blueprints.openBlueprintsAdmin();
+
+		Blueprints.createBlueprint(title = "Test Blueprint");
+
+		Blueprints.addElement(element = "Boost Proximity");
+
+		Type(
+			elementName = "Boost Proximity",
+			fieldLabel = "Field",
+			locator1 = "Blueprints#BLUEPRINTS_ADDED_ELEMENT_INPUT_FIELD",
+			value1 = "accountEntryId");
+
+		Blueprints.searchBlueprintsPreview(searchTerm = "test");
+
+		Alert.viewWarningSpecific(key_warningMessage = "Element skippedInvalid element instance at: 0");
+
+		AssertElementPresent(
+			locator1 = "Blueprints#BLUEPRINTS_PREVIEW_SEARCH_RESULT_TITLE",
+			resultTitle = "Test Test");
+	}
+
 	test AssertBlueprintStillAppliedAfterRename {
 		JSONWebcontent.addWebContent(
 			content = "apple apple apple",
@@ -471,6 +512,21 @@ definition {
 		SearchPortlets.searchEmbedded(searchTerm = "apple");
 
 		SearchResultPortlet.viewSearchResultsSpecificOrder(resultsList = "WC Longer,WC Shorter");
+	}
+
+	@description = "This is a use case for LPS-136868."
+	test AssertCommerceItemsSearchableViaPreview {
+		CommerceAccelerators.initializeNewSiteViaAccelerator(siteName = "Minium");
+
+		Blueprints.openBlueprintsAdmin();
+
+		Blueprints.createBlueprint(title = "Test Blueprint");
+
+		Blueprints.searchBlueprintsPreview(searchTerm = "Brake Pads");
+
+		AssertElementPresent(
+			locator1 = "Blueprints#BLUEPRINTS_PREVIEW_SEARCH_RESULT_TITLE",
+			resultTitle = "Brake Pads");
 	}
 
 	test AssertDisabledQueryElementNotAppliedToSearch {
@@ -1020,7 +1076,7 @@ definition {
 
 		PortletEntry.save();
 
-		Blueprints.viewCopiedContent(text = "clauses");
+		SearchPortlets.viewCopiedContent(text = "clauses");
 	}
 
 	test CopyElementJSONViaEditElementPreview {
@@ -1042,7 +1098,7 @@ definition {
 
 		Click.javaScriptClick(locator1 = "Button#COPY");
 
-		Blueprints.viewCopiedContent(text = "queryConfiguration");
+		SearchPortlets.viewCopiedContent(text = "queryConfiguration");
 	}
 
 	test CopyRawResponseViaBlueprintsPreview {
@@ -1060,7 +1116,7 @@ definition {
 
 		Click.javaScriptClick(locator1 = "Button#COPY");
 
-		Blueprints.viewCopiedContent(text = "hits");
+		SearchPortlets.viewCopiedContent(text = "hits");
 	}
 
 	test CopyScoreExplanationViaBlueprintsPreview {
@@ -1078,7 +1134,7 @@ definition {
 
 		Click.javaScriptClick(locator1 = "Button#COPY");
 
-		Blueprints.viewCopiedContent(text = "PerFieldSimilarity");
+		SearchPortlets.viewCopiedContent(text = "PerFieldSimilarity");
 	}
 
 	test CreateBlueprint {
@@ -1517,6 +1573,8 @@ definition {
 			key_text = "Import",
 			locator1 = "Button#ANY");
 
+		SelectFrameTop();
+
 		Blueprints.gotoBlueprint(title = "Test Blueprint");
 
 		AssertElementPresent(
@@ -1584,9 +1642,70 @@ definition {
 			key_text = "Import",
 			locator1 = "Button#ANY");
 
+		SelectFrameTop();
+
 		Blueprints.gotoElement(element = "Test Element");
 
 		AssertTextPresent(value1 = "Import Element");
+	}
+
+	test FederatedSearchKeyAppliesToBlueprintsOptions {
+		JSONDocument.addFile(
+			dmDocumentTitle = "Apple",
+			groupName = "Guest");
+
+		JSONWebcontent.addWebContent(
+			content = "",
+			groupName = "Guest",
+			title = "Apple Pie");
+
+		Blueprints.openBlueprintsAdmin();
+
+		Blueprints.createBlueprint(title = "Test Blueprint");
+
+		Blueprints.addElement(element = "Paste Any Elasticsearch Query");
+
+		var elasticsearchQueryJson = '''
+{
+	"match":
+	{
+		"title_en_US":
+		{
+			"query": "Pie"
+		}
+	}
+}
+		''';
+
+		Type.typeCodeMirrorEditorNoError(
+			locator1 = "Blueprints#CODE_MIRROR_EDITOR",
+			value1 = "${elasticsearchQueryJson}");
+
+		Blueprints.configureElementDropdown(
+			dropdownName = "Occur",
+			option = "MUST");
+
+		PortletEntry.save();
+
+		Search.openSearchPage();
+
+		Blueprints.applyBlueprintViaOptionsWidget(blueprintTitle = "Test Blueprint");
+
+		Blueprints.configureFederatedSearchKeyForOptionsWidget(federatedSearchKey = "key");
+
+		SearchPortlets.configureSearchBarWidget(federatedSearchKey = "key");
+
+		SearchResultPortlet.configureSearchResults(federatedSearchKey = "key");
+
+		SearchPortlets.searchWidget(searchTerm = "apple");
+
+		SearchResultPortlet.viewSearchResults(
+			searchAssetTitle = "Apple Pie",
+			searchAssetType = "Web Content Article");
+
+		SearchResultPortlet.viewSearchResultNotPresent(
+			searchAssetTitle = "Apple",
+			searchAssetType = "Document");
 	}
 
 	test HideAndShowAddElementsSidebar {
@@ -2266,10 +2385,10 @@ definition {
 
 		Blueprints.createBlueprint(title = "Test Blueprint");
 
-		Blueprints.addElement(element = "Boost Contents in a Category for a User Segment");
+		Blueprints.addElement(element = "Boost Contents in a Category for User Segments");
 
 		Type(
-			elementName = "Boost Contents in a Category for a User Segment",
+			elementName = "Boost Contents in a Category for User Segments",
 			fieldLabel = "Asset Category ID",
 			locator1 = "Blueprints#BLUEPRINTS_ADDED_ELEMENT_INPUT_FIELD",
 			value1 = "${categoryId}");
@@ -2277,13 +2396,13 @@ definition {
 		var segmentId = JSONSegmentsentry.getSegmentId(segmentName = "Test Segment");
 
 		Type(
-			elementName = "Boost Contents in a Category for a User Segment",
+			elementName = "Boost Contents in a Category for User Segments",
 			fieldLabel = "User Segment IDs",
 			locator1 = "Blueprints#BLUEPRINTS_ADDED_ELEMENT_INPUT_FIELD",
 			value1 = "${segmentId}");
 
 		Type(
-			elementName = "Boost Contents in a Category for a User Segment",
+			elementName = "Boost Contents in a Category for User Segments",
 			fieldLabel = "Boost",
 			locator1 = "Blueprints#BLUEPRINTS_ADDED_ELEMENT_INPUT_FIELD",
 			value1 = "2000");
@@ -2878,6 +2997,10 @@ definition {
 			locator1 = "Blueprints#BLUEPRINTS_CLAUSE_CONTRIBUTOR_ON_OFF_TOGGLE");
 
 		Uncheck.uncheckToggleSwitch(
+			contributorClass = "AssetCategoryIdsQueryPreFilterContributor",
+			locator1 = "Blueprints#BLUEPRINTS_CLAUSE_CONTRIBUTOR_ON_OFF_TOGGLE");
+
+		Uncheck.uncheckToggleSwitch(
 			contributorClass = "AssetEntryModelPreFilterContributor",
 			locator1 = "Blueprints#BLUEPRINTS_CLAUSE_CONTRIBUTOR_ON_OFF_TOGGLE");
 
@@ -2894,7 +3017,7 @@ definition {
 			locator1 = "Blueprints#BLUEPRINTS_CLAUSE_CONTRIBUTOR_ITEM");
 
 		AssertElementPresent(
-			contributorClass = "AssetEntryModelPreFilterContributor",
+			contributorClass = "AssetCategoryIdsQueryPreFilterContributor",
 			locator1 = "Blueprints#BLUEPRINTS_CLAUSE_CONTRIBUTOR_ITEM");
 
 		AssertElementNotPresent(locator1 = "Blueprints#BLUEPRINTS_CLAUSE_CONTRIBUTOR_TOGGLE_ENABLED");
@@ -3002,7 +3125,7 @@ definition {
 			locator1 = "Blueprints#BLUEPRINTS_CLAUSE_CONTRIBUTOR_ITEM");
 
 		AssertElementNotPresent(
-			contributorClass = "AssetEntryModelPreFilterContributor",
+			contributorClass = "AssetCategoryIdsQueryPreFilterContributor",
 			locator1 = "Blueprints#BLUEPRINTS_CLAUSE_CONTRIBUTOR_ITEM");
 
 		Button.click(button = "Clear");

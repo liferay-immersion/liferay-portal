@@ -21,10 +21,11 @@ import React, {useLayoutEffect, useRef, useState} from 'react';
 
 import PreviewSelector from './PreviewSelector';
 import PublishButton from './PublishButton';
-import {useDraftStatus, usePreviewLayout} from './StyleBookContext';
 import Undo from './Undo';
 import UndoHistory from './UndoHistory';
 import {DRAFT_STATUS} from './constants/draftStatusConstants';
+import {usePreviewLayout} from './contexts/LayoutContext';
+import {useDraftStatus} from './contexts/StyleBookEditorContext';
 
 const STATUS_TO_LABEL = {
 	[DRAFT_STATUS.draftSaved]: Liferay.Language.get('saved'),
@@ -32,7 +33,7 @@ const STATUS_TO_LABEL = {
 	[DRAFT_STATUS.saving]: `${Liferay.Language.get('saving')}...`,
 };
 
-export default function Toolbar() {
+export default React.memo(function Toolbar() {
 	const previewLayout = usePreviewLayout();
 
 	return (
@@ -74,7 +75,7 @@ export default function Toolbar() {
 			</ClayLayout.ContainerFluid>
 		</div>
 	);
-}
+});
 
 function DraftStatus() {
 	const draftStatus = useDraftStatus();

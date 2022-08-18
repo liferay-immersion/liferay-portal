@@ -12,62 +12,57 @@
  * details.
  */
 
-import {TypedDocumentNode, useLazyQuery} from '@apollo/client';
 import ClayAutocomplete from '@clayui/autocomplete';
 import ClayDropDown from '@clayui/drop-down';
-import {useEffect, useMemo, useState} from 'react';
+import {useEffect, useState} from 'react';
 
 import useDebounce from '../../../hooks/useDebounce';
+import {useFetch} from '../../../hooks/useFetch';
 
 export type AutoCompleteProps = {
-	gqlQuery: TypedDocumentNode;
-	gqlVariables?: any;
 	label?: string;
-	objectName: string;
 	onSearch: (keyword: string) => any;
+	resource: string;
 	transformData?: (item: any) => any;
 };
 
 const AutoComplete: React.FC<AutoCompleteProps> = ({
-	gqlQuery,
 	label,
-	objectName,
 	onSearch,
+	resource,
 	transformData,
 }) => {
 	const [showValue, setShowValue] = useState('');
 	const [value, setValue] = useState('');
 	const [active, setActive] = useState(false);
-	const [fetchQuery, {called, data, error, loading}] = useLazyQuery(gqlQuery);
 
 	const debouncedValue = useDebounce(value, 1000);
 
-	const items = useMemo(() => {
-		return transformData
-			? transformData(data)
-			: data?.c[objectName].items || [];
-	}, [data, objectName, transformData]);
+	const {called, data, error, isValidating} = useFetch(
+		debouncedValue
+			? `${resource}/?filter=${onSearch(debouncedValue)}`
+			: null,
+		transformData
+	);
 
-	useEffect(() => {
-		if (debouncedValue) {
-			fetchQuery({
-				variables: {filter: onSearch(debouncedValue)},
-			}).then(() => {
-				setActive(true);
-			});
-		}
-	}, [debouncedValue, onSearch, fetchQuery]);
-
+	const items = data?.items || [];
 	const onClickItem = (name: string) => {
 		setShowValue(name);
 		setActive(false);
 	};
+
+	useEffect(() => {
+		if (debouncedValue) {
+			setActive(true);
+		}
+	}, [called, debouncedValue]);
 
 	return (
 		<ClayAutocomplete className="mb-4">
 			<label>{label}</label>
 
 			<ClayAutocomplete.Input
+				onBlur={() => setTimeout(() => setActive(false), 200)}
 				onChange={(event) => {
 					setValue(event.target.value);
 					setShowValue(event.target.value);
@@ -96,7 +91,7 @@ const AutoComplete: React.FC<AutoCompleteProps> = ({
 				</ClayDropDown.ItemList>
 			</ClayAutocomplete.DropDown>
 
-			{loading && <ClayAutocomplete.LoadingIndicator />}
+			{isValidating && <ClayAutocomplete.LoadingIndicator />}
 		</ClayAutocomplete>
 	);
 };

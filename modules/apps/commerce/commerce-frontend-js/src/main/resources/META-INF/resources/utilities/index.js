@@ -26,8 +26,8 @@ export const fetchParams = {
 	headers: fetchHeaders,
 };
 
-export function getData(apiUrl, query, page, pageSize) {
-	const url = new URL(apiUrl, Liferay.ThemeDisplay.getPortalURL());
+export function getData(apiURL, query, page, pageSize) {
+	const url = new URL(apiURL, Liferay.ThemeDisplay.getPortalURL());
 
 	if (query) {
 		url.searchParams.append('search', query);
@@ -41,7 +41,7 @@ export function getData(apiUrl, query, page, pageSize) {
 		url.searchParams.append('pageSize', pageSize);
 	}
 
-	return fetch(url, {
+	return fetch(url.pathname + url.search, {
 		...fetchParams,
 	}).then((data) => data.json());
 }
@@ -101,9 +101,9 @@ export function getValueFromItem(item, fieldName) {
 }
 
 export function formatActionUrl(url, item) {
-	var regex = new RegExp('{(.*?)}', 'mg');
+	let regex = new RegExp('{(.*?)}', 'mg');
 
-	var replacedUrl = url.replace(regex, (matched) =>
+	let replacedUrl = url.replace(regex, (matched) =>
 		getValueFromItem(
 			item,
 			matched.substring(1, matched.length - 1).split('.')

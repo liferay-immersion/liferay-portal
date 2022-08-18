@@ -17,16 +17,16 @@ import ClayLoadingIndicator from '@clayui/loading-indicator';
 import classNames from 'classnames';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 
+import {LAYOUT_TYPES} from './constants/layoutTypes';
 import {
-	useFrontendTokensValues,
 	useLoading,
 	usePreviewLayout,
 	usePreviewLayoutType,
 	useSetLoading,
-} from './StyleBookContext';
-import {LAYOUT_TYPES} from './constants/layoutTypes';
+} from './contexts/LayoutContext';
+import {useFrontendTokensValues} from './contexts/StyleBookEditorContext';
 
-export default function LayoutPreview() {
+export default React.memo(function LayoutPreview() {
 	const frontendTokensValues = useFrontendTokensValues();
 	const loading = useLoading();
 	const previewLayout = usePreviewLayout();
@@ -107,7 +107,7 @@ export default function LayoutPreview() {
 			</div>
 		</>
 	);
-}
+});
 
 function loadOverlay(iframeRef, previewLayoutType) {
 	if (previewLayoutType === LAYOUT_TYPES.fragmentCollection) {

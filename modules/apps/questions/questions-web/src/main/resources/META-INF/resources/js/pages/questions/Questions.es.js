@@ -419,7 +419,7 @@ export default withRouter(
 
 		const [debounceCallback] = useDebounceCallback(
 			(search) => changePage(search, 1, 20),
-			500
+			1000
 		);
 
 		useEffect(() => {
@@ -759,7 +759,7 @@ export default withRouter(
 												<ClayButtonWithIcon
 													displayType="unstyled"
 													onClick={() => {
-														debounceCallback('');
+														setSearch('');
 													}}
 													symbol="times-circle"
 													type="submit"
@@ -784,7 +784,8 @@ export default withRouter(
 											Boolean(
 												section.actions['add-thread']
 											)) ||
-										context.canCreateThread) && (
+										context.canCreateThread) &&
+									sectionTitle !== ALL_SECTIONS_ID && (
 										<ClayInput.GroupItem shrink>
 											<ClayButton
 												className="c-ml-3 d-none d-sm-block text-nowrap"

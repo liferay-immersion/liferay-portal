@@ -26,7 +26,7 @@ import com.liferay.object.web.internal.object.entries.constants.ObjectEntriesFDS
 import com.liferay.object.web.internal.object.entries.frontend.data.set.data.model.RelatedModel;
 import com.liferay.petra.portlet.url.builder.PortletURLBuilder;
 import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.language.LanguageUtil;
+import com.liferay.portal.kernel.language.Language;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.ParamUtil;
@@ -74,7 +74,7 @@ public class RelatedModelFDSActionProvider implements FDSActionProvider {
 							httpServletRequest));
 					dropdownItem.setIcon("trash");
 					dropdownItem.setLabel(
-						LanguageUtil.get(httpServletRequest, Constants.DELETE));
+						_language.get(httpServletRequest, Constants.DELETE));
 				}
 			).build();
 		}
@@ -92,7 +92,7 @@ public class RelatedModelFDSActionProvider implements FDSActionProvider {
 					_getViewURL(relatedModel.getId(), httpServletRequest));
 				dropdownItem.setIcon("view");
 				dropdownItem.setLabel(
-					LanguageUtil.get(httpServletRequest, Constants.VIEW));
+					_language.get(httpServletRequest, Constants.VIEW));
 			}
 		).add(
 			dropdownItem -> {
@@ -102,7 +102,7 @@ public class RelatedModelFDSActionProvider implements FDSActionProvider {
 						httpServletRequest));
 				dropdownItem.setIcon("trash");
 				dropdownItem.setLabel(
-					LanguageUtil.get(httpServletRequest, Constants.DELETE));
+					_language.get(httpServletRequest, Constants.DELETE));
 			}
 		).build();
 	}
@@ -162,11 +162,12 @@ public class RelatedModelFDSActionProvider implements FDSActionProvider {
 		).setMVCRenderCommandName(
 			"/object_entries/edit_object_entry"
 		).setParameter(
-			"objectDefinitionId", objectDefinition.getObjectDefinitionId()
-		).setParameter(
-			"objectEntryId", id
+			"externalReferenceCode", objectEntry.getExternalReferenceCode()
 		).buildPortletURL();
 	}
+
+	@Reference
+	private Language _language;
 
 	@Reference
 	private ObjectDefinitionLocalService _objectDefinitionLocalService;

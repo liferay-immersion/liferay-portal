@@ -27,12 +27,12 @@ import SelectSXPBlueprintModal from './select_sxp_blueprint_modal/SelectSXPBluep
 
 const CONTRIBUTORS = {
 	BASIC: 'basic',
-	SXP_BLUEPRINT: 'blueprint',
+	SXP_BLUEPRINT: 'sxpBlueprint',
 };
 
 const DEFAULT_ATTRIBUTES = {
 	fields: [],
-	includeAssetSummary: true,
+	includeAssetSearchSummary: true,
 	includeAssetURL: true,
 	sxpBlueprintId: '',
 };
@@ -271,8 +271,10 @@ function SXPBlueprintAttributes({onBlur, onChange, touched, value}) {
 						aria-label={Liferay.Language.get(
 							'include-asset-summary'
 						)}
-						onChange={_handleChangeAttribute('includeAssetSummary')}
-						value={value.attributes?.includeAssetSummary}
+						onChange={_handleChangeAttribute(
+							'includeAssetSearchSummary'
+						)}
+						value={value.attributes?.includeAssetSearchSummary}
 					>
 						<ClaySelect.Option
 							label={Liferay.Language.get('true')}
@@ -386,7 +388,8 @@ function Inputs({onChange, onReplace, contributorOptions, value = {}}) {
 
 				<ClayInput.GroupItem
 					className={getCN('size-input', {
-						'has-error': !value.size && touched.size,
+						'has-error':
+							(!value.size || value.size < 0) && touched.size,
 					})}
 				>
 					<label>
@@ -399,12 +402,26 @@ function Inputs({onChange, onReplace, contributorOptions, value = {}}) {
 
 					<ClayInput
 						aria-label={Liferay.Language.get('size')}
+						min="0"
 						onBlur={_handleBlur('size')}
 						onChange={_handleChange('size')}
 						required
 						type="number"
 						value={value.size || ''}
 					/>
+
+					{value.size < 0 && touched.size && (
+						<div className="form-feedback-group">
+							<div className="form-feedback-item">
+								{Liferay.Util.sub(
+									Liferay.Language.get(
+										'please-enter-a-value-greater-than-or-equal-to-x'
+									),
+									'0'
+								)}
+							</div>
+						</div>
+					)}
 				</ClayInput.GroupItem>
 			</div>
 
@@ -499,8 +516,7 @@ function SearchBarConfigurationSuggestions({
 
 	return (
 		<div className="search-bar-configuration-suggestions">
-			{removeEmptyFields(suggestionsContributorConfiguration).length >
-			0 ? (
+			{removeEmptyFields(suggestionsContributorConfiguration).length ? (
 				removeEmptyFields(
 					suggestionsContributorConfiguration
 				).map(({id, ...item}) => (

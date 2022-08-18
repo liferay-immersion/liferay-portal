@@ -85,6 +85,8 @@ definition {
 
 		Button.clickSave();
 
+		SelectFrameTop();
+
 		for (var domainName : list "${domainNames}") {
 			AssertElementPresent(
 				key_domainName = "${domainName}",
@@ -337,13 +339,13 @@ definition {
 
 		LexiconEntry.gotoAdd();
 
-		Pause(locator1 = "3000");
-
 		SelectFrame(
 			key_title = "Assign Users to ${accountName}",
 			locator1 = "IFrame#MODAL_ANY");
 
 		LexiconEntry.gotoAdd();
+
+		SelectFrameTop();
 
 		Type(
 			locator1 = "UsersAndOrganizationsEditUser#DETAILS_SCREEN_NAME_FIELD",
@@ -422,8 +424,6 @@ definition {
 		Accounts.gotoAssigneeTab(assigneeTab = "Users");
 
 		LexiconEntry.gotoAdd();
-
-		Pause(locator1 = "3000");
 
 		SelectFrame(
 			key_title = "Assign Users to ${accountName}",
@@ -544,8 +544,6 @@ definition {
 
 		LexiconEntry.gotoAdd();
 
-		Pause(locator1 = "3000");
-
 		SelectFrame(
 			key_title = "Assign Organizations to ${accountName}",
 			locator1 = "IFrame#MODAL_ANY");
@@ -568,8 +566,6 @@ definition {
 
 		LexiconEntry.gotoAdd();
 
-		Pause(locator1 = "3000");
-
 		SelectFrame(
 			key_title = "Assign Organizations to ${accountName}",
 			locator1 = "IFrame#MODAL_ANY");
@@ -591,8 +587,6 @@ definition {
 		Accounts.gotoAssigneeTab(assigneeTab = "Users");
 
 		LexiconEntry.gotoAdd();
-
-		Pause(locator1 = "3000");
 
 		SelectFrame(
 			key_title = "Assign Users to ${accountName}",
@@ -937,8 +931,6 @@ definition {
 
 		LexiconEntry.gotoAdd();
 
-		Pause(locator1 = "3000");
-
 		SelectFrame(
 			key_title = "Assign Users to ${accountName}",
 			locator1 = "IFrame#MODAL_ANY");
@@ -1147,8 +1139,6 @@ definition {
 			locator1 = "Account#DEFAULT_ACCOUNT_ADDRESSES_SET_DEFAULT_BILLING",
 			value1 = "Set Default Address");
 
-		Pause(locator1 = "3000");
-
 		SelectFrame(
 			key_title = "Set Default Billing Address",
 			locator1 = "IFrame#MODAL_ANY");
@@ -1246,8 +1236,6 @@ definition {
 		AssertClick(
 			locator1 = "Account#DEFAULT_ACCOUNT_ADDRESSES_SET_DEFAULT_SHIPPING",
 			value1 = "Set Default Address");
-
-		Pause(locator1 = "3000");
 
 		SelectFrame(
 			key_title = "Set Default Shipping Address",
@@ -1527,8 +1515,6 @@ definition {
 		Accounts.gotoAssigneeTab(assigneeTab = "Users");
 
 		LexiconEntry.gotoAdd();
-
-		Pause(locator1 = "3000");
 
 		SelectFrame(
 			key_title = "Assign Users to ${accountName}",

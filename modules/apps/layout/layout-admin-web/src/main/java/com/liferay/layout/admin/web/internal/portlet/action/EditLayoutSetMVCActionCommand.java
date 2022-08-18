@@ -15,9 +15,11 @@
 package com.liferay.layout.admin.web.internal.portlet.action;
 
 import com.liferay.client.extension.constants.ClientExtensionEntryConstants;
+import com.liferay.client.extension.model.ClientExtensionEntryRel;
 import com.liferay.client.extension.service.ClientExtensionEntryRelLocalService;
 import com.liferay.document.library.kernel.service.DLAppLocalService;
 import com.liferay.layout.admin.constants.LayoutAdminPortletKeys;
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.LayoutSet;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
@@ -36,6 +38,7 @@ import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.PropertiesParamUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.UnicodeProperties;
+import com.liferay.portal.kernel.util.UnicodePropertiesBuilder;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 
@@ -120,6 +123,36 @@ public class EditLayoutSetMVCActionCommand extends BaseMVCActionCommand {
 		}
 	}
 
+	private void _addClientExtensionEntryRel(
+			String cetExternalReferenceCode, LayoutSet layoutSet, String type,
+			long userId)
+		throws Exception {
+
+		if (Validator.isNotNull(cetExternalReferenceCode)) {
+			ClientExtensionEntryRel clientExtensionEntryRel =
+				_clientExtensionEntryRelLocalService.
+					fetchClientExtensionEntryRelByExternalReferenceCode(
+						layoutSet.getCompanyId(), cetExternalReferenceCode);
+
+			if (clientExtensionEntryRel == null) {
+				_clientExtensionEntryRelLocalService.
+					deleteClientExtensionEntryRels(
+						_portal.getClassNameId(LayoutSet.class),
+						layoutSet.getLayoutSetId(), type);
+
+				_clientExtensionEntryRelLocalService.addClientExtensionEntryRel(
+					userId, _portal.getClassNameId(LayoutSet.class),
+					layoutSet.getLayoutSetId(), cetExternalReferenceCode, type,
+					StringPool.BLANK);
+			}
+		}
+		else {
+			_clientExtensionEntryRelLocalService.deleteClientExtensionEntryRels(
+				_portal.getClassNameId(LayoutSet.class),
+				layoutSet.getLayoutSetId(), type);
+		}
+	}
+
 	private void _updateClientExtensions(
 			ActionRequest actionRequest, LayoutSet layoutSet,
 			ThemeDisplay themeDisplay)
@@ -129,27 +162,69 @@ public class EditLayoutSetMVCActionCommand extends BaseMVCActionCommand {
 			themeDisplay.getPermissionChecker(), layoutSet.getGroupId(),
 			ActionKeys.MANAGE_LAYOUTS);
 
-		String faviconCETExternalReferenceCode = ParamUtil.getString(
-			actionRequest, "faviconCETExternalReferenceCode");
+		String themeFaviconCETExternalReferenceCode = ParamUtil.getString(
+			actionRequest, "themeFaviconCETExternalReferenceCode");
 
-		if (Validator.isNotNull(faviconCETExternalReferenceCode)) {
+		_addClientExtensionEntryRel(
+			themeFaviconCETExternalReferenceCode, layoutSet,
+			ClientExtensionEntryConstants.TYPE_THEME_FAVICON,
+			themeDisplay.getUserId());
+
+		_clientExtensionEntryRelLocalService.deleteClientExtensionEntryRels(
+			_portal.getClassNameId(LayoutSet.class), layoutSet.getLayoutSetId(),
+			ClientExtensionEntryConstants.TYPE_GLOBAL_CSS);
+
+		String[] globalCSSCETExternalReferenceCodes = ParamUtil.getStringValues(
+			actionRequest, "globalCSSCETExternalReferenceCodes");
+
+		for (String globalCSSCETExternalReferenceCode :
+				globalCSSCETExternalReferenceCodes) {
+
 			_clientExtensionEntryRelLocalService.addClientExtensionEntryRel(
 				themeDisplay.getUserId(),
 				_portal.getClassNameId(LayoutSet.class),
-				layoutSet.getLayoutSetId(), faviconCETExternalReferenceCode,
-				ClientExtensionEntryConstants.TYPE_THEME_FAVICON);
+				layoutSet.getLayoutSetId(), globalCSSCETExternalReferenceCode,
+				ClientExtensionEntryConstants.TYPE_GLOBAL_CSS,
+				StringPool.BLANK);
+		}
+
+		_clientExtensionEntryRelLocalService.deleteClientExtensionEntryRels(
+			_portal.getClassNameId(LayoutSet.class), layoutSet.getLayoutSetId(),
+			ClientExtensionEntryConstants.TYPE_GLOBAL_JS);
+
+		String[] globalJSCETExternalReferenceCodes = ParamUtil.getStringValues(
+			actionRequest, "globalJSCETExternalReferenceCodes");
+
+		for (String globalJSCETExternalReferenceCode :
+				globalJSCETExternalReferenceCodes) {
+
+			String[] typeSettings = StringUtil.split(
+				globalJSCETExternalReferenceCode, StringPool.UNDERLINE);
+
+			UnicodeProperties typeSettingsUnicodeProperties =
+				UnicodePropertiesBuilder.create(
+					true
+				).put(
+					"loadType", typeSettings[1]
+				).put(
+					"scriptLocation", typeSettings[2]
+				).build();
+
+			_clientExtensionEntryRelLocalService.addClientExtensionEntryRel(
+				themeDisplay.getUserId(),
+				_portal.getClassNameId(LayoutSet.class),
+				layoutSet.getLayoutSetId(), typeSettings[0],
+				ClientExtensionEntryConstants.TYPE_GLOBAL_JS,
+				typeSettingsUnicodeProperties.toString());
 		}
 
 		String themeCSSCETExternalReferenceCode = ParamUtil.getString(
 			actionRequest, "themeCSSCETExternalReferenceCode");
 
-		if (Validator.isNotNull(themeCSSCETExternalReferenceCode)) {
-			_clientExtensionEntryRelLocalService.addClientExtensionEntryRel(
-				themeDisplay.getUserId(),
-				_portal.getClassNameId(LayoutSet.class),
-				layoutSet.getLayoutSetId(), themeCSSCETExternalReferenceCode,
-				ClientExtensionEntryConstants.TYPE_THEME_CSS);
-		}
+		_addClientExtensionEntryRel(
+			themeCSSCETExternalReferenceCode, layoutSet,
+			ClientExtensionEntryConstants.TYPE_THEME_CSS,
+			themeDisplay.getUserId());
 	}
 
 	private void _updateLogo(

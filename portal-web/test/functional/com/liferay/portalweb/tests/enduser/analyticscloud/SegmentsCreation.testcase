@@ -47,6 +47,8 @@ definition {
 	tearDown {
 		var testPortalInstance = PropsUtil.get("test.portal.instance");
 
+		ACUtils.tearDownAC();
+
 		ACUtils.tearDownDXP();
 
 		if ("${testPortalInstance}" == "true") {
@@ -54,11 +56,7 @@ definition {
 		}
 		else {
 			JSONGroup.deleteGroupByName(groupName = "Site Name");
-
-			JSONUser.tearDownNonAdminUsers();
 		}
-
-		ACUtils.tearDownAC();
 	}
 
 	@description = "Feature ID: Legacy | Automation ID: LRAC-8483 | Test Summary: Add members from different pages"
@@ -1313,6 +1311,10 @@ definition {
 				siteName = "Site Name");
 		}
 
+		task ("Close sessions") {
+			ACUtils.closeAllSessionsAndWait();
+		}
+
 		task ("Switch to new property in AC") {
 			ACUtils.launchAC();
 
@@ -1562,6 +1564,86 @@ definition {
 		AssertTextEquals(
 			locator1 = "ACSegments#SEGMENT_LABEL",
 			value1 = "DYNAMIC SEGMENT");
+	}
+
+	@description = "Bug: LRAC-10972 | Automation ID: LRAC-11506 | Test Summary: Check Autocomplete Suggestions For All Criteria Types"
+	@priority = "3"
+	test CheckAutocompleteSuggestionsForAllCriteriaTypes {
+		property analytics.cloud.upstream = "false";
+
+		task ("Sign in as new user") {
+			User.logoutAndLoginPG(
+				userLoginEmailAddress = "userea@liferay.com",
+				userLoginFullName = "userfn userln");
+		}
+
+		task ("Go to AC Page DXP") {
+			ACUtils.navigateToSitePage(
+				pageName = "AC Page",
+				siteName = "Site Name");
+		}
+
+		task ("Get URL") {
+			var myURL = Navigator.getCurrentURL();
+		}
+
+		task ("Switch to new property in AC") {
+			ACUtils.closeAllSessionsAndWait();
+
+			ACUtils.launchAC();
+
+			ACProperties.switchProperty(propertyName = "${assignedPropertyName}");
+		}
+
+		task ("Add a new dynamic segment") {
+			ACNavigation.goToSegments();
+
+			ACSegments.createDynamicSegment();
+
+			ACUtils.setItemName(itemName = "Dynamic Segment Test");
+		}
+
+		task ("Check URL autocomplete from Session Attributes") {
+			ACSegments.goToSidebarAttributes(criterion = "Session Attributes");
+
+			ACSegments.addSegmentField(segmentField = "URL");
+
+			ACSegments.editTextCriterion(
+				skip = "true",
+				textInput = "site-name");
+
+			ACSegments.viewAutocompleteSuggestions(
+				autocompleteText = "${myURL}",
+				notPresent = "home");
+		}
+
+		task ("Cancel the creation") {
+			ACSegments.cancelSegment();
+
+			Button.click(button = "Leave Page");
+		}
+
+		task ("Add a new dynamic segment") {
+			ACNavigation.goToSegments();
+
+			ACSegments.createDynamicSegment();
+
+			ACUtils.setItemName(itemName = "Dynamic Segment Test");
+		}
+
+		task ("Check URL autocomplete from Session Attributes") {
+			ACSegments.goToSidebarAttributes(criterion = "Individual Attributes");
+
+			ACSegments.addSegmentField(segmentField = "givenName");
+
+			ACSegments.editTextCriterion(
+				skip = "true",
+				textInput = "user");
+
+			ACSegments.viewAutocompleteSuggestions(
+				autocompleteText = "userfn",
+				notPresent = "Abram");
+		}
 	}
 
 	@description = "Feature ID: Legacy | Automation ID: LRAC-8484 | Test Summary: Segment Form Validation"

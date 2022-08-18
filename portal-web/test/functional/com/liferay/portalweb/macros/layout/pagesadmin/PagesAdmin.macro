@@ -66,6 +66,8 @@ definition {
 			PagesAdmin.togglePageTemplateInheritChanges(toggleValue = "${inheritChanges}");
 		}
 
+		Navigator.gotoNavUnderline(navUnderline = "General");
+
 		AssertVisible(locator1 = "TextInput#NAME");
 
 		if (isSet(openGraph)) {
@@ -82,8 +84,6 @@ definition {
 	@summary = "Add newly created pages to specified navigation menus or assert that the option to add the pages to navigation menus is missing."
 	macro _addPageToNavigationMenu {
 		if (isSet(navigationMenus)) {
-			Pause(locator1 = "5000");
-
 			for (var navigationMenu : list "${navigationMenus}") {
 				if ("${assertCheckboxMissing}" == "true") {
 					AssertElementNotPresent(
@@ -92,10 +92,6 @@ definition {
 				}
 				else {
 					Check(
-						checkboxName = "${navigationMenu}",
-						locator1 = "Checkbox#ANY_CHECKBOX");
-
-					AssertChecked(
 						checkboxName = "${navigationMenu}",
 						locator1 = "Checkbox#ANY_CHECKBOX");
 				}
@@ -193,8 +189,6 @@ definition {
 
 		LexiconCard.viewCardPresent(card = "${sitePageType}");
 
-		Pause(locator1 = "3000");
-
 		LexiconCard.clickCard(card = "${sitePageType}");
 	}
 
@@ -229,6 +223,30 @@ definition {
 			sitePageType = "${sitePageType}");
 	}
 
+	macro addCSSExtensions {
+		WaitForEditable(
+			key_text = "Add CSS Extensions",
+			locator1 = "Button#ANY");
+
+		Click(
+			key_text = "Add CSS Extensions",
+			locator1 = "Button#ANY");
+
+		SelectFrame(locator1 = "IFrame#MODAL_BODY");
+
+		for (var extensionName : list "${extensionNameList}") {
+			Check(
+				key_listEntry = "${extensionName}",
+				locator1 = "LexiconList#LIST_ENTRY_CHECKBOX");
+		}
+
+		SelectFrameTop();
+
+		Click(
+			key_text = "Add",
+			locator1 = "Modal#MODAL_FOOTER_BUTTON");
+	}
+
 	macro addJavaScript {
 		PagesAdmin.gotoPageEllipsisMenuItem(
 			menuItem = "Configure",
@@ -250,6 +268,32 @@ definition {
 		AssertClickNoError(
 			locator1 = "Button#SAVE",
 			value1 = "Save");
+	}
+
+	macro addJavaScriptExtensions {
+		WaitForEditable(
+			key_text = "Add JavaScript Extensions",
+			locator1 = "Button#ANY");
+
+		Click(
+			key_text = "Add JavaScript Extensions",
+			locator1 = "Button#ANY");
+
+		MenuItem.click(menuItem = "${insertion}");
+
+		SelectFrame(locator1 = "IFrame#MODAL_BODY");
+
+		for (var extensionName : list "${extensionNameList}") {
+			Check(
+				key_listEntry = "${extensionName}",
+				locator1 = "LexiconList#LIST_ENTRY_CHECKBOX");
+		}
+
+		SelectFrameTop();
+
+		Click(
+			key_text = "Add",
+			locator1 = "Modal#MODAL_FOOTER_BUTTON");
 	}
 
 	macro addLocalizedCanonicalURL {
@@ -387,6 +431,8 @@ definition {
 	macro addPageUnderSitePagesVariation {
 		LexiconEntry.gotoAddMenuItem(menuItem = "Page");
 
+		WaitForPageLoad();
+
 		PagesAdmin._selectPageType(
 			collectionName = "${collectionName}",
 			pageTemplateName = "${pageTemplateName}",
@@ -516,6 +562,8 @@ definition {
 	macro addPublicPageUnderSitePagesVariation {
 		LexiconEntry.gotoAddMenuItem(menuItem = "Public Page");
 
+		WaitForPageLoad();
+
 		PagesAdmin._selectPageType(
 			collectionName = "${collectionName}",
 			pageTemplateName = "${pageTemplateName}",
@@ -536,6 +584,24 @@ definition {
 		Button.click(button = "Save");
 
 		WaitForSPARefresh();
+	}
+
+	macro addThemeCSSExtension {
+		WaitForEditable(
+			key_text = "Extension",
+			locator1 = "TextInput#ANY");
+
+		Click(
+			key_text = "Extension",
+			locator1 = "TextInput#ANY");
+
+		SelectFrame(locator1 = "IFrame#MODAL_BODY");
+
+		Click(
+			key_listEntry = "${extensionName}",
+			locator1 = "LexiconList#LIST_ENTRY_TITLE");
+
+		SelectFrameTop();
 	}
 
 	macro cannotDeletePagesAssociatedWithSiteTemplate {
@@ -754,6 +820,34 @@ definition {
 		Click(
 			key_text = "Delete",
 			locator1 = "Modal#MODAL_FOOTER_BUTTON");
+
+		if (isSet(failure)) {
+			if (IsElementPresent(locator1 = "Message#ERROR_2")) {
+				Alert.viewRequestFailedToComplete();
+
+				AssertTextEquals(
+					locator1 = "Message#ERROR_2",
+					value1 = "${failure}");
+			}
+			else {
+				AssertTextEquals(
+					locator1 = "Message#ERROR",
+					value1 = "${failure}");
+			}
+		}
+		else {
+			Alert.viewSuccessMessage();
+		}
+	}
+
+	macro discardDraft {
+		WaitForPageLoad();
+
+		PagesAdmin.openPageEllipsisMenu(pageName = "${pageName}");
+
+		MenuItem.clickNoError(menuItem = "Discard Draft");
+
+		AssertConfirm(value1 = "Are you sure you want to discard the current draft and apply the latest published changes?");
 
 		if (isSet(failure)) {
 			if (IsElementPresent(locator1 = "Message#ERROR_2")) {
@@ -999,12 +1093,40 @@ definition {
 	}
 
 	macro selectFavicon {
+		WaitForEditable(
+			key_text = "Change Favicon",
+			locator1 = "Button#ANY");
+
+		Click(
+			key_text = "Change Favicon",
+			locator1 = "Button#ANY");
+
 		if (isSet(imageFileName)) {
 			ItemSelector.selectDMImage(imageFileName = "${imageFileName}");
 		}
 		else {
 			ItemSelector.uploadFile(uploadFileName = "${uploadFileName}");
 		}
+
+		SelectFrameTop();
+	}
+
+	macro selectFaviconExtension {
+		WaitForEditable(
+			key_text = "Change Favicon",
+			locator1 = "Button#ANY");
+
+		Click(
+			key_text = "Change Favicon",
+			locator1 = "Button#ANY");
+
+		SelectFrame(locator1 = "IFrame#MODAL_BODY");
+
+		Navigator.gotoNavTab(navTab = "Extensions");
+
+		Click(
+			key_listEntry = "${extensionName}",
+			locator1 = "LexiconList#LIST_ENTRY_TITLE");
 
 		SelectFrameTop();
 	}
@@ -1162,11 +1284,15 @@ definition {
 			buttonId = "uploadImage",
 			locator1 = "Button#BUTTON_ID");
 
+		WaitForEditable(locator1 = "TextInput#FILE");
+
 		UploadCommonFile.uploadCommonFileHiddenNoMouseOver(
 			locator1 = "TextInput#FILE",
 			value1 = "${logoFile}");
 
-		Pause(locator1 = "10000");
+		WaitForElementPresent(
+			key_text = "Done",
+			locator1 = "Button#ANY_ENABLED");
 
 		Button.clickDone();
 

@@ -25,7 +25,7 @@ import ClayIcon from '@clayui/icon';
 import ClayModal from '@clayui/modal';
 import ClayMultiSelect from '@clayui/multi-select';
 import ClaySticker from '@clayui/sticker';
-import {fetch, objectToFormData, sub} from 'frontend-js-web';
+import {fetch, getOpener, objectToFormData, sub} from 'frontend-js-web';
 import React, {useCallback, useRef, useState} from 'react';
 
 function filterDuplicateItems(items) {
@@ -99,13 +99,13 @@ const Sharing = ({
 	const emailValidationInProgressRef = useRef(false);
 
 	const closeDialog = () => {
-		Liferay.Util.getOpener().Liferay.fire('closeModal', {
+		getOpener().Liferay.fire('closeModal', {
 			id: 'sharingDialog',
 		});
 	};
 
 	const showNotification = (message, error) => {
-		const parentOpenToast = Liferay.Util.getOpener().Liferay.Util.openToast;
+		const parentOpenToast = getOpener().Liferay.Util.openToast;
 
 		const openToastParams = {message};
 
@@ -221,7 +221,7 @@ const Sharing = ({
 					erroredResults.map(({error}) => error)
 				);
 
-				if (erroredResults.length === 0) {
+				if (!erroredResults.length) {
 					setMultiSelectValue('');
 				}
 
@@ -318,7 +318,7 @@ const Sharing = ({
 								</ClayForm.Text>
 							</ClayForm.FeedbackGroup>
 
-							{emailAddressErrorMessages.length > 0 && (
+							{!!emailAddressErrorMessages.length && (
 								<ClayForm.FeedbackGroup>
 									{emailAddressErrorMessages.map(
 										(emailAddressErrorMessage) => (

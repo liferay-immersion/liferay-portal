@@ -14,9 +14,23 @@
 
 import 'codemirror/addon/display/autorefresh';
 
+import 'codemirror/addon/edit/closebrackets';
+
+import 'codemirror/addon/edit/closetag';
+
+import 'codemirror/addon/edit/matchbrackets';
+
+import 'codemirror/addon/fold/brace-fold';
+
+import 'codemirror/addon/fold/comment-fold';
+
+import 'codemirror/addon/fold/foldcode';
+
 import 'codemirror/addon/fold/foldgutter.css';
 
 import 'codemirror/addon/fold/foldgutter';
+
+import 'codemirror/addon/fold/indent-fold';
 
 import 'codemirror/addon/fold/xml-fold';
 
@@ -32,15 +46,19 @@ import 'codemirror/addon/hint/xml-hint';
 
 import 'codemirror/lib/codemirror.css';
 
+import 'codemirror/mode/css/css';
+
 import 'codemirror/mode/htmlmixed/htmlmixed';
 
 import 'codemirror/mode/xml/xml';
+import classNames from 'classnames';
 import CodeMirror from 'codemirror';
 import React, {useEffect, useRef} from 'react';
 
 const noop = () => {};
 
 const CodeMirrorEditor = ({
+	className,
 	initialContent = '',
 	mode = 'text/html',
 	onChange = noop,
@@ -76,7 +94,7 @@ const CodeMirrorEditor = ({
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
-	return <div className="h-100" ref={ref} />;
+	return <div className={classNames(className, 'h-100')} ref={ref} />;
 };
 
 export default CodeMirrorEditor;

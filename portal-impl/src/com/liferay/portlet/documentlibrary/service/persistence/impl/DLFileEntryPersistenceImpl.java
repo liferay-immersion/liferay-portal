@@ -8497,7 +8497,7 @@ public class DLFileEntryPersistenceImpl
 	 * </p>
 	 *
 	 * @param groupId the group ID
-	 * @param folderId the folder ID
+	 * @param folderIds the folder IDs
 	 * @param start the lower bound of the range of document library file entries
 	 * @param end the upper bound of the range of document library file entries (not inclusive)
 	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
@@ -11157,7 +11157,7 @@ public class DLFileEntryPersistenceImpl
 	 *
 	 * @param groupId the group ID
 	 * @param userId the user ID
-	 * @param folderId the folder ID
+	 * @param folderIds the folder IDs
 	 * @param start the lower bound of the range of document library file entries
 	 * @param end the upper bound of the range of document library file entries (not inclusive)
 	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
@@ -13570,7 +13570,7 @@ public class DLFileEntryPersistenceImpl
 	 * </p>
 	 *
 	 * @param groupId the group ID
-	 * @param folderId the folder ID
+	 * @param folderIds the folder IDs
 	 * @param fileEntryTypeId the file entry type ID
 	 * @param start the lower bound of the range of document library file entries
 	 * @param end the upper bound of the range of document library file entries (not inclusive)
@@ -15288,15 +15288,14 @@ public class DLFileEntryPersistenceImpl
 		DLFileEntryModelImpl dlFileEntryModelImpl =
 			(DLFileEntryModelImpl)dlFileEntry;
 
-		if (Validator.isNull(dlFileEntry.getExternalReferenceCode())) {
-			dlFileEntry.setExternalReferenceCode(
-				String.valueOf(dlFileEntry.getPrimaryKey()));
-		}
-
 		if (Validator.isNull(dlFileEntry.getUuid())) {
 			String uuid = PortalUUIDUtil.generate();
 
 			dlFileEntry.setUuid(uuid);
+		}
+
+		if (Validator.isNull(dlFileEntry.getExternalReferenceCode())) {
+			dlFileEntry.setExternalReferenceCode(dlFileEntry.getUuid());
 		}
 
 		ServiceContext serviceContext =
@@ -15418,7 +15417,9 @@ public class DLFileEntryPersistenceImpl
 	 */
 	@Override
 	public DLFileEntry fetchByPrimaryKey(Serializable primaryKey) {
-		if (CTPersistenceHelperUtil.isProductionMode(DLFileEntry.class)) {
+		if (CTPersistenceHelperUtil.isProductionMode(
+				DLFileEntry.class, primaryKey)) {
+
 			return super.fetchByPrimaryKey(primaryKey);
 		}
 

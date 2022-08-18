@@ -449,7 +449,6 @@ public class AssetPublisherHelperImpl implements AssetPublisherHelper {
 		assetEntryQuery.setOrderByType1(
 			GetterUtil.getString(
 				portletPreferences.getValue("orderByType1", "DESC")));
-
 		assetEntryQuery.setOrderByType2(
 			GetterUtil.getString(
 				portletPreferences.getValue("orderByType2", "ASC")));
@@ -627,9 +626,15 @@ public class AssetPublisherHelperImpl implements AssetPublisherHelper {
 				if (Validator.isNotNull(viewURL) &&
 					!Objects.equals(viewURL, noSuchEntryRedirect)) {
 
+					String redirect = ParamUtil.getString(
+						liferayPortletRequest, "redirect");
+
+					if (Validator.isNull(redirect)) {
+						redirect = _portal.getCurrentURL(liferayPortletRequest);
+					}
+
 					viewURL = HttpComponentsUtil.setParameter(
-						viewURL, "redirect",
-						_portal.getCurrentURL(liferayPortletRequest));
+						viewURL, "redirect", redirect);
 				}
 			}
 			catch (Exception exception) {
@@ -1191,7 +1196,7 @@ public class AssetPublisherHelperImpl implements AssetPublisherHelper {
 		String portletName, AssetEntryQuery assetEntryQuery) {
 
 		if (_assetPublisherWebConfiguration.searchWithIndex() &&
-			(assetEntryQuery.getLinkedAssetEntryId() == 0) &&
+			ArrayUtil.isEmpty(assetEntryQuery.getLinkedAssetEntryIds()) &&
 			!portletName.equals(
 				AssetPublisherPortletKeys.HIGHEST_RATED_ASSETS) &&
 			!portletName.equals(AssetPublisherPortletKeys.MOST_VIEWED_ASSETS)) {
@@ -1206,7 +1211,7 @@ public class AssetPublisherHelperImpl implements AssetPublisherHelper {
 		String portletName, AssetEntryQuery assetEntryQuery) {
 
 		if (!portletName.equals(AssetPublisherPortletKeys.RELATED_ASSETS) ||
-			(assetEntryQuery.getLinkedAssetEntryId() > 0)) {
+			ArrayUtil.isNotEmpty(assetEntryQuery.getLinkedAssetEntryIds())) {
 
 			return true;
 		}

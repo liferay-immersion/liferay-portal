@@ -198,14 +198,20 @@ public class WikiPageLocalServiceTest {
 
 	@Test
 	public void testAddPageWithoutExternalReferenceCode() throws Exception {
-		WikiPage wikiPage = WikiTestUtil.addPage(
+		WikiPage wikiPage1 = WikiTestUtil.addPage(
 			TestPropsValues.getUserId(), _node.getNodeId(),
 			RandomTestUtil.randomString(), RandomTestUtil.randomString(), true,
 			ServiceContextTestUtil.getServiceContext(_group.getGroupId()));
 
-		Assert.assertEquals(
-			wikiPage.getExternalReferenceCode(),
-			String.valueOf(wikiPage.getPageId()));
+		String externalReferenceCode = wikiPage1.getExternalReferenceCode();
+
+		Assert.assertEquals(externalReferenceCode, wikiPage1.getUuid());
+
+		WikiPage wikiPage2 =
+			WikiPageLocalServiceUtil.getLatestPageByExternalReferenceCode(
+				_group.getGroupId(), externalReferenceCode);
+
+		Assert.assertEquals(wikiPage1, wikiPage2);
 	}
 
 	@Test(expected = AssetCategoryTestException.class)

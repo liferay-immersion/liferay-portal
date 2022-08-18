@@ -794,7 +794,7 @@ definition {
 		BlogsNavigator.openBlogsAdmin(siteURLKey = "guest");
 
 		Blogs.addEntryWithUploadedCoverImage(
-			coverImageName = "Document_1",
+			coverImageName = "document_1",
 			entryContent = "Blogs Entry Content",
 			entrySubtitle = "Blogs Entry Subtitle",
 			entryTitle = "Blogs Entry Title",
@@ -847,7 +847,7 @@ definition {
 
 		Navigator.openWithAppendToBaseURL(urlAppend = "web/test-site-name/test-content-page-name");
 
-		ContentPages.viewFragmentBackgroundImage(image = "Document_1.jpeg");
+		ContentPages.viewFragmentBackgroundImage(image = "document_1-jpeg");
 	}
 
 	@description = "This test covers LPS-119553. It ensures that the assets in the connected site can not be filtered out after navigating to the depot through the breadcrumb."
@@ -1293,10 +1293,9 @@ definition {
 		Pagination.viewResults(results = "Showing 21 to 30 of 30 entries.");
 	}
 
-	@description = "This is a test for LPS-136945. It checks that only 'File Upload,' 'Folder,' 'Google Drive Shortcut' and 'External Video Shortcut' options appear when adding a document."
+	@description = "This is a test for LPS-136945. It checks that only 'File Upload', 'Folder', and 'External Video Shortcut' options appear when adding a document."
 	@priority = "3"
 	test OnlyRelevantSelectionsAppearWhenAddingDocuments {
-		property osgi.app.includes = "document-library-google-docs";
 		property portal.acceptance = "false";
 
 		WebContentNavigator.openWebContentAdmin(siteURLKey = "guest");

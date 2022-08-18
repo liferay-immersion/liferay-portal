@@ -67,13 +67,13 @@ public class ResourcePermissionsUpgradeProcess extends UpgradeProcess {
 					"from RemoteAppEntry");
 			PreparedStatement preparedStatement =
 				AutoBatchPreparedStatementUtil.autoBatch(
-					connection.prepareStatement(
-						StringBundler.concat(
-							"insert into ResourcePermission (mvccVersion, ",
-							"resourcePermissionId, companyId, name, scope, ",
-							"primKey, primKeyId, roleId, ownerId, actionIds, ",
-							"viewActionId) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ",
-							"?, ?), (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")))) {
+					connection,
+					StringBundler.concat(
+						"insert into ResourcePermission (mvccVersion, ",
+						"resourcePermissionId, companyId, name, scope, ",
+						"primKey, primKeyId, roleId, ownerId, actionIds, ",
+						"viewActionId) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ",
+						"?), (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"))) {
 
 			while (resultSet.next()) {
 				long mvccVersion = resultSet.getLong("mvccVersion");
@@ -99,7 +99,6 @@ public class ResourcePermissionsUpgradeProcess extends UpgradeProcess {
 				preparedStatement.setLong(9, userId);
 				preparedStatement.setLong(10, 15);
 				preparedStatement.setBoolean(11, true);
-
 				preparedStatement.setLong(12, mvccVersion);
 				preparedStatement.setLong(13, increment());
 				preparedStatement.setLong(14, companyId);

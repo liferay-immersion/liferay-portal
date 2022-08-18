@@ -755,7 +755,11 @@ definition {
 		}
 
 		task ("Assert user can login portal after retry time out") {
-			Pause(locator1 = "5000");
+			while (IsElementPresent(locator1 = "MultiFactorAuthentication#EMAIL_OTP_VERIFY_SUBMIT_EMAIL_BUTTON_DISABLED")) {
+				Pause(locator1 = "800");
+
+				Refresh();
+			}
 
 			MultiFactorAuthentication.verifyOTP(
 				portalURL = "${portalURL}",

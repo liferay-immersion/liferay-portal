@@ -242,6 +242,7 @@
 		<column name="namespace" type="String" />
 		<column name="position" type="int" />
 		<column name="rendererKey" type="String" />
+		<column name="type" type="int" />
 		<column name="lastPropagationDate" type="Date" />
 		<column name="lastPublishDate" type="Date" />
 
@@ -323,9 +324,11 @@
 		<exception>DuplicateFragmentEntry</exception>
 		<exception>DuplicateFragmentEntryKey</exception>
 		<exception>FragmentCollectionName</exception>
+		<exception>FragmentCompositionDescription</exception>
 		<exception>FragmentCompositionName</exception>
 		<exception>FragmentEntryConfiguration</exception>
 		<exception>FragmentEntryContent</exception>
+		<exception>FragmentEntryFieldTypes</exception>
 		<exception>FragmentEntryName</exception>
 		<exception>FragmentEntryTypeOptions</exception>
 		<exception>InvalidFile</exception>

@@ -361,7 +361,7 @@ definition {
 			PageEditorEditableLink.updateURL(url = "https://liferay.com");
 
 			AssertVisible(
-				key_append = "//img[contains(@src,'Document_1.jpg')]",
+				key_append = "//img[contains(@src,'document_1-jpg')]",
 				key_url = "https://liferay.com",
 				locator1 = "Fragment#FRAGMENT_LINK");
 
@@ -401,12 +401,12 @@ definition {
 
 		task ("Assert mapped URL work in display page template") {
 			AssertVisible(
-				key_append = "//img[contains(@src,'Document_1.jpg')]",
+				key_append = "//img[contains(@src,'document_1-jpg')]",
 				key_url = "https://liferay.com",
 				locator1 = "Fragment#FRAGMENT_LINK");
 
 			Click(
-				key_append = "//img[contains(@src,'Document_1.jpg')]",
+				key_append = "//img[contains(@src,'document_1-jpg')]",
 				key_url = "https://liferay.com",
 				locator1 = "Fragment#FRAGMENT_LINK");
 
@@ -1401,7 +1401,9 @@ definition {
 				locator1 = "Select#GENERIC_SELECT_FIELD",
 				value1 = "Web Content Article");
 
-			Pause(locator1 = "3000");
+			WaitForEditable(
+				key_fieldLabel = "Subtype",
+				locator1 = "Select#GENERIC_SELECT_FIELD");
 
 			for (var subtype : list "Basic Web Content,WC Structure Name") {
 				AssertElementPresent(
@@ -1415,7 +1417,9 @@ definition {
 				locator1 = "Select#GENERIC_SELECT_FIELD",
 				value1 = "Document");
 
-			Pause(locator1 = "3000");
+			WaitForEditable(
+				key_fieldLabel = "Subtype",
+				locator1 = "Select#GENERIC_SELECT_FIELD");
 
 			for (var subtype : list "Basic Document,Google Drive Shortcut,DM Document Type Name") {
 				AssertElementPresent(

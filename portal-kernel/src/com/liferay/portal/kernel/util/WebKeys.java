@@ -325,6 +325,9 @@ public interface WebKeys {
 
 	public static final String LAYOUTS = "LAYOUTS";
 
+	public static final String LINKED_ASSET_ENTRY_IDS =
+		"LIFERAY_SHARED_LINKED_ASSET_ENTRY_IDS";
+
 	public static final String LOCALE = "LOCALE";
 
 	public static final String LOGOUT = "LOGOUT";
@@ -674,6 +677,8 @@ public interface WebKeys {
 
 	public static final String UNIQUE_ELEMENT_IDS =
 		"LIFERAY_SHARED_UNIQUE_ELEMENT_IDS";
+
+	public static final String UNKNOWN_VIRTUAL_HOST = "UNKNOWN_VIRTUAL_HOST";
 
 	public static final String UPLOAD_EXCEPTION = "UPLOAD_EXCEPTION";
 

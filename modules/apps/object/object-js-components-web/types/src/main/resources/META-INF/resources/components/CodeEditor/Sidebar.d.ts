@@ -26,7 +26,7 @@ export interface SidebarCategory {
 }
 interface SidebarElement {
 	content: string;
+	helpText: string;
 	label: string;
-	tooltip: string;
 }
 export {};

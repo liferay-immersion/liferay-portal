@@ -62,7 +62,7 @@ public class ListObjectFieldFilterParser implements ObjectFieldFilterParser {
 			"itemsValues",
 			() -> {
 				JSONObject jsonObject = JSONFactoryUtil.createJSONObject(
-					objectViewFilterColumn.getJson());
+					objectViewFilterColumn.getJSON());
 
 				JSONArray jsonArray = jsonObject.getJSONArray(
 					objectViewFilterColumn.getFilterType());
@@ -101,7 +101,7 @@ public class ListObjectFieldFilterParser implements ObjectFieldFilterParser {
 		throws PortalException {
 
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject(
-			objectViewFilterColumn.getJson());
+			objectViewFilterColumn.getJSON());
 
 		JSONArray jsonArray = jsonObject.getJSONArray(
 			objectViewFilterColumn.getFilterType());

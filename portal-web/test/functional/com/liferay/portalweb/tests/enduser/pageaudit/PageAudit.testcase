@@ -88,6 +88,10 @@ definition {
 			PageAudit.setAPIViaSiteSettings(apiKey = "AIzaSyAq-oKsvIhlYHdk1UXCFy63h74ECIgbgbE");
 		}
 
+		task ("Configure canonical URL") {
+			PageAudit.configurationSEOCanonicalURL();
+		}
+
 		task ("Add a translation for that page") {
 			PagesAdmin.openPagesAdmin(siteURLKey = "test-site-name");
 
@@ -135,6 +139,10 @@ definition {
 			Navigator.openWithAppendToBaseURL(urlAppend = "web/test-site-name/content-page");
 
 			PageAudit.setAPIViaSiteSettings(apiKey = "AIzaSyAq-oKsvIhlYHdk1UXCFy63h74ECIgbgbE");
+		}
+
+		task ("Configure canonical URL") {
+			PageAudit.configurationSEOCanonicalURL();
 		}
 
 		task ("Open Page Audit panel and change locale/language") {
@@ -190,8 +198,6 @@ definition {
 
 			Button.clickPublish();
 
-			DisplayPageTemplatesAdmin.openDisplayPagesAdmin(siteURLKey = "test-site-name");
-
 			DisplayPageTemplatesAdmin.markDisplayPageAsDefault(displayPageName = "Display Page Name");
 		}
 
@@ -199,6 +205,10 @@ definition {
 			Navigator.openWithAppendToBaseURL(urlAppend = "web/test-site-name/content-page-2");
 
 			PageAudit.setAPIViaSiteSettings(apiKey = "AIzaSyAq-oKsvIhlYHdk1UXCFy63h74ECIgbgbE");
+		}
+
+		task ("Configure canonical URL") {
+			PageAudit.configurationSEOCanonicalURL();
 		}
 
 		task ("Go to display page") {
@@ -237,6 +247,10 @@ definition {
 			Navigator.openWithAppendToBaseURL(urlAppend = "web/test-site-name/3");
 
 			PageAudit.setAPIViaSiteSettings(apiKey = "AIzaSyAq-oKsvIhlYHdk1UXCFy63h74ECIgbgbE");
+		}
+
+		task ("Configure canonical URL") {
+			PageAudit.configurationSEOCanonicalURL();
 		}
 
 		task ("Open Page Audit panel and change locale/language") {
@@ -638,20 +652,6 @@ definition {
 			PageAudit.setAPIViaSiteSettings(apiKey = "AIzaSyAq-oKsvIhlYHdk1UXCFy63h74ECIgbgbE");
 		}
 
-		task ("Disable option to strangers to verify email") {
-			ApplicationsMenu.gotoPortlet(
-				category = "Configuration",
-				panel = "Control Panel",
-				portlet = "Instance Settings");
-
-			SystemSettings.gotoConfiguration(
-				configurationCategory = "User Authentication",
-				configurationName = "General",
-				configurationScope = "Virtual Instance Scope");
-
-			PortalSettings.uncheckStrangersVerifyEmailCheckbox();
-		}
-
 		task ("Login with new user") {
 			User.logoutAndLoginPG(
 				userLoginEmailAddress = "userea@liferay.com",
@@ -1011,20 +1011,6 @@ definition {
 			PageAudit.setAPIViaSiteSettings(apiKey = "AIzaSyAq-oKsvIhlYHdk1UXCFy63h74ECIgbgbE");
 		}
 
-		task ("Disable option to strangers to verify email") {
-			ApplicationsMenu.gotoPortlet(
-				category = "Configuration",
-				panel = "Control Panel",
-				portlet = "Instance Settings");
-
-			SystemSettings.gotoConfiguration(
-				configurationCategory = "User Authentication",
-				configurationName = "General",
-				configurationScope = "Virtual Instance Scope");
-
-			PortalSettings.uncheckStrangersVerifyEmailCheckbox();
-		}
-
 		task ("Login with new user") {
 			User.logoutAndLoginPG(
 				userLoginEmailAddress = "userea@liferay.com",
@@ -1176,20 +1162,6 @@ definition {
 				userEmailAddress = "userea@liferay.com");
 		}
 
-		task ("Disable option to strangers to verify email") {
-			ApplicationsMenu.gotoPortlet(
-				category = "Configuration",
-				panel = "Control Panel",
-				portlet = "Instance Settings");
-
-			SystemSettings.gotoConfiguration(
-				configurationCategory = "User Authentication",
-				configurationName = "General",
-				configurationScope = "Virtual Instance Scope");
-
-			PortalSettings.uncheckStrangersVerifyEmailCheckbox();
-		}
-
 		task ("Login with new user") {
 			User.logoutAndLoginPG(
 				userLoginEmailAddress = "userea@liferay.com",
@@ -1238,20 +1210,6 @@ definition {
 			JSONRole.assignRoleToUser(
 				roleTitle = "DocumentEditorRole Name",
 				userEmailAddress = "userea@liferay.com");
-		}
-
-		task ("Disable option to strangers to verify email") {
-			ApplicationsMenu.gotoPortlet(
-				category = "Configuration",
-				panel = "Control Panel",
-				portlet = "Instance Settings");
-
-			SystemSettings.gotoConfiguration(
-				configurationCategory = "User Authentication",
-				configurationName = "General",
-				configurationScope = "Virtual Instance Scope");
-
-			PortalSettings.uncheckStrangersVerifyEmailCheckbox();
 		}
 
 		task ("Login with new user") {
@@ -1304,20 +1262,6 @@ definition {
 				userEmailAddress = "userea@liferay.com");
 		}
 
-		task ("Disable option to strangers to verify email") {
-			ApplicationsMenu.gotoPortlet(
-				category = "Configuration",
-				panel = "Control Panel",
-				portlet = "Instance Settings");
-
-			SystemSettings.gotoConfiguration(
-				configurationCategory = "User Authentication",
-				configurationName = "General",
-				configurationScope = "Virtual Instance Scope");
-
-			PortalSettings.uncheckStrangersVerifyEmailCheckbox();
-		}
-
 		task ("Login with new user") {
 			User.logoutAndLoginPG(
 				userLoginEmailAddress = "userea@liferay.com",
@@ -1368,20 +1312,6 @@ definition {
 				userEmailAddress = "userea@liferay.com");
 		}
 
-		task ("Disable option to strangers to verify email") {
-			ApplicationsMenu.gotoPortlet(
-				category = "Configuration",
-				panel = "Control Panel",
-				portlet = "Instance Settings");
-
-			SystemSettings.gotoConfiguration(
-				configurationCategory = "User Authentication",
-				configurationName = "General",
-				configurationScope = "Virtual Instance Scope");
-
-			PortalSettings.uncheckStrangersVerifyEmailCheckbox();
-		}
-
 		task ("Login with new user") {
 			User.logoutAndLoginPG(
 				userLoginEmailAddress = "userea@liferay.com",
@@ -1423,20 +1353,6 @@ definition {
 			JSONRole.assignRoleToUser(
 				roleTitle = "BlogsRole Name",
 				userEmailAddress = "userea@liferay.com");
-		}
-
-		task ("Disable option to strangers to verify email") {
-			ApplicationsMenu.gotoPortlet(
-				category = "Configuration",
-				panel = "Control Panel",
-				portlet = "Instance Settings");
-
-			SystemSettings.gotoConfiguration(
-				configurationCategory = "User Authentication",
-				configurationName = "General",
-				configurationScope = "Virtual Instance Scope");
-
-			PortalSettings.uncheckStrangersVerifyEmailCheckbox();
 		}
 
 		task ("Login with new user") {
@@ -1482,20 +1398,6 @@ definition {
 				userEmailAddress = "userea@liferay.com");
 		}
 
-		task ("Disable option to strangers to verify email") {
-			ApplicationsMenu.gotoPortlet(
-				category = "Configuration",
-				panel = "Control Panel",
-				portlet = "Instance Settings");
-
-			SystemSettings.gotoConfiguration(
-				configurationCategory = "User Authentication",
-				configurationName = "General",
-				configurationScope = "Virtual Instance Scope");
-
-			PortalSettings.uncheckStrangersVerifyEmailCheckbox();
-		}
-
 		task ("Login with new user") {
 			User.logoutAndLoginPG(
 				userLoginEmailAddress = "userea@liferay.com",
@@ -1539,20 +1441,6 @@ definition {
 				userEmailAddress = "userea@liferay.com");
 		}
 
-		task ("Disable option to strangers to verify email") {
-			ApplicationsMenu.gotoPortlet(
-				category = "Configuration",
-				panel = "Control Panel",
-				portlet = "Instance Settings");
-
-			SystemSettings.gotoConfiguration(
-				configurationCategory = "User Authentication",
-				configurationName = "General",
-				configurationScope = "Virtual Instance Scope");
-
-			PortalSettings.uncheckStrangersVerifyEmailCheckbox();
-		}
-
 		task ("Login with new user") {
 			User.logoutAndLoginPG(
 				userLoginEmailAddress = "userea@liferay.com",
@@ -1594,20 +1482,6 @@ definition {
 			JSONRole.assignRoleToUser(
 				roleTitle = "WebContentRole Name",
 				userEmailAddress = "userea@liferay.com");
-		}
-
-		task ("Disable option to strangers to verify email") {
-			ApplicationsMenu.gotoPortlet(
-				category = "Configuration",
-				panel = "Control Panel",
-				portlet = "Instance Settings");
-
-			SystemSettings.gotoConfiguration(
-				configurationCategory = "User Authentication",
-				configurationName = "General",
-				configurationScope = "Virtual Instance Scope");
-
-			PortalSettings.uncheckStrangersVerifyEmailCheckbox();
 		}
 
 		task ("Login with new user") {
@@ -1662,20 +1536,6 @@ definition {
 				userEmailAddress = "userea@liferay.com");
 		}
 
-		task ("Disable option to strangers to verify email") {
-			ApplicationsMenu.gotoPortlet(
-				category = "Configuration",
-				panel = "Control Panel",
-				portlet = "Instance Settings");
-
-			SystemSettings.gotoConfiguration(
-				configurationCategory = "User Authentication",
-				configurationName = "General",
-				configurationScope = "Virtual Instance Scope");
-
-			PortalSettings.uncheckStrangersVerifyEmailCheckbox();
-		}
-
 		task ("Add Display Page and mark it as default") {
 			JSONLayoutpagetemplate.addDisplayPageTemplateEntry(
 				contentType = "Blogs Entry",
@@ -1687,8 +1547,6 @@ definition {
 			DisplayPageTemplatesAdmin.gotoDisplayPage(displayPageName = "Display Page Name");
 
 			Button.clickPublish();
-
-			DisplayPageTemplatesAdmin.openDisplayPagesAdmin(siteURLKey = "test-site-name");
 
 			DisplayPageTemplatesAdmin.markDisplayPageAsDefault(displayPageName = "Display Page Name");
 		}
@@ -1765,20 +1623,6 @@ definition {
 				userEmailAddress = "userea@liferay.com");
 		}
 
-		task ("Disable option to strangers to verify email") {
-			ApplicationsMenu.gotoPortlet(
-				category = "Configuration",
-				panel = "Control Panel",
-				portlet = "Instance Settings");
-
-			SystemSettings.gotoConfiguration(
-				configurationCategory = "User Authentication",
-				configurationName = "General",
-				configurationScope = "Virtual Instance Scope");
-
-			PortalSettings.uncheckStrangersVerifyEmailCheckbox();
-		}
-
 		task ("Add Display Page and mark it as default") {
 			JSONLayoutpagetemplate.addDisplayPageTemplateEntry(
 				contentType = "Document",
@@ -1791,8 +1635,6 @@ definition {
 			DisplayPageTemplatesAdmin.gotoDisplayPage(displayPageName = "Display Page Name");
 
 			Button.clickPublish();
-
-			DisplayPageTemplatesAdmin.openDisplayPagesAdmin(siteURLKey = "test-site-name");
 
 			DisplayPageTemplatesAdmin.markDisplayPageAsDefault(displayPageName = "Display Page Name");
 		}
@@ -1867,20 +1709,6 @@ definition {
 				userEmailAddress = "userea@liferay.com");
 		}
 
-		task ("Disable option to strangers to verify email") {
-			ApplicationsMenu.gotoPortlet(
-				category = "Configuration",
-				panel = "Control Panel",
-				portlet = "Instance Settings");
-
-			SystemSettings.gotoConfiguration(
-				configurationCategory = "User Authentication",
-				configurationName = "General",
-				configurationScope = "Virtual Instance Scope");
-
-			PortalSettings.uncheckStrangersVerifyEmailCheckbox();
-		}
-
 		task ("Add Display Page and mark it as default") {
 			JSONLayoutpagetemplate.addDisplayPageTemplateEntry(
 				contentType = "Blogs Entry",
@@ -1892,8 +1720,6 @@ definition {
 			DisplayPageTemplatesAdmin.gotoDisplayPage(displayPageName = "Display Page Name");
 
 			Button.clickPublish();
-
-			DisplayPageTemplatesAdmin.openDisplayPagesAdmin(siteURLKey = "test-site-name");
 
 			DisplayPageTemplatesAdmin.markDisplayPageAsDefault(displayPageName = "Display Page Name");
 		}
@@ -1968,20 +1794,6 @@ definition {
 				userEmailAddress = "userea@liferay.com");
 		}
 
-		task ("Disable option to strangers to verify email") {
-			ApplicationsMenu.gotoPortlet(
-				category = "Configuration",
-				panel = "Control Panel",
-				portlet = "Instance Settings");
-
-			SystemSettings.gotoConfiguration(
-				configurationCategory = "User Authentication",
-				configurationName = "General",
-				configurationScope = "Virtual Instance Scope");
-
-			PortalSettings.uncheckStrangersVerifyEmailCheckbox();
-		}
-
 		task ("Add Display Page and mark it as default") {
 			JSONLayoutpagetemplate.addDisplayPageTemplateEntry(
 				contentType = "Web Content Article",
@@ -1994,8 +1806,6 @@ definition {
 			DisplayPageTemplatesAdmin.gotoDisplayPage(displayPageName = "Display Page Name");
 
 			Button.clickPublish();
-
-			DisplayPageTemplatesAdmin.openDisplayPagesAdmin(siteURLKey = "test-site-name");
 
 			DisplayPageTemplatesAdmin.markDisplayPageAsDefault(displayPageName = "Display Page Name");
 		}
@@ -2063,20 +1873,6 @@ definition {
 				userEmailAddress = "userea@liferay.com");
 		}
 
-		task ("Disable option to strangers to verify email") {
-			ApplicationsMenu.gotoPortlet(
-				category = "Configuration",
-				panel = "Control Panel",
-				portlet = "Instance Settings");
-
-			SystemSettings.gotoConfiguration(
-				configurationCategory = "User Authentication",
-				configurationName = "General",
-				configurationScope = "Virtual Instance Scope");
-
-			PortalSettings.uncheckStrangersVerifyEmailCheckbox();
-		}
-
 		task ("Add Display Page and mark it as default") {
 			JSONLayoutpagetemplate.addDisplayPageTemplateEntry(
 				contentType = "Blogs Entry",
@@ -2088,8 +1884,6 @@ definition {
 			DisplayPageTemplatesAdmin.gotoDisplayPage(displayPageName = "Display Page Name");
 
 			Button.clickPublish();
-
-			DisplayPageTemplatesAdmin.openDisplayPagesAdmin(siteURLKey = "test-site-name");
 
 			DisplayPageTemplatesAdmin.markDisplayPageAsDefault(displayPageName = "Display Page Name");
 		}
@@ -2162,20 +1956,6 @@ definition {
 				userEmailAddress = "userea@liferay.com");
 		}
 
-		task ("Disable option to strangers to verify email") {
-			ApplicationsMenu.gotoPortlet(
-				category = "Configuration",
-				panel = "Control Panel",
-				portlet = "Instance Settings");
-
-			SystemSettings.gotoConfiguration(
-				configurationCategory = "User Authentication",
-				configurationName = "General",
-				configurationScope = "Virtual Instance Scope");
-
-			PortalSettings.uncheckStrangersVerifyEmailCheckbox();
-		}
-
 		task ("Add Display Page and mark it as default") {
 			JSONLayoutpagetemplate.addDisplayPageTemplateEntry(
 				contentType = "Document",
@@ -2188,8 +1968,6 @@ definition {
 			DisplayPageTemplatesAdmin.gotoDisplayPage(displayPageName = "Display Page Name");
 
 			Button.clickPublish();
-
-			DisplayPageTemplatesAdmin.openDisplayPagesAdmin(siteURLKey = "test-site-name");
 
 			DisplayPageTemplatesAdmin.markDisplayPageAsDefault(displayPageName = "Display Page Name");
 		}
@@ -2257,20 +2035,6 @@ definition {
 				userEmailAddress = "userea@liferay.com");
 		}
 
-		task ("Disable option to strangers to verify email") {
-			ApplicationsMenu.gotoPortlet(
-				category = "Configuration",
-				panel = "Control Panel",
-				portlet = "Instance Settings");
-
-			SystemSettings.gotoConfiguration(
-				configurationCategory = "User Authentication",
-				configurationName = "General",
-				configurationScope = "Virtual Instance Scope");
-
-			PortalSettings.uncheckStrangersVerifyEmailCheckbox();
-		}
-
 		task ("Add Display Page and mark it as default") {
 			JSONLayoutpagetemplate.addDisplayPageTemplateEntry(
 				contentType = "Blogs Entry",
@@ -2282,8 +2046,6 @@ definition {
 			DisplayPageTemplatesAdmin.gotoDisplayPage(displayPageName = "Display Page Name");
 
 			Button.clickPublish();
-
-			DisplayPageTemplatesAdmin.openDisplayPagesAdmin(siteURLKey = "test-site-name");
 
 			DisplayPageTemplatesAdmin.markDisplayPageAsDefault(displayPageName = "Display Page Name");
 		}
@@ -2351,20 +2113,6 @@ definition {
 				userEmailAddress = "userea@liferay.com");
 		}
 
-		task ("Disable option to strangers to verify email") {
-			ApplicationsMenu.gotoPortlet(
-				category = "Configuration",
-				panel = "Control Panel",
-				portlet = "Instance Settings");
-
-			SystemSettings.gotoConfiguration(
-				configurationCategory = "User Authentication",
-				configurationName = "General",
-				configurationScope = "Virtual Instance Scope");
-
-			PortalSettings.uncheckStrangersVerifyEmailCheckbox();
-		}
-
 		task ("Add Display Page and mark it as default") {
 			JSONLayoutpagetemplate.addDisplayPageTemplateEntry(
 				contentType = "Web Content Article",
@@ -2377,8 +2125,6 @@ definition {
 			DisplayPageTemplatesAdmin.gotoDisplayPage(displayPageName = "Display Page Name");
 
 			Button.clickPublish();
-
-			DisplayPageTemplatesAdmin.openDisplayPagesAdmin(siteURLKey = "test-site-name");
 
 			DisplayPageTemplatesAdmin.markDisplayPageAsDefault(displayPageName = "Display Page Name");
 		}
@@ -2464,20 +2210,6 @@ definition {
 				widgetName = "Asset Publisher");
 		}
 
-		task ("Disable option to strangers to verify email") {
-			ApplicationsMenu.gotoPortlet(
-				category = "Configuration",
-				panel = "Control Panel",
-				portlet = "Instance Settings");
-
-			SystemSettings.gotoConfiguration(
-				configurationCategory = "User Authentication",
-				configurationName = "General",
-				configurationScope = "Virtual Instance Scope");
-
-			PortalSettings.uncheckStrangersVerifyEmailCheckbox();
-		}
-
 		task ("Login with user") {
 			User.logoutAndLoginPG(
 				userLoginEmailAddress = "userea@liferay.com",
@@ -2488,8 +2220,6 @@ definition {
 			Navigator.openWithAppendToBaseURL(urlAppend = "web/test-site-name/test-widget-page-name");
 
 			AssertElementPresent(locator1 = "PageAudit#PAGE_AUDIT_BUTTON");
-
-			Pause(locator1 = "5000");
 		}
 
 		task ("Delete Role created") {
@@ -2541,20 +2271,6 @@ definition {
 				widgetName = "Asset Publisher");
 		}
 
-		task ("Disable option to strangers to verify email") {
-			ApplicationsMenu.gotoPortlet(
-				category = "Configuration",
-				panel = "Control Panel",
-				portlet = "Instance Settings");
-
-			SystemSettings.gotoConfiguration(
-				configurationCategory = "User Authentication",
-				configurationName = "General",
-				configurationScope = "Virtual Instance Scope");
-
-			PortalSettings.uncheckStrangersVerifyEmailCheckbox();
-		}
-
 		task ("Login with user") {
 			User.logoutAndLoginPG(
 				userLoginEmailAddress = "userea@liferay.com",
@@ -2565,8 +2281,6 @@ definition {
 			Navigator.openWithAppendToBaseURL(urlAppend = "web/test-site-name/test-widget-page-name");
 
 			AssertElementPresent(locator1 = "PageAudit#PAGE_AUDIT_BUTTON");
-
-			Pause(locator1 = "5000");
 		}
 
 		task ("Delete Role created") {
@@ -2618,20 +2332,6 @@ definition {
 				widgetName = "Asset Publisher");
 		}
 
-		task ("Disable option to strangers to verify email") {
-			ApplicationsMenu.gotoPortlet(
-				category = "Configuration",
-				panel = "Control Panel",
-				portlet = "Instance Settings");
-
-			SystemSettings.gotoConfiguration(
-				configurationCategory = "User Authentication",
-				configurationName = "General",
-				configurationScope = "Virtual Instance Scope");
-
-			PortalSettings.uncheckStrangersVerifyEmailCheckbox();
-		}
-
 		task ("Login with user") {
 			User.logoutAndLoginPG(
 				userLoginEmailAddress = "userea@liferay.com",
@@ -2642,8 +2342,6 @@ definition {
 			Navigator.openWithAppendToBaseURL(urlAppend = "web/test-site-name/test-widget-page-name");
 
 			AssertElementPresent(locator1 = "PageAudit#PAGE_AUDIT_BUTTON");
-
-			Pause(locator1 = "5000");
 		}
 
 		task ("Delete Role created") {
@@ -2695,20 +2393,6 @@ definition {
 				widgetName = "Asset Publisher");
 		}
 
-		task ("Disable option to strangers to verify email") {
-			ApplicationsMenu.gotoPortlet(
-				category = "Configuration",
-				panel = "Control Panel",
-				portlet = "Instance Settings");
-
-			SystemSettings.gotoConfiguration(
-				configurationCategory = "User Authentication",
-				configurationName = "General",
-				configurationScope = "Virtual Instance Scope");
-
-			PortalSettings.uncheckStrangersVerifyEmailCheckbox();
-		}
-
 		task ("Login with user") {
 			User.logoutAndLoginPG(
 				userLoginEmailAddress = "userea@liferay.com",
@@ -2719,8 +2403,6 @@ definition {
 			Navigator.openWithAppendToBaseURL(urlAppend = "web/test-site-name/test-widget-page-name");
 
 			AssertElementPresent(locator1 = "PageAudit#PAGE_AUDIT_BUTTON");
-
-			Pause(locator1 = "5000");
 		}
 
 		task ("Delete Role created") {
@@ -2765,20 +2447,6 @@ definition {
 				widgetName = "Asset Publisher");
 		}
 
-		task ("Disable option to strangers to verify email") {
-			ApplicationsMenu.gotoPortlet(
-				category = "Configuration",
-				panel = "Control Panel",
-				portlet = "Instance Settings");
-
-			SystemSettings.gotoConfiguration(
-				configurationCategory = "User Authentication",
-				configurationName = "General",
-				configurationScope = "Virtual Instance Scope");
-
-			PortalSettings.uncheckStrangersVerifyEmailCheckbox();
-		}
-
 		task ("Login with user") {
 			User.logoutAndLoginPG(
 				userLoginEmailAddress = "userea@liferay.com",
@@ -2789,8 +2457,6 @@ definition {
 			Navigator.openWithAppendToBaseURL(urlAppend = "web/test-site-name/test-widget-page-name");
 
 			AssertElementNotPresent(locator1 = "PageAudit#PAGE_AUDIT_BUTTON");
-
-			Pause(locator1 = "5000");
 		}
 
 		task ("Delete Role created") {
@@ -2835,20 +2501,6 @@ definition {
 				widgetName = "Asset Publisher");
 		}
 
-		task ("Disable option to strangers to verify email") {
-			ApplicationsMenu.gotoPortlet(
-				category = "Configuration",
-				panel = "Control Panel",
-				portlet = "Instance Settings");
-
-			SystemSettings.gotoConfiguration(
-				configurationCategory = "User Authentication",
-				configurationName = "General",
-				configurationScope = "Virtual Instance Scope");
-
-			PortalSettings.uncheckStrangersVerifyEmailCheckbox();
-		}
-
 		task ("Login with user") {
 			User.logoutAndLoginPG(
 				userLoginEmailAddress = "userea@liferay.com",
@@ -2859,8 +2511,6 @@ definition {
 			Navigator.openWithAppendToBaseURL(urlAppend = "web/test-site-name/test-widget-page-name");
 
 			AssertElementNotPresent(locator1 = "PageAudit#PAGE_AUDIT_BUTTON");
-
-			Pause(locator1 = "5000");
 		}
 
 		task ("Delete Role created") {
@@ -2903,20 +2553,6 @@ definition {
 				groupName = "Test Site Name",
 				layoutName = "Test Widget Page Name",
 				widgetName = "Asset Publisher");
-		}
-
-		task ("Disable option to strangers to verify email") {
-			ApplicationsMenu.gotoPortlet(
-				category = "Configuration",
-				panel = "Control Panel",
-				portlet = "Instance Settings");
-
-			SystemSettings.gotoConfiguration(
-				configurationCategory = "User Authentication",
-				configurationName = "General",
-				configurationScope = "Virtual Instance Scope");
-
-			PortalSettings.uncheckStrangersVerifyEmailCheckbox();
 		}
 
 		task ("Login with user") {
@@ -2973,20 +2609,6 @@ definition {
 				widgetName = "Asset Publisher");
 		}
 
-		task ("Disable option to strangers to verify email") {
-			ApplicationsMenu.gotoPortlet(
-				category = "Configuration",
-				panel = "Control Panel",
-				portlet = "Instance Settings");
-
-			SystemSettings.gotoConfiguration(
-				configurationCategory = "User Authentication",
-				configurationName = "General",
-				configurationScope = "Virtual Instance Scope");
-
-			PortalSettings.uncheckStrangersVerifyEmailCheckbox();
-		}
-
 		task ("Login with user") {
 			User.logoutAndLoginPG(
 				userLoginEmailAddress = "userea@liferay.com",
@@ -2997,8 +2619,6 @@ definition {
 			Navigator.openWithAppendToBaseURL(urlAppend = "web/test-site-name/test-widget-page-name");
 
 			AssertElementNotPresent(locator1 = "PageAudit#PAGE_AUDIT_BUTTON");
-
-			Pause(locator1 = "5000");
 		}
 
 		task ("Delete Role created") {
@@ -3110,20 +2730,6 @@ definition {
 			Navigator.openWithAppendToBaseURL(urlAppend = "web/test-site-name/content-page");
 
 			PageAudit.setAPIViaSiteSettings(apiKey = "AIzaSyAq-oKsvIhlYHdk1UXCFy63h74ECIgbgbE");
-		}
-
-		task ("Disable option to strangers to verify email") {
-			ApplicationsMenu.gotoPortlet(
-				category = "Configuration",
-				panel = "Control Panel",
-				portlet = "Instance Settings");
-
-			SystemSettings.gotoConfiguration(
-				configurationCategory = "User Authentication",
-				configurationName = "General",
-				configurationScope = "Virtual Instance Scope");
-
-			PortalSettings.uncheckStrangersVerifyEmailCheckbox();
 		}
 
 		task ("Login with new user") {
@@ -4042,8 +3648,6 @@ definition {
 
 			Button.clickPublish();
 
-			DisplayPageTemplatesAdmin.openDisplayPagesAdmin(siteURLKey = "test-site-name");
-
 			DisplayPageTemplatesAdmin.markDisplayPageAsDefault(displayPageName = "Display Page Name");
 		}
 
@@ -4102,8 +3706,6 @@ definition {
 			DisplayPageTemplatesAdmin.gotoDisplayPage(displayPageName = "Display Page Name");
 
 			Button.clickPublish();
-
-			DisplayPageTemplatesAdmin.openDisplayPagesAdmin(siteURLKey = "test-site-name");
 
 			DisplayPageTemplatesAdmin.markDisplayPageAsDefault(displayPageName = "Display Page Name");
 		}
@@ -4274,7 +3876,7 @@ definition {
 
 			AssertTextEquals(
 				locator1 = "PageAudit#HELP_TEXT",
-				value1 = "Launch a page audit to check issues that impact on your page's accesibility and SEO.");
+				value1 = "Launch a page audit to check issues that impact on your page's accessibility and SEO.");
 
 			AssertVisible(locator1 = "PageAudit#LAUNCH_PAGE_AUDIT_BUTTON");
 		}
@@ -4800,7 +4402,7 @@ definition {
 		}
 
 		task ("Check if Google PageSpeed Insights tab isn't visible in the 'VIRTUAL INSTANCE SCOPE' section") {
-			AssertElementPresent(
+			AssertElementNotPresent(
 				key_configurationName = "Google PageSpeed Insights",
 				key_configurationScope = "Site Scope",
 				locator1 = "SystemSettings#SCOPED_CONFIGURATION_NAME");
@@ -4810,6 +4412,10 @@ definition {
 			Click.javaScriptClick(
 				checkboxName = "Enable",
 				locator1 = "Checkbox#ANY_CHECKBOX");
+
+			Click(locator1 = "Button#UPDATE");
+
+			Alert.viewSuccessMessage();
 		}
 
 		task ("Check if Google PageSpeed Insights tab is visible in the 'VIRTUAL INSTANCE SCOPE' section") {

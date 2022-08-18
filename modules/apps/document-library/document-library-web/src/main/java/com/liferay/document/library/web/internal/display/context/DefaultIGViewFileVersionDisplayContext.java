@@ -26,10 +26,7 @@ import com.liferay.frontend.taglib.clay.servlet.taglib.util.DropdownItemListBuil
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.repository.model.FileShortcut;
 import com.liferay.portal.kernel.repository.model.FileVersion;
-import com.liferay.portal.kernel.servlet.taglib.ui.Menu;
-import com.liferay.portal.kernel.servlet.taglib.ui.MenuItem;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.UUID;
@@ -127,38 +124,6 @@ public class DefaultIGViewFileVersionDisplayContext
 				dropdownGroupItem.setSeparator(true);
 			}
 		).build();
-	}
-
-	@Override
-	public Menu getMenu() throws PortalException {
-		Menu menu = new Menu();
-
-		menu.setDirection("left-side");
-		menu.setMarkupView("lexicon");
-		menu.setMenuItems(getMenuItems());
-		menu.setScroll(false);
-		menu.setShowWhenSingleIcon(true);
-
-		return menu;
-	}
-
-	@Override
-	public List<MenuItem> getMenuItems() throws PortalException {
-		List<MenuItem> menuItems = new ArrayList<>();
-
-		if (_dlPortletInstanceSettingsHelper.isShowActions()) {
-			_uiItemsBuilder.addDownloadMenuItem(menuItems);
-
-			_uiItemsBuilder.addViewOriginalFileMenuItem(menuItems);
-
-			_uiItemsBuilder.addEditMenuItem(menuItems);
-
-			_uiItemsBuilder.addPermissionsMenuItem(menuItems);
-
-			_uiItemsBuilder.addDeleteMenuItem(menuItems);
-		}
-
-		return menuItems;
 	}
 
 	@Override

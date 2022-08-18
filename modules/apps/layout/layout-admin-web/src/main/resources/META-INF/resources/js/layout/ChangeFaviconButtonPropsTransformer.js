@@ -27,27 +27,26 @@ export default function propsTransformer({
 			openSelectionModal({
 				onSelect(selectedItem) {
 					if (selectedItem) {
-						const faviconCETExternalReferenceCode = document.getElementById(
-							`${portletNamespace}faviconCETExternalReferenceCode`
-						);
-
 						const faviconFileEntryId = document.getElementById(
 							`${portletNamespace}faviconFileEntryId`
 						);
-						const faviconFileEntryImage = document.getElementById(
-							`${portletNamespace}faviconFileEntryImage`
+						const faviconImage = document.getElementById(
+							`${portletNamespace}faviconImage`
 						);
-						const faviconFileEntryTitle = document.getElementById(
-							`${portletNamespace}faviconFileEntryTitle`
+						const faviconTitle = document.getElementById(
+							`${portletNamespace}faviconTitle`
+						);
+						const themeFaviconCETExternalReferenceCode = document.getElementById(
+							`${portletNamespace}themeFaviconCETExternalReferenceCode`
 						);
 
 						if (
+							faviconFileEntryId &&
+							faviconImage &&
+							faviconTitle &&
 							selectedItem &&
 							selectedItem.value &&
-							faviconCETExternalReferenceCode &&
-							faviconFileEntryId &&
-							faviconFileEntryImage &&
-							faviconFileEntryTitle
+							themeFaviconCETExternalReferenceCode
 						) {
 							const itemValue = JSON.parse(selectedItem.value);
 
@@ -55,22 +54,24 @@ export default function propsTransformer({
 								selectedItem.returnType ===
 								'com.liferay.client.extension.type.item.selector.CETItemSelectorReturnType'
 							) {
-								faviconCETExternalReferenceCode.value =
+								faviconFileEntryId.value = 0;
+								themeFaviconCETExternalReferenceCode.value =
 									itemValue.cetExternalReferenceCode;
 							}
 							else {
 								faviconFileEntryId.value =
 									itemValue.fileEntryId;
+								themeFaviconCETExternalReferenceCode.value = '';
 							}
 
 							if (itemValue.url) {
-								faviconFileEntryImage.src = itemValue.url;
+								faviconImage.src = itemValue.url;
 							}
 							else {
-								faviconFileEntryImage.classList.add('d-none');
+								faviconImage.classList.add('d-none');
 							}
 
-							faviconFileEntryTitle.innerHTML =
+							faviconTitle.innerHTML =
 								itemValue.title || itemValue.name;
 						}
 					}

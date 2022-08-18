@@ -13,28 +13,29 @@
  */
 
 import ClayForm, {ClayRadio, ClayRadioGroup, ClayToggle} from '@clayui/form';
-import ClayIcon from '@clayui/icon';
+import {useModal} from '@clayui/modal';
 import {
+	API,
+	BuilderScreen,
 	Card,
 	Input,
 	InputLocalized,
 	Select,
 	SidePanelForm,
-	closeSidePanel,
+	Toggle,
 	openToast,
+	saveAndReload,
 } from '@liferay/object-js-components-web';
-import {fetch, sub} from 'frontend-js-web';
+import {sub} from 'frontend-js-web';
 import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {createTextMaskInputElement} from 'text-mask-core';
 
-import {HEADERS} from '../utils/constants';
 import {createAutoCorrectedNumberPipe} from '../utils/createAutoCorrectedNumberPipe';
-import {ERRORS} from '../utils/errors';
 import {
 	normalizeFieldSettings,
 	updateFieldSettings,
 } from '../utils/fieldSettings';
-import {defaultLanguageId, defaultLocale} from '../utils/locale';
+import {ModalAddFilter} from './ModalAddFilter';
 import ObjectFieldFormBase, {
 	ObjectFieldErrors,
 	useObjectFieldForm,
@@ -42,60 +43,61 @@ import ObjectFieldFormBase, {
 
 import './EditObjectField.scss';
 
-const locales: {label: string; symbol: string}[] = [];
-const languageLabels: string[] = [];
-const languages = Liferay.Language.available as LocalizedValue<string>;
-
-Object.entries(languages).forEach(([languageId, label]) => {
-	locales.push({
-		label: languageId,
-		symbol: languageId.replace('_', '-').toLocaleLowerCase(),
-	});
-
-	languageLabels.push(label);
-});
+const defaultLanguageId = Liferay.ThemeDisplay.getDefaultLanguageId();
+const languages = Liferay.Language.available;
+const languageLabels = Object.values(languages);
 
 export default function EditObjectField({
+	filterOperators,
 	forbiddenChars,
 	forbiddenLastChars,
 	forbiddenNames,
 	isApproved,
-	isSystemObject,
+	isDefaultStorageType,
+	objectDefinitionId,
 	objectField: initialValues,
 	objectFieldTypes,
 	objectName,
 	readOnly,
+	workflowStatusJSONArray,
 }: IProps) {
+	const [editingObjectFieldName, setEditingObjectFieldName] = useState<
+		string
+	>('');
+
+	const [editingFilter, setEditingFilter] = useState(false);
+	const [objectFields, setObjectFields] = useState<ObjectField[]>();
+	const [objectDefinitionId2, setObjectDefinitionId2] = useState<number>();
+	const [aggregationFilters, setAggregationFilters] = useState<
+		AggregationFilters[]
+	>([]);
+	const [visibleModal, setVisibleModal] = useState(false);
+
+	const {observer, onClose} = useModal({
+		onClose: () => {
+			setEditingFilter(false);
+			setVisibleModal(false);
+		},
+	});
+
 	const onSubmit = async ({id, ...objectField}: ObjectField) => {
 		delete objectField.system;
 
-		const response = await fetch(
-			`/o/object-admin/v1.0/object-fields/${id}`,
-			{
-				body: JSON.stringify(objectField),
-				headers: HEADERS,
-				method: 'PUT',
-			}
-		);
+		try {
+			await API.save(
+				`/o/object-admin/v1.0/object-fields/${id}`,
+				objectField
+			);
 
-		if (response.ok) {
-			closeSidePanel();
+			saveAndReload();
 			openToast({
 				message: Liferay.Language.get(
 					'the-object-field-was-updated-successfully'
 				),
 			});
 		}
-		else {
-			const error = (await response.json()) as
-				| {type?: string}
-				| undefined;
-
-			const message =
-				(error?.type && ERRORS[error.type]) ??
-				Liferay.Language.get('an-error-occurred');
-
-			openToast({message, type: 'danger'});
+		catch (error) {
+			openToast({message: (error as Error).message, type: 'danger'});
 		}
 	};
 
@@ -120,13 +122,6 @@ export default function EditObjectField({
 		values.system
 	);
 
-	const [locale, setSelectedLocale] = useState(
-		defaultLocale as {
-			label: string;
-			symbol: string;
-		}
-	);
-
 	const handleSettingsChange = ({name, value}: ObjectFieldSetting) =>
 		setValues({
 			objectFieldSettings: updateFieldSettings(
@@ -135,12 +130,334 @@ export default function EditObjectField({
 			),
 		});
 
+	const handleDeleteFilterColumn = (objectFieldName?: string) => {
+		const {objectFieldSettings} = values;
+
+		const [filter] = objectFieldSettings?.filter(
+			(fieldSetting) => fieldSetting.name === 'filters'
+		) as ObjectFieldSetting[];
+
+		const filterValues = filter.value as ObjectFieldFilterSetting[];
+
+		const newFilterValues: ObjectFieldFilterSetting[] = [
+			...filterValues.filter(
+				(filterValue) => filterValue.filterBy !== objectFieldName
+			),
+		];
+
+		const newFilter: ObjectFieldSetting = {
+			name: filter.name,
+			value: newFilterValues,
+		};
+
+		const newObjectFieldSettings: ObjectFieldSetting[] | undefined = [
+			...(objectFieldSettings?.filter(
+				(fieldSettings) => fieldSettings.name !== 'filters'
+			) as ObjectFieldSetting[]),
+			newFilter,
+		];
+
+		const newAggregationFilters = aggregationFilters.filter(
+			(aggregationFilter) =>
+				aggregationFilter.filterBy !== objectFieldName
+		);
+
+		setAggregationFilters(newAggregationFilters);
+
+		setValues({
+			objectFieldSettings: newObjectFieldSettings,
+		});
+	};
+
+	const handleSaveFilterColumn = (
+		objectFieldName: string,
+		filterBy?: string,
+		fieldLabel?: LocalizedValue<string>,
+		objectFieldBusinessType?: string,
+		filterType?: string,
+		valueList?: IItem[],
+		value?: string
+	) => {
+		const newAggregationFilters = [
+			...aggregationFilters,
+			{
+				fieldLabel: fieldLabel ? fieldLabel[defaultLanguageId] : '',
+				filterBy,
+				filterType,
+				label: fieldLabel,
+				objectFieldBusinessType,
+				objectFieldName,
+				value,
+				valueList,
+			},
+		] as AggregationFilters[];
+
+		const {objectFieldSettings} = values;
+
+		const filterSetting = objectFieldSettings?.filter(
+			({name}) => name === 'filters'
+		);
+
+		if (filterSetting) {
+			const [filter] = filterSetting;
+
+			let newFilterValues: ObjectFieldFilterSetting[] = [];
+
+			if (objectFieldBusinessType === 'Date') {
+				const dateJson: ObjectFieldDateRangeFilterSettings = {};
+
+				valueList?.forEach(({label, value}) => {
+					dateJson[value] = label;
+				});
+
+				newFilterValues = [
+					...(filter.value as ObjectFieldFilterSetting[]),
+					{
+						filterBy: objectFieldName,
+						filterType,
+						json: dateJson,
+					},
+				];
+			}
+			else if (
+				objectFieldBusinessType === 'Picklist' ||
+				objectFieldName === 'status'
+			) {
+				let picklistJson:
+					| ExcludesFilterOperator
+					| IncludesFilterOperator;
+
+				if (filterType === 'excludes') {
+					picklistJson = {
+						not: {
+							in: valueList?.map(({value}) => value) as
+								| string[]
+								| number[],
+						},
+					};
+				}
+				else {
+					picklistJson = {
+						in: valueList?.map(({value}) => value) as
+							| string[]
+							| number[],
+					};
+				}
+
+				newFilterValues = [
+					...(filter.value as ObjectFieldFilterSetting[]),
+					{
+						filterBy: objectFieldName,
+						filterType,
+						json: picklistJson,
+					},
+				];
+			}
+			else {
+				newFilterValues = [
+					...(filter.value as ObjectFieldFilterSetting[]),
+					{
+						filterBy: objectFieldName,
+						filterType,
+						json: {
+							[filterType as string]: value
+								? value
+								: valueList?.map(({value}) => value),
+						},
+					},
+				];
+			}
+
+			const newFilter: ObjectFieldSetting = {
+				name: filter.name,
+				value: newFilterValues,
+			};
+
+			const newObjectFieldSettings: ObjectFieldSetting[] | undefined = [
+				...(objectFieldSettings?.filter(
+					(fieldSetting) => fieldSetting.name !== 'filters'
+				) as ObjectFieldSetting[]),
+				newFilter,
+			];
+
+			setAggregationFilters(newAggregationFilters);
+			setValues({
+				objectFieldSettings: newObjectFieldSettings,
+			});
+		}
+	};
+
+	const getPicklistFilterJSONValues = (
+		filterType: string,
+		parsedFilter: ObjectFieldFilterSetting
+	) => {
+		let picklistFilterValues: string[] | number[] = [];
+
+		if (filterType === 'includes') {
+			picklistFilterValues = (parsedFilter.json as IncludesFilterOperator)[
+				'in'
+			];
+		}
+		else {
+			picklistFilterValues = (parsedFilter.json as ExcludesFilterOperator)[
+				'not'
+			]['in'];
+		}
+
+		return picklistFilterValues;
+	};
+
+	useEffect(() => {
+		if (values.businessType === 'Aggregation' && objectDefinitionId2) {
+			API.getObjectFields(objectDefinitionId2).then(setObjectFields);
+		}
+	}, [values.businessType, objectDefinitionId2]);
+
+	useEffect(() => {
+		if (values.businessType === 'Aggregation') {
+			const filters = values.objectFieldSettings?.find(
+				(settings) => settings.name === 'filters'
+			);
+
+			const filterValues = filters?.value as ObjectFieldFilterSetting[];
+
+			if (!filterValues.length) {
+				setAggregationFilters([]);
+
+				return;
+			}
+
+			if (
+				values.objectFieldSettings &&
+				objectFields &&
+				filterValues.length !== 0
+			) {
+				const newAggregationFilters = filterValues.map(
+					(parsedFilter) => {
+						const objectField = objectFields.find(
+							(objectField) =>
+								objectField.name === parsedFilter.filterBy
+						);
+
+						const filterType = parsedFilter.filterType as string;
+
+						if (objectField && filterType) {
+							const aggregationFilter: AggregationFilters = {
+								fieldLabel:
+									objectField.label[defaultLanguageId],
+								filterBy: parsedFilter.filterBy,
+								filterType,
+								label: objectField.label,
+								objectFieldBusinessType:
+									objectField.businessType,
+								objectFieldName: objectField.name,
+								value:
+									objectField.businessType === 'Integer' ||
+									objectField.businessType === 'LongInteger'
+										? (parsedFilter.json as {
+												[key: string]: string;
+										  })[filterType]
+										: undefined,
+							};
+
+							if (
+								objectField.businessType === 'Date' &&
+								parsedFilter.filterType === 'range'
+							) {
+								const dateRangeFilterValues = parsedFilter.json as ObjectFieldDateRangeFilterSettings;
+
+								const aggregationFilterDateRangeValues: LabelValueObject[] = [
+									{
+										label: dateRangeFilterValues['ge'],
+										value: 'ge',
+									},
+									{
+										label: dateRangeFilterValues['le'],
+										value: 'le',
+									},
+								];
+
+								const dateRangeAggregationFilter: AggregationFilters = {
+									...aggregationFilter,
+									valueList: aggregationFilterDateRangeValues,
+								};
+
+								return dateRangeAggregationFilter;
+							}
+
+							if (objectField.businessType === 'Picklist') {
+								const picklistFilterValues = getPicklistFilterJSONValues(
+									filterType,
+									parsedFilter
+								) as string[];
+
+								const picklistValueList: LabelValueObject[] = picklistFilterValues.map(
+									(picklistFilterValue) => {
+										return {
+											checked: true,
+											label: picklistFilterValue,
+											value: picklistFilterValue,
+										};
+									}
+								);
+
+								const picklistAggregationFilter: AggregationFilters = {
+									...aggregationFilter,
+									valueList: picklistValueList,
+								};
+
+								return picklistAggregationFilter;
+							}
+
+							if (objectField.name === 'status') {
+								const statusFilterValues = getPicklistFilterJSONValues(
+									filterType,
+									parsedFilter
+								) as number[];
+
+								const workflowStatusValueList = statusFilterValues.map(
+									(statusValue) => {
+										const currentStatus = workflowStatusJSONArray.find(
+											(workflowStatus) =>
+												Number(workflowStatus.value) ===
+												statusValue
+										);
+
+										return {
+											label: currentStatus?.label,
+											value: currentStatus?.label,
+										};
+									}
+								);
+
+								const statusAggregationFilter: AggregationFilters = {
+									...aggregationFilter,
+									valueList: workflowStatusValueList as LabelValueObject[],
+								};
+
+								return statusAggregationFilter;
+							}
+
+							return aggregationFilter;
+						}
+					}
+				);
+
+				setAggregationFilters(
+					newAggregationFilters as AggregationFilters[]
+				);
+			}
+		}
+
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [objectFields]);
+
 	return (
 		<SidePanelForm
 			className="lfr-objects__edit-object-field"
 			onSubmit={handleSubmit}
 			readOnly={
-				isSystemObject && objectName !== 'AccountEntry'
+				values.system && objectName !== 'AccountEntry'
 					? disabled
 					: readOnly
 			}
@@ -148,29 +465,30 @@ export default function EditObjectField({
 		>
 			<Card title={Liferay.Language.get('basic-info')}>
 				<InputLocalized
-					defaultLanguageId={defaultLanguageId}
+					disableFlag={values.system && objectName !== 'AccountEntry'}
 					disabled={
-						isSystemObject && objectName !== 'AccountEntry'
+						values.system && objectName !== 'AccountEntry'
 							? disabled
 							: readOnly
 					}
 					error={errors.label}
 					label={Liferay.Language.get('label')}
-					locales={locales}
-					onSelectedLocaleChange={setSelectedLocale}
-					onTranslationsChange={(label) => setValues({label})}
+					onChange={(label) => setValues({label})}
 					required
-					selectedLocale={locale}
 					translations={values.label as LocalizedValue<string>}
 				/>
 
 				<ObjectFieldFormBase
 					disabled={disabled}
+					editingField
 					errors={errors}
 					handleChange={handleChange}
+					objectDefinitionId={objectDefinitionId}
 					objectField={values}
 					objectFieldTypes={objectFieldTypes}
 					objectName={objectName}
+					onAggregationFilterChange={setAggregationFilters}
+					onRelationshipChange={setObjectDefinitionId2}
 					setValues={setValues}
 				>
 					{values.businessType === 'Attachment' && (
@@ -187,12 +505,12 @@ export default function EditObjectField({
 						values.businessType === 'LongText') && (
 						<MaxLengthProperties
 							disabled={
-								isSystemObject && objectName !== 'AccountEntry'
+								values.system && objectName !== 'AccountEntry'
 									? disabled
 									: readOnly
 							}
 							errors={errors}
-							isSystemObject={isSystemObject}
+							isSystemObjectField={!!values.system}
 							objectField={values}
 							objectFieldSettings={
 								values.objectFieldSettings as ObjectFieldSetting[]
@@ -204,6 +522,58 @@ export default function EditObjectField({
 				</ObjectFieldFormBase>
 			</Card>
 
+			{values.businessType === 'Aggregation' && (
+				<BuilderScreen
+					disableEdit
+					emptyState={{
+						buttonText: Liferay.Language.get('new-filter'),
+						description: Liferay.Language.get(
+							'use-conditions-to-specify-which-fields-will-be-considered-in-the-aggregation'
+						),
+						title: Liferay.Language.get(
+							'no-filter-was-created-yet'
+						),
+					}}
+					filter
+					firstColumnHeader={Liferay.Language.get('filter-by')}
+					objectColumns={aggregationFilters}
+					onDeleteColumn={handleDeleteFilterColumn}
+					onEditingObjectFieldName={setEditingObjectFieldName}
+					onVisibleEditModal={setVisibleModal}
+					openModal={() => setVisibleModal(true)}
+					secondColumnHeader={Liferay.Language.get('type')}
+					thirdColumnHeader={Liferay.Language.get('value')}
+					title={Liferay.Language.get('filters')}
+				/>
+			)}
+
+			{visibleModal && (
+				<ModalAddFilter
+					currentFilters={[]}
+					editingFilter={editingFilter}
+					editingObjectFieldName={editingObjectFieldName}
+					filterOperators={filterOperators}
+					header={Liferay.Language.get('filter')}
+					objectFields={
+						objectFields?.filter((objectField) => {
+							if (
+								objectField.businessType === 'Date' ||
+								objectField.businessType === 'Integer' ||
+								objectField.businessType === 'LongInteger' ||
+								objectField.businessType === 'Picklist' ||
+								objectField.name === 'status'
+							) {
+								return objectField;
+							}
+						}) ?? []
+					}
+					observer={observer}
+					onClose={onClose}
+					onSave={handleSaveFilterColumn}
+					workflowStatusJSONArray={workflowStatusJSONArray}
+				/>
+			)}
+
 			{values.DBType !== 'Blob' && (
 				<SearchableContainer
 					disabled={disabled}
@@ -213,6 +583,17 @@ export default function EditObjectField({
 					readOnly={readOnly}
 					setValues={setValues}
 				/>
+			)}
+
+			{Liferay.FeatureFlags['LPS-135430'] && !isDefaultStorageType && (
+				<Card title={Liferay.Language.get('external-data-source')}>
+					<Input
+						label={Liferay.Language.get('external-reference-code')}
+						name="externalReferenceCode"
+						onChange={handleChange}
+						value={values.externalReferenceCode}
+					/>
+				</Card>
 			)}
 		</SidePanelForm>
 	);
@@ -229,16 +610,15 @@ function SearchableContainer({
 		objectField.indexed &&
 		(objectField.DBType === 'Clob' ||
 			objectField.DBType === 'String' ||
-			objectField.businessType === 'Attachment');
+			objectField.businessType === 'Attachment') &&
+		objectField.businessType !== 'Aggregation';
 
-	const selectedLanguage = useMemo(() => {
-		const selectedLabel =
+	const selectedLanguageIndex = useMemo(() => {
+		const label =
 			objectField.indexedLanguageId &&
 			languages[objectField.indexedLanguageId];
 
-		return selectedLabel
-			? languageLabels.indexOf(selectedLabel)
-			: undefined;
+		return label ? languageLabels.indexOf(label) : undefined;
 	}, [objectField.indexedLanguageId]);
 
 	return (
@@ -291,8 +671,11 @@ function SearchableContainer({
 					disabled={disabled}
 					label={Liferay.Language.get('language')}
 					name="indexedLanguageId"
-					onChange={({target: {value}}: any) => {
-						const selectedLabel = languageLabels[value];
+					onChange={({target: {value}}) => {
+						const selectedLabel =
+							languageLabels[
+								value as keyof typeof languageLabels
+							];
 						const [indexedLanguageId] = Object.entries(
 							languages
 						).find(([, label]) => selectedLabel === label) as [
@@ -303,7 +686,7 @@ function SearchableContainer({
 					}}
 					options={languageLabels}
 					required
-					value={selectedLanguage}
+					value={selectedLanguageIndex}
 				/>
 			)}
 		</Card>
@@ -313,7 +696,7 @@ function SearchableContainer({
 function MaxLengthProperties({
 	disabled,
 	errors,
-	isSystemObject,
+	isSystemObjectField,
 	objectField,
 	objectFieldSettings,
 	onSettingsChange,
@@ -346,8 +729,8 @@ function MaxLengthProperties({
 	return (
 		<>
 			<ClayForm.Group>
-				<ClayToggle
-					disabled={isSystemObject ?? disabled}
+				<Toggle
+					disabled={isSystemObjectField ?? disabled}
 					label={Liferay.Language.get('limit-characters')}
 					name="showCounter"
 					onToggle={(value) => {
@@ -365,19 +748,10 @@ function MaxLengthProperties({
 						setValues({objectFieldSettings: updatedSettings});
 					}}
 					toggled={!!settings.showCounter}
-				/>
-				&nbsp;
-				<span
-					data-tooltip-align="top"
-					title={Liferay.Language.get(
+					tooltip={Liferay.Language.get(
 						'when-enabled-a-character-counter-will-be-shown-to-the-user'
 					)}
-				>
-					<ClayIcon
-						className="lfr-objects__edit-object-field-tooltip-icon"
-						symbol="question-circle-full"
-					/>
-				</span>
+				/>
 			</ClayForm.Group>
 			<ClayForm.Group>
 				{settings.showCounter && (
@@ -432,6 +806,7 @@ function AttachmentProperties({
 							'/myDocumentsAndMediaFolder'
 						)}
 						label={Liferay.Language.get('storage-folder')}
+						maxLength={255}
 						onChange={({target: {value}}) =>
 							onSettingsChange({
 								name: 'storageDLFolderPath',
@@ -476,6 +851,24 @@ function AttachmentProperties({
 	);
 }
 
+interface AggregationFilters {
+	defaultSort?: boolean;
+	fieldLabel?: string;
+	filterBy?: string;
+	filterType?: string;
+	label: LocalizedValue<string>;
+	objectFieldBusinessType?: string;
+	objectFieldName: string;
+	priority?: number;
+	sortOrder?: string;
+	type?: string;
+	value?: string;
+	valueList?: LabelValueObject[];
+}
+
+interface IItem extends LabelValueObject {
+	checked?: boolean;
+}
 interface IAttachmentPropertiesProps {
 	errors: ObjectFieldErrors;
 	objectFieldSettings: ObjectFieldSetting[];
@@ -485,7 +878,7 @@ interface IAttachmentPropertiesProps {
 interface IMaxLengthPropertiesProps {
 	disabled: boolean;
 	errors: ObjectFieldErrors;
-	isSystemObject: boolean;
+	isSystemObjectField: boolean;
 	objectField: Partial<ObjectField>;
 	objectFieldSettings: ObjectFieldSetting[];
 	onSettingsChange: (setting: ObjectFieldSetting) => void;
@@ -493,15 +886,18 @@ interface IMaxLengthPropertiesProps {
 }
 
 interface IProps {
+	filterOperators: TFilterOperators;
 	forbiddenChars: string[];
 	forbiddenLastChars: string[];
 	forbiddenNames: string[];
 	isApproved: boolean;
-	isSystemObject: boolean;
+	isDefaultStorageType: boolean;
+	objectDefinitionId: number;
 	objectField: ObjectField;
 	objectFieldTypes: ObjectFieldType[];
 	objectName: string;
 	readOnly: boolean;
+	workflowStatusJSONArray: LabelValueObject[];
 }
 
 interface ISearchableProps {

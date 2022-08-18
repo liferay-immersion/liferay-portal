@@ -15,7 +15,15 @@
 import {LAYOUT_DATA_ITEM_TYPE_LABELS} from '../config/constants/layoutDataItemTypeLabels';
 import {LAYOUT_DATA_ITEM_TYPES} from '../config/constants/layoutDataItemTypes';
 
-export default function selectLayoutDataItemLabel({fragmentEntryLinks}, item) {
+export default function selectLayoutDataItemLabel(
+	{fragmentEntryLinks},
+	item,
+	{useCustomName = true} = {}
+) {
+	if (useCustomName && item.config?.name) {
+		return item.config.name;
+	}
+
 	if (
 		item.type === LAYOUT_DATA_ITEM_TYPES.fragment &&
 		fragmentEntryLinks[item.config?.fragmentEntryLinkId]?.name

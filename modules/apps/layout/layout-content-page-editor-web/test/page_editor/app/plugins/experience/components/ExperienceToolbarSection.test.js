@@ -148,6 +148,11 @@ const mockConfig = {
 describe('ExperienceToolbarSection', () => {
 	beforeAll(() => {
 		Liferay.component = jest.fn();
+
+		window.Liferay = {
+			...Liferay,
+			FeatureFlags: {},
+		};
 	});
 
 	afterEach(() => {
@@ -235,7 +240,7 @@ describe('ExperienceToolbarSection', () => {
 
 		const icons = getAllByRole('presentation');
 
-		const lockIcon = icons[1];
+		const lockIcon = icons[2];
 
 		// Hackily work around:
 		//

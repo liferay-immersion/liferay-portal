@@ -207,6 +207,28 @@ public class ImportExportLayoutPageTemplateEntriesTest {
 	}
 
 	@Test
+	public void testImportExportLayoutPageTemplateEntryCollectionDisplayName()
+		throws Exception {
+
+		Map<String, String> numberValuesMap = HashMapBuilder.put(
+			"CLASS_PK",
+			() -> {
+				AssetListEntry assetListEntry = _addAssetListEntry(
+					_group1.getGroupId());
+
+				return String.valueOf(assetListEntry.getAssetListEntryId());
+			}
+		).build();
+
+		File expectedFile = _generateZipFile(
+			"collection_display/name/expected", numberValuesMap, null);
+		File inputFile = _generateZipFile(
+			"collection_display/name/input", numberValuesMap, null);
+
+		_validateImportExport(expectedFile, inputFile);
+	}
+
+	@Test
 	public void testImportExportLayoutPageTemplateEntryContainerBackgroundFragmentImage()
 		throws Exception {
 
@@ -259,6 +281,46 @@ public class ImportExportLayoutPageTemplateEntriesTest {
 			"container/complete/expected", null, null);
 		File inputFile = _generateZipFile(
 			"container/complete/input", null, null);
+
+		_validateImportExport(expectedFile, inputFile);
+	}
+
+	@Test
+	public void testImportExportLayoutPageTemplateEntryContainerContentVisibility()
+		throws Exception {
+
+		File expectedFile = _generateZipFile(
+			"container/content_visibility/expected", null, null);
+		File inputFile = _generateZipFile(
+			"container/content_visibility/input", null, null);
+
+		_validateImportExport(expectedFile, inputFile);
+	}
+
+	@Test
+	public void testImportExportLayoutPageTemplateEntryContainerCssClasses()
+		throws Exception {
+
+		_addTextFragmentEntry();
+
+		File expectedFile = _generateZipFile(
+			"container/css_classes/expected", null, null);
+		File inputFile = _generateZipFile(
+			"container/css_classes/input", null, null);
+
+		_validateImportExport(expectedFile, inputFile);
+	}
+
+	@Test
+	public void testImportExportLayoutPageTemplateEntryContainerCustomCSS()
+		throws Exception {
+
+		_addTextFragmentEntry();
+
+		File expectedFile = _generateZipFile(
+			"container/custom_css/expected", null, null);
+		File inputFile = _generateZipFile(
+			"container/custom_css/input", null, null);
 
 		_validateImportExport(expectedFile, inputFile);
 	}
@@ -407,6 +469,114 @@ public class ImportExportLayoutPageTemplateEntriesTest {
 	}
 
 	@Test
+	public void testImportExportLayoutPageTemplateEntryContainerName()
+		throws Exception {
+
+		File expectedFile = _generateZipFile(
+			"container/name/expected", null, null);
+		File inputFile = _generateZipFile("container/name/input", null, null);
+
+		_validateImportExport(expectedFile, inputFile);
+	}
+
+	@Test
+	public void testImportExportLayoutPageTemplateEntryFormContainerName()
+		throws Exception {
+
+		File expectedFile = _generateZipFile("form/name/expected", null, null);
+		File inputFile = _generateZipFile("form/name/input", null, null);
+
+		_validateImportExport(expectedFile, inputFile);
+	}
+
+	@Test
+	public void testImportExportLayoutPageTemplateEntryFormContainerWithEmbeddedSuccessMessage()
+		throws Exception {
+
+		try (PropsTemporarySwapper propsTemporarySwapper =
+				new PropsTemporarySwapper(
+					"feature.flag.LPS-149720", Boolean.TRUE.toString())) {
+
+			File expectedFile = _generateZipFile(
+				"form/success_message_embedded/expected", null, null);
+			File inputFile = _generateZipFile(
+				"form/success_message_embedded/input", null, null);
+
+			_validateImportExport(expectedFile, inputFile);
+		}
+	}
+
+	@Test
+	public void testImportExportLayoutPageTemplateEntryFormContainerWithLayoutSuccessMessage()
+		throws Exception {
+
+		try (PropsTemporarySwapper propsTemporarySwapper =
+				new PropsTemporarySwapper(
+					"feature.flag.LPS-149720", Boolean.TRUE.toString())) {
+
+			Layout layout = LayoutTestUtil.addTypeContentLayout(_group1);
+
+			Map<String, String> stringValuesMap = HashMapBuilder.put(
+				"FRIENDLY_URL", layout.getFriendlyURL()
+			).put(
+				"SITE_KEY", String.valueOf(_group1.getGroupKey())
+			).build();
+
+			File expectedFile = _generateZipFile(
+				"form/success_message_layout/expected", null, stringValuesMap);
+			File inputFile = _generateZipFile(
+				"form/success_message_layout/input", null, stringValuesMap);
+
+			_validateImportExport(expectedFile, inputFile);
+		}
+	}
+
+	@Test
+	public void testImportExportLayoutPageTemplateEntryFormContainerWithURLSuccessMessage()
+		throws Exception {
+
+		try (PropsTemporarySwapper propsTemporarySwapper =
+				new PropsTemporarySwapper(
+					"feature.flag.LPS-149720", Boolean.TRUE.toString())) {
+
+			File expectedFile = _generateZipFile(
+				"form/success_message_url/expected", null, null);
+			File inputFile = _generateZipFile(
+				"form/success_message_url/input", null, null);
+
+			_validateImportExport(expectedFile, inputFile);
+		}
+	}
+
+	@Test
+	public void testImportExportLayoutPageTemplateEntryFragmentCssClasses()
+		throws Exception {
+
+		_addTextFragmentEntry();
+
+		File expectedFile = _generateZipFile(
+			"fragment/css_classes/expected", null, null);
+		File inputFile = _generateZipFile(
+			"fragment/css_classes/input", null, null);
+
+		_validateImportExport(expectedFile, inputFile);
+	}
+
+	@Test
+	public void testImportExportLayoutPageTemplateEntryFragmentCustomCSS()
+		throws Exception {
+
+		_addTextFragmentEntry();
+
+		File expectedFile = _generateZipFile(
+			"fragment/custom_css/expected", null, null);
+		File inputFile = _generateZipFile(
+			"fragment/custom_css/input", null, null);
+
+		_validateImportExport(expectedFile, inputFile);
+	}
+
+	@Test
 	public void testImportExportLayoutPageTemplateEntryFragmentHidden()
 		throws Exception {
 
@@ -496,22 +666,30 @@ public class ImportExportLayoutPageTemplateEntriesTest {
 	}
 
 	@Test
+	public void testImportExportLayoutPageTemplateEntryFragmentName()
+		throws Exception {
+
+		_addTextFragmentEntry();
+
+		File expectedFile = _generateZipFile(
+			"fragment/name/expected", null, null);
+		File inputFile = _generateZipFile("fragment/name/input", null, null);
+
+		_validateImportExport(expectedFile, inputFile);
+	}
+
+	@Test
 	public void testImportExportLayoutPageTemplateEntryFragmentResponsiveStyles()
 		throws Exception {
 
-		try (PropsTemporarySwapper propsTemporarySwapper =
-				new PropsTemporarySwapper(
-					"feature.flag.LPS-132571", Boolean.TRUE.toString())) {
+		_addTextFragmentEntry();
 
-			_addTextFragmentEntry();
+		File expectedFile = _generateZipFile(
+			"fragment/responsive/expected", null, null);
+		File inputFile = _generateZipFile(
+			"fragment/responsive/input", null, null);
 
-			File expectedFile = _generateZipFile(
-				"fragment/responsive/expected", null, null);
-			File inputFile = _generateZipFile(
-				"fragment/responsive/input", null, null);
-
-			_validateImportExport(expectedFile, inputFile);
-		}
+		_validateImportExport(expectedFile, inputFile);
 	}
 
 	@Test
@@ -756,6 +934,41 @@ public class ImportExportLayoutPageTemplateEntriesTest {
 		_validateImportExport(expectedFile, inputFile);
 	}
 
+	@Test
+	public void testImportExportLayoutPageTemplateEntryRowCssClasses()
+		throws Exception {
+
+		_addTextFragmentEntry();
+
+		File expectedFile = _generateZipFile(
+			"container/css_classes/expected", null, null);
+		File inputFile = _generateZipFile(
+			"container/css_classes/input", null, null);
+
+		_validateImportExport(expectedFile, inputFile);
+	}
+
+	@Test
+	public void testImportExportLayoutPageTemplateEntryRowCustomCSS()
+		throws Exception {
+
+		File expectedFile = _generateZipFile(
+			"row/custom_css/expected", null, null);
+		File inputFile = _generateZipFile("row/custom_css/input", null, null);
+
+		_validateImportExport(expectedFile, inputFile);
+	}
+
+	@Test
+	public void testImportExportLayoutPageTemplateEntryRowName()
+		throws Exception {
+
+		File expectedFile = _generateZipFile("row/name/expected", null, null);
+		File inputFile = _generateZipFile("row/name/input", null, null);
+
+		_validateImportExport(expectedFile, inputFile);
+	}
+
 	private AssetListEntry _addAssetListEntry(long groupId)
 		throws PortalException {
 
@@ -901,10 +1114,8 @@ public class ImportExportLayoutPageTemplateEntriesTest {
 		List<LayoutPageTemplatesImporterResultEntry>
 			layoutPageTemplatesImporterResultEntries = null;
 
-		ServiceContext serviceContext = _getServiceContext(
-			_group1, TestPropsValues.getUserId());
-
-		ServiceContextThreadLocal.pushServiceContext(serviceContext);
+		ServiceContextThreadLocal.pushServiceContext(
+			_getServiceContext(_group1, TestPropsValues.getUserId()));
 
 		try {
 			layoutPageTemplatesImporterResultEntries =

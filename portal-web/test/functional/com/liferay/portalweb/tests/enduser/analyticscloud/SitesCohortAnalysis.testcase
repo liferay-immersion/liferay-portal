@@ -37,6 +37,8 @@ definition {
 	tearDown {
 		var testPortalInstance = PropsUtil.get("test.portal.instance");
 
+		ACUtils.tearDownAC();
+
 		ACUtils.tearDownDXP();
 
 		if ("${testPortalInstance}" == "true") {
@@ -45,15 +47,13 @@ definition {
 		else {
 			JSONGroup.deleteGroupByName(groupName = "Site Name");
 		}
-
-		JSONUser.tearDownNonAdminUsers();
-
-		ACUtils.tearDownAC();
 	}
 
 	@description = "Feature ID: Legacy | Automation ID: LRAC-8327 | Test Summary: Assert Sites Cohort Analysis sort Anonymous Visitors"
 	@priority = "3"
 	test AssertSitesCohortAnalysisSortAnonymousVisitors {
+		property analytics.cloud.upstream = "false";
+
 		task ("Logout from DXP") {
 			User.logoutPG();
 		}
@@ -123,7 +123,7 @@ definition {
 		}
 
 		task ("Assert that the cohort analysis card shows which individuals are returning after their first views") {
-			while (IsElementNotPresent(locator1 = "ACSites#COHORT_ANALYSIS_DAY_ZERO_PERCENTAGE") && (maxIterations = "50")) {
+			while ((IsElementNotPresent(locator1 = "ACSites#COHORT_ANALYSIS_DAY_ZERO_PERCENTAGE")) && (maxIterations = "50")) {
 				TestUtils.hardRefresh();
 			}
 

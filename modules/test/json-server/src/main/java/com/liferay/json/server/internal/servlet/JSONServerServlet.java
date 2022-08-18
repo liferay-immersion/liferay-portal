@@ -409,21 +409,29 @@ public class JSONServerServlet extends HttpServlet {
 					"Missing model name in path " + path);
 			}
 
-			_applicationMap = _applicationMaps.get(parts.get(0));
+			String applicationName = parts.get(0);
+
+			_applicationMap = _applicationMaps.get(applicationName);
 
 			if (_applicationMap == null) {
 				throw new IllegalArgumentException(
-					"Unknown application name " + parts.get(0));
+					"Unknown application name " + applicationName);
 			}
 
-			_modelName = parts.get(1);
+			long id = -1;
+			String modelName = parts.get(1);
 
 			if (parts.size() > 2) {
-				_id = GetterUtil.getLongStrict(parts.get(2));
+				try {
+					id = GetterUtil.getLongStrict(parts.get(2));
+				}
+				catch (IllegalArgumentException illegalArgumentException) {
+					modelName = path.substring(applicationName.length() + 2);
+				}
 			}
-			else {
-				_id = -1;
-			}
+
+			_id = id;
+			_modelName = modelName;
 
 			byte[] bytes = StreamUtil.toByteArray(
 				httpServletRequest.getInputStream());

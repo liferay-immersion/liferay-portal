@@ -14,10 +14,8 @@
 
 import React, {useContext} from 'react';
 
-import {defaultLanguageId} from '../../../utils/locale';
 import Panel from '../../Panel/Panel';
 import LayoutContext, {TYPES} from '../context';
-import {TObjectField} from '../types';
 import HeaderDropdown from './HeaderDropdown';
 import RequiredLabel from './RequiredLabel';
 
@@ -28,6 +26,8 @@ interface IObjectLayoutFieldProps extends React.HTMLAttributes<HTMLElement> {
 	rowIndex: number;
 	tabIndex: number;
 }
+
+const defaultLanguageId = Liferay.ThemeDisplay.getDefaultLanguageId();
 
 const ObjectLayoutField: React.FC<IObjectLayoutFieldProps> = ({
 	boxIndex,
@@ -40,14 +40,11 @@ const ObjectLayoutField: React.FC<IObjectLayoutFieldProps> = ({
 		LayoutContext
 	);
 
-	const objectField = objectFields.find(
-		({id}) => id === objectFieldId
-	) as TObjectField;
+	const objectField = objectFields.find(({id}) => id === objectFieldId)!;
 
 	const objectFieldType = objectFieldTypes.find(
-		(objectFieldType) =>
-			objectFieldType.businessType === objectField.businessType
-	) as ObjectFieldType;
+		({businessType}) => businessType === objectField.businessType
+	);
 
 	return (
 		<>
@@ -69,7 +66,7 @@ const ObjectLayoutField: React.FC<IObjectLayoutFieldProps> = ({
 							}}
 						/>
 					}
-					title={objectField?.label[defaultLanguageId]}
+					title={objectField?.label[defaultLanguageId]!}
 				>
 					<small className="text-secondary">
 						{objectFieldType?.label} |{' '}

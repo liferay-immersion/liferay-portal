@@ -15,7 +15,10 @@
 package com.liferay.portal.upgrade.v7_4_x;
 
 import com.liferay.portal.kernel.dao.jdbc.AutoBatchPreparedStatementUtil;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.upgrade.UpgradeProcess;
+import com.liferay.portal.kernel.util.LoggingTimer;
 import com.liferay.portal.kernel.util.StringBundler;
 
 import java.sql.PreparedStatement;
@@ -28,104 +31,93 @@ public class UpgradeExternalReferenceCode extends UpgradeProcess {
 
 	@Override
 	protected void doUpgrade() throws Exception {
-		upgradeExternalReferenceCodes("AccountEntry", "accountEntryId");
-		upgradeExternalReferenceCodes("AccountGroup", "accountGroupId");
-		upgradeExternalReferenceCodes("Address", "addressId");
-		upgradeExternalReferenceCodes("AssetCategory", "categoryId");
-		upgradeExternalReferenceCodes("AssetVocabulary", "vocabularyId");
-		upgradeExternalReferenceCodes("BlogsEntry", "entryId");
-		upgradeExternalReferenceCodes("CIWarehouse", "CIWarehouseId");
-		upgradeExternalReferenceCodes("CIWarehouseItem", "CIWarehouseItemId");
-		upgradeExternalReferenceCodes("CommerceCatalog", "commerceCatalogId");
-		upgradeExternalReferenceCodes("CommerceChannel", "commerceChannelId");
-		upgradeExternalReferenceCodes("CommerceDiscount", "commerceDiscountId");
-		upgradeExternalReferenceCodes("CommerceOrder", "commerceOrderId");
-		upgradeExternalReferenceCodes(
-			"CommerceOrderItem", "commerceOrderItemId");
-		upgradeExternalReferenceCodes(
-			"CommerceOrderNote", "commerceOrderNoteId");
-		upgradeExternalReferenceCodes(
-			"CommerceOrderType", "commerceOrderTypeId");
-		upgradeExternalReferenceCodes(
-			"CommerceOrderTypeRel", "commerceOrderTypeRelId");
-		upgradeExternalReferenceCodes(
-			"CommercePriceEntry", "commercePriceEntryId");
-		upgradeExternalReferenceCodes(
-			"CommercePriceList", "commercePriceListId");
-		upgradeExternalReferenceCodes(
-			"CommercePriceModifier", "commercePriceModifierId");
-		upgradeExternalReferenceCodes(
-			"CommercePricingClass", "commercePricingClassId");
-		upgradeExternalReferenceCodes(
-			"CommerceTermEntry", "commerceTermEntryId");
-		upgradeExternalReferenceCodes(
-			"CommerceTierPriceEntry", "commerceTierPriceEntryId");
-		upgradeExternalReferenceCodes("COREntry", "COREntryId");
-		upgradeExternalReferenceCodes(
-			"CPAttachmentFileEntry", "CPAttachmentFileEntryId");
-		upgradeExternalReferenceCodes("CPInstance", "CPInstanceId");
-		upgradeExternalReferenceCodes("CPOption", "CPOptionId");
-		upgradeExternalReferenceCodes("CPOptionValue", "CPOptionValueId");
-		upgradeExternalReferenceCodes("CProduct", "CProductId");
-		upgradeExternalReferenceCodes("CPTaxCategory", "CPTaxCategoryId");
-		upgradeExternalReferenceCodes("DLFileEntry", "fileEntryId");
-		upgradeExternalReferenceCodes("KBArticle", "kbArticleId");
-		upgradeExternalReferenceCodes("KBFolder", "kbFolderId");
-		upgradeExternalReferenceCodes("MBMessage", "messageId");
-		upgradeExternalReferenceCodes("ObjectEntry", "objectEntryId");
-		upgradeExternalReferenceCodes("Organization_", "organizationId");
-		upgradeExternalReferenceCodes("RemoteAppEntry", "remoteAppEntryId");
-		upgradeExternalReferenceCodes("User_", "userId");
-		upgradeExternalReferenceCodes("UserGroup", "userGroupId");
-		upgradeExternalReferenceCodes("WikiNode", "nodeId");
-		upgradeExternalReferenceCodes("WikiPage", "pageId");
+		upgradeExternalReference("Address", "addressId");
+		upgradeExternalReference("AssetCategory", "categoryId");
+		upgradeExternalReference("AssetVocabulary", "vocabularyId");
+		upgradeExternalReference("BlogsEntry", "entryId");
+		upgradeExternalReference("DLFileEntry", "fileEntryId");
+		upgradeExternalReference("Organization_", "organizationId");
+		upgradeExternalReference("User_", "userId");
+		upgradeExternalReference("UserGroup", "userGroupId");
 	}
 
-	protected void upgradeExternalReferenceCodes(
+	protected void upgradeExternalReference(
 			String tableName, String primKeyColumnName)
 		throws Exception {
 
-		if (!hasTable(tableName) ||
-			!hasColumn(tableName, "externalReferenceCode")) {
+		if (!hasTable(tableName)) {
+			if (_log.isDebugEnabled()) {
+				_log.debug("Skip nonexistent table " + tableName);
+			}
 
 			return;
 		}
 
-		StringBundler selectSB = new StringBundler(6);
+		if (_log.isDebugEnabled()) {
+			_log.debug("Upgrade table " + tableName);
+		}
 
-		selectSB.append("select ");
-		selectSB.append(primKeyColumnName);
-		selectSB.append(" from ");
-		selectSB.append(tableName);
-		selectSB.append(" where externalReferenceCode is null or ");
-		selectSB.append("externalReferenceCode = ''");
+		if (!hasColumn(tableName, "externalReferenceCode")) {
+			alterTableAddColumn(
+				tableName, "externalReferenceCode", "VARCHAR(75)");
+		}
 
-		StringBundler updateSB = new StringBundler(5);
+		try (LoggingTimer loggingTimer = new LoggingTimer()) {
+			StringBundler selectSB = new StringBundler(7);
 
-		updateSB.append("update ");
-		updateSB.append(tableName);
-		updateSB.append(" set externalReferenceCode = ? where ");
-		updateSB.append(primKeyColumnName);
-		updateSB.append(" = ?");
+			selectSB.append("select ");
+			selectSB.append(primKeyColumnName);
 
-		try (PreparedStatement preparedStatement1 = connection.prepareStatement(
-				selectSB.toString());
-			ResultSet resultSet = preparedStatement1.executeQuery();
-			PreparedStatement preparedStatement2 =
-				AutoBatchPreparedStatementUtil.autoBatch(
-					connection.prepareStatement(updateSB.toString()))) {
+			boolean hasUuid = hasColumn(tableName, "uuid_");
 
-			while (resultSet.next()) {
-				long primKey = resultSet.getLong(1);
-
-				preparedStatement2.setString(1, String.valueOf(primKey));
-				preparedStatement2.setLong(2, primKey);
-
-				preparedStatement2.addBatch();
+			if (hasUuid) {
+				selectSB.append(", uuid_");
 			}
 
-			preparedStatement2.executeBatch();
+			selectSB.append(" from ");
+			selectSB.append(tableName);
+			selectSB.append(" where externalReferenceCode is null or ");
+			selectSB.append("externalReferenceCode = ''");
+
+			StringBundler updateSB = new StringBundler(5);
+
+			updateSB.append("update ");
+			updateSB.append(tableName);
+			updateSB.append(" set externalReferenceCode = ? where ");
+			updateSB.append(primKeyColumnName);
+			updateSB.append(" = ?");
+
+			try (PreparedStatement preparedStatement1 =
+					connection.prepareStatement(selectSB.toString());
+				ResultSet resultSet = preparedStatement1.executeQuery();
+				PreparedStatement preparedStatement2 =
+					AutoBatchPreparedStatementUtil.autoBatch(
+						connection, updateSB.toString())) {
+
+				while (resultSet.next()) {
+					long primKey = resultSet.getLong(1);
+
+					if (hasUuid) {
+						String uuid = resultSet.getString(2);
+
+						preparedStatement2.setString(1, uuid);
+					}
+					else {
+						preparedStatement2.setString(
+							1, String.valueOf(primKey));
+					}
+
+					preparedStatement2.setLong(2, primKey);
+
+					preparedStatement2.addBatch();
+				}
+
+				preparedStatement2.executeBatch();
+			}
 		}
 	}
+
+	private static final Log _log = LogFactoryUtil.getLog(
+		UpgradeExternalReferenceCode.class);
 
 }

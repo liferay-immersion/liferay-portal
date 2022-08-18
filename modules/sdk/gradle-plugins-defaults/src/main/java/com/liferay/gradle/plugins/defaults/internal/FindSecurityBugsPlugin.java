@@ -16,7 +16,7 @@ package com.liferay.gradle.plugins.defaults.internal;
 
 import com.liferay.gradle.plugins.defaults.internal.util.FileUtil;
 import com.liferay.gradle.plugins.defaults.internal.util.GradleUtil;
-import com.liferay.gradle.plugins.defaults.tasks.WriteFindBugsProjectTask;
+import com.liferay.gradle.plugins.defaults.task.WriteFindBugsProjectTask;
 import com.liferay.gradle.plugins.jasper.jspc.CompileJSPTask;
 import com.liferay.gradle.plugins.jasper.jspc.JspCPlugin;
 

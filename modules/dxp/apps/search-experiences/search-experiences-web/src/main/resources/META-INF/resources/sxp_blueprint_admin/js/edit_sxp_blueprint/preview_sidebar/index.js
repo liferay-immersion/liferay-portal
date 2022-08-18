@@ -9,7 +9,6 @@
  * distribution rights of the Software.
  */
 
-import ClayAlert from '@clayui/alert';
 import ClayButton from '@clayui/button';
 import {Align} from '@clayui/drop-down';
 import ClayEmptyState from '@clayui/empty-state';
@@ -47,7 +46,6 @@ function PreviewSidebar({
 	responseString = '',
 	totalHits,
 	visible,
-	warnings = [],
 }) {
 	const [activeDelta, setActiveDelta] = useState(10);
 	const [activePage, setActivePage] = useState(1);
@@ -87,7 +85,7 @@ function PreviewSidebar({
 	);
 
 	const _renderHits = () => (
-		<div className="preview-results-list sidebar-body">
+		<div className="preview-results-list">
 			<ClayList>
 				{hits.map((result) => (
 					<ResultListItem
@@ -262,63 +260,50 @@ function PreviewSidebar({
 				</div>
 			</nav>
 
-			{!!warnings.length && (
-				<div className="warning-container">
-					{warnings.map((warning, index) => (
-						<ClayAlert
-							displayType="warning"
-							key={index}
-							title={Liferay.Language.get('warning')}
-							variant="stripe"
-						>
-							{warning.msg}
-						</ClayAlert>
-					))}
-				</div>
-			)}
+			<div className="sidebar-body">
+				{!!errors.length && _renderErrors()}
 
-			{isDefined(totalHits) &&
-				!errors.length &&
-				_renderResultsManagementBar()}
+				{isDefined(totalHits) && _renderResultsManagementBar()}
 
-			{!loading ? (
-				errors.length ? (
-					_renderErrors()
-				) : totalHits > 0 ? (
-					_renderHits()
-				) : totalHits === 0 ? (
-					<div className="empty-list-message">
-						<ClayEmptyState description="" />
-					</div>
-				) : (
-					<div className="search-message">
-						{Liferay.Language.get(
-							'perform-a-search-to-preview-your-blueprints-search-results'
-						)}
-					</div>
-				)
-			) : (
-				<>
-					<ClayLoadingIndicator />
-
-					{showCancel && (
-						<div className="search-message">
-							{Liferay.Language.get(
-								'it-looks-like-this-is-taking-longer-than-expected'
-							)}
-
-							<ClayButton
-								className="cancel"
-								displayType="secondary"
-								onClick={onFetchCancel}
-								small
-							>
-								{Liferay.Language.get('cancel')}
-							</ClayButton>
+				{!loading ? (
+					totalHits > 0 ? (
+						_renderHits()
+					) : totalHits === 0 ? (
+						<div className="empty-list-message">
+							<ClayEmptyState description="" />
 						</div>
-					)}
-				</>
-			)}
+					) : (
+						!errors.length && (
+							<div className="search-message">
+								{Liferay.Language.get(
+									'perform-a-search-to-preview-your-blueprints-search-results'
+								)}
+							</div>
+						)
+					)
+				) : (
+					<>
+						<ClayLoadingIndicator />
+
+						{showCancel && (
+							<div className="search-message">
+								{Liferay.Language.get(
+									'it-looks-like-this-is-taking-longer-than-expected'
+								)}
+
+								<ClayButton
+									className="cancel"
+									displayType="secondary"
+									onClick={onFetchCancel}
+									small
+								>
+									{Liferay.Language.get('cancel')}
+								</ClayButton>
+							</div>
+						)}
+					</>
+				)}
+			</div>
 		</div>
 	);
 }
@@ -334,7 +319,6 @@ PreviewSidebar.propTypes = {
 	responseString: PropTypes.string,
 	totalHits: PropTypes.number,
 	visible: PropTypes.bool,
-	warnings: PropTypes.arrayOf(PropTypes.object),
 };
 
 export default React.memo(PreviewSidebar);

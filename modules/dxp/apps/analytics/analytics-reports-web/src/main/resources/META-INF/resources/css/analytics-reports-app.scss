@@ -112,6 +112,8 @@ html#{$cadmin-selector} {
 				}
 
 				.pie-chart-wrapper--chart {
+					flex-shrink: 0;
+
 					.dim {
 						opacity: 0.4;
 					}

@@ -17,20 +17,19 @@ import ClayIcon from '@clayui/icon';
 import {useNavigate, useParams} from 'react-router-dom';
 
 import Container from '../../../components/Layout/Container';
-import ListView from '../../../components/ListView/ListView';
+import ListView from '../../../components/ListView';
 import ProgressBar from '../../../components/ProgressBar';
 import useBuildHistory from '../../../data/useBuildHistory';
-import {getBuilds} from '../../../graphql/queries';
 import i18n from '../../../i18n';
 import {filters} from '../../../schema/filter';
+import {buildsResource, getBuildsTransformData} from '../../../services/rest';
 import {BUILD_STATUS} from '../../../util/constants';
 import dayjs from '../../../util/date';
 import {searchUtil} from '../../../util/search';
-import RoutineBuildModal from './RoutineBuildModal';
-import useRoutineActions from './useRoutineActions';
+import useBuildActions from './Builds/useBuildActions';
 
 const Routine = () => {
-	const {actionsRoutine, formModal} = useRoutineActions();
+	const {actions, formModal} = useBuildActions();
 	const {barChart, colors} = useBuildHistory();
 	const {routineId} = useParams();
 	const navigate = useNavigate();
@@ -48,13 +47,13 @@ const Routine = () => {
 					},
 				}}
 				managementToolbarProps={{
-					addButton: () => navigate('update'),
+					addButton: () => navigate('create'),
 					filterFields: filters.build.index as any,
 					title: i18n.translate('build-history'),
 				}}
-				query={getBuilds}
+				resource={buildsResource}
 				tableProps={{
-					actions: actionsRoutine,
+					actions,
 					columns: [
 						{
 							key: 'status',
@@ -183,7 +182,7 @@ const Routine = () => {
 					],
 					navigateTo: ({id}) => `build/${id}`,
 				}}
-				transformData={(data) => data?.builds}
+				transformData={getBuildsTransformData}
 				variables={{
 					filter: searchUtil.eq('routineId', routineId as string),
 				}}
@@ -242,8 +241,6 @@ const Routine = () => {
 					</div>
 				)}
 			</ListView>
-
-			<RoutineBuildModal modal={formModal.modal} />
 		</Container>
 	);
 };

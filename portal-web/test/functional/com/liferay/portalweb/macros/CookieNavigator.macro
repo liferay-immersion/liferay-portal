@@ -32,6 +32,8 @@ definition {
 	macro gotoSiteSettings {
 		Variables.assertDefined(parameterList = "${portlet}");
 
+		takeScreenshot();
+
 		var baseURL = "${baseURL}";
 
 		if (!(isSet(baseURL))) {

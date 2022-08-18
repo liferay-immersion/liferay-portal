@@ -16,25 +16,31 @@
 
 import './EditObjectField.scss';
 export default function EditObjectField({
+	filterOperators,
 	forbiddenChars,
 	forbiddenLastChars,
 	forbiddenNames,
 	isApproved,
-	isSystemObject,
+	isDefaultStorageType,
+	objectDefinitionId,
 	objectField: initialValues,
 	objectFieldTypes,
 	objectName,
 	readOnly,
+	workflowStatusJSONArray,
 }: IProps): JSX.Element;
 interface IProps {
+	filterOperators: TFilterOperators;
 	forbiddenChars: string[];
 	forbiddenLastChars: string[];
 	forbiddenNames: string[];
 	isApproved: boolean;
-	isSystemObject: boolean;
+	isDefaultStorageType: boolean;
+	objectDefinitionId: number;
 	objectField: ObjectField;
 	objectFieldTypes: ObjectFieldType[];
 	objectName: string;
 	readOnly: boolean;
+	workflowStatusJSONArray: LabelValueObject[];
 }
 export {};

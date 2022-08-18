@@ -494,6 +494,27 @@ public class JSONServerServletTest {
 			Assert.assertEquals(
 				"Unknown ID in path /fruit/orange/3", message.get("message"));
 		}
+
+		// /fruit/supercalifragilisticexpialidocious/something/to/say/when/you
+		// /have/nothing/to/say?a=b&c=d&e=f
+
+		mockHttpServletRequest.setPathInfo(
+			"/fruit/supercalifragilisticexpialidocious/something/to/say/when" +
+				"/you/have/nothing/to/say?a=b&c=d&e=f");
+
+		mockHttpServletResponse = new MockHttpServletResponse();
+
+		_servlet.service(mockHttpServletRequest, mockHttpServletResponse);
+
+		List<Map<String, Object>> maps = _objectMapper.readValue(
+			mockHttpServletResponse.getContentAsString(), List.class);
+
+		Assert.assertEquals(maps.toString(), 1, maps.size());
+
+		Map<String, Object> map = maps.get(0);
+
+		Assert.assertEquals(1, map.get("id"));
+		Assert.assertEquals("Merlot", map.get("name"));
 	}
 
 	@Test

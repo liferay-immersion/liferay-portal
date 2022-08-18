@@ -31,6 +31,19 @@ import org.json.JSONObject;
  */
 public class AxisTestClassGroup extends BaseTestClassGroup {
 
+	public long getAverageDuration() {
+		BatchTestClassGroup batchTestClassGroup = getBatchTestClassGroup();
+
+		long averageDuration = batchTestClassGroup.getAverageOverheadDuration();
+
+		for (TestClass testClass : getTestClasses()) {
+			averageDuration += testClass.getAverageDuration();
+			averageDuration += testClass.getAverageOverheadDuration();
+		}
+
+		return averageDuration;
+	}
+
 	public String getAxisName() {
 		if (_segmentTestClassGroup != null) {
 			List<AxisTestClassGroup> axisTestClassGroups =
@@ -73,6 +86,7 @@ public class AxisTestClassGroup extends BaseTestClassGroup {
 	public JSONObject getJSONObject() {
 		JSONObject jsonObject = new JSONObject();
 
+		jsonObject.put("average_duration", getAverageDuration());
 		jsonObject.put("axis_name", getAxisName());
 
 		JSONArray testClassesJSONArray = new JSONArray();

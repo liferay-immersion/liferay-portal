@@ -30,8 +30,7 @@
 		<finder name="UserId" return-type="Collection">
 			<finder-column name="userId" />
 		</finder>
-		<finder name="C_L" return-type="OAuthClientASLocalMetadata" unique="true">
-			<finder-column name="companyId" />
+		<finder name="LocalWellKnownURI" return-type="OAuthClientASLocalMetadata" unique="true">
 			<finder-column name="localWellKnownURI" />
 		</finder>
 	</entity>
@@ -51,10 +50,11 @@
 
 		<!-- Other fields -->
 
+		<column name="authRequestParametersJSON" type="String" />
 		<column name="authServerWellKnownURI" type="String" />
 		<column name="clientId" type="String" />
 		<column name="infoJSON" type="String" />
-		<column name="parametersJSON" type="String" />
+		<column name="tokenRequestParametersJSON" type="String" />
 
 		<!-- Finder methods -->
 
@@ -78,8 +78,10 @@
 		<exception>DuplicateOAuthClientASLocalMetadata</exception>
 		<exception>DuplicateOAuthClientEntry</exception>
 		<exception>OAuthClientASLocalMetadataJSON</exception>
+		<exception>OAuthClientASLocalMetadataLocalWellKnownURI</exception>
+		<exception>OAuthClientEntryAuthRequestParametersJSON</exception>
 		<exception>OAuthClientEntryAuthServerWellKnownURI</exception>
 		<exception>OAuthClientEntryInfoJSON</exception>
-		<exception>OAuthClientEntryParametersJSON</exception>
+		<exception>OAuthClientEntryTokenRequestParametersJSON</exception>
 	</exceptions>
 </service-builder>

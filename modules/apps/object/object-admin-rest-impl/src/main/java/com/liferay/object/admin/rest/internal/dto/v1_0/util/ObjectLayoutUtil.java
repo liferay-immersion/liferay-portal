@@ -20,8 +20,6 @@ import com.liferay.object.admin.rest.dto.v1_0.ObjectLayoutColumn;
 import com.liferay.object.admin.rest.dto.v1_0.ObjectLayoutRow;
 import com.liferay.object.admin.rest.dto.v1_0.ObjectLayoutTab;
 import com.liferay.object.util.LocalizedMapUtil;
-import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.vulcan.util.TransformUtil;
 
 import java.util.Map;
@@ -62,67 +60,47 @@ public class ObjectLayoutUtil {
 	}
 
 	public static ObjectLayoutTab toObjectLayoutTab(
-		com.liferay.object.model.ObjectLayoutTab
-			serviceBuilderObjectLayoutTab) {
+		com.liferay.object.model.ObjectLayoutTab objectLayoutTab) {
 
-		if (serviceBuilderObjectLayoutTab == null) {
+		if (objectLayoutTab == null) {
 			return null;
 		}
 
 		return new ObjectLayoutTab() {
 			{
-				id = serviceBuilderObjectLayoutTab.getObjectLayoutTabId();
+				id = objectLayoutTab.getObjectLayoutTabId();
 				name = LocalizedMapUtil.getLanguageIdMap(
-					serviceBuilderObjectLayoutTab.getNameMap());
+					objectLayoutTab.getNameMap());
 				objectLayoutBoxes = TransformUtil.transformToArray(
-					serviceBuilderObjectLayoutTab.getObjectLayoutBoxes(),
+					objectLayoutTab.getObjectLayoutBoxes(),
 					ObjectLayoutUtil::_toObjectLayoutBox,
 					ObjectLayoutBox.class);
 				objectRelationshipId =
-					serviceBuilderObjectLayoutTab.getObjectRelationshipId();
-				priority = serviceBuilderObjectLayoutTab.getPriority();
+					objectLayoutTab.getObjectRelationshipId();
+				priority = objectLayoutTab.getPriority();
 			}
 		};
 	}
 
 	private static ObjectLayoutBox _toObjectLayoutBox(
-		com.liferay.object.model.ObjectLayoutBox
-			serviceBuilderObjectLayoutBox) {
+		com.liferay.object.model.ObjectLayoutBox objectLayoutBox) {
 
-		if (serviceBuilderObjectLayoutBox == null) {
+		if (objectLayoutBox == null) {
 			return null;
-		}
-
-		if (!GetterUtil.getBoolean(PropsUtil.get("feature.flag.LPS-149014"))) {
-			return new ObjectLayoutBox() {
-				{
-					collapsable =
-						serviceBuilderObjectLayoutBox.getCollapsable();
-					id = serviceBuilderObjectLayoutBox.getObjectLayoutBoxId();
-					name = LocalizedMapUtil.getLanguageIdMap(
-						serviceBuilderObjectLayoutBox.getNameMap());
-					objectLayoutRows = TransformUtil.transformToArray(
-						serviceBuilderObjectLayoutBox.getObjectLayoutRows(),
-						ObjectLayoutUtil::_toObjectLayoutRow,
-						ObjectLayoutRow.class);
-					priority = serviceBuilderObjectLayoutBox.getPriority();
-				}
-			};
 		}
 
 		return new ObjectLayoutBox() {
 			{
-				collapsable = serviceBuilderObjectLayoutBox.getCollapsable();
-				id = serviceBuilderObjectLayoutBox.getObjectLayoutBoxId();
+				collapsable = objectLayoutBox.getCollapsable();
+				id = objectLayoutBox.getObjectLayoutBoxId();
 				name = LocalizedMapUtil.getLanguageIdMap(
-					serviceBuilderObjectLayoutBox.getNameMap());
+					objectLayoutBox.getNameMap());
 				objectLayoutRows = TransformUtil.transformToArray(
-					serviceBuilderObjectLayoutBox.getObjectLayoutRows(),
+					objectLayoutBox.getObjectLayoutRows(),
 					ObjectLayoutUtil::_toObjectLayoutRow,
 					ObjectLayoutRow.class);
-				priority = serviceBuilderObjectLayoutBox.getPriority();
-				type = ObjectLayoutBox.Type.create(
-					serviceBuilderObjectLayoutBox.getType());
+				priority = objectLayoutBox.getPriority();
+				type = ObjectLayoutBox.Type.create(objectLayoutBox.getType());
 			}
 		};
 	}

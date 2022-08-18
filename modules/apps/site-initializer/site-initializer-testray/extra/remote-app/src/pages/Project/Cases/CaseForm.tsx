@@ -12,30 +12,29 @@
  * details.
  */
 
-import {useQuery} from '@apollo/client';
 import ClayForm, {ClayCheckbox} from '@clayui/form';
 import {useEffect} from 'react';
 import {useForm} from 'react-hook-form';
 import {useOutletContext, useParams} from 'react-router-dom';
+import {KeyedMutator} from 'swr';
 
 import Form from '../../../components/Form';
 import Container from '../../../components/Layout/Container';
 import MarkdownPreview from '../../../components/Markdown';
-import {CreateCase, UpdateCase} from '../../../graphql/mutations';
+import {useHeader} from '../../../hooks';
+import {useFetch} from '../../../hooks/useFetch';
+import useFormActions from '../../../hooks/useFormActions';
+import i18n from '../../../i18n';
+import yupSchema, {yupResolver} from '../../../schema/yup';
 import {
-	CTypePagination,
+	APIResponse,
 	TestrayCase,
 	TestrayCaseType,
 	TestrayComponent,
 	TestrayProject,
-	getCaseTypes,
-	getCases,
-	getComponents,
-} from '../../../graphql/queries';
-import {useHeader} from '../../../hooks';
-import useFormActions from '../../../hooks/useFormActions';
-import i18n from '../../../i18n';
-import yupSchema, {yupResolver} from '../../../schema/yup';
+	createCase,
+	updateCase,
+} from '../../../services/rest';
 import {DescriptionType} from '../../../types';
 
 type CaseFormData = {
@@ -62,9 +61,11 @@ const descriptionTypes = Object.values(
 
 const CaseForm = () => {
 	const {
+		mutateCase,
 		testrayCase,
 		testrayProject,
 	}: {
+		mutateCase: KeyedMutator<any>;
 		testrayCase: TestrayCase;
 		testrayProject: TestrayProject;
 	} = useOutletContext();
@@ -73,16 +74,16 @@ const CaseForm = () => {
 		shouldUpdate: false,
 	});
 
-	const {data: testrayComponentsData} = useQuery<
-		CTypePagination<'components', TestrayComponent>
-	>(getComponents);
+	const {data: testrayComponentsData} = useFetch<
+		APIResponse<TestrayComponent>
+	>('/components?fields=id,name');
 
-	const {data: testrayCaseTypesData} = useQuery<
-		CTypePagination<'caseTypes', TestrayCaseType>
-	>(getCaseTypes);
+	const {data: testrayCaseTypesData} = useFetch<APIResponse<TestrayCaseType>>(
+		'/casetypes?fields=id,name'
+	);
 
-	const testrayCaseTypes = testrayCaseTypesData?.c.caseTypes.items || [];
-	const testrayComponents = testrayComponentsData?.c.components.items || [];
+	const testrayCaseTypes = testrayCaseTypesData?.items || [];
+	const testrayComponents = testrayComponentsData?.items || [];
 
 	useEffect(() => {
 		if (testrayProject) {
@@ -93,7 +94,7 @@ const CaseForm = () => {
 	}, [setTabs, testrayProject]);
 
 	const {
-		form: {onClose, onSubmit},
+		form: {onClose, onError, onSave, onSubmit, onSuccess},
 	} = useFormActions();
 
 	const {projectId} = useParams();
@@ -101,6 +102,7 @@ const CaseForm = () => {
 		formState: {errors},
 		handleSubmit,
 		register,
+		reset,
 		setValue,
 		watch,
 	} = useForm<CaseFormData>({
@@ -109,22 +111,36 @@ const CaseForm = () => {
 					...testrayCase,
 					caseTypeId: testrayCase.caseType?.id,
 					componentId: testrayCase.component?.id,
+					priority: priorities[0].value,
 			  }
-			: {},
+			: {
+					addAnother: false,
+					estimatedDuration: 0,
+			  },
 		resolver: yupResolver(yupSchema.case),
 	});
 
 	const _onSubmit = (form: CaseFormData) => {
+		const addAnother = form?.addAnother === true;
+
 		onSubmit(
 			{...form, projectId},
 			{
-				createMutation: CreateCase,
-				updateMutation: UpdateCase,
-			},
-			{
-				refetchQueries: [{query: getCases}],
+				create: createCase,
+				update: updateCase,
 			}
-		);
+		)
+			.then(mutateCase)
+			.then(() => {
+				if (addAnother) {
+					onSuccess();
+
+					return reset();
+				}
+
+				return onSave();
+			})
+			.catch(onError);
 	};
 
 	const caseTypeId = watch('caseTypeId');
@@ -154,6 +170,7 @@ const CaseForm = () => {
 					<Form.Select
 						{...inputProps}
 						className="col-4"
+						defaultOption={false}
 						label="priority"
 						name="priority"
 						options={priorities}
@@ -192,6 +209,7 @@ const CaseForm = () => {
 						label={i18n.translate('estimated-duration')}
 						name="estimatedDuration"
 						required={false}
+						type="number"
 					/>
 				</Form.BaseRow>
 

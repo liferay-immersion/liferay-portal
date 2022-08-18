@@ -9,37 +9,4 @@
  * distribution rights of the Software.
  */
 
-import {useState} from 'react';
-import i18n from '../../../../common/I18n';
-import SearchBar from './components/SearchBar';
-
-const SearchHeader = ({count, loading, onSearchSubmit}) => {
-	const [searchTerm, setSearchTerm] = useState('');
-
-	const getCounter = () => {
-		return `${count} ${
-			searchTerm
-				? i18n.pluralize(count, 'result')
-				: i18n.pluralize(count, 'project')
-		}`;
-	};
-
-	return (
-		<div className="align-items-center d-flex justify-content-between mb-4">
-			<SearchBar
-				onSearchSubmit={(term) => {
-					setSearchTerm(term);
-					onSearchSubmit(term);
-				}}
-			/>
-
-			{loading ? (
-				<>Loading</>
-			) : (
-				<h5 className="m-0 text-neutral-7">{getCounter()}</h5>
-			)}
-		</div>
-	);
-};
-
-export default SearchHeader;
+export {default} from './SearchHeader';

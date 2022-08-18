@@ -16,11 +16,9 @@ import PropTypes from 'prop-types';
 
 function CountryRegionDynamicSelect({
 	countrySelect,
-	countrySelectId,
-	countrySelectVal,
+	countrySelectVal = 0,
 	regionSelect,
-	regionSelectId,
-	regionSelectVal,
+	regionSelectVal = 0,
 }) {
 	let japanCountryId;
 
@@ -28,68 +26,54 @@ function CountryRegionDynamicSelect({
 		{
 			select: countrySelect,
 			selectData(callback) {
-				Liferay.Service(
-					'/country/get-countries',
-					{
-						active: true,
-						companyId: Liferay.ThemeDisplay.getCompanyId,
-					},
-					(countries) => {
-						const countryJP = countries.find(
-							(country) => country.a2 === 'JP'
-						);
+				Liferay.Address.getCountries((countries) => {
+					const countryJP = countries.find(
+						(country) => country.a2 === 'JP'
+					);
 
-						japanCountryId = countryJP.countryId;
+					japanCountryId = countryJP.countryId;
 
-						callback(countries);
-					}
-				);
+					callback(countries);
+				});
 			},
 			selectDesc: 'nameCurrentValue',
-			selectId: countrySelectId,
+			selectId: 'countryId',
 			selectSort: true,
 			selectVal: countrySelectVal,
 		},
 		{
 			select: regionSelect,
 			selectData(callback, selectKey) {
-				Liferay.Service(
-					'/region/get-regions',
-					{
-						active: true,
-						countryId: Number(selectKey),
-					},
-					(regions) => {
-						if (
-							selectKey === japanCountryId &&
-							Liferay.ThemeDisplay.getLanguageId() === 'ja_JP'
-						) {
-							regions.sort((region1, region2) => {
-								if (
-									Number(region1.regionCode) >
-									Number(region2.regionCode)
-								) {
-									return 1;
-								}
+				Liferay.Address.getRegions((regions) => {
+					if (
+						selectKey === japanCountryId &&
+						Liferay.ThemeDisplay.getLanguageId() === 'ja_JP'
+					) {
+						regions.sort((region1, region2) => {
+							if (
+								Number(region1.regionCode) >
+								Number(region2.regionCode)
+							) {
+								return 1;
+							}
 
-								if (
-									Number(region1.regionCode) <
-									Number(region2.regionCode)
-								) {
-									return -1;
-								}
+							if (
+								Number(region1.regionCode) <
+								Number(region2.regionCode)
+							) {
+								return -1;
+							}
 
-								return 0;
-							});
-						}
-
-						callback(regions);
+							return 0;
+						});
 					}
-				);
+
+					callback(regions);
+				}, selectKey);
 			},
 			selectDesc: 'title',
 			selectDisableOnEmpty: true,
-			selectId: regionSelectId,
+			selectId: 'regionId',
 			selectVal: regionSelectVal,
 		},
 	]);

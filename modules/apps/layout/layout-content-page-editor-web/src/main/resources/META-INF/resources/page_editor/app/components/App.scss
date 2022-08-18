@@ -8,6 +8,7 @@
 @import 'DragPreview';
 @import 'DropZone';
 @import 'EditModeSelector';
+@import 'FormValidationModal';
 @import 'HTMLEditorModal';
 @import 'Layout';
 @import 'LayoutViewport';
@@ -19,6 +20,9 @@
 @import 'Translation';
 @import 'ViewportSizeSelector';
 
+@import 'fragment-configuration-fields/AdvancedSelectField';
+@import 'fragment-configuration-fields/CSSClassSelectorField';
+@import 'fragment-configuration-fields/CustomCSSField';
 @import 'fragment-configuration-fields/HideFromSearchField';
 @import 'fragment-configuration-fields/TargetCollectionsField';
 
@@ -51,4 +55,5 @@
 @import '../../plugins/comments/components/Plugin';
 @import '../../plugins/experience/components/Plugin';
 @import '../../plugins/fragments-widgets/components/Plugin';
+@import '../../plugins/page-content/components/Plugin';
 @import '../../plugins/page-design-options/components/Plugin';

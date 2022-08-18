@@ -38,7 +38,7 @@ import com.liferay.document.library.kernel.service.DLAppLocalService;
 import com.liferay.frontend.taglib.servlet.taglib.util.JSPRenderer;
 import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
 import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.language.LanguageUtil;
+import com.liferay.portal.kernel.language.Language;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Company;
@@ -142,7 +142,7 @@ public class CSVCommerceOrderImporterTypeImpl
 		ResourceBundle resourceBundle = ResourceBundleUtil.getBundle(
 			"content.Language", locale, getClass());
 
-		return LanguageUtil.format(resourceBundle, "import-from-x", KEY);
+		return _language.format(resourceBundle, "import-from-x", KEY);
 	}
 
 	@Override
@@ -305,17 +305,14 @@ public class CSVCommerceOrderImporterTypeImpl
 		}
 
 		commerceOrderImporterItemImpl.setJSON("[]");
-
 		commerceOrderImporterItemImpl.setQuantity(quantity);
 
 		if (csvRecord.isMapped(_REQUESTED_DELIVERY_DATE_FIELD_NAME) &&
 			csvRecord.isSet(_REQUESTED_DELIVERY_DATE_FIELD_NAME)) {
 
-			String requestedDeliveryDateString = GetterUtil.getString(
-				csvRecord.get(_REQUESTED_DELIVERY_DATE_FIELD_NAME));
-
 			commerceOrderImporterItemImpl.setRequestedDeliveryDateString(
-				requestedDeliveryDateString);
+				GetterUtil.getString(
+					csvRecord.get(_REQUESTED_DELIVERY_DATE_FIELD_NAME)));
 		}
 
 		return commerceOrderImporterItemImpl;
@@ -365,6 +362,9 @@ public class CSVCommerceOrderImporterTypeImpl
 
 	@Reference
 	private JSPRenderer _jspRenderer;
+
+	@Reference
+	private Language _language;
 
 	@Reference
 	private UserLocalService _userLocalService;

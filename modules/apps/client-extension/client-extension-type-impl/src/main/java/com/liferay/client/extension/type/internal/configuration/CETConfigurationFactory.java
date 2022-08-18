@@ -17,27 +17,21 @@ package com.liferay.client.extension.type.internal.configuration;
 import com.liferay.client.extension.type.CET;
 import com.liferay.client.extension.type.configuration.CETConfiguration;
 import com.liferay.client.extension.type.manager.CETManager;
-import com.liferay.petra.string.StringPool;
 import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
 import com.liferay.portal.kernel.model.Company;
 import com.liferay.portal.kernel.module.framework.ModuleServiceLifecycle;
 import com.liferay.portal.kernel.service.CompanyLocalService;
 import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.PropertiesUtil;
-import com.liferay.portal.kernel.util.StringUtil;
-import com.liferay.portal.kernel.util.UnicodeProperties;
-import com.liferay.portal.kernel.util.UnicodePropertiesBuilder;
 import com.liferay.portal.util.PropsValues;
 
 import java.util.Map;
-import java.util.Properties;
 
 import org.osgi.framework.Constants;
-import org.osgi.service.component.ComponentConstants;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ConfigurationPolicy;
 import org.osgi.service.component.annotations.Deactivate;
+import org.osgi.service.component.annotations.Modified;
 import org.osgi.service.component.annotations.Reference;
 
 /**
@@ -56,21 +50,25 @@ public class CETConfigurationFactory {
 			CETConfiguration.class, properties);
 
 		_cet = _cetManager.addCET(
-			cetConfiguration.baseURL(), _getCompanyId(properties),
-			cetConfiguration.description(),
-			_getExternalReferenceCode(properties), cetConfiguration.name(),
-			_loadProperties(cetConfiguration), cetConfiguration.sourceCodeURL(),
-			cetConfiguration.type(),
-			_toTypeSettingsUnicodeProperties(cetConfiguration));
+			cetConfiguration, _getCompanyId(properties),
+			_getExternalReferenceCode(properties));
 	}
 
 	@Deactivate
-	protected void deactivate(Integer reason) throws Exception {
-		if (reason ==
-				ComponentConstants.DEACTIVATION_REASON_CONFIGURATION_DELETED) {
+	protected void deactivate() {
+		_cetManager.deleteCET(_cet);
+	}
 
-			_cetManager.deleteCET(_cet);
-		}
+	@Modified
+	protected void modified(Map<String, Object> properties) throws Exception {
+		_cetManager.deleteCET(_cet);
+
+		CETConfiguration cetConfiguration = ConfigurableUtil.createConfigurable(
+			CETConfiguration.class, properties);
+
+		_cet = _cetManager.addCET(
+			cetConfiguration, _getCompanyId(properties),
+			_getExternalReferenceCode(properties));
 	}
 
 	private long _getCompanyId(Map<String, Object> properties)
@@ -104,41 +102,7 @@ public class CETConfigurationFactory {
 		return "LXC:" + pid;
 	}
 
-	private Properties _loadProperties(CETConfiguration cetConfiguration)
-		throws Exception {
-
-		String[] properties = cetConfiguration.properties();
-
-		if (properties == null) {
-			return new Properties();
-		}
-
-		return PropertiesUtil.load(
-			StringUtil.merge(properties, StringPool.NEW_LINE));
-	}
-
-	private UnicodeProperties _toTypeSettingsUnicodeProperties(
-		CETConfiguration cetConfiguration) {
-
-		UnicodeProperties typeSettingsUnicodeProperties =
-			UnicodePropertiesBuilder.create(
-				true
-			).build();
-
-		String[] typeSettings = cetConfiguration.typeSettings();
-
-		if (typeSettings == null) {
-			return typeSettingsUnicodeProperties;
-		}
-
-		for (String typeSetting : typeSettings) {
-			typeSettingsUnicodeProperties.put(typeSetting);
-		}
-
-		return typeSettingsUnicodeProperties;
-	}
-
-	private CET _cet;
+	private volatile CET _cet;
 
 	@Reference
 	private CETManager _cetManager;

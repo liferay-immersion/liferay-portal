@@ -12,6 +12,8 @@
  * details.
  */
 
+/// <reference types="ckeditor4" />
+
 import React from 'react';
 import './RichTextLocalized.scss';
 export declare function RichTextLocalized({
@@ -19,14 +21,13 @@ export declare function RichTextLocalized({
 	editorConfig,
 	helpMessage,
 	label,
-	locales,
 	onSelectedLocaleChange,
 	onTranslationsChange,
 	selectedLocale,
 	translations,
 }: IProps): JSX.Element;
 interface IItem {
-	label: string;
+	label: Locale;
 	symbol: string;
 }
 interface IProps extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -36,13 +37,12 @@ interface IProps extends React.InputHTMLAttributes<HTMLInputElement> {
 		translated: string;
 		untranslated: string;
 	};
-	editorConfig: string;
+	editorConfig: CKEDITOR.config;
 	helpMessage?: string;
 	label: string;
-	locales: Array<IItem>;
 	onSelectedLocaleChange: (val: IItem) => void;
 	onTranslationsChange: (val: LocalizedValue<string>) => void;
-	selectedLocale: IItem;
+	selectedLocale: Locale;
 	translations: LocalizedValue<string>;
 }
 export {};

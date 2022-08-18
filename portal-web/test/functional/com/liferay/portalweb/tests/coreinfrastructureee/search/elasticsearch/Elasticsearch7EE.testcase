@@ -30,8 +30,10 @@ definition {
 
 	@priority = "5"
 	test LearningToRankSmoke {
-		property elastic.override.version = "7.13.4";
 		property elasticsearch.ltr.enabled = "true";
+		property minimum.slave.ram = "24";
+		property osgi.module.configuration.file.names = "com.liferay.portal.search.rest.configuration.SearchSuggestionsCompanyConfiguration.config";
+		property osgi.module.configurations = "enableSuggestionsEndpoint=B&quot;false&quot;";
 		property remote.elasticsearch.enabled = "true";
 		property search.environment.suite.exclude = "true";
 		property test.name.skip.portal.instance = "Elasticsearch7EE#LearningToRankSmoke";
@@ -58,7 +60,7 @@ definition {
 		var assetEntryTitleListNoLtr = "";
 		var iterator = "1";
 
-		while ("${iterator}" != "21" && (maxIterations = "20")) {
+		while (("${iterator}" != "21") && (maxIterations = "20")) {
 			var assetEntryTitle = selenium.getText("//div[contains(@id,'SearchResultsPortlet')]//li[${iterator}]/div//a");
 
 			var assetEntryTitleListNoLtr = StringUtil.add("${assetEntryTitleListNoLtr}", "${assetEntryTitle}");
@@ -90,7 +92,7 @@ definition {
 		var assetEntryTitleListLtr = "";
 		var iterator = "1";
 
-		while ("${iterator}" != "21" && (maxIterations = "20")) {
+		while (("${iterator}" != "21") && (maxIterations = "20")) {
 			var assetEntryTitle = selenium.getText("//div[contains(@id,'SearchResultsPortlet')]//li[${iterator}]/div//a");
 
 			var assetEntryTitleListLtr = StringUtil.add("${assetEntryTitleListLtr}", "${assetEntryTitle}");

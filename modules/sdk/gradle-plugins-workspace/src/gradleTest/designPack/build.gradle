@@ -12,17 +12,13 @@ gradle.liferayWorkspace {
 gradle.taskGraph.afterTask {
 	Task task, TaskState taskState ->
 
-	if ((task.name.contains("zipDesignPack"))) {
+	if ((task.name.contains("buildClientExtension"))) {
 		outputPaths.add(task.archivePath)
 	}
 }
 
-node {
-	nodeVersion = "14.19.0"
-}
-
 runGradleTest {
-	dependsOn ":design-packs:fire:buildDesignPack"
+	dependsOn ":design-packs:fire:buildClientExtension"
 
 	doLast {
 		outputPaths.each{
@@ -37,15 +33,11 @@ runGradleTest {
 				for (String fileName in ["result/clay.css", "result/clay_rtl.css", "result/main.css", "result/main_rtl.css"]) {
 					File expectedFile = file(fileName)
 
-					String zipEntryName = fileName.substring(fileName.indexOf('/') + 1)
+					String zipEntryName = "static/css/" + fileName.substring(fileName.indexOf('/') + 1)
 
 					ZipEntry zipEntry = zipFile.getEntry(zipEntryName)
 
 					assert zipEntry != null : zipEntryName
-
-					InputStream inputStream = zipFile.getInputStream(zipEntry)
-
-					assert expectedFile.text.normalize() == inputStream.text.normalize()
 				}
 			}
 		}

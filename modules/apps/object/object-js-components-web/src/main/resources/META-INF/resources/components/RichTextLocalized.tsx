@@ -17,15 +17,21 @@ import ClayDropDown from '@clayui/drop-down';
 import ClayIcon from '@clayui/icon';
 import ClayLabel from '@clayui/label';
 import ClayLayout from '@clayui/layout';
-
-// @ts-ignore
-
-import {ClassicEditor} from 'frontend-editor-ckeditor-web';
+import {ClassicEditor, IEditor} from 'frontend-editor-ckeditor-web';
 import React, {useEffect, useRef, useState} from 'react';
 
 import {FieldBase} from './FieldBase';
 
 import './RichTextLocalized.scss';
+
+const defaultLanguageId = Liferay.ThemeDisplay.getDefaultLanguageId();
+
+const availableLocales = Object.keys(Liferay.Language.available)
+	.sort((languageId) => (languageId === defaultLanguageId ? -1 : 1))
+	.map((language) => ({
+		label: language as Locale,
+		symbol: language.replace('_', '-').toLowerCase(),
+	}));
 
 export function RichTextLocalized({
 	ariaLabels = {
@@ -37,7 +43,6 @@ export function RichTextLocalized({
 	editorConfig,
 	helpMessage,
 	label,
-	locales,
 	onSelectedLocaleChange,
 	onTranslationsChange,
 	selectedLocale,
@@ -47,33 +52,36 @@ export function RichTextLocalized({
 
 	const [active, setActive] = useState(false);
 
-	const defaultLanguage = locales[0];
+	const defaultLanguage = availableLocales[0];
 
 	useEffect(() => {
 		const editor = editorRef.current?.editor;
 
 		if (editor) {
 			editor.config.contentsLangDirection =
-				Liferay.Language.direction[selectedLocale.label as Locale];
+				Liferay.Language.direction[selectedLocale];
 
-			editor.config.contentsLanguage = selectedLocale.label;
+			editor.config.contentsLanguage = selectedLocale;
 
-			editor.setData(translations[selectedLocale.label as Locale]);
+			if (translations[selectedLocale]) {
+				editor.setData(translations[selectedLocale] as string);
+			}
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [selectedLocale.label]);
+	}, [selectedLocale]);
 
 	return (
 		<FieldBase helpMessage={helpMessage} label={label}>
 			<div className="lfr-notification__rich-text-localized">
 				<div className="lfr-notification__rich-text-localized-editor">
 					<ClassicEditor
-						contents={translations[selectedLocale.label as Locale]}
+						contents={translations[selectedLocale] as string}
 						editorConfig={editorConfig}
+						name="richTextLocalizedEditor"
 						onChange={(content: string) => {
 							onTranslationsChange({
 								...translations,
-								[selectedLocale.label]: content,
+								[selectedLocale]: content,
 							});
 						}}
 						ref={editorRef}
@@ -92,17 +100,21 @@ export function RichTextLocalized({
 							title={ariaLabels.openLocalizations}
 						>
 							<span className="inline-item">
-								<ClayIcon symbol={selectedLocale.symbol} />
+								<ClayIcon
+									symbol={selectedLocale
+										.replace('_', '-')
+										.toLowerCase()}
+								/>
 							</span>
 
 							<span className="btn-section">
-								{selectedLocale.label}
+								{selectedLocale}
 							</span>
 						</ClayButton>
 					}
 				>
 					<ClayDropDown.ItemList>
-						{locales.map((locale) => {
+						{availableLocales.map((locale) => {
 							const value = translations[locale.label as Locale];
 
 							return (
@@ -159,15 +171,8 @@ export function RichTextLocalized({
 		</FieldBase>
 	);
 }
-
-interface IEditor {
-	editor: {
-		config: {contentsLangDirection: unknown; contentsLanguage: unknown};
-		setData: (data: unknown) => void;
-	};
-}
 interface IItem {
-	label: string;
+	label: Locale;
 	symbol: string;
 }
 interface IProps extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -177,12 +182,11 @@ interface IProps extends React.InputHTMLAttributes<HTMLInputElement> {
 		translated: string;
 		untranslated: string;
 	};
-	editorConfig: string;
+	editorConfig: CKEDITOR.config;
 	helpMessage?: string;
 	label: string;
-	locales: Array<IItem>;
 	onSelectedLocaleChange: (val: IItem) => void;
 	onTranslationsChange: (val: LocalizedValue<string>) => void;
-	selectedLocale: IItem;
+	selectedLocale: Locale;
 	translations: LocalizedValue<string>;
 }

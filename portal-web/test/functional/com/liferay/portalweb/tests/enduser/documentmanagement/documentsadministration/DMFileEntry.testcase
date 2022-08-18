@@ -105,8 +105,7 @@ definition {
 	@description = "This ensures that an old image friendlyURL redirects properly after document is reverted."
 	@priority = "5"
 	test CanAccessOldFriendlyURLAfterRevert {
-		property osgi.module.configuration.file.names = "com.liferay.document.library.configuration.FFFriendlyURLEntryFileEntryConfiguration.config";
-		property osgi.module.configurations = "enabled=B&quot;true&quot;";
+		property custom.properties = "company.default.time.zone=America/Los_Angeles";
 
 		var portalURL = PropsUtil.get("portal.url");
 
@@ -863,7 +862,9 @@ definition {
 
 		DMNavigator.gotoFolder(dmFolderName = "DM Folder 2 Name");
 
-		DMDocument.downloadCP(dmDocumentTitle = "DM Document Title");
+		DMDocument.downloadCP(
+			dmDocumentSize = "22 KB",
+			dmDocumentTitle = "DM Document Title");
 
 		AssertTextNotPresent(value1 = "The requested resource could not be found.");
 	}
@@ -1029,7 +1030,9 @@ definition {
 
 		DMNavigator.openDocumentsAndMediaAdmin(siteURLKey = "guest");
 
-		DMDocument.downloadCP(dmDocumentTitle = "DM Document Title");
+		DMDocument.downloadCP(
+			dmDocumentSize = "259 B",
+			dmDocumentTitle = "DM Document Title");
 
 		AssertTextNotPresent(value1 = "The requested resource could not be found.");
 
@@ -1650,13 +1653,11 @@ definition {
 
 		DMDocument.setExpirationDate(
 			enableExpirationDate = "true",
-			increaseMinutes = "2");
+			increaseMinutes = "1");
 
 		Navigator.openURL();
 
-		Notifications.waitForNotificationFlexibly(
-			flexibleRefreshingTime = "3000",
-			waitingTime = "120000");
+		Notifications.waitForNotificationFlexibly(flexibleRefreshingTime = "3000");
 
 		Notifications.viewBadgeCount(notificationCount = "1");
 
@@ -1721,7 +1722,7 @@ definition {
 
 		var key_imageSourceURL = "${portalURL}/documents/${siteId}/0/Document_1";
 
-		AssertElementPresent.pauseAssertVisible(locator1 = "DocumentsAndMediaDocument#DOCUMENT_VIEWPORT_PREVIEW");
+		WaitForVisible(locator1 = "DocumentsAndMediaDocument#DOCUMENT_VIEWPORT_PREVIEW");
 	}
 
 	@description = "This test covers LPS-104957. It ensures that the JPG file can be previewed."
@@ -1769,7 +1770,7 @@ definition {
 			siteURLKey = "guest");
 
 		while (IsElementPresent(key_infoMessage = "Generating preview will take a few minutes.", locator1 = "Message#INFO_SPECIFIC")) {
-			Pause(locator1 = "10000");
+			WaitForElementPresent.waitForLastScript();
 
 			Refresh();
 		}
@@ -1779,6 +1780,14 @@ definition {
 			locator1 = "DocumentsAndMediaDocument#DOCUMENT_DETAILS_IMAGE_PREVIEW");
 
 		AssertConsoleTextNotPresent(value1 = "Unable to render preview for file version: large_file_2.pdf");
+
+		AssertVisible(
+			key_text = "caret-top",
+			locator1 = "Icon#ANY_DISABLED");
+
+		AssertVisible(
+			key_text = "caret-bottom",
+			locator1 = "Icon#ANY_ENABLED");
 	}
 
 	@description = "This test covers LPS-146237. It validates that a PDF can be previewed from the Recycle Bin."
@@ -1949,13 +1958,11 @@ definition {
 
 		DMDocument.setExpirationDate(
 			enableExpirationDate = "true",
-			increaseMinutes = "2");
+			increaseMinutes = "1");
 
 		Navigator.openURL();
 
-		Notifications.waitForNotificationFlexibly(
-			flexibleRefreshingTime = "3000",
-			waitingTime = "120000");
+		Notifications.waitForNotificationFlexibly(flexibleRefreshingTime = "3000");
 
 		Notifications.gotoNotifications();
 
@@ -2119,7 +2126,7 @@ definition {
 			groupName = "Guest",
 			siteURLKey = "guest");
 
-		DMDocument.setReviewDate(increaseMinutes = "2");
+		DMDocument.setReviewDate(increaseMinutes = "1");
 
 		Navigator.openURL();
 
@@ -2127,9 +2134,7 @@ definition {
 
 		Navigator.openURL();
 
-		Notifications.waitForNotificationFlexibly(
-			flexibleRefreshingTime = "3000",
-			waitingTime = "120000");
+		Notifications.waitForNotificationFlexibly(flexibleRefreshingTime = "3000");
 
 		Notifications.viewBadgeCount(notificationCount = "1");
 
@@ -2176,13 +2181,11 @@ definition {
 
 		DMDocument.setReviewDate(
 			enableReviewDate = "true",
-			increaseMinutes = "2");
+			increaseMinutes = "1");
 
 		Navigator.openURL();
 
-		Notifications.waitForNotificationFlexibly(
-			flexibleRefreshingTime = "3000",
-			waitingTime = "120000");
+		Notifications.waitForNotificationFlexibly(flexibleRefreshingTime = "3000");
 
 		Notifications.viewBadgeCount(notificationCount = "1");
 
@@ -2228,13 +2231,11 @@ definition {
 
 		DMDocument.setReviewDate(
 			enableReviewDate = "true",
-			increaseMinutes = "2");
+			increaseMinutes = "1");
 
 		Navigator.openURL();
 
-		Notifications.waitForNotificationFlexibly(
-			flexibleRefreshingTime = "3000",
-			waitingTime = "120000");
+		Notifications.waitForNotificationFlexibly(flexibleRefreshingTime = "3000");
 
 		Notifications.viewBadgeCount(notificationCount = "1");
 
@@ -2462,6 +2463,8 @@ definition {
 			groupName = "Guest",
 			siteURLKey = "guest");
 
+		WaitForPageLoad();
+
 		DMDocument.editDocument(
 			dmDocumentDescription = "DM Document Description",
 			dmDocumentFile = "Document_1.txt",
@@ -2469,13 +2472,11 @@ definition {
 
 		DMDocument.setExpirationDate(
 			enableExpirationDate = "true",
-			increaseMinutes = "2");
+			increaseMinutes = "1");
 
 		Navigator.openURL();
 
-		Notifications.waitForNotificationFlexibly(
-			flexibleRefreshingTime = "3000",
-			waitingTime = "120000");
+		Notifications.waitForNotificationFlexibly(flexibleRefreshingTime = "3000");
 
 		Notifications.viewBadgeCount(notificationCount = "1");
 
@@ -2519,6 +2520,8 @@ definition {
 			groupName = "Guest",
 			siteURLKey = "guest");
 
+		WaitForPageLoad();
+
 		DMDocument.editDocument(
 			dmDocumentFile = "Document_5.txt",
 			dmDocumentTitle = "Document_5.txt");
@@ -2526,6 +2529,8 @@ definition {
 		DMDocument.setExpirationDate(
 			enableExpirationDate = "true",
 			increaseMinutes = "1");
+
+		// We need to wait for the system time to pass by 2 minutes in order to verify the document is expired. There is currently no easy way to manipulate the system time in CI for automation. 2 minutes is the shortest value we can set while ensuring the stability of the test. See LPS-157957.
 
 		Pause(locator1 = "120000");
 
@@ -2696,7 +2701,7 @@ definition {
 		CKEditor.addTextWithLink(
 			displayText = "Web Content Content",
 			dmDocumentTitle = "Document_1.doc",
-			fieldLabel = "content");
+			fieldLabel = "Content");
 
 		PortletEntry.publish();
 
@@ -2744,6 +2749,68 @@ definition {
 			fileName = "Document_2.doc");
 	}
 
+	@description = "This ensures that the friendly URL of a document created on a site will be updated automatically if it duplicates the existing one on the site."
+	@priority = "4"
+	test FriendlyURLDuplicatingSiteDocIsAutomaticallyChanged {
+		JSONDocument.addFileWithUploadedFile(
+			dmDocumentTitle = "Document_1",
+			groupName = "Guest",
+			mimeType = "application/msword",
+			sourceFileName = "Document_1.doc");
+
+		DMNavigator.openToAddEntry(
+			groupName = "Guest",
+			siteURLKey = "guest");
+
+		DMDocument.editDocument(
+			dmDocumentFile = "Document_2.doc",
+			dmDocumentTitle = "Document_2");
+
+		DMDocument.editFriendlyURL(friendlyURLEdit = "document_1");
+
+		Alert.viewWarningSpecific(warningMessage = "Warning:The friendly URL document_1 was changed to document_1-1 to ensure uniqueness.");
+
+		DMNavigator.openToEditEntryInSite(
+			dmDocumentTitle = "Document_2",
+			groupName = "Guest",
+			siteURLKey = "guest");
+
+		DMDocument.viewEntryInEdit(friendlyURL = "document_1-1");
+	}
+
+	@description = "This ensures that the friendly URL of a document created on a site will be updated automatically if it duplicates the one in the recycle bin of the site."
+	@priority = "3"
+	test FriendlyURLDuplicatingSiteRecycleBinDocIsAutomaticallyChanged {
+		JSONDocument.addFileWithUploadedFile(
+			dmDocumentTitle = "Document_1",
+			groupName = "Guest",
+			mimeType = "application/msword",
+			sourceFileName = "Document_1.jpg");
+
+		JSONDocument.moveToRecycleBin(
+			dmDocumentTitle = "Document_1",
+			groupName = "Guest");
+
+		DMNavigator.openToAddEntry(
+			groupName = "Guest",
+			siteURLKey = "guest");
+
+		DMDocument.editDocument(
+			dmDocumentFile = "Document_2.jpg",
+			dmDocumentTitle = "Document_2");
+
+		DMDocument.editFriendlyURL(friendlyURLEdit = "document_1");
+
+		Alert.viewWarningSpecific(warningMessage = "Warning:The friendly URL document_1 was changed to document_1-1 to ensure uniqueness.");
+
+		DMNavigator.openToEditEntryInSite(
+			dmDocumentTitle = "Document_2",
+			groupName = "Guest",
+			siteURLKey = "guest");
+
+		DMDocument.viewEntryInEdit(friendlyURL = "document_1-1");
+	}
+
 	@description = "This test covers LPS-112571. It ensures that a gif file can be added to editor normally after disabling the gif mime type from the adaptive media of the system settings."
 	@priority = "3"
 	@refactorneeded
@@ -2780,7 +2847,7 @@ definition {
 
 		BlogsNavigator.gotoEntryCP(entryTitle = "Blogs Entry Title");
 
-		BlogsEntry.viewInlineImage(uploadFileName = "static.gif");
+		BlogsEntry.viewInlineImage(uploadFileName = "static-gif");
 	}
 
 	@description = "This test covers LPS-144687. It validates that a temp zip is not created if NoSuchFileException occurs during a download."

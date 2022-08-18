@@ -14,15 +14,12 @@
 
 package com.liferay.client.extension.service.impl;
 
-import com.liferay.client.extension.exception.ClientExtensionEntryTypeException;
 import com.liferay.client.extension.exception.DuplicateClientExtensionEntryExternalReferenceCodeException;
 import com.liferay.client.extension.model.ClientExtensionEntry;
+import com.liferay.client.extension.service.ClientExtensionEntryRelLocalService;
 import com.liferay.client.extension.service.base.ClientExtensionEntryLocalServiceBaseImpl;
 import com.liferay.client.extension.type.deployer.CETDeployer;
 import com.liferay.client.extension.type.factory.CETFactory;
-import com.liferay.client.extension.type.validator.CETValidator;
-import com.liferay.osgi.service.tracker.collections.map.ServiceTrackerMap;
-import com.liferay.osgi.service.tracker.collections.map.ServiceTrackerMapFactory;
 import com.liferay.petra.reflect.ReflectionUtil;
 import com.liferay.portal.aop.AopService;
 import com.liferay.portal.kernel.cluster.Clusterable;
@@ -66,11 +63,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
-import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Reference;
 
 /**
@@ -168,6 +162,10 @@ public class ClientExtensionEntryLocalServiceImpl
 			ResourceConstants.SCOPE_INDIVIDUAL,
 			clientExtensionEntry.getClientExtensionEntryId());
 
+		_clientExtensionEntryRelLocalService.deleteClientExtensionEntryRels(
+			clientExtensionEntry.getCompanyId(),
+			clientExtensionEntry.getExternalReferenceCode());
+
 		clientExtensionEntryLocalService.undeployClientExtensionEntry(
 			clientExtensionEntry);
 
@@ -196,7 +194,7 @@ public class ClientExtensionEntryLocalServiceImpl
 
 		_serviceRegistrationsMaps.put(
 			clientExtensionEntry.getClientExtensionEntryId(),
-			_cetDeployer.deploy(_cetFactory.cet(clientExtensionEntry)));
+			_cetDeployer.deploy(_cetFactory.create(clientExtensionEntry)));
 	}
 
 	@Override
@@ -374,24 +372,6 @@ public class ClientExtensionEntryLocalServiceImpl
 		return clientExtensionEntryPersistence.update(clientExtensionEntry);
 	}
 
-	@Activate
-	protected void activate(BundleContext bundleContext) {
-		_bundleContext = bundleContext;
-
-		_serviceTrackerMap = ServiceTrackerMapFactory.openSingleValueMap(
-			bundleContext, CETValidator.class, "type");
-	}
-
-	@Deactivate
-	@Override
-	protected void deactivate() {
-		super.deactivate();
-
-		if (_serviceTrackerMap != null) {
-			_serviceTrackerMap.close();
-		}
-	}
-
 	private void _addResources(ClientExtensionEntry clientExtensionEntry)
 		throws PortalException {
 
@@ -525,24 +505,20 @@ public class ClientExtensionEntryLocalServiceImpl
 			).build();
 		}
 
-		CETValidator cetValidator = _serviceTrackerMap.getService(type);
-
-		if (cetValidator == null) {
-			throw new ClientExtensionEntryTypeException(
-				"No CET validator registered for type " + type);
-		}
-
-		cetValidator.validate(
-			newTypeSettingsUnicodeProperties, oldTypeSettingsUnicodeProperties);
+		_cetFactory.validate(
+			newTypeSettingsUnicodeProperties, oldTypeSettingsUnicodeProperties,
+			type);
 	}
-
-	private BundleContext _bundleContext;
 
 	@Reference
 	private CETDeployer _cetDeployer;
 
 	@Reference
 	private CETFactory _cetFactory;
+
+	@Reference
+	private ClientExtensionEntryRelLocalService
+		_clientExtensionEntryRelLocalService;
 
 	@Reference
 	private CompanyLocalService _companyLocalService;
@@ -552,7 +528,6 @@ public class ClientExtensionEntryLocalServiceImpl
 
 	private final Map<Long, List<ServiceRegistration<?>>>
 		_serviceRegistrationsMaps = new ConcurrentHashMap<>();
-	private ServiceTrackerMap<String, CETValidator> _serviceTrackerMap;
 
 	@Reference
 	private UserLocalService _userLocalService;

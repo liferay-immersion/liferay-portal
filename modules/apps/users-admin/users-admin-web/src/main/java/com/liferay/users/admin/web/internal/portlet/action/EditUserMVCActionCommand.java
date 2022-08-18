@@ -21,6 +21,7 @@ import com.liferay.document.library.kernel.service.DLAppLocalService;
 import com.liferay.petra.lang.SafeCloseable;
 import com.liferay.petra.string.CharPool;
 import com.liferay.petra.string.StringPool;
+import com.liferay.portal.aop.AopService;
 import com.liferay.portal.kernel.bean.BeanParamUtil;
 import com.liferay.portal.kernel.exception.CompanyMaxUsersException;
 import com.liferay.portal.kernel.exception.ContactBirthdayException;
@@ -34,7 +35,7 @@ import com.liferay.portal.kernel.exception.UserFieldException;
 import com.liferay.portal.kernel.exception.UserIdException;
 import com.liferay.portal.kernel.exception.UserReminderQueryException;
 import com.liferay.portal.kernel.exception.UserScreenNameException;
-import com.liferay.portal.kernel.language.LanguageUtil;
+import com.liferay.portal.kernel.language.Language;
 import com.liferay.portal.kernel.messaging.proxy.ProxyModeThreadLocal;
 import com.liferay.portal.kernel.model.Address;
 import com.liferay.portal.kernel.model.Company;
@@ -61,6 +62,7 @@ import com.liferay.portal.kernel.service.UserService;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
+import com.liferay.portal.kernel.transaction.Transactional;
 import com.liferay.portal.kernel.util.CalendarFactoryUtil;
 import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.FileUtil;
@@ -84,6 +86,7 @@ import java.util.Locale;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
+import javax.portlet.PortletException;
 import javax.portlet.PortletRequest;
 
 import javax.servlet.http.HttpServletRequest;
@@ -107,9 +110,19 @@ import org.osgi.service.component.annotations.Reference;
 		"javax.portlet.name=" + UsersAdminPortletKeys.USERS_ADMIN,
 		"mvc.command.name=/users_admin/edit_user"
 	},
-	service = MVCActionCommand.class
+	service = AopService.class
 )
-public class EditUserMVCActionCommand extends BaseMVCActionCommand {
+public class EditUserMVCActionCommand
+	extends BaseMVCActionCommand implements AopService, MVCActionCommand {
+
+	@Override
+	@Transactional(rollbackFor = Exception.class)
+	public boolean processAction(
+			ActionRequest actionRequest, ActionResponse actionResponse)
+		throws PortletException {
+
+		return super.processAction(actionRequest, actionResponse);
+	}
 
 	protected void deleteUsers(ActionRequest actionRequest) throws Exception {
 		String cmd = ParamUtil.getString(actionRequest, Constants.CMD);
@@ -446,7 +459,7 @@ public class EditUserMVCActionCommand extends BaseMVCActionCommand {
 
 			Locale locale = LocaleUtil.fromLanguageId(languageId);
 
-			LanguageUtil.updateCookie(
+			_language.updateCookie(
 				httpServletRequest, httpServletResponse, locale);
 
 			// Clear cached portlet responses
@@ -513,6 +526,21 @@ public class EditUserMVCActionCommand extends BaseMVCActionCommand {
 			new ArrayList<Website>(), new ArrayList<AnnouncementsDelivery>(),
 			sendEmail, serviceContext);
 
+		byte[] portraitBytes = null;
+
+		long fileEntryId = ParamUtil.getLong(actionRequest, "fileEntryId");
+
+		if (fileEntryId > 0) {
+			FileEntry fileEntry = _dlAppLocalService.getFileEntry(fileEntryId);
+
+			portraitBytes = FileUtil.getBytes(fileEntry.getContentStream());
+		}
+
+		if (portraitBytes != null) {
+			user = userLocalService.updatePortrait(
+				user.getUserId(), portraitBytes);
+		}
+
 		user.setComments(comments);
 
 		return userLocalService.updateUser(user);
@@ -567,6 +595,10 @@ public class EditUserMVCActionCommand extends BaseMVCActionCommand {
 	}
 
 	private DLAppLocalService _dlAppLocalService;
+
+	@Reference
+	private Language _language;
+
 	private ListTypeLocalService _listTypeLocalService;
 
 	@Reference

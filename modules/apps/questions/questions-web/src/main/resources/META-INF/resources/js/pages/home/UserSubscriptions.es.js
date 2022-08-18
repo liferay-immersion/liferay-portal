@@ -60,6 +60,12 @@ export default withRouter(({history, location}) => {
 		}
 	);
 
+	if (threads && threads.myUserAccountSubscriptions.items) {
+		threads.myUserAccountSubscriptions.items = threads.myUserAccountSubscriptions.items.filter(
+			(thread) => thread.graphQLNode.showAsQuestion
+		);
+	}
+
 	const {data: topics, refetch: refetchTopics} = useQuery(
 		getSubscriptionsQuery,
 		{
@@ -144,7 +150,7 @@ export default withRouter(({history, location}) => {
 	return (
 		<section className="questions-section questions-section-list">
 			<div className="c-p-5 questions-container row">
-				<div className="col-xl-8 offset-xl-2">
+				<div className="c-mt-3 c-mx-auto c-px-0 w-100">
 					<h2 className="sheet-subtitle">
 						{Liferay.Language.get('tags')}
 					</h2>
@@ -273,6 +279,7 @@ export default withRouter(({history, location}) => {
 								(data) => (
 									<div key={data.id}>
 										<QuestionRow
+											context={context}
 											currentSection={
 												context.useTopicNamesInURL
 													? data.graphQLNode

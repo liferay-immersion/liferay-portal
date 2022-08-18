@@ -12,41 +12,44 @@
  * details.
  */
 
-import {useQuery} from '@apollo/client';
 import ClayForm, {ClayCheckbox} from '@clayui/form';
 import ClayLayout from '@clayui/layout';
 import {useForm} from 'react-hook-form';
-import {useParams} from 'react-router-dom';
+import {useOutletContext, useParams} from 'react-router-dom';
 
 import Form from '../../../components/Form';
 import Container from '../../../components/Layout/Container';
-import {createUserAccount, updateUserAccount} from '../../../graphql/mutations';
-import {Role, TypePagination, getLiferayRoles} from '../../../graphql/queries';
+import {useFetch} from '../../../hooks/useFetch';
 import useFormActions from '../../../hooks/useFormActions';
 import i18n from '../../../i18n';
 import yupSchema, {yupResolver} from '../../../schema/yup';
+import {createUserAccount, updateUserAccount} from '../../../services/rest';
 
-type userFormDefault = {
+type UserFormDefault = {
 	alternateName: string;
-	confirmPassword: string;
 	emailAddress: string;
 	familyName: string;
 	givenName: string;
 	id: string;
-	password: string;
-	roles: number[];
+	password?: string;
+	repassword?: string;
+	roleBriefs?: any;
+	roles?: number[];
 	testrayUser: boolean;
 };
 
 const UserForm = () => {
-	const {data} = useQuery<TypePagination<'roles', Role>>(getLiferayRoles);
+	const {data} = useFetch('/roles');
 
-	const roles = data?.roles.items || [];
+	const {userId} = useParams();
 
-	const {projectId} = useParams();
+	const userAccount = useOutletContext<any>();
+
+	const currentUser = userAccount?.userAccount || [];
+	const roles = data?.items || [];
 
 	const {
-		form: {onClose, onSubmit},
+		form: {onClose, onError, onSave, onSubmit},
 	} = useFormActions();
 
 	const {
@@ -55,25 +58,32 @@ const UserForm = () => {
 		register,
 		setValue,
 		watch,
-	} = useForm<userFormDefault>({
-		defaultValues: {roles: []},
+	} = useForm<UserFormDefault>({
+		defaultValues: userId ? currentUser : {},
 		resolver: yupResolver(yupSchema.user),
 	});
 
-	const _onSubmit = (form: userFormDefault) => {
+	const _onSubmit = (form: UserFormDefault) => {
+		delete form.password;
+		delete form.repassword;
+		delete form.roles;
+		delete form.roleBriefs;
+
 		onSubmit(
-			{...form, projectId},
+			{...form, userId},
 			{
-				createMutation: createUserAccount,
-				updateMutation: updateUserAccount,
+				create: createUserAccount,
+				update: updateUserAccount,
 			}
-		);
+		)
+			.then(onSave)
+			.catch(onError);
 	};
 
-	const rolesWatch = watch('roles');
+	const rolesWatch = watch('roles') || [];
 
 	const setCheckedValue = (value: any) => {
-		const valueInsideList = rolesWatch.includes(value);
+		const valueInsideList = rolesWatch?.includes(value);
 		let newRoles = [...rolesWatch];
 
 		if (valueInsideList) {
@@ -174,7 +184,7 @@ const UserForm = () => {
 					</ClayLayout.Col>
 
 					<ClayLayout.Col size={12} sm={12} xl={9}>
-						{roles.map(({id, name}) => (
+						{roles.map(({id, name}: {id: number; name: string}) => (
 							<div className="mt-2" key={id}>
 								<ClayCheckbox
 									checked={rolesWatch.includes(id)}

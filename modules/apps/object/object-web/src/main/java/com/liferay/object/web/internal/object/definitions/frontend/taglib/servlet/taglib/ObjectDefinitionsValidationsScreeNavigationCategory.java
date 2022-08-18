@@ -17,10 +17,10 @@ package com.liferay.object.web.internal.object.definitions.frontend.taglib.servl
 import com.liferay.frontend.taglib.servlet.taglib.ScreenNavigationCategory;
 import com.liferay.frontend.taglib.servlet.taglib.ScreenNavigationEntry;
 import com.liferay.object.model.ObjectDefinition;
-import com.liferay.object.validation.rule.ObjectValidationRuleEngineServicesTracker;
+import com.liferay.object.validation.rule.ObjectValidationRuleEngineTracker;
 import com.liferay.object.web.internal.object.definitions.constants.ObjectDefinitionsScreenNavigationEntryConstants;
 import com.liferay.object.web.internal.object.definitions.display.context.ObjectDefinitionsValidationsDisplayContext;
-import com.liferay.portal.kernel.language.LanguageUtil;
+import com.liferay.portal.kernel.language.Language;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermission;
 import com.liferay.portal.kernel.util.WebKeys;
@@ -68,18 +68,12 @@ public class ObjectDefinitionsValidationsScreeNavigationCategory
 
 	@Override
 	public String getLabel(Locale locale) {
-		return LanguageUtil.get(locale, "validations");
+		return _language.get(locale, "validations");
 	}
 
 	@Override
 	public boolean isVisible(User user, ObjectDefinition objectDefinition) {
-		if (!objectDefinition.isSystem() &&
-			objectDefinition.isDefaultStorageType()) {
-
-			return true;
-		}
-
-		return false;
+		return objectDefinition.isDefaultStorageType();
 	}
 
 	@Override
@@ -92,10 +86,13 @@ public class ObjectDefinitionsValidationsScreeNavigationCategory
 			WebKeys.PORTLET_DISPLAY_CONTEXT,
 			new ObjectDefinitionsValidationsDisplayContext(
 				httpServletRequest, _objectDefinitionModelResourcePermission,
-				_objectValidationRuleEngineServicesTracker));
+				_objectValidationRuleEngineTracker));
 
 		super.render(httpServletRequest, httpServletResponse);
 	}
+
+	@Reference
+	private Language _language;
 
 	@Reference(
 		target = "(model.class.name=com.liferay.object.model.ObjectDefinition)"
@@ -104,7 +101,7 @@ public class ObjectDefinitionsValidationsScreeNavigationCategory
 		_objectDefinitionModelResourcePermission;
 
 	@Reference
-	private ObjectValidationRuleEngineServicesTracker
-		_objectValidationRuleEngineServicesTracker;
+	private ObjectValidationRuleEngineTracker
+		_objectValidationRuleEngineTracker;
 
 }

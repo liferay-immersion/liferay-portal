@@ -425,9 +425,9 @@ definition {
 
 		FormViewBuilder.validateFieldLabel(fieldLabel = "Text ES");
 
-		Pause(locator1 = "6000");
-
-		Refresh();
+		WaitForElementPresent(
+			key_fieldName = "Text ES",
+			locator1 = "FormViewBuilder#TEXT_FIELD");
 
 		FormViewBuilder.editText(
 			fieldName = "Text ES",
@@ -437,11 +437,7 @@ definition {
 
 		Alert.viewSuccessMessage();
 
-		Navigator.openURL();
-
-		ProductMenu.gotoPortlet(
-			category = "Content & Data",
-			portlet = "Forms");
+		FormsAdmin.openFormsAdmin(siteURLKey = "guest");
 
 		FormsAdminNavigator.gotoViewEntries();
 
@@ -849,9 +845,9 @@ definition {
 
 		FormViewBuilder.validateFieldLabel(fieldLabel = "Text ES");
 
-		Pause(locator1 = "6000");
-
-		Refresh();
+		WaitForElementPresent(
+			key_fieldName = "Text ES",
+			locator1 = "FormViewBuilder#TEXT_FIELD");
 
 		FormViewBuilder.editText(
 			fieldName = "Text ES",
@@ -861,11 +857,7 @@ definition {
 
 		Alert.viewSuccessMessage();
 
-		Navigator.openURL();
-
-		ProductMenu.gotoPortlet(
-			category = "Content & Data",
-			portlet = "Forms");
+		FormsAdmin.openFormsAdmin(siteURLKey = "guest");
 
 		FormsAdminNavigator.gotoViewEntries();
 

@@ -19,8 +19,9 @@ import com.liferay.object.exception.DefaultObjectViewException;
 import com.liferay.object.exception.ObjectViewColumnFieldNameException;
 import com.liferay.object.exception.ObjectViewFilterColumnException;
 import com.liferay.object.exception.ObjectViewSortColumnException;
+import com.liferay.object.exception.ObjectViewSortColumnObjectFieldNameException;
 import com.liferay.object.field.filter.parser.ObjectFieldFilterParser;
-import com.liferay.object.field.filter.parser.ObjectFieldFilterParserServicesTracker;
+import com.liferay.object.field.filter.parser.ObjectFieldFilterParserTracker;
 import com.liferay.object.model.ObjectDefinition;
 import com.liferay.object.model.ObjectField;
 import com.liferay.object.model.ObjectView;
@@ -109,8 +110,7 @@ public class ObjectViewLocalServiceImpl extends ObjectViewLocalServiceBaseImpl {
 				user, objectView, objectViewFilterColumns));
 		objectView.setObjectViewSortColumns(
 			_addObjectViewSortColumns(
-				user, objectView.getObjectViewId(), objectViewColumns,
-				objectViewSortColumns));
+				user, objectView, objectViewColumns, objectViewSortColumns));
 
 		return objectView;
 	}
@@ -268,8 +268,7 @@ public class ObjectViewLocalServiceImpl extends ObjectViewLocalServiceBaseImpl {
 				user, objectView, objectViewFilterColumns));
 		objectView.setObjectViewSortColumns(
 			_addObjectViewSortColumns(
-				user, objectView.getObjectViewId(), objectViewColumns,
-				objectViewSortColumns));
+				user, objectView, objectViewColumns, objectViewSortColumns));
 
 		return objectView;
 	}
@@ -331,8 +330,8 @@ public class ObjectViewLocalServiceImpl extends ObjectViewLocalServiceBaseImpl {
 					objectView.getObjectViewId());
 				newObjectViewFilterColumn.setFilterType(
 					objectViewFilterColumn.getFilterType());
-				newObjectViewFilterColumn.setJson(
-					objectViewFilterColumn.getJson());
+				newObjectViewFilterColumn.setJSON(
+					objectViewFilterColumn.getJSON());
 				newObjectViewFilterColumn.setObjectFieldName(
 					objectViewFilterColumn.getObjectFieldName());
 
@@ -342,14 +341,15 @@ public class ObjectViewLocalServiceImpl extends ObjectViewLocalServiceBaseImpl {
 	}
 
 	private List<ObjectViewSortColumn> _addObjectViewSortColumns(
-			User user, long objectViewId,
+			User user, ObjectView objectView,
 			List<ObjectViewColumn> objectViewColumns,
 			List<ObjectViewSortColumn> objectViewSortColumns)
 		throws PortalException {
 
 		try {
 			_validateObjectViewSortColumns(
-				objectViewColumns, objectViewSortColumns);
+				objectView.getObjectDefinitionId(), objectViewColumns,
+				objectViewSortColumns);
 		}
 		catch (ObjectViewSortColumnException objectViewSortColumnException) {
 			throw new ObjectViewSortColumnException(
@@ -366,7 +366,8 @@ public class ObjectViewLocalServiceImpl extends ObjectViewLocalServiceBaseImpl {
 				newObjectViewSortColumn.setCompanyId(user.getCompanyId());
 				newObjectViewSortColumn.setUserId(user.getUserId());
 				newObjectViewSortColumn.setUserName(user.getFullName());
-				newObjectViewSortColumn.setObjectViewId(objectViewId);
+				newObjectViewSortColumn.setObjectViewId(
+					objectView.getObjectViewId());
 				newObjectViewSortColumn.setObjectFieldName(
 					objectViewSortColumn.getObjectFieldName());
 				newObjectViewSortColumn.setPriority(
@@ -472,7 +473,8 @@ public class ObjectViewLocalServiceImpl extends ObjectViewLocalServiceBaseImpl {
 
 				if (!Objects.equals(
 						objectField.getBusinessType(),
-						ObjectFieldConstants.BUSINESS_TYPE_PICKLIST)) {
+						ObjectFieldConstants.BUSINESS_TYPE_PICKLIST) &&
+					!objectField.isSystem()) {
 
 					throw new ObjectViewFilterColumnException(
 						StringBundler.concat(
@@ -485,15 +487,15 @@ public class ObjectViewLocalServiceImpl extends ObjectViewLocalServiceBaseImpl {
 			}
 
 			if (Validator.isNull(objectViewFilterColumn.getFilterType()) &&
-				Validator.isNull(objectViewFilterColumn.getJson())) {
+				Validator.isNull(objectViewFilterColumn.getJSON())) {
 
 				continue;
 			}
 
 			if ((Validator.isNull(objectViewFilterColumn.getFilterType()) &&
-				 Validator.isNotNull(objectViewFilterColumn.getJson())) ||
+				 Validator.isNotNull(objectViewFilterColumn.getJSON())) ||
 				(Validator.isNotNull(objectViewFilterColumn.getFilterType()) &&
-				 Validator.isNull(objectViewFilterColumn.getJson()))) {
+				 Validator.isNull(objectViewFilterColumn.getJSON()))) {
 
 				throw new ObjectViewFilterColumnException(
 					StringBundler.concat(
@@ -503,9 +505,8 @@ public class ObjectViewLocalServiceImpl extends ObjectViewLocalServiceBaseImpl {
 			}
 
 			ObjectFieldFilterParser objectFieldFilterParser =
-				_objectFieldFilterParserServicesTracker.
-					getObjectFieldFilterParser(
-						objectViewFilterColumn.getFilterType());
+				_objectFieldFilterParserTracker.getObjectFieldFilterParser(
+					objectViewFilterColumn.getFilterType());
 
 			objectFieldFilterParser.validate(
 				listTypeDefinitionId, objectViewFilterColumn);
@@ -513,7 +514,7 @@ public class ObjectViewLocalServiceImpl extends ObjectViewLocalServiceBaseImpl {
 	}
 
 	private void _validateObjectViewSortColumns(
-			List<ObjectViewColumn> objectViewColumns,
+			long objectDefinitionId, List<ObjectViewColumn> objectViewColumns,
 			List<ObjectViewSortColumn> objectViewSortColumns)
 		throws PortalException {
 
@@ -543,6 +544,27 @@ public class ObjectViewLocalServiceImpl extends ObjectViewLocalServiceBaseImpl {
 					"There is no sort order of type: " +
 						objectViewSortColumn.getSortOrder());
 			}
+
+			if (!_objectFieldNames.contains(
+					objectViewSortColumn.getObjectFieldName())) {
+
+				ObjectField objectField = _objectFieldPersistence.findByODI_N(
+					objectDefinitionId,
+					objectViewSortColumn.getObjectFieldName());
+
+				if (Objects.equals(
+						objectField.getBusinessType(),
+						ObjectFieldConstants.BUSINESS_TYPE_AGGREGATION) ||
+					Objects.equals(
+						objectField.getBusinessType(),
+						ObjectFieldConstants.BUSINESS_TYPE_RELATIONSHIP)) {
+
+					throw new ObjectViewSortColumnObjectFieldNameException(
+						"Object field " +
+							objectViewSortColumn.getObjectFieldName() +
+								" is not sortable");
+				}
+			}
 		}
 	}
 
@@ -550,8 +572,7 @@ public class ObjectViewLocalServiceImpl extends ObjectViewLocalServiceBaseImpl {
 	private ObjectDefinitionPersistence _objectDefinitionPersistence;
 
 	@Reference
-	private ObjectFieldFilterParserServicesTracker
-		_objectFieldFilterParserServicesTracker;
+	private ObjectFieldFilterParserTracker _objectFieldFilterParserTracker;
 
 	private final Set<String> _objectFieldNames = Collections.unmodifiableSet(
 		SetUtil.fromArray(

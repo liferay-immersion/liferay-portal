@@ -34,6 +34,35 @@ definition {
 	}
 
 	@priority = "5"
+	test StructuredContentDraftByVersionContainsSetPriority {
+		property portal.acceptance = "true";
+
+		task ("Given in Headless Admin Content I create a structuredContent draft with a priority field set") {
+			var ddmStructureId = WebContentStructures.getDdmStructureId(structureName = "content-structure");
+
+			var responseToParse = HeadlessWebcontentAPI.createStructuredContentDraft(
+				data = "Text",
+				ddmStructureId = "${ddmStructureId}",
+				label = "Text",
+				name = "Text",
+				priority = "1",
+				title = "Title");
+		}
+
+		task ("When returning only web content with version 1.0") {
+			var response = HeadlessWebcontentAPI.versionStructureContent(
+				responseToParse = "${responseToParse}",
+				versionvalue = "1.0");
+		}
+
+		task ("Then the response body includes the set priority") {
+			HeadlessWebcontentAPI.assertPriorityFieldWithCorrectValue(
+				expectedPriorityValue = "1.0",
+				responseToParse = "${response}");
+		}
+	}
+
+	@priority = "5"
 	test StructuredContentDraftContainsModifiedPriorityValue {
 		property portal.acceptance = "true";
 

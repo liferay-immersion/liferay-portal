@@ -1844,6 +1844,18 @@ public class GraphQLServletExtender {
 				_addField(Scalars.GraphQLString, "profileURL")
 			).build());
 
+		graphQLObjectTypeBuilder = new GraphQLObjectType.Builder();
+
+		graphQLTypes.put(
+			"FileEntry",
+			graphQLObjectTypeBuilder.name(
+				"FileEntry"
+			).field(
+				_addField(Scalars.GraphQLLong, "id")
+			).field(
+				_addField(Scalars.GraphQLString, "name")
+			).build());
+
 		GraphQLInputObjectType.Builder graphQLInputObjectTypeBuilder =
 			new GraphQLInputObjectType.Builder();
 
@@ -2024,6 +2036,10 @@ public class GraphQLServletExtender {
 							dataFetchingEnvironment,
 							HashMapBuilder.<String, Serializable>put(
 								"companyId", CompanyThreadLocal.getCompanyId()
+							).put(
+								"filter",
+								(String)dataFetchingEnvironment.getArgument(
+									"filter")
 							).put(
 								"scopeKey",
 								(String)dataFetchingEnvironment.getArgument(

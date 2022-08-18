@@ -18,40 +18,31 @@ import Avatar from '../../../../components/Avatar';
 import AssignToMe from '../../../../components/Avatar/AssigneToMe';
 import Code from '../../../../components/Code';
 import Container from '../../../../components/Layout/Container';
-import ListView from '../../../../components/ListView/ListView';
+import ListViewRest from '../../../../components/ListView';
 import StatusBadge from '../../../../components/StatusBadge';
-import client from '../../../../graphql/apolloClient';
-import {UpdateCaseResult} from '../../../../graphql/mutations';
-import {TestrayCaseResult, getCaseResults} from '../../../../graphql/queries';
+import useAssignCaseResult from '../../../../hooks/useAssignCaseResult';
 import i18n from '../../../../i18n';
 import {filters} from '../../../../schema/filter';
-import {Liferay} from '../../../../services/liferay';
+import {
+	TestrayCaseResult,
+	caseResultResource,
+	getCaseResultTransformData,
+} from '../../../../services/rest';
 import {getStatusLabel} from '../../../../util/constants';
 import {searchUtil} from '../../../../util/search';
 
 const Build = () => {
 	const {buildId} = useParams();
-
-	const onAssignToMe = (caseResult: TestrayCaseResult) => {
-		client.mutate({
-			mutation: UpdateCaseResult,
-			variables: {
-				CaseResult: {
-					r_userToCaseResults_userId: Liferay.ThemeDisplay.getUserId(),
-				},
-				caseResultId: caseResult.id,
-			},
-		});
-	};
+	const {onAssignToMeFetch} = useAssignCaseResult();
 
 	return (
 		<Container className="mt-4">
-			<ListView
+			<ListViewRest
 				managementToolbarProps={{
 					filterFields: filters.build.results as any,
 					title: i18n.translate('tests'),
 				}}
-				query={getCaseResults}
+				resource={caseResultResource}
 				tableProps={{
 					columns: [
 						{
@@ -87,28 +78,25 @@ const Build = () => {
 						},
 						{
 							key: 'user',
-							render: (_: any, caseResult: TestrayCaseResult) => {
-								return caseResult?.user ? (
+							render: (_: any, caseResult: TestrayCaseResult) =>
+								caseResult?.user ? (
 									<Avatar
 										displayName
 										name={caseResult.user.givenName}
 									/>
 								) : (
 									<AssignToMe
-										onClick={() => onAssignToMe(caseResult)}
+										onClick={() =>
+											onAssignToMeFetch(caseResult)
+										}
 									/>
-								);
-							},
+								),
 							value: i18n.translate('assignee'),
 						},
 						{
 							key: 'dueStatus',
 							render: (dueStatus: any) => (
-								<StatusBadge
-									type={getStatusLabel(
-										dueStatus
-									)?.toLowerCase()}
-								>
+								<StatusBadge type={getStatusLabel(dueStatus)}>
 									{getStatusLabel(dueStatus)}
 								</StatusBadge>
 							),
@@ -127,7 +115,7 @@ const Build = () => {
 					],
 					navigateTo: ({id}) => `case-result/${id}`,
 				}}
-				transformData={(data) => data?.caseResults}
+				transformData={getCaseResultTransformData}
 				variables={{
 					filter: searchUtil.eq('buildId', buildId as string),
 				}}

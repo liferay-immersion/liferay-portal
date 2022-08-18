@@ -14,4 +14,12 @@
 // stylelint-disable selector-type-no-unknown
 liferay-remote-app-raylife-ap {
 	@import 'variables';
+
+	@import 'apps/application/edit-applications';
+	@import 'apps/dashboard/product-performance/index';
+	@import 'apps/dashboard/recent-applications/index';
+	@import 'components/header';
+	@import 'components/table';
 }
+
+@import 'apps/applications/modal';

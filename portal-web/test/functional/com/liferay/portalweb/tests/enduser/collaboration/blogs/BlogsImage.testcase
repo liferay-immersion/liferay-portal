@@ -125,7 +125,7 @@ definition {
 			uploadFileName = "Document_1");
 
 		BlogsEntry.editCoverImage(
-			coverImageName = "Document_2.jpg",
+			coverImageName = "document_2-jpg",
 			navTab = "Documents and Media",
 			uploadFileName = "Document_2.jpg");
 
@@ -353,7 +353,7 @@ definition {
 		BlogsNavigator.openBlogsAdmin(siteURLKey = "guest");
 
 		Blogs.addEntryWithUploadedCoverImage(
-			coverImageName = "Document_1",
+			coverImageName = "document_1",
 			entryContent = "Blogs Entry Content new",
 			entrySubtitle = "Blogs Entry Subtitle new",
 			entryTitle = "Blogs Entry Title new",
@@ -493,9 +493,6 @@ definition {
 	@description = "This ensures that an image in the Blogs content field can be rendered correctly after moving it to a folder."
 	@priority = "4"
 	test CanViewInlineImageAfterMovingToFolder {
-		property osgi.module.configuration.file.names = "com.liferay.document.library.configuration.FFFriendlyURLEntryFileEntryConfiguration.config";
-		property osgi.module.configurations = "enabled=B&quot;true&quot;";
-
 		JSONDocument.addFileWithUploadedFile(
 			dmDocumentDescription = "DM Document Description",
 			dmDocumentTitle = "DM Document Title",
@@ -541,10 +538,8 @@ definition {
 	@description = "This ensures that an image in the Blogs content field can be rendered correctly when publication is enabled."
 	@priority = "5"
 	test CanViewInlineImageWithPublication {
-		property osgi.module.configuration.file.names = "com.liferay.document.library.configuration.FFFriendlyURLEntryFileEntryConfiguration.config";
+		property osgi.module.configuration.file.names = "com.liferay.change.tracking.configuration.CTSettingsConfiguration.config";
 		property osgi.module.configurations = "enabled=B&quot;true&quot;";
-
-		JSONPublications.enablePublications();
 
 		JSONPublications.addPublication(publicationName = "Publication Name");
 
@@ -587,9 +582,6 @@ definition {
 	@description = "This ensures that an image in the Blogs small image can be rendered correctly after moving it to a folder."
 	@priority = "4"
 	test CanViewSmallImageAfterMovingToFolder {
-		property osgi.module.configuration.file.names = "com.liferay.document.library.configuration.FFFriendlyURLEntryFileEntryConfiguration.config";
-		property osgi.module.configurations = "enabled=B&quot;true&quot;";
-
 		JSONDocument.addFileWithUploadedFile(
 			dmDocumentDescription = "DM Document Description",
 			dmDocumentTitle = "DM Document Title",

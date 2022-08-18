@@ -22,6 +22,7 @@ import ClayModal, {useModal} from '@clayui/modal';
 import {ClayPaginationBarWithBasicItems} from '@clayui/pagination-bar';
 import ClayPanel from '@clayui/panel';
 import ClayTimePicker from '@clayui/time-picker';
+import {openConfirmModal} from 'frontend-js-web';
 import React, {useState} from 'react';
 
 import ChangeTrackingBaseScheduleView from './ChangeTrackingBaseScheduleView';
@@ -86,7 +87,7 @@ class ChangeTrackingConflictsView extends ChangeTrackingBaseScheduleView {
 						{Liferay.Language.get('conflicting-changes')}
 					</h2>
 
-					{this.unresolvedConflicts.length > 0 && (
+					{!!this.unresolvedConflicts.length && (
 						<ClayAlert
 							displayType="warning"
 							spritemap={this.spritemap}
@@ -103,7 +104,7 @@ class ChangeTrackingConflictsView extends ChangeTrackingBaseScheduleView {
 						</ClayAlert>
 					)}
 
-					{this.unresolvedConflicts.length === 0 && (
+					{!this.unresolvedConflicts.length && (
 						<ClayAlert
 							displayType="success"
 							spritemap={this.spritemap}
@@ -125,7 +126,7 @@ class ChangeTrackingConflictsView extends ChangeTrackingBaseScheduleView {
 				</div>
 
 				<div className="sheet-section">
-					{this.unresolvedConflicts.length > 0 && (
+					{!!this.unresolvedConflicts.length && (
 						<ClayPanel
 							collapsable
 							defaultExpanded
@@ -151,7 +152,7 @@ class ChangeTrackingConflictsView extends ChangeTrackingBaseScheduleView {
 				</div>
 
 				<div className="sheet-section">
-					{this.resolvedConflicts.length > 0 && (
+					{!!this.resolvedConflicts.length && (
 						<ClayPanel
 							collapsable
 							displayTitle={
@@ -186,7 +187,7 @@ class ChangeTrackingConflictsView extends ChangeTrackingBaseScheduleView {
 								<div>
 									<ClayDatePicker
 										disabled={
-											this.unresolvedConflicts.length > 0
+											!!this.unresolvedConflicts.length
 										}
 										onValueChange={this.handleDateChange}
 										placeholder="YYYY-MM-DD"
@@ -207,7 +208,7 @@ class ChangeTrackingConflictsView extends ChangeTrackingBaseScheduleView {
 								<div>
 									<ClayTimePicker
 										disabled={
-											this.unresolvedConflicts.length > 0
+											!!this.unresolvedConflicts.length
 										}
 										onChange={this.handleTimeChange}
 										spritemap={this.spritemap}
@@ -235,7 +236,7 @@ class ChangeTrackingConflictsView extends ChangeTrackingBaseScheduleView {
 						<div className="btn-group-item">
 							<button
 								className={
-									this.unresolvedConflicts.length > 0
+									this.unresolvedConflicts.length
 										? 'btn btn-primary disabled'
 										: 'btn btn-primary'
 								}
@@ -279,7 +280,7 @@ const ConflictsTable = ({conflicts, spritemap}) => {
 	const getAlertFooter = (conflict) => {
 		if (
 			!conflict.dismissURL &&
-			(!conflict.actions || conflict.actions.length === 0)
+			(!conflict.actions || !conflict.actions.length)
 		) {
 			return '';
 		}
@@ -295,8 +296,15 @@ const ConflictsTable = ({conflicts, spritemap}) => {
 						<ClayButton
 							displayType="secondary"
 							onClick={() =>
-								confirm(action.confirmationMessage) &&
-								submitForm(document.hrefFm, action.href)
+								openConfirmModal({
+									message: action.confirmationMessage,
+									onConfirm: (isConfirmed) =>
+										isConfirmed &&
+										submitForm(
+											document.hrefFm,
+											action.href
+										),
+								})
 							}
 						>
 							<span className="inline-item inline-item-before">
@@ -368,7 +376,7 @@ const ConflictsTable = ({conflicts, spritemap}) => {
 	};
 
 	const getDropdownMenu = (conflict) => {
-		if (!conflict.actions || conflict.actions.length === 0) {
+		if (!conflict.actions || !conflict.actions.length) {
 			return '';
 		}
 
@@ -381,8 +389,15 @@ const ConflictsTable = ({conflicts, spritemap}) => {
 						<ClayButton
 							displayType="secondary"
 							onClick={() =>
-								confirm(firstAction.confirmationMessage) &&
-								submitForm(document.hrefFm, firstAction.href)
+								openConfirmModal({
+									message: firstAction.confirmationMessage,
+									onConfirm: (isConfirmed) =>
+										isConfirmed &&
+										submitForm(
+											document.hrefFm,
+											firstAction.href
+										),
+								})
 							}
 							small
 						>
@@ -423,8 +438,12 @@ const ConflictsTable = ({conflicts, spritemap}) => {
 				items.push({
 					label: action.label,
 					onClick: () =>
-						confirm(action.confirmationMessage) &&
-						submitForm(document.hrefFm, action.href),
+						openConfirmModal({
+							message: action.confirmationMessage,
+							onConfirm: (isConfirmed) =>
+								isConfirmed &&
+								submitForm(document.hrefFm, action.href),
+						}),
 					symbolLeft: action.symbol,
 				});
 			}
@@ -444,8 +463,15 @@ const ConflictsTable = ({conflicts, spritemap}) => {
 						<ClayButton
 							displayType="secondary"
 							onClick={() =>
-								confirm(firstAction.confirmationMessage) &&
-								submitForm(document.hrefFm, firstAction.href)
+								openConfirmModal({
+									message: firstAction.confirmationMessage,
+									onConfirm: (isConfirmed) =>
+										isConfirmed &&
+										submitForm(
+											document.hrefFm,
+											firstAction.href
+										),
+								})
 							}
 							small
 						>

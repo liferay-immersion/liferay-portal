@@ -43,11 +43,7 @@ definition {
 
 		FormsAdminNavigator.enableLocalNetworkDataProvider();
 
-		Navigator.openURL();
-
-		ProductMenu.gotoPortlet(
-			category = "Content & Data",
-			portlet = "Forms");
+		FormsAdmin.openFormsAdmin(siteURLKey = "guest");
 
 		Navigator.gotoNavItem(navItem = "Data Providers");
 
@@ -1411,6 +1407,8 @@ definition {
 		Form.gotoAutocompleteTab();
 
 		Form.enableAutocompleteConfiguration();
+
+		// Pausing 60 seconds due to LPS-159468
 
 		Pause(locator1 = "60000");
 

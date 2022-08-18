@@ -30,6 +30,7 @@ import com.liferay.portal.kernel.lpkg.StaticLPKGResolver;
 import com.liferay.portal.kernel.module.framework.ThrowableCollector;
 import com.liferay.portal.kernel.spring.osgi.OSGiBeanProperties;
 import com.liferay.portal.kernel.util.FileUtil;
+import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HashMapDictionary;
 import com.liferay.portal.kernel.util.NamedThreadFactory;
 import com.liferay.portal.kernel.util.Props;
@@ -37,6 +38,7 @@ import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.ReleaseInfo;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.SystemProperties;
 import com.liferay.portal.module.framework.ModuleFramework;
 import com.liferay.portal.util.PropsValues;
 
@@ -441,10 +443,17 @@ public class ModuleFrameworkImpl implements ModuleFramework {
 			Constants.FRAMEWORK_STORAGE,
 			PropsValues.MODULE_FRAMEWORK_STATE_DIR);
 
-		properties.put("eclipse.security", null);
 		properties.put(
-			"equinox.resolver.revision.batch.size",
-			PropsValues.MODULE_FRAMEWORK_RESOLVER_REVISION_BATCH_SIZE);
+			"ds.lock.timeout.milliseconds",
+			GetterUtil.getString(
+				SystemProperties.get("ds.lock.timeout.milliseconds"),
+				"1800000"));
+		properties.put(
+			"ds.stop.timeout.milliseconds",
+			GetterUtil.getString(
+				SystemProperties.get("ds.stop.timeout.milliseconds"),
+				"1800000"));
+		properties.put("eclipse.security", null);
 		properties.put("java.security.manager", null);
 		properties.put("org.osgi.framework.security", null);
 
@@ -532,6 +541,7 @@ public class ModuleFrameworkImpl implements ModuleFramework {
 
 		crc32.update(fileName.getBytes());
 
+		_calculateChecksum(file.canWrite() ? 1000L : -1000L, crc32);
 		_calculateChecksum(file.lastModified(), crc32);
 		_calculateChecksum(file.length(), crc32);
 

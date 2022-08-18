@@ -25,7 +25,7 @@ import {
 	markAsAnswerMessageBoardMessageQuery,
 } from '../utils/client.es';
 import lang from '../utils/lang.es';
-import {getDateFormatted} from '../utils/time.es';
+import {dateToInternationalHuman} from '../utils/utils.es';
 import ArticleBodyRenderer from './ArticleBodyRenderer.es';
 import Comments from './Comments.es';
 import Link from './Link.es';
@@ -105,7 +105,10 @@ export default withRouter(
 
 							<span className="text-secondary">
 								{lang.sub(Liferay.Language.get('answered-x'), [
-									getDateFormatted(answer.dateCreated),
+									`- ${dateToInternationalHuman(
+										answer.dateCreated,
+										Liferay.ThemeDisplay.getBCP47LanguageId()
+									)}`,
 								])}
 							</span>
 
@@ -124,18 +127,14 @@ export default withRouter(
 							<div className="d-flex justify-content-between">
 								<div>
 									{editable && (
-										<ClayButton.Group
-											className="font-weight-bold text-secondary"
-											spaced={true}
-										>
+										<div className="font-weight-bold text-secondary">
 											{answer.actions[
 												'reply-to-message'
 											] &&
 												answer.status !== 'pending' &&
-												comments.length === 0 && (
+												!comments.length && (
 													<ClayButton
-														className="btn-sm c-px-2 c-py-1 text-reset text-secondary"
-														displayType="secondary"
+														className="btn-sm c-mr-2 c-px-2 c-py-1"
 														onClick={() =>
 															setShowNewComment(
 																true
@@ -151,8 +150,8 @@ export default withRouter(
 											{answer.actions.delete && (
 												<>
 													<ClayButton
-														className="text-reset"
-														displayType="unstyled"
+														className="btn-sm c-mr-2 c-px-2 c-py-1"
+														displayType="secondary"
 														onClick={() => {
 															setShowDeleteAnswerModal(
 																true
@@ -200,9 +199,9 @@ export default withRouter(
 
 											{canMarkAsAnswer && (
 												<ClayButton
-													className="text-reset"
+													className="btn-sm c-mr-2 c-px-2 c-py-1"
 													data-testid="mark-as-answer-button"
-													displayType="unstyled"
+													displayType="secondary"
 													onClick={() => {
 														markAsAnswerMessageBoardMessage(
 															{
@@ -239,8 +238,8 @@ export default withRouter(
 											{editable &&
 												answer.actions.replace && (
 													<ClayButton
-														className="text-reset"
-														displayType="unstyled"
+														className="btn-sm c-mr-2 c-px-2 c-py-1"
+														displayType="secondary"
 													>
 														<Link
 															className="text-reset"
@@ -252,7 +251,7 @@ export default withRouter(
 														</Link>
 													</ClayButton>
 												)}
-										</ClayButton.Group>
+										</div>
 									)}
 								</div>
 
@@ -283,7 +282,7 @@ export default withRouter(
 						/>
 					</div>
 				</div>
-				<div className="c-mb-3 col-md-9 offset-md-1">
+				<div className="c-my-2 offset-md-1">
 					{editable && !!comments.length && !showNewComment && (
 						<ClayButton.Group
 							className="font-weight-bold text-secondary"
@@ -292,8 +291,7 @@ export default withRouter(
 							{answer.actions['reply-to-message'] &&
 								answer.status !== 'pending' && (
 									<ClayButton
-										className="btn-sm c-px-2 c-py-1 text-reset text-secondary"
-										displayType="secondary"
+										className="btn-sm c-px-2 c-py-1"
 										onClick={() => setShowNewComment(true)}
 									>
 										{Liferay.Language.get('add-comment')}

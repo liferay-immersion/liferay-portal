@@ -91,7 +91,7 @@ function FieldsTable({portletNamespace}) {
 	return (
 		<div className="card d-flex flex-column">
 			<h4 className="card-header py-3">
-				{Liferay.Language.get('field-mapping')}
+				{Liferay.Language.get('fields')}
 			</h4>
 
 			<ClayAlert
@@ -112,11 +112,11 @@ function FieldsTable({portletNamespace}) {
 							<ClayTable.Cell headingCell>
 								<ClayCheckbox
 									checked={
-										selectedFields.length > 0 &&
+										!!selectedFields.length &&
 										selectedFields.length === fields.length
 									}
 									indeterminate={
-										selectedFields.length > 0 &&
+										!!selectedFields.length &&
 										selectedFields.length < fields.length
 									}
 									onChange={() => {

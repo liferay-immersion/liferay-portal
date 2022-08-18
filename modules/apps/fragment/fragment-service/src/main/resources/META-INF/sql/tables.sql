@@ -30,7 +30,7 @@ create table FragmentComposition (
 	fragmentCollectionId LONG,
 	fragmentCompositionKey VARCHAR(75) null,
 	name VARCHAR(75) null,
-	description VARCHAR(75) null,
+	description STRING null,
 	data_ TEXT null,
 	previewFileEntryId LONG,
 	lastPublishDate DATE null,
@@ -100,6 +100,7 @@ create table FragmentEntryLink (
 	namespace VARCHAR(75) null,
 	position INTEGER,
 	rendererKey VARCHAR(200) null,
+	type_ INTEGER,
 	lastPropagationDate DATE null,
 	lastPublishDate DATE null,
 	primary key (fragmentEntryLinkId, ctCollectionId)

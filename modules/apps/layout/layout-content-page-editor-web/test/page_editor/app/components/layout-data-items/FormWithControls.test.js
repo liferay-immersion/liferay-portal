@@ -29,6 +29,28 @@ jest.mock(
 		))
 );
 
+jest.mock(
+	'../../../../../src/main/resources/META-INF/resources/page_editor/app/config',
+	() => ({
+		config: {
+			formTypes: [
+				{
+					label: 'Type',
+					subtypes: [
+						{
+							label: 'Subtype',
+							value: '1234',
+						},
+					],
+					value: '1234',
+				},
+			],
+		},
+	})
+);
+
+const DEFAULT_CONFIG = {classNameId: '0'};
+
 describe('FormWithControls', () => {
 	it('renders a container inside a form', () => {
 		const {container} = render(
@@ -36,7 +58,7 @@ describe('FormWithControls', () => {
 				<FormWithControls
 					item={{
 						children: [],
-						config: {},
+						config: DEFAULT_CONFIG,
 						itemId: 'form',
 						type: LAYOUT_DATA_ITEM_TYPES.form,
 					}}
@@ -54,7 +76,7 @@ describe('FormWithControls', () => {
 				<FormWithControls
 					item={{
 						children: [],
-						config: {},
+						config: DEFAULT_CONFIG,
 						itemId: 'form',
 						type: LAYOUT_DATA_ITEM_TYPES.form,
 					}}
@@ -115,7 +137,7 @@ describe('FormWithControls', () => {
 				<FormWithControls
 					item={{
 						children: ['child'],
-						config: {},
+						config: DEFAULT_CONFIG,
 						itemId: 'form',
 						type: LAYOUT_DATA_ITEM_TYPES.form,
 					}}
@@ -126,5 +148,26 @@ describe('FormWithControls', () => {
 		);
 
 		expect(screen.queryByText('Form Child')).not.toBeInTheDocument();
+	});
+
+	it('allows selecting content type if it is not mapped', () => {
+		render(
+			<StoreMother.Component>
+				<FormWithControls
+					item={{
+						children: [],
+						config: {
+							classNameId: '0',
+							classTypeId: '0',
+						},
+						itemId: 'form',
+						type: LAYOUT_DATA_ITEM_TYPES.form,
+					}}
+				/>
+			</StoreMother.Component>
+		);
+
+		expect(screen.getByText('Type')).toBeInTheDocument();
+		expect(screen.getByText('map-your-form')).toBeInTheDocument();
 	});
 });

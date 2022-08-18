@@ -38,6 +38,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Properties;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -244,6 +245,18 @@ public class PoshiRunnerExecutor {
 		}
 		catch (Exception exception) {
 			if (updateLoggerStatus) {
+				if (Validator.isNotNull(element.attributeValue("method"))) {
+					_poshiLogger.startCommand(element);
+
+					SummaryLogger.startSummary(element);
+
+					SummaryLogger.failSummary(
+						element, exception.getMessage(),
+						_poshiLogger.getDetailsLinkId());
+
+					_poshiLogger.failCommand(element);
+				}
+
 				_poshiLogger.updateStatus(element, "fail");
 			}
 
@@ -781,6 +794,16 @@ public class PoshiRunnerExecutor {
 				executeElement, args, returnValue);
 		}
 		catch (Throwable throwable) {
+			_poshiLogger.startCommand(executeElement);
+
+			SummaryLogger.startSummary(executeElement);
+
+			SummaryLogger.failSummary(
+				executeElement, throwable.getMessage(),
+				_poshiLogger.getDetailsLinkId());
+
+			_poshiLogger.failCommand(executeElement);
+
 			_poshiLogger.updateStatus(executeElement, "fail");
 
 			throw throwable;
@@ -862,6 +885,17 @@ public class PoshiRunnerExecutor {
 	}
 
 	public void runSeleniumElement(Element executeElement) throws Exception {
+		Properties properties =
+			PoshiContext.getNamespacedClassCommandNameProperties(
+				PoshiContext.getTestCaseNamespacedClassCommandName());
+
+		if (GetterUtil.getBoolean(
+				properties.getProperty("disable-webdriver"))) {
+
+			throw new RuntimeException(
+				"Unable to call Selenium method while WebDriver is disabled");
+		}
+
 		PoshiStackTraceUtil.setCurrentElement(executeElement);
 
 		List<String> arguments = new ArrayList<>();
@@ -903,11 +937,10 @@ public class PoshiRunnerExecutor {
 
 		Class<?> clazz = liferaySelenium.getClass();
 
-		Method method = clazz.getMethod(
-			selenium, parameterClasses.toArray(new Class<?>[0]));
-
 		_returnObject = invokeLiferaySeleniumMethod(
-			method, arguments.toArray(new String[0]));
+			clazz.getMethod(
+				selenium, parameterClasses.toArray(new Class<?>[0])),
+			arguments.toArray(new String[0]));
 	}
 
 	public void runTakeScreenshotElement(Element element) throws Exception {

@@ -54,6 +54,7 @@ import com.liferay.commerce.service.CPDAvailabilityEstimateLocalService;
 import com.liferay.commerce.service.CPDefinitionInventoryLocalService;
 import com.liferay.commerce.service.CommerceAvailabilityEstimateLocalService;
 import com.liferay.commerce.util.comparator.CommerceAvailabilityEstimatePriorityComparator;
+import com.liferay.expando.kernel.model.ExpandoBridge;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.json.JSONArrayImpl;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
@@ -83,6 +84,7 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 
 import java.io.File;
+import java.io.Serializable;
 
 import java.math.BigDecimal;
 
@@ -257,6 +259,46 @@ public class CPDefinitionsImporter {
 			WorkflowConstants.STATUS_DRAFT, serviceContext);
 	}
 
+	private void _addExpandoValue(
+		CPDefinition cpDefinition, JSONArray jsonArray) {
+
+		if (jsonArray == null) {
+			return;
+		}
+
+		ExpandoBridge expandoBridge = cpDefinition.getExpandoBridge();
+
+		if (expandoBridge == null) {
+			return;
+		}
+
+		for (int i = 0; i < jsonArray.length(); i++) {
+			JSONObject customFieldJSONObject = jsonArray.getJSONObject(i);
+
+			JSONObject customValueJSONObject =
+				customFieldJSONObject.getJSONObject("customValue");
+
+			if (customValueJSONObject == null) {
+				continue;
+			}
+
+			if (customValueJSONObject.get("data") instanceof BigDecimal) {
+				BigDecimal customValue = (BigDecimal)customValueJSONObject.get(
+					"data");
+
+				expandoBridge.setAttributeDefault(
+					customFieldJSONObject.getString("name"),
+					customValue.doubleValue());
+
+				continue;
+			}
+
+			expandoBridge.setAttributeDefault(
+				customFieldJSONObject.getString("name"),
+				(Serializable)customValueJSONObject.get("data"));
+		}
+	}
+
 	private void _addWarehouseQuantities(
 			JSONObject skuJSONObject, long[] commerceInventoryWarehouseIds,
 			ServiceContext serviceContext, CPInstance cpInstance)
@@ -379,6 +421,9 @@ public class CPDefinitionsImporter {
 					externalReferenceCode, company.getCompanyId());
 
 		if (cpDefinition != null) {
+			_addExpandoValue(
+				cpDefinition, jsonObject.getJSONArray("customFields"));
+
 			_commerceChannelRelLocalService.addCommerceChannelRel(
 				CPDefinition.class.getName(), cpDefinition.getCPDefinitionId(),
 				commerceChannelId, serviceContext);
@@ -440,6 +485,8 @@ public class CPDefinitionsImporter {
 				subscriptionInfoJSONObject),
 			maxSubscriptionCycles, assetCategoryIds, assetTagNames,
 			serviceContext);
+
+		_addExpandoValue(cpDefinition, jsonObject.getJSONArray("customFields"));
 
 		serviceContext.setWorkflowAction(originalWorkflowAction);
 
@@ -513,17 +560,13 @@ public class CPDefinitionsImporter {
 
 				double priceDouble = jsonObject.getDouble("price", 0);
 
-				BigDecimal price = BigDecimal.valueOf(priceDouble);
-
-				BigDecimal cost = BigDecimal.valueOf(
-					jsonObject.getDouble("cost", 0));
-
 				cpInstance.setManufacturerPartNumber(
 					jsonObject.getString("manufacturerPartNumber"));
-				cpInstance.setPrice(price);
+				cpInstance.setPrice(BigDecimal.valueOf(priceDouble));
 				cpInstance.setPromoPrice(
 					BigDecimal.valueOf(jsonObject.getDouble("promoPrice", 0)));
-				cpInstance.setCost(cost);
+				cpInstance.setCost(
+					BigDecimal.valueOf(jsonObject.getDouble("cost", 0)));
 
 				_cpInstanceLocalService.updateCPInstance(cpInstance);
 

@@ -67,7 +67,7 @@ import com.liferay.portal.kernel.exception.NoSuchPortletPreferencesException;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.PortletIdException;
 import com.liferay.portal.kernel.json.JSONArray;
-import com.liferay.portal.kernel.language.LanguageUtil;
+import com.liferay.portal.kernel.language.Language;
 import com.liferay.portal.kernel.lock.Lock;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -120,7 +120,6 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.BiPredicate;
@@ -1238,23 +1237,23 @@ public class PortletImportControllerImpl implements PortletImportController {
 		// Available locales
 
 		if (portletDataHandler.isDataLocalized()) {
-			List<Locale> sourceAvailableLocales = Arrays.asList(
-				LocaleUtil.fromLanguageIds(
-					StringUtil.split(
-						headerElement.attributeValue("available-locales"))));
+			String[] sourceAvailableLanguageIds = StringUtil.split(
+				headerElement.attributeValue("available-locales"));
 
-			for (Locale sourceAvailableLocale : sourceAvailableLocales) {
-				if (!LanguageUtil.isAvailableLocale(
+			for (String sourceAvailableLanguageId :
+					sourceAvailableLanguageIds) {
+
+				if (!_language.isAvailableLocale(
 						_portal.getSiteGroupId(groupId),
-						sourceAvailableLocale)) {
+						sourceAvailableLanguageId)) {
 
 					LocaleException localeException = new LocaleException(
 						LocaleException.TYPE_EXPORT_IMPORT);
 
-					localeException.setSourceAvailableLocales(
-						sourceAvailableLocales);
+					localeException.setSourceAvailableLanguageIds(
+						Arrays.asList(sourceAvailableLanguageIds));
 					localeException.setTargetAvailableLocales(
-						LanguageUtil.getAvailableLocales(
+						_language.getAvailableLocales(
 							_portal.getSiteGroupId(groupId)));
 
 					throw localeException;
@@ -1589,6 +1588,10 @@ public class PortletImportControllerImpl implements PortletImportController {
 
 	private ExportImportLifecycleManager _exportImportLifecycleManager;
 	private GroupLocalService _groupLocalService;
+
+	@Reference
+	private Language _language;
+
 	private LayoutLocalService _layoutLocalService;
 
 	@Reference

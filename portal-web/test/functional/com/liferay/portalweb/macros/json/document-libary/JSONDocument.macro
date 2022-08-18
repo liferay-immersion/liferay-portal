@@ -372,6 +372,20 @@ definition {
 		return "${fileEntryUuid}";
 	}
 
+	macro getLatestVersionURL {
+		Variables.assertDefined(parameterList = "${dmDocumentTitle},${groupName}");
+
+		var portalURL = JSONCompany.getPortalURL();
+		var fileName = StringUtil.replace("${dmDocumentTitle}", " ", "-");
+
+		var fileName = StringUtil.lowerCase("${fileName}");
+		var siteURLKey = StringUtil.replace("${groupName}", " ", "-");
+
+		var siteURLKey = StringUtil.lowerCase("${siteURLKey}");
+
+		return "${portalURL}/documents/d/${siteURLKey}/${fileName}";
+	}
+
 	@summary = "This calls the JSON WS API to move a document to a folder"
 	macro moveFileEntryToFolder {
 		var fileEntryId = JSONDocument.getFileEntryId(

@@ -2518,15 +2518,14 @@ public class CProductPersistenceImpl
 
 		CProductModelImpl cProductModelImpl = (CProductModelImpl)cProduct;
 
-		if (Validator.isNull(cProduct.getExternalReferenceCode())) {
-			cProduct.setExternalReferenceCode(
-				String.valueOf(cProduct.getPrimaryKey()));
-		}
-
 		if (Validator.isNull(cProduct.getUuid())) {
 			String uuid = _portalUUID.generate();
 
 			cProduct.setUuid(uuid);
+		}
+
+		if (Validator.isNull(cProduct.getExternalReferenceCode())) {
+			cProduct.setExternalReferenceCode(cProduct.getUuid());
 		}
 
 		ServiceContext serviceContext =
@@ -2647,7 +2646,7 @@ public class CProductPersistenceImpl
 	 */
 	@Override
 	public CProduct fetchByPrimaryKey(Serializable primaryKey) {
-		if (ctPersistenceHelper.isProductionMode(CProduct.class)) {
+		if (ctPersistenceHelper.isProductionMode(CProduct.class, primaryKey)) {
 			return super.fetchByPrimaryKey(primaryKey);
 		}
 

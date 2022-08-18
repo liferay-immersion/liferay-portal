@@ -25,9 +25,7 @@ import {navigate} from 'frontend-js-web';
 import React, {useRef, useState} from 'react';
 
 export default function SearchBar({
-	destinationFriendlyURL,
 	emptySearchEnabled,
-	initialScope = '',
 	keywords = '',
 	keywordsParameterName = 'q',
 	letUserChooseScope = false,
@@ -35,7 +33,8 @@ export default function SearchBar({
 	scopeParameterName,
 	scopeParameterStringCurrentSite,
 	scopeParameterStringEverything,
-	searchURL = '/search',
+	searchURL,
+	selectedEverythingSearchScope = false,
 	suggestionsContributorConfiguration = '{}',
 	suggestionsDisplayThreshold = '2',
 	suggestionsURL = '/o/portal-search-rest/v1.0/suggestions',
@@ -53,7 +52,11 @@ export default function SearchBar({
 		loading: false,
 		networkStatus: 4,
 	}));
-	const [scope, setScope] = useState(initialScope);
+	const [scope, setScope] = useState(
+		selectedEverythingSearchScope
+			? scopeParameterStringEverything
+			: scopeParameterStringCurrentSite
+	);
 
 	const alignElementRef = useRef();
 	const dropdownRef = useRef();
@@ -81,7 +84,9 @@ export default function SearchBar({
 		},
 		variables: {
 			currentURL: window.location.href,
-			destinationFriendlyURL,
+			destinationFriendlyURL: !searchURL.trim().length
+				? searchURL
+				: '/search',
 			groupId: Liferay.ThemeDisplay.getScopeGroupId(),
 			plid: Liferay.ThemeDisplay.getPlid(),
 			scope,
@@ -91,7 +96,7 @@ export default function SearchBar({
 
 	const _handleKeyDown = (event) => {
 		if (event.key === 'Enter') {
-			_handleSubmit();
+			_handleSubmit(event);
 		}
 	};
 
@@ -99,7 +104,10 @@ export default function SearchBar({
 		setScope(event.target.value);
 	};
 
-	const _handleSubmit = () => {
+	const _handleSubmit = (event) => {
+		event.preventDefault();
+		event.stopPropagation();
+
 		if (!!inputValue.trim().length || emptySearchEnabled) {
 			const queryString = _updateQueryString(document.location.search);
 
@@ -159,6 +167,7 @@ export default function SearchBar({
 							aria-label={Liferay.Language.get('submit')}
 							displayType="unstyled"
 							onClick={_handleSubmit}
+							type="submit"
 						>
 							<ClayIcon symbol="search" />
 						</ClayButton>
@@ -198,10 +207,16 @@ export default function SearchBar({
 				</ClayInput.GroupItem>
 
 				<ClayInput.GroupItem prepend shrink>
-					<ClaySelect onChange={_handleChangeScope} value={scope}>
+					<ClaySelect
+						aria-label={Liferay.Language.get('scope')}
+						name={scopeParameterName}
+						onChange={_handleChangeScope}
+						title={Liferay.Language.get('scope')}
+						value={scope}
+					>
 						<ClaySelect.Option
 							key={scopeParameterStringCurrentSite}
-							label={Liferay.Language.get('current-site')}
+							label={Liferay.Language.get('this-site')}
 							value={scopeParameterStringCurrentSite}
 						/>
 
@@ -213,11 +228,12 @@ export default function SearchBar({
 					</ClaySelect>
 				</ClayInput.GroupItem>
 
-				<ClayInput.GroupItem append shrink>
+				<ClayInput.GroupItem append className="mr-0" shrink>
 					<ClayButton
 						aria-label={Liferay.Language.get('submit')}
 						displayType="secondary"
 						onClick={_handleSubmit}
+						type="submit"
 					>
 						<ClayIcon symbol="search" />
 					</ClayButton>
@@ -248,7 +264,7 @@ export default function SearchBar({
 			searchParams.delete(paginationStartParameterName);
 		}
 
-		if (scope) {
+		if (letUserChooseScope) {
 			searchParams.set(scopeParameterName, scope);
 		}
 

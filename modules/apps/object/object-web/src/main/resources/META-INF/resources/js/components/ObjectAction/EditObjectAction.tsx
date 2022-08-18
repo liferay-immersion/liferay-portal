@@ -12,24 +12,29 @@
  * details.
  */
 
-import {CustomItem} from '@liferay/object-js-components-web';
+import {CustomItem, SidebarCategory} from '@liferay/object-js-components-web';
 import React from 'react';
 
 import ObjectAction from './index';
 
 export default function EditObjectAction({
-	ffNotificationTemplates,
 	objectAction: {id, ...values},
+	objectActionCodeEditorElements,
 	objectActionExecutors,
 	objectActionTriggers,
+	objectDefinitionsRelationshipsURL,
 	readOnly,
+	validateExpressionURL,
 }: IProps) {
 	return (
 		<ObjectAction
-			ffNotificationTemplates={ffNotificationTemplates}
 			objectAction={values}
+			objectActionCodeEditorElements={objectActionCodeEditorElements}
 			objectActionExecutors={objectActionExecutors}
 			objectActionTriggers={objectActionTriggers}
+			objectDefinitionsRelationshipsURL={
+				objectDefinitionsRelationshipsURL
+			}
 			readOnly={readOnly}
 			requestParams={{
 				method: 'PUT',
@@ -39,14 +44,17 @@ export default function EditObjectAction({
 				'the-object-action-was-updated-successfully'
 			)}
 			title={Liferay.Language.get('action')}
+			validateExpressionURL={validateExpressionURL}
 		/>
 	);
 }
 
 interface IProps {
-	ffNotificationTemplates: boolean;
 	objectAction: ObjectAction;
+	objectActionCodeEditorElements: SidebarCategory[];
 	objectActionExecutors: CustomItem[];
 	objectActionTriggers: CustomItem[];
+	objectDefinitionsRelationshipsURL: string;
 	readOnly?: boolean;
+	validateExpressionURL: string;
 }

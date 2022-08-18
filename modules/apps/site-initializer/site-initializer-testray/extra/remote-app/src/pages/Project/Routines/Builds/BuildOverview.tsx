@@ -21,8 +21,8 @@ import Container from '../../../../components/Layout/Container';
 import QATable from '../../../../components/Table/QATable';
 import useCaseResultGroupBy from '../../../../data/useCaseResultGroupBy';
 import useTotalTestCases from '../../../../data/useTotalTestCases';
-import {TestrayBuild, TestrayTask} from '../../../../graphql/queries';
 import i18n from '../../../../i18n';
+import {TestrayBuild, TestrayTask} from '../../../../services/rest';
 import dayjs from '../../../../util/date';
 import {getDonutLegend} from '../../../../util/graph';
 
@@ -115,7 +115,7 @@ const BuildOverview: React.FC<BuildOverviewProps> = ({
 				title={i18n.translate('total-test-cases')}
 			>
 				<div className="row">
-					{totalTestCasesGroup.ready && (
+					{Boolean(totalTestCasesGroup.ready) && (
 						<div className="col-2">
 							<ClayChart
 								data={{

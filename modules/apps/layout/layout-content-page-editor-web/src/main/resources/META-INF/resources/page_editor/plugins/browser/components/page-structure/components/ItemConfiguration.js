@@ -76,7 +76,7 @@ function ItemConfigurationContent({activePanel, setActivePanel}) {
 
 	useEffect(() => {
 		if (
-			panels.length === 0 ||
+			!panels.length ||
 			panels.some((panel) => panel.panelId === activePanel.id)
 		) {
 			return;
@@ -114,7 +114,7 @@ function ItemConfigurationContent({activePanel, setActivePanel}) {
 
 	return (
 		<PageStructureSidebarSection resizable size={1.5}>
-			<div className="page-editor__page-structure__item-configuration">
+			<div className="page-editor__page-structure__item-configuration w-100">
 				<ClayTabs className="flex-nowrap pt-2 px-3">
 					{panels.map((panel) => (
 						<ClayTabs.Item

@@ -204,7 +204,7 @@ public abstract class BaseWorkspaceGitRepository
 			throw new RuntimeException("GitHub URL is null");
 		}
 
-		if (gitHubURL.equals(optString("git_hub_url"))) {
+		if (gitHubURL.equals(optString("git_hub_url")) && !_rebase) {
 			return;
 		}
 
@@ -230,15 +230,24 @@ public abstract class BaseWorkspaceGitRepository
 			_setSenderBranchUsername(_senderRemoteGitRef.getUsername());
 		}
 		else if (GitUtil.isValidGitHubRefURL(gitHubURL)) {
+			_upstreamRemoteGitRef = _getUpstreamRemoteGitRef();
+
+			_setBaseBranchHeadSHA(_upstreamRemoteGitRef.getSHA());
+			setBaseBranchSHA(_upstreamRemoteGitRef.getSHA());
+			_setBaseBranchUsername(_upstreamRemoteGitRef.getUsername());
+
 			_senderRemoteGitRef = GitUtil.getRemoteGitRef(gitHubURL);
 
-			_setBaseBranchHeadSHA(_senderRemoteGitRef.getSHA());
-			setBaseBranchSHA(_senderRemoteGitRef.getSHA());
-			_setBaseBranchUsername(_senderRemoteGitRef.getUsername());
 			_setSenderBranchHeadSHA(_senderRemoteGitRef.getSHA());
 			_setSenderBranchName(_senderRemoteGitRef.getName());
 			setSenderBranchSHA(_senderRemoteGitRef.getSHA());
 			_setSenderBranchUsername(_senderRemoteGitRef.getUsername());
+
+			if (_rebase) {
+				_setBaseBranchHeadSHA(_upstreamRemoteGitRef.getSHA());
+				setBaseBranchSHA(_upstreamRemoteGitRef.getSHA());
+				_setBaseBranchUsername(_upstreamRemoteGitRef.getUsername());
+			}
 		}
 		else {
 			throw new RuntimeException("Invalid GitHub URL " + gitHubURL);
@@ -249,6 +258,10 @@ public abstract class BaseWorkspaceGitRepository
 		BuildDatabase buildDatabase = BuildDatabaseUtil.getBuildDatabase();
 
 		buildDatabase.putWorkspaceGitRepository(getDirectoryName(), this);
+	}
+
+	public void setRebase(boolean rebase) {
+		_rebase = rebase;
 	}
 
 	@Override
@@ -275,12 +288,23 @@ public abstract class BaseWorkspaceGitRepository
 
 		GitWorkingDirectory gitWorkingDirectory = getGitWorkingDirectory();
 
+		if (_rebase) {
+			gitWorkingDirectory.createLocalGitBranch(
+				getUpstreamBranchName(), true, getBaseBranchSHA());
+		}
+
 		LocalGitBranch localGitBranch = getLocalGitBranch();
 
 		gitWorkingDirectory.checkoutLocalGitBranch(localGitBranch);
 
-		gitWorkingDirectory.createLocalGitBranch(
-			getUpstreamBranchName(), true, getBaseBranchSHA());
+		LocalGitBranch baseLocalGitBranch =
+			gitWorkingDirectory.createLocalGitBranch(
+				getUpstreamBranchName(), true, getBaseBranchSHA());
+
+		if (_rebase) {
+			gitWorkingDirectory.rebase(
+				true, baseLocalGitBranch, localGitBranch);
+		}
 
 		gitWorkingDirectory.reset("--hard " + localGitBranch.getSHA());
 
@@ -715,6 +739,7 @@ public abstract class BaseWorkspaceGitRepository
 	private List<LocalGitCommit> _historicalLocalGitCommits;
 	private LocalGitBranch _localGitBranch;
 	private final Set<String> _propertyOptions = new HashSet<>();
+	private boolean _rebase;
 	private RemoteGitRef _senderRemoteGitRef;
 	private boolean _setUp;
 	private RemoteGitRef _upstreamRemoteGitRef;

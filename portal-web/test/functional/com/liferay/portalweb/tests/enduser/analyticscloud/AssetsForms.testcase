@@ -25,6 +25,8 @@ definition {
 	tearDown {
 		var testPortalInstance = PropsUtil.get("test.portal.instance");
 
+		ACUtils.tearDownAC();
+
 		ACUtils.tearDownDXP();
 
 		if ("${testPortalInstance}" == "true") {
@@ -33,10 +35,6 @@ definition {
 		else {
 			JSONGroup.deleteGroupByName(groupName = "Site Name");
 		}
-
-		JSONUser.tearDownNonAdminUsers();
-
-		ACUtils.tearDownAC();
 	}
 
 	@description = "Feature ID: Legacy | Automation ID: LRAC-8433 | Test Summary: Form appears on card shows the pages that the form appears on"
@@ -118,6 +116,8 @@ definition {
 
 		task ("Download the document with anonymous user") {
 			User.logoutPG();
+
+			ACUtils.clearLocalStorage();
 
 			ACUtils.navigateToSitePage(
 				actionType = "Submit Form",

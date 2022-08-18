@@ -16,22 +16,25 @@ package com.liferay.object.rest.internal.deployer;
 
 import com.liferay.object.deployer.ObjectDefinitionDeployer;
 import com.liferay.object.model.ObjectDefinition;
+import com.liferay.object.rest.dto.v1_0.ObjectEntry;
 import com.liferay.object.rest.internal.graphql.dto.v1_0.ObjectDefinitionGraphQLDTOContributor;
 import com.liferay.object.rest.internal.jaxrs.context.provider.ObjectDefinitionContextProvider;
+import com.liferay.object.rest.internal.jaxrs.exception.mapper.ObjectEntryManagerHttpExceptionMapper;
 import com.liferay.object.rest.internal.jaxrs.exception.mapper.ObjectEntryValuesExceptionMapper;
 import com.liferay.object.rest.internal.jaxrs.exception.mapper.ObjectValidationRuleEngineExceptionMapper;
 import com.liferay.object.rest.internal.jaxrs.exception.mapper.RequiredObjectRelationshipExceptionMapper;
 import com.liferay.object.rest.internal.resource.v1_0.BaseObjectEntryResourceImpl;
-import com.liferay.object.rest.manager.v1_0.ObjectEntryManagerServicesTracker;
+import com.liferay.object.rest.manager.v1_0.ObjectEntryManagerTracker;
+import com.liferay.object.rest.petra.sql.dsl.expression.FilterPredicateFactory;
 import com.liferay.object.scope.ObjectScopeProvider;
 import com.liferay.object.scope.ObjectScopeProviderRegistry;
 import com.liferay.object.service.ObjectFieldLocalService;
+import com.liferay.object.service.ObjectRelationshipLocalService;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.HashMapDictionaryBuilder;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.StringUtil;
-import com.liferay.portal.odata.filter.FilterParserProvider;
 import com.liferay.portal.vulcan.graphql.dto.GraphQLDTOContributor;
 
 import java.lang.reflect.Method;
@@ -104,6 +107,10 @@ public class ObjectDefinitionDeployerImpl implements ObjectDefinitionDeployer {
 						HashMapDictionaryBuilder.<String, Object>put(
 							"api.version", "v1.0"
 						).put(
+							"batch.engine.entity.class.name",
+							ObjectEntry.class.getName() + "#" +
+								objectDefinition.getName()
+						).put(
 							"batch.engine.task.item.delegate", "true"
 						).put(
 							"batch.engine.task.item.delegate.name",
@@ -112,6 +119,10 @@ public class ObjectDefinitionDeployerImpl implements ObjectDefinitionDeployer {
 							"batch.planner.export.enabled", "true"
 						).put(
 							"batch.planner.import.enabled", "true"
+						).put(
+							"entity.class.name",
+							ObjectEntry.class.getName() + "#" +
+								objectDefinition.getName()
 						).put(
 							"osgi.jaxrs.application.select",
 							"(osgi.jaxrs.name=" + objectDefinition.getName() +
@@ -136,6 +147,19 @@ public class ObjectDefinitionDeployerImpl implements ObjectDefinitionDeployer {
 						"osgi.jaxrs.name",
 						objectDefinition.getName() +
 							"ObjectDefinitionContextProvider"
+					).build()),
+				_bundleContext.registerService(
+					ExceptionMapper.class,
+					new ObjectEntryManagerHttpExceptionMapper(),
+					HashMapDictionaryBuilder.<String, Object>put(
+						"osgi.jaxrs.application.select",
+						"(osgi.jaxrs.name=" + objectDefinition.getName() + ")"
+					).put(
+						"osgi.jaxrs.extension", "true"
+					).put(
+						"osgi.jaxrs.name",
+						objectDefinition.getName() +
+							"ObjectEntryManagerHttpExceptionMapper"
 					).build()),
 				_bundleContext.registerService(
 					ExceptionMapper.class,
@@ -182,10 +206,11 @@ public class ObjectDefinitionDeployerImpl implements ObjectDefinitionDeployer {
 			_bundleContext.registerService(
 				GraphQLDTOContributor.class,
 				ObjectDefinitionGraphQLDTOContributor.of(
-					_filterParserProvider, objectDefinition,
-					_objectEntryManagerServicesTracker.getObjectEntryManager(
+					_filterPredicateFactory, objectDefinition,
+					_objectEntryManagerTracker.getObjectEntryManager(
 						objectDefinition.getStorageType()),
-					_objectFieldLocalService, objectScopeProvider),
+					_objectFieldLocalService, _objectRelationshipLocalService,
+					objectScopeProvider),
 				HashMapDictionaryBuilder.<String, Object>put(
 					"dto.name", objectDefinition.getDBTableName()
 				).build()));
@@ -309,7 +334,7 @@ public class ObjectDefinitionDeployerImpl implements ObjectDefinitionDeployer {
 	private ConfigurationAdmin _configurationAdmin;
 
 	@Reference
-	private FilterParserProvider _filterParserProvider;
+	private FilterPredicateFactory _filterPredicateFactory;
 
 	private final Map<String, Map<Long, ObjectDefinition>>
 		_objectDefinitionsMap = new HashMap<>();
@@ -320,8 +345,7 @@ public class ObjectDefinitionDeployerImpl implements ObjectDefinitionDeployer {
 	private ComponentFactory _objectEntryApplicationComponentFactory;
 
 	@Reference
-	private ObjectEntryManagerServicesTracker
-		_objectEntryManagerServicesTracker;
+	private ObjectEntryManagerTracker _objectEntryManagerTracker;
 
 	@Reference(
 		target = "(component.factory=com.liferay.object.rest.internal.resource.v1_0.ObjectEntryResource)"
@@ -330,6 +354,9 @@ public class ObjectDefinitionDeployerImpl implements ObjectDefinitionDeployer {
 
 	@Reference
 	private ObjectFieldLocalService _objectFieldLocalService;
+
+	@Reference
+	private ObjectRelationshipLocalService _objectRelationshipLocalService;
 
 	@Reference
 	private ObjectScopeProviderRegistry _objectScopeProviderRegistry;

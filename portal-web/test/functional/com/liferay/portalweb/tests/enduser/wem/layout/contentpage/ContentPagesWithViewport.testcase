@@ -38,8 +38,6 @@ definition {
 	@description = "This is a test for 147512. The page editor cannot change background image on non-desktop viewports."
 	@priority = "4"
 	test CannotChangeBackgroundImageOfFragmentInNonDesktopViewport {
-		property custom.properties = "feature.flag.LPS-132571=true";
-
 		task ("Given a page creator has a content page where a Container fragment has a background image") {
 			ContentPagesNavigator.openEditContentPage(
 				pageName = "Test Content Page Name",
@@ -54,7 +52,7 @@ definition {
 				panel = "Styles",
 				uploadFileName = "high_resolution_photo.jpg");
 
-			PageEditor.viewContainerStyle(backgroundImage = "high_resolution_photo\.jpg");
+			PageEditor.viewContainerStyle(backgroundImage = "high_resolution_photo-jpg");
 
 			AssertEditable(
 				key_text = "Background Image",
@@ -75,8 +73,6 @@ definition {
 	@description = "This is a test for 147512. The page editor could customize styles on non-desktop viewports."
 	@priority = "5"
 	test CustomizeFragmentStylesInNonDesktopViewport {
-		property custom.properties = "feature.flag.LPS-132571=true";
-
 		task ("Given a page creator has a content page with a Heading fragment") {
 			ContentPagesNavigator.openEditContentPage(
 				pageName = "Test Content Page Name",
@@ -92,14 +88,22 @@ definition {
 		}
 
 		task ("Then the page creator could customize styles of Heading fragment in the Tablet viewport") {
-			task ("View the Advanced tab is not shown on sidebar") {
+			task ("View only the CSS section is available on Advanced panel") {
 				SelectFrame.selectFrameNoLoading(locator1 = "IFrame#PAGE_EDITOR_GLOBAL_CONTEXT_IFRAME");
 
 				PageEditor.clickConfigurableField(fragmentName = "Heading");
 
 				SelectFrameTop();
 
-				Navigator.viewNoNavTab(navTab = "Advanced");
+				Navigator.gotoNavTab(navTab = "Advanced");
+
+				AssertElementPresent(
+					key_fieldSetLabel = "CSS",
+					locator1 = "PageEditor#ITEM_CONFIGURATION_FIELDSET_LABEL");
+
+				AssertElementNotPresent(
+					checkboxName = "Hide from Site Search Results",
+					locator1 = "Checkbox#ANY_CHECKBOX");
 			}
 
 			task ("View only the Frame section is available on General panel") {
@@ -107,11 +111,11 @@ definition {
 
 				AssertElementPresent(
 					key_fieldSetLabel = "Frame",
-					locator1 = "PageEditor#COMMON_STYLES_FIELDSET_LABEL");
+					locator1 = "PageEditor#ITEM_CONFIGURATION_FIELDSET_LABEL");
 
 				AssertElementNotPresent(
 					key_fieldSetLabel = "Heading Options",
-					locator1 = "PageEditor#COMMON_STYLES_FIELDSET_LABEL");
+					locator1 = "PageEditor#ITEM_CONFIGURATION_FIELDSET_LABEL");
 			}
 
 			task ("View all sections are available on Styles panel") {
@@ -120,7 +124,7 @@ definition {
 				for (var fieldSetLabel : list "Spacing,Text,Background,Borders,Effects") {
 					AssertElementPresent(
 						key_fieldSetLabel = "${fieldSetLabel}",
-						locator1 = "PageEditor#COMMON_STYLES_FIELDSET_LABEL");
+						locator1 = "PageEditor#ITEM_CONFIGURATION_FIELDSET_LABEL");
 				}
 			}
 		}
@@ -160,7 +164,7 @@ definition {
 				locator1 = "Select#GENERIC_SELECT_FIELD",
 				value1 = "3 Modules per Row");
 
-			Pause(locator1 = "3000");
+			PageEditor.waitForAutoSave();
 		}
 
 		task ("Select the 6 Modules per Row as Layout in Landscape Phone viewport") {
@@ -171,7 +175,7 @@ definition {
 				locator1 = "Select#GENERIC_SELECT_FIELD",
 				value1 = "6 Modules per Row");
 
-			Pause(locator1 = "3000");
+			PageEditor.waitForAutoSave();
 		}
 
 		task ("Select the 1 Module per Row as Layout in Portrait Phone viewport") {
@@ -182,7 +186,7 @@ definition {
 				locator1 = "Select#GENERIC_SELECT_FIELD",
 				value1 = "1 Module per Row");
 
-			Pause(locator1 = "3000");
+			PageEditor.waitForAutoSave();
 		}
 
 		task ("Assert the Layout of Grid is 2 Modules per Row and the height of module is greater than 20px in Desktop viewport") {
@@ -280,9 +284,13 @@ definition {
 		}
 
 		task ("View the Text Align of Heading is left") {
-			PageEditor.viewFragmentStyle(
-				alignment = "left",
-				fragmentName = "Heading");
+			AssertCssValue(
+				fragmentName = "heading",
+				id = "element-text",
+				index = "1",
+				locator1 = "Fragment#CONTRIBUTED_FRAGMENT_TEXT",
+				locator2 = "text-align",
+				value1 = "start");
 		}
 
 		task ("Change the Text Align of Heading in other viewports") {
@@ -292,7 +300,7 @@ definition {
 				deviceType = "Tablet",
 				fragmentName = "Heading");
 
-			PageEditor.configureFragment(alignment = "Center");
+			PageEditor.configureFragment(alignment = "Align Center");
 
 			PageEditor.switchViewport(deviceType = "Landscape Phone");
 
@@ -300,7 +308,7 @@ definition {
 				deviceType = "Landscape Phone",
 				fragmentName = "Heading");
 
-			PageEditor.configureFragment(alignment = "Right");
+			PageEditor.configureFragment(alignment = "Align Right");
 
 			PageEditor.switchViewport(deviceType = "Portrait Phone");
 
@@ -314,9 +322,13 @@ definition {
 		task ("View the Text Align of Heading in different viewports") {
 			PageEditor.switchViewport(deviceType = "Desktop");
 
-			PageEditor.viewFragmentStyle(
-				alignment = "left",
-				fragmentName = "Heading");
+			AssertCssValue(
+				fragmentName = "heading",
+				id = "element-text",
+				index = "1",
+				locator1 = "Fragment#CONTRIBUTED_FRAGMENT_TEXT",
+				locator2 = "text-align",
+				value1 = "start");
 
 			PageEditor.switchViewport(deviceType = "Tablet");
 
@@ -363,7 +375,7 @@ definition {
 				index = "1",
 				locator1 = "Fragment#FRAGMENT_BODY",
 				locator2 = "text-align",
-				value1 = "left");
+				value1 = "start");
 
 			SelectFrame(value1 = "relative=top");
 
@@ -690,8 +702,6 @@ definition {
 	@description = "This is a test for 147512. The page editor only could clear color picker selection defined on current non-desktop viewport."
 	@priority = "4"
 	test OnlyClearColorPickerSelectionInCurrentNonDesktopViewport {
-		property custom.properties = "feature.flag.LPS-132571=true";
-
 		task ("Given a page creator has a content page where a Heading fragment has a defined Text Color in desktop viewport") {
 			ContentPagesNavigator.openEditContentPage(
 				pageName = "Test Content Page Name",
@@ -720,10 +730,9 @@ definition {
 
 			SelectFrame.selectFrameNoLoading(locator1 = "IFrame#PAGE_EDITOR_GLOBAL_CONTEXT_IFRAME");
 
-			PageEditor.viewFragmentCommonStyle(
+			PageEditor.viewFragmentStyle(
 				fragmentName = "Heading",
-				styleName = "color",
-				styleValue = "success");
+				textColor = "success");
 		}
 
 		task ("When the page creator changes the Text Color to Warning") {
@@ -733,10 +742,9 @@ definition {
 
 			SelectFrame.selectFrameNoLoading(locator1 = "IFrame#PAGE_EDITOR_GLOBAL_CONTEXT_IFRAME");
 
-			PageEditor.viewFragmentCommonStyle(
+			PageEditor.viewFragmentStyle(
 				fragmentName = "Heading",
-				styleName = "color",
-				styleValue = "warning");
+				textColor = "warning");
 		}
 
 		task ("Then the page creator could clear the color picker selection defined in Tablet viewport") {
@@ -751,10 +759,9 @@ definition {
 
 			SelectFrame.selectFrameNoLoading(locator1 = "IFrame#PAGE_EDITOR_GLOBAL_CONTEXT_IFRAME");
 
-			PageEditor.viewFragmentCommonStyle(
+			PageEditor.viewFragmentStyle(
 				fragmentName = "Heading",
-				styleName = "color",
-				styleValue = "success");
+				textColor = "success");
 		}
 	}
 
@@ -887,14 +894,14 @@ definition {
 
 			AssertElementPresent(
 				key_fieldSetLabel = "Frame",
-				locator1 = "PageEditor#COMMON_STYLES_FIELDSET_LABEL");
+				locator1 = "PageEditor#ITEM_CONFIGURATION_FIELDSET_LABEL");
 
 			Navigator.gotoNavTab(navTab = "Styles");
 
 			for (var fieldSetLabel : list "Spacing,Text,Background,Borders,Effects") {
 				AssertElementPresent(
 					key_fieldSetLabel = "${fieldSetLabel}",
-					locator1 = "PageEditor#COMMON_STYLES_FIELDSET_LABEL");
+					locator1 = "PageEditor#ITEM_CONFIGURATION_FIELDSET_LABEL");
 			}
 		}
 
@@ -904,7 +911,7 @@ definition {
 
 				AssertElementPresent(
 					key_fieldSetLabel = "Spacing",
-					locator1 = "PageEditor#COMMON_STYLES_FIELDSET_LABEL");
+					locator1 = "PageEditor#ITEM_CONFIGURATION_FIELDSET_LABEL");
 			}
 		}
 	}

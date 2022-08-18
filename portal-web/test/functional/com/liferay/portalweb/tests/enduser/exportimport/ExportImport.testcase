@@ -245,9 +245,13 @@ definition {
 
 		var dmDocumentURL = selenium.getAttribute("//input[contains(@id,'urlInput')]@value");
 
-		var editDocumentURL = StringUtil.extractFirst("${dmDocumentURL}", "jpg");
+		var editDocumentURL = StringUtil.replaceFirst("${dmDocumentURL}", "_1", "_10000");
+
+		echo("## * Edit Document URL: ${editDocumentURL}");
 
 		var entryExternalURL = StringUtil.replace("${editDocumentURL}", "http://", "");
+
+		echo("## * Entry External URL: ${entryExternalURL}");
 
 		WebContentNavigator.openWebContentAdmin(siteURLKey = "guest");
 
@@ -258,7 +262,7 @@ definition {
 		CKEditor.addEntryExternalURL(
 			displayText = "${editDocumentURL}",
 			entryExternalURL = "${entryExternalURL}",
-			fieldLabel = "content");
+			fieldLabel = "Content");
 
 		Button.clickPublish();
 
@@ -664,7 +668,7 @@ definition {
 
 		LAR.configureExportOptions(
 			checkContentNameList = "Web Content",
-			uncheckContentNameList = "Documents and Media,Pages");
+			uncheckContentNameList = "Documents and Media");
 
 		AssertClick(
 			key_text = "Export",
@@ -1862,7 +1866,6 @@ definition {
 	@priority = "5"
 	test ImportCorruptedFile {
 		property portal.acceptance = "true";
-		property portal.release = "false";
 
 		Navigator.openURL();
 
@@ -2235,7 +2238,7 @@ definition {
 		CKEditor.addEntryExternalURL(
 			displayText = "${dmDocumentURL}",
 			entryExternalURL = "${entryExternalURL}",
-			fieldLabel = "content");
+			fieldLabel = "Content");
 
 		PortletEntry.publish();
 	}

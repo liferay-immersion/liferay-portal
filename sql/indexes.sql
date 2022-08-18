@@ -172,6 +172,7 @@ create unique index IX_350F5CAE on DLFileVersion (uuid_[$COLUMN_LENGTH:75$], gro
 create index IX_67A46FAA on DLFolder (companyId, ctCollectionId);
 create index IX_F1EC1690 on DLFolder (companyId, status, ctCollectionId);
 create index IX_9D91952C on DLFolder (groupId, ctCollectionId);
+create unique index IX_A1EB230D on DLFolder (groupId, externalReferenceCode[$COLUMN_LENGTH:75$], ctCollectionId);
 create index IX_4B18B17E on DLFolder (groupId, mountPoint, parentFolderId, ctCollectionId);
 create index IX_45D93323 on DLFolder (groupId, mountPoint, parentFolderId, hidden_, ctCollectionId);
 create index IX_91065109 on DLFolder (groupId, mountPoint, parentFolderId, hidden_, status, ctCollectionId);
@@ -317,9 +318,6 @@ create index IX_2932DD37 on ListType (type_[$COLUMN_LENGTH:75$]);
 create index IX_C28C72EC on MembershipRequest (groupId, statusId);
 create index IX_35AA8FA6 on MembershipRequest (groupId, userId, statusId);
 create index IX_66D70879 on MembershipRequest (userId);
-
-create index IX_4A527DD3 on OrgGroupRole (groupId);
-create index IX_AB044D1C on OrgGroupRole (roleId);
 
 create index IX_6AF0D434 on OrgLabor (organizationId);
 
@@ -608,9 +606,11 @@ create index IX_A098EFBF on Users_Teams (userId);
 create index IX_BB65040C on Users_UserGroups (companyId);
 create index IX_66FF2503 on Users_UserGroups (userGroupId);
 
+create index IX_30C7B8AD on VirtualHost (companyId, ctCollectionId);
 create index IX_741D01F2 on VirtualHost (companyId, layoutSetId, ctCollectionId);
 create index IX_6A3E4238 on VirtualHost (companyId, layoutSetId, defaultVirtualHost, ctCollectionId);
 create unique index IX_76A64FBE on VirtualHost (hostname[$COLUMN_LENGTH:200$], ctCollectionId);
+create index IX_1079582F on VirtualHost (layoutSetId, hostname[$COLUMN_LENGTH:200$], ctCollectionId);
 
 create unique index IX_97DFA146 on WebDAVProps (classNameId, classPK);
 

@@ -32,7 +32,6 @@ import com.liferay.portal.kernel.test.rule.DeleteAfterTestRun;
 import com.liferay.portal.kernel.test.util.GroupTestUtil;
 import com.liferay.portal.kernel.test.util.RoleTestUtil;
 import com.liferay.portal.kernel.test.util.UserTestUtil;
-import com.liferay.portal.props.test.util.PropsTemporarySwapper;
 import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.portal.test.rule.PermissionCheckerMethodTestRule;
@@ -75,30 +74,12 @@ public class LayoutPermissionTest {
 			_layoutPermission.contains(
 				permissionChecker, layout,
 				ActionKeys.UPDATE_LAYOUT_ADVANCED_OPTIONS));
-
-		try (PropsTemporarySwapper propsTemporarySwapper =
-				new PropsTemporarySwapper(
-					"feature.flag.LPS-132571", Boolean.TRUE.toString())) {
-
-			Assert.assertFalse(
-				_layoutPermission.containsLayoutRestrictedUpdatePermission(
-					permissionChecker, layout));
-			Assert.assertFalse(
-				_layoutPermission.containsLayoutUpdatePermission(
-					permissionChecker, layout));
-		}
-
-		try (PropsTemporarySwapper propsTemporarySwapper =
-				new PropsTemporarySwapper(
-					"feature.flag.LPS-132571", Boolean.FALSE.toString())) {
-
-			Assert.assertFalse(
-				_layoutPermission.containsLayoutRestrictedUpdatePermission(
-					permissionChecker, layout));
-			Assert.assertFalse(
-				_layoutPermission.containsLayoutUpdatePermission(
-					permissionChecker, layout));
-		}
+		Assert.assertFalse(
+			_layoutPermission.containsLayoutRestrictedUpdatePermission(
+				permissionChecker, layout));
+		Assert.assertFalse(
+			_layoutPermission.containsLayoutUpdatePermission(
+				permissionChecker, layout));
 	}
 
 	@Test
@@ -111,30 +92,12 @@ public class LayoutPermissionTest {
 		Assert.assertTrue(
 			_layoutPermission.contains(
 				permissionChecker, layout, ActionKeys.UPDATE_LAYOUT_BASIC));
-
-		try (PropsTemporarySwapper propsTemporarySwapper =
-				new PropsTemporarySwapper(
-					"feature.flag.LPS-132571", Boolean.TRUE.toString())) {
-
-			Assert.assertTrue(
-				_layoutPermission.containsLayoutRestrictedUpdatePermission(
-					permissionChecker, layout));
-			Assert.assertTrue(
-				_layoutPermission.containsLayoutUpdatePermission(
-					permissionChecker, layout));
-		}
-
-		try (PropsTemporarySwapper propsTemporarySwapper =
-				new PropsTemporarySwapper(
-					"feature.flag.LPS-132571", Boolean.FALSE.toString())) {
-
-			Assert.assertFalse(
-				_layoutPermission.containsLayoutRestrictedUpdatePermission(
-					permissionChecker, layout));
-			Assert.assertFalse(
-				_layoutPermission.containsLayoutUpdatePermission(
-					permissionChecker, layout));
-		}
+		Assert.assertTrue(
+			_layoutPermission.containsLayoutRestrictedUpdatePermission(
+				permissionChecker, layout));
+		Assert.assertTrue(
+			_layoutPermission.containsLayoutUpdatePermission(
+				permissionChecker, layout));
 	}
 
 	@Test
@@ -150,29 +113,12 @@ public class LayoutPermissionTest {
 			_layoutPermission.contains(
 				permissionChecker, layout, ActionKeys.UPDATE_LAYOUT_CONTENT));
 
-		try (PropsTemporarySwapper propsTemporarySwapper =
-				new PropsTemporarySwapper(
-					"feature.flag.LPS-132571", Boolean.TRUE.toString())) {
-
-			Assert.assertFalse(
-				_layoutPermission.containsLayoutRestrictedUpdatePermission(
-					permissionChecker, layout));
-			Assert.assertTrue(
-				_layoutPermission.containsLayoutUpdatePermission(
-					permissionChecker, layout));
-		}
-
-		try (PropsTemporarySwapper propsTemporarySwapper =
-				new PropsTemporarySwapper(
-					"feature.flag.LPS-132571", Boolean.FALSE.toString())) {
-
-			Assert.assertFalse(
-				_layoutPermission.containsLayoutRestrictedUpdatePermission(
-					permissionChecker, layout));
-			Assert.assertTrue(
-				_layoutPermission.containsLayoutUpdatePermission(
-					permissionChecker, layout));
-		}
+		Assert.assertFalse(
+			_layoutPermission.containsLayoutRestrictedUpdatePermission(
+				permissionChecker, layout));
+		Assert.assertTrue(
+			_layoutPermission.containsLayoutUpdatePermission(
+				permissionChecker, layout));
 	}
 
 	@Test
@@ -187,30 +133,12 @@ public class LayoutPermissionTest {
 		Assert.assertTrue(
 			_layoutPermission.contains(
 				permissionChecker, layout, ActionKeys.UPDATE_LAYOUT_LIMITED));
-
-		try (PropsTemporarySwapper propsTemporarySwapper =
-				new PropsTemporarySwapper(
-					"feature.flag.LPS-132571", Boolean.TRUE.toString())) {
-
-			Assert.assertTrue(
-				_layoutPermission.containsLayoutRestrictedUpdatePermission(
-					permissionChecker, layout));
-			Assert.assertTrue(
-				_layoutPermission.containsLayoutUpdatePermission(
-					permissionChecker, layout));
-		}
-
-		try (PropsTemporarySwapper propsTemporarySwapper =
-				new PropsTemporarySwapper(
-					"feature.flag.LPS-132571", Boolean.FALSE.toString())) {
-
-			Assert.assertFalse(
-				_layoutPermission.containsLayoutRestrictedUpdatePermission(
-					permissionChecker, layout));
-			Assert.assertFalse(
-				_layoutPermission.containsLayoutUpdatePermission(
-					permissionChecker, layout));
-		}
+		Assert.assertTrue(
+			_layoutPermission.containsLayoutRestrictedUpdatePermission(
+				permissionChecker, layout));
+		Assert.assertTrue(
+			_layoutPermission.containsLayoutUpdatePermission(
+				permissionChecker, layout));
 	}
 
 	@Test
@@ -223,30 +151,12 @@ public class LayoutPermissionTest {
 		Assert.assertTrue(
 			_layoutPermission.contains(
 				permissionChecker, layout, ActionKeys.UPDATE));
-
-		try (PropsTemporarySwapper propsTemporarySwapper =
-				new PropsTemporarySwapper(
-					"feature.flag.LPS-132571", Boolean.TRUE.toString())) {
-
-			Assert.assertTrue(
-				_layoutPermission.containsLayoutRestrictedUpdatePermission(
-					permissionChecker, layout));
-			Assert.assertTrue(
-				_layoutPermission.containsLayoutUpdatePermission(
-					permissionChecker, layout));
-		}
-
-		try (PropsTemporarySwapper propsTemporarySwapper =
-				new PropsTemporarySwapper(
-					"feature.flag.LPS-132571", Boolean.FALSE.toString())) {
-
-			Assert.assertTrue(
-				_layoutPermission.containsLayoutRestrictedUpdatePermission(
-					permissionChecker, layout));
-			Assert.assertTrue(
-				_layoutPermission.containsLayoutUpdatePermission(
-					permissionChecker, layout));
-		}
+		Assert.assertTrue(
+			_layoutPermission.containsLayoutRestrictedUpdatePermission(
+				permissionChecker, layout));
+		Assert.assertTrue(
+			_layoutPermission.containsLayoutUpdatePermission(
+				permissionChecker, layout));
 	}
 
 	private PermissionChecker _getPermissionChecker(String actionId)

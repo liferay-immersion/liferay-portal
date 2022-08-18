@@ -360,7 +360,8 @@ public class LayoutCopyHelperImpl implements LayoutCopyHelper {
 			}
 
 			JSONObject dataJSONObject = _processDataJSONObject(
-				data, targetLayout, fragmentEntryLinksMap, entry.getValue());
+				LayoutStructure.of(data), targetLayout, fragmentEntryLinksMap,
+				entry.getValue());
 
 			_layoutPageTemplateStructureLocalService.
 				updateLayoutPageTemplateStructureData(
@@ -409,7 +410,7 @@ public class LayoutCopyHelperImpl implements LayoutCopyHelper {
 		}
 
 		JSONObject dataJSONObject = _processDataJSONObject(
-			layoutStructure.toString(), targetLayout, fragmentEntryLinksMap,
+			layoutStructure, targetLayout, fragmentEntryLinksMap,
 			targetSegmentsExperienceId);
 
 		_layoutPageTemplateStructureLocalService.
@@ -762,15 +763,13 @@ public class LayoutCopyHelperImpl implements LayoutCopyHelper {
 	}
 
 	private JSONObject _processDataJSONObject(
-			String data, Layout targetLayout,
+			LayoutStructure layoutStructure, Layout targetLayout,
 			Map<Long, FragmentEntryLink> fragmentEntryLinksMap,
 			long targetSegmentsExperienceId)
 		throws Exception {
 
 		ServiceContext serviceContext =
 			ServiceContextThreadLocal.getServiceContext();
-
-		LayoutStructure layoutStructure = LayoutStructure.of(data);
 
 		for (LayoutStructureItem layoutStructureItem :
 				layoutStructure.getLayoutStructureItems()) {
@@ -932,10 +931,6 @@ public class LayoutCopyHelperImpl implements LayoutCopyHelper {
 
 				_consumer.accept(_targetLayout);
 
-				// Copy classedModelUsages after copying the structure
-
-				_copyLayoutClassedModelUsages(_sourceLayout, _targetLayout);
-
 				List<String> portletIds = _getLayoutPortletIds(
 					_sourceLayout, _sourceSegmentsExperiencesIds);
 
@@ -945,6 +940,10 @@ public class LayoutCopyHelperImpl implements LayoutCopyHelper {
 				_copyPortletPreferences(
 					portletIds, _sourceLayout, _targetLayout);
 			}
+
+			// Copy classedModelUsages after copying the structure
+
+			_copyLayoutClassedModelUsages(_sourceLayout, _targetLayout);
 
 			_sites.copyExpandoBridgeAttributes(_sourceLayout, _targetLayout);
 			_sites.copyPortletSetups(_sourceLayout, _targetLayout);
@@ -1007,7 +1006,8 @@ public class LayoutCopyHelperImpl implements LayoutCopyHelper {
 					targetLayout.getUserId(), classNameId,
 					targetLayout.getPlid(),
 					clientExtensionEntryRel.getCETExternalReferenceCode(),
-					clientExtensionEntryRel.getType());
+					clientExtensionEntryRel.getType(),
+					clientExtensionEntryRel.getTypeSettings());
 			}
 		}
 

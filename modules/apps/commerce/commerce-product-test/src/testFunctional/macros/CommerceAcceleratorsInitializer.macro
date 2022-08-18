@@ -137,7 +137,7 @@ definition {
 
 		Navigator.gotoNavTab(navTab = "Widgets");
 
-		Pause(locator1 = "5000");
+		WaitForElementPresent(locator1 = "NavBar#APPLICATION_SEARCH_FIELD");
 
 		Type(
 			locator1 = "NavBar#APPLICATION_SEARCH_FIELD",
@@ -160,6 +160,8 @@ definition {
 		Click(
 			key_menuItem = "${sortingType}",
 			locator1 = "CommerceEntry#ANY_MENU_ITEM");
+
+		WaitForPageLoad();
 	}
 
 	macro createNewAccountViaFront {
@@ -188,11 +190,11 @@ definition {
 
 			Button.click(button = "Add Order");
 
+			SelectFrame.selectFrameTop();
+
 			WaitForElementPresent(
 				key_orderType = "${orderType}",
 				locator1 = "CommerceOrders#PENDING_ORDERS_ORDER_TYPE");
-
-			SelectFrame.selectFrameTop();
 		}
 	}
 

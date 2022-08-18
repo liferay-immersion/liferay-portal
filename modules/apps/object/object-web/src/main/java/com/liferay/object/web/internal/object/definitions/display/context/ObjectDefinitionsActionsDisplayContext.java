@@ -21,7 +21,6 @@ import com.liferay.object.action.executor.ObjectActionExecutorRegistry;
 import com.liferay.object.action.trigger.ObjectActionTrigger;
 import com.liferay.object.action.trigger.ObjectActionTriggerRegistry;
 import com.liferay.object.admin.rest.dto.v1_0.util.ObjectActionUtil;
-import com.liferay.object.constants.ObjectActionExecutorConstants;
 import com.liferay.object.model.ObjectAction;
 import com.liferay.object.model.ObjectDefinition;
 import com.liferay.object.web.internal.constants.ObjectWebKeys;
@@ -37,15 +36,10 @@ import com.liferay.portal.kernel.json.JSONUtil;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.portlet.LiferayWindowState;
 import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermission;
-import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.PropsUtil;
-import com.liferay.portal.kernel.util.StringUtil;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-
-import javax.portlet.ResourceURL;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -119,15 +113,6 @@ public class ObjectDefinitionsActionsDisplayContext
 
 		for (ObjectActionExecutor objectActionExecutor :
 				_objectActionExecutorRegistry.getObjectActionExecutors()) {
-
-			if (!GetterUtil.getBoolean(
-					PropsUtil.get("feature.flag.LPS-152180")) &&
-				StringUtil.equals(
-					objectActionExecutor.getKey(),
-					ObjectActionExecutorConstants.KEY_ADD_OBJECT_ENTRY)) {
-
-				continue;
-			}
 
 			objectActionExecutorsJSONArray.put(
 				JSONUtil.put(
@@ -222,16 +207,21 @@ public class ObjectDefinitionsActionsDisplayContext
 	}
 
 	public String getObjectDefinitionsRelationshipsURL() {
-		ResourceURL resourceURL = ResourceURLBuilder.createResourceURL(
+		return ResourceURLBuilder.createResourceURL(
 			objectRequestHelper.getLiferayPortletResponse()
+		).setParameter(
+			"objectDefinitionId", getObjectDefinitionId()
 		).setResourceID(
 			"/object_definitions/get_object_definitions_relationships"
-		).buildResourceURL();
+		).buildString();
+	}
 
-		resourceURL.setParameter(
-			"objectDefinitionId", String.valueOf(getObjectDefinitionId()));
-
-		return resourceURL.toString();
+	public String getValidateExpressionURL() {
+		return ResourceURLBuilder.createResourceURL(
+			objectRequestHelper.getLiferayPortletResponse()
+		).setResourceID(
+			"/object_definitions/validate_expression"
+		).buildString();
 	}
 
 	@Override

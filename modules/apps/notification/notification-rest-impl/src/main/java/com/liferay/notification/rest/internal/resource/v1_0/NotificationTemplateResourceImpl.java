@@ -16,9 +16,11 @@ package com.liferay.notification.rest.internal.resource.v1_0;
 
 import com.liferay.notification.constants.NotificationActionKeys;
 import com.liferay.notification.constants.NotificationConstants;
+import com.liferay.notification.model.NotificationTemplateAttachment;
 import com.liferay.notification.rest.dto.v1_0.NotificationTemplate;
 import com.liferay.notification.rest.internal.odata.entity.v1_0.NotificationTemplateEntityModel;
 import com.liferay.notification.rest.resource.v1_0.NotificationTemplateResource;
+import com.liferay.notification.service.NotificationTemplateAttachmentLocalService;
 import com.liferay.notification.service.NotificationTemplateService;
 import com.liferay.notification.util.LocalizedMapUtil;
 import com.liferay.portal.kernel.search.Field;
@@ -27,12 +29,11 @@ import com.liferay.portal.kernel.search.filter.Filter;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HashMapBuilder;
-import com.liferay.portal.kernel.util.PropsUtil;
+import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.odata.entity.EntityModel;
 import com.liferay.portal.vulcan.aggregation.Aggregation;
 import com.liferay.portal.vulcan.pagination.Page;
 import com.liferay.portal.vulcan.pagination.Pagination;
-import com.liferay.portal.vulcan.resource.EntityModelResource;
 import com.liferay.portal.vulcan.util.SearchUtil;
 
 import javax.ws.rs.core.MultivaluedMap;
@@ -49,14 +50,11 @@ import org.osgi.service.component.annotations.ServiceScope;
 	scope = ServiceScope.PROTOTYPE, service = NotificationTemplateResource.class
 )
 public class NotificationTemplateResourceImpl
-	extends BaseNotificationTemplateResourceImpl
-	implements EntityModelResource {
+	extends BaseNotificationTemplateResourceImpl {
 
 	@Override
 	public void deleteNotificationTemplate(Long notificationTemplateId)
 		throws Exception {
-
-		_checkFeatureFlag();
 
 		_notificationTemplateService.deleteNotificationTemplate(
 			notificationTemplateId);
@@ -72,8 +70,6 @@ public class NotificationTemplateResourceImpl
 			Long notificationTemplateId)
 		throws Exception {
 
-		_checkFeatureFlag();
-
 		return _toNotificationTemplate(
 			_notificationTemplateService.getNotificationTemplate(
 				notificationTemplateId));
@@ -84,8 +80,6 @@ public class NotificationTemplateResourceImpl
 			String search, Aggregation aggregation, Filter filter,
 			Pagination pagination, Sort[] sorts)
 		throws Exception {
-
-		_checkFeatureFlag();
 
 		return SearchUtil.search(
 			HashMapBuilder.put(
@@ -124,11 +118,12 @@ public class NotificationTemplateResourceImpl
 			NotificationTemplate notificationTemplate)
 		throws Exception {
 
-		_checkFeatureFlag();
-
 		return _toNotificationTemplate(
 			_notificationTemplateService.addNotificationTemplate(
-				contextUser.getUserId(), notificationTemplate.getBcc(),
+				contextUser.getUserId(),
+				GetterUtil.getLong(
+					notificationTemplate.getObjectDefinitionId()),
+				notificationTemplate.getBcc(),
 				LocalizedMapUtil.getLocalizedMap(
 					notificationTemplate.getBody()),
 				notificationTemplate.getCc(),
@@ -139,8 +134,9 @@ public class NotificationTemplateResourceImpl
 				notificationTemplate.getName(),
 				LocalizedMapUtil.getLocalizedMap(
 					notificationTemplate.getSubject()),
-				LocalizedMapUtil.getLocalizedMap(
-					notificationTemplate.getTo())));
+				LocalizedMapUtil.getLocalizedMap(notificationTemplate.getTo()),
+				ListUtil.fromArray(
+					notificationTemplate.getAttachmentObjectFieldIds())));
 	}
 
 	@Override
@@ -149,11 +145,12 @@ public class NotificationTemplateResourceImpl
 			NotificationTemplate notificationTemplate)
 		throws Exception {
 
-		_checkFeatureFlag();
-
 		return _toNotificationTemplate(
 			_notificationTemplateService.updateNotificationTemplate(
-				notificationTemplateId, notificationTemplate.getBcc(),
+				notificationTemplateId,
+				GetterUtil.getLong(
+					notificationTemplate.getObjectDefinitionId()),
+				notificationTemplate.getBcc(),
 				LocalizedMapUtil.getLocalizedMap(
 					notificationTemplate.getBody()),
 				notificationTemplate.getCc(),
@@ -164,14 +161,9 @@ public class NotificationTemplateResourceImpl
 				notificationTemplate.getName(),
 				LocalizedMapUtil.getLocalizedMap(
 					notificationTemplate.getSubject()),
-				LocalizedMapUtil.getLocalizedMap(
-					notificationTemplate.getTo())));
-	}
-
-	private void _checkFeatureFlag() throws Exception {
-		if (!GetterUtil.getBoolean(PropsUtil.get("feature.flag.LPS-149050"))) {
-			throw new UnsupportedOperationException();
-		}
+				LocalizedMapUtil.getLocalizedMap(notificationTemplate.getTo()),
+				ListUtil.fromArray(
+					notificationTemplate.getAttachmentObjectFieldIds())));
 	}
 
 	private NotificationTemplate _toNotificationTemplate(
@@ -213,6 +205,13 @@ public class NotificationTemplateResourceImpl
 						serviceBuilderNotificationTemplate.
 							getNotificationTemplateId())
 				).build();
+				attachmentObjectFieldIds = transformToArray(
+					_notificationTemplateAttachmentLocalService.
+						getNotificationTemplateAttachments(
+							serviceBuilderNotificationTemplate.
+								getNotificationTemplateId()),
+					NotificationTemplateAttachment::getObjectFieldId,
+					Long.class);
 				bcc = serviceBuilderNotificationTemplate.getBcc();
 				body = LocalizedMapUtil.getLanguageIdMap(
 					serviceBuilderNotificationTemplate.getBodyMap());
@@ -232,6 +231,8 @@ public class NotificationTemplateResourceImpl
 				name = serviceBuilderNotificationTemplate.getName();
 				name_i18n = LocalizedMapUtil.getLanguageIdMap(
 					serviceBuilderNotificationTemplate.getNameMap());
+				objectDefinitionId =
+					serviceBuilderNotificationTemplate.getObjectDefinitionId();
 				subject = LocalizedMapUtil.getLanguageIdMap(
 					serviceBuilderNotificationTemplate.getSubjectMap());
 				to = LocalizedMapUtil.getLanguageIdMap(
@@ -242,6 +243,10 @@ public class NotificationTemplateResourceImpl
 
 	private static final EntityModel _entityModel =
 		new NotificationTemplateEntityModel();
+
+	@Reference
+	private NotificationTemplateAttachmentLocalService
+		_notificationTemplateAttachmentLocalService;
 
 	@Reference
 	private NotificationTemplateService _notificationTemplateService;

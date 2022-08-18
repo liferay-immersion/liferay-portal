@@ -56,7 +56,7 @@ public class ClientExtensionEntryUpgradeProcess extends UpgradeProcess {
 			ResultSet resultSet = statement.executeQuery(selectSQL);
 			PreparedStatement preparedStatement =
 				AutoBatchPreparedStatementUtil.autoBatch(
-					connection.prepareStatement(updateSQL))) {
+					connection, updateSQL)) {
 
 			while (resultSet.next()) {
 				String type = resultSet.getString("type_");
@@ -70,7 +70,6 @@ public class ClientExtensionEntryUpgradeProcess extends UpgradeProcess {
 				}
 
 				preparedStatement.setString(1, typeSettings);
-
 				preparedStatement.setLong(
 					2, resultSet.getLong("clientExtensionEntryId"));
 

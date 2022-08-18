@@ -16,8 +16,8 @@
 	<td></td>
 </tr>
 <tr>
-	<td>STATE</td>
-	<td>//div/span[contains(.,'State')]/..//div[@class='panel-body']</td>
+	<td>TASK_NAME</td>
+	<td>//div/span[contains(.,'Task Name')]/..//div[@class='panel-body']</td>
 	<td></td>
 </tr>
 <tr>

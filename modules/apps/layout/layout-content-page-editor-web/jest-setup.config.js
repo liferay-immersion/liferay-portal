@@ -12,6 +12,10 @@
  * details.
  */
 
+import {initializeCache} from './src/main/resources/META-INF/resources/page_editor/app/utils/cache';
+
+initializeCache();
+
 if (typeof Array.prototype.flatMap !== 'function') {
 	Array.prototype.flatMap = function () {
 		return Array.prototype.map
@@ -19,8 +23,6 @@ if (typeof Array.prototype.flatMap !== 'function') {
 			.reduce((acc, x) => acc.concat(x), []);
 	};
 }
-
-Liferay.FeatureFlags = {};
 
 // eslint-disable-next-line
 jest.mock(

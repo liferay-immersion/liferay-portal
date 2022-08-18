@@ -83,20 +83,17 @@ public class LayoutAssetRenderer extends BaseJSPAssetRenderer<Layout> {
 
 		Locale locale = getLocale(portletRequest);
 
-		StringBundler sb = new StringBundler(4);
-
-		sb.append("<strong>");
-		sb.append(LanguageUtil.get(locale, "page"));
-		sb.append(":</strong> ");
-		sb.append(_layout.getHTMLTitle(locale));
+		String summary = StringBundler.concat(
+			LanguageUtil.get(locale, "page"), ": ",
+			_layout.getHTMLTitle(locale));
 
 		if (_layout.isTypeContent() &&
 			(_layout.isDenied() || _layout.isPending())) {
 
-			return HtmlUtil.stripHtml(sb.toString());
+			return HtmlUtil.stripHtml(summary);
 		}
 
-		return sb.toString();
+		return summary;
 	}
 
 	@Override

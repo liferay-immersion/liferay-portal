@@ -85,7 +85,7 @@ public abstract class BaseListTypeEntryResourceImpl
 			),
 			@io.swagger.v3.oas.annotations.Parameter(
 				in = io.swagger.v3.oas.annotations.enums.ParameterIn.QUERY,
-				name = "search"
+				name = "aggregationTerms"
 			),
 			@io.swagger.v3.oas.annotations.Parameter(
 				in = io.swagger.v3.oas.annotations.enums.ParameterIn.QUERY,
@@ -98,6 +98,10 @@ public abstract class BaseListTypeEntryResourceImpl
 			@io.swagger.v3.oas.annotations.Parameter(
 				in = io.swagger.v3.oas.annotations.enums.ParameterIn.QUERY,
 				name = "pageSize"
+			),
+			@io.swagger.v3.oas.annotations.Parameter(
+				in = io.swagger.v3.oas.annotations.enums.ParameterIn.QUERY,
+				name = "search"
 			),
 			@io.swagger.v3.oas.annotations.Parameter(
 				in = io.swagger.v3.oas.annotations.enums.ParameterIn.QUERY,
@@ -428,11 +432,17 @@ public abstract class BaseListTypeEntryResourceImpl
 			"createStrategy", "INSERT");
 
 		if ("INSERT".equalsIgnoreCase(createStrategy)) {
-			listTypeEntryUnsafeConsumer =
-				listTypeEntry -> postListTypeDefinitionListTypeEntry(
-					Long.parseLong(
-						(String)parameters.get("listTypeDefinitionId")),
-					listTypeEntry);
+			if (parameters.containsKey("listTypeDefinitionId")) {
+				listTypeEntryUnsafeConsumer =
+					listTypeEntry -> postListTypeDefinitionListTypeEntry(
+						Long.parseLong(
+							(String)parameters.get("listTypeDefinitionId")),
+						listTypeEntry);
+			}
+			else {
+				throw new NotSupportedException(
+					"One of the following parameters must be specified: [listTypeDefinitionId]");
+			}
 		}
 
 		if (listTypeEntryUnsafeConsumer == null) {
@@ -496,7 +506,8 @@ public abstract class BaseListTypeEntryResourceImpl
 			Map<String, Serializable> parameters, String search)
 		throws Exception {
 
-		return null;
+		throw new UnsupportedOperationException(
+			"This method needs to be implemented");
 	}
 
 	@Override

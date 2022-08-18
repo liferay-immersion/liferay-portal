@@ -11,8 +11,13 @@
 
 <tbody>
 <tr>
+	<td>ALERT</td>
+	<td>//div[contains(@id,'FrontendJSComponentsSampleWebPortlet')]//*[contains(@class,'alert-info') and contains(@id,'${id}')]</td>
+	<td></td>
+</tr>
+<tr>
 	<td>HOTSPOT</td>
-	<td>//*[@class='lfr-walkthrough-hotspot']</td>
+	<td>//div[not(contains(@class,'hide')) and contains(@id, 'tabs')]//*[@class='lfr-walkthrough-hotspot']</td>
 	<td></td>
 </tr>
 <tr>
@@ -33,6 +38,11 @@
 <tr>
 	<td>POPOVER_TITLE</td>
 	<td>//*[contains(@class,'popover-header')]//span[contains(.,'${key_title}')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>POPOVER_OVERLAY</td>
+	<td>//*[contains(@clip-path,'overlay')]</td>
 	<td></td>
 </tr>
 </tbody>

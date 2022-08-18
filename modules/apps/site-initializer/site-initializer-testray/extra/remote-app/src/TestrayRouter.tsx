@@ -34,6 +34,7 @@ import CaseForm from './pages/Project/Cases/CaseForm';
 import CaseOutlet from './pages/Project/Cases/CaseOutlet';
 import CaseRequirement from './pages/Project/Cases/CaseRequirement';
 import Overview from './pages/Project/Overview';
+import ProjectForm from './pages/Project/ProjectForm';
 import ProjectOutlet from './pages/Project/ProjectOutlet';
 import Requirements from './pages/Project/Requirements';
 import Requirement from './pages/Project/Requirements/Requirement';
@@ -41,8 +42,10 @@ import RequirementsForm from './pages/Project/Requirements/RequirementsForm';
 import RequirementsOutlet from './pages/Project/Requirements/RequirementsOutlet';
 import Routines from './pages/Project/Routines';
 import Build from './pages/Project/Routines/Builds/Build';
+import BuildForm from './pages/Project/Routines/Builds/BuildForm';
 import BuildOutlet from './pages/Project/Routines/Builds/BuildOutlet';
 import CaseResult from './pages/Project/Routines/Builds/Inner/CaseResult';
+import CaseResultEditTest from './pages/Project/Routines/Builds/Inner/CaseResult/CaseResultEditTest';
 import CaseResultOutlet from './pages/Project/Routines/Builds/Inner/CaseResult/CaseResultOutlet';
 import CaseResultHistory from './pages/Project/Routines/Builds/Inner/CaseResult/History';
 import CaseTypes from './pages/Project/Routines/Builds/Inner/CaseTypes';
@@ -51,7 +54,7 @@ import Runs from './pages/Project/Routines/Builds/Inner/Run';
 import Teams from './pages/Project/Routines/Builds/Inner/Teams';
 import Routine from './pages/Project/Routines/Routine';
 import RoutineArchived from './pages/Project/Routines/RoutineArchived';
-import RoutineBuildForm from './pages/Project/Routines/RoutineBuildForm';
+import RoutineForm from './pages/Project/Routines/RoutineForm';
 import RoutineOutlet from './pages/Project/Routines/RoutineOutlet';
 import Suites from './pages/Project/Suites';
 import Suite from './pages/Project/Suites/Suite';
@@ -71,124 +74,159 @@ const TestrayRoute = () => (
 				<Route element={<Layout />} path="/">
 					<Route element={<Projects />} index />
 
-					<Route
-						element={<ProjectOutlet />}
-						path="project/:projectId"
-					>
-						<Route element={<Projects />} index />
+					<Route element={<OutletBridge />} path="project">
+						<Route element={<ProjectForm />} path="create" />
 
-						<Route element={<Overview />} path="overview" />
+						<Route element={<ProjectOutlet />} path=":projectId">
+							<Route element={<Projects />} index />
 
-						<Route element={<OutletBridge />} path="suites">
-							<Route element={<Suites />} index />
+							<Route element={<ProjectForm />} path="update" />
 
-							<Route element={<SuiteForm />} path="create" />
+							<Route element={<Overview />} path="overview" />
 
-							<Route
-								element={<SuiteOutlet />}
-								path=":testraySuiteId"
-							>
-								<Route element={<Suite />} index />
+							<Route element={<OutletBridge />} path="suites">
+								<Route element={<Suites />} index />
 
-								<Route element={<SuiteForm />} path="update" />
-							</Route>
-						</Route>
-
-						<Route element={<OutletBridge />} path="cases">
-							<Route element={<Cases />} index />
-
-							<Route element={<CaseForm />} path="create" />
-
-							<Route element={<CaseOutlet />} path=":caseId">
-								<Route element={<Case />} index />
-
-								<Route element={<CaseForm />} path="update" />
+								<Route element={<SuiteForm />} path="create" />
 
 								<Route
-									element={<CaseRequirement />}
-									path="requirements"
-								/>
+									element={<SuiteOutlet />}
+									path=":suiteId"
+								>
+									<Route element={<Suite />} index />
+
+									<Route
+										element={<SuiteForm />}
+										path="update"
+									/>
+								</Route>
 							</Route>
-						</Route>
 
-						<Route path="requirements">
-							<Route element={<Requirements />} index />
+							<Route element={<OutletBridge />} path="cases">
+								<Route element={<Cases />} index />
 
-							<Route
-								element={<RequirementsForm />}
-								path="create"
-							/>
+								<Route element={<CaseForm />} path="create" />
 
-							<Route
-								element={<RequirementsOutlet />}
-								path=":requirementId"
-							>
-								<Route element={<Requirement />} index />
+								<Route element={<CaseOutlet />} path=":caseId">
+									<Route element={<Case />} index />
+
+									<Route
+										element={<CaseForm />}
+										path="update"
+									/>
+
+									<Route
+										element={<CaseRequirement />}
+										path="requirements"
+									/>
+								</Route>
+							</Route>
+
+							<Route path="requirements">
+								<Route element={<Requirements />} index />
 
 								<Route
 									element={<RequirementsForm />}
-									path="update"
-								/>
-							</Route>
-						</Route>
-
-						<Route element={<OutletBridge />} path="routines">
-							<Route element={<Routines />} index />
-
-							<Route
-								element={<RoutineBuildForm />}
-								path="create"
-							/>
-
-							<Route
-								element={<RoutineOutlet />}
-								path=":routineId"
-							>
-								<Route element={<Routine />} index />
-
-								<Route
-									element={<RoutineBuildForm />}
-									path="update"
+									path="create"
 								/>
 
 								<Route
-									element={<RoutineArchived />}
-									path="archived"
-								/>
-
-								<Route
-									element={
-										<BuildOutlet ignorePath="case-result" />
-									}
-									path="build/:buildId"
+									element={<RequirementsOutlet />}
+									path=":requirementId"
 								>
-									<Route element={<Build />} index />
+									<Route element={<Requirement />} index />
 
 									<Route
-										element={<CaseResultOutlet />}
-										path="case-result/:caseResultId"
+										element={<RequirementsForm />}
+										path="update"
+									/>
+								</Route>
+							</Route>
+
+							<Route element={<OutletBridge />} path="routines">
+								<Route element={<Routines />} index />
+
+								<Route
+									element={<RoutineForm />}
+									path="create"
+								/>
+
+								<Route
+									element={<RoutineOutlet />}
+									path=":routineId"
+								>
+									<Route element={<Routine />} index />
+
+									<Route
+										element={<RoutineForm />}
+										path="update"
+									/>
+
+									<Route
+										element={<BuildForm />}
+										path="create"
+									/>
+
+									<Route
+										element={<RoutineArchived />}
+										path="archived"
+									/>
+
+									<Route
+										element={
+											<BuildOutlet
+												ignorePaths={[
+													'case-result',
+													'update',
+												]}
+											/>
+										}
+										path="build/:buildId"
 									>
-										<Route element={<CaseResult />} index />
+										<Route element={<Build />} index />
 
 										<Route
-											element={<CaseResultHistory />}
-											path="history"
+											element={<BuildForm />}
+											path="update"
+										/>
+
+										<Route
+											element={<CaseResultOutlet />}
+											path="case-result/:caseResultId"
+										>
+											<Route
+												element={<CaseResult />}
+												index
+											/>
+
+											<Route
+												element={<CaseResultHistory />}
+												path="history"
+											/>
+
+											<Route
+												element={<CaseResultEditTest />}
+												path="edit/:status"
+											/>
+										</Route>
+
+										<Route element={<Runs />} path="runs" />
+
+										<Route
+											element={<CaseTypes />}
+											path="case-types"
+										/>
+
+										<Route
+											element={<Teams />}
+											path="teams"
+										/>
+
+										<Route
+											element={<Components />}
+											path="components"
 										/>
 									</Route>
-
-									<Route element={<Runs />} path="runs" />
-
-									<Route
-										element={<CaseTypes />}
-										path="case-types"
-									/>
-
-									<Route element={<Teams />} path="teams" />
-
-									<Route
-										element={<Components />}
-										path="components"
-									/>
 								</Route>
 							</Route>
 						</Route>
@@ -199,10 +237,10 @@ const TestrayRoute = () => (
 							<Route element={<Users />} index />
 
 							<Route element={<UserForm />} path="create" />
-						</Route>
 
-						<Route element={<UserOutlet />} path="user/:name">
-							<Route element={<UserForm />} path="update" />
+							<Route element={<UserOutlet />} path=":userId">
+								<Route element={<UserForm />} path="update" />
+							</Route>
 						</Route>
 
 						<Route element={<OutletBridge />} path="user/me">

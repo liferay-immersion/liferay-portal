@@ -152,22 +152,19 @@ public class AssetVocabularyServiceTest {
 	public void testAddVocabularyWithoutExternalReferenceCode()
 		throws Exception {
 
-		AssetVocabulary vocabulary = AssetTestUtil.addVocabulary(
+		AssetVocabulary vocabulary1 = AssetTestUtil.addVocabulary(
 			_group.getGroupId());
 
-		String externalReferenceCode = String.valueOf(
-			vocabulary.getVocabularyId());
+		String externalReferenceCode = vocabulary1.getExternalReferenceCode();
 
-		Assert.assertEquals(
-			externalReferenceCode, vocabulary.getExternalReferenceCode());
+		Assert.assertEquals(externalReferenceCode, vocabulary1.getUuid());
 
-		vocabulary =
+		AssetVocabulary vocabulary2 =
 			AssetVocabularyLocalServiceUtil.
 				getAssetVocabularyByExternalReferenceCode(
 					_group.getGroupId(), externalReferenceCode);
 
-		Assert.assertEquals(
-			externalReferenceCode, vocabulary.getExternalReferenceCode());
+		Assert.assertEquals(vocabulary1, vocabulary2);
 	}
 
 	@Test

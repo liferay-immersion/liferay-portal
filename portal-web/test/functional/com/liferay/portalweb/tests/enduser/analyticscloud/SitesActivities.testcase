@@ -25,6 +25,8 @@ definition {
 	tearDown {
 		var testPortalInstance = PropsUtil.get("test.portal.instance");
 
+		ACUtils.tearDownAC();
+
 		ACUtils.tearDownDXP();
 
 		if ("${testPortalInstance}" == "true") {
@@ -33,10 +35,6 @@ definition {
 		else {
 			JSONGroup.deleteGroupByName(groupName = "Site Name");
 		}
-
-		JSONUser.tearDownNonAdminUsers();
-
-		ACUtils.tearDownAC();
 	}
 
 	@description = "Feature ID: Legacy | Automation ID: LRAC-8293 | Test Summary: Assert 180 Day time period filter in Sites"
@@ -116,6 +114,8 @@ definition {
 	@description = "Bug: LRAC-10257 | Automation ID: LRAC-10257 | Test Summary: Assert total amount of views in all cards"
 	@priority = "5"
 	test AssertTotalAmountOfViewsInAllCards {
+		property analytics.cloud.upstream = "false";
+
 		ACDXPSettings.connectDXPtoAnalyticsCloud(siteName = "Site Name");
 
 		task ("Add a new user in DXP") {
@@ -167,10 +167,10 @@ definition {
 		}
 
 		task ("Assert views by location") {
-			var current = ACSettings.getCurrentNumber(metricName = "Views");
+			var current = ACSites.getCurrentMetric(metricName = "Views");
 
 			ACCards.viewGeomapTableText(
-				cardTitle = "Sessions by Location",
+				cardTitle = "Views by Location",
 				leftText = "Local Network",
 				rightText = "${current} 100%");
 		}
@@ -352,6 +352,8 @@ definition {
 
 		task ("Access the page as a anonymous user") {
 			User.logoutPG();
+
+			ACUtils.clearLocalStorage();
 
 			ACUtils.navigateToSitePage(
 				actionType = "View Blog",

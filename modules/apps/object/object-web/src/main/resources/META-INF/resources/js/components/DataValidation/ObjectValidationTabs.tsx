@@ -22,43 +22,28 @@ import {
 	Select,
 	SidebarCategory,
 } from '@liferay/object-js-components-web';
-import React, {ChangeEventHandler, useState} from 'react';
+import React, {ChangeEventHandler} from 'react';
 
-import useMetadata from '../../hooks/useMetadata';
-import {defaultLanguageId} from '../../utils/locale';
 import {ObjectValidationErrors} from '../ObjectValidationFormBase';
 
-function BasicInfo({
+export function BasicInfo({
 	componentLabel,
-	defaultLocale,
 	disabled,
 	errors,
-	locales,
 	setValues,
 	values,
 }: IBasicInfo) {
-	const [locale, setSelectedLocale] = useState(
-		defaultLocale as {
-			label: string;
-			symbol: string;
-		}
-	);
-
 	return (
 		<>
 			<Card title={componentLabel}>
 				<InputLocalized
-					defaultLanguageId={defaultLanguageId}
 					disabled={disabled}
 					error={errors.name}
 					label={Liferay.Language.get('label')}
-					locales={locales}
-					onSelectedLocaleChange={setSelectedLocale}
-					onTranslationsChange={(label) => setValues({name: label})}
+					onChange={(name) => setValues({name})}
 					placeholder={Liferay.Language.get('add-a-label')}
 					required
-					selectedLocale={locale}
-					translations={values.name as LocalizedValue<string>}
+					translations={values.name!}
 				/>
 
 				<Input
@@ -83,24 +68,13 @@ function BasicInfo({
 	);
 }
 
-function Conditions({
-	defaultLocale,
+export function Conditions({
 	disabled,
 	errors,
-	locales,
 	objectValidationRuleElements,
 	setValues,
 	values,
 }: IConditions) {
-	const [locale, setSelectedLocale] = useState(
-		defaultLocale as {
-			label: string;
-			symbol: string;
-		}
-	);
-
-	const sidebarElements = useMetadata(objectValidationRuleElements);
-
 	const engine = values.engine;
 	const ddmTooltip = {
 		content: Liferay.Language.get(
@@ -129,34 +103,29 @@ function Conditions({
 			<Card
 				title={values.engineLabel!}
 				tooltip={engine === 'ddm' ? ddmTooltip : null}
-				viewMode="no-padding"
 			>
 				<CodeEditor
 					error={errors.script}
 					mode={engine}
-					onChange={(script?: string) => setValues({script})}
+					onChange={(script?: string, lineCount?: number) =>
+						setValues({lineCount, script})
+					}
 					placeholder={placeholder}
 					readOnly={disabled}
-					sidebarElements={sidebarElements}
+					sidebarElements={objectValidationRuleElements}
 					value={values.script ?? ''}
 				/>
 			</Card>
 
 			<Card title={Liferay.Language.get('error-message')}>
 				<InputLocalized
-					defaultLanguageId={defaultLanguageId}
 					disabled={disabled}
 					error={errors.errorLabel}
 					label={Liferay.Language.get('message')}
-					locales={locales}
-					onSelectedLocaleChange={setSelectedLocale}
-					onTranslationsChange={(message) =>
-						setValues({errorLabel: message})
-					}
+					onChange={(errorLabel) => setValues({errorLabel})}
 					placeholder={Liferay.Language.get('add-an-error-message')}
 					required
-					selectedLocale={locale}
-					translations={values.errorLabel as LocalizedValue<string>}
+					translations={values.errorLabel!}
 				/>
 			</Card>
 		</>
@@ -182,11 +151,9 @@ interface ITriggerEventProps {
 }
 
 interface ITabs {
-	defaultLocale: {label: string; symbol: string};
 	disabled: boolean;
 	errors: ObjectValidationErrors;
 	handleChange: ChangeEventHandler<HTMLInputElement>;
-	locales: Array<any>;
 	setValues: (values: Partial<ObjectValidation>) => void;
 	values: Partial<ObjectValidation>;
 }
@@ -198,5 +165,3 @@ interface IBasicInfo extends ITabs {
 interface IConditions extends ITabs {
 	objectValidationRuleElements: SidebarCategory[];
 }
-
-export {BasicInfo, Conditions};

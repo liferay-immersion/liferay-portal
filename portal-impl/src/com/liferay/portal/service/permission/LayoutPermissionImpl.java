@@ -46,10 +46,8 @@ import com.liferay.portal.kernel.service.permission.OrganizationPermissionUtil;
 import com.liferay.portal.kernel.service.permission.UserGroupPermissionUtil;
 import com.liferay.portal.kernel.service.permission.UserPermissionUtil;
 import com.liferay.portal.kernel.spring.osgi.OSGiBeanProperties;
-import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.workflow.permission.WorkflowPermissionUtil;
 import com.liferay.portal.util.LayoutTypeControllerTracker;
-import com.liferay.portal.util.PropsUtil;
 import com.liferay.portal.util.PropsValues;
 import com.liferay.sites.kernel.util.SitesUtil;
 
@@ -213,10 +211,10 @@ public class LayoutPermissionImpl
 			boolean privateLayout, long layoutId, String actionId)
 		throws PortalException {
 
-		Layout layout = LayoutLocalServiceUtil.getLayout(
-			groupId, privateLayout, layoutId);
-
-		return contains(permissionChecker, layout, actionId);
+		return contains(
+			permissionChecker,
+			LayoutLocalServiceUtil.getLayout(groupId, privateLayout, layoutId),
+			actionId);
 	}
 
 	@Override
@@ -234,22 +232,12 @@ public class LayoutPermissionImpl
 			PermissionChecker permissionChecker, Layout layout)
 		throws PortalException {
 
-		if (GetterUtil.getBoolean(PropsUtil.get("feature.flag.LPS-132571"))) {
-			if (contains(permissionChecker, layout, ActionKeys.UPDATE) ||
-				contains(
-					permissionChecker, layout,
-					ActionKeys.UPDATE_LAYOUT_BASIC) ||
-				contains(
-					permissionChecker, layout,
-					ActionKeys.UPDATE_LAYOUT_LIMITED)) {
+		if (contains(permissionChecker, layout, ActionKeys.UPDATE) ||
+			contains(
+				permissionChecker, layout, ActionKeys.UPDATE_LAYOUT_BASIC) ||
+			contains(
+				permissionChecker, layout, ActionKeys.UPDATE_LAYOUT_LIMITED)) {
 
-				return true;
-			}
-
-			return false;
-		}
-
-		if (contains(permissionChecker, layout, ActionKeys.UPDATE)) {
 			return true;
 		}
 
@@ -270,27 +258,13 @@ public class LayoutPermissionImpl
 			PermissionChecker permissionChecker, Layout layout)
 		throws PortalException {
 
-		if (GetterUtil.getBoolean(PropsUtil.get("feature.flag.LPS-132571"))) {
-			if (contains(permissionChecker, layout, ActionKeys.UPDATE) ||
-				contains(
-					permissionChecker, layout,
-					ActionKeys.UPDATE_LAYOUT_BASIC) ||
-				contains(
-					permissionChecker, layout,
-					ActionKeys.UPDATE_LAYOUT_CONTENT) ||
-				contains(
-					permissionChecker, layout,
-					ActionKeys.UPDATE_LAYOUT_LIMITED)) {
-
-				return true;
-			}
-
-			return false;
-		}
-
 		if (contains(permissionChecker, layout, ActionKeys.UPDATE) ||
 			contains(
-				permissionChecker, layout, ActionKeys.UPDATE_LAYOUT_CONTENT)) {
+				permissionChecker, layout, ActionKeys.UPDATE_LAYOUT_BASIC) ||
+			contains(
+				permissionChecker, layout, ActionKeys.UPDATE_LAYOUT_CONTENT) ||
+			contains(
+				permissionChecker, layout, ActionKeys.UPDATE_LAYOUT_LIMITED)) {
 
 			return true;
 		}

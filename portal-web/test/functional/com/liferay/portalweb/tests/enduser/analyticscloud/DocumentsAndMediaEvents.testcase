@@ -44,6 +44,8 @@ definition {
 	tearDown {
 		var testPortalInstance = PropsUtil.get("test.portal.instance");
 
+		ACUtils.tearDownAC();
+
 		ACUtils.tearDownDXP();
 
 		if ("${testPortalInstance}" == "true") {
@@ -51,11 +53,7 @@ definition {
 		}
 		else {
 			JSONGroup.deleteGroupByName(groupName = "Site Name");
-
-			JSONUser.tearDownNonAdminUsers();
 		}
-
-		ACUtils.tearDownAC();
 	}
 
 	@description = "Feature ID: Legacy | Automation ID: LRAC-8969 | Test Summary: Check documentDownloaded triggers when a file is downloaded in a DXP site and check its properties (see reference document in comments)"
@@ -108,7 +106,7 @@ definition {
 				locator1 = "Button#DOWNLOAD_SIDEBAR",
 				value1 = "Download");
 
-			Pause(locator1 = "5000");
+			ACUtils.waitForSendingRequest();
 		}
 
 		task ("View the Document events triggered") {
@@ -160,8 +158,6 @@ definition {
 
 			ACNavigation.goToSettings();
 
-			Pause(locator1 = "10000");
-
 			var expectedChannelId = ACSettings.getPropertyId(propertyName = "${assignedPropertyName}");
 		}
 
@@ -200,7 +196,7 @@ definition {
 				key_card = "New Document",
 				locator1 = "Card#CARD_TITLE");
 
-			Pause(locator1 = "10000");
+			ACUtils.waitForSendingRequest();
 		}
 
 		task ("View the Document events triggered") {

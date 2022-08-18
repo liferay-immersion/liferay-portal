@@ -157,12 +157,10 @@ definition {
 
 		Click(locator1 = "CPSAMLAdmin#IMPORT_CERTIFICATE");
 
-		Pause(locator1 = "1000");
-
-		AssertElementPresent(locator1 = "Button#SELECT_FILE");
+		WaitForElementPresent(locator1 = "Button#SELECT_FILE");
 
 		if ("${certificateUsage}" == "SIGNING") {
-			UploadTempFile(
+			UploadTempFile.uploadTempFileHiddenNoMouseOver(
 				locator1 = "TextInput#FILE",
 				value1 = "samlidp.p12");
 
@@ -175,7 +173,7 @@ definition {
 
 			var filePath = "${liferayHome}-1/data";
 
-			UploadTempFile(
+			UploadTempFile.uploadTempFileHiddenNoMouseOver(
 				locator1 = "TextInput#FILE",
 				value1 = "samlsp_encryption.p12");
 

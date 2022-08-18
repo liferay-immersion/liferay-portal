@@ -44,6 +44,7 @@ GradleProvidedDependenciesCheck | .gradle | Validates the scope of dependencies 
 GradleTestDependencyVersionCheck | .gradle | Checks the version for dependencies in gradle build files. |
 [IncorrectFileLocationCheck](check/incorrect_file_location_check.markdown#incorrectfilelocationcheck) | | Checks that `/src/*/java/` only contains `.java` files. |
 IncorrectFilePathCheck | | Checks that file path contains illegal characters. |
+JSCompatibilityCheck | | Checks for JavaScript compatibility. |
 [JSLodashDependencyCheck](check/js_lodash_dependency_check.markdown#jslodashdependencycheck) | .js or .jsx | Finds incorrect use of `AUI._`. |
 [JSONDeprecatedPackagesCheck](check/json_deprecated_packages_check.markdown#jsondeprecatedpackagescheck) | .ipynb, .json or .npmbridgerc | Finds incorrect use of deprecated packages in `package.json` files. |
 JSONPackageJSONBNDVersionCheck | .ipynb, .json or .npmbridgerc | Checks the version for dependencies in `package.json` files. |
@@ -90,6 +91,7 @@ JavaMapBuilderGenericsCheck | .java | Finds missing or unnecessary generics on `
 JavaMissingOverrideCheck | .java | Finds missing @Override annotations. |
 JavaMissingXMLPublicIdsCheck | .java | Finds missing public IDs for check XML files. |
 JavaModifiedServiceMethodCheck | .java | Finds missing empty lines before `removedService` or `addingService` calls. |
+JavaModuleClassGetResourceCallCheck | .java | Checks that dependencies files are located in the correct directory. |
 [JavaModuleComponentCheck](check/java_module_component_check.markdown#javamodulecomponentcheck) | .java | Checks for use of `@Component` in `-api` or `-spi` modules. |
 [JavaModuleExposureCheck](check/java_module_exposure_check.markdown#javamoduleexposurecheck) | .java | Checks for exposure of `SPI` types in `API`. |
 JavaModuleIllegalImportsCheck | .java | Finds cases of incorrect use of certain classes in modules. |
@@ -145,6 +147,7 @@ PrimitiveWrapperInstantiationCheck | .java, .jsp, .jspf, .jspx, .tag, .tpl or .v
 PrincipalExceptionCheck | .java, .jsp, .jspf, .jspx, .tag, .tpl or .vm | Finds calls to `PrincipalException.class.getName()` (use `PrincipalException.getNestedClasses()` instead). |
 PropertiesArchivedModulesCheck | .eslintignore, .prettierignore or .properties | Finds `test.batch.class.names.includes` property value pointing to archived modules in `test.properties`. |
 PropertiesBuildIncludeDirsCheck | .eslintignore, .prettierignore or .properties | Verifies property value of `build.include.dirs` in `build.properties`. |
+PropertiesFeatureFlagsCheck | .eslintignore, .prettierignore or .properties | Generate feature flags in `portal.properties` file. |
 PropertiesImportedFilesContentCheck | .eslintignore, .prettierignore or .properties | Performs several checks on `imported-files.properties` file. |
 [PropertiesLanguageKeysCheck](check/properties_language_keys_check.markdown#propertieslanguagekeyscheck) | .eslintignore, .prettierignore or .properties | Checks that there is no HTML markup in language keys. |
 PropertiesLiferayPluginPackageFileCheck | .eslintignore, .prettierignore or .properties | Performs several checks on `liferay-plugin-package.properties` file. |

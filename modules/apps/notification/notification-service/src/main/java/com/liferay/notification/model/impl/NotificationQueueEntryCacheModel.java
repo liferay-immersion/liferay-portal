@@ -78,7 +78,7 @@ public class NotificationQueueEntryCacheModel
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(43);
+		StringBundler sb = new StringBundler(45);
 
 		sb.append("{mvccVersion=");
 		sb.append(mvccVersion);
@@ -122,6 +122,8 @@ public class NotificationQueueEntryCacheModel
 		sb.append(to);
 		sb.append(", toName=");
 		sb.append(toName);
+		sb.append(", status=");
+		sb.append(status);
 		sb.append("}");
 
 		return sb.toString();
@@ -231,13 +233,17 @@ public class NotificationQueueEntryCacheModel
 			notificationQueueEntryImpl.setToName(toName);
 		}
 
+		notificationQueueEntryImpl.setStatus(status);
+
 		notificationQueueEntryImpl.resetOriginalValues();
 
 		return notificationQueueEntryImpl;
 	}
 
 	@Override
-	public void readExternal(ObjectInput objectInput) throws IOException {
+	public void readExternal(ObjectInput objectInput)
+		throws ClassNotFoundException, IOException {
+
 		mvccVersion = objectInput.readLong();
 
 		notificationQueueEntryId = objectInput.readLong();
@@ -251,7 +257,7 @@ public class NotificationQueueEntryCacheModel
 
 		notificationTemplateId = objectInput.readLong();
 		bcc = objectInput.readUTF();
-		body = objectInput.readUTF();
+		body = (String)objectInput.readObject();
 		cc = objectInput.readUTF();
 
 		classNameId = objectInput.readLong();
@@ -267,6 +273,8 @@ public class NotificationQueueEntryCacheModel
 		subject = objectInput.readUTF();
 		to = objectInput.readUTF();
 		toName = objectInput.readUTF();
+
+		status = objectInput.readInt();
 	}
 
 	@Override
@@ -299,10 +307,10 @@ public class NotificationQueueEntryCacheModel
 		}
 
 		if (body == null) {
-			objectOutput.writeUTF("");
+			objectOutput.writeObject("");
 		}
 		else {
-			objectOutput.writeUTF(body);
+			objectOutput.writeObject(body);
 		}
 
 		if (cc == null) {
@@ -355,6 +363,8 @@ public class NotificationQueueEntryCacheModel
 		else {
 			objectOutput.writeUTF(toName);
 		}
+
+		objectOutput.writeInt(status);
 	}
 
 	public long mvccVersion;
@@ -378,5 +388,6 @@ public class NotificationQueueEntryCacheModel
 	public String subject;
 	public String to;
 	public String toName;
+	public int status;
 
 }

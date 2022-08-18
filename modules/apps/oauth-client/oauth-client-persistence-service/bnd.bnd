@@ -1,6 +1,6 @@
 Bundle-Name: Liferay OAuth Client Persistence Service
 Bundle-SymbolicName: com.liferay.oauth.client.persistence.service
-Bundle-Version: 1.0.0
+Bundle-Version: 1.0.2
 Import-Package:\
 	!com.google.crypto.tink.*,\
 	\

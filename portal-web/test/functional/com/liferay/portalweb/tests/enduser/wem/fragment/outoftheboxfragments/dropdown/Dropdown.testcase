@@ -64,9 +64,7 @@ definition {
 				fragmentName = "Menu Display",
 				navTab = "Fragments");
 
-			Button.click(button = "Publish Master");
-
-			Alert.viewSuccessMessage();
+			MastersPageTemplates.publishMaster();
 		}
 
 		task ("Add a page based on custom master page") {
@@ -161,7 +159,7 @@ definition {
 				value1 = "true");
 
 			AssertVisible(
-				key_content = "Place fragments here.",
+				key_content = "Place fragments or widgets here.",
 				key_fragmentClass = "menu",
 				key_position = "1",
 				locator1 = "Fragment#DROP_ZONE_NO_FRAGMENTS_MESSAGE");
@@ -174,14 +172,12 @@ definition {
 				value1 = "false");
 
 			AssertNotVisible(
-				key_content = "Place fragments here.",
+				key_content = "Place fragments or widgets here.",
 				key_fragmentClass = "menu",
 				key_position = "1",
 				locator1 = "Fragment#DROP_ZONE_NO_FRAGMENTS_MESSAGE");
 
-			Button.click(button = "Publish Master");
-
-			Alert.viewSuccessMessage();
+			MastersPageTemplates.publishMaster();
 		}
 
 		task ("Add a page based on custom master page") {
@@ -222,7 +218,7 @@ definition {
 				value1 = "true");
 
 			AssertVisible(
-				key_content = "Place fragments here.",
+				key_content = "Place fragments or widgets here.",
 				key_fragmentClass = "menu",
 				key_position = "1",
 				locator1 = "Fragment#DROP_ZONE_NO_FRAGMENTS_MESSAGE");
@@ -237,7 +233,7 @@ definition {
 				value1 = "false");
 
 			AssertNotVisible(
-				key_content = "Place fragments here.",
+				key_content = "Place fragments or widgets here.",
 				key_fragmentClass = "menu",
 				key_position = "1",
 				locator1 = "Fragment#DROP_ZONE_NO_FRAGMENTS_MESSAGE");
@@ -254,7 +250,7 @@ definition {
 					locator1 = "Checkbox#ANY_CHECKBOX");
 			}
 
-			Pause(locator1 = "3000");
+			PageEditor.waitForAutoSave();
 
 			AssertNotChecked.assertNotCheckedNotVisible(
 				checkboxName = "Display on Hover",
@@ -268,7 +264,7 @@ definition {
 				value1 = "true");
 
 			AssertVisible(
-				key_content = "Place fragments here.",
+				key_content = "Place fragments or widgets here.",
 				key_fragmentClass = "menu",
 				key_position = "1",
 				locator1 = "Fragment#DROP_ZONE_NO_FRAGMENTS_MESSAGE");
@@ -283,7 +279,7 @@ definition {
 				value1 = "true");
 
 			AssertVisible(
-				key_content = "Place fragments here.",
+				key_content = "Place fragments or widgets here.",
 				key_fragmentClass = "menu",
 				key_position = "1",
 				locator1 = "Fragment#DROP_ZONE_NO_FRAGMENTS_MESSAGE");
@@ -302,7 +298,7 @@ definition {
 				value1 = "true");
 
 			AssertVisible(
-				key_content = "Place fragments here.",
+				key_content = "Place fragments or widgets here.",
 				key_fragmentClass = "menu",
 				key_position = "1",
 				locator1 = "Fragment#DROP_ZONE_NO_FRAGMENTS_MESSAGE");
@@ -317,7 +313,7 @@ definition {
 				value1 = "true");
 
 			AssertVisible(
-				key_content = "Place fragments here.",
+				key_content = "Place fragments or widgets here.",
 				key_fragmentClass = "menu",
 				key_position = "1",
 				locator1 = "Fragment#DROP_ZONE_NO_FRAGMENTS_MESSAGE");
@@ -443,9 +439,7 @@ definition {
 				fragmentName = "Dropdown",
 				id = "dropdown-text");
 
-			Button.click(button = "Publish Master");
-
-			Alert.viewSuccessMessage();
+			MastersPageTemplates.publishMaster();
 		}
 
 		task ("Add a page based on custom master page") {

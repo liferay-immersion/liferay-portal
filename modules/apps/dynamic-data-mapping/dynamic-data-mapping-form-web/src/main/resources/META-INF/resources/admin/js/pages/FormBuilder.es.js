@@ -51,7 +51,7 @@ import {createFormURL} from '../util/form.es';
 import {submitEmailContent} from '../util/submitEmailContent.es';
 import ErrorList from './ErrorList';
 
-export function FormBuilder() {
+export default function FormBuilder() {
 	const {
 		autocompleteUserURL,
 		portletNamespace,
@@ -86,9 +86,23 @@ export function FormBuilder() {
 
 		const pagesVisitor = new PagesVisitor(formSettingsContext.pages);
 
-		return pagesVisitor.mapFields((field) => {
-			if (field.valid) {
+		const alertElement = document.querySelector(
+			'.lfr-ddm__show-partial-results-alert'
+		);
+
+		return pagesVisitor.mapFields(({field}) => {
+			const showPartialResultsToRespondents = pagesVisitor.findField(
+				({fieldName}) => fieldName === 'showPartialResultsToRespondents'
+			)?.value;
+
+			if (field) {
 				return field;
+			}
+
+			if (showPartialResultsToRespondents === true) {
+				alertElement.classList.remove(
+					'lfr-ddm__show-partial-results-alert--hidden'
+				);
 			}
 
 			return {
@@ -163,7 +177,7 @@ export function FormBuilder() {
 	 * Opens the sidebar whenever a field is focused
 	 */
 	useEffect(() => {
-		const hasFocusedField = Object.keys(focusedField).length > 0;
+		const hasFocusedField = !!Object.keys(focusedField).length;
 
 		if (hasFocusedField) {
 			setSidebarState(({sidebarPanelId}) => ({

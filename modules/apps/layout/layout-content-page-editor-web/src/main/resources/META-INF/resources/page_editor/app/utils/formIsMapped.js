@@ -12,15 +12,24 @@
  * details.
  */
 
-import {FORM_MAPPING_SOURCES} from '../config/constants/formMappingSources';
-import {LAYOUT_TYPES} from '../config/constants/layoutTypes';
 import {config} from '../config/index';
 
 export function formIsMapped(item) {
-	return (
-		(config.layoutType === LAYOUT_TYPES.display &&
-			(item.config.formConfig === FORM_MAPPING_SOURCES.default ||
-				item.config.formConfig === FORM_MAPPING_SOURCES.displayPage)) ||
-		(item.config.classNameId && item.config.classNameId !== '0')
-	);
+	const {classNameId, classTypeId} = item.config;
+
+	const {formTypes} = config;
+
+	const type = formTypes.find(({value}) => value === classNameId);
+
+	if (!type) {
+		return false;
+	}
+
+	const subtype = type.subtypes?.find(({value}) => value === classTypeId);
+
+	if (subtype || classTypeId === '0') {
+		return true;
+	}
+
+	return false;
 }

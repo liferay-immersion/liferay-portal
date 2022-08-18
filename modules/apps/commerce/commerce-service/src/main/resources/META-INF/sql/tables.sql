@@ -160,6 +160,7 @@ create table CommerceOrder (
 
 create table CommerceOrderItem (
 	mvccVersion LONG default 0 not null,
+	uuid_ VARCHAR(75) null,
 	externalReferenceCode VARCHAR(75) null,
 	commerceOrderItemId LONG not null primary key,
 	groupId LONG,
@@ -223,6 +224,7 @@ create table CommerceOrderItem (
 
 create table CommerceOrderNote (
 	mvccVersion LONG default 0 not null,
+	uuid_ VARCHAR(75) null,
 	externalReferenceCode VARCHAR(75) null,
 	commerceOrderNoteId LONG not null primary key,
 	groupId LONG,
@@ -253,6 +255,7 @@ create table CommerceOrderPayment (
 
 create table CommerceOrderType (
 	mvccVersion LONG default 0 not null,
+	uuid_ VARCHAR(75) null,
 	externalReferenceCode VARCHAR(75) null,
 	commerceOrderTypeId LONG not null primary key,
 	companyId LONG,
@@ -275,6 +278,7 @@ create table CommerceOrderType (
 
 create table CommerceOrderTypeRel (
 	mvccVersion LONG default 0 not null,
+	uuid_ VARCHAR(75) null,
 	externalReferenceCode VARCHAR(75) null,
 	commerceOrderTypeRelId LONG not null primary key,
 	companyId LONG,
@@ -289,6 +293,7 @@ create table CommerceOrderTypeRel (
 
 create table CommerceShipment (
 	mvccVersion LONG default 0 not null,
+	uuid_ VARCHAR(75) null,
 	externalReferenceCode VARCHAR(75) null,
 	commerceShipmentId LONG not null primary key,
 	groupId LONG,
@@ -300,16 +305,18 @@ create table CommerceShipment (
 	commerceAccountId LONG,
 	commerceAddressId LONG,
 	commerceShippingMethodId LONG,
-	shippingOptionName TEXT null,
 	carrier VARCHAR(75) null,
-	trackingNumber VARCHAR(75) null,
-	shippingDate DATE null,
 	expectedDate DATE null,
+	shippingDate DATE null,
+	shippingOptionName TEXT null,
+	trackingNumber VARCHAR(75) null,
+	trackingURL STRING null,
 	status INTEGER
 );
 
 create table CommerceShipmentItem (
 	mvccVersion LONG default 0 not null,
+	uuid_ VARCHAR(75) null,
 	externalReferenceCode VARCHAR(75) null,
 	commerceShipmentItemId LONG not null primary key,
 	groupId LONG,
@@ -335,10 +342,11 @@ create table CommerceShippingMethod (
 	modifiedDate DATE null,
 	name STRING null,
 	description STRING null,
-	imageId LONG,
+	active_ BOOLEAN,
 	engineKey VARCHAR(75) null,
+	imageId LONG,
 	priority DOUBLE,
-	active_ BOOLEAN
+	trackingURL STRING null
 );
 
 create table CommerceSubscriptionEntry (

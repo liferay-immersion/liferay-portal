@@ -56,7 +56,7 @@ public class ObjectViewFilterColumnWrapper
 		attributes.put("modifiedDate", getModifiedDate());
 		attributes.put("objectViewId", getObjectViewId());
 		attributes.put("filterType", getFilterType());
-		attributes.put("json", getJson());
+		attributes.put("json", getJSON());
 		attributes.put("objectFieldName", getObjectFieldName());
 
 		return attributes;
@@ -128,7 +128,7 @@ public class ObjectViewFilterColumnWrapper
 		String json = (String)attributes.get("json");
 
 		if (json != null) {
-			setJson(json);
+			setJSON(json);
 		}
 
 		String objectFieldName = (String)attributes.get("objectFieldName");
@@ -179,8 +179,8 @@ public class ObjectViewFilterColumnWrapper
 	 * @return the json of this object view filter column
 	 */
 	@Override
-	public String getJson() {
-		return model.getJson();
+	public String getJSON() {
+		return model.getJSON();
 	}
 
 	/**
@@ -319,8 +319,8 @@ public class ObjectViewFilterColumnWrapper
 	 * @param json the json of this object view filter column
 	 */
 	@Override
-	public void setJson(String json) {
-		model.setJson(json);
+	public void setJSON(String json) {
+		model.setJSON(json);
 	}
 
 	/**

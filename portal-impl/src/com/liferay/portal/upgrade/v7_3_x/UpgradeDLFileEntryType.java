@@ -46,9 +46,9 @@ public class UpgradeDLFileEntryType extends UpgradeProcess {
 						"? OR structureKey = ? ) ");
 			PreparedStatement preparedStatement3 =
 				AutoBatchPreparedStatementUtil.autoBatch(
-					connection.prepareStatement(
-						"update DLFileEntryType set dataDefinitionId = ? " +
-							"where fileEntryTypeId = ? "));
+					connection,
+					"update DLFileEntryType set dataDefinitionId = ? where " +
+						"fileEntryTypeId = ? ");
 			ResultSet resultSet1 = preparedStatement1.executeQuery()) {
 
 			long classNameId = PortalUtil.getClassNameId(
@@ -79,9 +79,7 @@ public class UpgradeDLFileEntryType extends UpgradeProcess {
 	}
 
 	private void _upgradeSchema() throws Exception {
-		if (!hasColumn("DLFileEntryType", "dataDefinitionId")) {
-			runSQL("alter table DLFileEntryType add dataDefinitionId LONG ");
-		}
+		alterTableAddColumn("DLFileEntryType", "dataDefinitionId", "LONG");
 	}
 
 }

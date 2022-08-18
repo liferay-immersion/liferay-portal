@@ -17,11 +17,13 @@ import ClayForm from '@clayui/form';
 import ClayLabel from '@clayui/label';
 import ClayMultiSelect from '@clayui/multi-select';
 import {FocusScope} from '@clayui/shared';
-import React, {useEffect, useMemo, useRef, useState} from 'react';
+import React, {useMemo, useRef, useState} from 'react';
 
 import useControlledState from '../../../core/hooks/useControlledState';
 import {useSelector} from '../../contexts/StoreContext';
 import {useId} from '../../utils/useId';
+
+const MAX_SUGGESTED_CLASSES = 20;
 
 export default function CSSClassSelectorField({
 	field,
@@ -45,6 +47,8 @@ export default function CSSClassSelectorField({
 	const cssClassesInputId = useId();
 	const helpTextId = useId();
 
+	const alignElementRef = useRef();
+	const firstOptionRef = useRef();
 	const multiSelectRef = useRef();
 
 	const onKeyDown = (event) => {
@@ -52,15 +56,14 @@ export default function CSSClassSelectorField({
 			setDropdownActive(false);
 			setValue((previousValue) => previousValue.trim());
 
-			// https://github.com/liferay/clay/issues/4915
-
-			multiSelectRef.current?.querySelector('input').focus();
+			multiSelectRef.current?.focus();
 		}
 	};
 
-	const onItemClick = (newItem) => {
-		setValue('');
-		setDropdownActive(false);
+	const addItem = (newItem) => {
+		if (!newItem.trim()) {
+			return;
+		}
 
 		if (!items.some((item) => item.value === newItem)) {
 			const nextItems = [...items, {label: newItem, value: newItem}];
@@ -71,48 +74,81 @@ export default function CSSClassSelectorField({
 				nextItems.map((item) => item.value)
 			);
 		}
+	};
 
-		// https://github.com/liferay/clay/issues/4915
+	const onItemClick = (newItem) => {
+		setValue('');
+		setDropdownActive(false);
 
-		multiSelectRef.current?.querySelector('input').focus();
+		addItem(newItem);
+
+		multiSelectRef.current?.focus();
 	};
 
 	return (
 		<>
-			<ClayForm.Group small>
+			<ClayForm.Group
+				className="page-editor__css-class-selector-field"
+				small
+			>
 				<label htmlFor={cssClassesInputId}>
 					{Liferay.Language.get('css-classes')}
 				</label>
 
-				<ClayMultiSelect
-					autocomplete="off"
-					id={cssClassesInputId}
-					items={items}
-					onChange={setValue}
-					onFocus={() => {
-						setDropdownActive(false);
-					}}
-					onItemsChange={(items) => {
-						setItems(items);
+				<div ref={alignElementRef}>
+					<ClayMultiSelect
+						autoComplete="off"
+						id={cssClassesInputId}
+						items={items}
+						onBlur={() => {
+							if (!dropDownActive) {
+								addItem(value);
+								setValue('');
+							}
+						}}
+						onChange={(value) => {
+							setValue(value);
 
-						onValueSelect(
-							field.name,
-							items.map((item) => item.value)
-						);
-					}}
-					onKeyDown={(event) => {
-						if (event.key === ' ' && value.trim().length > 0) {
-							setDropdownActive(true);
-						}
-					}}
-					placeholder={
-						items.length > 0
-							? null
-							: Liferay.Language.get('type-to-add-a-class')
-					}
-					ref={multiSelectRef}
-					value={value}
-				/>
+							if (!dropDownActive) {
+								setDropdownActive(true);
+							}
+						}}
+						onFocus={() => {
+							setDropdownActive(false);
+							setValue((previousValue) => previousValue.trim());
+						}}
+						onItemsChange={(items) => {
+							const nextItems = [
+								...new Set(items.map((item) => item.value)),
+							];
+
+							setItems(
+								nextItems.map((item) => ({
+									label: item,
+									value: item,
+								}))
+							);
+
+							onValueSelect(field.name, nextItems);
+						}}
+						onKeyDown={(event) => {
+							if (event.key === ' ' && !!value.trim().length) {
+								addItem(value.trim());
+								setValue('');
+							}
+							else if (event.key === 'ArrowDown') {
+								event.preventDefault();
+
+								firstOptionRef.current?.focus();
+							}
+						}}
+						placeholder={Liferay.Language.get(
+							'type-to-add-a-class'
+						)}
+						ref={multiSelectRef}
+						value={value}
+					/>
+				</div>
 
 				<div className="mt-1 small text-secondary" id={helpTextId}>
 					{Liferay.Language.get(
@@ -122,8 +158,9 @@ export default function CSSClassSelectorField({
 			</ClayForm.Group>
 			<CSSClassSelectorDropDown
 				active={dropDownActive}
+				alignElementRef={alignElementRef}
 				cssClass={value}
-				multiSelectRef={multiSelectRef}
+				firstOptionRef={firstOptionRef}
 				onItemClick={onItemClick}
 				onKeyDown={onKeyDown}
 				onSetActive={setDropdownActive}
@@ -134,14 +171,14 @@ export default function CSSClassSelectorField({
 
 function CSSClassSelectorDropDown({
 	active,
+	alignElementRef,
 	cssClass,
-	multiSelectRef,
+	firstOptionRef,
 	onItemClick,
 	onKeyDown,
 	onSetActive,
 }) {
 	const dropdownRef = useRef();
-	const dropdownItemRef = useRef();
 
 	const availableCssClasses = useSelector((state) => {
 		const layoutData = state.layoutData;
@@ -158,22 +195,22 @@ function CSSClassSelectorDropDown({
 	});
 
 	const filteredCssClasses = useMemo(() => {
-		return availableCssClasses.filter(
-			(availableCssClass) =>
-				availableCssClass.indexOf(cssClass.trim()) !== -1
-		);
+		return availableCssClasses
+			.filter(
+				(availableCssClass) =>
+					availableCssClass.indexOf(cssClass.trim()) !== -1
+			)
+			.slice(0, MAX_SUGGESTED_CLASSES);
 	}, [availableCssClasses, cssClass]);
-
-	useEffect(() => {
-		if (active) {
-			dropdownItemRef.current?.focus();
-		}
-	}, [active]);
 
 	return (
 		<ClayDropDown.Menu
-			active={active}
-			alignElementRef={multiSelectRef}
+			active={active && cssClass}
+			alignElementRef={alignElementRef}
+			className="page-editor__css-class-selector-dropdown"
+			containerProps={{
+				className: 'cadmin',
+			}}
 			onKeyDown={onKeyDown}
 			onSetActive={onSetActive}
 			ref={dropdownRef}
@@ -186,7 +223,7 @@ function CSSClassSelectorDropDown({
 						>
 							<ClayDropDown.Item
 								className="align-items-center d-flex text-3"
-								innerRef={dropdownItemRef}
+								innerRef={firstOptionRef}
 								onClick={() => onItemClick(cssClass)}
 							>
 								{Liferay.Language.get('create')}
@@ -200,7 +237,7 @@ function CSSClassSelectorDropDown({
 							</ClayDropDown.Item>
 						</ClayDropDown.Group>
 
-						{filteredCssClasses.length > 0 && (
+						{!!filteredCssClasses.length && (
 							<ClayDropDown.Group
 								header={Liferay.Language.get(
 									'existing-classes'

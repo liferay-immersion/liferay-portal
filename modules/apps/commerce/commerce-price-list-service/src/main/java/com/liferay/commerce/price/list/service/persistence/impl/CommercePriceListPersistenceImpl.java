@@ -3845,7 +3845,7 @@ public class CommercePriceListPersistenceImpl
 	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>CommercePriceListModelImpl</code>.
 	 * </p>
 	 *
-	 * @param groupId the group ID
+	 * @param groupIds the group IDs
 	 * @param companyId the company ID
 	 * @param start the lower bound of the range of commerce price lists
 	 * @param end the upper bound of the range of commerce price lists (not inclusive)
@@ -6228,7 +6228,7 @@ public class CommercePriceListPersistenceImpl
 	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>CommercePriceListModelImpl</code>.
 	 * </p>
 	 *
-	 * @param groupId the group ID
+	 * @param groupIds the group IDs
 	 * @param companyId the company ID
 	 * @param status the status
 	 * @param start the lower bound of the range of commerce price lists
@@ -7785,7 +7785,7 @@ public class CommercePriceListPersistenceImpl
 	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>CommercePriceListModelImpl</code>.
 	 * </p>
 	 *
-	 * @param groupId the group ID
+	 * @param groupIds the group IDs
 	 * @param companyId the company ID
 	 * @param status the status
 	 * @param start the lower bound of the range of commerce price lists
@@ -9170,15 +9170,15 @@ public class CommercePriceListPersistenceImpl
 		CommercePriceListModelImpl commercePriceListModelImpl =
 			(CommercePriceListModelImpl)commercePriceList;
 
-		if (Validator.isNull(commercePriceList.getExternalReferenceCode())) {
-			commercePriceList.setExternalReferenceCode(
-				String.valueOf(commercePriceList.getPrimaryKey()));
-		}
-
 		if (Validator.isNull(commercePriceList.getUuid())) {
 			String uuid = _portalUUID.generate();
 
 			commercePriceList.setUuid(uuid);
+		}
+
+		if (Validator.isNull(commercePriceList.getExternalReferenceCode())) {
+			commercePriceList.setExternalReferenceCode(
+				commercePriceList.getUuid());
 		}
 
 		ServiceContext serviceContext =
@@ -9304,7 +9304,9 @@ public class CommercePriceListPersistenceImpl
 	 */
 	@Override
 	public CommercePriceList fetchByPrimaryKey(Serializable primaryKey) {
-		if (ctPersistenceHelper.isProductionMode(CommercePriceList.class)) {
+		if (ctPersistenceHelper.isProductionMode(
+				CommercePriceList.class, primaryKey)) {
+
 			return super.fetchByPrimaryKey(primaryKey);
 		}
 

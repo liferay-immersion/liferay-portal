@@ -13,28 +13,18 @@
  */
 
 import React from 'react';
-import {TAction, TState, TWorkflowStatus} from './types';
+import {
+	TName,
+	TObjectView,
+	TObjectViewSortColumn,
+	TState,
+	TWorkflowStatus,
+} from './types';
 interface IViewContextProps extends Array<TState | Function> {
 	0: typeof initialState;
 	1: React.Dispatch<React.ReducerAction<React.Reducer<TState, TAction>>>;
 }
 declare const ViewContext: React.Context<IViewContextProps>;
-export declare const METADATA: {
-	businessType: string;
-	checked: boolean;
-	filtered: boolean;
-	id: number;
-	indexed: boolean;
-	indexedAsKeyword: boolean;
-	indexedLanguageId: string;
-	label: {
-		[x: string]: string;
-	};
-	listTypeDefinitionId: boolean;
-	name: string;
-	required: boolean;
-	type: string;
-}[];
 export declare enum TYPES {
 	ADD_OBJECT_FIELDS = 'ADD_OBJECT_FIELDS',
 	ADD_OBJECT_VIEW = 'ADD_OBJECT_VIEW',
@@ -55,8 +45,116 @@ export declare enum TYPES {
 	SET_OBJECT_VIEW_AS_DEFAULT = 'SET_OBJECT_VIEW_AS_DEFAULT',
 }
 declare const initialState: TState;
+declare type TSortOptions = {
+	label: string;
+	value: string;
+};
+export declare type TAction =
+	| {
+			payload: {
+				objectView: TObjectView;
+			};
+			type: TYPES.ADD_OBJECT_VIEW;
+	  }
+	| {
+			payload: {
+				selectedObjectFields: ObjectField[];
+			};
+			type: TYPES.ADD_OBJECT_VIEW_COLUMN;
+	  }
+	| {
+			payload: {
+				filterType?: string;
+				objectFieldName: string;
+				valueList?: IItem[];
+			};
+			type: TYPES.ADD_OBJECT_VIEW_FILTER_COLUMN;
+	  }
+	| {
+			payload: {
+				objectFieldName: string;
+				objectFields: ObjectField[];
+				objectViewSortColumns?: TObjectViewSortColumn[];
+				selectedObjetSort: TSortOptions;
+			};
+			type: TYPES.ADD_OBJECT_VIEW_SORT_COLUMN;
+	  }
+	| {
+			payload: {
+				objectFields: ObjectField[];
+				objectView: TObjectView;
+			};
+			type: TYPES.ADD_OBJECT_FIELDS;
+	  }
+	| {
+			payload: {
+				newName: string;
+			};
+			type: TYPES.CHANGE_OBJECT_VIEW_NAME;
+	  }
+	| {
+			payload: {
+				draggedIndex: number;
+				targetIndex: number;
+			};
+			type: TYPES.CHANGE_OBJECT_VIEW_COLUMN_ORDER;
+	  }
+	| {
+			payload: {
+				draggedIndex: number;
+				targetIndex: number;
+			};
+			type: TYPES.CHANGE_OBJECT_VIEW_SORT_COLUMN_ORDER;
+	  }
+	| {
+			payload: {
+				objectFieldName?: string;
+			};
+			type: TYPES.DELETE_OBJECT_VIEW_COLUMN;
+	  }
+	| {
+			payload: {
+				objectFieldName?: string;
+			};
+			type: TYPES.DELETE_OBJECT_VIEW_FILTER_COLUMN;
+	  }
+	| {
+			payload: {
+				objectFieldName?: string;
+			};
+			type: TYPES.DELETE_OBJECT_VIEW_SORT_COLUMN;
+	  }
+	| {
+			payload: {
+				editingObjectFieldName: string;
+				translations: TName;
+			};
+			type: TYPES.EDIT_OBJECT_VIEW_COLUMN_LABEL;
+	  }
+	| {
+			payload: {
+				filterType?: string;
+				objectFieldName?: string;
+				valueList?: IItem[];
+			};
+			type: TYPES.EDIT_OBJECT_VIEW_FILTER_COLUMN;
+	  }
+	| {
+			payload: {
+				editingObjectFieldName: string;
+				selectedObjectSort: string;
+			};
+			type: TYPES.EDIT_OBJECT_VIEW_SORT_COLUMN_SORT_ORDER;
+	  }
+	| {
+			payload: {
+				checked: boolean;
+			};
+			type: TYPES.SET_OBJECT_VIEW_AS_DEFAULT;
+	  };
 interface IViewContextProviderProps extends React.HTMLAttributes<HTMLElement> {
 	value: {
+		filterOperators: TFilterOperators;
 		isViewOnly: boolean;
 		objectViewId: string;
 		workflowStatusJSONArray: TWorkflowStatus[];

@@ -15,38 +15,36 @@
 import {useParams} from 'react-router-dom';
 
 import Container from '../../../components/Layout/Container';
-import ListView from '../../../components/ListView/ListView';
+import ListViewRest from '../../../components/ListView';
 import ProgressBar from '../../../components/ProgressBar';
-import {getRoutines} from '../../../graphql/queries';
 import i18n from '../../../i18n';
 import {filters} from '../../../schema/filter';
 import {getTimeFromNow} from '../../../util/date';
 import {searchUtil} from '../../../util/search';
-import RoutineModal from './RoutineModal';
 import useRoutineActions from './useRoutineActions';
 
 const Routines = () => {
 	const {projectId: _projectId} = useParams();
-	const {actions, formModal} = useRoutineActions();
+	const {actions, navigate} = useRoutineActions();
 
 	const projectId = Number(_projectId);
 
 	return (
 		<Container>
-			<ListView
-				forceRefetch={formModal.forceRefetch}
+			<ListViewRest
 				managementToolbarProps={{
-					addButton: () => formModal.modal.open(),
+					addButton: () => navigate('create'),
 					filterFields: filters.routines,
 					title: i18n.translate('routines'),
 				}}
-				query={getRoutines}
+				resource="/routines"
 				tableProps={{
 					actions,
 					columns: [
 						{
 							clickable: true,
 							key: 'name',
+							sorteable: true,
 							value: i18n.translate('routine'),
 						},
 						{
@@ -91,13 +89,10 @@ const Routines = () => {
 					],
 					navigateTo: ({id}) => id?.toString(),
 				}}
-				transformData={(data) => data?.c?.routines}
 				variables={{
 					filter: searchUtil.eq('projectId', projectId),
 				}}
 			/>
-
-			<RoutineModal modal={formModal.modal} projectId={projectId} />
 		</Container>
 	);
 };

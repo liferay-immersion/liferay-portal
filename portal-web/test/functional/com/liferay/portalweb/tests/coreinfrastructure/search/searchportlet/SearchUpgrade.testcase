@@ -413,4 +413,40 @@ definition {
 		Upgrade.viewSearchPortletsConfiguration();
 	}
 
+	test ViewSXPBlueprintsAndElementsArchive7310U6 {
+		property data.archive.type = "data-archive-sxp";
+		property portal.version = "7.3.10.u6";
+		property test.assert.warning.exceptions = "true";
+		property test.run.environment = "EE";
+
+		Upgrade.viewSXPBlueprintAndElements();
+	}
+
+	test ViewSXPBlueprintsAndElementsArchive7413U33 {
+		property data.archive.type = "data-archive-sxp";
+		property portal.version = "7.4.13.u33";
+		property test.assert.warning.exceptions = "true";
+		property test.run.environment = "EE";
+
+		Upgrade.viewSXPBlueprintAndElements();
+	}
+
+	@priority = "5"
+	test ViewSynonymsEntryArchive7310 {
+		property data.archive.type = "data-archive-search-synonyms";
+		property portal.version = "7.3.10";
+		property test.run.environment = "EE";
+
+		Upgrade.viewSynonymsEntry();
+	}
+
+	@priority = "5"
+	test ViewSynonymsEntryArchive7413 {
+		property data.archive.type = "data-archive-search-synonyms";
+		property portal.version = "7.4.13";
+		property test.run.environment = "EE";
+
+		Upgrade.viewSynonymsEntry();
+	}
+
 }

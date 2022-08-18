@@ -19,9 +19,13 @@ export default function hasSubmitChild(itemId) {
 		`.${getLayoutDataItemUniqueClassName(itemId)}`
 	);
 
+	if (!element) {
+		return false;
+	}
+
 	return Boolean(
-		element.querySelector(
+		element.querySelectorAll(
 			'input[type=submit], button[type=submit], button:not([type])'
-		)
+		).length
 	);
 }

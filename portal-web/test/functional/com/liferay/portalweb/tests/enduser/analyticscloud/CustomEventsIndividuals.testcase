@@ -65,6 +65,8 @@ definition {
 	tearDown {
 		var testPortalInstance = PropsUtil.get("test.portal.instance");
 
+		ACUtils.tearDownAC();
+
 		ACUtils.tearDownDXP();
 
 		if ("${testPortalInstance}" == "true") {
@@ -73,10 +75,6 @@ definition {
 		else {
 			JSONGroup.deleteGroupByName(groupName = "Site Name");
 		}
-
-		JSONUser.tearDownNonAdminUsers();
-
-		ACUtils.tearDownAC();
 	}
 
 	@description = "Feature ID: LRAC-7536 | Automation ID: LRAC-10512 | Test Summary: Individual activities chart tooltip events and sessions shown"
@@ -250,9 +248,7 @@ definition {
 				customEventName = "${customEventName1}",
 				timeToSendCustomEvent = "1");
 
-			// Pause is necessary because poshi logs in from one user to another very quickly.
-
-			Pause(locator1 = "5000");
+			ACUtils.logInPause();
 		}
 
 		task ("Sign in as new user") {

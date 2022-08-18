@@ -94,6 +94,17 @@
 								"pageElements": [
 									{
 										"definition": {
+											"widgetInstance": {
+												"widgetConfig": {
+													"properties": "route=applications"
+												},
+												"widgetName": "com_liferay_client_extension_web_internal_portlet_ClientExtensionEntryPortlet_RAYLIFEAGENTPORTAL001"
+											}
+										},
+										"type": "Widget"
+									},
+									{
+										"definition": {
 											"fragment": {
 												"key": "tabs"
 											},
@@ -165,9 +176,20 @@
 																"paddingTop": "4",
 																"textAlign": ""
 															},
+															"fragmentViewports": [
+																{
+																	"fragmentViewportStyle": {
+																		"paddingLeft": "0",
+																		"paddingRight": "0"
+																	},
+																	"id": "tablet"
+																}
+															],
 															"indexed": true,
 															"layout": {
+																"align": "Center",
 																"borderWidth": 0,
+																"contentDisplay": "FlexColumn",
 																"marginBottom": 0,
 																"marginLeft": 0,
 																"marginRight": 0,
@@ -184,7 +206,9 @@
 																"definition": {
 																	"fragmentStyle": {
 																		"marginBottom": "4",
-																		"textAlign": ""
+																		"maxWidth": "1500px",
+																		"textAlign": "",
+																		"width": "100%"
 																	},
 																	"gutters": true,
 																	"indexed": true,
@@ -477,7 +501,10 @@
 															{
 																"definition": {
 																	"fragmentStyle": {
-																		"borderWidth": "0"
+																		"borderWidth": "0",
+																		"maxWidth": "1500px",
+																		"textAlign": "",
+																		"width": "100%"
 																	},
 																	"indexed": true,
 																	"layout": {
@@ -511,18 +538,14 @@
 																				"pageElements": [
 																					{
 																						"definition": {
-																							"fragment": {
-																								"key": "fake-content"
-																							},
-																							"fragmentConfig": {
-																								"fakeContentId": "fake content",
-																								"height": "915px"
-																							},
-																							"fragmentFields": [
-																							],
-																							"indexed": true
+																							"widgetInstance": {
+																								"widgetConfig": {
+																									"properties": "route=applications-table"
+																								},
+																								"widgetName": "com_liferay_client_extension_web_internal_portlet_ClientExtensionEntryPortlet_RAYLIFEAGENTPORTAL001"
+																							}
 																						},
-																						"type": "Fragment"
+																						"type": "Widget"
 																					}
 																				],
 																				"type": "FragmentDropZone"
@@ -551,7 +574,9 @@
 															},
 															"indexed": true,
 															"layout": {
+																"align": "Center",
 																"borderWidth": 0,
+																"contentDisplay": "FlexColumn",
 																"marginBottom": 0,
 																"marginLeft": 0,
 																"marginRight": 0,
@@ -568,7 +593,9 @@
 																"definition": {
 																	"fragmentStyle": {
 																		"marginBottom": "4",
-																		"textAlign": ""
+																		"maxWidth": "1500px",
+																		"textAlign": "",
+																		"width": "100%"
 																	},
 																	"gutters": true,
 																	"indexed": true,
@@ -864,7 +891,10 @@
 															{
 																"definition": {
 																	"fragmentStyle": {
-																		"borderWidth": "0"
+																		"borderWidth": "0",
+																		"maxWidth": "1500px",
+																		"textAlign": "",
+																		"width": "100%"
 																	},
 																	"indexed": true,
 																	"layout": {
@@ -938,7 +968,9 @@
 															},
 															"indexed": true,
 															"layout": {
+																"align": "Center",
 																"borderWidth": 0,
+																"contentDisplay": "FlexColumn",
 																"marginBottom": 0,
 																"marginLeft": 0,
 																"marginRight": 0,
@@ -955,7 +987,9 @@
 																"definition": {
 																	"fragmentStyle": {
 																		"marginBottom": "4",
-																		"textAlign": ""
+																		"maxWidth": "1500px",
+																		"textAlign": "",
+																		"width": "100%"
 																	},
 																	"gutters": true,
 																	"indexed": true,
@@ -1251,7 +1285,10 @@
 															{
 																"definition": {
 																	"fragmentStyle": {
-																		"borderWidth": "0"
+																		"borderWidth": "0",
+																		"maxWidth": "1500px",
+																		"textAlign": "",
+																		"width": "100%"
 																	},
 																	"indexed": true,
 																	"layout": {
@@ -1325,7 +1362,9 @@
 															},
 															"indexed": true,
 															"layout": {
+																"align": "Center",
 																"borderWidth": 0,
+																"contentDisplay": "FlexColumn",
 																"marginBottom": 0,
 																"marginLeft": 0,
 																"marginRight": 0,
@@ -1342,7 +1381,9 @@
 																"definition": {
 																	"fragmentStyle": {
 																		"marginBottom": "4",
-																		"textAlign": ""
+																		"maxWidth": "1500px",
+																		"textAlign": "",
+																		"width": "100%"
 																	},
 																	"gutters": true,
 																	"indexed": true,
@@ -1638,7 +1679,10 @@
 															{
 																"definition": {
 																	"fragmentStyle": {
-																		"borderWidth": "0"
+																		"borderWidth": "0",
+																		"maxWidth": "1500px",
+																		"textAlign": "",
+																		"width": "100%"
 																	},
 																	"indexed": true,
 																	"layout": {

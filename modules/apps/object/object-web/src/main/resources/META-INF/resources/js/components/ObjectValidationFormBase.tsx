@@ -18,8 +18,7 @@ import {
 	useForm,
 } from '@liferay/object-js-components-web';
 
-import {defaultLanguageId} from '../utils/locale';
-
+const defaultLanguageId = Liferay.ThemeDisplay.getDefaultLanguageId();
 const REQUIRED_MSG = Liferay.Language.get('required');
 
 export function useObjectValidationForm({
@@ -28,7 +27,6 @@ export function useObjectValidationForm({
 }: IUseObjectValidationForm) {
 	const validate = (validation: Partial<ObjectValidation>) => {
 		const errors: ObjectValidationErrors = {};
-
 		const label = validation.name?.[defaultLanguageId];
 		const errorMessage = validation.errorLabel?.[defaultLanguageId];
 		const script = validation.script;
@@ -43,6 +41,16 @@ export function useObjectValidationForm({
 
 		if (invalidateRequired(script)) {
 			errors.script = REQUIRED_MSG;
+		}
+
+		if (
+			validation.engine === 'groovy' &&
+			!!validation.lineCount &&
+			validation.lineCount > 2987
+		) {
+			errors.script = Liferay.Language.get(
+				'the-maximum-number-of-lines-available-is-2987'
+			);
 		}
 
 		return errors;

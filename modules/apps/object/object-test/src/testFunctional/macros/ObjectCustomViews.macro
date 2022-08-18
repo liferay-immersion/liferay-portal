@@ -3,13 +3,17 @@ definition {
 	macro addColumnsViaUI {
 		LexiconEntry.gotoAdd();
 
-		Click.clickAtNotVisible(
-			key_columnOption = "${columnOption}",
-			locator1 = "ObjectCustomViews#CHECKBOX_COLUMN_OPTION");
+		SelectFrame(locator1 = "ObjectCustomViews#VIEW_MODAL_ADD_COLUMNS");
 
-		Click(
-			key_tab = "Save",
-			locator1 = "Button#TAB_SUBMIT_BTN");
+		for (var columnsOptions : list "${addColumns}") {
+			Click.clickAtNotVisible(
+				key_columnOption = "${columnsOptions}",
+				locator1 = "ObjectCustomViews#CHECKBOX_COLUMN_OPTION");
+		}
+
+		Button.clickSave();
+
+		SelectFrame(locator1 = "IFrame#IFRAME");
 	}
 
 	macro addDefaultSort {
@@ -54,6 +58,8 @@ definition {
 	}
 
 	macro assertColumnLabelPresent {
+		SelectFrame(locator1 = "IFrame#IFRAME");
+
 		AssertElementPresent(
 			key_columnLabel = "${columnLabel}",
 			locator1 = "ObjectCustomViews#BUILDER_SEARCH_RESULT_COLUMN_LABEL");
@@ -65,16 +71,16 @@ definition {
 			locator1 = "ObjectCustomViews#VIEW_BUILDER_SEARCH_RESULT");
 	}
 
-	macro assertColumnNotPresentOnDefaultSort {
+	macro assertColumnNotPresentOnAddColumnModal {
 		AssertElementNotPresent(
-			key_columnName = "${colunmName}",
-			locator1 = "ObjectCustomViews#DEFAULT_SORT_SEARCH_RESULT");
-	}
-
-	macro assertColumnNotVisibleOnAddColumnModal {
-		AssertNotVisible(
 			key_columnName = "${columnOption}",
 			locator1 = "ObjectCustomViews#ADD_COLUMNS_COLUMN_LABEL");
+	}
+
+	macro assertColumnNotPresentOnDefaultSort {
+		AssertElementNotPresent(
+			key_columnName = "${columnName}",
+			locator1 = "ObjectCustomViews#DEFAULT_SORT_SEARCH_RESULT");
 	}
 
 	macro assertColumnPresent {
@@ -95,6 +101,8 @@ definition {
 	}
 
 	macro assertColumnVisibleOnAddColumnModal {
+		SelectFrame(locator1 = "ObjectCustomViews#VIEW_MODAL_ADD_COLUMNS");
+
 		AssertVisible(
 			key_columnName = "${columnOption}",
 			locator1 = "ObjectCustomViews#ADD_COLUMNS_COLUMN_LABEL");
@@ -247,6 +255,8 @@ definition {
 	}
 
 	macro searchOnAddColumnModal {
+		SelectFrame(locator1 = "ObjectCustomViews#VIEW_MODAL_ADD_COLUMNS");
+
 		Click(locator1 = "ObjectCustomViews#ADD_COLUMNS_SEARCH_BAR");
 
 		Type(

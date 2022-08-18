@@ -16,13 +16,11 @@ import ClayAlert from '@clayui/alert';
 import ClayButton from '@clayui/button';
 import ClayForm from '@clayui/form';
 import ClayModal, {ClayModalProvider, useModal} from '@clayui/modal';
-import {FormCustomSelect, Input} from '@liferay/object-js-components-web';
-import {fetch} from 'frontend-js-web';
+import {Observer} from '@clayui/modal/lib/types';
+import {API, FormCustomSelect, Input} from '@liferay/object-js-components-web';
 import React, {FormEvent, useEffect, useState} from 'react';
 
-import {HEADERS} from '../utils/constants';
-import {defaultLanguageId} from '../utils/locale';
-
+const defaultLanguageId = Liferay.ThemeDisplay.getDefaultLanguageId();
 const requiredLabel = Liferay.Language.get('required');
 
 function ModalAddObjectValidation({
@@ -64,33 +62,25 @@ function ModalAddObjectValidation({
 		}
 		else {
 			setShowError(false);
-			const response = await fetch(apiURL, {
-				body: JSON.stringify({
-					active: false,
-					engine: typeSelection.name,
-					name: {
-						[defaultLanguageId]: labelInput[defaultLanguageId],
+			try {
+				await API.save(
+					apiURL,
+					{
+						active: false,
+						engine: typeSelection.name,
+						name: {
+							[defaultLanguageId]: labelInput[defaultLanguageId],
+						},
+						script: 'script_placeholder',
 					},
-					script: 'script_placeholder',
-				}),
-				headers: HEADERS,
-				method: 'POST',
-			});
-
-			if (response.status === 401) {
-				window.location.reload();
-			}
-			else if (response.ok) {
+					'POST'
+				);
 				onClose();
 
 				window.location.reload();
 			}
-			else {
-				const {
-					title = Liferay.Language.get('an-error-occurred'),
-				} = (await response.json()) as {title?: string};
-
-				setError(title);
+			catch (error) {
+				setError((error as Error).message);
 			}
 		}
 	};
@@ -200,7 +190,7 @@ export default function ModalWithProvider({
 }
 
 interface IModal extends IProps {
-	observer: any;
+	observer: Observer;
 	onClose: () => void;
 }
 

@@ -8,7 +8,7 @@ definition {
 		ScrollWebElementIntoView(locator1 = "AssetCategorization#TAGS_FIELD");
 
 		if (IsElementPresent(key_tagName = "${tagName}", locator1 = "AssetCategorization#TAG_AUTOCOMPLETE_SPECIFIC")) {
-			Click(
+			Click.mouseDownMouseUp(
 				key_tagName = "${tagName}",
 				locator1 = "AssetCategorization#TAG_AUTOCOMPLETE_SPECIFIC");
 		}
@@ -127,6 +127,12 @@ definition {
 		}
 
 		SelectFrameTop();
+
+		if (isSet(modalTitle)) {
+			SelectFrame(
+				key_title = "${modalTitle}",
+				locator1 = "IFrame#MODAL_ANY");
+		}
 
 		if (IsElementPresent(key_text = "Add", locator1 = "Modal#MODAL_FOOTER_BUTTON")) {
 			Click(

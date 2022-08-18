@@ -45,6 +45,7 @@ public class SXPElementWrapper
 
 		attributes.put("mvccVersion", getMvccVersion());
 		attributes.put("uuid", getUuid());
+		attributes.put("externalReferenceCode", getExternalReferenceCode());
 		attributes.put("sxpElementId", getSXPElementId());
 		attributes.put("companyId", getCompanyId());
 		attributes.put("userId", getUserId());
@@ -54,7 +55,6 @@ public class SXPElementWrapper
 		attributes.put("description", getDescription());
 		attributes.put("elementDefinitionJSON", getElementDefinitionJSON());
 		attributes.put("hidden", isHidden());
-		attributes.put("key", getKey());
 		attributes.put("readOnly", isReadOnly());
 		attributes.put("schemaVersion", getSchemaVersion());
 		attributes.put("title", getTitle());
@@ -77,6 +77,13 @@ public class SXPElementWrapper
 
 		if (uuid != null) {
 			setUuid(uuid);
+		}
+
+		String externalReferenceCode = (String)attributes.get(
+			"externalReferenceCode");
+
+		if (externalReferenceCode != null) {
+			setExternalReferenceCode(externalReferenceCode);
 		}
 
 		Long sxpElementId = (Long)attributes.get("sxpElementId");
@@ -132,12 +139,6 @@ public class SXPElementWrapper
 
 		if (hidden != null) {
 			setHidden(hidden);
-		}
-
-		String key = (String)attributes.get("key");
-
-		if (key != null) {
-			setKey(key);
 		}
 
 		Boolean readOnly = (Boolean)attributes.get("readOnly");
@@ -299,6 +300,16 @@ public class SXPElementWrapper
 	}
 
 	/**
+	 * Returns the external reference code of this sxp element.
+	 *
+	 * @return the external reference code of this sxp element
+	 */
+	@Override
+	public String getExternalReferenceCode() {
+		return model.getExternalReferenceCode();
+	}
+
+	/**
 	 * Returns the hidden of this sxp element.
 	 *
 	 * @return the hidden of this sxp element
@@ -306,16 +317,6 @@ public class SXPElementWrapper
 	@Override
 	public boolean getHidden() {
 		return model.getHidden();
-	}
-
-	/**
-	 * Returns the key of this sxp element.
-	 *
-	 * @return the key of this sxp element
-	 */
-	@Override
-	public String getKey() {
-		return model.getKey();
 	}
 
 	/**
@@ -662,6 +663,16 @@ public class SXPElementWrapper
 	}
 
 	/**
+	 * Sets the external reference code of this sxp element.
+	 *
+	 * @param externalReferenceCode the external reference code of this sxp element
+	 */
+	@Override
+	public void setExternalReferenceCode(String externalReferenceCode) {
+		model.setExternalReferenceCode(externalReferenceCode);
+	}
+
+	/**
 	 * Sets whether this sxp element is hidden.
 	 *
 	 * @param hidden the hidden of this sxp element
@@ -669,16 +680,6 @@ public class SXPElementWrapper
 	@Override
 	public void setHidden(boolean hidden) {
 		model.setHidden(hidden);
-	}
-
-	/**
-	 * Sets the key of this sxp element.
-	 *
-	 * @param key the key of this sxp element
-	 */
-	@Override
-	public void setKey(String key) {
-		model.setKey(key);
 	}
 
 	/**

@@ -66,52 +66,22 @@ public class InfoForm {
 		return false;
 	}
 
-	public List<InfoField> getAllInfoFields() {
-		List<InfoField> allInfoFields = new ArrayList<>();
-
-		for (InfoFieldSetEntry infoFieldSetEntry :
-				_builder._infoFieldSetEntriesByName.values()) {
-
-			if (infoFieldSetEntry instanceof InfoField) {
-				allInfoFields.add((InfoField)infoFieldSetEntry);
-			}
-			else if (infoFieldSetEntry instanceof InfoFieldSet) {
-				InfoFieldSet infoFieldSet = (InfoFieldSet)infoFieldSetEntry;
-
-				allInfoFields.addAll(infoFieldSet.getAllInfoFields());
-			}
-		}
-
-		return allInfoFields;
+	public List<InfoField<?>> getAllInfoFields() {
+		return new ArrayList<>(_builder._infoFieldsByUniqueId.values());
 	}
 
 	public InfoLocalizedValue<String> getDescriptionInfoLocalizedValue() {
 		return _builder._descriptionInfoLocalizedValue;
 	}
 
-	public InfoField getInfoField(String name) {
-		for (InfoFieldSetEntry infoFieldSetEntry :
-				_builder._infoFieldSetEntriesByName.values()) {
+	public InfoField<?> getInfoField(String name) {
+		InfoField<?> infoField = _builder._infoFieldsByUniqueId.get(name);
 
-			InfoField infoField = null;
-
-			if (infoFieldSetEntry instanceof InfoField) {
-				infoField = (InfoField)infoFieldSetEntry;
-			}
-			else if (infoFieldSetEntry instanceof InfoFieldSet) {
-				InfoFieldSet infoFieldSet = (InfoFieldSet)infoFieldSetEntry;
-
-				infoField = infoFieldSet.getInfoField(name);
-			}
-
-			if ((infoField != null) &&
-				Objects.equals(infoField.getUniqueId(), name)) {
-
-				return infoField;
-			}
+		if (infoField != null) {
+			return infoField;
 		}
 
-		return null;
+		return _builder._infoFieldsByName.get(name);
 	}
 
 	public List<InfoFieldSetEntry> getInfoFieldSetEntries() {
@@ -205,12 +175,16 @@ public class InfoForm {
 					infoFieldSet.getName(), infoFieldSet);
 			}
 
+			_populateInfoFieldsMaps(infoFieldSet);
+
 			return this;
 		}
 
 		public Builder infoFieldSetEntry(InfoFieldSetEntry infoFieldSetEntry) {
 			_infoFieldSetEntriesByName.put(
 				infoFieldSetEntry.getName(), infoFieldSetEntry);
+
+			_populateInfoFieldsMaps(infoFieldSetEntry);
 
 			return this;
 		}
@@ -239,7 +213,37 @@ public class InfoForm {
 			return this;
 		}
 
+		private void _populateInfoFieldsMaps(
+			InfoFieldSetEntry infoFieldSetEntry) {
+
+			if (infoFieldSetEntry == null) {
+				return;
+			}
+
+			if (infoFieldSetEntry instanceof InfoField) {
+				_infoFieldsByName.put(
+					infoFieldSetEntry.getName(),
+					(InfoField<?>)infoFieldSetEntry);
+				_infoFieldsByUniqueId.put(
+					infoFieldSetEntry.getUniqueId(),
+					(InfoField<?>)infoFieldSetEntry);
+
+				return;
+			}
+
+			InfoFieldSet infoFieldSet = (InfoFieldSet)infoFieldSetEntry;
+
+			for (InfoField<?> infoField : infoFieldSet.getAllInfoFields()) {
+				_infoFieldsByName.put(infoField.getName(), infoField);
+				_infoFieldsByUniqueId.put(infoField.getUniqueId(), infoField);
+			}
+		}
+
 		private InfoLocalizedValue<String> _descriptionInfoLocalizedValue;
+		private final Map<String, InfoField<?>> _infoFieldsByName =
+			new LinkedHashMap<>();
+		private final Map<String, InfoField<?>> _infoFieldsByUniqueId =
+			new LinkedHashMap<>();
 		private final Map<String, InfoFieldSetEntry>
 			_infoFieldSetEntriesByName = new LinkedHashMap<>();
 		private InfoLocalizedValue<String> _labelInfoLocalizedValue;

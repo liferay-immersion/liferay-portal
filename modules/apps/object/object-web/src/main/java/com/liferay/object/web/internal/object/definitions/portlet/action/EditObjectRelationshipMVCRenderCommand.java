@@ -20,6 +20,7 @@ import com.liferay.object.model.ObjectRelationship;
 import com.liferay.object.service.ObjectDefinitionLocalService;
 import com.liferay.object.service.ObjectDefinitionService;
 import com.liferay.object.service.ObjectRelationshipLocalService;
+import com.liferay.object.system.SystemObjectDefinitionMetadataTracker;
 import com.liferay.object.web.internal.configuration.activator.FFOneToOneRelationshipConfigurationActivator;
 import com.liferay.object.web.internal.constants.ObjectWebKeys;
 import com.liferay.object.web.internal.object.definitions.display.context.ObjectDefinitionsRelationshipsDisplayContext;
@@ -64,7 +65,7 @@ public class EditObjectRelationshipMVCRenderCommand
 			renderRequest.setAttribute(
 				ObjectWebKeys.OBJECT_DEFINITION,
 				_objectDefinitionLocalService.getObjectDefinition(
-					objectRelationship.getObjectDefinitionId2()));
+					objectRelationship.getObjectDefinitionId1()));
 			renderRequest.setAttribute(
 				ObjectWebKeys.OBJECT_RELATIONSHIP, objectRelationship);
 
@@ -74,7 +75,8 @@ public class EditObjectRelationshipMVCRenderCommand
 					_ffOneToOneRelationshipConfigurationActivator,
 					_portal.getHttpServletRequest(renderRequest),
 					_objectDefinitionModelResourcePermission,
-					_objectDefinitionService));
+					_objectDefinitionService,
+					_systemObjectDefinitionMetadataTracker));
 		}
 		catch (PortalException portalException) {
 			SessionErrors.add(renderRequest, portalException.getClass());
@@ -104,5 +106,9 @@ public class EditObjectRelationshipMVCRenderCommand
 
 	@Reference
 	private Portal _portal;
+
+	@Reference
+	private SystemObjectDefinitionMetadataTracker
+		_systemObjectDefinitionMetadataTracker;
 
 }

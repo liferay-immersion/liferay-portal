@@ -19,9 +19,9 @@ import com.liferay.asset.kernel.model.AssetTag;
 import com.liferay.content.dashboard.item.action.ContentDashboardItemAction;
 import com.liferay.content.dashboard.item.action.exception.ContentDashboardItemActionException;
 import com.liferay.content.dashboard.item.action.provider.ContentDashboardItemActionProvider;
+import com.liferay.content.dashboard.item.type.ContentDashboardItemSubtype;
 import com.liferay.content.dashboard.web.internal.info.item.provider.util.InfoItemFieldValuesProviderUtil;
 import com.liferay.content.dashboard.web.internal.item.action.ContentDashboardItemActionProviderTracker;
-import com.liferay.content.dashboard.web.internal.item.type.ContentDashboardItemSubtype;
 import com.liferay.content.dashboard.web.internal.util.ContentDashboardGroupUtil;
 import com.liferay.document.library.constants.DLPortletKeys;
 import com.liferay.document.library.util.DLURLHelper;
@@ -277,9 +277,9 @@ public class FileEntryContentDashboardItem
 		return _fileEntry.getModifiedDate();
 	}
 
+	@Override
 	public Preview getPreview() {
-		return new Preview(
-			_getDownloadURL(), _getPreviewImageURL(), _getViewURL());
+		return new Preview(_getPreviewImageURL(), _getViewURL());
 	}
 
 	@Override
@@ -397,32 +397,6 @@ public class FileEntryContentDashboardItem
 					getContentDashboardItemActions(
 						_portal.getHttpServletRequest(portletRequest),
 						ContentDashboardItemAction.Type.PREVIEW);
-
-				if (!contentDashboardItemActions.isEmpty()) {
-					ContentDashboardItemAction contentDashboardItemAction =
-						contentDashboardItemActions.get(0);
-
-					return contentDashboardItemAction.getURL();
-				}
-
-				return null;
-			}
-		).orElse(
-			null
-		);
-	}
-
-	private String _getDownloadURL() {
-		return Optional.ofNullable(
-			ServiceContextThreadLocal.getServiceContext()
-		).map(
-			ServiceContext::getLiferayPortletRequest
-		).map(
-			portletRequest -> {
-				List<ContentDashboardItemAction> contentDashboardItemActions =
-					getContentDashboardItemActions(
-						_portal.getHttpServletRequest(portletRequest),
-						ContentDashboardItemAction.Type.DOWNLOAD);
 
 				if (!contentDashboardItemActions.isEmpty()) {
 					ContentDashboardItemAction contentDashboardItemAction =

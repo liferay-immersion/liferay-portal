@@ -51,7 +51,7 @@ import com.liferay.portal.kernel.exception.NoSuchLayoutPrototypeException;
 import com.liferay.portal.kernel.exception.NoSuchLayoutSetPrototypeException;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.json.JSONArray;
-import com.liferay.portal.kernel.language.LanguageUtil;
+import com.liferay.portal.kernel.language.Language;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Group;
@@ -98,7 +98,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -336,6 +335,10 @@ public class LayoutImportController implements ImportController {
 		for (Element portletElement : portletElements) {
 			long layoutId = GetterUtil.getLong(
 				portletElement.attributeValue("layout-id"));
+
+			if (layoutId != 0) {
+				continue;
+			}
 
 			long plid = LayoutConstants.DEFAULT_PLID;
 
@@ -650,22 +653,20 @@ public class LayoutImportController implements ImportController {
 
 		// Available locales
 
-		List<Locale> sourceAvailableLocales = Arrays.asList(
-			LocaleUtil.fromLanguageIds(
-				StringUtil.split(
-					headerElement.attributeValue("available-locales"))));
+		String[] sourceAvailableLanguageIds = StringUtil.split(
+			headerElement.attributeValue("available-locales"));
 
-		for (Locale sourceAvailableLocale : sourceAvailableLocales) {
-			if (!LanguageUtil.isAvailableLocale(
-					groupId, sourceAvailableLocale)) {
+		for (String sourceAvailableLanguageId : sourceAvailableLanguageIds) {
+			if (!_language.isAvailableLocale(
+					groupId, sourceAvailableLanguageId)) {
 
 				LocaleException localeException = new LocaleException(
 					LocaleException.TYPE_EXPORT_IMPORT);
 
-				localeException.setSourceAvailableLocales(
-					sourceAvailableLocales);
+				localeException.setSourceAvailableLanguageIds(
+					Arrays.asList(sourceAvailableLanguageIds));
 				localeException.setTargetAvailableLocales(
-					LanguageUtil.getAvailableLocales(groupId));
+					_language.getAvailableLocales(groupId));
 
 				throw localeException;
 			}
@@ -1353,6 +1354,9 @@ public class LayoutImportController implements ImportController {
 
 	@Reference
 	private GroupLocalService _groupLocalService;
+
+	@Reference
+	private Language _language;
 
 	@Reference
 	private LayoutLocalService _layoutLocalService;

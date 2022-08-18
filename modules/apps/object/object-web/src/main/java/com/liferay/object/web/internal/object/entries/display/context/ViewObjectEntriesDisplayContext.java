@@ -31,7 +31,7 @@ import com.liferay.object.service.ObjectViewLocalService;
 import com.liferay.object.web.internal.constants.ObjectWebKeys;
 import com.liferay.object.web.internal.display.context.helper.ObjectRequestHelper;
 import com.liferay.object.web.internal.object.entries.frontend.data.set.filter.factory.ObjectFieldFDSFilterFactory;
-import com.liferay.object.web.internal.object.entries.frontend.data.set.filter.factory.ObjectFieldFDSFilterFactoryServicesTracker;
+import com.liferay.object.web.internal.object.entries.frontend.data.set.filter.factory.ObjectFieldFDSFilterFactoryTracker;
 import com.liferay.petra.portlet.url.builder.PortletURLBuilder;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
@@ -69,8 +69,7 @@ public class ViewObjectEntriesDisplayContext {
 
 	public ViewObjectEntriesDisplayContext(
 		HttpServletRequest httpServletRequest,
-		ObjectFieldFDSFilterFactoryServicesTracker
-			objectFieldFDSFilterFactoryServicesTracker,
+		ObjectFieldFDSFilterFactoryTracker objectFieldFDSFilterFactoryTracker,
 		ObjectFieldLocalService objectFieldLocalService,
 		ObjectScopeProvider objectScopeProvider,
 		ObjectViewLocalService objectViewLocalService,
@@ -78,37 +77,19 @@ public class ViewObjectEntriesDisplayContext {
 		String restContextPath) {
 
 		_httpServletRequest = httpServletRequest;
-		_objectFieldFDSFilterFactoryServicesTracker =
-			objectFieldFDSFilterFactoryServicesTracker;
+		_objectFieldFDSFilterFactoryTracker =
+			objectFieldFDSFilterFactoryTracker;
 		_objectFieldLocalService = objectFieldLocalService;
 		_objectScopeProvider = objectScopeProvider;
 		_objectViewLocalService = objectViewLocalService;
 		_portletResourcePermission = portletResourcePermission;
 
-		_apiURL = "/o" + restContextPath;
+		_apiURL = _getAPIURL(restContextPath);
 		_objectRequestHelper = new ObjectRequestHelper(httpServletRequest);
 	}
 
 	public String getAPIURL() {
-		try {
-			long groupId = _objectScopeProvider.getGroupId(_httpServletRequest);
-
-			if (!_objectScopeProvider.isGroupAware() ||
-				!_objectScopeProvider.isValidGroupId(groupId)) {
-
-				return _apiURL + _getQueryString();
-			}
-
-			return StringBundler.concat(
-				_apiURL, "/scopes/", groupId, _getQueryString());
-		}
-		catch (PortalException portalException) {
-			if (_log.isDebugEnabled()) {
-				_log.debug(portalException);
-			}
-
-			return _apiURL;
-		}
+		return _apiURL + _getQueryString();
 	}
 
 	public CreationMenu getCreationMenu() throws Exception {
@@ -162,7 +143,8 @@ public class ViewObjectEntriesDisplayContext {
 				LanguageUtil.get(
 					_objectRequestHelper.getRequest(),
 					"are-you-sure-you-want-to-delete-this-entry"),
-				_apiURL + "/{id}", "trash", "delete",
+				_apiURL + "/by-external-reference-code/{externalReferenceCode}",
+				"trash", "delete",
 				LanguageUtil.get(_objectRequestHelper.getRequest(), "delete"),
 				"delete", "delete", "async"),
 			new FDSActionDropdownItem(
@@ -184,7 +166,7 @@ public class ViewObjectEntriesDisplayContext {
 			objectView.getObjectViewFilterColumns(),
 			objectViewFilterColumn -> {
 				ObjectFieldFDSFilterFactory objectFieldFDSFilterFactory =
-					_objectFieldFDSFilterFactoryServicesTracker.
+					_objectFieldFDSFilterFactoryTracker.
 						getObjectFieldFDSFilterFactory(
 							objectView.getObjectDefinitionId(),
 							objectViewFilterColumn);
@@ -244,6 +226,29 @@ public class ViewObjectEntriesDisplayContext {
 				_objectRequestHelper.getLiferayPortletRequest(),
 				_objectRequestHelper.getLiferayPortletResponse()),
 			_objectRequestHelper.getLiferayPortletResponse());
+	}
+
+	private String _getAPIURL(String restContextPath) {
+		String apiURL = "/o" + restContextPath;
+
+		try {
+			long groupId = _objectScopeProvider.getGroupId(_httpServletRequest);
+
+			if (!_objectScopeProvider.isGroupAware() ||
+				!_objectScopeProvider.isValidGroupId(groupId)) {
+
+				return apiURL;
+			}
+
+			return StringBundler.concat(apiURL, "/scopes/", groupId);
+		}
+		catch (PortalException portalException) {
+			if (_log.isDebugEnabled()) {
+				_log.debug(portalException);
+			}
+
+			return apiURL;
+		}
 	}
 
 	private String _getNestedFieldsQueryString() {
@@ -344,8 +349,8 @@ public class ViewObjectEntriesDisplayContext {
 	private final String _apiURL;
 	private final HttpServletRequest _httpServletRequest;
 	private ObjectDefinition _objectDefinition;
-	private final ObjectFieldFDSFilterFactoryServicesTracker
-		_objectFieldFDSFilterFactoryServicesTracker;
+	private final ObjectFieldFDSFilterFactoryTracker
+		_objectFieldFDSFilterFactoryTracker;
 	private final ObjectFieldLocalService _objectFieldLocalService;
 	private final ObjectRequestHelper _objectRequestHelper;
 	private final ObjectScopeProvider _objectScopeProvider;

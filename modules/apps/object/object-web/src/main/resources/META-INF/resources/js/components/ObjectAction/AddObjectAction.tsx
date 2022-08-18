@@ -12,23 +12,28 @@
  * details.
  */
 
-import {CustomItem} from '@liferay/object-js-components-web';
+import {CustomItem, SidebarCategory} from '@liferay/object-js-components-web';
 import React from 'react';
 
 import ObjectAction from './index';
 
 export default function AddObjectAction({
 	apiURL,
-	ffNotificationTemplates,
+	objectActionCodeEditorElements,
 	objectActionExecutors = [],
 	objectActionTriggers = [],
+	objectDefinitionsRelationshipsURL,
+	validateExpressionURL,
 }: IProps) {
 	return (
 		<ObjectAction
-			ffNotificationTemplates={ffNotificationTemplates}
 			objectAction={{active: true}}
+			objectActionCodeEditorElements={objectActionCodeEditorElements}
 			objectActionExecutors={objectActionExecutors}
 			objectActionTriggers={objectActionTriggers}
+			objectDefinitionsRelationshipsURL={
+				objectDefinitionsRelationshipsURL
+			}
 			requestParams={{
 				method: 'POST',
 				url: apiURL,
@@ -37,13 +42,16 @@ export default function AddObjectAction({
 				'the-object-action-was-created-successfully'
 			)}
 			title={Liferay.Language.get('new-action')}
+			validateExpressionURL={validateExpressionURL}
 		/>
 	);
 }
 
 interface IProps {
 	apiURL: string;
-	ffNotificationTemplates: boolean;
+	objectActionCodeEditorElements: SidebarCategory[];
 	objectActionExecutors: CustomItem[];
 	objectActionTriggers: CustomItem[];
+	objectDefinitionsRelationshipsURL: string;
+	validateExpressionURL: string;
 }

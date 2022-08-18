@@ -50,7 +50,6 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -62,7 +61,6 @@ import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
 
-import org.mockito.Matchers;
 import org.mockito.Mockito;
 
 import org.skyscreamer.jsonassert.JSONAssert;
@@ -89,9 +87,11 @@ public class DDMFormValuesFactoryTest {
 		setUpDDMFormValuesFactoryServiceTrackerMap();
 		setUpDDMFormValuesJSONSerializer();
 		setUpJSONFactoryUtil();
-		setUpLanguageUtil();
+
+		_setUpLanguage();
+		_setUpLanguageUtil();
+
 		setUpLocaleThreadLocal();
-		setUpLocaleUtil();
 	}
 
 	@Test
@@ -1026,7 +1026,7 @@ public class DDMFormValuesFactoryTest {
 		throws Exception {
 
 		Mockito.when(
-			_serviceTrackerMap.containsKey(Matchers.anyString())
+			_serviceTrackerMap.containsKey(Mockito.anyString())
 		).thenReturn(
 			false
 		);
@@ -1041,7 +1041,6 @@ public class DDMFormValuesFactoryTest {
 		ReflectionTestUtil.setFieldValue(
 			_ddmFormValuesJSONSerializer, "_jsonFactory",
 			new JSONFactoryImpl());
-
 		ReflectionTestUtil.setFieldValue(
 			_ddmFormValuesJSONSerializer, "_serviceTrackerMap",
 			ProxyFactory.newDummyInstance(ServiceTrackerMap.class));
@@ -1053,7 +1052,12 @@ public class DDMFormValuesFactoryTest {
 		jsonFactoryUtil.setJSONFactory(new JSONFactoryImpl());
 	}
 
-	protected void setUpLanguageUtil() {
+	protected void setUpLocaleThreadLocal() {
+		LocaleThreadLocal.setSiteDefaultLocale(LocaleUtil.US);
+		LocaleThreadLocal.setThemeDisplayLocale(LocaleUtil.BRAZIL);
+	}
+
+	private void _setUpLanguage() {
 		Set<Locale> availableLocales = new HashSet<>(
 			Arrays.asList(LocaleUtil.BRAZIL, LocaleUtil.US));
 
@@ -1064,7 +1068,7 @@ public class DDMFormValuesFactoryTest {
 		);
 
 		Mockito.when(
-			_language.getLanguageId(Matchers.any(HttpServletRequest.class))
+			_language.getLanguageId(Mockito.any(HttpServletRequest.class))
 		).thenReturn(
 			"es_ES"
 		);
@@ -1075,28 +1079,32 @@ public class DDMFormValuesFactoryTest {
 			"pt_BR"
 		);
 
+		_whenLanguageIsAvailableLocale(LocaleUtil.BRAZIL);
+		_whenLanguageIsAvailableLocale(LocaleUtil.US);
+
+		ReflectionTestUtil.setFieldValue(
+			_ddmFormValuesFactory, "_language", _language);
+	}
+
+	private void _setUpLanguageUtil() {
 		LanguageUtil languageUtil = new LanguageUtil();
 
 		languageUtil.setLanguage(_language);
 	}
 
-	protected void setUpLocaleThreadLocal() {
-		LocaleThreadLocal.setSiteDefaultLocale(LocaleUtil.US);
+	private void _whenLanguageIsAvailableLocale(Locale locale) {
+		Mockito.when(
+			_language.isAvailableLocale(Mockito.eq(locale))
+		).thenReturn(
+			true
+		);
 
-		LocaleThreadLocal.setThemeDisplayLocale(LocaleUtil.BRAZIL);
-	}
-
-	protected void setUpLocaleUtil() {
-		LocaleUtil localeUtil = ReflectionTestUtil.getFieldValue(
-			LocaleUtil.class, "_localeUtil");
-
-		Map<String, Locale> locales = ReflectionTestUtil.getFieldValue(
-			localeUtil, "_locales");
-
-		locales.clear();
-
-		locales.put("en_US", LocaleUtil.US);
-		locales.put("pt_BR", LocaleUtil.BRAZIL);
+		Mockito.when(
+			_language.isAvailableLocale(
+				Mockito.eq(LocaleUtil.toLanguageId(locale)))
+		).thenReturn(
+			true
+		);
 	}
 
 	private final DDMFormValuesFactory _ddmFormValuesFactory =

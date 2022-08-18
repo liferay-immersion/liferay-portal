@@ -35,6 +35,7 @@ renderResponse.setTitle(objectDefinition.getLabel(locale, true));
 	fdsActionDropdownItems="<%= objectDefinitionsActionsDisplayContext.getFDSActionDropdownItems() %>"
 	formName="fm"
 	id="<%= ObjectDefinitionsFDSNames.OBJECT_ACTIONS %>"
+	propsTransformer="js/ObjectDefinitionsActionsFDSPropsTransformer"
 	style="fluid"
 />
 
@@ -46,5 +47,11 @@ renderResponse.setTitle(objectDefinition.getLabel(locale, true));
 				"sidebarElements", objectDefinitionsActionsDisplayContext.getObjectActionCodeEditorElements()
 			).build()
 		%>'
+	/>
+</div>
+
+<div>
+	<react:component
+		module="js/components/ModalAddColumns"
 	/>
 </div>

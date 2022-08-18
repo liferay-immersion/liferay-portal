@@ -21,6 +21,7 @@ import com.liferay.object.admin.rest.dto.v1_0.ObjectLayout;
 import com.liferay.object.admin.rest.dto.v1_0.ObjectView;
 import com.liferay.object.admin.rest.dto.v1_0.Status;
 import com.liferay.object.admin.rest.dto.v1_0.util.ObjectActionUtil;
+import com.liferay.object.admin.rest.internal.dto.v1_0.converter.ObjectFieldDTOConverter;
 import com.liferay.object.admin.rest.internal.dto.v1_0.converter.ObjectViewDTOConverter;
 import com.liferay.object.admin.rest.internal.dto.v1_0.util.ObjectFieldUtil;
 import com.liferay.object.admin.rest.internal.dto.v1_0.util.ObjectLayoutUtil;
@@ -28,16 +29,19 @@ import com.liferay.object.admin.rest.internal.odata.entity.v1_0.ObjectDefinition
 import com.liferay.object.admin.rest.resource.v1_0.ObjectDefinitionResource;
 import com.liferay.object.constants.ObjectActionKeys;
 import com.liferay.object.constants.ObjectConstants;
-import com.liferay.object.exception.ObjectDefinitionAccountEntryRestrictedException;
 import com.liferay.object.exception.ObjectDefinitionStorageTypeException;
 import com.liferay.object.service.ObjectActionLocalService;
 import com.liferay.object.service.ObjectDefinitionService;
 import com.liferay.object.service.ObjectFieldLocalService;
 import com.liferay.object.service.ObjectFieldSettingLocalService;
+import com.liferay.object.service.ObjectFilterLocalService;
 import com.liferay.object.service.ObjectLayoutLocalService;
 import com.liferay.object.service.ObjectViewLocalService;
+import com.liferay.object.system.SystemObjectDefinitionMetadata;
+import com.liferay.object.system.SystemObjectDefinitionMetadataTracker;
 import com.liferay.object.util.LocalizedMapUtil;
-import com.liferay.portal.kernel.language.LanguageUtil;
+import com.liferay.petra.string.StringPool;
+import com.liferay.portal.kernel.language.Language;
 import com.liferay.portal.kernel.search.Field;
 import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.search.filter.Filter;
@@ -53,7 +57,6 @@ import com.liferay.portal.vulcan.aggregation.Aggregation;
 import com.liferay.portal.vulcan.dto.converter.DefaultDTOConverterContext;
 import com.liferay.portal.vulcan.pagination.Page;
 import com.liferay.portal.vulcan.pagination.Pagination;
-import com.liferay.portal.vulcan.resource.EntityModelResource;
 import com.liferay.portal.vulcan.util.SearchUtil;
 
 import javax.ws.rs.core.MultivaluedMap;
@@ -70,7 +73,7 @@ import org.osgi.service.component.annotations.ServiceScope;
 	scope = ServiceScope.PROTOTYPE, service = ObjectDefinitionResource.class
 )
 public class ObjectDefinitionResourceImpl
-	extends BaseObjectDefinitionResourceImpl implements EntityModelResource {
+	extends BaseObjectDefinitionResourceImpl {
 
 	@Override
 	public void deleteObjectDefinition(Long objectDefinitionId)
@@ -152,7 +155,8 @@ public class ObjectDefinitionResourceImpl
 					objectDefinition.getObjectFields(),
 					objectField -> ObjectFieldUtil.toObjectField(
 						objectField, _objectFieldLocalService,
-						_objectFieldSettingLocalService))));
+						_objectFieldSettingLocalService,
+						_objectFilterLocalService))));
 	}
 
 	@Override
@@ -170,15 +174,6 @@ public class ObjectDefinitionResourceImpl
 
 		if (!Validator.isBlank(objectDefinition.getStorageType())) {
 			throw new ObjectDefinitionStorageTypeException();
-		}
-
-		if ((Validator.isNotNull(
-				objectDefinition.getAccountEntryRestricted()) ||
-			 Validator.isNotNull(
-				 objectDefinition.getAccountEntryRestrictedObjectFieldId())) &&
-			!GetterUtil.getBoolean(PropsUtil.get("feature.flag.LPS-153768"))) {
-
-			throw new ObjectDefinitionAccountEntryRestrictedException();
 		}
 
 		com.liferay.object.model.ObjectDefinition
@@ -219,6 +214,10 @@ public class ObjectDefinitionResourceImpl
 
 		return new ObjectDefinition() {
 			{
+				accountEntryRestricted =
+					objectDefinition.isAccountEntryRestricted();
+				accountEntryRestrictedObjectFieldId =
+					objectDefinition.getAccountEntryRestrictedObjectFieldId();
 				actions = HashMapBuilder.put(
 					"delete",
 					() -> {
@@ -267,17 +266,6 @@ public class ObjectDefinitionResourceImpl
 							objectDefinition.getObjectDefinitionId());
 					}
 				).build();
-
-				if (GetterUtil.getBoolean(
-						PropsUtil.get("feature.flag.LPS-153768"))) {
-
-					accountEntryRestricted =
-						objectDefinition.isAccountEntryRestricted();
-					accountEntryRestrictedObjectFieldId =
-						objectDefinition.
-							getAccountEntryRestrictedObjectFieldId();
-				}
-
 				active = objectDefinition.isActive();
 				dateCreated = objectDefinition.getCreateDate();
 				dateModified = objectDefinition.getModifiedDate();
@@ -289,13 +277,18 @@ public class ObjectDefinitionResourceImpl
 					_objectActionLocalService.getObjectActions(
 						objectDefinition.getObjectDefinitionId()),
 					objectAction -> ObjectActionUtil.toObjectAction(
-						null, objectAction),
+						null, contextAcceptLanguage.getPreferredLocale(),
+						objectAction),
 					ObjectAction.class);
 				objectFields = transformToArray(
 					_objectFieldLocalService.getObjectFields(
 						objectDefinition.getObjectDefinitionId()),
-					objectField -> ObjectFieldUtil.toObjectField(
-						null, objectField),
+					objectField -> _objectFieldDTOConverter.toDTO(
+						new DefaultDTOConverterContext(
+							false, null, null, null,
+							contextAcceptLanguage.getPreferredLocale(), null,
+							null),
+						objectField),
 					ObjectField.class);
 				objectLayouts = transformToArray(
 					_objectLayoutLocalService.getObjectLayouts(
@@ -323,7 +316,7 @@ public class ObjectDefinitionResourceImpl
 						code = objectDefinition.getStatus();
 						label = WorkflowConstants.getStatusLabel(
 							objectDefinition.getStatus());
-						label_i18n = LanguageUtil.get(
+						label_i18n = _language.get(
 							LanguageResources.getResourceBundle(
 								contextAcceptLanguage.getPreferredLocale()),
 							WorkflowConstants.getStatusLabel(
@@ -339,6 +332,31 @@ public class ObjectDefinitionResourceImpl
 
 				system = objectDefinition.isSystem();
 				titleObjectFieldId = objectDefinition.getTitleObjectFieldId();
+
+				setParameterRequired(
+					() -> {
+						String restContextPath = StringPool.BLANK;
+
+						if (!objectDefinition.isSystem()) {
+							restContextPath =
+								objectDefinition.getRESTContextPath();
+						}
+						else {
+							SystemObjectDefinitionMetadata
+								systemObjectDefinitionMetadata =
+									_systemObjectDefinitionMetadataTracker.
+										getSystemObjectDefinitionMetadata(
+											objectDefinition.getName());
+
+							if (systemObjectDefinitionMetadata != null) {
+								restContextPath =
+									systemObjectDefinitionMetadata.
+										getRESTContextPath();
+							}
+						}
+
+						return restContextPath.matches(".*/\\{\\w+}/.*");
+					});
 			}
 		};
 	}
@@ -347,16 +365,25 @@ public class ObjectDefinitionResourceImpl
 		new ObjectDefinitionEntityModel();
 
 	@Reference
+	private Language _language;
+
+	@Reference
 	private ObjectActionLocalService _objectActionLocalService;
 
 	@Reference
 	private ObjectDefinitionService _objectDefinitionService;
 
 	@Reference
+	private ObjectFieldDTOConverter _objectFieldDTOConverter;
+
+	@Reference
 	private ObjectFieldLocalService _objectFieldLocalService;
 
 	@Reference
 	private ObjectFieldSettingLocalService _objectFieldSettingLocalService;
+
+	@Reference
+	private ObjectFilterLocalService _objectFilterLocalService;
 
 	@Reference
 	private ObjectLayoutLocalService _objectLayoutLocalService;
@@ -366,5 +393,9 @@ public class ObjectDefinitionResourceImpl
 
 	@Reference
 	private ObjectViewLocalService _objectViewLocalService;
+
+	@Reference
+	private SystemObjectDefinitionMetadataTracker
+		_systemObjectDefinitionMetadataTracker;
 
 }

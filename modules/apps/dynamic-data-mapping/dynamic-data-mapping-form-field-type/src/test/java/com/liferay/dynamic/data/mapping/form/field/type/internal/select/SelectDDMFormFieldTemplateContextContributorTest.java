@@ -23,6 +23,7 @@ import com.liferay.dynamic.data.mapping.render.DDMFormFieldRenderingContext;
 import com.liferay.dynamic.data.mapping.test.util.DDMFormFieldOptionsTestUtil;
 import com.liferay.portal.json.JSONFactoryImpl;
 import com.liferay.portal.kernel.json.JSONFactory;
+import com.liferay.portal.kernel.language.Language;
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.test.util.PropsTestUtil;
 import com.liferay.portal.kernel.util.HashMapBuilder;
@@ -43,7 +44,6 @@ import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
 
-import org.mockito.Matchers;
 import org.mockito.Mockito;
 
 /**
@@ -66,6 +66,10 @@ public class SelectDDMFormFieldTemplateContextContributorTest
 
 		_setUpJSONFactory();
 		_setUpLocaleThreadLocal();
+
+		ReflectionTestUtil.setFieldValue(
+			_selectDDMFormFieldTemplateContextContributor, "_language",
+			Mockito.mock(Language.class));
 	}
 
 	@Test
@@ -174,10 +178,10 @@ public class SelectDDMFormFieldTemplateContextContributorTest
 				"value " + i, "Reference " + i);
 		}
 
-		List<Map<String, String>> actualOptions = _getActualOptions(
-			ddmFormField, ddmFormFieldOptions, LocaleUtil.US);
-
-		Assert.assertNotEquals(expectedOptions, actualOptions);
+		Assert.assertNotEquals(
+			expectedOptions,
+			_getActualOptions(
+				ddmFormField, ddmFormFieldOptions, LocaleUtil.US));
 
 		ddmFormField.setProperty("alphabeticalOrder", "true");
 
@@ -345,7 +349,7 @@ public class SelectDDMFormFieldTemplateContextContributorTest
 		).when(
 			selectDDMFormFieldTemplateContextContributor
 		).getResourceBundle(
-			Matchers.any(Locale.class)
+			Mockito.any(Locale.class)
 		);
 
 		return selectDDMFormFieldTemplateContextContributor;

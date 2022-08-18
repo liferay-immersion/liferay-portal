@@ -38,6 +38,7 @@ import com.liferay.source.formatter.check.configuration.SuppressionsLoader;
 import com.liferay.source.formatter.check.util.SourceUtil;
 import com.liferay.source.formatter.processor.BNDRunSourceProcessor;
 import com.liferay.source.formatter.processor.BNDSourceProcessor;
+import com.liferay.source.formatter.processor.CETSourceProcessor;
 import com.liferay.source.formatter.processor.CQLSourceProcessor;
 import com.liferay.source.formatter.processor.CSSSourceProcessor;
 import com.liferay.source.formatter.processor.CodeownersSourceProcessor;
@@ -353,6 +354,8 @@ public class SourceFormatter {
 		_sourceProcessors.add(new XMLSourceProcessor());
 		_sourceProcessors.add(new YMLSourceProcessor());
 
+		_sourceProcessors.add(new CETSourceProcessor());
+
 		ExecutorService executorService = Executors.newFixedThreadPool(
 			_sourceProcessors.size());
 
@@ -596,14 +599,21 @@ public class SourceFormatter {
 						"/portal-impl/src/com/liferay/portlet/social/util" +
 							"/SocialConfigurationImpl.java");
 			}
+			else if (_isFrontendPackageChanges(recentChangesFileName)) {
+				dependentFileNames.addAll(
+					SourceFormatterUtil.filterFileNames(
+						_allFileNames, new String[0],
+						new String[] {"**/package.json"},
+						_sourceFormatterExcludes, false));
+			}
 		}
 
 		if (_sourceFormatterArgs.isFormatCurrentBranch()) {
-			if (!buildPropertiesAdded) {
-				List<String> fileNames = GitUtil.getCurrentBranchFileNames(
-					_sourceFormatterArgs.getBaseDirName(),
-					_sourceFormatterArgs.getGitWorkingBranchName(), true);
+			List<String> fileNames = GitUtil.getCurrentBranchFileNames(
+				_sourceFormatterArgs.getBaseDirName(),
+				_sourceFormatterArgs.getGitWorkingBranchName(), true);
 
+			if (!buildPropertiesAdded) {
 				for (String fileName : fileNames) {
 					if (!buildPropertiesAdded &&
 						fileName.endsWith(".lfrbuild-portal")) {
@@ -630,6 +640,34 @@ public class SourceFormatter {
 							"**/source-formatter-suppressions.xml"
 						},
 						_sourceFormatterExcludes, false));
+			}
+
+			String currentBranchDiff = GitUtil.getCurrentBranchDiff(
+				_sourceFormatterArgs.getBaseDirName(),
+				_sourceFormatterArgs.getGitWorkingBranchName());
+
+			for (String fileName : fileNames) {
+				if (!fileName.endsWith(".java")) {
+					continue;
+				}
+
+				for (String line : StringUtil.split(currentBranchDiff, "\n")) {
+					if ((line.startsWith(StringPool.MINUS) ||
+						 line.startsWith(StringPool.PLUS)) &&
+						line.contains("\"feature.flag.")) {
+
+						File portalDir = SourceFormatterUtil.getPortalDir(
+							_sourceFormatterArgs.getBaseDirName(),
+							_sourceFormatterArgs.getMaxLineLength());
+
+						dependentFileNames.add(
+							portalDir + "/portal-impl/src/portal.properties");
+
+						break;
+					}
+				}
+
+				break;
 			}
 		}
 
@@ -1090,6 +1128,25 @@ public class SourceFormatter {
 		if (_sourceFormatterArgs.isShowDebugInformation()) {
 			DebugUtil.addCheckNames(CheckType.SOURCE_CHECK, _getCheckNames());
 		}
+	}
+
+	private boolean _isFrontendPackageChanges(String recentChangesFileName) {
+		if (recentChangesFileName.endsWith(
+				"/modules/apps/frontend-js/frontend-js-metal-web" +
+					"/package.json") ||
+			recentChangesFileName.endsWith(
+				"/modules/apps/frontend-js/frontend-js-react-web" +
+					"/package.json") ||
+			recentChangesFileName.endsWith(
+				"/modules/apps/frontend-js/frontend-js-spa-web/package.json") ||
+			recentChangesFileName.endsWith(
+				"/modules/apps/frontend-taglib/frontend-taglib-clay" +
+					"/package.json")) {
+
+			return true;
+		}
+
+		return false;
 	}
 
 	private boolean _isSubrepository() throws Exception {

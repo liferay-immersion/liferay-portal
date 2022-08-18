@@ -46,16 +46,12 @@ import com.liferay.portal.kernel.service.CompanyLocalService;
 import com.liferay.portal.kernel.service.PersistedModelLocalServiceRegistry;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.UserLocalService;
-import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HashMapDictionaryBuilder;
 import com.liferay.portal.kernel.util.Portal;
-import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.ResourceBundleUtil;
 import com.liferay.portal.language.LanguageResources;
 import com.liferay.portal.security.service.access.policy.model.SAPEntry;
 import com.liferay.portal.security.service.access.policy.service.SAPEntryLocalService;
-
-import java.util.Objects;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
@@ -186,21 +182,6 @@ public class SystemObjectDefinitionMetadataPortalInstanceLifecycleListener
 		long companyId,
 		SystemObjectDefinitionMetadata systemObjectDefinitionMetadata) {
 
-		if (Objects.equals(
-				systemObjectDefinitionMetadata.getName(),
-				"CommercePricingClass") &&
-			!GetterUtil.getBoolean(PropsUtil.get("feature.flag.LPS-151766"))) {
-
-			return;
-		}
-
-		if (Objects.equals(
-				systemObjectDefinitionMetadata.getName(), "CPDefinition") &&
-			!GetterUtil.getBoolean(PropsUtil.get("feature.flag.LPS-152408"))) {
-
-			return;
-		}
-
 		if (_log.isDebugEnabled()) {
 			_log.debug(
 				StringBundler.concat(
@@ -231,21 +212,14 @@ public class SystemObjectDefinitionMetadataPortalInstanceLifecycleListener
 					_persistedModelLocalServiceRegistry,
 					systemObjectDefinitionMetadata),
 				null);
-
-			if (GetterUtil.getBoolean(
-					PropsUtil.get("feature.flag.LPS-146754"))) {
-
-				_bundleContext.registerService(
-					ObjectRelatedModelsProvider.class,
-					new SystemObjectMtoMObjectRelatedModelsProviderImpl(
-						objectDefinition, _objectDefinitionLocalService,
-						_objectFieldLocalService,
-						_objectRelationshipLocalService,
-						_persistedModelLocalServiceRegistry,
-						systemObjectDefinitionMetadata),
-					null);
-			}
-
+			_bundleContext.registerService(
+				ObjectRelatedModelsProvider.class,
+				new SystemObjectMtoMObjectRelatedModelsProviderImpl(
+					objectDefinition, _objectDefinitionLocalService,
+					_objectFieldLocalService, _objectRelationshipLocalService,
+					_persistedModelLocalServiceRegistry,
+					systemObjectDefinitionMetadata),
+				null);
 			_bundleContext.registerService(
 				RESTContextPathResolver.class,
 				new RESTContextPathResolverImpl(

@@ -28,6 +28,7 @@ import com.liferay.object.admin.rest.client.pagination.Page;
 import com.liferay.object.admin.rest.client.pagination.Pagination;
 import com.liferay.object.admin.rest.client.resource.v1_0.ObjectFieldResource;
 import com.liferay.object.admin.rest.client.serdes.v1_0.ObjectFieldSerDes;
+import com.liferay.petra.function.UnsafeTriConsumer;
 import com.liferay.petra.reflect.ReflectionUtil;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.json.JSONArray;
@@ -46,6 +47,7 @@ import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.odata.entity.EntityField;
 import com.liferay.portal.odata.entity.EntityModel;
+import com.liferay.portal.search.test.util.SearchTestRule;
 import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.portal.vulcan.resource.EntityModelResource;
@@ -56,6 +58,7 @@ import java.text.DateFormat;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -69,6 +72,8 @@ import java.util.stream.Stream;
 import javax.annotation.Generated;
 
 import javax.ws.rs.core.MultivaluedHashMap;
+
+import org.apache.commons.lang.time.DateUtils;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -180,6 +185,8 @@ public abstract class BaseObjectFieldResourceTestCase {
 
 		ObjectField objectField = randomObjectField();
 
+		objectField.setDefaultValue(regex);
+		objectField.setExternalReferenceCode(regex);
 		objectField.setIndexedLanguageId(regex);
 		objectField.setName(regex);
 
@@ -189,6 +196,8 @@ public abstract class BaseObjectFieldResourceTestCase {
 
 		objectField = ObjectFieldSerDes.toDTO(json);
 
+		Assert.assertEquals(regex, objectField.getDefaultValue());
+		Assert.assertEquals(regex, objectField.getExternalReferenceCode());
 		Assert.assertEquals(regex, objectField.getIndexedLanguageId());
 		Assert.assertEquals(regex, objectField.getName());
 	}
@@ -202,7 +211,7 @@ public abstract class BaseObjectFieldResourceTestCase {
 
 		Page<ObjectField> page =
 			objectFieldResource.getObjectDefinitionObjectFieldsPage(
-				objectDefinitionId, null, Pagination.of(1, 10));
+				objectDefinitionId, null, null, Pagination.of(1, 10), null);
 
 		Assert.assertEquals(0, page.getTotalCount());
 
@@ -213,7 +222,8 @@ public abstract class BaseObjectFieldResourceTestCase {
 					randomIrrelevantObjectField());
 
 			page = objectFieldResource.getObjectDefinitionObjectFieldsPage(
-				irrelevantObjectDefinitionId, null, Pagination.of(1, 2));
+				irrelevantObjectDefinitionId, null, null, Pagination.of(1, 2),
+				null);
 
 			Assert.assertEquals(1, page.getTotalCount());
 
@@ -232,7 +242,7 @@ public abstract class BaseObjectFieldResourceTestCase {
 				objectDefinitionId, randomObjectField());
 
 		page = objectFieldResource.getObjectDefinitionObjectFieldsPage(
-			objectDefinitionId, null, Pagination.of(1, 10));
+			objectDefinitionId, null, null, Pagination.of(1, 10), null);
 
 		Assert.assertEquals(2, page.getTotalCount());
 
@@ -244,6 +254,110 @@ public abstract class BaseObjectFieldResourceTestCase {
 		objectFieldResource.deleteObjectField(objectField1.getId());
 
 		objectFieldResource.deleteObjectField(objectField2.getId());
+	}
+
+	@Test
+	public void testGetObjectDefinitionObjectFieldsPageWithFilterDateTimeEquals()
+		throws Exception {
+
+		List<EntityField> entityFields = getEntityFields(
+			EntityField.Type.DATE_TIME);
+
+		if (entityFields.isEmpty()) {
+			return;
+		}
+
+		Long objectDefinitionId =
+			testGetObjectDefinitionObjectFieldsPage_getObjectDefinitionId();
+
+		ObjectField objectField1 = randomObjectField();
+
+		objectField1 = testGetObjectDefinitionObjectFieldsPage_addObjectField(
+			objectDefinitionId, objectField1);
+
+		for (EntityField entityField : entityFields) {
+			Page<ObjectField> page =
+				objectFieldResource.getObjectDefinitionObjectFieldsPage(
+					objectDefinitionId, null,
+					getFilterString(entityField, "between", objectField1),
+					Pagination.of(1, 2), null);
+
+			assertEquals(
+				Collections.singletonList(objectField1),
+				(List<ObjectField>)page.getItems());
+		}
+	}
+
+	@Test
+	public void testGetObjectDefinitionObjectFieldsPageWithFilterDoubleEquals()
+		throws Exception {
+
+		List<EntityField> entityFields = getEntityFields(
+			EntityField.Type.DOUBLE);
+
+		if (entityFields.isEmpty()) {
+			return;
+		}
+
+		Long objectDefinitionId =
+			testGetObjectDefinitionObjectFieldsPage_getObjectDefinitionId();
+
+		ObjectField objectField1 =
+			testGetObjectDefinitionObjectFieldsPage_addObjectField(
+				objectDefinitionId, randomObjectField());
+
+		@SuppressWarnings("PMD.UnusedLocalVariable")
+		ObjectField objectField2 =
+			testGetObjectDefinitionObjectFieldsPage_addObjectField(
+				objectDefinitionId, randomObjectField());
+
+		for (EntityField entityField : entityFields) {
+			Page<ObjectField> page =
+				objectFieldResource.getObjectDefinitionObjectFieldsPage(
+					objectDefinitionId, null,
+					getFilterString(entityField, "eq", objectField1),
+					Pagination.of(1, 2), null);
+
+			assertEquals(
+				Collections.singletonList(objectField1),
+				(List<ObjectField>)page.getItems());
+		}
+	}
+
+	@Test
+	public void testGetObjectDefinitionObjectFieldsPageWithFilterStringEquals()
+		throws Exception {
+
+		List<EntityField> entityFields = getEntityFields(
+			EntityField.Type.STRING);
+
+		if (entityFields.isEmpty()) {
+			return;
+		}
+
+		Long objectDefinitionId =
+			testGetObjectDefinitionObjectFieldsPage_getObjectDefinitionId();
+
+		ObjectField objectField1 =
+			testGetObjectDefinitionObjectFieldsPage_addObjectField(
+				objectDefinitionId, randomObjectField());
+
+		@SuppressWarnings("PMD.UnusedLocalVariable")
+		ObjectField objectField2 =
+			testGetObjectDefinitionObjectFieldsPage_addObjectField(
+				objectDefinitionId, randomObjectField());
+
+		for (EntityField entityField : entityFields) {
+			Page<ObjectField> page =
+				objectFieldResource.getObjectDefinitionObjectFieldsPage(
+					objectDefinitionId, null,
+					getFilterString(entityField, "eq", objectField1),
+					Pagination.of(1, 2), null);
+
+			assertEquals(
+				Collections.singletonList(objectField1),
+				(List<ObjectField>)page.getItems());
+		}
 	}
 
 	@Test
@@ -267,7 +381,7 @@ public abstract class BaseObjectFieldResourceTestCase {
 
 		Page<ObjectField> page1 =
 			objectFieldResource.getObjectDefinitionObjectFieldsPage(
-				objectDefinitionId, null, Pagination.of(1, 2));
+				objectDefinitionId, null, null, Pagination.of(1, 2), null);
 
 		List<ObjectField> objectFields1 = (List<ObjectField>)page1.getItems();
 
@@ -275,7 +389,7 @@ public abstract class BaseObjectFieldResourceTestCase {
 
 		Page<ObjectField> page2 =
 			objectFieldResource.getObjectDefinitionObjectFieldsPage(
-				objectDefinitionId, null, Pagination.of(2, 2));
+				objectDefinitionId, null, null, Pagination.of(2, 2), null);
 
 		Assert.assertEquals(3, page2.getTotalCount());
 
@@ -285,11 +399,154 @@ public abstract class BaseObjectFieldResourceTestCase {
 
 		Page<ObjectField> page3 =
 			objectFieldResource.getObjectDefinitionObjectFieldsPage(
-				objectDefinitionId, null, Pagination.of(1, 3));
+				objectDefinitionId, null, null, Pagination.of(1, 3), null);
 
 		assertEqualsIgnoringOrder(
 			Arrays.asList(objectField1, objectField2, objectField3),
 			(List<ObjectField>)page3.getItems());
+	}
+
+	@Test
+	public void testGetObjectDefinitionObjectFieldsPageWithSortDateTime()
+		throws Exception {
+
+		testGetObjectDefinitionObjectFieldsPageWithSort(
+			EntityField.Type.DATE_TIME,
+			(entityField, objectField1, objectField2) -> {
+				BeanTestUtil.setProperty(
+					objectField1, entityField.getName(),
+					DateUtils.addMinutes(new Date(), -2));
+			});
+	}
+
+	@Test
+	public void testGetObjectDefinitionObjectFieldsPageWithSortDouble()
+		throws Exception {
+
+		testGetObjectDefinitionObjectFieldsPageWithSort(
+			EntityField.Type.DOUBLE,
+			(entityField, objectField1, objectField2) -> {
+				BeanTestUtil.setProperty(
+					objectField1, entityField.getName(), 0.1);
+				BeanTestUtil.setProperty(
+					objectField2, entityField.getName(), 0.5);
+			});
+	}
+
+	@Test
+	public void testGetObjectDefinitionObjectFieldsPageWithSortInteger()
+		throws Exception {
+
+		testGetObjectDefinitionObjectFieldsPageWithSort(
+			EntityField.Type.INTEGER,
+			(entityField, objectField1, objectField2) -> {
+				BeanTestUtil.setProperty(
+					objectField1, entityField.getName(), 0);
+				BeanTestUtil.setProperty(
+					objectField2, entityField.getName(), 1);
+			});
+	}
+
+	@Test
+	public void testGetObjectDefinitionObjectFieldsPageWithSortString()
+		throws Exception {
+
+		testGetObjectDefinitionObjectFieldsPageWithSort(
+			EntityField.Type.STRING,
+			(entityField, objectField1, objectField2) -> {
+				Class<?> clazz = objectField1.getClass();
+
+				String entityFieldName = entityField.getName();
+
+				Method method = clazz.getMethod(
+					"get" + StringUtil.upperCaseFirstLetter(entityFieldName));
+
+				Class<?> returnType = method.getReturnType();
+
+				if (returnType.isAssignableFrom(Map.class)) {
+					BeanTestUtil.setProperty(
+						objectField1, entityFieldName,
+						Collections.singletonMap("Aaa", "Aaa"));
+					BeanTestUtil.setProperty(
+						objectField2, entityFieldName,
+						Collections.singletonMap("Bbb", "Bbb"));
+				}
+				else if (entityFieldName.contains("email")) {
+					BeanTestUtil.setProperty(
+						objectField1, entityFieldName,
+						"aaa" +
+							StringUtil.toLowerCase(
+								RandomTestUtil.randomString()) +
+									"@liferay.com");
+					BeanTestUtil.setProperty(
+						objectField2, entityFieldName,
+						"bbb" +
+							StringUtil.toLowerCase(
+								RandomTestUtil.randomString()) +
+									"@liferay.com");
+				}
+				else {
+					BeanTestUtil.setProperty(
+						objectField1, entityFieldName,
+						"aaa" +
+							StringUtil.toLowerCase(
+								RandomTestUtil.randomString()));
+					BeanTestUtil.setProperty(
+						objectField2, entityFieldName,
+						"bbb" +
+							StringUtil.toLowerCase(
+								RandomTestUtil.randomString()));
+				}
+			});
+	}
+
+	protected void testGetObjectDefinitionObjectFieldsPageWithSort(
+			EntityField.Type type,
+			UnsafeTriConsumer<EntityField, ObjectField, ObjectField, Exception>
+				unsafeTriConsumer)
+		throws Exception {
+
+		List<EntityField> entityFields = getEntityFields(type);
+
+		if (entityFields.isEmpty()) {
+			return;
+		}
+
+		Long objectDefinitionId =
+			testGetObjectDefinitionObjectFieldsPage_getObjectDefinitionId();
+
+		ObjectField objectField1 = randomObjectField();
+		ObjectField objectField2 = randomObjectField();
+
+		for (EntityField entityField : entityFields) {
+			unsafeTriConsumer.accept(entityField, objectField1, objectField2);
+		}
+
+		objectField1 = testGetObjectDefinitionObjectFieldsPage_addObjectField(
+			objectDefinitionId, objectField1);
+
+		objectField2 = testGetObjectDefinitionObjectFieldsPage_addObjectField(
+			objectDefinitionId, objectField2);
+
+		for (EntityField entityField : entityFields) {
+			Page<ObjectField> ascPage =
+				objectFieldResource.getObjectDefinitionObjectFieldsPage(
+					objectDefinitionId, null, null, Pagination.of(1, 2),
+					entityField.getName() + ":asc");
+
+			assertEquals(
+				Arrays.asList(objectField1, objectField2),
+				(List<ObjectField>)ascPage.getItems());
+
+			Page<ObjectField> descPage =
+				objectFieldResource.getObjectDefinitionObjectFieldsPage(
+					objectDefinitionId, null, null, Pagination.of(1, 2),
+					entityField.getName() + ":desc");
+
+			assertEquals(
+				Arrays.asList(objectField2, objectField1),
+				(List<ObjectField>)descPage.getItems());
+		}
 	}
 
 	protected ObjectField
@@ -517,6 +774,9 @@ public abstract class BaseObjectFieldResourceTestCase {
 			"This method needs to be implemented");
 	}
 
+	@Rule
+	public SearchTestRule searchTestRule = new SearchTestRule();
+
 	protected ObjectField testGraphQLObjectField_addObjectField()
 		throws Exception {
 
@@ -625,6 +885,24 @@ public abstract class BaseObjectFieldResourceTestCase {
 				continue;
 			}
 
+			if (Objects.equals("defaultValue", additionalAssertFieldName)) {
+				if (objectField.getDefaultValue() == null) {
+					valid = false;
+				}
+
+				continue;
+			}
+
+			if (Objects.equals(
+					"externalReferenceCode", additionalAssertFieldName)) {
+
+				if (objectField.getExternalReferenceCode() == null) {
+					valid = false;
+				}
+
+				continue;
+			}
+
 			if (Objects.equals("indexed", additionalAssertFieldName)) {
 				if (objectField.getIndexed() == null) {
 					valid = false;
@@ -697,6 +975,22 @@ public abstract class BaseObjectFieldResourceTestCase {
 
 			if (Objects.equals("required", additionalAssertFieldName)) {
 				if (objectField.getRequired() == null) {
+					valid = false;
+				}
+
+				continue;
+			}
+
+			if (Objects.equals("state", additionalAssertFieldName)) {
+				if (objectField.getState() == null) {
+					valid = false;
+				}
+
+				continue;
+			}
+
+			if (Objects.equals("system", additionalAssertFieldName)) {
+				if (objectField.getSystem() == null) {
 					valid = false;
 				}
 
@@ -835,6 +1129,30 @@ public abstract class BaseObjectFieldResourceTestCase {
 				continue;
 			}
 
+			if (Objects.equals("defaultValue", additionalAssertFieldName)) {
+				if (!Objects.deepEquals(
+						objectField1.getDefaultValue(),
+						objectField2.getDefaultValue())) {
+
+					return false;
+				}
+
+				continue;
+			}
+
+			if (Objects.equals(
+					"externalReferenceCode", additionalAssertFieldName)) {
+
+				if (!Objects.deepEquals(
+						objectField1.getExternalReferenceCode(),
+						objectField2.getExternalReferenceCode())) {
+
+					return false;
+				}
+
+				continue;
+			}
+
 			if (Objects.equals("id", additionalAssertFieldName)) {
 				if (!Objects.deepEquals(
 						objectField1.getId(), objectField2.getId())) {
@@ -941,6 +1259,26 @@ public abstract class BaseObjectFieldResourceTestCase {
 				if (!Objects.deepEquals(
 						objectField1.getRequired(),
 						objectField2.getRequired())) {
+
+					return false;
+				}
+
+				continue;
+			}
+
+			if (Objects.equals("state", additionalAssertFieldName)) {
+				if (!Objects.deepEquals(
+						objectField1.getState(), objectField2.getState())) {
+
+					return false;
+				}
+
+				continue;
+			}
+
+			if (Objects.equals("system", additionalAssertFieldName)) {
+				if (!Objects.deepEquals(
+						objectField1.getSystem(), objectField2.getSystem())) {
 
 					return false;
 				}
@@ -1070,6 +1408,22 @@ public abstract class BaseObjectFieldResourceTestCase {
 				"Invalid entity field " + entityFieldName);
 		}
 
+		if (entityFieldName.equals("defaultValue")) {
+			sb.append("'");
+			sb.append(String.valueOf(objectField.getDefaultValue()));
+			sb.append("'");
+
+			return sb.toString();
+		}
+
+		if (entityFieldName.equals("externalReferenceCode")) {
+			sb.append("'");
+			sb.append(String.valueOf(objectField.getExternalReferenceCode()));
+			sb.append("'");
+
+			return sb.toString();
+		}
+
 		if (entityFieldName.equals("id")) {
 			throw new IllegalArgumentException(
 				"Invalid entity field " + entityFieldName);
@@ -1126,6 +1480,16 @@ public abstract class BaseObjectFieldResourceTestCase {
 				"Invalid entity field " + entityFieldName);
 		}
 
+		if (entityFieldName.equals("state")) {
+			throw new IllegalArgumentException(
+				"Invalid entity field " + entityFieldName);
+		}
+
+		if (entityFieldName.equals("system")) {
+			throw new IllegalArgumentException(
+				"Invalid entity field " + entityFieldName);
+		}
+
 		if (entityFieldName.equals("type")) {
 			throw new IllegalArgumentException(
 				"Invalid entity field " + entityFieldName);
@@ -1175,6 +1539,10 @@ public abstract class BaseObjectFieldResourceTestCase {
 	protected ObjectField randomObjectField() throws Exception {
 		return new ObjectField() {
 			{
+				defaultValue = StringUtil.toLowerCase(
+					RandomTestUtil.randomString());
+				externalReferenceCode = StringUtil.toLowerCase(
+					RandomTestUtil.randomString());
 				id = RandomTestUtil.randomLong();
 				indexed = RandomTestUtil.randomBoolean();
 				indexedAsKeyword = RandomTestUtil.randomBoolean();
@@ -1183,6 +1551,8 @@ public abstract class BaseObjectFieldResourceTestCase {
 				listTypeDefinitionId = RandomTestUtil.randomLong();
 				name = StringUtil.toLowerCase(RandomTestUtil.randomString());
 				required = RandomTestUtil.randomBoolean();
+				state = RandomTestUtil.randomBoolean();
+				system = RandomTestUtil.randomBoolean();
 			}
 		};
 	}

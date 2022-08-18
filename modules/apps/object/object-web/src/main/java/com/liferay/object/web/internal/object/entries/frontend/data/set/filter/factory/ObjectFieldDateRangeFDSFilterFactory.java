@@ -23,6 +23,7 @@ import com.liferay.object.service.ObjectFieldLocalService;
 import com.liferay.object.web.internal.object.entries.frontend.data.set.filter.ObjectFieldDateRangeFDSFilter;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.language.Language;
+import com.liferay.portal.kernel.search.Field;
 
 import java.util.Locale;
 import java.util.Objects;
@@ -50,8 +51,23 @@ public class ObjectFieldDateRangeFDSFilterFactory
 			ObjectViewFilterColumn objectViewFilterColumn)
 		throws PortalException {
 
+		String id = objectViewFilterColumn.getObjectFieldName();
+
+		if (Objects.equals(
+				objectViewFilterColumn.getObjectFieldName(),
+				Field.CREATE_DATE)) {
+
+			id = "dateCreated";
+		}
+		else if (Objects.equals(
+					objectViewFilterColumn.getObjectFieldName(),
+					"modifiedDate")) {
+
+			id = "dateModified";
+		}
+
 		return new ObjectFieldDateRangeFDSFilter(
-			objectViewFilterColumn.getObjectFieldName(),
+			id,
 			_getLabel(
 				locale, objectDefinitionId,
 				objectViewFilterColumn.getObjectFieldName()));

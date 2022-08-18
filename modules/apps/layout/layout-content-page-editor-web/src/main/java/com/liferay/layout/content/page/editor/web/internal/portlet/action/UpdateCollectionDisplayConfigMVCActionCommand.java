@@ -14,6 +14,7 @@
 
 package com.liferay.layout.content.page.editor.web.internal.portlet.action;
 
+import com.liferay.fragment.entry.processor.constants.FragmentEntryProcessorConstants;
 import com.liferay.fragment.model.FragmentEntryLink;
 import com.liferay.fragment.service.FragmentEntryLinkLocalService;
 import com.liferay.layout.content.page.editor.constants.ContentPageEditorPortletKeys;
@@ -26,7 +27,7 @@ import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.json.JSONUtil;
-import com.liferay.portal.kernel.language.LanguageUtil;
+import com.liferay.portal.kernel.language.Language;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.JSONPortletResponseUtil;
@@ -103,7 +104,8 @@ public class UpdateCollectionDisplayConfigMVCActionCommand
 					fragmentEntryLink.getEditableValues());
 
 			String configuration = editableValuesJSONObject.getString(
-				_KEY_FREEMARKER_FRAGMENT_ENTRY_PROCESSOR);
+				FragmentEntryProcessorConstants.
+					KEY_FREEMARKER_FRAGMENT_ENTRY_PROCESSOR);
 
 			if ((configuration == null) || !JSONUtil.isValid(configuration)) {
 				continue;
@@ -111,7 +113,8 @@ public class UpdateCollectionDisplayConfigMVCActionCommand
 
 			JSONObject configurationJSONObject =
 				editableValuesJSONObject.getJSONObject(
-					_KEY_FREEMARKER_FRAGMENT_ENTRY_PROCESSOR);
+					FragmentEntryProcessorConstants.
+						KEY_FREEMARKER_FRAGMENT_ENTRY_PROCESSOR);
 
 			if (!configurationJSONObject.has("targetCollections")) {
 				continue;
@@ -137,7 +140,8 @@ public class UpdateCollectionDisplayConfigMVCActionCommand
 			}
 
 			editableValuesJSONObject.put(
-				_KEY_FREEMARKER_FRAGMENT_ENTRY_PROCESSOR,
+				FragmentEntryProcessorConstants.
+					KEY_FREEMARKER_FRAGMENT_ENTRY_PROCESSOR,
 				configurationJSONObject);
 
 			long fragmentEntryLinkId =
@@ -152,7 +156,7 @@ public class UpdateCollectionDisplayConfigMVCActionCommand
 					fragmentEntryLink,
 					_portal.getHttpServletRequest(actionRequest),
 					_portal.getHttpServletResponse(actionResponse),
-					layoutStructure, StringPool.BLANK));
+					layoutStructure));
 		}
 
 		try {
@@ -178,7 +182,7 @@ public class UpdateCollectionDisplayConfigMVCActionCommand
 
 			jsonObject.put(
 				"error",
-				LanguageUtil.get(
+				_language.get(
 					themeDisplay.getRequest(), "an-unexpected-error-occurred"));
 		}
 
@@ -197,10 +201,6 @@ public class UpdateCollectionDisplayConfigMVCActionCommand
 		"com.liferay.fragment.renderer.collection.filter.internal." +
 			"CollectionFilterFragmentRenderer";
 
-	private static final String _KEY_FREEMARKER_FRAGMENT_ENTRY_PROCESSOR =
-		"com.liferay.fragment.entry.processor.freemarker." +
-			"FreeMarkerFragmentEntryProcessor";
-
 	private static final Log _log = LogFactoryUtil.getLog(
 		UpdateCollectionDisplayConfigMVCActionCommand.class);
 
@@ -209,6 +209,9 @@ public class UpdateCollectionDisplayConfigMVCActionCommand
 
 	@Reference
 	private FragmentEntryLinkManager _fragmentEntryLinkManager;
+
+	@Reference
+	private Language _language;
 
 	@Reference
 	private Portal _portal;

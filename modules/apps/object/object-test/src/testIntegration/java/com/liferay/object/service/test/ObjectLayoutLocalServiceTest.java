@@ -41,10 +41,8 @@ import com.liferay.portal.kernel.test.rule.DeleteAfterTestRun;
 import com.liferay.portal.kernel.test.util.RandomTestUtil;
 import com.liferay.portal.kernel.test.util.TestPropsValues;
 import com.liferay.portal.kernel.util.StringUtil;
-import com.liferay.portal.kernel.util.UnicodePropertiesBuilder;
 import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
-import com.liferay.portal.util.PropsUtil;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -76,11 +74,6 @@ public class ObjectLayoutLocalServiceTest {
 
 	@Test
 	public void testAddObjectLayout() throws Exception {
-		PropsUtil.addProperties(
-			UnicodePropertiesBuilder.setProperty(
-				"feature.flag.LPS-149014", "true"
-			).build());
-
 		try {
 			ObjectLayoutTab objectLayoutTab1 =
 				_objectLayoutTabPersistence.create(0);
@@ -360,11 +353,6 @@ public class ObjectLayoutLocalServiceTest {
 
 		_objectLayoutLocalService.deleteObjectLayout(
 			objectLayout.getObjectLayoutId());
-
-		PropsUtil.addProperties(
-			UnicodePropertiesBuilder.setProperty(
-				"feature.flag.LPS-149014", "false"
-			).build());
 	}
 
 	@Test
@@ -394,9 +382,9 @@ public class ObjectLayoutLocalServiceTest {
 
 		ObjectField objectField = _objectFieldLocalService.addCustomObjectField(
 			TestPropsValues.getUserId(), 0,
-			_objectDefinition.getObjectDefinitionId(), "Text", "String", false,
-			false, null, LocalizedMapUtil.getLocalizedMap(name),
-			StringUtil.randomId(), true, Collections.emptyList());
+			_objectDefinition.getObjectDefinitionId(), "Text", "String", null,
+			false, false, null, LocalizedMapUtil.getLocalizedMap(name),
+			StringUtil.randomId(), true, false, Collections.emptyList());
 
 		return objectField.getObjectFieldId();
 	}

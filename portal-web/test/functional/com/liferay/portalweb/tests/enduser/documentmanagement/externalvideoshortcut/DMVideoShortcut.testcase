@@ -335,7 +335,7 @@ definition {
 
 		WebContentNavigator.gotoPreviewEntryCP(webContentTitle = "WC WebContent Title");
 
-		Pause(locator1 = "5000");
+		WaitForVisible(locator1 = "IFrame#MODAL_BODY");
 
 		SelectFrame(locator1 = "IFrame#MODAL_BODY");
 
@@ -509,9 +509,6 @@ definition {
 	@description = "This ensures that an external video in an external video fragment can be rendered correctly after moving it to a folder."
 	@priority = "4"
 	test CanViewExternalVideoViaFragmentAfterMovingToFolder {
-		property osgi.module.configuration.file.names = "com.liferay.document.library.configuration.FFFriendlyURLEntryFileEntryConfiguration.config";
-		property osgi.module.configurations = "enabled=B&quot;true&quot;";
-
 		JSONLayout.addPublicLayout(
 			groupName = "Guest",
 			layoutName = "Content Page Name",
@@ -564,9 +561,6 @@ definition {
 	@description = "This ensures that an external video in the WC content field can be rendered correctly after moving it to a folder."
 	@priority = "4"
 	test CanViewVideoInWCAfterMovingToFolder {
-		property osgi.module.configuration.file.names = "com.liferay.document.library.configuration.FFFriendlyURLEntryFileEntryConfiguration.config";
-		property osgi.module.configurations = "enabled=B&quot;true&quot;";
-
 		DMNavigator.openDocumentsAndMediaAdmin(siteURLKey = "guest");
 
 		VideoShortcut.addCP(
@@ -889,7 +883,9 @@ definition {
 
 		SearchPortlets.viewResultDetails(searchAssetTitle = "Test YouTube Video");
 
-		Pause(locator1 = "3000");
+		WaitForElementPresent(
+			key_videoShortcutPreview = "https://www.youtube.com",
+			locator1 = "DocumentsAndMediaDocument#VIDEO_SHORTCUT_PREVIEW");
 
 		AssertVisible(
 			key_videoShortcutPreview = "https://www.youtube.com",

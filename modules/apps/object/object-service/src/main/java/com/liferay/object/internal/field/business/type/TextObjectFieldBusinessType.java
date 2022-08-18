@@ -26,12 +26,13 @@ import com.liferay.object.service.ObjectFieldSettingLocalService;
 import com.liferay.petra.string.StringPool;
 import com.liferay.petra.string.StringUtil;
 import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.language.LanguageUtil;
+import com.liferay.portal.kernel.language.Language;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.ResourceBundleUtil;
 import com.liferay.portal.kernel.util.SetUtil;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.vulcan.extension.PropertyDefinition;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -70,7 +71,7 @@ public class TextObjectFieldBusinessType implements ObjectFieldBusinessType {
 
 	@Override
 	public String getDescription(Locale locale) {
-		return LanguageUtil.get(
+		return _language.get(
 			ResourceBundleUtil.getModuleAndPortalResourceBundle(
 				locale, getClass()),
 			"add-text-up-to-280-characters");
@@ -78,7 +79,7 @@ public class TextObjectFieldBusinessType implements ObjectFieldBusinessType {
 
 	@Override
 	public String getLabel(Locale locale) {
-		return LanguageUtil.get(
+		return _language.get(
 			ResourceBundleUtil.getModuleAndPortalResourceBundle(
 				locale, getClass()),
 			"text");
@@ -96,12 +97,9 @@ public class TextObjectFieldBusinessType implements ObjectFieldBusinessType {
 
 		Map<String, Object> properties = new HashMap<>();
 
-		List<ObjectFieldSetting> objectFieldSettings =
-			_objectFieldSettingLocalService.getObjectFieldSettings(
-				objectField.getObjectFieldId());
-
 		ListUtil.isNotEmptyForEach(
-			objectFieldSettings,
+			_objectFieldSettingLocalService.getObjectFieldObjectFieldSettings(
+				objectField.getObjectFieldId()),
 			objectFieldSetting -> properties.put(
 				objectFieldSetting.getName(), objectFieldSetting.getValue()));
 
@@ -109,13 +107,18 @@ public class TextObjectFieldBusinessType implements ObjectFieldBusinessType {
 	}
 
 	@Override
+	public PropertyDefinition.PropertyType getPropertyType() {
+		return PropertyDefinition.PropertyType.TEXT;
+	}
+
+	@Override
 	public void validateObjectFieldSettings(
-			String objectFieldName,
+			long objectDefinitionId, String objectFieldName,
 			List<ObjectFieldSetting> objectFieldSettings)
 		throws PortalException {
 
 		ObjectFieldBusinessType.super.validateObjectFieldSettings(
-			objectFieldName, objectFieldSettings);
+			objectDefinitionId, objectFieldName, objectFieldSettings);
 
 		Map<String, String> objectFieldSettingsValues = new HashMap<>();
 
@@ -154,6 +157,9 @@ public class TextObjectFieldBusinessType implements ObjectFieldBusinessType {
 				objectFieldName, "showCounter", showCounter);
 		}
 	}
+
+	@Reference
+	private Language _language;
 
 	@Reference
 	private ObjectFieldSettingLocalService _objectFieldSettingLocalService;

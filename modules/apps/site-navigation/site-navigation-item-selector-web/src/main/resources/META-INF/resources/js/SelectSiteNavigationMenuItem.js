@@ -17,6 +17,7 @@ import ClayEmptyState from '@clayui/empty-state';
 import ClayForm, {ClayInput} from '@clayui/form';
 import ClayIcon from '@clayui/icon';
 import ClayLayout from '@clayui/layout';
+import {getOpener} from 'frontend-js-web';
 import React, {useState} from 'react';
 
 const nodeByName = (items, name) => {
@@ -52,7 +53,7 @@ const SelectSiteNavigationMenuItem = ({itemSelectorSaveEvent, nodes}) => {
 			return;
 		}
 
-		Liferay.Util.getOpener().Liferay.fire(itemSelectorSaveEvent, {
+		getOpener().Liferay.fire(itemSelectorSaveEvent, {
 			data: {
 				selectSiteNavigationMenuItemId: item.id,
 				selectSiteNavigationMenuItemName: item.name,
@@ -60,8 +61,14 @@ const SelectSiteNavigationMenuItem = ({itemSelectorSaveEvent, nodes}) => {
 		});
 	};
 
-	const onClick = (event, item) => {
+	const onClick = (event, item, expand) => {
 		event.preventDefault();
+
+		if (item.disabled) {
+			expand.toggle(item.id);
+
+			return;
+		}
 
 		handleTreeViewSelectionChange(event, item);
 	};
@@ -96,16 +103,18 @@ const SelectSiteNavigationMenuItem = ({itemSelectorSaveEvent, nodes}) => {
 				</ClayInput.Group>
 			</ClayForm.Group>
 
-			{items.length > 0 ? (
+			{items.length ? (
 				<ClayTreeView
 					items={items}
 					onItemsChange={setItems}
 					showExpanderOnHover={false}
 				>
-					{(item) => (
+					{(item, _selection, expand) => (
 						<ClayTreeView.Item>
 							<ClayTreeView.ItemStack
-								onClick={(event) => onClick(event, item)}
+								onClick={(event) =>
+									onClick(event, item, expand)
+								}
 								onKeyDownCapture={(event) => {
 									if (event.key === ' ' && item.disabled) {
 										event.stopPropagation();

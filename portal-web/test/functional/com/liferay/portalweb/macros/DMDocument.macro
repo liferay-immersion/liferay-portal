@@ -123,6 +123,8 @@ definition {
 				key_dmDocumentTitle = "${documentsAndMediaField}",
 				locator1 = "WC#ICON_DOCUMENT_TITLE",
 				value1 = "${documentsAndMediaField}");
+
+			SelectFrameTop();
 		}
 
 		if (isSet(linkedPageName)) {
@@ -323,7 +325,7 @@ definition {
 		}
 
 		if (isSet(siteName)) {
-			LexiconCard.clickCardTitleLink(card = "${siteName}");
+			LexiconCard.clickCard(card = "${siteName}");
 		}
 
 		if (isSet(depotName)) {
@@ -357,7 +359,7 @@ definition {
 			value1 = "Sites and Libraries");
 
 		if (isSet(siteName)) {
-			LexiconCard.clickCardTitleLink(card = "${siteName}");
+			LexiconCard.clickCard(card = "${siteName}");
 		}
 
 		if (isSet(depotName)) {
@@ -561,7 +563,7 @@ definition {
 			}
 		}
 		else {
-			AssertElementPresent.pauseAssertVisible(locator1 = "DocumentsAndMedia#BREADCRUMB_HOME");
+			AssertVisible(locator1 = "DocumentsAndMedia#BREADCRUMB_HOME");
 
 			VerifyElementPresent(locator1 = "Message#SUCCESS");
 		}
@@ -838,6 +840,19 @@ definition {
 		}
 	}
 
+	macro assertFileExtensionFromTempFolder {
+		var downloadedFile = TestCase.getDownloadedTempFileName(fileNamePattern = "${downloadedFile}");
+
+		echo("## downloadedFile: ${downloadedFile}");
+
+		if (contains("${downloadedFile}", "${fileExtension}")) {
+			echo("This is an expected file extension.");
+		}
+		else {
+			fail("FAIL!");
+		}
+	}
+
 	macro assertFileNameFromTempFolder {
 		var tempDir = PropsUtil.get("output.dir.name");
 
@@ -900,6 +915,8 @@ definition {
 				value1 = "You now have a lock on this document. No one else can edit this document until you unlock it. This lock will automatically expire in 1 day.");
 
 			DMNavigator.openDocumentsAndMediaAdmin(siteURLKey = "guest");
+
+			WaitForPageLoad();
 
 			Click(locator1 = "DocumentsAndMedia#DESCRIPTIVE_LIST_DOCUMENT_VERTICAL_ELLIPSIS");
 
@@ -970,7 +987,9 @@ definition {
 				value1 = "You now have a lock on this document. No one else can edit this document until you unlock it. This lock will automatically expire in 1 day.");
 		}
 
-		LexiconEntry.gotoEllipsisMenuItem(menuItem = "Checkin");
+		Click(locator1 = "Icon#TOOLBAR_ELLIPSIS");
+
+		MenuItem.click(menuItem = "Checkin");
 
 		if (IsElementPresent(locator1 = "DocumentsAndMedia#CHECKIN_DIALOG_TITLE")) {
 			if ("${revision}" == "Major") {
@@ -1042,6 +1061,8 @@ definition {
 		AssertClick(
 			locator1 = "DocumentsAndMedia#DESCRIPTIVE_LIST_DOCUMENT_TITLE",
 			value1 = "${dmDocumentTitle}");
+
+		WaitForPageLoad();
 
 		AssertTextEquals(
 			locator1 = "Message#CHECKOUT_SUCCESS",
@@ -1132,6 +1153,14 @@ definition {
 			value1 = "You now have a lock on this document. No one else can edit this document until you unlock it. This lock will automatically expire in 1 day.");
 	}
 
+	macro checkoutViaManagementBar {
+		Click(locator1 = "Icon#TOOLBAR_ELLIPSIS");
+
+		MenuItem.click(menuItem = "Checkout");
+
+		Alert.viewSuccessMessage();
+	}
+
 	macro configureCacheControl {
 		if (isSet(systemSettingsInstanceScope)) {
 			DMNavigator.openToConfigInSystemSettings(portlet = "Cache Control");
@@ -1139,6 +1168,8 @@ definition {
 		else {
 			DMNavigator.openToConfigInInstanceSettings(portlet = "Cache Control");
 		}
+
+		WaitForPageLoad();
 
 		if (isSet(cacheControl)) {
 			AssertTextEquals(
@@ -1333,7 +1364,7 @@ definition {
 
 		Click(locator1 = "DocumentsAndMedia#DOCUMENT_VERSION_VERTICAL_ELLIPSIS");
 
-		MenuItem.clickNoError(menuItem = "Delete Version");
+		MenuItem.clickNoError(menuItem = "Delete");
 
 		AssertConfirm(value1 = "Are you sure you want to delete this? It will be deleted immediately.");
 
@@ -1359,9 +1390,9 @@ definition {
 			key_rowEntry = "${dmDocumentTitle}",
 			locator1 = "Icon#ROW_VERTICAL_ELLIPSIS");
 
-		AssertClick.assertPartialTextClickAt(
-			locator1 = "MenuItem#DOWNLOAD",
-			value1 = "Download");
+		Click(
+			key_menuItem = "Download (${dmDocumentSize})",
+			locator1 = "MenuItem#DROPDOWN_MENU_ITEM");
 
 		DownloadTempFile();
 	}
@@ -1701,7 +1732,7 @@ definition {
 			value1 = "Sites and Libraries");
 
 		if (isSet(siteName)) {
-			LexiconCard.clickCardTitleLink(card = "${siteName}");
+			LexiconCard.clickCard(card = "${siteName}");
 		}
 
 		if (isSet(depotName)) {
@@ -1776,6 +1807,8 @@ definition {
 			Click(locator1 = "Button#EDIT");
 		}
 
+		WaitForPageLoad();
+
 		DMDocument.editCmd(
 			dmDocumentDescriptionEdit = "${dmDocumentDescriptionEdit}",
 			dmDocumentFileEdit = "${dmDocumentFileEdit}",
@@ -1811,7 +1844,11 @@ definition {
 	}
 
 	macro editPGViaMG {
-		LexiconEntry.gotoEllipsisMenuItem(menuItem = "Edit");
+		Click.waitForMenuToggleJSClick(
+			key_card = "${mgDocumentTitle}",
+			locator1 = "Card#CARD_ELLIPSIS");
+
+		MenuItem.click(menuItem = "Edit");
 
 		PortletEntry.inputTitle(title = "${mgDocumentTitleEdit}");
 
@@ -1897,7 +1934,7 @@ definition {
 
 		SelectFrame.selectFrameNoLoading(locator1 = "DocumentsAndMedia#CONFIGURATION_IFRAME");
 
-		AssertElementPresent.pauseAssertVisible(locator1 = "Checkbox#SHOW_ACTIONS_CHECKBOX");
+		WaitForVisible(locator1 = "Checkbox#SHOW_ACTIONS_CHECKBOX");
 
 		Check(locator1 = "Checkbox#SHOW_ACTIONS_CHECKBOX");
 
@@ -1994,7 +2031,7 @@ definition {
 	macro gotoMenuItemViaInfoPanel {
 		DMDocument.expandInfo();
 
-		Click(locator1 = "Icon#BODY_VERTICAL_ELLIPSIS");
+		Click(locator1 = "Icon#SIDEBAR_HEADER_ACTION_VERTICAL_ELLIPSIS_BUTTON");
 
 		if (isSet(menuItem)) {
 			Click(
@@ -2690,7 +2727,7 @@ definition {
 		}
 
 		Type(
-			key_fieldLabel = "Maximum File Size",
+			key_fieldLabel = "File Max Size",
 			locator1 = "TextInput#GENERIC_TEXT_INPUT",
 			value1 = "${fieldValue}");
 
@@ -2749,9 +2786,30 @@ definition {
 				key_fieldLabel = "Maximum File Size",
 				locator1 = "TextInput#GENERIC_NUMBER_INPUT",
 				value1 = "${maximumFileSizeValue}");
+
+			if (isSet(validateInvalidsize)) {
+				FormPortlet.viewValidationErrorMessage(validationErrorMessage = "Error: Please enter a valid number.");
+			}
 		}
 
-		SystemSettings.saveConfiguration();
+		if (isSet(validateInvalidValue)) {
+			Button.clickSave();
+
+			AssertTextEquals.assertPartialText(
+				key_alertMessage = "Your request failed to complete.",
+				locator1 = "Message#ERROR_ENTER_A_VALID_VALUE",
+				value1 = "Your request failed to complete.");
+
+			if (isSet(viewErrorAlert)) {
+				AssertTextEquals.assertPartialText(
+					key_alertMessage = "Error:Mime type or size limit is not valid.",
+					locator1 = "Message#ERROR_ENTER_A_VALID_VALUE",
+					value1 = "Error:Mime type or size limit is not valid.");
+			}
+		}
+		else {
+			SystemSettings.saveConfiguration();
+		}
 	}
 
 	macro viewActiveURL {
@@ -2811,7 +2869,7 @@ definition {
 				value1 = "Generating preview will take a few minutes.");
 
 			while (IsElementPresent(locator1 = "Message#INFO")) {
-				Pause(locator1 = "1000");
+				WaitForElementPresent.waitForLastScript();
 
 				Refresh();
 			}
@@ -2819,6 +2877,8 @@ definition {
 	}
 
 	macro viewCacheControlConfigurationInConsole {
+		echo("${responseHeader}");
+
 		if (isSet(uncacheableMimeType)) {
 			if (contains("${responseHeader}", "Cache-Control: private, no-cache, no-store, must-revalidate")) {
 				echo("This file can not be cached");
@@ -3342,6 +3402,15 @@ definition {
 				locator1 = "TextInput#GENERIC_TEXT_INPUT",
 				value1 = "${dmDocumentFileName}");
 		}
+
+		if (isSet(friendlyURL)) {
+			Panel.expandPanel(panel = "Friendly URL");
+
+			AssertTextEquals.assertValue(
+				key_fieldLabel = "Friendly URL",
+				locator1 = "TextInput#GENERIC_TEXT_INPUT",
+				value1 = "${friendlyURL}");
+		}
 	}
 
 	macro viewFieldLabels {
@@ -3422,7 +3491,7 @@ definition {
 			var portalURL = StringUtil.replace("${portalURL}", ":8080", ":9080");
 		}
 
-		var latestVersionURL = "${portalURL}/documents/${siteId}/0/${dmDocumentFileName}";
+		var latestVersionURL = "${portalURL}/documents/d/${siteName}/${dmDocumentFileName}";
 
 		AssertElementPresent(
 			key_latestVersionURL = "${latestVersionURL}",
@@ -3520,10 +3589,6 @@ definition {
 	}
 
 	macro viewNoPermission {
-		Click(
-			key_rowEntry = "${rowEntry}",
-			locator1 = "Icon#ROW_VERTICAL_ELLIPSIS");
-
 		MenuItem.viewNotPresent(menuItem = "${menuItem}");
 	}
 
@@ -3822,6 +3887,8 @@ definition {
 				key_mgDocumentTitle = "${mgDocumentTitle}",
 				locator1 = "MediaGallery#ENTRY_THUMBNAIL");
 
+			WaitForVisible(locator1 = "IFrame#SELECT_MEDIA_GALLERY_VIDEO");
+
 			SelectFrame.selectFrameNoLoading(locator1 = "IFrame#SELECT_MEDIA_GALLERY_VIDEO");
 
 			AssertElementPresent(locator1 = "MediaGallery#ENTRY_VIDEO_PLAYED");
@@ -3888,7 +3955,7 @@ definition {
 		var key_dmRepositoryName = "${dmRepositoryName}";
 
 		if (isSet(dmRepositoryName)) {
-			AssertClick.assertTextClickAtAndPause(
+			AssertClick(
 				locator1 = "DocumentsAndMedia#SEARCH_REPOSITORY_TAB",
 				value1 = "${dmRepositoryName}");
 
@@ -3950,7 +4017,7 @@ definition {
 
 		Click(locator1 = "DocumentsAndMedia#DESCRIPTIVE_LIST_DOCUMENT_VERTICAL_ELLIPSIS");
 
-		AssertTextEquals.assertPartialText(
+		WaitForElementPresent(
 			locator1 = "MenuItem#DOWNLOAD",
 			value1 = "Download");
 
@@ -3986,7 +4053,7 @@ definition {
 
 		Click(locator1 = "DocumentsAndMedia#DESCRIPTIVE_LIST_DOCUMENT_VERTICAL_ELLIPSIS");
 
-		AssertTextEquals.assertPartialText(
+		WaitForElementPresent(
 			locator1 = "MenuItem#DOWNLOAD",
 			value1 = "Download");
 
@@ -4061,7 +4128,7 @@ definition {
 				locator1 = "DocumentsAndMediaDocument#VIDEO_GENERATION_INFO");
 
 			while (IsElementPresent(key_text = "Generating video preview will take a few minutes.", locator1 = "DocumentsAndMediaDocument#VIDEO_GENERATION_INFO")) {
-				Pause(locator1 = "1000");
+				WaitForElementPresent.waitForLastScript();
 
 				Refresh();
 

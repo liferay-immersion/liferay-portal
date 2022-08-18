@@ -43,6 +43,8 @@ import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
+import javax.servlet.ServletContext;
+
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -129,11 +131,22 @@ public class FDSSamplePortlet extends MVCPortlet {
 						"description", false),
 					ObjectFieldUtil.createObjectField(
 						"Date", "Date", true, false, null, "Date", "date",
+						false),
+					ObjectFieldUtil.createObjectField(
+						"Text", "String", true, false, null, "Color", "color",
+						false),
+					ObjectFieldUtil.createObjectField(
+						"Text", "String", true, false, null, "Size", "size",
 						false)));
 
 		objectDefinition =
 			_objectDefinitionLocalService.publishCustomObjectDefinition(
 				user.getUserId(), objectDefinition.getObjectDefinitionId());
+
+		String[] colors = {"Blue", "Green", "Red", "Yellow"};
+		String[] sizes = {
+			"Tiny", "Small", "Medium", "Large", "Huge", "Gargantuan"
+		};
 
 		Calendar calendar = Calendar.getInstance();
 
@@ -144,9 +157,13 @@ public class FDSSamplePortlet extends MVCPortlet {
 			_objectEntryLocalService.addObjectEntry(
 				user.getUserId(), 0, objectDefinition.getObjectDefinitionId(),
 				HashMapBuilder.<String, Serializable>put(
+					"color", colors[i % 4]
+				).put(
 					"date", calendar.getTime()
 				).put(
 					"description", "This is a description for sample " + i + "."
+				).put(
+					"size", sizes[i % 6]
 				).put(
 					"title", "Sample" + i
 				).build(),
@@ -171,6 +188,11 @@ public class FDSSamplePortlet extends MVCPortlet {
 
 	@Reference
 	private Portal _portal;
+
+	@Reference(
+		target = "(&(original.bean=true)(bean.id=javax.servlet.ServletContext))"
+	)
+	private ServletContext _servletContext;
 
 	@Reference
 	private UserLocalService _userLocalService;

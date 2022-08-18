@@ -102,6 +102,7 @@ GradleProvidedDependenciesCheck | [Bug Prevention](bug_prevention_checks.markdow
 GradleStylingCheck | [Styling](styling_checks.markdown#styling-checks) | .gradle | Applies rules to enforce consistency in code style. |
 [GradleTaskCreationCheck](check/gradle_task_creation_check.markdown#gradletaskcreationcheck) | [Styling](styling_checks.markdown#styling-checks) | .gradle | Checks that a task is declared on a separate line before the closure. |
 GradleTestDependencyVersionCheck | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .gradle | Checks the version for dependencies in gradle build files. |
+[GradleUpgradeReleaseDXPCheck](check/gradle_upgrade_release_dxp_check.markdown#gradleupgradereleasedxpcheck) | [Upgrade](upgrade_checks.markdown#upgrade-checks) | .gradle | Remove and replaced dependencies in `build.gradle` that are already in `release.dxp.api` with `released.dxp.api` dependency. |
 GroovyImportsCheck | [Styling](styling_checks.markdown#styling-checks) | .groovy | Sorts and groups imports in `.groovy` files. |
 HTMLEmptyLinesCheck | [Styling](styling_checks.markdown#styling-checks) | .html or .path | Finds missing and unnecessary empty lines. |
 HTMLWhitespaceCheck | [Styling](styling_checks.markdown#styling-checks) | .html or .path | Finds missing and unnecessary whitespace in `.html` files. |
@@ -111,6 +112,7 @@ IncorrectFilePathCheck | [Bug Prevention](bug_prevention_checks.markdown#bug-pre
 InstanceofOrderCheck | [Styling](styling_checks.markdown#styling-checks) | .java, .jsp, .jspf, .jspx, .tag, .tpl or .vm | Check the order of `instanceof` calls. |
 [ItemBuilderCheck](check/builder_check.markdown#buildercheck) | [Miscellaneous](miscellaneous_checks.markdown#miscellaneous-checks) | .java | Checks that `DropdownItemBuilder`, `LabelItemBuilder` or `NavigationItemBuilder` is used when possible. |
 [ItemListBuilderCheck](check/builder_check.markdown#buildercheck) | [Miscellaneous](miscellaneous_checks.markdown#miscellaneous-checks) | .java | Checks that `DropdownItemListBuilder`, `LabelItemListBuilder` or `NavigationItemListBuilder` is used when possible. |
+JSCompatibilityCheck | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | | Checks for JavaScript compatibility. |
 [JSLodashDependencyCheck](check/js_lodash_dependency_check.markdown#jslodashdependencycheck) | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .js or .jsx | Finds incorrect use of `AUI._`. |
 [JSONDeprecatedPackagesCheck](check/json_deprecated_packages_check.markdown#jsondeprecatedpackagescheck) | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .ipynb, .json or .npmbridgerc | Finds incorrect use of deprecated packages in `package.json` files. |
 JSONNamingCheck | [Naming Conventions](naming_conventions_checks.markdown#naming-conventions-checks) | .java, .jsp, .jspf, .jspx, .tag, .tpl or .vm | Checks if variable names follow naming conventions. |
@@ -212,6 +214,7 @@ JavaMapBuilderGenericsCheck | [Bug Prevention](bug_prevention_checks.markdown#bu
 JavaMissingOverrideCheck | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .java | Finds missing @Override annotations. |
 JavaMissingXMLPublicIdsCheck | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .java | Finds missing public IDs for check XML files. |
 JavaModifiedServiceMethodCheck | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .java | Finds missing empty lines before `removedService` or `addingService` calls. |
+JavaModuleClassGetResourceCallCheck | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .java | Checks that dependencies files are located in the correct directory. |
 [JavaModuleComponentCheck](check/java_module_component_check.markdown#javamodulecomponentcheck) | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .java | Checks for use of `@Component` in `-api` or `-spi` modules. |
 [JavaModuleExposureCheck](check/java_module_exposure_check.markdown#javamoduleexposurecheck) | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .java | Checks for exposure of `SPI` types in `API`. |
 JavaModuleIllegalImportsCheck | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .java | Finds cases of incorrect use of certain classes in modules. |
@@ -228,6 +231,7 @@ JavaRedundantConstructorCheck | [Bug Prevention](bug_prevention_checks.markdown#
 JavaReleaseInfoCheck | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .java | Validates information in `ReleaseInfo.java`. |
 [JavaResultSetCheck](check/java_result_set_check.markdown#javaresultsetcheck) | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .java | Checks for correct use `java.sql.ResultSet.getInt(int)`. |
 JavaReturnStatementCheck | [Styling](styling_checks.markdown#styling-checks) | .java | Finds unnecessary `else` statement (when `if` and `else` statement both end with `return` statement). |
+JavaRunSqlStylingCheck | [Styling](styling_checks.markdown#styling-checks) | .java | Applies rules to enforce consistency in code style. |
 [JavaSeeAnnotationCheck](check/java_see_annotation_check.markdown#javaseeannotationcheck) | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .java | Checks for nested annotations inside `@see`. |
 JavaServiceImplCheck | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .java | Ensures that `afterPropertiesSet` and `destroy` methods in `*ServiceImpl` always call the method with the same name in the superclass. |
 JavaServiceObjectCheck | [Styling](styling_checks.markdown#styling-checks) | .java | Checks for correct use of `*.is*` instead of `*.get*` when calling methods generated by ServiceBuilder. |
@@ -342,6 +346,7 @@ PropertiesDefinitionKeysCheck | [Styling](styling_checks.markdown#styling-checks
 PropertiesDependenciesFileCheck | [Styling](styling_checks.markdown#styling-checks) | .eslintignore, .prettierignore or .properties | Sorts the properties in `dependencies.properties` file. |
 PropertiesEmptyLinesCheck | [Styling](styling_checks.markdown#styling-checks) | .eslintignore, .prettierignore or .properties | Finds missing and unnecessary empty lines. |
 PropertiesEnvironmentVariablesCheck | [Documentation](documentation_checks.markdown#documentation-checks) | .eslintignore, .prettierignore or .properties | Verifies that the environment property in the documentation matches the property name. |
+PropertiesFeatureFlagsCheck | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .eslintignore, .prettierignore or .properties | Generate feature flags in `portal.properties` file. |
 PropertiesImportedFilesContentCheck | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .eslintignore, .prettierignore or .properties | Performs several checks on `imported-files.properties` file. |
 [PropertiesLanguageKeysCheck](check/properties_language_keys_check.markdown#propertieslanguagekeyscheck) | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .eslintignore, .prettierignore or .properties | Checks that there is no HTML markup in language keys. |
 PropertiesLanguageKeysOrderCheck | [Styling](styling_checks.markdown#styling-checks) | .eslintignore, .prettierignore or .properties | Sort language keys in `Language.properties` file. |
@@ -358,7 +363,8 @@ PropertiesServiceKeysCheck | [Bug Prevention](bug_prevention_checks.markdown#bug
 PropertiesSourceFormatterContentCheck | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .eslintignore, .prettierignore or .properties | Performs several checks on `source-formatter.properties` file. |
 PropertiesSourceFormatterFileCheck | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .eslintignore, .prettierignore or .properties | Performs several checks on `source-formatter.properties` file. |
 PropertiesStylingCheck | [Styling](styling_checks.markdown#styling-checks) | .eslintignore, .prettierignore or .properties | Applies rules to enforce consistency in code style. |
-PropertiesTestFileCheck | [Styling](styling_checks.markdown#styling-checks) | .eslintignore, .prettierignore or .properties | Performs several checks in `test.properties`. |
+[PropertiesUpgradeLiferayPluginPackageFileCheck](check/properties_upgrade_liferay_plugin_package_file_check.markdown#propertiesupgradeliferaypluginpackagefilecheck) | [Upgrade](upgrade_checks.markdown#upgrade-checks) | .eslintignore, .prettierignore or .properties | Performs several upgrade checks in `liferay-plugin-package.properties` file. |
+PropertiesUpgradeLiferayPluginPackageLiferayVersionsCheck | [Upgrade](upgrade_checks.markdown#upgrade-checks) | .eslintignore, .prettierignore or .properties | Validates and upgrades the version in `liferay-plugin-package.properties` file. |
 PropertiesVerifyPropertiesCheck | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .eslintignore, .prettierignore or .properties | Finds usage of legacy properties in `portal.properties` or `system.properties`. |
 PropertiesWhitespaceCheck | [Styling](styling_checks.markdown#styling-checks) | .eslintignore, .prettierignore or .properties | Finds missing and unnecessary whitespace in `.properties` files. |
 PythonClassesAndMethodsOrderCheck | [Styling](styling_checks.markdown#styling-checks) | .py | Checks the order of classes and methods. |
@@ -366,6 +372,7 @@ PythonImportsCheck | [Styling](styling_checks.markdown#styling-checks) | .py | S
 PythonStylingCheck | [Styling](styling_checks.markdown#styling-checks) | .py | Applies rules to enforce consistency in code style. |
 PythonWhitespaceCheck | [Styling](styling_checks.markdown#styling-checks) | .py | Finds missing and unnecessary whitespace. |
 RedundantBranchingStatementCheck | [Performance](performance_checks.markdown#performance-checks) | .java | Finds unnecessary branching (`break`, `continue` or `return`) statements. |
+[RedundantLogCheck](check/redundant_log_check.markdown#redundantlogcheck) | [Performance](performance_checks.markdown#performance-checks) | .java | Finds unnecessary logs. |
 ReferenceAnnotationCheck | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .java | Performs several checks on classes with @Reference annotation. |
 [RequireThisCheck](https://checkstyle.sourceforge.io/config_coding.html#RequireThis) | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .java | Checks that references to instance variables and methods of the present object are explicitly of the form 'this.varName' or 'this.methodName(args)' and that those references don't rely on the default behavior when 'this.' is absent. |
 [ResourceBundleCheck](check/resource_bundle_check.markdown#resourcebundlecheck) | [Bug Prevention](bug_prevention_checks.markdown#bug-prevention-checks) | .java, .jsp, .jspf, .jspx, .tag, .tpl or .vm | Checks that there are no calls to `java.util.ResourceBundle.getBundle`. |

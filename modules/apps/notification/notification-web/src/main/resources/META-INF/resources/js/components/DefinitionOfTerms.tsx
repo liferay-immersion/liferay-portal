@@ -22,21 +22,17 @@ import {FrontendDataSet} from '@liferay/frontend-data-set-web';
 
 import {render} from '@liferay/frontend-js-react-web';
 import {
+	API,
 	AutoComplete,
 	onActionDropdownItemClick,
 } from '@liferay/object-js-components-web';
 import {createResourceURL, fetch} from 'frontend-js-web';
 import React, {useEffect, useState} from 'react';
 
-import {defaultLanguageId} from '../utils/locale';
-
-const HEADERS = new Headers({
-	'Accept': 'application/json',
-	'Content-Type': 'application/json',
-});
+const defaultLanguageId = Liferay.ThemeDisplay.getDefaultLanguageId();
 
 export function DefinitionOfTerms({baseResourceURL}: IProps) {
-	const [objectDefinitons, setObjectDefinitons] = useState<
+	const [objectDefinitions, setObjectDefinitions] = useState<
 		ObjectDefinition[]
 	>();
 	const [selectedEntity, setSelectedEntity] = useState<ObjectDefinition>();
@@ -112,27 +108,13 @@ export function DefinitionOfTerms({baseResourceURL}: IProps) {
 	);
 
 	useEffect(() => {
-		const makeFetch = async () => {
-			const response = await fetch(
-				'/o/object-admin/v1.0/object-definitions',
-				{
-					headers: HEADERS,
-					method: 'GET',
-				}
-			);
-
-			const {items} = (await response.json()) as {
-				items: ObjectDefinition[];
-			};
-
+		API.getObjectDefinitions().then((items) => {
 			const objectDefinitions = items.filter(
 				({system}: ObjectDefinition) => !system
 			);
 
-			setObjectDefinitons(objectDefinitions);
-		};
-
-		makeFetch();
+			setObjectDefinitions(objectDefinitions);
+		});
 	}, []);
 
 	const getEntityFields = async (objectDefinition: ObjectDefinition) => {
@@ -140,11 +122,11 @@ export function DefinitionOfTerms({baseResourceURL}: IProps) {
 			createResourceURL(baseResourceURL, {
 				objectDefinitionId: objectDefinition.id,
 				p_p_resource_id:
-					'/notification_templates/get_notification_template_terms',
-			})
+					'/notification_templates/notification_template_terms',
+			}).toString()
 		);
 
-		const responseJSON = (await response.json()) as any[];
+		const responseJSON: [] = await response.json();
 
 		setFrontEndDataSetProps({
 			...frontEndDataSetProps,
@@ -189,9 +171,9 @@ export function DefinitionOfTerms({baseResourceURL}: IProps) {
 			<ClayPanel.Body>
 				<AutoComplete
 					emptyStateMessage={Liferay.Language.get(
-						'there-are-no-objects'
+						'no-entities-were-found'
 					)}
-					items={objectDefinitons ?? []}
+					items={objectDefinitions ?? []}
 					label={Liferay.Language.get('entity')}
 					onChangeQuery={setQuery}
 					onSelectItem={(item: ObjectDefinition) => {

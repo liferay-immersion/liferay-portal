@@ -35,11 +35,27 @@ renderResponse.setTitle(assetListDisplayContext.getAssetListEntryTitle());
 
 <c:if test='<%= !(boolean)data.get("isSegmentationEnabled") %>'>
 	<clay:stripe
+		defaultTitleDisabled="<%= true %>"
+		dismissible="<%= true %>"
 		displayType="warning"
 	>
-		<strong class="lead"><%= LanguageUtil.get(request, "personalized-variations-can-not-be-displayed-because-segmentation-is-disabled") %></strong>
+		<strong><%= LanguageUtil.get(request, "personalized-variations-cannot-be-displayed-because-segmentation-is-disabled") %></strong>
 
-		<span><%= LanguageUtil.get(request, "to-enable-segmentation-go-to-system-settings-segments-segments-service") %></span>
+		<%
+		String segmentsConfigurationURL = editAssetListDisplayContext.getSegmentsCompanyConfigurationURL();
+		%>
+
+		<c:choose>
+			<c:when test="<%= segmentsConfigurationURL != null %>">
+				<clay:link
+					href="<%= segmentsConfigurationURL %>"
+					label='<%= LanguageUtil.get(request, "to-enable,-go-to-instance-settings") %>'
+				/>
+			</c:when>
+			<c:otherwise>
+				<span><liferay-ui:message key="contact-your-system-administrator-to-enable-it" /></span>
+			</c:otherwise>
+		</c:choose>
 	</clay:stripe>
 </c:if>
 

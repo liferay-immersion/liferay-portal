@@ -23,6 +23,8 @@ DLSizeLimitConfigurationDisplayContext dlSizeLimitConfigurationDisplayContext = 
 <aui:form action="<%= dlSizeLimitConfigurationDisplayContext.getEditDLSizeLimitConfigurationURL() %>" method="post" name="fm">
 	<clay:sheet>
 		<clay:sheet-header>
+			<liferay-ui:error exception="<%= ConfigurationModelListenerException.class %>" message="mime-type-size-limit-error" />
+
 			<h2>
 				<liferay-ui:message key="dl-size-limit-configuration-name" />
 			</h2>
@@ -37,12 +39,16 @@ DLSizeLimitConfigurationDisplayContext dlSizeLimitConfigurationDisplayContext = 
 		</clay:sheet-section>
 
 		<clay:sheet-section>
-			<span aria-hidden="true" class="loading-animation"></span>
+			<h3 class="sheet-subtitle"><liferay-ui:message key="maximum-file-size-and-mimetypes" /></h3>
 
-			<react:component
-				module="document_library/js/file-size-limit/FileSizeMimetypes"
-				props="<%= dlSizeLimitConfigurationDisplayContext.getFileSizePerMimeTypeData() %>"
-			/>
+			<div>
+				<span aria-hidden="true" class="loading-animation"></span>
+
+				<react:component
+					module="document_library/js/file-size-limit/FileSizeMimetypes"
+					props="<%= dlSizeLimitConfigurationDisplayContext.getFileSizePerMimeTypeData() %>"
+				/>
+			</div>
 		</clay:sheet-section>
 
 		<clay:sheet-footer>

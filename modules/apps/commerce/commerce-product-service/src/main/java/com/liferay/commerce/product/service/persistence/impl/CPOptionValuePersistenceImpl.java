@@ -3069,15 +3069,14 @@ public class CPOptionValuePersistenceImpl
 		CPOptionValueModelImpl cpOptionValueModelImpl =
 			(CPOptionValueModelImpl)cpOptionValue;
 
-		if (Validator.isNull(cpOptionValue.getExternalReferenceCode())) {
-			cpOptionValue.setExternalReferenceCode(
-				String.valueOf(cpOptionValue.getPrimaryKey()));
-		}
-
 		if (Validator.isNull(cpOptionValue.getUuid())) {
 			String uuid = _portalUUID.generate();
 
 			cpOptionValue.setUuid(uuid);
+		}
+
+		if (Validator.isNull(cpOptionValue.getExternalReferenceCode())) {
+			cpOptionValue.setExternalReferenceCode(cpOptionValue.getUuid());
 		}
 
 		ServiceContext serviceContext =
@@ -3200,7 +3199,9 @@ public class CPOptionValuePersistenceImpl
 	 */
 	@Override
 	public CPOptionValue fetchByPrimaryKey(Serializable primaryKey) {
-		if (ctPersistenceHelper.isProductionMode(CPOptionValue.class)) {
+		if (ctPersistenceHelper.isProductionMode(
+				CPOptionValue.class, primaryKey)) {
+
 			return super.fetchByPrimaryKey(primaryKey);
 		}
 

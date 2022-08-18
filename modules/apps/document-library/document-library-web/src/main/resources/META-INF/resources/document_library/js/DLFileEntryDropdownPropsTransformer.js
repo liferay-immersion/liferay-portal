@@ -15,6 +15,7 @@
 import {
 	addParams,
 	navigate,
+	openConfirmModal,
 	openModal,
 	openSelectionModal,
 } from 'frontend-js-web';
@@ -85,23 +86,26 @@ const ACTIONS = {
 	},
 
 	delete({deleteURL}) {
-		if (
-			confirm(
-				Liferay.Language.get('are-you-sure-you-want-to-delete-this')
-			)
-		) {
-			submitForm(document.hrefFm, deleteURL);
-		}
+		openConfirmModal({
+			message: Liferay.Language.get(
+				'are-you-sure-you-want-to-delete-this'
+			),
+			onConfirm: (isConfirmed) =>
+				isConfirmed && submitForm(document.hrefFm, deleteURL),
+		});
 	},
 
 	deleteVersion({deleteURL}) {
-		if (
-			confirm(
-				Liferay.Language.get('are-you-sure-you-want-to-delete-this')
-			)
-		) {
-			submitForm(document.hrefFm, deleteURL);
-		}
+		openConfirmModal({
+			message: Liferay.Language.get(
+				'are-you-sure-you-want-to-delete-this'
+			),
+			onConfirm: (isConfirmed) => {
+				if (isConfirmed) {
+					submitForm(document.hrefFm, deleteURL);
+				}
+			},
+		});
 	},
 
 	editImage({fileEntryId, imageURL}, portletNamespace) {
@@ -109,6 +113,16 @@ const ACTIONS = {
 			fileEntryId,
 			imageURL,
 		});
+	},
+
+	editOfficeDocument({editURL}, portletNamespace) {
+		Liferay.componentReady(`${portletNamespace}DocumentLibraryOpener`).then(
+			(openerOnedrive) => {
+				openerOnedrive.edit({
+					formSubmitURL: editURL,
+				});
+			}
+		);
 	},
 
 	move({parameterName, parameterValue}, portletNamespace) {
@@ -123,37 +137,54 @@ const ACTIONS = {
 	},
 
 	publish({publishURL}) {
-		if (
-			confirm(
-				Liferay.Language.get(
-					'are-you-sure-you-want-to-publish-the-selected-document'
-				)
-			)
-		) {
-			location.href = publishURL;
-		}
+		openConfirmModal({
+			message: Liferay.Language.get(
+				'are-you-sure-you-want-to-publish-the-selected-document'
+			),
+			onConfirm: (isConfirmed) => {
+				if (isConfirmed) {
+					location.href = publishURL;
+				}
+			},
+		});
 	},
 };
 
 export default function propsTransformer({items, portletNamespace, ...props}) {
 	return {
 		...props,
-		items: items.map((item) => {
-			return {
-				...item,
-				items: item.items?.map((child) => ({
-					...child,
-					onClick(event) {
-						const action = child.data?.action;
+		items: items.map((item) =>
+			item?.type === 'group'
+				? {
+						...item,
+						items: item.items?.map((child) => ({
+							...child,
+							onClick(event) {
+								const action = child.data?.action;
 
-						if (action) {
-							event.preventDefault();
+								if (action) {
+									event.preventDefault();
 
-							ACTIONS[action](child.data, portletNamespace);
-						}
-					},
-				})),
-			};
-		}),
+									ACTIONS[action](
+										child.data,
+										portletNamespace
+									);
+								}
+							},
+						})),
+				  }
+				: {
+						...item,
+						onClick(event) {
+							const action = item.data?.action;
+
+							if (action) {
+								event.preventDefault();
+
+								ACTIONS[action](item.data, portletNamespace);
+							}
+						},
+				  }
+		),
 	};
 }

@@ -14,6 +14,9 @@
 
 package com.liferay.object.internal.deployer;
 
+import com.liferay.asset.kernel.service.AssetCategoryLocalService;
+import com.liferay.asset.kernel.service.AssetTagLocalService;
+import com.liferay.asset.kernel.service.AssetVocabularyLocalService;
 import com.liferay.info.collection.provider.InfoCollectionProvider;
 import com.liferay.list.type.service.ListTypeEntryLocalService;
 import com.liferay.notification.constants.NotificationTermContributorConstants;
@@ -43,6 +46,7 @@ import com.liferay.object.scope.ObjectScopeProviderRegistry;
 import com.liferay.object.service.ObjectDefinitionLocalService;
 import com.liferay.object.service.ObjectEntryLocalService;
 import com.liferay.object.service.ObjectFieldLocalService;
+import com.liferay.object.service.ObjectLayoutLocalService;
 import com.liferay.object.service.ObjectRelationshipLocalService;
 import com.liferay.object.service.ObjectViewLocalService;
 import com.liferay.petra.reflect.ReflectionUtil;
@@ -51,6 +55,7 @@ import com.liferay.portal.kernel.security.permission.ResourceActions;
 import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermission;
 import com.liferay.portal.kernel.security.permission.resource.PortletResourcePermission;
 import com.liferay.portal.kernel.security.permission.resource.PortletResourcePermissionFactory;
+import com.liferay.portal.kernel.service.GroupLocalService;
 import com.liferay.portal.kernel.service.PersistedModelLocalServiceRegistry;
 import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.util.HashMapDictionaryBuilder;
@@ -81,14 +86,19 @@ import org.osgi.framework.ServiceRegistration;
 public class ObjectDefinitionDeployerImpl implements ObjectDefinitionDeployer {
 
 	public ObjectDefinitionDeployerImpl(
+		AssetCategoryLocalService assetCategoryLocalService,
+		AssetTagLocalService assetTagLocalService,
+		AssetVocabularyLocalService assetVocabularyLocalService,
 		BundleContext bundleContext,
 		DynamicQueryBatchIndexingActionableFactory
 			dynamicQueryBatchIndexingActionableFactory,
+		GroupLocalService groupLocalService,
 		ListTypeEntryLocalService listTypeEntryLocalService,
 		ModelSearchRegistrarHelper modelSearchRegistrarHelper,
 		ObjectDefinitionLocalService objectDefinitionLocalService,
 		ObjectEntryLocalService objectEntryLocalService,
 		ObjectFieldLocalService objectFieldLocalService,
+		ObjectLayoutLocalService objectLayoutLocalService,
 		ObjectRelationshipLocalService objectRelationshipLocalService,
 		ObjectScopeProviderRegistry objectScopeProviderRegistry,
 		ObjectViewLocalService objectViewLocalService,
@@ -96,14 +106,19 @@ public class ObjectDefinitionDeployerImpl implements ObjectDefinitionDeployer {
 		ResourceActions resourceActions, UserLocalService userLocalService,
 		ModelPreFilterContributor workflowStatusModelPreFilterContributor) {
 
+		_assetCategoryLocalService = assetCategoryLocalService;
+		_assetTagLocalService = assetTagLocalService;
+		_assetVocabularyLocalService = assetVocabularyLocalService;
 		_bundleContext = bundleContext;
 		_dynamicQueryBatchIndexingActionableFactory =
 			dynamicQueryBatchIndexingActionableFactory;
+		_groupLocalService = groupLocalService;
 		_listTypeEntryLocalService = listTypeEntryLocalService;
 		_modelSearchRegistrarHelper = modelSearchRegistrarHelper;
 		_objectDefinitionLocalService = objectDefinitionLocalService;
 		_objectEntryLocalService = objectEntryLocalService;
 		_objectFieldLocalService = objectFieldLocalService;
+		_objectLayoutLocalService = objectLayoutLocalService;
 		_objectRelationshipLocalService = objectRelationshipLocalService;
 		_objectScopeProviderRegistry = objectScopeProviderRegistry;
 		_objectViewLocalService = objectViewLocalService;
@@ -143,15 +158,6 @@ public class ObjectDefinitionDeployerImpl implements ObjectDefinitionDeployer {
 				new ObjectEntryPortletResourcePermissionLogic());
 
 		List<ServiceRegistration<?>> serviceRegistrations = ListUtil.fromArray(
-			_bundleContext.registerService(
-				InfoCollectionProvider.class,
-				new ObjectEntrySingleFormVariationInfoCollectionProvider(
-					_listTypeEntryLocalService, objectDefinition,
-					_objectEntryLocalService, _objectFieldLocalService,
-					_objectScopeProviderRegistry),
-				HashMapDictionaryBuilder.<String, Object>put(
-					"item.class.name", objectDefinition.getClassName()
-				).build()),
 			_bundleContext.registerService(
 				KeywordQueryContributor.class,
 				new ObjectEntryKeywordQueryContributor(
@@ -207,9 +213,7 @@ public class ObjectDefinitionDeployerImpl implements ObjectDefinitionDeployer {
 				).build()),
 			_bundleContext.registerService(
 				NotificationType.class,
-				new ObjectDefinitionNotificationType(
-					objectDefinition.getClassName(),
-					objectDefinition.getShortName()),
+				new ObjectDefinitionNotificationType(objectDefinition),
 				HashMapDictionaryBuilder.<String, Object>put(
 
 					// TODO Will commerce order need more than one notification
@@ -269,6 +273,20 @@ public class ObjectDefinitionDeployerImpl implements ObjectDefinitionDeployer {
 						objectEntryModelSummaryContributor);
 				}));
 
+		if (objectDefinition.isDefaultStorageType()) {
+			_bundleContext.registerService(
+				InfoCollectionProvider.class,
+				new ObjectEntrySingleFormVariationInfoCollectionProvider(
+					_assetCategoryLocalService, _assetTagLocalService,
+					_assetVocabularyLocalService, _groupLocalService,
+					_listTypeEntryLocalService, objectDefinition,
+					_objectEntryLocalService, _objectFieldLocalService,
+					_objectLayoutLocalService, _objectScopeProviderRegistry),
+				HashMapDictionaryBuilder.<String, Object>put(
+					"item.class.name", objectDefinition.getClassName()
+				).build());
+		}
+
 		for (Locale locale : LanguageUtil.getAvailableLocales()) {
 			serviceRegistrations.add(
 				_bundleContext.registerService(
@@ -307,14 +325,19 @@ public class ObjectDefinitionDeployerImpl implements ObjectDefinitionDeployer {
 					})));
 	}
 
+	private final AssetCategoryLocalService _assetCategoryLocalService;
+	private final AssetTagLocalService _assetTagLocalService;
+	private final AssetVocabularyLocalService _assetVocabularyLocalService;
 	private final BundleContext _bundleContext;
 	private final DynamicQueryBatchIndexingActionableFactory
 		_dynamicQueryBatchIndexingActionableFactory;
+	private final GroupLocalService _groupLocalService;
 	private final ListTypeEntryLocalService _listTypeEntryLocalService;
 	private final ModelSearchRegistrarHelper _modelSearchRegistrarHelper;
 	private final ObjectDefinitionLocalService _objectDefinitionLocalService;
 	private final ObjectEntryLocalService _objectEntryLocalService;
 	private final ObjectFieldLocalService _objectFieldLocalService;
+	private final ObjectLayoutLocalService _objectLayoutLocalService;
 	private final ObjectRelationshipLocalService
 		_objectRelationshipLocalService;
 	private final ObjectScopeProviderRegistry _objectScopeProviderRegistry;

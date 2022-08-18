@@ -35,13 +35,8 @@ public class UpgradeDLFileEntry extends UpgradeProcess {
 			_populateExternalReferenceCode();
 		}
 
-		if (!hasColumn("DLFileEntry", "expirationDate")) {
-			alterTableAddColumn("DLFileEntry", "expirationDate", "DATE null");
-		}
-
-		if (!hasColumn("DLFileEntry", "reviewDate")) {
-			alterTableAddColumn("DLFileEntry", "reviewDate", "DATE null");
-		}
+		alterTableAddColumn("DLFileEntry", "expirationDate", "DATE null");
+		alterTableAddColumn("DLFileEntry", "reviewDate", "DATE null");
 	}
 
 	private void _populateExternalReferenceCode() throws Exception {
@@ -52,9 +47,9 @@ public class UpgradeDLFileEntry extends UpgradeProcess {
 			ResultSet resultSet = preparedStatement1.executeQuery();
 			PreparedStatement preparedStatement2 =
 				AutoBatchPreparedStatementUtil.autoBatch(
-					connection.prepareStatement(
-						"update DLFileEntry set externalReferenceCode = ? " +
-							"where fileEntryId = ?"))) {
+					connection,
+					"update DLFileEntry set externalReferenceCode = ? where " +
+						"fileEntryId = ?")) {
 
 			while (resultSet.next()) {
 				long fileEntryId = resultSet.getLong(1);

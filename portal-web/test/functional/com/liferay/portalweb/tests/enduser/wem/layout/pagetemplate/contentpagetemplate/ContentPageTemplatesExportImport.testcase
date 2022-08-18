@@ -179,9 +179,7 @@ definition {
 				fragmentName = "Heading",
 				scope = "Master");
 
-			Button.click(button = "Publish Master");
-
-			Alert.viewSuccessMessage();
+			MastersPageTemplates.publishMaster();
 		}
 
 		task ("Add a content page template based on custom master") {
@@ -247,9 +245,7 @@ definition {
 				fragmentName = "Button",
 				scope = "Master");
 
-			Button.click(button = "Publish Master");
-
-			Alert.viewSuccessMessage();
+			MastersPageTemplates.publishMaster();
 		}
 
 		task ("Import content page template in new site") {
@@ -486,7 +482,7 @@ definition {
 
 			Click(locator1 = "PageEditor#MORE_LINK");
 
-			Pause(locator1 = "3000");
+			WaitForPageLoad();
 
 			AssertChecked.assertCheckedNotVisible(locator1 = "Radio#SPECIFIC_LOOK");
 
@@ -612,6 +608,8 @@ definition {
 			PageTemplatesAdmin.viewPageTemplatePresent(pageTemplateName = "Page Template Name");
 
 			PageTemplatesAdmin.gotoPageTemplate(pageTemplateName = "Page Template Name");
+
+			PageEditor.assertFragmentSidebarLoaded();
 
 			WaitForLiferayEvent.initializeLiferayEventLog();
 

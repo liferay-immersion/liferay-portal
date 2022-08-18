@@ -12,11 +12,15 @@
  * details.
  */
 
+import {getOpener, openModal} from 'frontend-js-web';
+
 import {
 	acceptAllCookies,
 	declineAllCookies,
 	getCookie,
 	setCookie,
+	setUserConfigCookie,
+	userConfigCookieName,
 } from '../../js/CookiesUtil';
 
 export default function ({
@@ -40,19 +44,14 @@ export default function ({
 	const editMode = document.body.classList.contains('has-edit-mode-menu');
 
 	if (!editMode) {
-		checkCookiesConsent(
-			cookieBanner,
-			optionalConsentCookieTypeNames,
-			requiredConsentCookieTypeNames
-		);
+		setBannerVisibility(cookieBanner);
 
 		const cookiePreferences = {};
 
 		optionalConsentCookieTypeNames.forEach(
 			(optionalConsentCookieTypeName) => {
-				cookiePreferences[optionalConsentCookieTypeName] = Boolean(
-					getCookie(optionalConsentCookieTypeName)
-				).toString();
+				cookiePreferences[optionalConsentCookieTypeName] =
+					getCookie(optionalConsentCookieTypeName) || 'false';
 			}
 		);
 
@@ -67,10 +66,12 @@ export default function ({
 				optionalConsentCookieTypeNames,
 				requiredConsentCookieTypeNames
 			);
+
+			setUserConfigCookie();
 		});
 
 		configurationButton.addEventListener('click', () => {
-			Liferay.Util.openModal({
+			openModal({
 				buttons: [
 					{
 						displayType: 'secondary',
@@ -91,13 +92,11 @@ export default function ({
 								}
 							);
 
-							checkCookiesConsent(
-								cookieBanner,
-								optionalConsentCookieTypeNames,
-								requiredConsentCookieTypeNames
-							);
+							setUserConfigCookie();
 
-							Liferay.Util.getOpener().Liferay.fire('closeModal');
+							setBannerVisibility(cookieBanner);
+
+							getOpener().Liferay.fire('closeModal');
 						},
 					},
 					{
@@ -109,13 +108,11 @@ export default function ({
 								requiredConsentCookieTypeNames
 							);
 
-							checkCookiesConsent(
-								cookieBanner,
-								optionalConsentCookieTypeNames,
-								requiredConsentCookieTypeNames
-							);
+							setUserConfigCookie();
 
-							Liferay.Util.getOpener().Liferay.fire('closeModal');
+							setBannerVisibility(cookieBanner);
+
+							getOpener().Liferay.fire('closeModal');
 						},
 					},
 					{
@@ -128,13 +125,11 @@ export default function ({
 								requiredConsentCookieTypeNames
 							);
 
-							checkCookiesConsent(
-								cookieBanner,
-								optionalConsentCookieTypeNames,
-								requiredConsentCookieTypeNames
-							);
+							setUserConfigCookie();
 
-							Liferay.Util.getOpener().Liferay.fire('closeModal');
+							setBannerVisibility(cookieBanner);
+
+							getOpener().Liferay.fire('closeModal');
 						},
 					},
 				],
@@ -154,23 +149,14 @@ export default function ({
 				optionalConsentCookieTypeNames,
 				requiredConsentCookieTypeNames
 			);
+
+			setUserConfigCookie();
 		});
 	}
 }
 
-function checkCookiesConsent(
-	cookieBanner,
-	optionalConsentCookieTypeNames,
-	requiredConsentCookieTypeNames
-) {
-	if (
-		optionalConsentCookieTypeNames.every((optionalConsentCookieTypeName) =>
-			getCookie(optionalConsentCookieTypeName)
-		) &&
-		requiredConsentCookieTypeNames.every((requiredConsentCookieTypeName) =>
-			getCookie(requiredConsentCookieTypeName)
-		)
-	) {
+function setBannerVisibility(cookieBanner) {
+	if (getCookie(userConfigCookieName)) {
 		cookieBanner.style.display = 'none';
 	}
 	else {

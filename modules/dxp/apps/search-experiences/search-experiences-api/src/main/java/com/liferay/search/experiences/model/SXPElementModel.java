@@ -98,6 +98,21 @@ public interface SXPElementModel
 	public void setUuid(String uuid);
 
 	/**
+	 * Returns the external reference code of this sxp element.
+	 *
+	 * @return the external reference code of this sxp element
+	 */
+	@AutoEscape
+	public String getExternalReferenceCode();
+
+	/**
+	 * Sets the external reference code of this sxp element.
+	 *
+	 * @param externalReferenceCode the external reference code of this sxp element
+	 */
+	public void setExternalReferenceCode(String externalReferenceCode);
+
+	/**
 	 * Returns the sxp element ID of this sxp element.
 	 *
 	 * @return the sxp element ID of this sxp element
@@ -344,21 +359,6 @@ public interface SXPElementModel
 	 * @param hidden the hidden of this sxp element
 	 */
 	public void setHidden(boolean hidden);
-
-	/**
-	 * Returns the key of this sxp element.
-	 *
-	 * @return the key of this sxp element
-	 */
-	@AutoEscape
-	public String getKey();
-
-	/**
-	 * Sets the key of this sxp element.
-	 *
-	 * @param key the key of this sxp element
-	 */
-	public void setKey(String key);
 
 	/**
 	 * Returns the read only of this sxp element.

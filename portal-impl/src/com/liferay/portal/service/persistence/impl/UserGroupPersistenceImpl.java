@@ -6377,15 +6377,14 @@ public class UserGroupPersistenceImpl
 
 		UserGroupModelImpl userGroupModelImpl = (UserGroupModelImpl)userGroup;
 
-		if (Validator.isNull(userGroup.getExternalReferenceCode())) {
-			userGroup.setExternalReferenceCode(
-				String.valueOf(userGroup.getPrimaryKey()));
-		}
-
 		if (Validator.isNull(userGroup.getUuid())) {
 			String uuid = PortalUUIDUtil.generate();
 
 			userGroup.setUuid(uuid);
+		}
+
+		if (Validator.isNull(userGroup.getExternalReferenceCode())) {
+			userGroup.setExternalReferenceCode(userGroup.getUuid());
 		}
 
 		ServiceContext serviceContext =
@@ -6506,7 +6505,9 @@ public class UserGroupPersistenceImpl
 	 */
 	@Override
 	public UserGroup fetchByPrimaryKey(Serializable primaryKey) {
-		if (CTPersistenceHelperUtil.isProductionMode(UserGroup.class)) {
+		if (CTPersistenceHelperUtil.isProductionMode(
+				UserGroup.class, primaryKey)) {
+
 			return super.fetchByPrimaryKey(primaryKey);
 		}
 

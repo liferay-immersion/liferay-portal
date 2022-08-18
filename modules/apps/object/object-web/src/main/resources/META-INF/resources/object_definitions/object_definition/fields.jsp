@@ -35,6 +35,7 @@ renderResponse.setTitle(objectDefinition.getLabel(locale, true));
 	fdsActionDropdownItems="<%= objectDefinitionsFieldsDisplayContext.getFDSActionDropdownItems() %>"
 	formName="fm"
 	id="<%= ObjectDefinitionsFDSNames.OBJECT_FIELDS %>"
+	propsTransformer="js/ObjectFieldsFDSPropsTransformer"
 	style="fluid"
 />
 
@@ -50,6 +51,8 @@ renderResponse.setTitle(objectDefinition.getLabel(locale, true));
 				"forbiddenLastChars", objectDefinitionsFieldsDisplayContext.getForbiddenLastCharacters()
 			).put(
 				"forbiddenNames", PropsUtil.getArray(PropsKeys.DL_NAME_BLACKLIST)
+			).put(
+				"objectDefinitionId", objectDefinition.getObjectDefinitionId()
 			).put(
 				"objectFieldTypes", objectDefinitionsFieldsDisplayContext.getObjectFieldBusinessTypeMaps(false, locale)
 			).put(

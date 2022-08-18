@@ -12,7 +12,11 @@
  * details.
  */
 
-import {ADD_FRAGMENT_COMPOSITION, INIT} from '../actions/types';
+import {
+	ADD_FRAGMENT_COMPOSITION,
+	INIT,
+	TOGGLE_FRAGMENT_HIGHLIGHTED,
+} from '../actions/types';
 import {LAYOUT_DATA_ITEM_TYPE_LABELS} from '../config/constants/layoutDataItemTypeLabels';
 import {LAYOUT_DATA_ITEM_TYPES} from '../config/constants/layoutDataItemTypes';
 import {config} from '../config/index';
@@ -77,28 +81,22 @@ export default function fragmentsReducer(fragments = [], action) {
 				fragmentCollectionId: 'layout-elements',
 				fragmentEntries: [
 					{
-						data: {
-							itemType: LAYOUT_DATA_ITEM_TYPES.container,
-						},
+						fragmentEntryKey: 'container',
 						icon: 'container',
-						itemId: 'container',
-						label:
+						itemType: LAYOUT_DATA_ITEM_TYPES.container,
+						name:
 							LAYOUT_DATA_ITEM_TYPE_LABELS[
 								LAYOUT_DATA_ITEM_TYPES.container
 							],
-						type: 'container',
 					},
 					{
-						data: {
-							itemType: LAYOUT_DATA_ITEM_TYPES.row,
-						},
+						fragmentEntryKey: 'row',
 						icon: 'table',
-						itemId: 'row',
-						label:
+						itemType: LAYOUT_DATA_ITEM_TYPES.row,
+						name:
 							LAYOUT_DATA_ITEM_TYPE_LABELS[
 								LAYOUT_DATA_ITEM_TYPES.row
 							],
-						type: 'row',
 					},
 				],
 				name: Liferay.Language.get('layout-elements'),
@@ -122,16 +120,13 @@ export default function fragmentsReducer(fragments = [], action) {
 					fragmentCollectionId: 'form-components',
 					fragmentEntries: [
 						{
-							data: {
-								itemType: LAYOUT_DATA_ITEM_TYPES.form,
-							},
+							fragmentEntryKey: 'form',
 							icon: 'container',
-							itemId: 'form',
-							label:
+							itemType: LAYOUT_DATA_ITEM_TYPES.form,
+							name:
 								LAYOUT_DATA_ITEM_TYPE_LABELS[
 									LAYOUT_DATA_ITEM_TYPES.form
 								],
-							type: 'form',
 						},
 						...formComponentsCollection.fragmentEntries,
 					],
@@ -150,18 +145,30 @@ export default function fragmentsReducer(fragments = [], action) {
 					).fragmentEntries,
 
 					{
-						data: {
-							itemType: LAYOUT_DATA_ITEM_TYPES.collection,
-						},
+						fragmentEntryKey: 'collection-display',
 						icon: 'list',
-						itemId: 'collection-display',
-						label: Liferay.Language.get('collection-display'),
-						type: LAYOUT_DATA_ITEM_TYPES.collection,
+						itemType: LAYOUT_DATA_ITEM_TYPES.collection,
+						name: Liferay.Language.get('collection-display'),
 					},
 				],
 			});
 
 			return newFragments;
+		}
+
+		case TOGGLE_FRAGMENT_HIGHLIGHTED: {
+			const {fragmentEntryKey, highlighted} = action;
+
+			const nextFragments = fragments.map((collection) => ({
+				...collection,
+				fragmentEntries: collection.fragmentEntries.map((fragment) =>
+					fragment.fragmentEntryKey === fragmentEntryKey
+						? {...fragment, highlighted}
+						: fragment
+				),
+			}));
+
+			return nextFragments;
 		}
 
 		default:

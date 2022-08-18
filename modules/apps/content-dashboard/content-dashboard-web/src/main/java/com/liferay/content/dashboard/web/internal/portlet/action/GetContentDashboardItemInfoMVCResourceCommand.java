@@ -47,6 +47,7 @@ import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Portal;
+import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.ResourceBundleUtil;
 import com.liferay.portal.kernel.util.WebKeys;
 
@@ -105,28 +106,28 @@ public class GetContentDashboardItemInfoMVCResourceCommand
 		try {
 			String className = ParamUtil.getString(
 				resourceRequest, "className");
+
+			ContentDashboardItemFactory<?> contentDashboardItemFactory =
+				_contentDashboardItemFactoryTracker.
+					getContentDashboardItemFactory(className);
+
+			if (contentDashboardItemFactory == null) {
+				JSONPortletResponseUtil.writeJSON(
+					resourceRequest, resourceResponse,
+					JSONFactoryUtil.createJSONArray());
+
+				return;
+			}
+
 			long classPK = GetterUtil.getLong(
 				ParamUtil.getLong(resourceRequest, "classPK"));
 
-			Optional<ContentDashboardItemFactory<?>>
-				contentDashboardItemFactoryOptional =
-					_contentDashboardItemFactoryTracker.
-						getContentDashboardItemFactoryOptional(className);
+			ContentDashboardItem<?> contentDashboardItem =
+				contentDashboardItemFactory.create(classPK);
 
-			JSONObject jsonObject = contentDashboardItemFactoryOptional.flatMap(
-				contentDashboardItemFactory -> {
-					try {
-						return Optional.of(
-							contentDashboardItemFactory.create(classPK));
-					}
-					catch (PortalException portalException) {
-						_log.error(portalException);
-
-						return Optional.empty();
-					}
-				}
-			).map(
-				contentDashboardItem -> JSONUtil.put(
+			JSONPortletResponseUtil.writeJSON(
+				resourceRequest, resourceResponse,
+				JSONUtil.put(
 					"className", _getClassName(contentDashboardItem)
 				).put(
 					"classPK", _getClassPK(contentDashboardItem)
@@ -137,6 +138,17 @@ public class GetContentDashboardItemInfoMVCResourceCommand
 					_toString(contentDashboardItem.getCreateDate())
 				).put(
 					"description", contentDashboardItem.getDescription(locale)
+				).put(
+					"downloadURL",
+					_getDownloadURL(contentDashboardItem, httpServletRequest)
+				).put(
+					"fetchSharingButtonURL",
+					_getFetchSharingButtonURL(
+						contentDashboardItem, httpServletRequest)
+				).put(
+					"fetchSharingCollaboratorsURL",
+					_getFetchSharingCollaboratorsURL(
+						contentDashboardItem, httpServletRequest)
 				).put(
 					"languageTag", locale.toLanguageTag()
 				).put(
@@ -154,6 +166,10 @@ public class GetContentDashboardItemInfoMVCResourceCommand
 				).put(
 					"specificFields",
 					_getSpecificFieldsJSONObject(contentDashboardItem, locale)
+				).put(
+					"subscribe",
+					_getSubscribeJSONObject(
+						contentDashboardItem, httpServletRequest)
 				).put(
 					"subType",
 					Optional.ofNullable(
@@ -184,13 +200,7 @@ public class GetContentDashboardItemInfoMVCResourceCommand
 					"vocabularies",
 					_getAssetVocabulariesJSONObject(
 						contentDashboardItem, locale)
-				)
-			).orElseGet(
-				JSONFactoryUtil::createJSONObject
-			);
-
-			JSONPortletResponseUtil.writeJSON(
-				resourceRequest, resourceResponse, jsonObject);
+				));
 		}
 		catch (Exception exception) {
 			if (_log.isInfoEnabled()) {
@@ -309,6 +319,62 @@ public class GetContentDashboardItemInfoMVCResourceCommand
 			});
 	}
 
+	private String _getDownloadURL(
+		ContentDashboardItem contentDashboardItem,
+		HttpServletRequest httpServletRequest) {
+
+		List<ContentDashboardItemAction> contentDashboardItemActions =
+			contentDashboardItem.getContentDashboardItemActions(
+				httpServletRequest, ContentDashboardItemAction.Type.DOWNLOAD);
+
+		if (ListUtil.isNotEmpty(contentDashboardItemActions)) {
+			ContentDashboardItemAction contentDashboardItemAction =
+				contentDashboardItemActions.get(0);
+
+			return contentDashboardItemAction.getURL();
+		}
+
+		return null;
+	}
+
+	private String _getFetchSharingButtonURL(
+		ContentDashboardItem contentDashboardItem,
+		HttpServletRequest httpServletRequest) {
+
+		List<ContentDashboardItemAction> contentDashboardItemActions =
+			contentDashboardItem.getContentDashboardItemActions(
+				httpServletRequest,
+				ContentDashboardItemAction.Type.SHARING_BUTTON);
+
+		if (ListUtil.isNotEmpty(contentDashboardItemActions)) {
+			ContentDashboardItemAction contentDashboardItemAction =
+				contentDashboardItemActions.get(0);
+
+			return contentDashboardItemAction.getURL();
+		}
+
+		return null;
+	}
+
+	private String _getFetchSharingCollaboratorsURL(
+		ContentDashboardItem contentDashboardItem,
+		HttpServletRequest httpServletRequest) {
+
+		List<ContentDashboardItemAction> contentDashboardItemActions =
+			contentDashboardItem.getContentDashboardItemActions(
+				httpServletRequest,
+				ContentDashboardItemAction.Type.SHARING_COLLABORATORS);
+
+		if (ListUtil.isNotEmpty(contentDashboardItemActions)) {
+			ContentDashboardItemAction contentDashboardItemAction =
+				contentDashboardItemActions.get(0);
+
+			return contentDashboardItemAction.getURL();
+		}
+
+		return null;
+	}
+
 	private JSONObject _getSpecificFieldsJSONObject(
 		ContentDashboardItem contentDashboardItem, Locale locale) {
 
@@ -344,6 +410,76 @@ public class GetContentDashboardItemInfoMVCResourceCommand
 		}
 
 		return "String";
+	}
+
+	private JSONObject _getSubscribeContentDashboardItemActionJSONObject(
+		ContentDashboardItem contentDashboardItem,
+		HttpServletRequest httpServletRequest) {
+
+		List<ContentDashboardItemAction> contentDashboardItemActions =
+			contentDashboardItem.getContentDashboardItemActions(
+				httpServletRequest, ContentDashboardItemAction.Type.SUBSCRIBE);
+
+		if (!ListUtil.isEmpty(contentDashboardItemActions)) {
+			ContentDashboardItemAction contentDashboardItemAction =
+				contentDashboardItemActions.get(0);
+
+			return JSONUtil.put(
+				"icon", contentDashboardItemAction.getIcon()
+			).put(
+				"label",
+				contentDashboardItemAction.getLabel(
+					_portal.getLocale(httpServletRequest))
+			).put(
+				"url", contentDashboardItemAction.getURL()
+			);
+		}
+
+		return null;
+	}
+
+	private JSONObject _getSubscribeJSONObject(
+		ContentDashboardItem contentDashboardItem,
+		HttpServletRequest httpServletRequest) {
+
+		if (!GetterUtil.getBoolean(PropsUtil.get("feature.flag.LPS-158043"))) {
+			return null;
+		}
+
+		return Optional.ofNullable(
+			_getSubscribeContentDashboardItemActionJSONObject(
+				contentDashboardItem, httpServletRequest)
+		).orElseGet(
+			() -> _getUnSubscribeContentDashboardItemActionJSONObject(
+				contentDashboardItem, httpServletRequest)
+		);
+	}
+
+	private JSONObject _getUnSubscribeContentDashboardItemActionJSONObject(
+		ContentDashboardItem contentDashboardItem,
+		HttpServletRequest httpServletRequest) {
+
+		List<ContentDashboardItemAction> contentDashboardItemActions =
+			contentDashboardItem.getContentDashboardItemActions(
+				httpServletRequest,
+				ContentDashboardItemAction.Type.UNSUBSCRIBE);
+
+		if (!ListUtil.isEmpty(contentDashboardItemActions)) {
+			ContentDashboardItemAction contentDashboardItemAction =
+				contentDashboardItemActions.get(0);
+
+			return JSONUtil.put(
+				"icon", contentDashboardItemAction.getIcon()
+			).put(
+				"label",
+				contentDashboardItemAction.getLabel(
+					_portal.getLocale(httpServletRequest))
+			).put(
+				"url", contentDashboardItemAction.getURL()
+			);
+		}
+
+		return null;
 	}
 
 	private JSONObject _getUserJSONObject(

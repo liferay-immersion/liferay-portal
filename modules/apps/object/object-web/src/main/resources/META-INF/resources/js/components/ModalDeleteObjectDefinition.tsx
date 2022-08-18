@@ -14,10 +14,10 @@
 
 import {ClayModalProvider, useModal} from '@clayui/modal';
 import {Observer} from '@clayui/modal/lib/types';
-import {createResourceURL, fetch, sub} from 'frontend-js-web';
+import {API} from '@liferay/object-js-components-web';
+import {createResourceURL, sub} from 'frontend-js-web';
 import React, {useEffect, useState} from 'react';
 
-import {HEADERS} from '../utils/constants';
 import DangerModal from './DangerModal';
 import WarningModal from './WarningModal';
 
@@ -67,7 +67,13 @@ function ModalDeleteObjectDefinition({
 		);
 	}
 
-	return code === 0 ? (
+	if (code !== 0) {
+		onDelete(id);
+
+		return null;
+	}
+
+	return (
 		<DangerModal
 			errorMessage={sub(
 				Liferay.Language.get('input-does-not-match-x'),
@@ -76,6 +82,7 @@ function ModalDeleteObjectDefinition({
 			observer={observer}
 			onClose={onClose}
 			onDelete={() => onDelete(id)}
+			placeholder={Liferay.Language.get('confirm-object-definition-name')}
 			title={Liferay.Language.get('delete-object-definition')}
 			token={name}
 		>
@@ -110,8 +117,6 @@ function ModalDeleteObjectDefinition({
 				}}
 			/>
 		</DangerModal>
-	) : (
-		onDelete(id)
 	);
 }
 
@@ -125,7 +130,7 @@ interface IProps {
 	};
 	observer: Observer;
 	onClose: () => void;
-	onDelete: any;
+	onDelete: (value: string) => Promise<void>;
 }
 
 export default function ModalWithProvider({
@@ -141,75 +146,59 @@ export default function ModalWithProvider({
 		status: {code: number};
 	} | null>(null);
 
-	const getDeleteObjectDefinition = async ({
-		itemData,
-	}: {
-		itemData: {
-			id: string;
-			name: string;
-			objectEntriesCount: number;
-			status: {code: number};
-		};
-	}) => {
-		const response = await fetch(
-			createResourceURL(baseResourceURL, {
-				objectDefinitionId: itemData.id,
-				p_p_resource_id:
-					'/object_definitions/get_object_definition_delete_info',
-			}).href
-		);
-
-		const {
-			hasObjectRelationship,
-			objectEntriesCount,
-		} = (await response.json()) as {
-			hasObjectRelationship: boolean;
-			objectEntriesCount: number;
-		};
-		setObjectDefinition({
-			...itemData,
-			hasObjectRelationship,
-			objectEntriesCount,
-		});
-	};
-
 	const {observer, onClose} = useModal({
 		onClose: () => setObjectDefinition(null),
 	});
 
-	const deleteRelationship = async (id: string) => {
-		const response = await fetch(
-			`/o/object-admin/v1.0/object-definitions/${id}`,
-			{
-				headers: HEADERS,
-				method: 'DELETE',
-			}
-		);
-
-		if (response.ok) {
+	const deleteObjectDefinition = async (id: string) => {
+		API.deleteObjectDefinitions(Number(id)).then(() => {
 			Liferay.Util.openToast({
 				message: sub(
 					Liferay.Language.get('x-was-deleted-successfully'),
 					`<strong>${objectDefinition?.name}</strong>`
 				),
-				type: 'success',
 			});
 
-			window.location.reload();
-
-			return;
-		}
-		onClose();
+			onClose();
+			setTimeout(window.location.reload, 1500);
+		});
 	};
 
 	useEffect(() => {
+		const getDeleteObjectDefinition = async ({
+			itemData,
+		}: {
+			itemData: {
+				id: string;
+				name: string;
+				objectEntriesCount: number;
+				status: {code: number};
+			};
+		}) => {
+			const url = createResourceURL(baseResourceURL, {
+				objectDefinitionId: itemData.id,
+				p_p_resource_id:
+					'/object_definitions/get_object_definition_delete_info',
+			}).href;
+			const {
+				hasObjectRelationship,
+				objectEntriesCount,
+			} = await API.fetchJSON<{
+				hasObjectRelationship: boolean;
+				objectEntriesCount: number;
+			}>(url);
+
+			setObjectDefinition({
+				...itemData,
+				hasObjectRelationship,
+				objectEntriesCount,
+			});
+		};
+
 		Liferay.on('deleteObjectDefinition', getDeleteObjectDefinition);
 
-		return () => {
-			Liferay.detach('deleteObjectDefinition');
-		};
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
+		return () => Liferay.detach('deleteObjectDefinition');
+	}, [baseResourceURL]);
 
 	return (
 		<ClayModalProvider>
@@ -218,7 +207,7 @@ export default function ModalWithProvider({
 					objectDefinition={objectDefinition}
 					observer={observer}
 					onClose={onClose}
-					onDelete={deleteRelationship}
+					onDelete={deleteObjectDefinition}
 				/>
 			)}
 		</ClayModalProvider>

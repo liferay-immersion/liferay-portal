@@ -64,10 +64,11 @@ public class BatchPlannerPlanHelper {
 
 		String externalType = ParamUtil.getString(
 			portletRequest, "externalType");
-		String internalClassName = ParamUtil.getString(
-			portletRequest, "internalClassName");
-		String taskItemDelegateName = ParamUtil.getString(
-			portletRequest, "taskItemDelegateName");
+		String internalClassName = _resolveInternalClassName(
+			ParamUtil.getString(portletRequest, "internalClassName"));
+		String taskItemDelegateName = _resolveTaskItemDelegateName(
+			ParamUtil.getString(portletRequest, "internalClassName"),
+			ParamUtil.getString(portletRequest, "taskItemDelegateName"));
 		boolean template = ParamUtil.getBoolean(portletRequest, "template");
 
 		BatchPlannerPlan batchPlannerPlan =
@@ -98,10 +99,11 @@ public class BatchPlannerPlanHelper {
 
 		String externalType = ParamUtil.getString(
 			portletRequest, "externalType", "CSV");
-		String internalClassName = ParamUtil.getString(
-			portletRequest, "internalClassName");
-		String taskItemDelegateName = ParamUtil.getString(
-			portletRequest, "taskItemDelegateName");
+		String internalClassName = _resolveInternalClassName(
+			ParamUtil.getString(portletRequest, "internalClassName"));
+		String taskItemDelegateName = _resolveTaskItemDelegateName(
+			ParamUtil.getString(portletRequest, "internalClassName"),
+			ParamUtil.getString(portletRequest, "taskItemDelegateName"));
 		boolean template = ParamUtil.getBoolean(portletRequest, "template");
 
 		int size = 0;
@@ -309,11 +311,17 @@ public class BatchPlannerPlanHelper {
 			String suffix = StringUtil.extractLast(
 				parameterName, StringPool.UNDERLINE);
 
-			if (Validator.isNull(
-					ParamUtil.getString(
-						portletRequest, "internalFieldName_" + suffix))) {
+			String internalFieldName = ParamUtil.getString(
+				portletRequest, "internalFieldName_" + suffix);
 
-				continue;
+			if (Validator.isNull(internalFieldName) &&
+				parameterName.contains("properties_") &&
+				Validator.isNotNull(
+					ParamUtil.getString(
+						portletRequest,
+						"internalFieldName_properties_" + suffix))) {
+
+				internalFieldName = suffix;
 			}
 
 			BatchPlannerMapping batchPlannerMapping =
@@ -321,14 +329,34 @@ public class BatchPlannerPlanHelper {
 
 			batchPlannerMapping.setExternalFieldName(
 				ParamUtil.getString(portletRequest, parameterName));
-			batchPlannerMapping.setInternalFieldName(
-				ParamUtil.getString(
-					portletRequest, "internalFieldName_" + suffix));
+			batchPlannerMapping.setInternalFieldName(internalFieldName);
 
 			batchPlannerMappings.add(batchPlannerMapping);
 		}
 
 		return batchPlannerMappings;
+	}
+
+	private String _resolveInternalClassName(String internalClassName) {
+		int index = internalClassName.indexOf(StringPool.POUND);
+
+		if (index < 0) {
+			return internalClassName;
+		}
+
+		return internalClassName.substring(0, index);
+	}
+
+	private String _resolveTaskItemDelegateName(
+		String internalClassName, String taskItemDelegateName) {
+
+		int index = internalClassName.indexOf(StringPool.POUND);
+
+		if (index < 0) {
+			return taskItemDelegateName;
+		}
+
+		return internalClassName.substring(index + 3);
 	}
 
 	private BatchPlannerPlan _updateBatchPlannerPlan(

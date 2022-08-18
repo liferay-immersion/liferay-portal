@@ -17,7 +17,6 @@ package com.liferay.portlet.internal;
 import com.liferay.petra.reflect.ReflectionUtil;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
-import com.liferay.portal.deploy.auto.PortletAutoDeployer;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -32,6 +31,7 @@ import com.liferay.portal.kernel.portlet.PortletFilterUtil;
 import com.liferay.portal.kernel.portlet.PortletIdCodec;
 import com.liferay.portal.kernel.service.PortletLocalServiceUtil;
 import com.liferay.portal.kernel.servlet.BufferCacheServletResponse;
+import com.liferay.portal.kernel.servlet.PluginContextListener;
 import com.liferay.portal.kernel.servlet.PortletServlet;
 import com.liferay.portal.kernel.util.ClassUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
@@ -119,7 +119,7 @@ public class InvokerPortletImpl
 		Class<? extends Portlet> portletClass = portlet.getClass();
 
 		if (ClassUtil.isSubclass(
-				portletClass, PortletAutoDeployer.JSF_STANDARD)) {
+				portletClass, "javax.portlet.faces.GenericFacesPortlet")) {
 
 			facesPortlet = true;
 		}
@@ -197,6 +197,14 @@ public class InvokerPortletImpl
 			InvokerPortlet invokerPortlet = (InvokerPortlet)_portlet;
 
 			return invokerPortlet.getPortletClassLoader();
+		}
+
+		ClassLoader classLoader =
+			(ClassLoader)_liferayPortletContext.getAttribute(
+				PluginContextListener.PLUGIN_CLASS_LOADER);
+
+		if (classLoader != null) {
+			return classLoader;
 		}
 
 		Class<?> portletClass = _portlet.getClass();

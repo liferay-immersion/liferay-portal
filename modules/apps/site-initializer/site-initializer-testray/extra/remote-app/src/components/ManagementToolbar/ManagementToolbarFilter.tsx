@@ -54,6 +54,8 @@ const ManagementToolbarFilter: React.FC<ManagementToolbarFilterProps> = ({
 	const onChange = formActions.form.onChange({form, setForm});
 
 	const onClear = () => {
+		setForm(initialFilters);
+
 		dispatch({
 			payload: null,
 			type: ListViewTypes.SET_CLEAR,
@@ -99,7 +101,7 @@ const ManagementToolbarFilter: React.FC<ManagementToolbarFilterProps> = ({
 		>
 			{!!filterFields?.length && (
 				<>
-					<div className="px-3">
+					<div className="dropdown-header">
 						<p className="font-weight-bold my-2">
 							{i18n.translate('filter-results')}
 						</p>
@@ -111,20 +113,20 @@ const ManagementToolbarFilter: React.FC<ManagementToolbarFilterProps> = ({
 							value={filter}
 						/>
 					</div>
-
 					<Form.Divider />
 
-					<div className="px-3">
+					<div className="popover-body">
 						<Form.Renderer
 							fields={filterFields}
 							filter={filter}
+							form={form}
 							onChange={onChange}
 						/>
 					</div>
 
 					<Form.Divider />
 
-					<div className="mb-2 px-3">
+					<div className="popover-footer">
 						<ClayButton onClick={onApply}>
 							{i18n.translate('apply')}
 						</ClayButton>

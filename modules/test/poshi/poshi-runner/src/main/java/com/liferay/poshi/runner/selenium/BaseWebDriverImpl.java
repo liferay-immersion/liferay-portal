@@ -1066,12 +1066,12 @@ public abstract class BaseWebDriverImpl implements LiferaySelenium, WebDriver {
 	}
 
 	@Override
-	public int getElementHeight(String locator) {
+	public long getElementHeight(String locator) {
 		WebElement webElement = getWebElement(locator);
 
 		Dimension dimension = webElement.getSize();
 
-		return dimension.getHeight();
+		return GetterUtil.getLong(dimension.getHeight());
 	}
 
 	@Override
@@ -1088,12 +1088,12 @@ public abstract class BaseWebDriverImpl implements LiferaySelenium, WebDriver {
 	}
 
 	@Override
-	public int getElementWidth(String locator) {
+	public long getElementWidth(String locator) {
 		WebElement webElement = getWebElement(locator);
 
 		Dimension dimension = webElement.getSize();
 
-		return dimension.getWidth();
+		return GetterUtil.getLong(dimension.getWidth());
 	}
 
 	@Override
@@ -3680,15 +3680,15 @@ public abstract class BaseWebDriverImpl implements LiferaySelenium, WebDriver {
 		};
 	}
 
-	protected int getElementPositionBottom(String locator) {
+	protected long getElementPositionBottom(String locator) {
 		return getElementPositionTop(locator) + getElementHeight(locator);
 	}
 
-	protected int getElementPositionCenterX(String locator) {
+	protected long getElementPositionCenterX(String locator) {
 		return getElementPositionLeft(locator) + (getElementWidth(locator) / 2);
 	}
 
-	protected int getElementPositionCenterY(String locator) {
+	protected long getElementPositionCenterY(String locator) {
 		return getElementPositionTop(locator) + (getElementHeight(locator) / 2);
 	}
 
@@ -3700,7 +3700,7 @@ public abstract class BaseWebDriverImpl implements LiferaySelenium, WebDriver {
 		return point.getX();
 	}
 
-	protected int getElementPositionRight(String locator) {
+	protected long getElementPositionRight(String locator) {
 		return getElementPositionLeft(locator) + getElementWidth(locator);
 	}
 
@@ -4522,7 +4522,7 @@ public abstract class BaseWebDriverImpl implements LiferaySelenium, WebDriver {
 
 		public void waitFor(String throwException) throws Exception {
 			int timeout = PropsValues.TIMEOUT_EXPLICIT_WAIT * 1000;
-			int wait = 100;
+			int wait = 500;
 
 			for (int millisecond = 0; millisecond < timeout;
 				 millisecond += wait) {

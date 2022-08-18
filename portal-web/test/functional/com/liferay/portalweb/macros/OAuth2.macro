@@ -81,6 +81,22 @@ definition {
 			value1 = "Save");
 	}
 
+	macro addOAuth2AppCreatorRole {
+		JSONRole.addRegularRole(
+			roleKey = "OAuth2 App Creator",
+			roleTitle = "OAuth2 App Creator");
+
+		Permissions.definePermissionViaJSONAPI(
+			resourceAction = "ACCESS_IN_CONTROL_PANEL",
+			resourceName = "com_liferay_oauth2_provider_web_internal_portlet_OAuth2AdminPortlet",
+			roleTitle = "OAuth2 App Creator");
+
+		Permissions.definePermissionViaJSONAPI(
+			resourceAction = "CREATE_TOKEN",
+			resourceName = "com.liferay.oauth2.provider.model.OAuth2Application",
+			roleTitle = "OAuth2 App Creator");
+	}
+
 	macro addPrefixHandlerInSystemSettings {
 		ApplicationsMenu.gotoPortlet(
 			category = "Configuration",
@@ -173,16 +189,21 @@ definition {
 
 	macro authorizeMyApplication {
 		if ("${newTab}" == "true") {
-			Open.openInTheNewTab(locator1 = "http://martamedio.com/oauth2-tester/");
+			Open.openInTheNewTab(locator1 = "https://localhost:8443/oauth2-tester/");
 		}
 		else {
-			Navigator.openSpecificURL(url = "http://martamedio.com/oauth2-tester/");
+			Navigator.openSpecificURL(url = "https://localhost:8443/oauth2-tester/");
 		}
 
 		if (isSet(portalURL)) {
 			Type(
 				locator1 = "OAuth2#OAUTH2_TESTER_PORTAL_URL",
 				value1 = "${portalURL}");
+		}
+		else {
+			Type(
+				locator1 = "OAuth2#OAUTH2_TESTER_PORTAL_URL",
+				value1 = "https://localhost:8443");
 		}
 
 		Type(
@@ -220,16 +241,23 @@ definition {
 			locator1 = "OAuth2#OAUTH2_TESTER_CLIENT_SECRET",
 			value1 = "${clientSecret}");
 
+		SelectFrameTop();
+
 		Button.click(button = "Obtain OAuth2 Access");
 	}
 
 	macro authorizePKCEApplication {
-		Navigator.openSpecificURL(url = "http://martamedio.com/oauth2-tester/pkce/");
+		Navigator.openSpecificURL(url = "https://localhost:8443/oauth2-tester/pkce/");
 
 		if (isSet(portalURL)) {
 			Type(
 				locator1 = "OAuth2#OAUTH2_TESTER_PORTAL_URL",
 				value1 = "${portalURL}");
+		}
+		else {
+			Type(
+				locator1 = "OAuth2#OAUTH2_TESTER_PORTAL_URL",
+				value1 = "https://localhost:8443");
 		}
 
 		Type(
@@ -416,7 +444,9 @@ definition {
 		if ("${grantFlow}" == "clientCredentials") {
 			var tokenCurl = '''
 				${portalURL}/o/oauth2/token \
-					--data grant_type=client_credentials&client_id=${clientId}&client_secret=${clientSecret}
+					-d client_id=${client_id} \
+					-d client_secret=${client_secret} \
+					-d grant_type=client_credentials
 			''';
 		}
 
@@ -433,7 +463,10 @@ definition {
 
 	macro getAuthorizationCode {
 		var generatedClientId = selenium.getElementValue("OAuth2#ADMIN_INPUT_FORM_CLIENT_ID");
-		var portalURL = PropsUtil.get("portal.url");
+
+		if (!(isSet(portalURL))) {
+			var portalURL = PropsUtil.get("portal.url");
+		}
 
 		Navigator.openSpecificURL(url = "${portalURL}/o/oauth2/authorize?client_id=${generatedClientId}&response_type=code");
 
@@ -452,6 +485,27 @@ definition {
 		echo("## * Authorization Code: ${authorizationCode}");
 
 		return "${authorizationCode}";
+	}
+
+	macro getDeleteOutput {
+		var portalURL = PropsUtil.get("portal.url");
+		var articleId = JSONWebcontentSetter.setArticleId(
+			groupName = "Guest",
+			title = "WC Title");
+		var groupId = JSONGroupAPI._getGroupIdByName(
+			groupName = "Guest",
+			site = "true");
+
+		var deleteCurl = '''
+			${portalURL}/api/jsonws/journal.journalarticle/delete-article -H 'Authorization: Bearer ${accessToken}' \
+				-d groupId=${groupId} \
+				-d articleId=${articleId} \
+				-d articleURL='wc-title'
+		''';
+
+		var deleteOutput = JSONCurlUtil.post("${deleteCurl}");
+
+		return "${deleteOutput}";
 	}
 
 	macro inputApplicationValues {
@@ -579,7 +633,10 @@ definition {
 
 			SelectFrame(locator1 = "IFrame#MODAL_BODY");
 
-			Pause(locator1 = "2000");
+			WaitForElementPresent(
+				key_clientCredentialsUser = "${clientCredentialsUser}",
+				locator1 = "OAuth2#ADMIN_CLIENT_CREDENTIALS_USER_SELECTED",
+				value1 = "${clientCredentialsUser}");
 
 			Click(
 				key_clientCredentialsUser = "${clientCredentialsUser}",
@@ -630,10 +687,6 @@ definition {
 
 	macro obtainOAuth2AccessNotAuthorized {
 		AssertConfirm.assertConfirmationNoError(value1 = "There's a problem with your authorization access");
-
-		AssertTextEquals.assertPartialText(
-			locator1 = "OAuth2#OAUTH2_TESTER_REQUEST_RESULTS",
-			value1 = "");
 	}
 
 	macro openOAuth2Admin {
@@ -642,6 +695,12 @@ definition {
 			urlAppend = "group/guest/~/control_panel/manage?p_p_id=com_liferay_oauth2_provider_web_internal_portlet_OAuth2AdminPortlet");
 
 		WaitForVisible(locator1 = "Button#PLUS");
+	}
+
+	macro openSSLPage {
+		Navigator.openSpecificURL(url = "https://localhost:8443");
+
+		Alert.confirmSecurity();
 	}
 
 	@description = "Get ClientId and ClientSecret from the page then post client credential token via curl."

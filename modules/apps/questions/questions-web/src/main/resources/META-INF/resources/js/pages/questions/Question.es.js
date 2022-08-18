@@ -55,7 +55,7 @@ import {
 import {ALL_SECTIONS_ID} from '../../utils/contants.es';
 import lang from '../../utils/lang.es';
 import {
-	dateToBriefInternationalHuman,
+	dateToInternationalHuman,
 	deleteCacheKey,
 	getContextLink,
 	getErrorObject,
@@ -95,16 +95,16 @@ export default withRouter(
 		const [pageSize, setPageSize] = useState(20);
 
 		const [loading, setLoading] = useState(true);
+		const [loadingAnswer, setLoadingAnswer] = useState(true);
 		const [question, setQuestion] = useState({});
-		const [answers, setAnswers] = useState({
-			totalCount: 0,
-		});
+		const [answers, setAnswers] = useState({});
 
 		const fetchMessages = useCallback(() => {
 			if (question && question.id) {
 				getMessages(question.id, page, pageSize).then(
 					({data: {messageBoardThreadMessageBoardMessages}}) => {
 						setAnswers(messageBoardThreadMessageBoardMessages);
+						setLoadingAnswer(false);
 					}
 				);
 			}
@@ -380,12 +380,14 @@ export default withRouter(
 										<p className="c-mb-0 small text-secondary">
 											{`${Liferay.Language.get(
 												'asked'
-											)} ${dateToBriefInternationalHuman(
-												question.dateCreated
-											)} - ${Liferay.Language.get(
+											)} - ${dateToInternationalHuman(
+												question.dateCreated,
+												Liferay.ThemeDisplay.getBCP47LanguageId()
+											)} / ${Liferay.Language.get(
 												'active'
-											)} ${dateToBriefInternationalHuman(
-												question.dateModified
+											)} - ${dateToInternationalHuman(
+												question.dateModified,
+												Liferay.ThemeDisplay.getBCP47LanguageId()
 											)} - ${lang.sub(
 												Liferay.Language.get(
 													'viewed-x-times'
@@ -511,10 +513,10 @@ export default withRouter(
 								</div>
 
 								<h3 className="c-mt-4 text-secondary">
-									{loading
-										? Liferay.Language.get(
+									{loadingAnswer
+										? `${Liferay.Language.get(
 												'loading-answers'
-										  )
+										  )}`
 										: `${
 												answers.totalCount
 										  } ${Liferay.Language.get('answers')}`}
@@ -536,6 +538,7 @@ export default withRouter(
 													!question.locked &&
 													!!question.actions.replace
 												}
+												context={context}
 												deleteAnswer={deleteAnswer}
 												editable={!question.locked}
 												key={answer.id}

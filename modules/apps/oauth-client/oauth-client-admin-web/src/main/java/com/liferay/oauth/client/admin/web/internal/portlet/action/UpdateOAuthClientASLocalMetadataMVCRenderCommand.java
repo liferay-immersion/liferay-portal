@@ -21,10 +21,8 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
-import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
-import com.liferay.portal.kernel.util.WebKeys;
 
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
@@ -54,18 +52,10 @@ public class UpdateOAuthClientASLocalMetadataMVCRenderCommand
 				renderRequest, "localWellKnownURI");
 
 			if (Validator.isNotNull(localWellKnownURI)) {
-				ThemeDisplay themeDisplay =
-					(ThemeDisplay)renderRequest.getAttribute(
-						WebKeys.THEME_DISPLAY);
-
-				OAuthClientASLocalMetadata oAuthClientASLocalMetadata =
-					_oAuthClientASLocalMetadataService.
-						getOAuthClientASLocalMetadata(
-							themeDisplay.getCompanyId(), localWellKnownURI);
-
 				renderRequest.setAttribute(
 					OAuthClientASLocalMetadata.class.getName(),
-					oAuthClientASLocalMetadata);
+					_oAuthClientASLocalMetadataService.
+						getOAuthClientASLocalMetadata(localWellKnownURI));
 			}
 		}
 		catch (PortalException portalException) {

@@ -324,62 +324,82 @@ definition {
 	}
 
 	@description = "This is a test for COMMERCE-7023. EditTheDefaultSettingForPinsCreation"
+	@ignore = "true"
 	@priority = "3"
 	test EditTheDefaultSettingForPinsCreation {
-		property portal.acceptance = "quarantine";
-		property portal.release = "quarantine";
-		property portal.upstream = "quarantine";
 
-		// TODO COMMERCE-8268 Test needs refactoring due to a failure locating the Default Diameter button.
+		// Test is ignored due to COMMERCE-9646
 
-		CommerceNavigator.gotoPortlet(
-			category = "Product Management",
-			portlet = "Products");
+		task ("Given a diagram product with an image") {
+			CommerceNavigator.gotoPortlet(
+				category = "Product Management",
+				portlet = "Products");
 
-		CPCommerceCatalog.newProductsEntry(
-			productCatalog = "Master",
-			productName = "Diagram T-Shirt",
-			productType = "Diagram");
+			CommerceJSONProductsAPI._addCommerceProduct(
+				catalogName = "Master",
+				productName = "Diagram T-Shirt",
+				productType = "diagram");
 
-		CommerceEntry.gotoMenuTab(menuTab = "Diagram");
+			CommerceProducts.openProductsAdmin();
 
-		CommerceProductImages.addDiagramImages(
-			imageTitles = "Black",
-			productType = "Diagram");
+			CommerceNavigator.searchEntry(entryName = "Diagram T-Shirt");
 
-		Button.clickPublish();
+			CommerceNavigator.gotoEntry(entryName = "Diagram T-Shirt");
 
-		Alert.viewSuccessMessage();
+			CommerceEntry.gotoMenuTab(menuTab = "Diagram");
 
-		CommerceDiagram.addPin(
-			label = "Test",
-			pinNumber = "1",
-			quantity = "1",
-			selectType = "Not Linked to a Catalog");
+			CommerceProductImages.addDiagramImages(
+				imageTitles = "Black",
+				productType = "Diagram");
 
-		Click(
-			key_text = "Default Diameter",
-			locator1 = "Button#ANY");
+			SelectFrame(locator1 = "relative=top");
 
-		AssertElementPresent(
-			key_radius = "10",
-			locator1 = "CommerceEntry#VERIFY_PIN_RADIUS");
+			Button.clickPublish();
+		}
 
-		CommerceEntry.verifyCostumRadiusWithCostumValue(key_list = "1,2,3,4,5");
+		task ("When a user navigates to the product and adds a pin") {
+			CommerceNavigator.gotoPortlet(
+				category = "Product Management",
+				portlet = "Products");
 
-		AssertElementPresent(
-			key_radius = "15",
-			locator1 = "CommerceEntry#VERIFY_PIN_RADIUS");
+			CommerceNavigator.gotoEntry(entryName = "Diagram T-Shirt");
 
-		CommerceEntry.verifyCostumRadiusWithDefaultValue();
+			CommerceEntry.gotoMenuTab(menuTab = "Diagram");
 
-		CommerceEntry.changePinColor(color = "#FF0000");
+			CommerceDiagram.selectPinSize(pinSize = "Small");
 
-		AssertElementPresent(
-			key_strokeColor = "#FF0000",
-			locator1 = "CommerceEntry#VERIFY_PIN_COLOR_STROKE");
+			CommerceDiagram.addPin(
+				label = "Test",
+				pinNumber = "1",
+				quantity = "1",
+				selectType = "Not Linked to a Catalog");
 
-		Button.clickPublish();
+			SelectFrame(locator1 = "relative=top");
+
+			Button.clickPublish();
+
+			Refresh();
+		}
+
+		task ("Then the user can change and assert the pin size") {
+			CommerceDiagram.assertPinSize(pinSize = "Small");
+
+			CommerceDiagram.selectPinSize(pinSize = "Medium");
+
+			Button.clickPublish();
+
+			Refresh();
+
+			CommerceDiagram.assertPinSize(pinSize = "Medium");
+
+			CommerceDiagram.selectPinSize(pinSize = "Large");
+
+			Button.clickPublish();
+
+			Refresh();
+
+			CommerceDiagram.assertPinSize(pinSize = "Large");
+		}
 	}
 
 	@description = "This is a test for COMMERCE-7126. RemoveDiagramProduct"

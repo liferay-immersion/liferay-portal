@@ -13,10 +13,14 @@
  */
 
 import {MouseEventHandler} from 'react';
-export declare function Element({label, onClick, tooltip}: IProps): JSX.Element;
+export declare function Element({
+	helpText,
+	label,
+	onClick,
+}: IProps): JSX.Element;
 interface IProps {
+	helpText: string;
 	label: string;
 	onClick?: MouseEventHandler;
-	tooltip: string;
 }
 export {};

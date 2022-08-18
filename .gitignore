@@ -38,8 +38,9 @@
 /baseline-reports
 /benchmarks/*.csv
 /benchmarks/*.sql
-/benchmarks/lib
-/benchmarks/log
+/benchmarks/benchmarks-actual.properties
+/benchmarks/benchmarks.*.properties
+/benchmarks/liferay
 /bin
 /build
 /build.*.properties

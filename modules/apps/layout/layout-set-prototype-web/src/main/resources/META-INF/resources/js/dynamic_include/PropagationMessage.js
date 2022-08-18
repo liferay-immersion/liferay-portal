@@ -54,6 +54,7 @@ export default function ({
 			}}
 			onShowChange={setShow}
 			show={show}
+			size="lg"
 			trigger={
 				<ClayButtonWithIcon
 					data-qa-id="info"

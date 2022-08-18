@@ -37,7 +37,7 @@ const getDescriptionI18n = (sxpElementResponse, defaultLocale) => {
 		[defaultLocale]: sxpElementResponse.description,
 	};
 
-	if (Object.keys(descriptionObject).length === 0) {
+	if (!Object.keys(descriptionObject).length) {
 		descriptionObject = {[defaultLocale]: ''};
 	}
 
@@ -79,7 +79,6 @@ const transformToSXPElementExportFormat = (
 
 export default function ({
 	defaultLocale,
-	featureFlagLps148749,
 	learnMessages,
 	locale,
 	namespace,
@@ -118,7 +117,6 @@ export default function ({
 			value={{
 				availableLanguages: Liferay.Language.available,
 				defaultLocale,
-				featureFlagLps148749,
 				learnMessages,
 				locale,
 				namespace,

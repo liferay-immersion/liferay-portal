@@ -14,13 +14,19 @@
 
 package com.liferay.object.service.impl;
 
+import com.liferay.asset.kernel.service.AssetCategoryLocalService;
+import com.liferay.asset.kernel.service.AssetTagLocalService;
+import com.liferay.asset.kernel.service.AssetVocabularyLocalService;
 import com.liferay.fragment.model.FragmentEntryLink;
 import com.liferay.layout.model.LayoutClassedModelUsage;
 import com.liferay.layout.service.LayoutClassedModelUsageLocalService;
 import com.liferay.list.type.service.ListTypeEntryLocalService;
 import com.liferay.object.constants.ObjectDefinitionConstants;
+import com.liferay.object.constants.ObjectFieldConstants;
 import com.liferay.object.deployer.ObjectDefinitionDeployer;
 import com.liferay.object.exception.NoSuchObjectFieldException;
+import com.liferay.object.exception.ObjectDefinitionAccountEntryRestrictedException;
+import com.liferay.object.exception.ObjectDefinitionAccountEntryRestrictedObjectFieldIdException;
 import com.liferay.object.exception.ObjectDefinitionActiveException;
 import com.liferay.object.exception.ObjectDefinitionLabelException;
 import com.liferay.object.exception.ObjectDefinitionNameException;
@@ -68,7 +74,7 @@ import com.liferay.portal.kernel.dao.orm.Property;
 import com.liferay.portal.kernel.dao.orm.PropertyFactoryUtil;
 import com.liferay.portal.kernel.dependency.manager.DependencyManagerSyncUtil;
 import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.language.LanguageUtil;
+import com.liferay.portal.kernel.language.Language;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.ResourceAction;
@@ -81,6 +87,8 @@ import com.liferay.portal.kernel.search.IndexableType;
 import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
 import com.liferay.portal.kernel.security.permission.ResourceActions;
 import com.liferay.portal.kernel.service.ClassNameLocalService;
+import com.liferay.portal.kernel.service.CompanyLocalService;
+import com.liferay.portal.kernel.service.GroupLocalService;
 import com.liferay.portal.kernel.service.PersistedModelLocalServiceRegistry;
 import com.liferay.portal.kernel.service.ResourceActionLocalService;
 import com.liferay.portal.kernel.service.ResourceLocalService;
@@ -216,9 +224,10 @@ public class ObjectDefinitionLocalServiceImpl
 					newObjectField.getBusinessType(),
 					newObjectField.getDBColumnName(),
 					objectDefinition.getDBTableName(),
-					newObjectField.getDBType(), false, false, "",
+					newObjectField.getDBType(),
+					newObjectField.getDefaultValue(), false, false, "",
 					newObjectField.getLabelMap(), newObjectField.getName(),
-					newObjectField.isRequired());
+					newObjectField.isRequired(), newObjectField.isState());
 			}
 			else {
 				if (!Objects.equals(
@@ -486,8 +495,8 @@ public class ObjectDefinitionLocalServiceImpl
 			throw new ObjectDefinitionStatusException();
 		}
 
-		int count = _objectFieldPersistence.countByObjectDefinitionId(
-			objectDefinition.getObjectDefinitionId());
+		int count = _objectFieldPersistence.countByODI_S(
+			objectDefinition.getObjectDefinitionId(), false);
 
 		if (count == 0) {
 			throw new RequiredObjectFieldException();
@@ -516,13 +525,15 @@ public class ObjectDefinitionLocalServiceImpl
 
 		_addingObjectDefinitionDeployer(
 			new ObjectDefinitionDeployerImpl(
-				_bundleContext, _dynamicQueryBatchIndexingActionableFactory,
+				_assetCategoryLocalService, _assetTagLocalService,
+				_assetVocabularyLocalService, _bundleContext,
+				_dynamicQueryBatchIndexingActionableFactory, _groupLocalService,
 				_listTypeEntryLocalService, _modelSearchRegistrarHelper, this,
 				_objectEntryLocalService, _objectFieldLocalService,
-				_objectRelationshipLocalService, _objectScopeProviderRegistry,
-				_objectViewLocalService, _persistedModelLocalServiceRegistry,
-				_resourceActions, _userLocalService,
-				_workflowStatusModelPreFilterContributor));
+				_objectLayoutLocalService, _objectRelationshipLocalService,
+				_objectScopeProviderRegistry, _objectViewLocalService,
+				_persistedModelLocalServiceRegistry, _resourceActions,
+				_userLocalService, _workflowStatusModelPreFilterContributor));
 
 		_objectDefinitionDeployerServiceTracker = new ServiceTracker<>(
 			_bundleContext, ObjectDefinitionDeployer.class,
@@ -674,15 +685,19 @@ public class ObjectDefinitionLocalServiceImpl
 		Map<Long, List<ServiceRegistration<?>>> serviceRegistrationsMap =
 			new ConcurrentHashMap<>();
 
-		List<ObjectDefinition> objectDefinitions =
-			objectDefinitionLocalService.getCustomObjectDefinitions(
-				WorkflowConstants.STATUS_APPROVED);
+		_companyLocalService.forEachCompanyId(
+			companyId -> {
+				List<ObjectDefinition> objectDefinitions =
+					objectDefinitionLocalService.getObjectDefinitions(
+						companyId, true, false,
+						WorkflowConstants.STATUS_APPROVED);
 
-		for (ObjectDefinition objectDefinition : objectDefinitions) {
-			serviceRegistrationsMap.put(
-				objectDefinition.getObjectDefinitionId(),
-				objectDefinitionDeployer.deploy(objectDefinition));
-		}
+				for (ObjectDefinition objectDefinition : objectDefinitions) {
+					serviceRegistrationsMap.put(
+						objectDefinition.getObjectDefinitionId(),
+						objectDefinitionDeployer.deploy(objectDefinition));
+				}
+			});
 
 		_serviceRegistrationsMaps.put(
 			objectDefinitionDeployer, serviceRegistrationsMap);
@@ -754,77 +769,101 @@ public class ObjectDefinitionLocalServiceImpl
 			ObjectDefinition.class.getName(),
 			objectDefinition.getObjectDefinitionId(), false, true, true);
 
-		if (GetterUtil.getBoolean(PropsUtil.get("feature.flag.LPS-154872"))) {
-			_objectFieldLocalService.addSystemObjectField(
-				userId, objectDefinition.getObjectDefinitionId(), "Date",
-				ObjectEntryTable.INSTANCE.status.getName(),
-				ObjectEntryTable.INSTANCE.getTableName(), "Date", false, false,
-				null,
-				LocalizedMapUtil.getLocalizedMap(
-					LanguageUtil.get(LocaleUtil.getDefault(), "create-date")),
-				"createDate", false);
-
-			_objectFieldLocalService.addSystemObjectField(
-				userId, objectDefinition.getObjectDefinitionId(), "Text",
-				ObjectEntryTable.INSTANCE.status.getName(),
-				ObjectEntryTable.INSTANCE.getTableName(), "String", false,
-				false, null,
-				LocalizedMapUtil.getLocalizedMap(
-					LanguageUtil.get(LocaleUtil.getDefault(), "author")),
-				"creator", false);
-
-			_objectFieldLocalService.addSystemObjectField(
-				userId, objectDefinition.getObjectDefinitionId(), "Integer",
-				ObjectEntryTable.INSTANCE.status.getName(),
-				ObjectEntryTable.INSTANCE.getTableName(), "Integer", false,
-				false, null,
-				LocalizedMapUtil.getLocalizedMap(
-					LanguageUtil.get(LocaleUtil.getDefault(), "id")),
-				"id", false);
-
-			_objectFieldLocalService.addSystemObjectField(
-				userId, objectDefinition.getObjectDefinitionId(), "Date",
-				ObjectEntryTable.INSTANCE.status.getName(),
-				ObjectEntryTable.INSTANCE.getTableName(), "Date", false, false,
-				null,
-				LocalizedMapUtil.getLocalizedMap(
-					LanguageUtil.get(LocaleUtil.getDefault(), "modified-date")),
-				"modifiedDate", false);
-
-			_objectFieldLocalService.addSystemObjectField(
-				userId, objectDefinition.getObjectDefinitionId(), "Text",
-				ObjectEntryTable.INSTANCE.status.getName(),
-				ObjectEntryTable.INSTANCE.getTableName(), "Integer", false,
-				false, null,
-				LocalizedMapUtil.getLocalizedMap(
-					LanguageUtil.get(LocaleUtil.getDefault(), "status")),
-				"status", false);
+		if (!objectDefinition.isSystem()) {
+			dbTableName = "ObjectEntry";
 		}
+
+		_objectFieldLocalService.addSystemObjectField(
+			userId, objectDefinition.getObjectDefinitionId(),
+			ObjectFieldConstants.BUSINESS_TYPE_TEXT,
+			ObjectEntryTable.INSTANCE.userName.getName(), dbTableName,
+			ObjectFieldConstants.DB_TYPE_STRING, null, false, false, null,
+			LocalizedMapUtil.getLocalizedMap(
+				_language.get(LocaleUtil.getDefault(), "author")),
+			"creator", false, false);
+
+		_objectFieldLocalService.addSystemObjectField(
+			userId, objectDefinition.getObjectDefinitionId(),
+			ObjectFieldConstants.BUSINESS_TYPE_DATE,
+			ObjectEntryTable.INSTANCE.createDate.getName(), dbTableName,
+			ObjectFieldConstants.DB_TYPE_DATE, null, false, false, null,
+			LocalizedMapUtil.getLocalizedMap(
+				_language.get(LocaleUtil.getDefault(), "create-date")),
+			"createDate", false, false);
+
+		String dbColumnName = ObjectEntryTable.INSTANCE.objectEntryId.getName();
+
+		if (system) {
+			dbColumnName = pkObjectFieldName;
+		}
+
+		if (GetterUtil.getBoolean(PropsUtil.get("feature.flag.LPS-158821")) &&
+			!objectDefinition.isSystem()) {
+
+			_objectFieldLocalService.addSystemObjectField(
+				userId, objectDefinition.getObjectDefinitionId(),
+				ObjectFieldConstants.BUSINESS_TYPE_TEXT,
+				ObjectEntryTable.INSTANCE.externalReferenceCode.getName(),
+				ObjectEntryTable.INSTANCE.getTableName(),
+				ObjectFieldConstants.DB_TYPE_STRING, null, false, false, null,
+				LocalizedMapUtil.getLocalizedMap(
+					_language.get(
+						LocaleUtil.getDefault(), "external-reference-code")),
+				"externalReferenceCode", false, false);
+		}
+
+		_objectFieldLocalService.addSystemObjectField(
+			userId, objectDefinition.getObjectDefinitionId(),
+			ObjectFieldConstants.BUSINESS_TYPE_LONG_INTEGER, dbColumnName,
+			dbTableName, ObjectFieldConstants.DB_TYPE_LONG, null, false, false,
+			null,
+			LocalizedMapUtil.getLocalizedMap(
+				_language.get(LocaleUtil.getDefault(), "id")),
+			"id", false, false);
+
+		_objectFieldLocalService.addSystemObjectField(
+			userId, objectDefinition.getObjectDefinitionId(),
+			ObjectFieldConstants.BUSINESS_TYPE_DATE,
+			ObjectEntryTable.INSTANCE.modifiedDate.getName(), dbTableName,
+			ObjectFieldConstants.DB_TYPE_DATE, null, false, false, null,
+			LocalizedMapUtil.getLocalizedMap(
+				_language.get(LocaleUtil.getDefault(), "modified-date")),
+			"modifiedDate", false, false);
+
+		_objectFieldLocalService.addSystemObjectField(
+			userId, objectDefinition.getObjectDefinitionId(),
+			ObjectFieldConstants.BUSINESS_TYPE_TEXT,
+			ObjectEntryTable.INSTANCE.status.getName(), dbTableName,
+			ObjectFieldConstants.DB_TYPE_INTEGER, null, false, false, null,
+			LocalizedMapUtil.getLocalizedMap(
+				_language.get(LocaleUtil.getDefault(), "status")),
+			"status", false, false);
 
 		if (objectFields != null) {
 			for (ObjectField objectField : objectFields) {
-				if (system) {
-					_objectFieldLocalService.addSystemObjectField(
+				if (system || objectField.isSystem()) {
+					_objectFieldLocalService.addOrUpdateSystemObjectField(
 						userId, objectDefinition.getObjectDefinitionId(),
 						objectField.getBusinessType(),
 						objectField.getDBColumnName(),
 						objectDefinition.getDBTableName(),
-						objectField.getDBType(), objectField.isIndexed(),
+						objectField.getDBType(), objectField.getDefaultValue(),
+						objectField.isIndexed(),
 						objectField.isIndexedAsKeyword(),
 						objectField.getIndexedLanguageId(),
 						objectField.getLabelMap(), objectField.getName(),
-						objectField.isRequired());
+						objectField.isRequired(), objectField.isState());
 				}
 				else {
 					_objectFieldLocalService.addCustomObjectField(
 						userId, objectField.getListTypeDefinitionId(),
 						objectDefinition.getObjectDefinitionId(),
 						objectField.getBusinessType(), objectField.getDBType(),
-						objectField.isIndexed(),
+						objectField.getDefaultValue(), objectField.isIndexed(),
 						objectField.isIndexedAsKeyword(),
 						objectField.getIndexedLanguageId(),
 						objectField.getLabelMap(), objectField.getName(),
-						objectField.isRequired(),
+						objectField.isRequired(), objectField.isState(),
 						objectField.getObjectFieldSettings());
 				}
 			}
@@ -959,7 +998,7 @@ public class ObjectDefinitionLocalServiceImpl
 		for (LayoutClassedModelUsage layoutClassedModelUsage :
 				layoutClassedModelUsages) {
 
-			Set<Locale> availableLocales = LanguageUtil.getAvailableLocales(
+			Set<Locale> availableLocales = _language.getAvailableLocales(
 				layoutClassedModelUsage.getGroupId());
 
 			for (Locale locale : availableLocales) {
@@ -1004,11 +1043,27 @@ public class ObjectDefinitionLocalServiceImpl
 
 		boolean originalActive = objectDefinition.isActive();
 
+		_validateAccountEntryRestrictedObjectFieldId(
+			accountEntryRestrictedObjectFieldId, accountEntryRestricted,
+			objectDefinition);
 		_validateObjectFieldId(objectDefinition, descriptionObjectFieldId);
 		_validateObjectFieldId(objectDefinition, titleObjectFieldId);
 		_validateActive(objectDefinition, active);
 		_validateLabel(labelMap);
 		_validatePluralLabel(pluralLabelMap);
+
+		if (objectDefinition.getAccountEntryRestrictedObjectFieldId() != 0) {
+			_objectFieldLocalService.updateRequired(
+				objectDefinition.getAccountEntryRestrictedObjectFieldId(),
+				false);
+		}
+
+		if (accountEntryRestricted &&
+			(accountEntryRestrictedObjectFieldId > 0)) {
+
+			_objectFieldLocalService.updateRequired(
+				accountEntryRestrictedObjectFieldId, true);
+		}
 
 		objectDefinition.setAccountEntryRestrictedObjectFieldId(
 			accountEntryRestrictedObjectFieldId);
@@ -1109,6 +1164,30 @@ public class ObjectDefinitionLocalServiceImpl
 			});
 
 		actionableDynamicQuery.performActions();
+	}
+
+	private void _validateAccountEntryRestrictedObjectFieldId(
+			long accountEntryRestrictedObjectFieldId,
+			boolean accountEntryRestricted, ObjectDefinition objectDefinition)
+		throws ObjectDefinitionAccountEntryRestrictedException,
+			   ObjectDefinitionAccountEntryRestrictedObjectFieldIdException {
+
+		if (accountEntryRestricted &&
+			(accountEntryRestrictedObjectFieldId == 0)) {
+
+			throw new ObjectDefinitionAccountEntryRestrictedObjectFieldIdException();
+		}
+
+		if (objectDefinition.isApproved() &&
+			((accountEntryRestricted !=
+				objectDefinition.isAccountEntryRestricted()) ||
+			 (accountEntryRestrictedObjectFieldId !=
+				 objectDefinition.getAccountEntryRestrictedObjectFieldId()))) {
+
+			throw new ObjectDefinitionAccountEntryRestrictedException(
+				"Account entry restrictions on approved object definitions " +
+					"cannot be changed");
+		}
 	}
 
 	private void _validateActive(
@@ -1277,14 +1356,32 @@ public class ObjectDefinitionLocalServiceImpl
 			ObjectDefinitionLocalServiceUtil.class, "undeployObjectDefinition",
 			ObjectDefinition.class);
 
+	@Reference
+	private AssetCategoryLocalService _assetCategoryLocalService;
+
+	@Reference
+	private AssetTagLocalService _assetTagLocalService;
+
+	@Reference
+	private AssetVocabularyLocalService _assetVocabularyLocalService;
+
 	private BundleContext _bundleContext;
 
 	@Reference
 	private ClassNameLocalService _classNameLocalService;
 
 	@Reference
+	private CompanyLocalService _companyLocalService;
+
+	@Reference
 	private DynamicQueryBatchIndexingActionableFactory
 		_dynamicQueryBatchIndexingActionableFactory;
+
+	@Reference
+	private GroupLocalService _groupLocalService;
+
+	@Reference
+	private Language _language;
 
 	@Reference
 	private LayoutClassedModelUsageLocalService

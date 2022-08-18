@@ -12,18 +12,15 @@
  * details.
  */
 
-import {MutationOptions} from '@apollo/client';
-import {DocumentNode} from 'graphql';
 import {useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 
-import client from '../graphql/apolloClient';
 import i18n from '../i18n';
 import {Liferay} from '../services/liferay';
 
-type OnSubmitOptions = {
-	createMutation: DocumentNode;
-	updateMutation: DocumentNode;
+type OnSubmitOptionsRest<T = any> = {
+	create: (data: any) => Promise<T>;
+	update: (id: number, data: any) => Promise<T>;
 };
 
 export type FormOptions = {
@@ -33,16 +30,15 @@ export type FormOptions = {
 	onClose: () => void;
 	onError: (error?: any) => void;
 	onSave: (param?: any) => void;
-	onSubmit: (
+	onSubmit: <T = any>(
 		data: any,
-		onSubmitOptions: OnSubmitOptions,
-		mutationOptions?: Omit<MutationOptions, 'mutation'>
-	) => Promise<any>;
+		options: OnSubmitOptionsRest<T>
+	) => Promise<T>;
 	onSubmitAndSave: (
 		data: any,
-		onSubmitOptions: OnSubmitOptions,
-		mutationOptions?: Omit<MutationOptions, 'mutation'>
+		onSubmitOptions: OnSubmitOptionsRest<any>
 	) => Promise<void>;
+	onSuccess: () => void;
 };
 
 export type Form = {
@@ -52,6 +48,28 @@ export type Form = {
 
 export type FormComponent = Omit<Form, 'forceRefetch'>;
 
+const onError = (error: any) => {
+	let errorMessage = i18n.translate('an-unexpected-error-occurred');
+
+	if (process.env.NODE_ENV === 'development') {
+		console.error(error);
+
+		errorMessage = error.message;
+	}
+
+	Liferay.Util.openToast({
+		message: errorMessage,
+		type: 'danger',
+	});
+};
+
+const onSuccess = () => {
+	Liferay.Util.openToast({
+		message: i18n.translate('your-request-completed-successfully'),
+		type: 'success',
+	});
+};
+
 const useFormActions = (): Form => {
 	const [forceRefetch, setForceRefetch] = useState(0);
 	const navigate = useNavigate();
@@ -60,50 +78,30 @@ const useFormActions = (): Form => {
 		navigate(-1);
 	};
 
-	const onError = (error: any) => {
-		console.error(error);
-
-		Liferay.Util.openToast({
-			message: i18n.translate('an-unexpected-error-occurred'),
-			type: 'danger',
-		});
-	};
-
-	const onSave = (state?: any) => {
-		Liferay.Util.openToast({
-			message: i18n.translate('your-request-completed-successfully'),
-			type: 'success',
-		});
+	const onSave = () => {
+		onSuccess();
 
 		setForceRefetch(new Date().getTime());
 
-		if (state) {
-			onSave(state);
-		}
 		navigate(-1);
 	};
 
-	const onSubmit = async (
+	const onSubmit = async <T = any>(
 		data: any,
-		{createMutation, updateMutation}: OnSubmitOptions,
-		options?: Omit<MutationOptions, 'mutation'>
-	) => {
-		const variables: any = {
-			data,
-		};
+		{create, update}: OnSubmitOptionsRest<T>
+	): Promise<T> => {
+		const form = {...data};
 
-		if (data.id) {
-			variables.id = data.id;
-		}
-
-		delete variables.data.id;
+		delete form.id;
 
 		try {
-			return client.mutate({
-				mutation: variables.id ? updateMutation : createMutation,
-				variables,
-				...options,
-			});
+			const fn = data.id
+				? () => update(data.id, form)
+				: () => create(form);
+
+			const response = await fn();
+
+			return response;
 		}
 		catch (error) {
 			onError(error);
@@ -114,10 +112,9 @@ const useFormActions = (): Form => {
 
 	const onSubmitAndSave = async (
 		data: any,
-		onSubmitOptions: OnSubmitOptions,
-		options?: Omit<MutationOptions, 'mutation'>
+		onSubmitOptions: OnSubmitOptionsRest<any>
 	) => {
-		await onSubmit(data, onSubmitOptions, options);
+		await onSubmit(data, onSubmitOptions);
 		await onSave();
 	};
 
@@ -145,6 +142,7 @@ const useFormActions = (): Form => {
 			onSave,
 			onSubmit,
 			onSubmitAndSave,
+			onSuccess,
 		},
 	};
 };

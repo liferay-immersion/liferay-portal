@@ -14,7 +14,8 @@ create table ObjectAction (
 	name VARCHAR(75) null,
 	objectActionExecutorKey VARCHAR(75) null,
 	objectActionTriggerKey VARCHAR(75) null,
-	parameters TEXT null
+	parameters TEXT null,
+	status INTEGER
 );
 
 create table ObjectDefinition (
@@ -76,12 +77,14 @@ create table ObjectField (
 	userName VARCHAR(75) null,
 	createDate DATE null,
 	modifiedDate DATE null,
+	externalReferenceCode VARCHAR(75) null,
 	listTypeDefinitionId LONG,
 	objectDefinitionId LONG,
 	businessType VARCHAR(75) null,
 	dbColumnName VARCHAR(75) null,
 	dbTableName VARCHAR(75) null,
 	dbType VARCHAR(75) null,
+	defaultValue VARCHAR(75) null,
 	indexed BOOLEAN,
 	indexedAsKeyword BOOLEAN,
 	indexedLanguageId VARCHAR(75) null,
@@ -89,6 +92,7 @@ create table ObjectField (
 	name VARCHAR(75) null,
 	relationshipType VARCHAR(75) null,
 	required BOOLEAN,
+	state_ BOOLEAN,
 	system_ BOOLEAN
 );
 
@@ -103,7 +107,22 @@ create table ObjectFieldSetting (
 	modifiedDate DATE null,
 	objectFieldId LONG,
 	name VARCHAR(75) null,
-	value VARCHAR(75) null
+	value VARCHAR(255) null
+);
+
+create table ObjectFilter (
+	mvccVersion LONG default 0 not null,
+	uuid_ VARCHAR(75) null,
+	objectFilterId LONG not null primary key,
+	companyId LONG,
+	userId LONG,
+	userName VARCHAR(75) null,
+	createDate DATE null,
+	modifiedDate DATE null,
+	objectFieldId LONG,
+	filterBy VARCHAR(75) null,
+	filterType VARCHAR(75) null,
+	json VARCHAR(75) null
 );
 
 create table ObjectLayout (
@@ -191,12 +210,52 @@ create table ObjectRelationship (
 	objectDefinitionId1 LONG,
 	objectDefinitionId2 LONG,
 	objectFieldId2 LONG,
+	parameterObjectFieldId LONG,
 	deletionType VARCHAR(75) null,
 	dbTableName VARCHAR(75) null,
 	label STRING null,
 	name VARCHAR(75) null,
 	reverse BOOLEAN,
 	type_ VARCHAR(75) null
+);
+
+create table ObjectState (
+	mvccVersion LONG default 0 not null,
+	uuid_ VARCHAR(75) null,
+	objectStateId LONG not null primary key,
+	companyId LONG,
+	userId LONG,
+	userName VARCHAR(75) null,
+	createDate DATE null,
+	modifiedDate DATE null,
+	listTypeEntryId LONG,
+	objectStateFlowId LONG
+);
+
+create table ObjectStateFlow (
+	mvccVersion LONG default 0 not null,
+	uuid_ VARCHAR(75) null,
+	objectStateFlowId LONG not null primary key,
+	companyId LONG,
+	userId LONG,
+	userName VARCHAR(75) null,
+	createDate DATE null,
+	modifiedDate DATE null,
+	objectFieldId LONG
+);
+
+create table ObjectStateTransition (
+	mvccVersion LONG default 0 not null,
+	uuid_ VARCHAR(75) null,
+	objectStateTransitionId LONG not null primary key,
+	companyId LONG,
+	userId LONG,
+	userName VARCHAR(75) null,
+	createDate DATE null,
+	modifiedDate DATE null,
+	objectStateFlowId LONG,
+	sourceObjectStateId LONG,
+	targetObjectStateId LONG
 );
 
 create table ObjectValidationRule (
@@ -256,7 +315,7 @@ create table ObjectViewFilterColumn (
 	modifiedDate DATE null,
 	objectViewId LONG,
 	filterType VARCHAR(75) null,
-	json VARCHAR(75) null,
+	json TEXT null,
 	objectFieldName VARCHAR(75) null
 );
 

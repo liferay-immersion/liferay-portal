@@ -1083,13 +1083,9 @@ definition {
 				navTab = "Blog Images",
 				uploadFileName = "Document_1.jpg");
 
-			Pause(locator1 = "3000");
-
 			Panel.expandPanel(panel = "Configuration");
 
 			BlogsEntry.addCustomAbstract(entryAbstractDescription = "This is a description for blogs entry");
-
-			Pause(locator1 = "3000");
 
 			PortletEntry.publish();
 
@@ -1617,8 +1613,6 @@ definition {
 				entryTitle = "Blogs Entry Title",
 				navTab = "Blog Images",
 				uploadFileName = "Document_1.jpg");
-
-			Pause(locator1 = "3000");
 
 			PortletEntry.publish();
 
@@ -2471,7 +2465,9 @@ definition {
 				entry = "First Web Content",
 				menuItem = "View History");
 
-			Pause(locator1 = "3000");
+			WaitForElementPresent(
+				key_webContentTitle = "First Web Content",
+				locator1 = "WCEditWebContent#VIEW_HISTORY_VERSION_TITLE");
 
 			var firstModifiedDate = selenium.getAttribute("//td[contains(@class,'modified-date')]/span[contains(@class,'tooltip')]@title");
 
@@ -2481,7 +2477,9 @@ definition {
 				entry = "Second Web Content",
 				menuItem = "View History");
 
-			Pause(locator1 = "3000");
+			WaitForElementPresent(
+				key_webContentTitle = "Second Web Content",
+				locator1 = "WCEditWebContent#VIEW_HISTORY_VERSION_TITLE");
 
 			var secondModifiedDate = selenium.getAttribute("//td[contains(@class,'modified-date')]/span[contains(@class,'tooltip')]@title");
 
@@ -2491,7 +2489,9 @@ definition {
 				entry = "Third Web Content",
 				menuItem = "View History");
 
-			Pause(locator1 = "3000");
+			WaitForElementPresent(
+				key_webContentTitle = "Third Web Content",
+				locator1 = "WCEditWebContent#VIEW_HISTORY_VERSION_TITLE");
 
 			var thirdModifiedDate = selenium.getAttribute("//td[contains(@class,'modified-date')]/span[contains(@class,'tooltip')]@title");
 		}
@@ -2620,7 +2620,9 @@ definition {
 				entry = "First Web Content",
 				menuItem = "View History");
 
-			Pause(locator1 = "3000");
+			WaitForElementPresent(
+				key_webContentTitle = "First Web Content",
+				locator1 = "WCEditWebContent#VIEW_HISTORY_VERSION_TITLE");
 
 			var firstModifiedDate = selenium.getAttribute("//tr[2]//td[contains(@class,'modified-date')]/span[contains(@class,'tooltip')]@title");
 		}

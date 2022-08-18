@@ -126,9 +126,11 @@ definition {
 	macro gotoNavUnderline {
 		var key_navUnderline = "${navUnderline}";
 
-		AssertClick(
-			locator1 = "NavUnderline#NAV_UNDERLINE_LINK",
-			value1 = "${navUnderline}");
+		if (IsElementNotPresent(locator1 = "NavUnderline#ACTIVE_NAV_UNDERLINE_LINK")) {
+			AssertClick(
+				locator1 = "NavUnderline#NAV_UNDERLINE_LINK",
+				value1 = "${navUnderline}");
+		}
 
 		AssertElementPresent(locator1 = "NavUnderline#ACTIVE_NAV_UNDERLINE_LINK");
 	}
@@ -332,6 +334,10 @@ definition {
 		else {
 			Open(locator1 = "${baseURL}/web/${siteNameURL}-staging");
 		}
+	}
+
+	macro openStoreURL {
+		Navigator.openWithAppendToBaseURL(urlAppend = "group/control_panel/manage?p_p_id=com_liferay_marketplace_store_web_portlet_MarketplaceStorePortlet");
 	}
 
 	macro openToGroupPagesPortlet {

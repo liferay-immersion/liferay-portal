@@ -25,11 +25,13 @@ ObjectView objectView = (ObjectView)request.getAttribute(ObjectWebKeys.OBJECT_VI
 	module="js/components/ObjectView/index"
 	props='<%=
 		HashMapBuilder.<String, Object>put(
+			"filterOperators", LocalizedJSONArrayUtil.getFilterOperatorsJSONObject(locale)
+		).put(
 			"isViewOnly", !objectDefinitionsViewsDisplayContext.hasUpdateObjectDefinitionPermission()
 		).put(
 			"objectViewId", objectView.getObjectViewId()
 		).put(
-			"workflowStatusJSONArray", objectDefinitionsViewsDisplayContext.getWorkflowStatusJSONArray()
+			"workflowStatusJSONArray", LocalizedJSONArrayUtil.getWorkflowStatusJSONArray(locale)
 		).build()
 	%>'
 />

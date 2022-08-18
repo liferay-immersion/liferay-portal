@@ -18,12 +18,12 @@ import com.liferay.frontend.data.set.model.FDSActionDropdownItem;
 import com.liferay.frontend.taglib.clay.servlet.taglib.util.CreationMenu;
 import com.liferay.object.constants.ObjectActionKeys;
 import com.liferay.object.model.ObjectDefinition;
-import com.liferay.object.rest.manager.v1_0.ObjectEntryManagerServicesTracker;
+import com.liferay.object.rest.manager.v1_0.ObjectEntryManagerTracker;
 import com.liferay.object.web.internal.display.context.helper.ObjectRequestHelper;
 import com.liferay.petra.portlet.url.builder.PortletURLBuilder;
+import com.liferay.petra.portlet.url.builder.ResourceURLBuilder;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.language.LanguageUtil;
-import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
 import com.liferay.portal.kernel.portlet.LiferayWindowState;
 import com.liferay.portal.kernel.portlet.PortletURLUtil;
 import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermission;
@@ -38,7 +38,6 @@ import java.util.List;
 import javax.portlet.ActionRequest;
 import javax.portlet.PortletException;
 import javax.portlet.PortletURL;
-import javax.portlet.ResourceURL;
 import javax.portlet.WindowStateException;
 
 import javax.servlet.http.HttpServletRequest;
@@ -53,11 +52,11 @@ public class ViewObjectDefinitionsDisplayContext {
 		HttpServletRequest httpServletRequest,
 		ModelResourcePermission<ObjectDefinition>
 			objectDefinitionModelResourcePermission,
-		ObjectEntryManagerServicesTracker objectEntryManagerServicesTracker) {
+		ObjectEntryManagerTracker objectEntryManagerTracker) {
 
 		_objectDefinitionModelResourcePermission =
 			objectDefinitionModelResourcePermission;
-		_objectEntryManagerServicesTracker = objectEntryManagerServicesTracker;
+		_objectEntryManagerTracker = objectEntryManagerTracker;
 
 		_objectRequestHelper = new ObjectRequestHelper(httpServletRequest);
 	}
@@ -88,15 +87,6 @@ public class ViewObjectDefinitionsDisplayContext {
 	public List<FDSActionDropdownItem> getFDSActionDropdownItems()
 		throws Exception {
 
-		LiferayPortletResponse liferayPortletResponse =
-			_objectRequestHelper.getLiferayPortletResponse();
-
-		ResourceURL resourceURL = liferayPortletResponse.createResourceURL();
-
-		resourceURL.setParameter("objectDefinitionId", "{id}");
-		resourceURL.setResourceID(
-			"/object_definitions/export_object_definition");
-
 		return Arrays.asList(
 			new FDSActionDropdownItem(
 				PortletURLBuilder.create(
@@ -110,7 +100,14 @@ public class ViewObjectDefinitionsDisplayContext {
 				LanguageUtil.get(_objectRequestHelper.getRequest(), "view"),
 				"get", null, null),
 			new FDSActionDropdownItem(
-				resourceURL.toString(), "export", "export",
+				ResourceURLBuilder.createResourceURL(
+					_objectRequestHelper.getLiferayPortletResponse()
+				).setParameter(
+					"objectDefinitionId", "{id}"
+				).setResourceID(
+					"/object_definitions/export_object_definition"
+				).buildString(),
+				"export", "export",
 				LanguageUtil.get(
 					_objectRequestHelper.getRequest(), "export-as-json"),
 				"get", null, null),
@@ -135,7 +132,7 @@ public class ViewObjectDefinitionsDisplayContext {
 
 	public List<String> getStorageTypes() {
 		List<String> storageTypes = TransformUtil.transform(
-			_objectEntryManagerServicesTracker.getStorageTypes(),
+			_objectEntryManagerTracker.getStorageTypes(),
 			objectEntryManagerStorageType -> LanguageUtil.get(
 				_objectRequestHelper.getLocale(),
 				objectEntryManagerStorageType));
@@ -186,8 +183,7 @@ public class ViewObjectDefinitionsDisplayContext {
 
 	private final ModelResourcePermission<ObjectDefinition>
 		_objectDefinitionModelResourcePermission;
-	private final ObjectEntryManagerServicesTracker
-		_objectEntryManagerServicesTracker;
+	private final ObjectEntryManagerTracker _objectEntryManagerTracker;
 	private final ObjectRequestHelper _objectRequestHelper;
 
 }

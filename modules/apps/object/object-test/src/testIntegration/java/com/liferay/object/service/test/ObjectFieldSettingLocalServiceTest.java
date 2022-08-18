@@ -59,10 +59,10 @@ public class ObjectFieldSettingLocalServiceTest {
 
 		_objectField = _objectFieldLocalService.addCustomObjectField(
 			TestPropsValues.getUserId(), 0,
-			_objectDefinition.getObjectDefinitionId(), "Text", "String", false,
-			false, null,
+			_objectDefinition.getObjectDefinitionId(), "Text", "String", null,
+			false, false, null,
 			LocalizedMapUtil.getLocalizedMap(RandomTestUtil.randomString()),
-			StringUtil.randomId(), RandomTestUtil.randomBoolean(),
+			StringUtil.randomId(), RandomTestUtil.randomBoolean(), false,
 			Collections.emptyList());
 	}
 

@@ -27,6 +27,9 @@ import com.liferay.petra.reflect.ReflectionUtil;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.bean.BeanReference;
+import com.liferay.portal.kernel.cache.PortalCache;
+import com.liferay.portal.kernel.cache.PortalCacheHelperUtil;
+import com.liferay.portal.kernel.cache.PortalCacheManagerNames;
 import com.liferay.portal.kernel.cache.PortalCacheMapSynchronizeUtil;
 import com.liferay.portal.kernel.change.tracking.CTAware;
 import com.liferay.portal.kernel.dao.orm.EntityCache;
@@ -1109,11 +1112,10 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 		FullNameGenerator fullNameGenerator =
 			FullNameGeneratorFactory.getInstance();
 
-		String fullName = fullNameGenerator.getFullName(
-			firstName, middleName, lastName);
-
 		String greeting = LanguageUtil.format(
-			locale, "welcome-x", fullName, false);
+			locale, "welcome-x",
+			fullNameGenerator.getFullName(firstName, middleName, lastName),
+			false);
 
 		User user = userPersistence.create(userId);
 
@@ -1335,9 +1337,17 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 
 		serviceLatch.waitFor(
 			EntityCache.class,
-			entityCache -> PortalCacheMapSynchronizeUtil.synchronize(
-				entityCache.getPortalCache(UserImpl.class), _defaultUsers,
-				_synchronizer));
+			entityCache -> {
+				PortalCache<?, ?> portalCache = entityCache.getPortalCache(
+					UserImpl.class);
+
+				PortalCacheMapSynchronizeUtil.synchronize(
+					PortalCacheHelperUtil.getPortalCache(
+						PortalCacheManagerNames.MULTI_VM,
+						portalCache.getPortalCacheName(), portalCache.isMVCC(),
+						portalCache.isSharded()),
+					_defaultUsers, _synchronizer);
+			});
 
 		serviceLatch.openOn(
 			() -> {
@@ -1738,11 +1748,9 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 				password = regExpToolkit.generate(null);
 			}
 			else {
-				PasswordPolicy passwordPolicy =
+				password = PwdToolkitUtil.generate(
 					_passwordPolicyLocalService.getPasswordPolicy(
-						user.getCompanyId(), user.getOrganizationIds());
-
-				password = PwdToolkitUtil.generate(passwordPolicy);
+						user.getCompanyId(), user.getOrganizationIds()));
 			}
 
 			serviceContext.setAttribute("passwordUnencrypted", password);
@@ -4462,11 +4470,10 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 			FullNameGenerator fullNameGenerator =
 				FullNameGeneratorFactory.getInstance();
 
-			String fullName = fullNameGenerator.getFullName(
-				firstName, middleName, lastName);
-
 			String greeting = LanguageUtil.format(
-				locale, "welcome-x", fullName, false);
+				locale, "welcome-x",
+				fullNameGenerator.getFullName(firstName, middleName, lastName),
+				false);
 
 			if (Validator.isNotNull(password1)) {
 				user.setPassword(PasswordEncryptorUtil.encrypt(password1));

@@ -12,7 +12,12 @@
  * details.
  */
 
-import {delegate, sub, toggleSelectBox} from 'frontend-js-web';
+import {
+	delegate,
+	openSelectionModal,
+	sub,
+	toggleSelectBox,
+} from 'frontend-js-web';
 
 export default function ({classTypes, namespace}) {
 	const mapDDMStructures = {};
@@ -355,7 +360,7 @@ export default function ({classTypes, namespace}) {
 		if (fromBox.attr('id') === id || toBox.attr('id') === id) {
 			toggleSubclasses();
 
-			if (document.getElementById(id).options.length === 0) {
+			if (!document.getElementById(id).options.length) {
 				toggleSaveButton(true);
 			}
 			else {
@@ -386,7 +391,7 @@ export default function ({classTypes, namespace}) {
 			url
 		);
 
-		Liferay.Util.openSelectionModal({
+		openSelectionModal({
 			customSelectEvent: true,
 			id: `${namespace}selectDDMStructure${delegateTarget.id}`,
 			iframeBodyCssClass: '',

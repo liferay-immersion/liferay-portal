@@ -15,27 +15,48 @@
 import ClayIcon from '@clayui/icon';
 import {useOutletContext} from 'react-router-dom';
 
+import Button from '../../../components/Button';
 import Container from '../../../components/Layout/Container';
-import ListView from '../../../components/ListView/ListView';
-import {
-	TestrayRequirementCase,
-	TestraySuite,
-	getRequirementCases,
-} from '../../../graphql/queries';
+import ListView from '../../../components/ListView';
 import i18n from '../../../i18n';
+import {
+	TestrayCase,
+	TestrayRequirementCase,
+	caseRequirementsResource,
+	getCasesRequerimentsTransformData,
+} from '../../../services/rest';
 import {searchUtil} from '../../../util/search';
+import CaseRequirementLinkModal from './CaseRequirementLinkModal';
+import useCaseRequirementActions from './useCaseRequirementActions';
 
 const CaseRequirement = () => {
 	const {
 		projectId,
 		testrayCase,
-	}: {projectId: number; testrayCase: TestraySuite} = useOutletContext();
+	}: {projectId: number; testrayCase: TestrayCase} = useOutletContext();
+
+	const {formModal} = useCaseRequirementActions(testrayCase);
 
 	return (
 		<Container>
+			<CaseRequirementLinkModal modal={formModal} />
+
 			<ListView
-				managementToolbarProps={{title: i18n.translate('requirements')}}
-				query={getRequirementCases}
+				forceRefetch={formModal.forceRefetch}
+				managementToolbarProps={{
+					buttons: (
+						<Button
+							displayType="secondary"
+							onClick={() => formModal.open()}
+							symbol="list-ul"
+							toolbar
+						>
+							{i18n.translate('link-requirements')}
+						</Button>
+					),
+					title: i18n.translate('requirements'),
+				}}
+				resource={caseRequirementsResource}
 				tableProps={{
 					columns: [
 						{
@@ -45,7 +66,7 @@ const CaseRequirement = () => {
 								_,
 								requirementCase: TestrayRequirementCase
 							) => requirementCase.requirement.key,
-							value: 'Key',
+							value: i18n.translate('key'),
 						},
 						{
 							key: 'linkTitle',
@@ -66,7 +87,7 @@ const CaseRequirement = () => {
 									/>
 								</a>
 							),
-							value: 'Link',
+							value: i18n.translate('link'),
 						},
 						{
 							key: 'team',
@@ -114,7 +135,7 @@ const CaseRequirement = () => {
 					navigateTo: ({requirement}: TestrayRequirementCase) =>
 						`/project/${projectId}/requirements/${requirement.id}`,
 				}}
-				transformData={(data) => data?.requirementscaseses}
+				transformData={getCasesRequerimentsTransformData}
 				variables={{
 					filter: searchUtil.eq('caseId', testrayCase.id),
 				}}

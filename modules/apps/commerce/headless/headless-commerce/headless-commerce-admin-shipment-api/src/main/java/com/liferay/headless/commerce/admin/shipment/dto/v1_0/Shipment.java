@@ -179,6 +179,35 @@ public class Shipment implements Serializable {
 	protected Date createDate;
 
 	@Schema
+	@Valid
+	public CustomField[] getCustomFields() {
+		return customFields;
+	}
+
+	public void setCustomFields(CustomField[] customFields) {
+		this.customFields = customFields;
+	}
+
+	@JsonIgnore
+	public void setCustomFields(
+		UnsafeSupplier<CustomField[], Exception> customFieldsUnsafeSupplier) {
+
+		try {
+			customFields = customFieldsUnsafeSupplier.get();
+		}
+		catch (RuntimeException re) {
+			throw re;
+		}
+		catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	@GraphQLField
+	@JsonProperty(access = JsonProperty.Access.READ_WRITE)
+	protected CustomField[] customFields;
+
+	@Schema
 	public Date getExpectedDate() {
 		return expectedDate;
 	}
@@ -460,7 +489,7 @@ public class Shipment implements Serializable {
 	}
 
 	@GraphQLField
-	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
+	@JsonProperty(access = JsonProperty.Access.READ_WRITE)
 	protected Long shippingMethodId;
 
 	@Schema(example = "Standard Delivery")
@@ -547,6 +576,34 @@ public class Shipment implements Serializable {
 	@GraphQLField
 	@JsonProperty(access = JsonProperty.Access.READ_WRITE)
 	protected String trackingNumber;
+
+	@Schema(example = "Standard Delivery")
+	public String getTrackingURL() {
+		return trackingURL;
+	}
+
+	public void setTrackingURL(String trackingURL) {
+		this.trackingURL = trackingURL;
+	}
+
+	@JsonIgnore
+	public void setTrackingURL(
+		UnsafeSupplier<String, Exception> trackingURLUnsafeSupplier) {
+
+		try {
+			trackingURL = trackingURLUnsafeSupplier.get();
+		}
+		catch (RuntimeException re) {
+			throw re;
+		}
+		catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	@GraphQLField
+	@JsonProperty(access = JsonProperty.Access.READ_WRITE)
+	protected String trackingURL;
 
 	@Schema(example = "John")
 	public String getUserName() {
@@ -652,6 +709,26 @@ public class Shipment implements Serializable {
 			sb.append(liferayToJSONDateFormat.format(createDate));
 
 			sb.append("\"");
+		}
+
+		if (customFields != null) {
+			if (sb.length() > 1) {
+				sb.append(", ");
+			}
+
+			sb.append("\"customFields\": ");
+
+			sb.append("[");
+
+			for (int i = 0; i < customFields.length; i++) {
+				sb.append(String.valueOf(customFields[i]));
+
+				if ((i + 1) < customFields.length) {
+					sb.append(", ");
+				}
+			}
+
+			sb.append("]");
 		}
 
 		if (expectedDate != null) {
@@ -814,6 +891,20 @@ public class Shipment implements Serializable {
 			sb.append("\"");
 
 			sb.append(_escape(trackingNumber));
+
+			sb.append("\"");
+		}
+
+		if (trackingURL != null) {
+			if (sb.length() > 1) {
+				sb.append(", ");
+			}
+
+			sb.append("\"trackingURL\": ");
+
+			sb.append("\"");
+
+			sb.append(_escape(trackingURL));
 
 			sb.append("\"");
 		}

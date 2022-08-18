@@ -41,14 +41,13 @@ public class LabelsPortalK8sConfigurationPropertiesMutator
 		Dictionary<String, Object> properties) {
 
 		for (Map.Entry<String, String> entry : labels.entrySet()) {
-			String modifiedKey = "k8s." + entry.getKey();
+			String key = entry.getKey();
 
-			if (modifiedKey.contains(StringPool.SLASH)) {
-				modifiedKey = StringUtil.replace(
-					modifiedKey, CharPool.SLASH, CharPool.PERIOD);
+			if (key.contains(StringPool.SLASH)) {
+				key = StringUtil.replace(key, CharPool.SLASH, CharPool.PERIOD);
 			}
 
-			properties.put(modifiedKey, entry.getValue());
+			properties.put(key, entry.getValue());
 		}
 	}
 

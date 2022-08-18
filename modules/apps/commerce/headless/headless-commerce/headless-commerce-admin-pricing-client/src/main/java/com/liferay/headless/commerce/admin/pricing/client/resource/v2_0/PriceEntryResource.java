@@ -93,12 +93,14 @@ public interface PriceEntryResource {
 		throws Exception;
 
 	public Page<PriceEntry> getPriceListByExternalReferenceCodePriceEntriesPage(
-			String externalReferenceCode, Pagination pagination)
+			String externalReferenceCode, String search, String filterString,
+			Pagination pagination, String sortString)
 		throws Exception;
 
 	public HttpInvoker.HttpResponse
 			getPriceListByExternalReferenceCodePriceEntriesPageHttpResponse(
-				String externalReferenceCode, Pagination pagination)
+				String externalReferenceCode, String search,
+				String filterString, Pagination pagination, String sortString)
 		throws Exception;
 
 	public PriceEntry postPriceListByExternalReferenceCodePriceEntry(
@@ -786,12 +788,15 @@ public interface PriceEntryResource {
 
 		public Page<PriceEntry>
 				getPriceListByExternalReferenceCodePriceEntriesPage(
-					String externalReferenceCode, Pagination pagination)
+					String externalReferenceCode, String search,
+					String filterString, Pagination pagination,
+					String sortString)
 			throws Exception {
 
 			HttpInvoker.HttpResponse httpResponse =
 				getPriceListByExternalReferenceCodePriceEntriesPageHttpResponse(
-					externalReferenceCode, pagination);
+					externalReferenceCode, search, filterString, pagination,
+					sortString);
 
 			String content = httpResponse.getContent();
 
@@ -832,7 +837,9 @@ public interface PriceEntryResource {
 
 		public HttpInvoker.HttpResponse
 				getPriceListByExternalReferenceCodePriceEntriesPageHttpResponse(
-					String externalReferenceCode, Pagination pagination)
+					String externalReferenceCode, String search,
+					String filterString, Pagination pagination,
+					String sortString)
 			throws Exception {
 
 			HttpInvoker httpInvoker = HttpInvoker.newHttpInvoker();
@@ -856,11 +863,23 @@ public interface PriceEntryResource {
 
 			httpInvoker.httpMethod(HttpInvoker.HttpMethod.GET);
 
+			if (search != null) {
+				httpInvoker.parameter("search", String.valueOf(search));
+			}
+
+			if (filterString != null) {
+				httpInvoker.parameter("filter", filterString);
+			}
+
 			if (pagination != null) {
 				httpInvoker.parameter(
 					"page", String.valueOf(pagination.getPage()));
 				httpInvoker.parameter(
 					"pageSize", String.valueOf(pagination.getPageSize()));
+			}
+
+			if (sortString != null) {
+				httpInvoker.parameter("sort", sortString);
 			}
 
 			httpInvoker.path(

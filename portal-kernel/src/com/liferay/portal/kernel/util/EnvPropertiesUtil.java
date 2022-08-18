@@ -14,16 +14,20 @@
 
 package com.liferay.portal.kernel.util;
 
+import com.liferay.petra.reflect.ReflectionUtil;
 import com.liferay.petra.string.CharPool;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+
+import java.io.IOException;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 import java.util.function.BiConsumer;
 
 /**
@@ -32,7 +36,10 @@ import java.util.function.BiConsumer;
 public class EnvPropertiesUtil {
 
 	public static void loadEnvOverrides(
-		String envPrefix, BiConsumer<String, String> biConsumer) {
+		String envPrefix, long companyId,
+		BiConsumer<String, String> biConsumer) {
+
+		String companyEnvPrefix = envPrefix.concat(_PROPS_BY_COMPANY);
 
 		Map<String, String> env = System.getenv();
 
@@ -40,6 +47,27 @@ public class EnvPropertiesUtil {
 			String key = entry.getKey();
 
 			if (!key.startsWith(envPrefix)) {
+				continue;
+			}
+
+			if (key.startsWith(companyEnvPrefix)) {
+				if (companyId == GetterUtil.getLong(
+						key.substring(companyEnvPrefix.length()), -1)) {
+
+					try {
+						Properties properties = PropertiesUtil.load(
+							entry.getValue());
+
+						properties.forEach(
+							(propertyKey, propertyValue) -> biConsumer.accept(
+								String.valueOf(propertyKey),
+								String.valueOf(propertyValue)));
+					}
+					catch (IOException ioException) {
+						ReflectionUtil.throwException(ioException);
+					}
+				}
+
 				continue;
 			}
 
@@ -133,6 +161,8 @@ public class EnvPropertiesUtil {
 			throw new ExceptionInInitializerError(exception);
 		}
 	}
+
+	private static final String _PROPS_BY_COMPANY = "PROPS_BY_COMPANY_";
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		EnvPropertiesUtil.class);

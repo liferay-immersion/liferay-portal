@@ -63,6 +63,8 @@ definition {
 	tearDown {
 		var testPortalInstance = PropsUtil.get("test.portal.instance");
 
+		ACUtils.tearDownAC();
+
 		ACUtils.tearDownDXP();
 
 		if ("${testPortalInstance}" == "true") {
@@ -71,10 +73,6 @@ definition {
 		else {
 			JSONGroup.deleteGroupByName(groupName = "Site Name");
 		}
-
-		JSONUser.tearDownNonAdminUsers();
-
-		ACUtils.tearDownAC();
 	}
 
 	@description = "Feature ID: LRAC-7868 | Automation ID: LRAC-10264 | Test Summary: Event Analysis creation with Attribute ad Filter Attribute"
@@ -181,9 +179,10 @@ definition {
 	@description = "Feature ID: LRAC-7868 | Automation ID: LRAC-10269 | Test Summary: Attribute breakdowns are sorted by the highest event count"
 	@priority = "4"
 	test AssertAttributeBreakdownsSortedByHighestEventCount {
+		property analytics.cloud.upstream = "false";
 		property test.name.skip.portal.instance = "CustomEventsFilterBreakdown#AssertAttributeBreakdownsSortedByHighestEventCount";
 
-		var attributeNameList = "pageTitle,url";
+		var attributeName = "pageTitle";
 		var layoutNameList = "Custom 1,Custom 2";
 		var dataSource = StringUtil.extractFirst("${assignedPropertyName}", " ");
 
@@ -242,7 +241,7 @@ definition {
 		}
 
 		task ("Add the breakdown to analysis") {
-			ACEventAnalysis.addBreakdown(attributeNameList = "${attributeNameList}");
+			ACEventAnalysis.addBreakdown(attributeNameList = "${attributeName}");
 		}
 
 		task ("Check that the analysis is being ordered by the number of interactions by default") {
@@ -459,7 +458,7 @@ definition {
 	test AssertTheAnalysisResultIsSorted {
 		property test.name.skip.portal.instance = "CustomEventsFilterBreakdown#AssertTheAnalysisResultIsSorted";
 
-		var attributeNameList = "pageTitle,url";
+		var attributeName = "pageTitle";
 		var layoutNameList = "Custom 1,Custom 2";
 		var dataSource = StringUtil.extractFirst("${assignedPropertyName}", " ");
 
@@ -518,7 +517,7 @@ definition {
 		}
 
 		task ("Add the breakdown to analysis") {
-			ACEventAnalysis.addBreakdown(attributeNameList = "${attributeNameList}");
+			ACEventAnalysis.addBreakdown(attributeNameList = "${attributeName}");
 		}
 
 		task ("Change the time filter to 24 hours") {

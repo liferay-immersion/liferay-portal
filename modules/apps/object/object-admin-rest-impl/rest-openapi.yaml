@@ -36,6 +36,9 @@ components:
                 parameters:
                     additionalProperties: true
                     type: object
+                status:
+                    $ref: "#/components/schemas/Status"
+                    readOnly: true
             type: object
         ObjectDefinition:
             properties:
@@ -95,6 +98,9 @@ components:
                     type: string
                 panelCategoryKey:
                     type: string
+                parameterRequired:
+                    readOnly: true
+                    type: boolean
                 pluralLabel:
                     additionalProperties:
                         type: string
@@ -128,7 +134,11 @@ components:
                     readOnly: true
                     type: object
                 businessType:
-                    enum: [Attachment, Boolean, Date, Decimal, Integer, LongInteger, LongText, Picklist, PrecisionDecimal, Relationship, RichText, Text]
+                    enum: [Aggregation, Attachment, Boolean, Date, Decimal, Integer, LongInteger, LongText, Picklist, PrecisionDecimal, Relationship, RichText, Text]
+                    type: string
+                defaultValue:
+                    type: string
+                externalReferenceCode:
                     type: string
                 id:
                     format: int64
@@ -159,6 +169,10 @@ components:
                     type: string
                 required:
                     type: boolean
+                state:
+                    type: boolean
+                system:
+                    type: boolean
                 type:
                     deprecated: true
                     enum: [BigDecimal, Boolean, Clob, Date, Double, Integer, Long, String]
@@ -175,7 +189,7 @@ components:
                     format: int64
                     type: integer
                 value:
-                    type: string
+                    type: object
         ObjectLayout:
             properties:
                 actions:
@@ -310,12 +324,40 @@ components:
                     type: integer
                 objectDefinitionName2:
                     type: string
+                parameterObjectFieldId:
+                    format: int64
+                    type: integer
                 reverse:
                     readOnly: true
                     type: boolean
                 type:
                     enum: [oneToMany, oneToOne, manyToMany]
                     type: string
+        ObjectState:
+            properties:
+                id:
+                    format: int64
+                    type: integer
+                key:
+                    type: string
+                objectStateTransitions:
+                    items:
+                        $ref: "#/components/schemas/ObjectStateTransition"
+                    type: array
+        ObjectStateFlow:
+            properties:
+                id:
+                    format: int64
+                    type: integer
+                objectStates:
+                    items:
+                        $ref: "#/components/schemas/ObjectState"
+                    type: array
+        ObjectStateTransition:
+            properties:
+                key:
+                    type: string
+            type: object
         ObjectValidationRule:
             properties:
                 actions:
@@ -459,7 +501,7 @@ components:
 info:
     description:
         "A Java client JAR is available for use with the group ID 'com.liferay', artifact ID
-        'com.liferay.object.admin.rest.client', and version '1.0.28'."
+        'com.liferay.object.admin.rest.client', and version '1.0.35'."
     license:
         name: "Apache 2.0"
         url: "http://www.apache.org/licenses/LICENSE-2.0.html"
@@ -787,6 +829,10 @@ paths:
                       format: int64
                       type: integer
                 - in: query
+                  name: filter
+                  schema:
+                      type: string
+                - in: query
                   name: page
                   schema:
                       type: integer
@@ -796,6 +842,10 @@ paths:
                       type: integer
                 - in: query
                   name: search
+                  schema:
+                      type: string
+                - in: query
+                  name: sort
                   schema:
                       type: string
             responses:

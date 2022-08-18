@@ -625,11 +625,10 @@ public class DirectoryTreeTest extends BaseVLDAPTestCase {
 
 		DirectoryTree directoryTree = new DirectoryTree();
 
-		SearchBase searchBase = directoryTree.getSearchBase(
-			"Liferay", 0, new LinkedHashMap<String, Object>(), identifiers,
-			_organization, company);
-
-		Assert.assertNull(searchBase);
+		Assert.assertNull(
+			directoryTree.getSearchBase(
+				"Liferay", 0, new LinkedHashMap<String, Object>(), identifiers,
+				_organization, company));
 	}
 
 	@Test
@@ -775,12 +774,12 @@ public class DirectoryTreeTest extends BaseVLDAPTestCase {
 
 		DirectoryTree directoryTree = new DirectoryTree();
 
-		SearchBase searchBase = directoryTree.getSearchBase(
-			"Liferay", 0, new LinkedHashMap<String, Object>(),
-			Arrays.asList(new Identifier("cn", "testScreenName")),
-			_organization, company);
-
-		_assertUserSearchBase(searchBase, false);
+		_assertUserSearchBase(
+			directoryTree.getSearchBase(
+				"Liferay", 0, new LinkedHashMap<String, Object>(),
+				Arrays.asList(new Identifier("cn", "testScreenName")),
+				_organization, company),
+			false);
 	}
 
 	@Test
@@ -1338,7 +1337,8 @@ public class DirectoryTreeTest extends BaseVLDAPTestCase {
 			FastDateFormatFactory.class);
 
 		Mockito.when(
-			fastDateFormatFactory.getSimpleDateFormat(Mockito.anyString())
+			fastDateFormatFactory.getSimpleDateFormat(
+				Mockito.nullable(String.class))
 		).thenReturn(
 			fastDateFormat
 		);
@@ -1466,8 +1466,9 @@ public class DirectoryTreeTest extends BaseVLDAPTestCase {
 
 		Mockito.when(
 			userLocalService.search(
-				Mockito.anyLong(), Mockito.anyString(), Mockito.anyString(),
-				Mockito.anyString(), Mockito.anyString(), Mockito.anyString(),
+				Mockito.anyLong(), Mockito.nullable(String.class),
+				Mockito.nullable(String.class), Mockito.nullable(String.class),
+				Mockito.nullable(String.class), Mockito.nullable(String.class),
 				Mockito.anyInt(), Mockito.any(LinkedHashMap.class),
 				Mockito.anyBoolean(), Mockito.anyInt(), Mockito.anyInt(),
 				Mockito.any(UserScreenNameComparator.class))

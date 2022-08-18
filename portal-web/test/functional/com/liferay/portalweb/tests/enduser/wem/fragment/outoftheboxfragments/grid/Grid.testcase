@@ -97,7 +97,7 @@ definition {
 			PageEditor.addElementToContainer(
 				collectionName = "Layout Elements",
 				fragmentName = "Grid",
-				index = "2",
+				height = "Tall",
 				navTab = "Fragments",
 				targetElementName = "Grid");
 
@@ -335,7 +335,7 @@ definition {
 		}
 
 		task ("Add a Web Content Display widget to module 1") {
-			PageEditor.gotoTab(tabName = "Widgets");
+			Navigator.gotoNavTab(navTab = "Widgets");
 
 			Type.sendKeysApplicationSearch(
 				locator1 = "PageEditor#FRAGMENTS_AND_WIDGETS_SEARCH_FIELD",
@@ -350,7 +350,7 @@ definition {
 				locator2 = "PageEditor#GRID_COLUMN",
 				value1 = "Web Content Display");
 
-			Pause(locator1 = "5000");
+			PageEditor.waitForAutoSave();
 
 			AssertElementPresent(
 				key_columnNumber = "1",
@@ -453,7 +453,7 @@ definition {
 			PageEditor.gotoStyle(fragmentName = "Heading");
 
 			PageEditor.configureFragment(
-				alignment = "Center",
+				alignment = "Align Center",
 				textColor = "Success");
 
 			PageEditor.gotoConfiguration(fragmentName = "Heading");
@@ -464,7 +464,7 @@ definition {
 		task ("View the Heading's style") {
 			PageEditor.viewFragmentStyle(
 				alignment = "center",
-				fragmentName = "heading",
+				fragmentName = "Heading",
 				headingLevel = "h2",
 				textColor = "success");
 		}
@@ -475,12 +475,12 @@ definition {
 			Navigator.gotoNavTab(navTab = "Fragments");
 
 			DragAndDrop.javaScriptDragAndDropToUp(
+				index = "1",
 				key_collectionName = "Basic Components",
 				key_fragmentName = "Button",
 				key_targetFragmentName = "Grid",
 				locator1 = "PageEditor#FRAGMENTS_AND_WIDGETS_TAB_FRAGMENT",
-				locator2 = "PageEditor#ANY_FRAGMENT_DROP_TARGET",
-				value1 = "");
+				locator2 = "PageEditor#ANY_FRAGMENT_DROP_TARGET");
 
 			PageEditor.waitForAutoSave();
 		}
@@ -494,13 +494,13 @@ definition {
 
 			PageEditor.gotoStyle(fragmentName = "Button");
 
-			PageEditor.configureFragment(alignment = "Center");
+			PageEditor.configureFragment(alignment = "Align Center");
 		}
 
 		task ("View the Button's style") {
 			PageEditor.viewFragmentStyle(
 				alignment = "center",
-				fragmentName = "button",
+				fragmentName = "Button",
 				size = "lg",
 				type = "link");
 		}
@@ -537,7 +537,7 @@ definition {
 		task ("View the Heading's style") {
 			PageEditor.viewFragmentStyle(
 				alignment = "center",
-				fragmentName = "heading",
+				fragmentName = "Heading",
 				headingLevel = "h2",
 				textColor = "success");
 		}
@@ -545,7 +545,7 @@ definition {
 		task ("View the Button's style") {
 			PageEditor.viewFragmentStyle(
 				alignment = "center",
-				fragmentName = "button",
+				fragmentName = "Button",
 				size = "lg",
 				type = "link");
 		}
@@ -575,17 +575,29 @@ definition {
 		}
 
 		task ("View the Heading's style in view mode") {
-			PageEditor.viewFragmentStyle(
-				alignment = "center",
+			ContentPages.viewFragmentCommonStyle(
 				fragmentName = "Heading",
-				headingLevel = "h2",
-				textColor = "success");
+				styleName = "textAlign",
+				styleValue = "center");
+
+			ContentPages.viewFragmentCommonStyle(
+				fragmentName = "Heading",
+				styleName = "color",
+				styleValue = "success");
+
+			PageEditor.viewFragmentStyle(
+				fragmentName = "Heading",
+				headingLevel = "h2");
 		}
 
 		task ("View the Button's style in view mode") {
+			ContentPages.viewFragmentCommonStyle(
+				fragmentName = "Button",
+				styleName = "textAlign",
+				styleValue = "center");
+
 			PageEditor.viewFragmentStyle(
-				alignment = "center",
-				fragmentName = "button",
+				fragmentName = "Button",
 				size = "lg",
 				type = "link");
 		}

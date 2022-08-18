@@ -14,7 +14,7 @@
 
 package com.liferay.gradle.plugins.tlddoc.builder;
 
-import com.liferay.gradle.plugins.tlddoc.builder.tasks.TLDDocTask;
+import com.liferay.gradle.plugins.tlddoc.builder.task.TLDDocTask;
 import com.liferay.gradle.util.GradleUtil;
 
 import groovy.lang.Closure;

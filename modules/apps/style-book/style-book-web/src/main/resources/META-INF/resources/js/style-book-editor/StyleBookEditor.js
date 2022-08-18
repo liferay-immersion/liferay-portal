@@ -17,30 +17,44 @@ import React from 'react';
 
 import LayoutPreview from './LayoutPreview';
 import Sidebar from './Sidebar';
-import {StyleBookContextProvider} from './StyleBookContext';
 import Toolbar from './Toolbar';
 import {config, initializeConfig} from './config';
 import {DRAFT_STATUS} from './constants/draftStatusConstants';
 import {LAYOUT_TYPES} from './constants/layoutTypes';
+import {LayoutContextProvider} from './contexts/LayoutContext';
+import {StyleBookEditorContextProvider} from './contexts/StyleBookEditorContext';
 import {useCloseProductMenu} from './useCloseProductMenu';
 
-const StyleBookEditor = () => {
+const StyleBookEditor = React.memo(() => {
 	useCloseProductMenu();
 
 	return (
-		<div className="cadmin style-book-editor">
+		<div className="cadmin d-flex flex-wrap style-book-editor">
 			<StyleErrorsContextProvider>
-				<Toolbar />
+				<LayoutContextProvider
+					initialState={{
+						previewLayout: getMostRecentLayout(
+							config.previewOptions
+						),
+						previewLayoutType: config.previewOptions.find((type) =>
+							type.data.recentLayouts.find(
+								(layout) =>
+									layout ===
+									getMostRecentLayout(config.previewOptions)
+							)
+						)?.type,
+					}}
+				>
+					<Toolbar />
 
-				<div className="d-flex">
 					<LayoutPreview />
+				</LayoutContextProvider>
 
-					<Sidebar />
-				</div>
+				<Sidebar />
 			</StyleErrorsContextProvider>
 		</div>
 	);
-};
+});
 
 export default function ({
 	fragmentCollectionPreviewURL = '',
@@ -58,6 +72,7 @@ export default function ({
 	initializeConfig({
 		fragmentCollectionPreviewURL,
 		frontendTokenDefinition,
+		frontendTokens: getFrontendTokens(frontendTokenDefinition),
 		isPrivateLayoutsEnabled,
 		namespace,
 		previewOptions,
@@ -69,24 +84,16 @@ export default function ({
 	});
 
 	return (
-		<StyleBookContextProvider
+		<StyleBookEditorContextProvider
 			initialState={{
 				draftStatus: DRAFT_STATUS.notSaved,
 				frontendTokensValues,
-				previewLayout: getMostRecentLayout(config.previewOptions),
-				previewLayoutType: config.previewOptions.find((type) =>
-					type.data.recentLayouts.find(
-						(layout) =>
-							layout ===
-							getMostRecentLayout(config.previewOptions)
-					)
-				)?.type,
 				redoHistory: [],
 				undoHistory: [],
 			}}
 		>
 			<StyleBookEditor />
-		</StyleBookContextProvider>
+		</StyleBookEditorContextProvider>
 	);
 }
 
@@ -111,3 +118,25 @@ function getMostRecentLayout(previewOptions) {
 
 	return null;
 }
+
+const getFrontendTokens = ({frontendTokenCategories}) => {
+	let tokens = {};
+
+	for (const category of frontendTokenCategories) {
+		for (const tokenSet of category.frontendTokenSets) {
+			for (const token of tokenSet.frontendTokens) {
+				tokens = {
+					...tokens,
+					[token.name]: {
+						...token,
+						tokenCategoryLabel: category.label,
+						tokenSetLabel: tokenSet.label,
+						value: token.defaultValue,
+					},
+				};
+			}
+		}
+	}
+
+	return tokens;
+};

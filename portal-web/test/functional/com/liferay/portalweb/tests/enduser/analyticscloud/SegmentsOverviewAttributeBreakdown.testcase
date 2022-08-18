@@ -23,6 +23,8 @@ definition {
 	tearDown {
 		var testPortalInstance = PropsUtil.get("test.portal.instance");
 
+		ACUtils.tearDownAC();
+
 		ACUtils.tearDownDXP();
 
 		if ("${testPortalInstance}" == "true") {
@@ -31,15 +33,13 @@ definition {
 		else {
 			JSONGroup.deleteGroupByName(groupName = "Site Name");
 		}
-
-		JSONUser.tearDownNonAdminUsers();
-
-		ACUtils.tearDownAC();
 	}
 
 	@description = "Feature ID: Legacy | Automation ID: LRAC-8504 | Test Summary: Segment Overview distribution filtered by boolean"
 	@priority = "3"
 	test SegmentOverviewDistributionFilteredByBoolean {
+		property analytics.cloud.upstream = "false";
+
 		var users = "user1,user2";
 		var emailList = "user1@liferay.com,user2@liferay.com";
 		var nameList = "user1 user1,user2 user2";

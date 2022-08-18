@@ -21,6 +21,16 @@
 	<td></td>
 </tr>
 <tr>
+	<td>ASSERT_FRAGMENTS_TEXT_IN_SF</td>
+	<td>//h1[(contains(@class,"component-heading")) and (contains(@data-lfr-editable-id,"${key_id}"))][contains(text(),"${key_fragmentText}")] | //h1[(contains(@class,"component-heading")) and (contains(@data-lfr-editable-id,"${key_id}"))]/p[contains(text(),"${key_fragmentText}")]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>ANY_SELECT</td>
+	<td>//div[not(contains(@class,'hide'))]//div[contains(@class,'input-select-wrapper')][label[contains(.,'${key_selectFieldLabel}')]]/select</td>
+	<td></td>
+</tr>
+<tr>
 	<td>CONFIGURATION_PANEL_COLLAPSED</td>
 	<td>//a[@aria-expanded='false' and contains(@aria-controls,'')][contains(.,'${key_panel}')]</td>
 	<td></td>
@@ -36,6 +46,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>VIEW_ITEM_FROM_LIST</td>
+	<td>//div[contains(@class,'table-list-title')]/a[contains(.,'${key_itemName}')]//following::div//a[contains(.,'View')]</td>
+	<td></td>
+</tr>
+<tr>
 	<td>WISH_LIST_NAME</td>
 	<td>//td[contains(@class,'lfr-name-column')]//*[contains(.,'${wishListName}')]</td>
 	<td></td>
@@ -43,6 +58,11 @@
 <tr>
 	<td>SELECTED_TABLE_PAGINATION</td>
 	<td>//li[contains(@class,'page-item active')]//button[contains(.,'${key_pageNumber}')]</td>
+		<td></td>
+</tr>
+<tr>
+	<td>VIEW_DISABLED_ENTRY</td>
+	<td>//label[contains(text(),'${key_entryName}')]/..//select[@class='form-control disabled']</td>
 	<td></td>
 </tr>
 <tr>
@@ -53,6 +73,11 @@
 <tr>
 	<td>PRODUCT_CARD_COMPARE_CHECKBOX</td>
 	<td>//p[@title='${key_productName}']//../..//input[contains(@aria-label,'Compare')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>PRODUCT_CARD_COMPARE_CHECKBOX_DISABLED</td>
+	<td>//p[@title='${key_productName}']//../..//input[contains(@aria-label,'Compare') and @disabled]</td>
 	<td></td>
 </tr>
 <tr>
@@ -131,6 +156,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>INVENTORY_EXPECTED_INCOMING_DELIVERY_DATE</td>
+	<td>//span[contains(@id,'displayDate')]/input[@placeholder=@placeholder='h:mm am/pm']</td>
+	<td></td>
+</tr>
+<tr>
 	<td>DISPLAY_PAGE_ANY</td>
 	<td>//span[contains (@id,'displayPageNameInput')]</td>
 	<td></td>
@@ -199,7 +229,8 @@
 	<td>NAME_FIELD</td>
 	<td>//div/input[contains(@id,'name')]</td>
 	<td></td>
-</tr><tr>
+</tr>
+<tr>
 	<td>NAME_FIELD_SPECIAL</td>
 	<td>//label[contains(.,'Title')]//..//input[@type="text"]</td>
 	<td></td>
@@ -317,6 +348,11 @@
 <tr>
 	<td>PRIORITY_FIELD</td>
 	<td>//div/label[contains (@for,'priority')]/../input</td>
+	<td></td>
+</tr>
+<tr>
+	<td>PRODUCT_ENTRY_IMAGE</td>
+	<td>//img[@class='sticker-img'][contains(@src,'${key_src}')]</td>
 	<td></td>
 </tr>
 <tr>
@@ -654,6 +690,11 @@
 	<td>//a[contains(.,'${key_entryName}')]/../../..//button[contains(@class, 'dropdown-toggle') and contains(@class, 'btn-unstyled') and contains(@class, 'component-action')]</td>
 	<td></td>
 </tr>
+<tr>
+	<td>ANY_FRAGMENT_DROP_TARGET_N</td>
+	<td>//div[@aria-label='${key_targetFragmentName}'][${key_index}]/div[contains(@class,'page-editor__topper__content')]</td>
+	<td></td>
+</tr>
 
 <!--CATALOGS-->
 
@@ -894,6 +935,11 @@
 	<td>//label[contains(.,'${key_fieldLabel}')]/../select/option[@selected and contains(.,'${key_value}')]</td>
 	<td></td>
 </tr>
+<tr>
+	<td>BUTTON_WITH_NAME</td>
+	<td>//*[not(self::div)][contains(@class,'btn')][normalize-space()='${key_text}'][contains(@name,'${key_buttonName}')][not(contains(@class,'navbar'))]</td>
+	<td></td>
+</tr>
 
 <!--PRODUCT-->
 
@@ -923,8 +969,28 @@
 	<td></td>
 </tr>
 <tr>
+	<td>PAYMENT_SUBSCRIPTION_TOGGLE_ACTIVE</td>
+	<td>//h4[contains(text(), 'Payment Subscription')]//following-sibling::span[contains(@class,'toggle-switch-handle')]//following::div[contains(@class,'collapse show')]</td>
+	<td></td>
+</tr>
+<tr>
 	<td>DELIVERY_SUBSCRIPTION_TOGGLE</td>
 	<td>//h4[contains(text(), 'Delivery Subscription')]//following-sibling::span[contains(@class,'toggle-switch-handle')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>SUBSCRIPTION_TOGGLE</td>
+	<td>//h4[contains(text(), '${key_subscriptionName}')]//following-sibling::span[contains(@class,'toggle-switch-handle')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>SUBSCRIPTION_FIELD_LABEL</td>
+	<td>//h4[contains(text(), '${key_subscriptionName}')]/..//label[contains(.,'${key_subscriptionFieldLabel}')]/..//select</td>
+	<td></td>
+</tr>
+<tr>
+	<td>TOGGLE_SWITCH_BUTTON</td>
+	<td>xpath=(//label[(contains(.,'${key_buttonName}')) or (contains(@for,'${key_buttonName}'))])[${key_indexNumber}]//input</td>
 	<td></td>
 </tr>
 <tr>
@@ -945,6 +1011,36 @@
 <tr>
 	<td>PRODUCT_CARD_DEFAULT_IMAGE</td>
 	<td>//img[@class='aspect-ratio-item-center-middle aspect-ratio-item-fluid aspect-ratio-item-vertical-fluid']//..//..//..//..//..//..//h2[contains(text(),'${key_productName}')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>PRODUCT_ID</td>
+	<td>//div[contains(@class,'header-info')]//span[contains(.,'ID')]/..//strong</td>
+	<td></td>
+</tr>
+<tr>
+	<td>PRODUCT_ERC</td>
+	<td>//div[contains(@class,'header-info')]//span[contains(.,'ERC')]/..//strong</td>
+	<td></td>
+</tr>
+<tr>
+	<td>PRODUCT_STATUS_BASED_ON_PRODUCT_NAME</td>
+	<td>//a[text()='${key_productName}']/../../../div/span[contains(@class,'workflow-status')]//strong[contains(.,'${key_status}')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>PRODUCT_ENTRY_BASED_ON_STATUS</td>
+	<td>//span[contains(@class,'workflow-status')]//strong[contains(.,'${key_status}')]/../../../..//a[text()='${key_productName}']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>PRODUCT_ENTRY_BASED_ON_STATUS_WITH_ROW</td>
+	<td>xpath=((//strong[contains(.,'${key_status}')])[${key_row}]/../../../..//a[text()='${key_productName}'])</td>
+	<td></td>
+</tr>
+<tr>
+	<td>PRODUCT_STATUS_BASED_ON_PRODUCT_NAME_WITH_ROW</td>
+	<td>xpath=((//a[text()='${key_productName}'])[${key_row}]/../../..//strong[contains(.,'${key_status}')])</td>
 	<td></td>
 </tr>
 
@@ -1012,7 +1108,7 @@
 </tr>
 <tr>
 	<td>SEARCH_PRODUCT_RELATIONS</td>
-	<td>//input[@data-qa-id='searchInput']</td>
+	<td>//input[@placeholder='Search for']</td>
 	<td></td>
 </tr>
 <tr>
@@ -1052,7 +1148,7 @@
 </tr>
 <tr>
 	<td>QUANTITY_IN_SHIPMENT_BY_WAREHOUSE</td>
-	<td>//div[contains(@class,'dnd-tbody')]//div[contains(text(),'${key_warehouseName}')]/..//div[5]</td>
+	<td>//div[contains(@class,'dnd-tbody')]//div[contains(text(),'${key_warehouseName}')]/..//div[6]</td>
 	<td></td>
 </tr>
 

@@ -139,8 +139,6 @@ definition {
 			productName = "Grouped T-Shirt",
 			productType = "Grouped");
 
-		AssertElementPresent(locator1 = "Message#SUCCESS");
-
 		Click(locator1 = "Icon#BACK");
 
 		AssertElementPresent(
@@ -456,11 +454,11 @@ definition {
 			key_itemName = "",
 			locator1 = "CommerceEntry#SPECIFIC_MENU_ITEM");
 
-		Click(
+		ClickNoError(
 			key_optionValue = "Convert to Draft",
 			locator1 = "CommerceFrontStore#FS_PRODUCT_OPTION");
 
-		Click(locator1 = "Button#OK");
+		AssertConfirm(value1 = "Converting the product status to draft will remove the product from the product catalog. Do you wish to proceed?");
 
 		AssertElementPresent(
 			key_text = "Save as Draft",
@@ -1175,6 +1173,66 @@ definition {
 			status = "Scheduled");
 	}
 
+	@description = "This is a test for bug COMMERCE-9448. Verify a product image can be uploaded via headless API."
+	@priority = "3"
+	test CanUploadProductImageViaAPI {
+		property portal.acceptance = "false";
+
+		task ("When a product is created with an image using JSON") {
+			var baseURL = PropsUtil.get("portal.url");
+			var catalogId = CommerceJSONCatalogsAPI._getCommerceCatalogIdByName(catalogName = "Master");
+
+			var curl = '''
+			${baseURL}/o/headless-commerce-admin-catalog/v1.0/products \
+			-u test@liferay.com:test \
+			-H 'accept: application/json' \
+  			-H 'Content-Type: application/json' \
+  			-d '{
+      			    "name": {
+           		      "en_US": "Simple Product"
+        		    },
+        			"catalogId": ${catalogId},
+        			"active": true,
+        			"productType": "simple",
+        			"images": [   
+           			 		      {
+                				    "src": "${baseURL}/documents/d/guest/tree-png",
+                				    "title": {
+                    	 		      "en_US": "icon"
+                				    }
+            					  }  
+       			 			  ]
+   				}'
+			''';
+
+			com.liferay.poshi.runner.util.JSONCurlUtil.post("${curl}");
+		}
+
+		task ("Then there is no error in the logs") {
+			AssertConsoleTextNotPresent(value1 = "java.lang.NullPointerException");
+		}
+
+		task ("And the product is created successfully with the uploaded image") {
+			CommerceProducts.openProductsAdmin();
+
+			AssertElementPresent(
+				key_src = "account",
+				locator1 = "CommerceEntry#PRODUCT_ENTRY_IMAGE");
+
+			CommerceNavigator.gotoEntry(entryName = "Simple Product");
+
+			CommerceEntry.gotoMenuTab(menuTab = "Media");
+
+			AssertElementPresent(
+				key_src = "account",
+				locator1 = "CommerceEntry#PRODUCT_ENTRY_IMAGE");
+
+			AssertElementPresent(
+				key_entryName = "icon",
+				locator1 = "CommerceEntry#TABLE_LIST_TITLE");
+		}
+	}
+
 	@description = "This is a test for COMMERCE-6747. ConfigureGroupedProduct"
 	@ignore = "true"
 	@priority = "3"
@@ -1219,7 +1277,9 @@ definition {
 			key_filterOption = "Add",
 			locator1 = "AppBuilder#CHOOSE_SEARCH_FILTER_BY_OPTION");
 
-		Pause(locator1 = "3000");
+		SelectFrameTop();
+
+		WaitForElementNotPresent(locator1 = "CommerceEntry#ANY_IFRAME");
 
 		if (IsElementPresent(key_contentType = "Base Information", locator1 = "CommerceEntry#NOTIFICATION_DELIVERY_PANEL_CLOSED")) {
 			Click(
@@ -1258,7 +1318,9 @@ definition {
 			key_filterOption = "Add",
 			locator1 = "AppBuilder#CHOOSE_SEARCH_FILTER_BY_OPTION");
 
-		Button.clickSave();
+		SelectFrameTop();
+
+		Click(locator1 = "Button#SAVE");
 
 		Alert.viewSuccessMessage();
 
@@ -1734,7 +1796,7 @@ definition {
 			category = "Product Management",
 			portlet = "Products");
 
-		Pause(locator1 = "2000");
+		WaitForElementPresent(locator1 = "CommerceNavigation#SEARCH_FIELD");
 
 		CommerceNavigator.searchEntry(entryName = "Simple T-Shirt");
 

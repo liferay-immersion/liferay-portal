@@ -37,6 +37,10 @@ public class SXPBlueprintTable extends BaseTable<SXPBlueprintTable> {
 		"mvccVersion", Long.class, Types.BIGINT, Column.FLAG_NULLITY);
 	public final Column<SXPBlueprintTable, String> uuid = createColumn(
 		"uuid_", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
+	public final Column<SXPBlueprintTable, String> externalReferenceCode =
+		createColumn(
+			"externalReferenceCode", String.class, Types.VARCHAR,
+			Column.FLAG_DEFAULT);
 	public final Column<SXPBlueprintTable, Long> sxpBlueprintId = createColumn(
 		"sxpBlueprintId", Long.class, Types.BIGINT, Column.FLAG_PRIMARY);
 	public final Column<SXPBlueprintTable, Long> companyId = createColumn(
@@ -58,8 +62,6 @@ public class SXPBlueprintTable extends BaseTable<SXPBlueprintTable> {
 		createColumn(
 			"elementInstancesJSON", Clob.class, Types.CLOB,
 			Column.FLAG_DEFAULT);
-	public final Column<SXPBlueprintTable, String> key = createColumn(
-		"key_", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
 	public final Column<SXPBlueprintTable, String> schemaVersion = createColumn(
 		"schemaVersion", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
 	public final Column<SXPBlueprintTable, String> title = createColumn(

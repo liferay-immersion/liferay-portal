@@ -21,14 +21,13 @@ import 'codemirror/addon/fold/foldgutter.css';
 import 'codemirror/addon/display/placeholder';
 
 import 'codemirror/lib/codemirror.css';
-import classNames from 'classnames';
 import CodeMirror from 'codemirror';
 import React, {useEffect, useRef} from 'react';
 
 import './CodeMirrorEditor.scss';
 
 const CodeMirrorEditor = React.forwardRef<CodeMirror.Editor, ICodeMirrorEditor>(
-	({className, fixed, onChange, ...options}, ref) => {
+	({onChange, ...options}, ref) => {
 		const editorWrapperRef = useRef<HTMLDivElement>(null);
 		const codeMirrorRef = useRef<CodeMirror.Editor>();
 
@@ -59,8 +58,9 @@ const CodeMirrorEditor = React.forwardRef<CodeMirror.Editor, ICodeMirrorEditor>(
 				>).current = editor;
 			}
 
-			const handleChange = (editor: CodeMirror.Editor) =>
-				onChange(editor.getValue());
+			const handleChange = (editor: CodeMirror.Editor) => {
+				onChange(editor.getValue(), editor.lineCount());
+			};
 
 			editor.on('change', handleChange);
 
@@ -68,23 +68,12 @@ const CodeMirrorEditor = React.forwardRef<CodeMirror.Editor, ICodeMirrorEditor>(
 			// eslint-disable-next-line react-hooks/exhaustive-deps
 		}, []);
 
-		return (
-			<div
-				className={classNames(
-					'form-control lfr-objects__editor',
-					{'lfr-objects__editor--fixed': fixed},
-					className
-				)}
-				ref={editorWrapperRef}
-			/>
-		);
+		return <div className="lfr-objects__editor" ref={editorWrapperRef} />;
 	}
 );
 
 export default React.memo(CodeMirrorEditor);
 
 export interface ICodeMirrorEditor extends CodeMirror.EditorConfiguration {
-	className?: string;
-	fixed?: boolean;
-	onChange: (value?: string) => void;
+	onChange: (value?: string, lineCount?: number) => void;
 }

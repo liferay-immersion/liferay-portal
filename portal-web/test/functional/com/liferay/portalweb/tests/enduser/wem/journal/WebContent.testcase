@@ -831,7 +831,7 @@ definition {
 
 			Button.clickSubmitForPublication();
 
-			Pause(locator1 = "2000");
+			Alert.viewSuccessMessage();
 		}
 
 		task ("View the usages of the Web Content article") {
@@ -1189,11 +1189,11 @@ definition {
 
 		task ("View content is still shown") {
 			WaitForElementPresent(
-				key_fieldLabel = "content",
+				key_fieldLabel = "Content",
 				locator1 = "CKEditor#BODY_FIELD_IFRAME_WEB_CONTENT_ARTICLE");
 
 			SelectFrame.selectFrameNoLoading(
-				key_fieldLabel = "content",
+				key_fieldLabel = "Content",
 				locator1 = "CKEditor#BODY_FIELD_IFRAME_WEB_CONTENT_ARTICLE");
 
 			AssertTextEquals(
@@ -1341,7 +1341,7 @@ definition {
 			CKEditor.addTextWithLink(
 				displayText = "Web Content Content",
 				entryExternalURL = "/web/test-site-name/test-page-name",
-				fieldLabel = "content",
+				fieldLabel = "Content",
 				pageName = "Test Page Name");
 		}
 	}
@@ -1629,6 +1629,8 @@ definition {
 				key_nodeName = "Content Page Name",
 				locator1 = "Treeview#NODE_UNSELECTED",
 				value1 = "Content Page Name");
+
+			SelectFrameTop();
 
 			Click(locator1 = "CKEditor#OK_BUTTON");
 

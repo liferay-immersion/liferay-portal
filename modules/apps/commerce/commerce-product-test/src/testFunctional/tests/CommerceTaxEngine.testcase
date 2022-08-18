@@ -290,6 +290,8 @@ definition {
 
 		Button.click(button = "Submit");
 
+		SelectFrameTop();
+
 		SelectFrame.selectFrameNoLoading(locator1 = "CommerceEntry#IFRAME_SIDE_PANEL");
 
 		Button.clickSave();
@@ -616,6 +618,8 @@ definition {
 			value1 = "0100");
 
 		Button.click(button = "Submit");
+
+		SelectFrameTop();
 
 		SelectFrame.selectFrameNoLoading(locator1 = "CommerceEntry#IFRAME_SIDE_PANEL");
 

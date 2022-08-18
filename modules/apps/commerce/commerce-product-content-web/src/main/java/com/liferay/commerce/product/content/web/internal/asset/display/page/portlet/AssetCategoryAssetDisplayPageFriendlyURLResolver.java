@@ -36,7 +36,7 @@ import com.liferay.layout.display.page.LayoutDisplayPageObjectProvider;
 import com.liferay.layout.display.page.LayoutDisplayPageProvider;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.language.LanguageUtil;
+import com.liferay.portal.kernel.language.Language;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.Layout;
 import com.liferay.portal.kernel.model.LayoutFriendlyURLComposite;
@@ -56,11 +56,9 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -165,18 +163,7 @@ public class AssetCategoryAssetDisplayPageFriendlyURLResolver
 			return null;
 		}
 
-		HttpServletRequest httpServletRequest =
-			(HttpServletRequest)requestContext.get("request");
-
-		HttpSession httpSession = httpServletRequest.getSession();
-
-		Locale locale = (Locale)httpSession.getAttribute(WebKeys.LOCALE);
-
-		if (locale == null) {
-			locale = _portal.getLocale(httpServletRequest);
-		}
-
-		String languageId = LanguageUtil.getLanguageId(locale);
+		String languageId = _language.getLanguageId(getLocale(requestContext));
 
 		if (Validator.isBlank(friendlyURLEntry.getUrlTitle(languageId))) {
 			return null;
@@ -314,7 +301,7 @@ public class AssetCategoryAssetDisplayPageFriendlyURLResolver
 				layoutActualURL + StringPool.QUESTION + queryString;
 		}
 
-		String languageId = LanguageUtil.getLanguageId(
+		String languageId = _language.getLanguageId(
 			_portal.getLocale(httpServletRequest));
 
 		_portal.addPageSubtitle(
@@ -376,6 +363,9 @@ public class AssetCategoryAssetDisplayPageFriendlyURLResolver
 
 	@Reference
 	private GroupLocalService _groupLocalService;
+
+	@Reference
+	private Language _language;
 
 	@Reference
 	private LayoutLocalService _layoutLocalService;

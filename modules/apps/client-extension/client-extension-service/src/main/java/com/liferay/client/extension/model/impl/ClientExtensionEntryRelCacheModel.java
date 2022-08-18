@@ -78,7 +78,7 @@ public class ClientExtensionEntryRelCacheModel
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(29);
+		StringBundler sb = new StringBundler(31);
 
 		sb.append("{mvccVersion=");
 		sb.append(mvccVersion);
@@ -108,6 +108,8 @@ public class ClientExtensionEntryRelCacheModel
 		sb.append(cetExternalReferenceCode);
 		sb.append(", type=");
 		sb.append(type);
+		sb.append(", typeSettings=");
+		sb.append(typeSettings);
 		sb.append("}");
 
 		return sb.toString();
@@ -180,13 +182,22 @@ public class ClientExtensionEntryRelCacheModel
 			clientExtensionEntryRelImpl.setType(type);
 		}
 
+		if (typeSettings == null) {
+			clientExtensionEntryRelImpl.setTypeSettings("");
+		}
+		else {
+			clientExtensionEntryRelImpl.setTypeSettings(typeSettings);
+		}
+
 		clientExtensionEntryRelImpl.resetOriginalValues();
 
 		return clientExtensionEntryRelImpl;
 	}
 
 	@Override
-	public void readExternal(ObjectInput objectInput) throws IOException {
+	public void readExternal(ObjectInput objectInput)
+		throws ClassNotFoundException, IOException {
+
 		mvccVersion = objectInput.readLong();
 
 		ctCollectionId = objectInput.readLong();
@@ -207,6 +218,7 @@ public class ClientExtensionEntryRelCacheModel
 		classPK = objectInput.readLong();
 		cetExternalReferenceCode = objectInput.readUTF();
 		type = objectInput.readUTF();
+		typeSettings = (String)objectInput.readObject();
 	}
 
 	@Override
@@ -262,6 +274,13 @@ public class ClientExtensionEntryRelCacheModel
 		else {
 			objectOutput.writeUTF(type);
 		}
+
+		if (typeSettings == null) {
+			objectOutput.writeObject("");
+		}
+		else {
+			objectOutput.writeObject(typeSettings);
+		}
 	}
 
 	public long mvccVersion;
@@ -278,5 +297,6 @@ public class ClientExtensionEntryRelCacheModel
 	public long classPK;
 	public String cetExternalReferenceCode;
 	public String type;
+	public String typeSettings;
 
 }

@@ -14,22 +14,20 @@
 
 import ClayTabs from '@clayui/tabs';
 import {
+	API,
 	SidePanelContent,
-	closeSidePanel,
 	invalidateRequired,
 	openToast,
+	saveAndReload,
 } from '@liferay/object-js-components-web';
-import {fetch} from 'frontend-js-web';
 import React, {useContext, useEffect, useState} from 'react';
 
-import {HEADERS} from '../../utils/constants';
-import {defaultLanguageId, locale} from '../../utils/locale';
 import BasicInfoScreen from './BasicInfoScreen/BasicInfoScreen';
 import {DefaultSortScreen} from './DefaultSortScreen/DefaultSortScreen';
 import {FilterScreen} from './FilterScreen/FilterScreen';
 import ViewBuilderScreen from './ViewBuilderScreen/ViewBuilderScreen';
 import ViewContext, {TYPES, ViewContextProvider} from './context';
-import {TObjectField, TObjectView, TWorkflowStatus} from './types';
+import {TObjectView, TWorkflowStatus} from './types';
 
 const TABS = [
 	{
@@ -50,8 +48,6 @@ const TABS = [
 	},
 ];
 
-HEADERS.append('Accept-Language', locale!.symbol);
-
 const CustomView: React.FC<React.HTMLAttributes<HTMLElement>> = () => {
 	const [{isViewOnly, objectView, objectViewId}, dispatch] = useContext(
 		ViewContext
@@ -62,14 +58,6 @@ const CustomView: React.FC<React.HTMLAttributes<HTMLElement>> = () => {
 
 	useEffect(() => {
 		const makeFetch = async () => {
-			const objectViewResponse = await fetch(
-				`/o/object-admin/v1.0/object-views/${objectViewId}`,
-				{
-					headers: HEADERS,
-					method: 'GET',
-				}
-			);
-
 			const {
 				defaultObjectView,
 				name,
@@ -77,15 +65,11 @@ const CustomView: React.FC<React.HTMLAttributes<HTMLElement>> = () => {
 				objectViewColumns,
 				objectViewFilterColumns,
 				objectViewSortColumns,
-			} = (await objectViewResponse.json()) as any;
-
-			const objectFieldsResponse = await fetch(
-				`/o/object-admin/v1.0/object-definitions/${objectDefinitionId}/object-fields`,
-				{
-					headers: HEADERS,
-					method: 'GET',
-				}
+			} = await API.fetchJSON<TObjectView>(
+				`/o/object-admin/v1.0/object-views/${objectViewId}`
 			);
+
+			const objectFields = await API.getObjectFields(objectDefinitionId);
 
 			const objectView = {
 				defaultObjectView,
@@ -102,12 +86,6 @@ const CustomView: React.FC<React.HTMLAttributes<HTMLElement>> = () => {
 				},
 				type: TYPES.ADD_OBJECT_VIEW,
 			});
-
-			const {
-				items: objectFields,
-			}: {
-				items: TObjectField[];
-			} = (await objectFieldsResponse.json()) as any;
 
 			dispatch({
 				payload: {
@@ -177,7 +155,11 @@ const CustomView: React.FC<React.HTMLAttributes<HTMLElement>> = () => {
 
 		const {objectViewColumns} = newObjectView;
 
-		if (invalidateRequired(objectView.name[defaultLanguageId])) {
+		if (
+			invalidateRequired(
+				objectView.name[Liferay.ThemeDisplay.getDefaultLanguageId()]
+			)
+		) {
 			openToast({
 				message: Liferay.Language.get('a-name-is-required'),
 				type: 'danger',
@@ -187,20 +169,12 @@ const CustomView: React.FC<React.HTMLAttributes<HTMLElement>> = () => {
 		}
 
 		if (!objectView.defaultObjectView || objectViewColumns.length !== 0) {
-			const response = await fetch(
-				`/o/object-admin/v1.0/object-views/${objectViewId}`,
-				{
-					body: JSON.stringify(newObjectView),
-					headers: HEADERS,
-					method: 'PUT',
-				}
-			);
-
-			if (response.status === 401) {
-				window.location.reload();
-			}
-			else if (response.ok) {
-				closeSidePanel();
+			try {
+				await API.save(
+					`/o/object-admin/v1.0/object-views/${objectViewId}`,
+					newObjectView
+				);
+				saveAndReload();
 
 				openToast({
 					message: Liferay.Language.get(
@@ -208,13 +182,9 @@ const CustomView: React.FC<React.HTMLAttributes<HTMLElement>> = () => {
 					),
 				});
 			}
-			else {
-				const {
-					title = Liferay.Language.get('an-error-occurred'),
-				} = (await response.json()) as any;
-
+			catch (error) {
 				openToast({
-					message: title,
+					message: (error as Error).message,
 					type: 'danger',
 				});
 			}
@@ -258,12 +228,14 @@ const CustomView: React.FC<React.HTMLAttributes<HTMLElement>> = () => {
 	);
 };
 interface ICustomViewWrapperProps extends React.HTMLAttributes<HTMLElement> {
+	filterOperators: TFilterOperators;
 	isViewOnly: boolean;
 	objectViewId: string;
 	workflowStatusJSONArray: TWorkflowStatus[];
 }
 
 const CustomViewWrapper: React.FC<ICustomViewWrapperProps> = ({
+	filterOperators,
 	isViewOnly,
 	objectViewId,
 	workflowStatusJSONArray,
@@ -271,6 +243,7 @@ const CustomViewWrapper: React.FC<ICustomViewWrapperProps> = ({
 	return (
 		<ViewContextProvider
 			value={{
+				filterOperators,
 				isViewOnly,
 				objectViewId,
 				workflowStatusJSONArray,

@@ -16,7 +16,7 @@ package com.liferay.client.extension.type.item.selector.web.internal.item.select
 
 import com.liferay.client.extension.constants.ClientExtensionEntryConstants;
 import com.liferay.client.extension.type.CET;
-import com.liferay.client.extension.type.CETThemeFavicon;
+import com.liferay.client.extension.type.ThemeFaviconCET;
 import com.liferay.item.selector.ItemSelectorViewDescriptor;
 import com.liferay.portal.kernel.json.JSONUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
@@ -65,9 +65,9 @@ public class CETItemDescriptor
 						_cet.getType(),
 						ClientExtensionEntryConstants.TYPE_THEME_FAVICON)) {
 
-					CETThemeFavicon cetThemeFavicon = (CETThemeFavicon)_cet;
+					ThemeFaviconCET themeFaviconCET = (ThemeFaviconCET)_cet;
 
-					return cetThemeFavicon.getURL();
+					return themeFaviconCET.getURL();
 				}
 
 				return null;

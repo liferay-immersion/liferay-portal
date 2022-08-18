@@ -9,37 +9,4 @@
  * distribution rights of the Software.
  */
 
-import {ClayInput} from '@clayui/form';
-import ClayIcon from '@clayui/icon';
-import {memo, useEffect, useState} from 'react';
-import i18n from '../../../../../../common/I18n';
-import useDebounce from '../../../../../../common/hooks/useDebounce';
-
-const SearchBar = ({onSearchSubmit}) => {
-	const [term, setTerm] = useState('');
-	const debouncedTerm = useDebounce(term, 500);
-
-	useEffect(() => onSearchSubmit(debouncedTerm), [
-		debouncedTerm,
-		onSearchSubmit,
-	]);
-
-	return (
-		<div className="position-relative">
-			<ClayInput
-				className="cp-search-project font-weight-semi-bold h5 rounded-pill shadow-lg"
-				onChange={(event) => setTerm(event.target.value)}
-				placeholder={i18n.translate('find-a-project')}
-				type="text"
-				value={term}
-			/>
-
-			<ClayIcon
-				className="position-absolute text-brand-primary"
-				symbol="search"
-			/>
-		</div>
-	);
-};
-
-export default memo(SearchBar);
+export {default} from './SearchBar';

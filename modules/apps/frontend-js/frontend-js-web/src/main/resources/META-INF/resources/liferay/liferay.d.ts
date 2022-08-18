@@ -53,9 +53,10 @@ declare module Liferay {
 			| 'sv_SE'
 			| 'zh_CN';
 
-		type LocalizedValue<T> = {[key in Locale]?: T};
+		type FullyLocalizedValue<T> = {[key in Locale]: T};
+		type LocalizedValue<T> = Partial<FullyLocalizedValue<T>>;
 
-		export const available: Object;
+		export const available: FullyLocalizedValue<string>;
 
 		export const direction: LocalizedValue<Direction>;
 
@@ -230,7 +231,8 @@ declare module Liferay {
 	}
 
 	namespace ThemeDisplay {
-		export function getDefaultLanguageId(): string;
+		export function getBCP47LanguageId(): string;
+		export function getDefaultLanguageId(): Language.Locale;
 		export function getLanguageId(): Language.Locale;
 		export function getPathThemeImages(): string;
 		export function getSiteGroupId(): number;
@@ -238,6 +240,44 @@ declare module Liferay {
 	}
 
 	namespace Util {
+		namespace Cookie {
+
+			/**
+			 * Object with cookie consent types as keys, for use in {@link Cookie.set}
+			 */
+			export const TYPES: {[key: string]: TYPE_VALUES};
+
+			export type TYPE_VALUES =
+				| 'CONSENT_TYPE_FUNCTIONAL'
+				| 'CONSENT_TYPE_NECESSARY'
+				| 'CONSENT_TYPE_PERFORMANCE'
+				| 'CONSENT_TYPE_PERSONALIZATION';
+
+			/* Returns the stored value of a cookie, undefined if not present */
+			export function get(
+				name: string,
+				type: TYPE_VALUES
+			): string | undefined;
+
+			/* Sets a cookie of a specific type if user has consented */
+			export function set(
+				name: string,
+				value: string,
+				type: TYPE_VALUES,
+				options?: {
+					'domain'?: string;
+					'expires'?: string;
+					'max-age'?: string;
+					'path'?: string;
+					'samesite'?: string;
+					'secure'?: boolean;
+				}
+			): boolean;
+
+			/* Removes a cookie by expiring it */
+			export function remove(name: string): void;
+		}
+
 		namespace PortletURL {
 
 			/* Returns an action portlet URL in form of a URL object by setting the lifecycle parameter */
@@ -452,6 +492,8 @@ declare module Liferay {
 			type?: string;
 			variant?: string;
 		}): void;
+
+		export function openWindow(config: object, callback?: Function): void;
 
 		/**
 		 * Submits the form, with optional setting of form elements.

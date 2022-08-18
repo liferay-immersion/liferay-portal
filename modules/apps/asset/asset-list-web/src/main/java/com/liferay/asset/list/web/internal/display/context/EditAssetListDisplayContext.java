@@ -37,6 +37,7 @@ import com.liferay.asset.list.web.internal.constants.AssetListWebKeys;
 import com.liferay.asset.list.web.internal.util.comparator.ClassNameModelResourceComparator;
 import com.liferay.asset.util.AssetRendererFactoryClassProvider;
 import com.liferay.asset.util.comparator.AssetRendererFactoryTypeNameComparator;
+import com.liferay.document.library.kernel.model.DLFileEntry;
 import com.liferay.dynamic.data.mapping.util.DDMIndexer;
 import com.liferay.frontend.taglib.clay.servlet.taglib.util.DropdownItem;
 import com.liferay.frontend.taglib.clay.servlet.taglib.util.DropdownItemListBuilder;
@@ -68,6 +69,7 @@ import com.liferay.portal.kernel.portlet.PortletProvider;
 import com.liferay.portal.kernel.portlet.PortletProviderUtil;
 import com.liferay.portal.kernel.portlet.PortletURLFactoryUtil;
 import com.liferay.portal.kernel.portlet.RequestBackedPortletURLFactoryUtil;
+import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.IndexerRegistryUtil;
 import com.liferay.portal.kernel.service.GroupLocalServiceUtil;
@@ -880,6 +882,18 @@ public class EditAssetListDisplayContext {
 		return _searchContainer;
 	}
 
+	public String getSegmentsCompanyConfigurationURL() {
+		try {
+			return _segmentsConfigurationProvider.getCompanyConfigurationURL(
+				_httpServletRequest);
+		}
+		catch (PortalException portalException) {
+			_log.error(portalException);
+		}
+
+		return StringPool.BLANK;
+	}
+
 	public long getSegmentsEntryId() {
 		if (_segmentsEntryId != null) {
 			return _segmentsEntryId;
@@ -1008,9 +1022,26 @@ public class EditAssetListDisplayContext {
 						return true;
 					}
 
+					if (classNameId == PortalUtil.getClassNameId(
+							FileEntry.class.getName())) {
+
+						classNameId = PortalUtil.getClassNameId(
+							DLFileEntry.class.getName());
+					}
+
 					AssetRendererFactory<?> assetRendererFactory =
 						AssetRendererFactoryRegistryUtil.
 							getAssetRendererFactoryByClassNameId(classNameId);
+
+					if (assetRendererFactory == null) {
+						if (_log.isDebugEnabled()) {
+							_log.debug(
+								"Unable to get asset renderer factory for " +
+									"class name ID " + classNameId);
+						}
+
+						continue;
+					}
 
 					if (assetRendererFactory.isSelectable()) {
 						return true;

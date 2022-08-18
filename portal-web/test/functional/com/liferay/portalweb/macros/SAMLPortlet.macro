@@ -429,4 +429,60 @@ definition {
 		PortletEntry.save();
 	}
 
+	@description = "Edit metadata configurations of SP, in Identity Provider Configurations"
+	macro editMetadataConfigurationsOfSP {
+		AssertClick(
+			idpEntityId = "${idpEntityId}",
+			locator1 = "CPSAMLAdminIdentityProviderConnection#IDENTITY_PROVIDER_CONNECTION_NAME",
+			value1 = "${idpEntityId}");
+
+		if (isSet(changeToURL)) {
+			SAML.assertSAMLMetadataAlertMessage();
+
+			Click(locator1 = "CPSAMLAdmin#SAML_UPLOAD_METADATA_URL");
+
+			Type(
+				locator1 = "TextInput#SAML_METADATA_URL_FIELD",
+				value1 = "${idpMetadataURL}");
+		}
+
+		if (isSet(changeToXML)) {
+			Click(locator1 = "CPSAMLAdmin#SAML_UPLOAD_METADATA_XML");
+
+			Click.javaScriptClick(locator1 = "CPSAMLAdmin#SAML_CHOOSE_METADATA_XML_FILE");
+
+			UploadDependencyFile.uploadFile(fileName = "${uploadMetadataXML}");
+
+			var idPMetadataXML = selenium.getElementValue("CPSAMLAdmin#SAML_CHOOSE_METADATA_XML_FILE");
+
+			echo("## * IdP Metadata XML File Name: ${idPMetadataXML}");
+		}
+
+		PortletEntry.save();
+	}
+
+	@description = "View metadata configurations of SP, in Identity Provider Configurations"
+	macro viewMetadataConfigurationsOfSP {
+		AssertClick(
+			idpEntityId = "${idpEntityId}",
+			locator1 = "CPSAMLAdminIdentityProviderConnection#IDENTITY_PROVIDER_CONNECTION_NAME",
+			value1 = "${idpEntityId}");
+
+		if (isSet(metadataURL)) {
+			AssertTextNotPresent(
+				locator1 = "CPSAMLAdmin#METADATA_ALERT_MESSAGE",
+				value1 = "The connected provider is configured through an uploaded metadata file.");
+
+			AssertNotVisible(locator1 = "CPSAMLAdmin#SAML_CHOOSE_METADATA_XML_FILE");
+		}
+
+		if (isSet(metadataXML)) {
+			SAML.assertSAMLMetadataAlertMessage();
+
+			AssertNotVisible(locator1 = "TextInput#SAML_METADATA_URL_FIELD");
+		}
+
+		PortletEntry.save();
+	}
+
 }

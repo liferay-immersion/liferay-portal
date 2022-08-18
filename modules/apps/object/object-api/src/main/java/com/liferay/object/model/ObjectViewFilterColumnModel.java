@@ -239,14 +239,14 @@ public interface ObjectViewFilterColumnModel
 	 * @return the json of this object view filter column
 	 */
 	@AutoEscape
-	public String getJson();
+	public String getJSON();
 
 	/**
 	 * Sets the json of this object view filter column.
 	 *
 	 * @param json the json of this object view filter column
 	 */
-	public void setJson(String json);
+	public void setJSON(String json);
 
 	/**
 	 * Returns the object field name of this object view filter column.
