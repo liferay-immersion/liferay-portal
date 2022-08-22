@@ -4,8 +4,8 @@
 	}
 
 	&-cards {
-		margin-left: 15rem;
-		margin-right: 15rem;
+		margin-left: 23rem;
+		margin-right: 23rem;
 	}
 
 	&-card {
@@ -17,5 +17,14 @@
 		position: fixed;
 		width: 100%;
 		z-index: 1;
+	}
+}
+
+@media screen and (max-width: 1960px) {
+	.lfr__notification-template {
+		&-cards {
+			margin-left: 1.5rem;
+			margin-right: 1.5rem;
+		}
 	}
 }
