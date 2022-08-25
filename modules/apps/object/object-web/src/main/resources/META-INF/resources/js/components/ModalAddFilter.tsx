@@ -371,23 +371,23 @@ export function ModalAddFilter({
 					</AutoComplete>
 				)}
 
-				{selectedFilterBy?.businessType !== 'Date' && (
-					<SingleSelect
-						error={errors.selectedFilterType}
-						label={Liferay.Language.get('filter-type')}
-						onChange={(target: LabelValueObject) =>
-							setSelectedFilterType(target)
-						}
-						options={
-							selectedFilterBy?.businessType === 'Integer' ||
-							selectedFilterBy?.businessType === 'LongInteger'
-								? filterOperators.numericOperators
-								: filterOperators.picklistOperators
-						}
-						required
-						value={selectedFilterType?.label ?? ''}
-					/>
-				)}
+				{selectedFilterBy !== undefined &&
+					selectedFilterBy?.businessType !== 'Date' && (
+						<SingleSelect
+							error={errors.selectedFilterType}
+							label={Liferay.Language.get('filter-type')}
+							onChange={(target: LabelValueObject) =>
+								setSelectedFilterType(target)
+							}
+							options={
+								selectedFilterBy?.businessType === 'Integer' ||
+								selectedFilterBy?.businessType === 'LongInteger'
+									? filterOperators.numericOperators
+									: filterOperators.picklistOperators
+							}
+							value={selectedFilterType?.label ?? ''}
+						/>
+					)}
 
 				{selectedFilterBy?.businessType === 'Date' &&
 					!disableDateValues && (
@@ -418,16 +418,17 @@ export function ModalAddFilter({
 					/>
 				)}
 
-				{(selectedFilterBy?.name === 'status' ||
-					selectedFilterBy?.businessType === 'Picklist') && (
-					<MultipleSelect
-						error={errors.items}
-						label={Liferay.Language.get('value')}
-						options={items}
-						required
-						setOptions={setItems}
-					/>
-				)}
+				{selectedFilterType !== null &&
+					(selectedFilterBy?.name === 'status' ||
+						selectedFilterBy?.businessType === 'Picklist') && (
+						<MultipleSelect
+							error={errors.items}
+							label={Liferay.Language.get('value')}
+							options={items}
+							required
+							setOptions={setItems}
+						/>
+					)}
 
 				{selectedFilterBy?.businessType === 'Date' &&
 					!disableDateValues && (
