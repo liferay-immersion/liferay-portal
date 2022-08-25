@@ -142,6 +142,8 @@ export default function EditNotificationTemplate({
 		validate,
 	});
 
+	const [title, setTitle] = useState('');
+
 	useEffect(() => {
 		if (notificationTemplateId !== 0) {
 			API.getNotificationTemplate(notificationTemplateId).then(
@@ -157,7 +159,7 @@ export default function EditNotificationTemplate({
 					objectDefinitionId,
 					subject,
 					to,
-				}) =>
+				}) => {
 					setValues({
 						...values,
 						attachmentObjectFieldIds,
@@ -171,9 +173,15 @@ export default function EditNotificationTemplate({
 						objectDefinitionId,
 						subject,
 						to,
-					})
+					});
+					setTitle(name);
+				}
 			);
 		}
+		else {
+			setTitle(Liferay.Language.get('untitled-notification-templates'));
+		}
+
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [notificationTemplateId]);
 
@@ -181,7 +189,7 @@ export default function EditNotificationTemplate({
 		<ClayForm onSubmit={handleSubmit}>
 			<ClayManagementToolbar className="lfr__notification-template-management-tollbar">
 				<ClayManagementToolbar.ItemList>
-					<h2>{Liferay.Language.get('notification-templates')}</h2>
+					<h2>{title}</h2>
 				</ClayManagementToolbar.ItemList>
 
 				<ClayManagementToolbar.ItemList>
