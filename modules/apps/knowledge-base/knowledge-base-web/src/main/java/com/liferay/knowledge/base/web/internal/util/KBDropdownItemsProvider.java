@@ -108,23 +108,6 @@ public class KBDropdownItemsProvider {
 						"add-child-article"));
 			}
 		).add(
-			() -> _hasPermissionsPermission(kbArticle),
-			dropdownItem -> {
-				dropdownItem.putData("action", "permissions");
-				dropdownItem.putData(
-					"permissionsURL",
-					PermissionsURLTag.doTag(
-						null, KBArticle.class.getName(), kbArticle.getTitle(),
-						kbArticle.getGroupId(),
-						String.valueOf(kbArticle.getResourcePrimKey()),
-						LiferayWindowState.POP_UP.toString(), null,
-						_liferayPortletRequest.getHttpServletRequest()));
-				dropdownItem.setLabel(
-					LanguageUtil.get(
-						_liferayPortletRequest.getHttpServletRequest(),
-						"permissions"));
-			}
-		).add(
 			() -> _hasSubscription(kbArticle),
 			dropdownItem -> {
 				dropdownItem.setHref(
@@ -185,6 +168,23 @@ public class KBDropdownItemsProvider {
 					LanguageUtil.get(
 						_liferayPortletRequest.getHttpServletRequest(),
 						"move"));
+			}
+		).add(
+			() -> _hasPermissionsPermission(kbArticle),
+			dropdownItem -> {
+				dropdownItem.putData("action", "permissions");
+				dropdownItem.putData(
+					"permissionsURL",
+					PermissionsURLTag.doTag(
+						null, KBArticle.class.getName(), kbArticle.getTitle(),
+						kbArticle.getGroupId(),
+						String.valueOf(kbArticle.getResourcePrimKey()),
+						LiferayWindowState.POP_UP.toString(), null,
+						_liferayPortletRequest.getHttpServletRequest()));
+				dropdownItem.setLabel(
+					LanguageUtil.get(
+						_liferayPortletRequest.getHttpServletRequest(),
+						"permissions"));
 			}
 		).add(
 			() -> _hasDeletePermission(kbArticle),
@@ -330,6 +330,17 @@ public class KBDropdownItemsProvider {
 						"move"));
 			}
 		).add(
+			() -> _hasPermissionsPermission(kbFolder),
+			dropdownItem -> {
+				dropdownItem.putData("action", "permissions");
+				dropdownItem.putData(
+					"permissionsURL", _getPermissionsURL(kbFolder));
+				dropdownItem.setLabel(
+					LanguageUtil.get(
+						_liferayPortletRequest.getHttpServletRequest(),
+						"permissions"));
+			}
+		).add(
 			() -> _hasDeletePermission(kbFolder),
 			dropdownItem -> {
 				dropdownItem.putData("action", "delete");
@@ -348,17 +359,6 @@ public class KBDropdownItemsProvider {
 					LanguageUtil.get(
 						_liferayPortletRequest.getHttpServletRequest(),
 						"delete"));
-			}
-		).add(
-			() -> _hasPermissionsPermission(kbFolder),
-			dropdownItem -> {
-				dropdownItem.putData("action", "permissions");
-				dropdownItem.putData(
-					"permissionsURL", _getPermissionsURL(kbFolder));
-				dropdownItem.setLabel(
-					LanguageUtil.get(
-						_liferayPortletRequest.getHttpServletRequest(),
-						"permissions"));
 			}
 		).build();
 	}
