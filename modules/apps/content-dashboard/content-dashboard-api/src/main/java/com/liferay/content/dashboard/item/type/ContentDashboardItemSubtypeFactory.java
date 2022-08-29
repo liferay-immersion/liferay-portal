@@ -28,7 +28,7 @@ public interface ContentDashboardItemSubtypeFactory<T> {
 	}
 
 	public ContentDashboardItemSubtype<T> create(
-			long classPK, long entityClassPK)
+			long classPK, long entryClassPK)
 		throws PortalException;
 
 }

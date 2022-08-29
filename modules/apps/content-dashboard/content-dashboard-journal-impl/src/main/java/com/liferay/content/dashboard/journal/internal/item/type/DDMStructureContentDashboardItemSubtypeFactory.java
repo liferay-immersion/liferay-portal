@@ -33,7 +33,7 @@ public class DDMStructureContentDashboardItemSubtypeFactory
 
 	@Override
 	public ContentDashboardItemSubtype<DDMStructure> create(
-			long classPK, long entityClassPK)
+			long classPK, long entryClassPK)
 		throws PortalException {
 
 		DDMStructure ddmStructure = _ddmStructureLocalService.getStructure(
