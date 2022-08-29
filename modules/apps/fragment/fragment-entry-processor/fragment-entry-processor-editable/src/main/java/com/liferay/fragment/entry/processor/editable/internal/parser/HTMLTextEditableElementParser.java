@@ -27,13 +27,13 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 /**
- * @author Diego Hu
+ * @author Eudaldo Alonso
  */
 @Component(
-	enabled = false, immediate = true, property = "type=date-time",
+	immediate = true, property = "type=html",
 	service = EditableElementParser.class
 )
-public class DateEditableElementParser extends TextEditableElementParser {
+public class HTMLTextEditableElementParser extends TextEditableElementParser {
 
 	@Override
 	public String getValue(Element element) {
@@ -43,7 +43,7 @@ public class DateEditableElementParser extends TextEditableElementParser {
 			ResourceBundle resourceBundle = ResourceBundleUtil.getBundle(
 				"content.Language", getClass());
 
-			return _language.get(resourceBundle, "example-date-time");
+			return _language.get(resourceBundle, "example-html");
 		}
 
 		return html;
@@ -51,7 +51,7 @@ public class DateEditableElementParser extends TextEditableElementParser {
 
 	@Override
 	protected String getEditableElementType() {
-		return "date-time";
+		return "html";
 	}
 
 	@Reference
