@@ -19,6 +19,7 @@ import com.liferay.frontend.taglib.clay.servlet.taglib.util.DropdownItemListBuil
 import com.liferay.knowledge.base.constants.KBActionKeys;
 import com.liferay.knowledge.base.constants.KBCommentConstants;
 import com.liferay.knowledge.base.constants.KBConstants;
+import com.liferay.knowledge.base.constants.KBFolderConstants;
 import com.liferay.knowledge.base.constants.KBPortletKeys;
 import com.liferay.knowledge.base.model.KBArticle;
 import com.liferay.knowledge.base.model.KBComment;
@@ -32,6 +33,7 @@ import com.liferay.knowledge.base.web.internal.security.permission.resource.KBCo
 import com.liferay.knowledge.base.web.internal.security.permission.resource.KBFolderPermission;
 import com.liferay.knowledge.base.web.internal.security.permission.resource.KBTemplatePermission;
 import com.liferay.petra.portlet.url.builder.PortletURLBuilder;
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.portlet.LiferayPortletRequest;
 import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
@@ -41,6 +43,7 @@ import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.service.permission.GroupPermissionUtil;
 import com.liferay.portal.kernel.theme.PortletDisplay;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
+import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.subscription.service.SubscriptionLocalServiceUtil;
 import com.liferay.taglib.security.PermissionsURLTag;
@@ -306,6 +309,33 @@ public class KBDropdownItemsProvider {
 						"edit"));
 			}
 		).add(
+			() -> _hasImportPermission(kbFolder),
+			dropdownItem -> {
+				dropdownItem.setHref(
+					PortletURLBuilder.createRenderURL(
+						_liferayPortletResponse
+					).setMVCPath(
+						"/admin/import.jsp"
+					).setRedirect(
+						PortalUtil.getCurrentURL(
+							_liferayPortletRequest.getHttpServletRequest())
+					).setParameter(
+						"parentKBFolderId",
+						() -> {
+							if (kbFolder == null) {
+								return KBFolderConstants.
+									DEFAULT_PARENT_FOLDER_ID;
+							}
+
+							return kbFolder.getKbFolderId();
+						}
+					).buildPortletURL());
+				dropdownItem.setLabel(
+					LanguageUtil.get(
+						_liferayPortletRequest.getHttpServletRequest(),
+						"import"));
+			}
+		).add(
 			() -> _hasMovePermission(kbFolder),
 			dropdownItem -> {
 				dropdownItem.setHref(
@@ -530,6 +560,28 @@ public class KBDropdownItemsProvider {
 		if (KBTemplatePermission.contains(
 				_themeDisplay.getPermissionChecker(), kbTemplate,
 				KBActionKeys.DELETE)) {
+
+			return true;
+		}
+
+		return false;
+	}
+
+	private boolean _hasImportPermission(KBFolder kbFolder)
+		throws PortalException {
+
+		if ((kbFolder == null) &&
+			AdminPermission.contains(
+				_themeDisplay.getPermissionChecker(),
+				_themeDisplay.getScopeGroupId(), KBActionKeys.ADD_KB_ARTICLE)) {
+
+			return true;
+		}
+
+		if ((kbFolder != null) &&
+			KBFolderPermission.contains(
+				_themeDisplay.getPermissionChecker(), kbFolder,
+				KBActionKeys.ADD_KB_ARTICLE)) {
 
 			return true;
 		}
