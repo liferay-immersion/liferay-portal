@@ -5731,9 +5731,8 @@ public class JenkinsResultsParserUtil {
 				nextIndex = indices.get(i + 1);
 			}
 
-			String opt = propertyName.substring(indices.get(i) + 1, nextIndex);
-
-			opt = Pattern.quote(opt);
+			String opt = Pattern.quote(
+				propertyName.substring(indices.get(i) + 1, nextIndex));
 
 			propertyOptSet.add(opt.replaceAll("\\*", "\\\\E.+\\\\Q"));
 
