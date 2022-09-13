@@ -20,6 +20,7 @@ import com.liferay.dynamic.data.mapping.exception.TemplateCreationDisabledExcept
 import com.liferay.dynamic.data.mapping.exception.TemplateDuplicateTemplateKeyException;
 import com.liferay.dynamic.data.mapping.exception.TemplateNameException;
 import com.liferay.dynamic.data.mapping.exception.TemplateScriptException;
+import com.liferay.dynamic.data.mapping.exception.TemplateSmallImageURLException;
 import com.liferay.dynamic.data.mapping.model.DDMTemplate;
 import com.liferay.dynamic.data.mapping.service.DDMTemplateLocalServiceUtil;
 import com.liferay.dynamic.data.mapping.util.comparator.TemplateIdComparator;
@@ -37,6 +38,8 @@ import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.search.test.util.SearchTestRule;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
+
+import java.io.File;
 
 import java.util.List;
 
@@ -502,9 +505,9 @@ public class DDMTemplateLocalServiceTest extends BaseDDMServiceTestCase {
 		Assert.assertEquals(3, count);
 	}
 
-	@Test
+	@Test(expected = TemplateSmallImageURLException.class)
 	public void testSmallImageWithInvalidURL() throws Exception {
-		DDMTemplate template = addTemplate(
+		addTemplate(
 			_classNameId, 0, _resourceClassNameId, StringUtil.randomString(),
 			StringUtil.randomString(), StringUtil.randomString(),
 			DDMTemplateConstants.TEMPLATE_TYPE_FORM,
@@ -512,12 +515,14 @@ public class DDMTemplateLocalServiceTest extends BaseDDMServiceTestCase {
 			TemplateConstants.LANG_TYPE_VM,
 			getTestTemplateScript(TemplateConstants.LANG_TYPE_VM),
 			WorkflowConstants.STATUS_APPROVED, true, "foo");
-
-		Assert.assertFalse(template.isSmallImage());
 	}
 
 	@Test
 	public void testSmallImageWithValidURL() throws Exception {
+		File file = new File(_FILE_DIR, "liferay.png");
+
+		String smallImageURL = String.valueOf(file.toURI());
+
 		DDMTemplate template = addTemplate(
 			_classNameId, 0, _resourceClassNameId, StringUtil.randomString(),
 			StringUtil.randomString(), StringUtil.randomString(),
@@ -525,8 +530,7 @@ public class DDMTemplateLocalServiceTest extends BaseDDMServiceTestCase {
 			DDMTemplateConstants.TEMPLATE_MODE_CREATE,
 			TemplateConstants.LANG_TYPE_VM,
 			getTestTemplateScript(TemplateConstants.LANG_TYPE_VM),
-			WorkflowConstants.STATUS_APPROVED, true,
-			"http://foo.com/example.png");
+			WorkflowConstants.STATUS_APPROVED, true, smallImageURL);
 
 		Assert.assertTrue(template.isSmallImage());
 	}
@@ -543,6 +547,11 @@ public class DDMTemplateLocalServiceTest extends BaseDDMServiceTestCase {
 	protected String getTemplateName(DDMTemplate template) {
 		return template.getName(group.getDefaultLanguageId());
 	}
+
+	private static final String _FILE_DIR =
+		"modules/apps/dynamic-data-mapping/dynamic-data-mapping-test/src" +
+			"/testIntegration/resources/com/liferay/dynamic/data/mapping" +
+				"/dependencies";
 
 	private static long _classNameId;
 	private static long _resourceClassNameId;
