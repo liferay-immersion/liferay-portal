@@ -79,6 +79,32 @@ public class OASExtensionTest {
 			oasExtensions.isI18nFieldNameNested("nestedParent_test_i18n"));
 	}
 
+	@Test
+	public void testIsObjectReferenceFieldName() {
+		OASExtensions oasExtensions = new OASExtensions();
+
+		Assert.assertFalse(
+			oasExtensions.isObjectReferenceFieldName("_i18nest"));
+		Assert.assertFalse(
+			oasExtensions.isObjectReferenceFieldName("nestedParent_attribute"));
+		Assert.assertFalse(oasExtensions.isObjectReferenceFieldName("test"));
+		Assert.assertFalse(
+			oasExtensions.isObjectReferenceFieldName("test_i18n"));
+		Assert.assertFalse(
+			oasExtensions.isObjectReferenceFieldName(
+				"nestedParent_nestedParent2_test_i18n"));
+		Assert.assertFalse(
+			oasExtensions.isObjectReferenceFieldName("nestedParent_test_i18n"));
+		Assert.assertFalse(
+			oasExtensions.isObjectReferenceFieldName("nestedParent_test_i1id"));
+		Assert.assertFalse(
+			oasExtensions.isObjectReferenceFieldName("n_parent_c_estid"));
+		Assert.assertFalse(
+			oasExtensions.isObjectReferenceFieldName("r_parent_c_test"));
+		Assert.assertTrue(
+			oasExtensions.isObjectReferenceFieldName("r_child_c_parentId"));
+	}
+
 	private Class<? extends Exception> _getI18nFieldNameExceptionClass(
 		String invalidI18Name) {
 
