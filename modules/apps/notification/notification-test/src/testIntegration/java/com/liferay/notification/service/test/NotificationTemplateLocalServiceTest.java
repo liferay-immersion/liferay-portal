@@ -43,6 +43,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -243,6 +246,48 @@ public class NotificationTemplateLocalServiceTest {
 			UnicodePropertiesBuilder.setProperty(
 				"feature.flag.LPS-159052", "false"
 			).build());
+	}
+
+	@Test
+	public void testSendNotificationTemplateToMultipleEmailAddresses()
+		throws Exception {
+
+		String to =
+			"abc@def.hij.com, br@test.com;caleb@able.test.com\ndavid@test.com";
+
+		NotificationTemplate notificationTemplate =
+			_notificationTemplateLocalService.addNotificationTemplate(
+				TestPropsValues.getUserId(), 0, "",
+				Collections.singletonMap(LocaleUtil.US, ""), "", "",
+				"test@liferay.com", Collections.singletonMap(LocaleUtil.US, ""),
+				RandomTestUtil.randomString(),
+				Collections.singletonMap(LocaleUtil.US, ""),
+				Collections.singletonMap(LocaleUtil.US, to),
+				Collections.emptyList());
+
+		_notificationTemplateLocalService.sendNotificationTemplate(
+			TestPropsValues.getUserId(),
+			notificationTemplate.getNotificationTemplateId(),
+			_NOTIFICATION_TYPE_KEY, new Object());
+
+		List<NotificationQueueEntry> notificationQueueEntries =
+			_notificationQueueEntryLocalService.getNotificationQueueEntries(
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS);
+
+		Stream<NotificationQueueEntry> stream =
+			notificationQueueEntries.stream();
+
+		Set<String> tos = stream.map(
+			NotificationQueueEntry::getTo
+		).collect(
+			Collectors.toSet()
+		);
+
+		Assert.assertEquals(tos.toString(), 4, tos.size());
+		Assert.assertTrue(tos.contains("abc@def.hij.com"));
+		Assert.assertTrue(tos.contains("br@test.com"));
+		Assert.assertTrue(tos.contains("caleb@able.test.com"));
+		Assert.assertTrue(tos.contains("david@test.com"));
 	}
 
 	private NotificationTemplate _addNotificationTemplate(
