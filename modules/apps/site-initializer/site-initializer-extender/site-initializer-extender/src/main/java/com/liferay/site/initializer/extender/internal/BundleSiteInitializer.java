@@ -459,7 +459,7 @@ public class BundleSiteInitializer implements SiteInitializer {
 					siteNavigationMenuItemSettingsBuilder));
 
 			Map<String, Layout> layouts = _invoke(
-				() -> _addLayouts(serviceContext));
+				() -> _addOrUpdateLayouts(serviceContext));
 
 			_invoke(
 				() -> _addLayoutPageTemplates(
@@ -1637,7 +1637,7 @@ public class BundleSiteInitializer implements SiteInitializer {
 			zipWriter.getFile(), true);
 	}
 
-	private Map<String, Layout> _addLayouts(ServiceContext serviceContext)
+	private Map<String, Layout> _addOrUpdateLayouts(ServiceContext serviceContext)
 		throws Exception {
 
 		Set<String> resourcePaths = _servletContext.getResourcePaths(
