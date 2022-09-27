@@ -3318,7 +3318,7 @@ public class BundleSiteInitializer implements SiteInitializer {
 					serviceContext, taxonomyCategory, taxonomyVocabularyId);
 			}
 			else {
-				taxonomyCategory = _addTaxonomyCategoryTaxonomyCategory(
+				taxonomyCategory = _addOrUpdateTaxonomyCategoryTaxonomyCategory(
 					parentTaxonomyCategoryId, serviceContext, taxonomyCategory);
 			}
 
@@ -3351,7 +3351,7 @@ public class BundleSiteInitializer implements SiteInitializer {
 		return taxonomyCategoryIdsStringUtilReplaceValues;
 	}
 
-	private TaxonomyCategory _addTaxonomyCategoryTaxonomyCategory(
+	private TaxonomyCategory _addOrUpdateTaxonomyCategoryTaxonomyCategory(
 			String parentTaxonomyCategoryId, ServiceContext serviceContext,
 			TaxonomyCategory taxonomyCategory)
 		throws Exception {
