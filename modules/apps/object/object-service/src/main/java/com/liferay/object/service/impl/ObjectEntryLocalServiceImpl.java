@@ -1058,7 +1058,7 @@ public class ObjectEntryLocalServiceImpl
 		_setExternalReferenceCode(objectEntry, values);
 
 		objectEntry.setModifiedDate(serviceContext.getModifiedDate(null));
-		objectEntry.setValues(null);
+		objectEntry.setValues(values);
 
 		objectEntry = objectEntryPersistence.update(objectEntry);
 

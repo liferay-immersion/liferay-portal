@@ -195,10 +195,12 @@ public class ObjectValidationRuleLocalServiceImpl
 		Map<String, Object> values = new HashMap<>();
 
 		if (baseModel instanceof ObjectEntry) {
+			ObjectEntry baseModelCurrentValues = (ObjectEntry)baseModel;
+
 			values = HashMapBuilder.<String, Object>putAll(
 				baseModel.getModelAttributes()
 			).putAll(
-				_objectEntryLocalService.getValues((ObjectEntry)baseModel)
+				baseModelCurrentValues.getValues()
 			).build();
 		}
 		else {
