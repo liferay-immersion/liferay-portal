@@ -1812,7 +1812,7 @@ public class BundleSiteInitializer implements SiteInitializer {
 		return listTypeDefinitionIdsStringUtilReplaceValues;
 	}
 
-	private void _addNotificationTemplate(
+	private void _addOrUpdateNotificationTemplate(
 			Map<String, String> documentsStringUtilReplaceValues,
 			Map<String, String>
 				objectDefinitionIdsAndObjectEntryIdsStringUtilReplaceValues,
@@ -1934,7 +1934,7 @@ public class BundleSiteInitializer implements SiteInitializer {
 		}
 
 		for (String resourcePath : resourcePaths) {
-			_addNotificationTemplate(
+			_addOrUpdateNotificationTemplate(
 				documentsStringUtilReplaceValues,
 				objectDefinitionIdsAndObjectEntryIdsStringUtilReplaceValues,
 				resourcePath, serviceContext);
