@@ -2061,7 +2061,7 @@ public class BundleSiteInitializer implements SiteInitializer {
 		}
 
 		_invoke(
-			() -> _addObjectRelationships(
+			() -> _addOrUpdateObjectRelationships(
 				objectDefinitionIdsStringUtilReplaceValues, serviceContext));
 
 		Map<String, String> objectEntryIdsStringUtilReplaceValues = _invoke(
@@ -2184,7 +2184,7 @@ public class BundleSiteInitializer implements SiteInitializer {
 		return objectEntryIdsStringUtilReplaceValues;
 	}
 
-	private void _addObjectRelationships(
+	private void _addOrUpdateObjectRelationships(
 			Map<String, String> objectDefinitionIdsStringUtilReplaceValues,
 			ServiceContext serviceContext)
 		throws Exception {
