@@ -422,7 +422,7 @@ public class BundleSiteInitializer implements SiteInitializer {
 					() -> _addAssetListEntries(
 						_ddmStructureLocalService, serviceContext));
 			Map<String, String> documentsStringUtilReplaceValues = _invoke(
-				() -> _addDocuments(
+				() -> _addOrUpdateDocuments(
 					serviceContext, siteNavigationMenuItemSettingsBuilder));
 
 			_invoke(
@@ -906,7 +906,7 @@ public class BundleSiteInitializer implements SiteInitializer {
 		return documentFolder.getId();
 	}
 
-	private Map<String, String> _addDocuments(
+	private Map<String, String> _addOrUpdateDocuments(
 			Long documentFolderId, long groupId, String parentResourcePath,
 			ServiceContext serviceContext,
 			SiteNavigationMenuItemSettingsBuilder
@@ -932,7 +932,7 @@ public class BundleSiteInitializer implements SiteInitializer {
 		for (String resourcePath : resourcePaths) {
 			if (resourcePath.endsWith("/")) {
 				documentsStringUtilReplaceValues.putAll(
-					_addDocuments(
+					_addOrUpdateDocuments(
 						_addOrUpdateDocumentFolder(
 							documentFolderId, groupId, resourcePath,
 							serviceContext),
@@ -1097,7 +1097,7 @@ public class BundleSiteInitializer implements SiteInitializer {
 		return documentsStringUtilReplaceValues;
 	}
 
-	private Map<String, String> _addDocuments(
+	private Map<String, String> _addOrUpdateDocuments(
 			ServiceContext serviceContext,
 			SiteNavigationMenuItemSettingsBuilder
 				siteNavigationMenuItemSettingsBuilder)
@@ -1107,11 +1107,11 @@ public class BundleSiteInitializer implements SiteInitializer {
 			serviceContext.getCompanyId());
 
 		return HashMapBuilder.putAll(
-			_addDocuments(
+			_addOrUpdateDocuments(
 				null, group.getGroupId(), "/site-initializer/documents/company",
 				serviceContext, siteNavigationMenuItemSettingsBuilder)
 		).putAll(
-			_addDocuments(
+			_addOrUpdateDocuments(
 				null, serviceContext.getScopeGroupId(),
 				"/site-initializer/documents/group", serviceContext,
 				siteNavigationMenuItemSettingsBuilder)
