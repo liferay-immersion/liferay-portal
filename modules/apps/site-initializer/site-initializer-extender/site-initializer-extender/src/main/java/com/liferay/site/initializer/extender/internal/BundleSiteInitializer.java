@@ -844,7 +844,7 @@ public class BundleSiteInitializer implements SiteInitializer {
 		}
 	}
 
-	private Long _addDocumentFolder(
+	private Long _addOrUpdateDocumentFolder(
 			Long documentFolderId, long groupId, String resourcePath,
 			ServiceContext serviceContext)
 		throws Exception {
@@ -933,7 +933,7 @@ public class BundleSiteInitializer implements SiteInitializer {
 			if (resourcePath.endsWith("/")) {
 				documentsStringUtilReplaceValues.putAll(
 					_addDocuments(
-						_addDocumentFolder(
+						_addOrUpdateDocumentFolder(
 							documentFolderId, groupId, resourcePath,
 							serviceContext),
 						groupId, resourcePath, serviceContext,
