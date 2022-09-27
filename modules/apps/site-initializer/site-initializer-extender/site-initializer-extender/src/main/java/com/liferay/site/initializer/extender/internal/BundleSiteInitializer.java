@@ -1297,7 +1297,7 @@ public class BundleSiteInitializer implements SiteInitializer {
 		}
 	}
 
-	private Map<String, Layout> _addLayout(
+	private Map<String, Layout> _addOrUpdateLayout(
 			long parentLayoutId, String parentResourcePath,
 			ServiceContext serviceContext)
 		throws Exception {
@@ -1408,7 +1408,7 @@ public class BundleSiteInitializer implements SiteInitializer {
 		for (String resourcePath : resourcePaths) {
 			if (resourcePath.endsWith("/")) {
 				layouts.putAll(
-					_addLayout(
+					_addOrUpdateLayout(
 						layout.getLayoutId(), resourcePath, serviceContext));
 			}
 		}
@@ -1659,7 +1659,7 @@ public class BundleSiteInitializer implements SiteInitializer {
 		for (String resourcePath : resourcePaths) {
 			if (resourcePath.endsWith("/")) {
 				layouts.putAll(
-					_addLayout(
+					_addOrUpdateLayout(
 						LayoutConstants.DEFAULT_PARENT_LAYOUT_ID, resourcePath,
 						serviceContext));
 			}
