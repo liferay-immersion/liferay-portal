@@ -192,10 +192,10 @@ public class ObjectEntryValuesException extends PortalException {
 
 	}
 
-	public static class invalidObjectStateChange
+	public static class InvalidObjectStateChange
 		extends ObjectEntryValuesException {
 
-		public invalidObjectStateChange(
+		public InvalidObjectStateChange(
 			String sourceObjectState, String targetObjectState) {
 
 			super(
