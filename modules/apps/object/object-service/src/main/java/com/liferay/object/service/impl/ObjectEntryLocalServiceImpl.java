@@ -43,6 +43,8 @@ import com.liferay.object.model.ObjectField;
 import com.liferay.object.model.ObjectFieldSetting;
 import com.liferay.object.model.ObjectFilter;
 import com.liferay.object.model.ObjectRelationship;
+import com.liferay.object.model.ObjectState;
+import com.liferay.object.model.ObjectStateFlow;
 import com.liferay.object.related.models.ObjectRelatedModelsProvider;
 import com.liferay.object.related.models.ObjectRelatedModelsProviderRegistry;
 import com.liferay.object.rest.petra.sql.dsl.expression.FilterPredicateFactory;
@@ -50,6 +52,8 @@ import com.liferay.object.scope.ObjectScopeProvider;
 import com.liferay.object.scope.ObjectScopeProviderRegistry;
 import com.liferay.object.service.ObjectFieldLocalService;
 import com.liferay.object.service.ObjectFieldSettingLocalService;
+import com.liferay.object.service.ObjectStateFlowLocalService;
+import com.liferay.object.service.ObjectStateLocalService;
 import com.liferay.object.service.base.ObjectEntryLocalServiceBaseImpl;
 import com.liferay.object.service.persistence.ObjectDefinitionPersistence;
 import com.liferay.object.service.persistence.ObjectFieldPersistence;
@@ -201,7 +205,8 @@ public class ObjectEntryLocalServiceImpl
 
 		_validateValues(
 			user.isDefaultUser(), objectDefinitionId,
-			objectDefinition.getPortletId(), serviceContext, userId, values);
+			objectDefinition.getPortletId(), serviceContext, userId, values,
+			null);
 
 		long objectEntryId = counterLocalService.increment();
 
@@ -257,7 +262,8 @@ public class ObjectEntryLocalServiceImpl
 
 		_validateValues(
 			user.isDefaultUser(), objectDefinition.getObjectDefinitionId(),
-			objectDefinition.getClassName(), serviceContext, userId, values);
+			objectDefinition.getClassName(), serviceContext, userId, values,
+			null);
 
 		insertIntoOrUpdateExtensionTable(
 			objectDefinition.getObjectDefinitionId(), primaryKey, values);
@@ -1040,7 +1046,8 @@ public class ObjectEntryLocalServiceImpl
 
 		_validateValues(
 			user.isDefaultUser(), objectEntry.getObjectDefinitionId(),
-			objectDefinition.getPortletId(), serviceContext, userId, values);
+			objectDefinition.getPortletId(), serviceContext, userId, values,
+			objectEntry);
 
 		_updateTable(
 			_getDynamicObjectDefinitionTable(
@@ -2687,6 +2694,55 @@ public class ObjectEntryLocalServiceImpl
 		}
 	}
 
+	private void _validateNextState(
+			long objectFieldId, long listTypeDefinitionId,
+			ObjectEntry objectEntry, Map.Entry<String, Serializable> entry)
+		throws PortalException {
+
+		ListTypeEntry listTypeEntryRequest =
+			_listTypeEntryLocalService.getListTypeEntry(
+				listTypeDefinitionId, String.valueOf(entry.getValue()));
+
+		ObjectStateFlow objectStateFlow =
+			_objectStateFlowLocalService.fetchObjectFieldObjectStateFlow(
+				objectFieldId);
+
+		ObjectState objectStateRequest =
+			_objectStateLocalService.getObjectStateFlowObjectState(
+				listTypeEntryRequest.getListTypeEntryId(),
+				objectStateFlow.getObjectStateFlowId());
+
+		Map<String, Serializable> objectEntryValues = objectEntry.getValues();
+
+		String objectEntryValue = _getValue(
+			String.valueOf(objectEntryValues.get(entry.getKey())));
+
+		ListTypeEntry listTypeEntry =
+			_listTypeEntryLocalService.getListTypeEntry(
+				listTypeDefinitionId, objectEntryValue);
+
+		ObjectState objectState =
+			_objectStateLocalService.getObjectStateFlowObjectState(
+				listTypeEntry.getListTypeEntryId(),
+				objectStateFlow.getObjectStateFlowId());
+
+		List<ObjectState> objectStatesPossibles =
+			_objectStateLocalService.getNextObjectStates(
+				objectState.getObjectStateId());
+
+		Stream<ObjectState> stream = objectStatesPossibles.stream();
+
+		if (!Objects.equals(objectState, objectStateRequest) &&
+			!stream.anyMatch(
+				listPossiblesObjectStates -> Objects.equals(
+					listPossiblesObjectStates.getObjectStateId(),
+					objectStateRequest.getObjectStateId()))) {
+
+			throw new ObjectEntryValuesException.InvalidObjectStateChange(
+				listTypeEntry.getKey(), listTypeEntryRequest.getKey());
+		}
+	}
+
 	private void _validateOneToOneInsert(
 			String dbColumnName, long dbColumnValue,
 			DynamicObjectDefinitionTable dynamicObjectDefinitionTable)
@@ -2786,13 +2842,13 @@ public class ObjectEntryLocalServiceImpl
 	private void _validateValues(
 			boolean defaultUser, long objectDefinitionId, String portletId,
 			ServiceContext serviceContext, long userId,
-			Map<String, Serializable> values)
+			Map<String, Serializable> values, ObjectEntry objectEntry)
 		throws PortalException {
 
 		for (Map.Entry<String, Serializable> entry : values.entrySet()) {
 			_validateValues(
 				defaultUser, entry, objectDefinitionId, portletId,
-				serviceContext, userId, values);
+				serviceContext, userId, values, objectEntry);
 		}
 	}
 
@@ -2800,7 +2856,7 @@ public class ObjectEntryLocalServiceImpl
 			boolean defaultUser, Map.Entry<String, Serializable> entry,
 			long objectDefinitionId, String portletId,
 			ServiceContext serviceContext, long userId,
-			Map<String, Serializable> values)
+			Map<String, Serializable> values, ObjectEntry objectEntry)
 		throws PortalException {
 
 		ObjectField objectField = null;
@@ -2939,6 +2995,12 @@ public class ObjectEntryLocalServiceImpl
 				throw new ObjectEntryValuesException.ListTypeEntry(
 					entry.getKey());
 			}
+
+			if (objectEntry != null) {
+				_validateNextState(
+					objectField.getObjectFieldId(),
+					objectField.getListTypeDefinitionId(), objectEntry, entry);
+			}
 		}
 	}
 
@@ -3010,6 +3072,12 @@ public class ObjectEntryLocalServiceImpl
 
 	@Reference
 	private ObjectScopeProviderRegistry _objectScopeProviderRegistry;
+
+	@Reference
+	private ObjectStateFlowLocalService _objectStateFlowLocalService;
+
+	@Reference
+	private ObjectStateLocalService _objectStateLocalService;
 
 	@Reference
 	private PersistedModelLocalServiceRegistry
