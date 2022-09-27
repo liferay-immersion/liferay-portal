@@ -2243,7 +2243,7 @@ public class BundleSiteInitializer implements SiteInitializer {
 		}
 	}
 
-	private void _addOrganization(
+	private void _addOrUpdateOrganization(
 			String json, Organization parentOrganization,
 			ServiceContext serviceContext)
 		throws Exception {
@@ -2303,7 +2303,7 @@ public class BundleSiteInitializer implements SiteInitializer {
 		}
 
 		for (int i = 0; i < jsonArray.length(); i++) {
-			_addOrganization(
+			_addOrUpdateOrganization(
 				jsonArray.getString(i), organization, serviceContext);
 		}
 	}
@@ -2326,7 +2326,7 @@ public class BundleSiteInitializer implements SiteInitializer {
 				return;
 			}
 
-			_addOrganization(json, null, serviceContext);
+			_addOrUpdateOrganization(json, null, serviceContext);
 		}
 	}
 
