@@ -430,7 +430,7 @@ public class BundleSiteInitializer implements SiteInitializer {
 					assetListEntryIdsStringUtilReplaceValues,
 					documentsStringUtilReplaceValues, serviceContext));
 
-			_invoke(() -> _addKnowledgeBaseArticles(serviceContext));
+			_invoke(() -> _addOrUpdateKnowledgeBaseArticles(serviceContext));
 			_invoke(() -> _addOrganizations(serviceContext));
 			_invoke(() -> _addSAPEntries(serviceContext));
 			_invoke(() -> _addSegmentsEntries(serviceContext));
@@ -1246,15 +1246,15 @@ public class BundleSiteInitializer implements SiteInitializer {
 			"/site-initializer/fragments/group", serviceContext);
 	}
 
-	private void _addKnowledgeBaseArticles(ServiceContext serviceContext)
+	private void _addOrUpdateKnowledgeBaseArticles(ServiceContext serviceContext)
 		throws Exception {
 
-		_addKnowledgeBaseObjects(
+		_addOrKnowledgeBaseObjects(
 			true, 0, "/site-initializer/knowledge-base-articles",
 			serviceContext);
 	}
 
-	private void _addKnowledgeBaseObjects(
+	private void _addOrKnowledgeBaseObjects(
 			boolean folder, long parentKnowledgeBaseObjectId,
 			String parentResourcePath, ServiceContext serviceContext)
 		throws Exception {
@@ -2660,7 +2660,7 @@ public class BundleSiteInitializer implements SiteInitializer {
 				folder, jsonObject, parentKnowledgeBaseObjectId,
 				serviceContext);
 
-		_addKnowledgeBaseObjects(
+		_addOrKnowledgeBaseObjects(
 			false, knowledgeBaseArticle.getId(), resourcePath, serviceContext);
 	}
 
@@ -2701,7 +2701,7 @@ public class BundleSiteInitializer implements SiteInitializer {
 			_addOrUpdateKnowledgeBaseFolder(
 				jsonObject, parentKnowledgeBaseObjectId, serviceContext);
 
-		_addKnowledgeBaseObjects(
+		_addOrKnowledgeBaseObjects(
 			true, knowledgeBaseFolder.getId(), resourcePath, serviceContext);
 	}
 
