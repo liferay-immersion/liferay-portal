@@ -999,6 +999,13 @@ components:
                                 $ref: "#/components/schemas/WebUrl"
                             type: array
                     type: object
+                userGroupBriefs:
+                    description:
+                        A list of the user's userGroups.
+                    items:
+                        $ref: "#/components/schemas/UserGroupBrief"
+                    readOnly: true
+                    type: array
             type: object
         UserGroup:
             properties:
@@ -1025,6 +1032,19 @@ components:
                     type: integer
             required:
                 - name
+            type: object
+        UserGroupBrief:
+            description:
+                Represents a UserGroup's basic information.
+            properties:
+                description:
+                    type: string
+                id:
+                    format: int64
+                    readOnly: true
+                    type: integer
+                name:
+                    type: string
             type: object
         WebUrl:
             description:
