@@ -259,7 +259,7 @@ renderResponse.setTitle(LanguageUtil.format(request, "edit-x", objectDefinition.
 
 				<c:if test='<%= GetterUtil.getBoolean(PropsUtil.get("feature.flag.LPS-158473")) && objectDefinition.isDefaultStorageType() %>'>
 					<aui:field-wrapper cssClass="form-group lfr-input-text-container">
-						<aui:input disabled="<%= objectDefinition.isActive() || objectDefinition.isSystem() %>" label="" labelOff='<%= LanguageUtil.get(request, "enable-entry-history") %>' labelOn='<%= LanguageUtil.get(request, "enable-entry-history") %>' name="enableEntryHistory" type="toggle-switch" />
+						<aui:input disabled="<%= objectDefinition.isApproved() || objectDefinition.isSystem() %>" label="" labelOff="enable-entry-history" labelOn="enable-entry-history" name="enableObjectEntryHistory" type="toggle-switch" value="<%= objectDefinition.isEnableObjectEntryHistory() %>" />
 					</aui:field-wrapper>
 				</c:if>
 			</clay:sheet-section>
