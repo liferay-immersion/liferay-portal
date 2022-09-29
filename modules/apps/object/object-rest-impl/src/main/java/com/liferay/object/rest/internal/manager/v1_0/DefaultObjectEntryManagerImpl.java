@@ -713,6 +713,10 @@ public class DefaultObjectEntryManagerImpl
 				_objectDefinitionLocalService.getObjectDefinition(
 					objectRelationship.getObjectDefinitionId2());
 
+			if (!objectDefinition2.isApproved()) {
+				continue;
+			}
+
 			ObjectRelatedModelsProvider objectRelatedModelsProvider =
 				_objectRelatedModelsProviderRegistry.
 					getObjectRelatedModelsProvider(
