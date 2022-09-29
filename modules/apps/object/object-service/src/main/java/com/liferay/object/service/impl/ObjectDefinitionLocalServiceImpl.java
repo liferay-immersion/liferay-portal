@@ -1397,7 +1397,7 @@ public class ObjectDefinitionLocalServiceImpl
 
 		if (approved) {
 			throw new ObjectDefinitionEnableObjectEntryHistoryException(
-				"Enable object entry histroy cannot be updated when the " +
+				"Enable object entry history cannot be updated when the " +
 					"object definition is published");
 		}
 	}
