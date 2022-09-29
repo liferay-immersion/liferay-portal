@@ -29,3 +29,11 @@ export function deleteConnection() {
 		method: 'DELETE',
 	});
 }
+
+export function fetchProperties() {
+	return fetch('/o/analytics-settings-rest/v1.0/channel', {
+		method: 'GET',
+	})
+		.then((response) => response.json())
+		.then((data) => data);
+}
