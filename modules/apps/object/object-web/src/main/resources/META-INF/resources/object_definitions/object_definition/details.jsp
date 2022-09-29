@@ -41,6 +41,10 @@ renderResponse.setTitle(LanguageUtil.format(request, "edit-x", objectDefinition.
 	<aui:input name="<%= Constants.CMD %>" type="hidden" value="<%= Constants.UPDATE %>" />
 	<aui:input name="redirect" type="hidden" value="<%= currentURL %>" />
 
+	<c:if test="<%= objectDefinition.isApproved() || objectDefinition.isSystem() %>">
+		<aui:input name="enableObjectEntryHistory" type="hidden" value="<%= objectDefinition.isEnableObjectEntryHistory() %>" />
+	</c:if>
+
 	<liferay-frontend:edit-form-body>
 		<liferay-ui:error exception="<%= ObjectDefinitionAccountEntryRestrictedObjectFieldIdException.class %>" message="if-activated-the-account-restriction-field-must-be-selected" />
 		<liferay-ui:error exception="<%= ObjectDefinitionActiveException.class %>" />
