@@ -17,6 +17,7 @@ package com.liferay.talend.runtime;
 import java.util.Optional;
 
 import javax.json.Json;
+import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.json.JsonValue;
@@ -61,6 +62,13 @@ public class LiferayRequestContentAggregatorSink extends LiferaySink {
 				jsonValue.asJsonObject());
 		}
 		else {
+			JsonArray jsonArray = jsonValue.asJsonArray();
+
+			JsonValue jsonArrayJsonValue = jsonArray.get(0);
+
+			jsonObjectBuilder = Json.createObjectBuilder(
+				jsonArrayJsonValue.asJsonObject());
+
 			jsonObjectBuilder.add("iterable", jsonValue);
 		}
 
