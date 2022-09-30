@@ -20,6 +20,7 @@ import com.liferay.headless.admin.user.client.dto.v1_0.OrganizationBrief;
 import com.liferay.headless.admin.user.client.dto.v1_0.RoleBrief;
 import com.liferay.headless.admin.user.client.dto.v1_0.SiteBrief;
 import com.liferay.headless.admin.user.client.dto.v1_0.UserAccount;
+import com.liferay.headless.admin.user.client.dto.v1_0.UserGroupBrief;
 import com.liferay.headless.admin.user.client.json.BaseJSONParser;
 
 import java.text.DateFormat;
@@ -495,6 +496,26 @@ public class UserAccountSerDes {
 				String.valueOf(userAccount.getUserAccountContactInformation()));
 		}
 
+		if (userAccount.getUserGroupBriefs() != null) {
+			if (sb.length() > 1) {
+				sb.append(", ");
+			}
+
+			sb.append("\"userGroupBriefs\": ");
+
+			sb.append("[");
+
+			for (int i = 0; i < userAccount.getUserGroupBriefs().length; i++) {
+				sb.append(String.valueOf(userAccount.getUserGroupBriefs()[i]));
+
+				if ((i + 1) < userAccount.getUserGroupBriefs().length) {
+					sb.append(", ");
+				}
+			}
+
+			sb.append("]");
+		}
+
 		sb.append("}");
 
 		return sb.toString();
@@ -742,6 +763,15 @@ public class UserAccountSerDes {
 				String.valueOf(userAccount.getUserAccountContactInformation()));
 		}
 
+		if (userAccount.getUserGroupBriefs() == null) {
+			map.put("userGroupBriefs", null);
+		}
+		else {
+			map.put(
+				"userGroupBriefs",
+				String.valueOf(userAccount.getUserGroupBriefs()));
+		}
+
 		return map;
 	}
 
@@ -957,6 +987,18 @@ public class UserAccountSerDes {
 					userAccount.setUserAccountContactInformation(
 						UserAccountContactInformationSerDes.toDTO(
 							(String)jsonParserFieldValue));
+				}
+			}
+			else if (Objects.equals(jsonParserFieldName, "userGroupBriefs")) {
+				if (jsonParserFieldValue != null) {
+					userAccount.setUserGroupBriefs(
+						Stream.of(
+							toStrings((Object[])jsonParserFieldValue)
+						).map(
+							object -> UserGroupBriefSerDes.toDTO((String)object)
+						).toArray(
+							size -> new UserGroupBrief[size]
+						));
 				}
 			}
 		}

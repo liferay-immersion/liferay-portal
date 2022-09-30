@@ -3160,6 +3160,14 @@ public abstract class BaseOrganizationResourceTestCase {
 				continue;
 			}
 
+			if (Objects.equals("userGroupBriefs", additionalAssertFieldName)) {
+				if (userAccount.getUserGroupBriefs() == null) {
+					valid = false;
+				}
+
+				continue;
+			}
+
 			throw new IllegalArgumentException(
 				"Invalid additional assert field name " +
 					additionalAssertFieldName);
@@ -3818,6 +3826,17 @@ public abstract class BaseOrganizationResourceTestCase {
 				if (!Objects.deepEquals(
 						userAccount1.getUserAccountContactInformation(),
 						userAccount2.getUserAccountContactInformation())) {
+
+					return false;
+				}
+
+				continue;
+			}
+
+			if (Objects.equals("userGroupBriefs", additionalAssertFieldName)) {
+				if (!Objects.deepEquals(
+						userAccount1.getUserGroupBriefs(),
+						userAccount2.getUserGroupBriefs())) {
 
 					return false;
 				}
