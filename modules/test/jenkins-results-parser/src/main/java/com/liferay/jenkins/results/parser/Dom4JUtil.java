@@ -74,13 +74,19 @@ public class Dom4JUtil {
 			}
 
 			if (item instanceof Element) {
-				element.add((Element)item);
+				Element itemElement = (Element)item;
+
+				itemElement.detach();
+
+				element.add(itemElement);
 
 				continue;
 			}
 
 			if (item instanceof Element[]) {
 				for (Element itemElement : (Element[])item) {
+					itemElement.detach();
+
 					element.add(itemElement);
 				}
 
