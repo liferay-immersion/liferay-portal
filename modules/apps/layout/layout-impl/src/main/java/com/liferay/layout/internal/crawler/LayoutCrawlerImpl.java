@@ -66,7 +66,7 @@ public class LayoutCrawlerImpl implements LayoutCrawler {
 
 		if (Validator.isNull(hostName)) {
 			if (_log.isWarnEnabled()) {
-				_log.warn("Unable to retrieve host name");
+				_log.warn("Unable to get host name");
 			}
 
 			return StringPool.BLANK;
@@ -88,8 +88,8 @@ public class LayoutCrawlerImpl implements LayoutCrawler {
 		options.setCookies(new Cookie[] {cookie});
 
 		ThemeDisplay themeDisplay = _getThemeDisplay(
-			company, layout, layoutCrawlerClientConfiguration, locale,
-			hostName);
+			company, hostName, layout, layoutCrawlerClientConfiguration,
+			locale);
 
 		options.setLocation(
 			HttpComponentsUtil.addParameter(
@@ -135,9 +135,9 @@ public class LayoutCrawlerImpl implements LayoutCrawler {
 	}
 
 	private ThemeDisplay _getThemeDisplay(
-			Company company, Layout layout,
+			Company company, String hostName, Layout layout,
 			LayoutCrawlerClientConfiguration layoutCrawlerClientConfiguration,
-			Locale locale, String hostName)
+			Locale locale)
 		throws Exception {
 
 		ThemeDisplay themeDisplay = new ThemeDisplay();
