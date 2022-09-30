@@ -185,6 +185,8 @@ public class LayoutSetPrototypeActionDropdownItemsProvider {
 					_renderResponse
 				).setActionName(
 					"deleteLayoutSetPrototypes"
+				).setRedirect(
+					_themeDisplay.getURLCurrent()
 				).setParameter(
 					"layoutSetPrototypeId",
 					_layoutSetPrototype.getLayoutSetPrototypeId()
