@@ -2222,13 +2222,13 @@ public class BundleSiteInitializer implements SiteInitializer {
 				continue;
 			}
 
-			com.liferay.object.model.ObjectRelationship objectRelationship1 =
-				_objectRelationshipLocalService.
+			com.liferay.object.model.ObjectRelationship
+				existingObjectRelationship = _objectRelationshipLocalService.
 					fetchObjectRelationshipByObjectDefinitionId(
 						objectRelationship.getObjectDefinitionId1(),
 						objectRelationship.getName());
 
-			if (objectRelationship1 == null) {
+			if (existingObjectRelationship == null) {
 				objectRelationshipResource.
 					postObjectDefinitionObjectRelationship(
 						objectRelationship.getObjectDefinitionId1(),
@@ -2236,7 +2236,7 @@ public class BundleSiteInitializer implements SiteInitializer {
 			}
 			else {
 				objectRelationshipResource.putObjectRelationship(
-					objectRelationship1.getObjectRelationshipId(),
+					existingObjectRelationship.getObjectRelationshipId(),
 					objectRelationship);
 			}
 		}
