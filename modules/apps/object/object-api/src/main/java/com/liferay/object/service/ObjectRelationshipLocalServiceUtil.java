@@ -266,11 +266,11 @@ public class ObjectRelationshipLocalServiceUtil {
 
 	public static ObjectRelationship
 			fetchObjectRelationshipByObjectDefinitionId(
-				long objectDefinitionId, String objectRelationshipName)
+				long objectDefinitionId, String name)
 		throws Exception {
 
 		return getService().fetchObjectRelationshipByObjectDefinitionId(
-			objectDefinitionId, objectRelationshipName);
+			objectDefinitionId, name);
 	}
 
 	public static ObjectRelationship fetchObjectRelationshipByObjectFieldId2(
