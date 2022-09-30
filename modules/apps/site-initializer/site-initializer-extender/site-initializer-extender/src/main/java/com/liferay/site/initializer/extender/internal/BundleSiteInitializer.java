@@ -2223,10 +2223,11 @@ public class BundleSiteInitializer implements SiteInitializer {
 			}
 
 			com.liferay.object.model.ObjectRelationship
-				existingObjectRelationship = _objectRelationshipLocalService.
-					fetchObjectRelationshipByObjectDefinitionId(
-						objectRelationship.getObjectDefinitionId1(),
-						objectRelationship.getName());
+				existingObjectRelationship =
+					_objectRelationshipLocalService.
+						fetchObjectRelationshipByObjectDefinitionId(
+							objectRelationship.getObjectDefinitionId1(),
+							objectRelationship.getName());
 
 			if (existingObjectRelationship == null) {
 				objectRelationshipResource.
