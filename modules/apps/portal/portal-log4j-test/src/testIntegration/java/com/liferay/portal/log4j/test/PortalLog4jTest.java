@@ -321,19 +321,17 @@ public class PortalLog4jTest {
 			Log4jLogFactoryImpl.class, "_CLASS_NAMES_UPGRADE");
 
 		for (String className : classNames) {
-			boolean wrapperFound = false;
+			boolean found = false;
 
-			for (String logWrapperClazz : logWrappers.keySet()) {
-				if (logWrapperClazz.endsWith(className)) {
-					wrapperFound = true;
+			for (String key : logWrappers.keySet()) {
+				if (key.endsWith(className)) {
+					found = true;
 
 					break;
 				}
 			}
 
-			Assert.assertTrue(
-				"Log wrapper for class " + className + " not found",
-				wrapperFound);
+			Assert.assertTrue(found);
 		}
 	}
 
