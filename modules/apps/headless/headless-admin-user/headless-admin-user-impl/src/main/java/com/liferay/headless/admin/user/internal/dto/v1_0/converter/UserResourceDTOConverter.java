@@ -33,6 +33,7 @@ import com.liferay.headless.admin.user.dto.v1_0.RoleBrief;
 import com.liferay.headless.admin.user.dto.v1_0.SiteBrief;
 import com.liferay.headless.admin.user.dto.v1_0.UserAccount;
 import com.liferay.headless.admin.user.dto.v1_0.UserAccountContactInformation;
+import com.liferay.headless.admin.user.dto.v1_0.UserGroupBrief;
 import com.liferay.headless.admin.user.dto.v1_0.WebUrl;
 import com.liferay.headless.admin.user.internal.dto.v1_0.util.CustomFieldsUtil;
 import com.liferay.headless.admin.user.internal.dto.v1_0.util.EmailAddressUtil;
@@ -47,9 +48,11 @@ import com.liferay.portal.kernel.model.GroupConstants;
 import com.liferay.portal.kernel.model.Organization;
 import com.liferay.portal.kernel.model.Role;
 import com.liferay.portal.kernel.model.User;
+import com.liferay.portal.kernel.model.UserGroup;
 import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
 import com.liferay.portal.kernel.service.GroupService;
 import com.liferay.portal.kernel.service.RoleService;
+import com.liferay.portal.kernel.service.UserGroupLocalService;
 import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.GetterUtil;
@@ -186,6 +189,10 @@ public class UserResourceDTOConverter
 								WebUrl.class);
 						}
 					};
+				userGroupBriefs = TransformUtil.transformToArray(
+					_userGroupLocalService.getUserUserGroups(user.getUserId()),
+					userGroup -> _toUserGroupBrief(userGroup),
+					UserGroupBrief.class);
 
 				setDashboardURL(
 					() -> {
@@ -336,6 +343,18 @@ public class UserResourceDTOConverter
 		};
 	}
 
+	private UserGroupBrief _toUserGroupBrief(UserGroup userGroup)
+		throws Exception {
+
+		return new UserGroupBrief() {
+			{
+				description = userGroup.getDescription();
+				id = userGroup.getGroupId();
+				name = userGroup.getName();
+			}
+		};
+	}
+
 	@Reference
 	private AccountEntryLocalService _accountEntryLocalService;
 
@@ -356,6 +375,12 @@ public class UserResourceDTOConverter
 
 	@Reference
 	private RoleService _roleService;
+
+	@Reference
+	private UserGroupLocalService _userGroupLocalService;
+
+	@Reference
+	private UserGroupResourceDTOConverter _userGroupResourceDTOConverter;
 
 	@Reference
 	private UserLocalService _userLocalService;
