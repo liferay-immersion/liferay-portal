@@ -317,14 +317,14 @@ public class PortalLog4jTest {
 			ReflectionTestUtil.getFieldValue(
 				LogFactoryUtil.class, "_logWrappers");
 
-		String[] classList = ReflectionTestUtil.getFieldValue(
+		String[] classNames = ReflectionTestUtil.getFieldValue(
 			Log4jLogFactoryImpl.class, "_CLASS_NAMES_UPGRADE");
 
-		for (String clazz : classList) {
+		for (String className : classNames) {
 			boolean wrapperFound = false;
 
 			for (String logWrapperClazz : logWrappers.keySet()) {
-				if (logWrapperClazz.endsWith(clazz)) {
+				if (logWrapperClazz.endsWith(className)) {
 					wrapperFound = true;
 
 					break;
@@ -332,7 +332,8 @@ public class PortalLog4jTest {
 			}
 
 			Assert.assertTrue(
-				"Log wrapper for class " + clazz + " not found", wrapperFound);
+				"Log wrapper for class " + className + " not found",
+				wrapperFound);
 		}
 	}
 
