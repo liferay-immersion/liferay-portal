@@ -29,7 +29,6 @@ import com.liferay.message.boards.model.MBThread;
 import com.liferay.message.boards.service.MBMessageLocalService;
 import com.liferay.message.boards.service.MBMessageService;
 import com.liferay.message.boards.service.MBStatsUserLocalService;
-import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.model.Company;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.service.CompanyLocalService;
@@ -71,6 +70,8 @@ public class MessageBoardMessageDTOConverter
 		MBMessage mbMessage = _mbMessageService.getMessage(
 			(Long)dtoConverterContext.getId());
 
+		Company company = _companyLocalService.getCompany(
+			mbMessage.getCompanyId());
 		User user = _userLocalService.fetchUser(mbMessage.getUserId());
 
 		return new MessageBoardMessage() {
@@ -81,8 +82,6 @@ public class MessageBoardMessageDTOConverter
 						MBMessage.class.getName(), mbMessage.getMessageId()));
 				anonymous = mbMessage.isAnonymous();
 				articleBody = mbMessage.getBody();
-				companyMxName = _getCompanyMxName(
-					mbMessage.getCompanyId(), user);
 				customFields = CustomFieldsUtil.toCustomFields(
 					dtoConverterContext.isAcceptAllLanguages(),
 					MBMessage.class.getName(), mbMessage.getMessageId(),
@@ -92,6 +91,7 @@ public class MessageBoardMessageDTOConverter
 				encodingFormat = mbMessage.getFormat();
 				externalReferenceCode = mbMessage.getExternalReferenceCode();
 				friendlyUrlPath = mbMessage.getUrlSubject();
+				hasCompanyMx = company.hasCompanyMx(user.getEmailAddress());
 				headline = mbMessage.getSubject();
 				id = mbMessage.getMessageId();
 				keywords = ListUtil.toArray(
@@ -156,18 +156,6 @@ public class MessageBoardMessageDTOConverter
 					});
 			}
 		};
-	}
-
-	private String _getCompanyMxName(long companyId, User user)
-		throws Exception {
-
-		Company company = _companyLocalService.getCompany(companyId);
-
-		if (company.hasCompanyMx(user.getEmailAddress())) {
-			return user.getCompanyMx();
-		}
-
-		return StringPool.BLANK;
 	}
 
 	@Reference

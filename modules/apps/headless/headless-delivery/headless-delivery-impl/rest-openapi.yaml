@@ -2617,10 +2617,6 @@ components:
                     description:
                         The message's main content.
                     type: string
-                companyMxName:
-                    description:
-                        User's company's mail domain.
-                    type: string
                 creator:
                     allOf:
                         - $ref: "#/components/schemas/Creator"
@@ -2662,6 +2658,8 @@ components:
                     type: string
                 friendlyUrlPath:
                     type: string
+                hasCompanyMx:
+                    type: boolean
                 headline:
                     description:
                         The message's main title.
