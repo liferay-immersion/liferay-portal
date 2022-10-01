@@ -224,6 +224,8 @@ public interface Layout extends LayoutModel, PersistedModel {
 	 */
 	public String getHTMLTitle(String localeLanguageId);
 
+	public String getIcon();
+
 	/**
 	 * Returns <code>true</code> if the current layout has a configured icon.
 	 *
@@ -285,8 +287,6 @@ public interface Layout extends LayoutModel, PersistedModel {
 
 	public String getThemeSetting(
 		String key, String device, boolean inheritLookAndFeel);
-
-	public String getIcon();
 
 	public com.liferay.portal.kernel.util.UnicodeProperties
 		getTypeSettingsProperties();
