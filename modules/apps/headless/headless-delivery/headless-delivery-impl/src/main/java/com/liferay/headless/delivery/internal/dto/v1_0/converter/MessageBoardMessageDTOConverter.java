@@ -72,7 +72,7 @@ public class MessageBoardMessageDTOConverter
 
 		Company company = _companyLocalService.getCompany(
 			mbMessage.getCompanyId());
-		User user = _userLocalService.fetchUser(mbMessage.getUserId());
+		User user = _userLocalService.getUser(mbMessage.getUserId());
 
 		return new MessageBoardMessage() {
 			{
