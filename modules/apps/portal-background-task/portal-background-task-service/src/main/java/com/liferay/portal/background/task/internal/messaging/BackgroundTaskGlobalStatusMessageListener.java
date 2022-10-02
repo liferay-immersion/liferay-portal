@@ -56,11 +56,6 @@ public class BackgroundTaskGlobalStatusMessageListener
 
 			_executeQueuedBackgroundTasks(message);
 		}
-		else if (status == BackgroundTaskConstants.STATUS_SUCCESSFUL) {
-			_executeQueuedBackgroundTasks(message);
-
-			_deleteSuccessfulTask(message);
-		}
 		else if (status == BackgroundTaskConstants.STATUS_QUEUED) {
 			long backgroundTaskId = message.getLong(
 				BackgroundTaskConstants.BACKGROUND_TASK_ID);
@@ -72,6 +67,11 @@ public class BackgroundTaskGlobalStatusMessageListener
 
 				_executeQueuedBackgroundTasks(message);
 			}
+		}
+		else if (status == BackgroundTaskConstants.STATUS_SUCCESSFUL) {
+			_executeQueuedBackgroundTasks(message);
+
+			_deleteSuccessfulTask(message);
 		}
 	}
 
