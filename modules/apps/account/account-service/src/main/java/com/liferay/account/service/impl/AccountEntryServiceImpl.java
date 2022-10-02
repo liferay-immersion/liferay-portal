@@ -97,7 +97,7 @@ public class AccountEntryServiceImpl extends AccountEntryServiceBaseImpl {
 			accountEntryLocalService.fetchAccountEntryByExternalReferenceCode(
 				permissionChecker.getCompanyId(), externalReferenceCode);
 
-		long accountEntryId = 0L;
+		long accountEntryId = 0;
 
 		if (accountEntry == null) {
 			_portalPermission.check(
