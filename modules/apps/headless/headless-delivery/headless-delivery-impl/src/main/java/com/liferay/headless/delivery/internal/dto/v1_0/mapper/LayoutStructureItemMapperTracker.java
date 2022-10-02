@@ -32,27 +32,25 @@ public class LayoutStructureItemMapperTracker {
 	public LayoutStructureItemMapper getLayoutStructureItemMapper(
 		String className) {
 
-		return _layoutStructureItemMapperServiceTrackerMap.getService(
-			className);
+		return _serviceTrackerMap.getService(className);
 	}
 
 	@Activate
 	protected void activate(BundleContext bundleContext) {
-		_layoutStructureItemMapperServiceTrackerMap =
-			ServiceTrackerMapFactory.openSingleValueMap(
-				bundleContext, LayoutStructureItemMapper.class, null,
-				ServiceReferenceMapperFactory.create(
-					bundleContext,
-					(layoutStructureItemMapper, emitter) -> emitter.emit(
-						layoutStructureItemMapper.getClassName())));
+		_serviceTrackerMap = ServiceTrackerMapFactory.openSingleValueMap(
+			bundleContext, LayoutStructureItemMapper.class, null,
+			ServiceReferenceMapperFactory.create(
+				bundleContext,
+				(layoutStructureItemMapper, emitter) -> emitter.emit(
+					layoutStructureItemMapper.getClassName())));
 	}
 
 	@Deactivate
 	protected void deactivate() {
-		_layoutStructureItemMapperServiceTrackerMap.close();
+		_serviceTrackerMap.close();
 	}
 
 	private ServiceTrackerMap<String, LayoutStructureItemMapper>
-		_layoutStructureItemMapperServiceTrackerMap;
+		_serviceTrackerMap;
 
 }
