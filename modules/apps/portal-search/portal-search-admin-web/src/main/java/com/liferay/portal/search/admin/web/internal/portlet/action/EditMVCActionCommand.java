@@ -122,22 +122,21 @@ public class EditMVCActionCommand extends BaseMVCActionCommand {
 
 	@Activate
 	protected void activate(BundleContext bundleContext) {
-		_indexReindexersServiceTrackerMap =
-			ServiceTrackerMapFactory.openSingleValueMap(
-				bundleContext, IndexReindexer.class, null,
-				ServiceReferenceMapperFactory.create(
-					bundleContext,
-					(indexReindexer, emitter) -> {
-						Class<? extends IndexReindexer> clazz =
-							indexReindexer.getClass();
+		_serviceTrackerMap = ServiceTrackerMapFactory.openSingleValueMap(
+			bundleContext, IndexReindexer.class, null,
+			ServiceReferenceMapperFactory.create(
+				bundleContext,
+				(indexReindexer, emitter) -> {
+					Class<? extends IndexReindexer> clazz =
+						indexReindexer.getClass();
 
-						emitter.emit(clazz.getName());
-					}));
+					emitter.emit(clazz.getName());
+				}));
 	}
 
 	@Deactivate
 	protected void deactivate() {
-		_indexReindexersServiceTrackerMap.close();
+		_serviceTrackerMap.close();
 	}
 
 	private void _reindex(final ActionRequest actionRequest) throws Exception {
@@ -233,8 +232,8 @@ public class EditMVCActionCommand extends BaseMVCActionCommand {
 
 		String className = ParamUtil.getString(actionRequest, "className");
 
-		IndexReindexer indexReindexer =
-			_indexReindexersServiceTrackerMap.getService(className);
+		IndexReindexer indexReindexer = _serviceTrackerMap.getService(
+			className);
 
 		indexReindexer.reindex(
 			ParamUtil.getLongValues(actionRequest, "companyIds"));
@@ -243,9 +242,7 @@ public class EditMVCActionCommand extends BaseMVCActionCommand {
 	private void _reindexIndexReindexers(ActionRequest actionRequest)
 		throws Exception {
 
-		for (IndexReindexer indexReindexer :
-				_indexReindexersServiceTrackerMap.values()) {
-
+		for (IndexReindexer indexReindexer : _serviceTrackerMap.values()) {
 			indexReindexer.reindex(
 				ParamUtil.getLongValues(actionRequest, "companyIds"));
 		}
@@ -253,9 +250,6 @@ public class EditMVCActionCommand extends BaseMVCActionCommand {
 
 	@Reference
 	private BackgroundTaskManager _backgroundTaskManager;
-
-	private ServiceTrackerMap<String, IndexReindexer>
-		_indexReindexersServiceTrackerMap;
 
 	@Reference
 	private IndexWriterHelper _indexWriterHelper;
@@ -268,5 +262,7 @@ public class EditMVCActionCommand extends BaseMVCActionCommand {
 
 	@Reference
 	private PortalUUID _portalUUID;
+
+	private ServiceTrackerMap<String, IndexReindexer> _serviceTrackerMap;
 
 }
