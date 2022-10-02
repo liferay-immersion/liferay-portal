@@ -19,7 +19,7 @@ import Highlight from './Highlight.es';
 export default function ArticleBodyRenderer({
 	articleBody,
 	compactMode = false,
-	companyMxName,
+	companyMx,
 	encodingFormat,
 	id,
 	signature,
@@ -52,7 +52,7 @@ export default function ArticleBodyRenderer({
 					dangerouslySetInnerHTML={{
 						__html: `.questions-article-body-${id} ${
 							articleBodyContainsParagraph ? 'p' : 'div'
-						}:last-child:after {content: " - ${signature} ${companyMxName}"; font-weight: bold; text-transform: capitalize;}`,
+						}:last-child:after {content: " - ${signature} ${companyMx}"; font-weight: bold; text-transform: capitalize;}`,
 					}}
 				/>
 			)}

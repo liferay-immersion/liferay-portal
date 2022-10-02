@@ -72,7 +72,7 @@ export const createCommentQuery = `
 			creator {
 				name
 			}
-			companyMxName
+			companyMx
 			dateCreated
 			dateModified
 			friendlyUrlPath
@@ -406,7 +406,7 @@ export const getMessagesQuery = `
 					postsNumber
 					rank
 				}
-				companyMxName
+				companyMx
 				dateCreated
 				dateModified
 				encodingFormat
@@ -416,7 +416,7 @@ export const getMessagesQuery = `
 					items {
 						actions
 						articleBody
-						companyMxName
+						companyMx
 						creator {
 							id
 							image

@@ -298,7 +298,7 @@ export default withRouter(
 
 								<div className="c-ml-md-auto c-ml-sm-2 c-mr-lg-2 c-mr-md-4 c-mr-xl-2">
 									<UserRow
-										companyMxName={answer.companyMxName}
+										companyMx={answer.companyMx}
 										creator={answer.creator}
 										statistics={answer.creatorStatistics}
 									/>
@@ -313,7 +313,7 @@ export default withRouter(
 						<Comments
 							comments={comments}
 							commentsChange={_commentsChange}
-							companyMxName={comments.companyMxName}
+							companyMx={comments.companyMx}
 							editable={editable}
 							entityId={answer.id}
 							onSubscription={onSubscription}

@@ -33,7 +33,7 @@ export default withRouter(
 			false
 		);
 		const [deleteMessage] = useMutation(deleteMessageQuery);
-		const companyMxName = `(${comment.companyMxName
+		const companyMx = `(${comment.companyMx
 			?.split('.', 1)
 			.join()})`;
 
@@ -66,8 +66,8 @@ export default withRouter(
 					<div className="c-mb-0">
 						<ArticleBodyRenderer
 							{...comment}
-							companyMxName={
-								comment.companyMxName && companyMxName
+							companyMx={
+								comment.companyMx && companyMx
 							}
 							signature={comment.creator && comment.creator.name}
 						/>
