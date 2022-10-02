@@ -35,29 +35,28 @@ public class LayoutListRetrieverTrackerImpl
 
 	@Override
 	public LayoutListRetriever<?, ?> getLayoutListRetriever(String type) {
-		return _layoutListRetrieversServiceTrackerMap.getService(type);
+		return _serviceTrackerMap.getService(type);
 	}
 
 	@Activate
 	protected void activate(BundleContext bundleContext) {
-		_layoutListRetrieversServiceTrackerMap =
-			ServiceTrackerMapFactory.openSingleValueMap(
+		_serviceTrackerMap = ServiceTrackerMapFactory.openSingleValueMap(
+			bundleContext,
+			(Class<LayoutListRetriever<?, ?>>)
+				(Class<?>)LayoutListRetriever.class,
+			null,
+			ServiceReferenceMapperFactory.create(
 				bundleContext,
-				(Class<LayoutListRetriever<?, ?>>)
-					(Class<?>)LayoutListRetriever.class,
-				null,
-				ServiceReferenceMapperFactory.create(
-					bundleContext,
-					(layoutListRetriever, emitter) -> emitter.emit(
-						GenericUtil.getGenericClassName(layoutListRetriever))));
+				(layoutListRetriever, emitter) -> emitter.emit(
+					GenericUtil.getGenericClassName(layoutListRetriever))));
 	}
 
 	@Deactivate
 	protected void deactivate() {
-		_layoutListRetrieversServiceTrackerMap.close();
+		_serviceTrackerMap.close();
 	}
 
 	private ServiceTrackerMap<String, LayoutListRetriever<?, ?>>
-		_layoutListRetrieversServiceTrackerMap;
+		_serviceTrackerMap;
 
 }

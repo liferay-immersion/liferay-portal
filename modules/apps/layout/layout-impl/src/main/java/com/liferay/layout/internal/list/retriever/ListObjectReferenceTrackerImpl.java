@@ -35,30 +35,29 @@ public class ListObjectReferenceTrackerImpl
 
 	@Override
 	public ListObjectReferenceFactory<?> getListObjectReference(String type) {
-		return _listObjectReferenceFactoryServiceTrackerMap.getService(type);
+		return _serviceTrackerMap.getService(type);
 	}
 
 	@Activate
 	protected void activate(BundleContext bundleContext) {
-		_listObjectReferenceFactoryServiceTrackerMap =
-			ServiceTrackerMapFactory.openSingleValueMap(
+		_serviceTrackerMap = ServiceTrackerMapFactory.openSingleValueMap(
+			bundleContext,
+			(Class<ListObjectReferenceFactory<?>>)
+				(Class<?>)ListObjectReferenceFactory.class,
+			null,
+			ServiceReferenceMapperFactory.create(
 				bundleContext,
-				(Class<ListObjectReferenceFactory<?>>)
-					(Class<?>)ListObjectReferenceFactory.class,
-				null,
-				ServiceReferenceMapperFactory.create(
-					bundleContext,
-					(listObjectReferenceFactory, emitter) -> emitter.emit(
-						GenericUtil.getGenericClassName(
-							listObjectReferenceFactory))));
+				(listObjectReferenceFactory, emitter) -> emitter.emit(
+					GenericUtil.getGenericClassName(
+						listObjectReferenceFactory))));
 	}
 
 	@Deactivate
 	protected void deactivate() {
-		_listObjectReferenceFactoryServiceTrackerMap.close();
+		_serviceTrackerMap.close();
 	}
 
 	private ServiceTrackerMap<String, ListObjectReferenceFactory<?>>
-		_listObjectReferenceFactoryServiceTrackerMap;
+		_serviceTrackerMap;
 
 }
