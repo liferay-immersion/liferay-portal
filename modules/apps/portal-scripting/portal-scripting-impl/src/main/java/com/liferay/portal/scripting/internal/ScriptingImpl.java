@@ -137,7 +137,6 @@ public class ScriptingImpl implements Scripting {
 					bundleContext,
 					(scriptingExecutor, emitter) -> emitter.emit(
 						scriptingExecutor.getLanguage())));
-
 		_scriptingValidatorsServiceTrackerMap =
 			ServiceTrackerMapFactory.openSingleValueMap(
 				bundleContext, ScriptingValidator.class, null,
