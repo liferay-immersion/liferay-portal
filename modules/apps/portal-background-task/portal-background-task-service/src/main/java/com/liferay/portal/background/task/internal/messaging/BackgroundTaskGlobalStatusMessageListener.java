@@ -54,7 +54,7 @@ public class BackgroundTaskGlobalStatusMessageListener
 		if ((status == BackgroundTaskConstants.STATUS_CANCELLED) ||
 			(status == BackgroundTaskConstants.STATUS_FAILED)) {
 
-			_executeQueuedBackgroundTasks(message);
+			_executeBackgroundTasks(message);
 		}
 		else if (status == BackgroundTaskConstants.STATUS_QUEUED) {
 			long backgroundTaskId = message.getLong(
@@ -65,17 +65,17 @@ public class BackgroundTaskGlobalStatusMessageListener
 						_backgroundTaskLocalService.fetchBackgroundTask(
 							backgroundTaskId)))) {
 
-				_executeQueuedBackgroundTasks(message);
+				_executeBackgroundTasks(message);
 			}
 		}
 		else if (status == BackgroundTaskConstants.STATUS_SUCCESSFUL) {
-			_executeQueuedBackgroundTasks(message);
+			_executeBackgroundTasks(message);
 
-			_deleteSuccessfulTask(message);
+			_deleteBackgroundTask(message);
 		}
 	}
 
-	private void _deleteSuccessfulTask(Message message) throws Exception {
+	private void _deleteBackgroundTask(Message message) throws Exception {
 		long backgroundTaskId = message.getLong(
 			BackgroundTaskConstants.BACKGROUND_TASK_ID);
 
@@ -104,7 +104,7 @@ public class BackgroundTaskGlobalStatusMessageListener
 		_backgroundTaskLocalService.deleteBackgroundTask(backgroundTaskId);
 	}
 
-	private void _executeQueuedBackgroundTasks(Message message) {
+	private void _executeBackgroundTasks(Message message) {
 		String taskExecutorClassName = message.getString(
 			"taskExecutorClassName");
 
