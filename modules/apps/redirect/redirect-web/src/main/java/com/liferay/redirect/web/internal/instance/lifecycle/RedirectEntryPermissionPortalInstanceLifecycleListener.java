@@ -89,7 +89,7 @@ public class RedirectEntryPermissionPortalInstanceLifecycleListener
 
 		_resourcePermissionLocalService.setResourcePermissions(
 			companyId, name, scope, primKey, roleId,
-			new String[] {resourceAction.getActionId()});
+			new String[] {actionId});
 	}
 
 	@Reference
