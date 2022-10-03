@@ -84,9 +84,7 @@
 	<exceptions>
 		<exception>DuplicateSXPBlueprintExternalReferenceCode</exception>
 		<exception>DuplicateSXPElementExternalReferenceCode</exception>
-		<exception>SXPBlueprintConfigurationJSON</exception>
 		<exception>SXPBlueprintTitle</exception>
-		<exception>SXPElementElementDefinitionJSON</exception>
 		<exception>SXPElementReadOnly</exception>
 		<exception>SXPElementTitle</exception>
 	</exceptions>
