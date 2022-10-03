@@ -43,28 +43,24 @@ public class RedirectEntryPermissionPortalInstanceLifecycleListener
 
 	@Override
 	public void portalInstanceRegistered(Company company) throws Exception {
-		Role powerUserRole = _roleLocalService.fetchRole(
-			companyId, RoleConstants.POWER_USER);
+		Role role = _roleLocalService.fetchRole(
+			company.getCompanyId(), RoleConstants.POWER_USER);
 
-		if (powerUserRole == null) {
+		if (role == null) {
 			return;
 		}
 
-		Group userPersonalSiteGroup =
-			_groupLocalService.fetchUserPersonalSiteGroup(
-				company.getCompanyId());
+		Group group = _groupLocalService.fetchUserPersonalSiteGroup(
+			company.getCompanyId());
 
-		if (userPersonalSiteGroup == null) {
+		if (group == null) {
 			return;
 		}
-
-		long userPersonalSiteGroupId = userPersonalSiteGroup.getGroupId();
 
 		_addResourcePermission(
 			company.getCompanyId(), RedirectEntry.class.getName(),
-			ResourceConstants.SCOPE_GROUP,
-			String.valueOf(userPersonalSiteGroupId), powerUserRole.getRoleId(),
-			ActionKeys.VIEW);
+			ResourceConstants.SCOPE_GROUP, String.valueOf(group.getGroupId()),
+			role.getRoleId(), ActionKeys.VIEW);
 	}
 
 	private void _addResourcePermission(
@@ -88,8 +84,7 @@ public class RedirectEntryPermissionPortalInstanceLifecycleListener
 		}
 
 		_resourcePermissionLocalService.setResourcePermissions(
-			companyId, name, scope, primKey, roleId,
-			new String[] {actionId});
+			companyId, name, scope, primKey, roleId, new String[] {actionId});
 	}
 
 	@Reference

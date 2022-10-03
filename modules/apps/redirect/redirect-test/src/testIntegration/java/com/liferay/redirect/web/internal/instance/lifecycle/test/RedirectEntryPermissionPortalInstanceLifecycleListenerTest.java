@@ -67,15 +67,15 @@ public class RedirectEntryPermissionPortalInstanceLifecycleListenerTest {
 		try {
 			_disablePortalInstanceLifecycleListener(componentDescriptionDTO);
 
-			_testCompany = CompanyTestUtil.addCompany();
+			_company = CompanyTestUtil.addCompany();
 
 			Assert.assertFalse(
-				_hasViewRedirectEntryPermission(_testCompany.getCompanyId()));
+				_hasViewRedirectEntryPermission(_company.getCompanyId()));
 
 			_enablePortalInstanceLifecycleListener(componentDescriptionDTO);
 
 			Assert.assertTrue(
-				_hasViewRedirectEntryPermission(_testCompany.getCompanyId()));
+				_hasViewRedirectEntryPermission(_company.getCompanyId()));
 		}
 		finally {
 			_enablePortalInstanceLifecycleListener(componentDescriptionDTO);
@@ -86,50 +86,50 @@ public class RedirectEntryPermissionPortalInstanceLifecycleListenerTest {
 	public void testViewRedirectEntryPermissionsAddedWithNewCompany()
 		throws Exception {
 
-		_testCompany = CompanyTestUtil.addCompany();
+		_company = CompanyTestUtil.addCompany();
 
 		Assert.assertTrue(
-			_hasViewRedirectEntryPermission(_testCompany.getCompanyId()));
+			_hasViewRedirectEntryPermission(_company.getCompanyId()));
 	}
 
 	private void _disablePortalInstanceLifecycleListener(
 			ComponentDescriptionDTO componentDescriptionDTO)
 		throws Exception {
 
-		Promise<Void> voidPromise = _serviceComponentRuntime.disableComponent(
+		Promise<Void> promise = _serviceComponentRuntime.disableComponent(
 			componentDescriptionDTO);
 
-		voidPromise.getValue();
+		promise.getValue();
 	}
 
 	private void _enablePortalInstanceLifecycleListener(
 			ComponentDescriptionDTO componentDescriptionDTO)
 		throws Exception {
 
-		Promise<Void> voidPromise = _serviceComponentRuntime.enableComponent(
+		Promise<Void> promise = _serviceComponentRuntime.enableComponent(
 			componentDescriptionDTO);
 
-		voidPromise.getValue();
+		promise.getValue();
 	}
 
 	private boolean _hasViewRedirectEntryPermission(long companyId)
 		throws Exception {
 
-		Role powerUserRole = _roleLocalService.fetchRole(
+		Group group = _groupLocalService.fetchUserPersonalSiteGroup(companyId);
+		Role role = _roleLocalService.fetchRole(
 			companyId, RoleConstants.POWER_USER);
-
-		Group userPersonalSiteGroup =
-			_groupLocalService.fetchUserPersonalSiteGroup(companyId);
 
 		return _resourcePermissionLocalService.hasResourcePermission(
 			companyId, RedirectEntry.class.getName(),
-			ResourceConstants.SCOPE_GROUP,
-			String.valueOf(userPersonalSiteGroup.getGroupId()),
-			powerUserRole.getRoleId(), ActionKeys.VIEW);
+			ResourceConstants.SCOPE_GROUP, String.valueOf(group.getGroupId()),
+			role.getRoleId(), ActionKeys.VIEW);
 	}
 
 	@Inject
 	private static ServiceComponentRuntime _serviceComponentRuntime;
+
+	@DeleteAfterTestRun
+	private Company _company;
 
 	@Inject
 	private GroupLocalService _groupLocalService;
@@ -144,8 +144,5 @@ public class RedirectEntryPermissionPortalInstanceLifecycleListenerTest {
 
 	@Inject
 	private RoleLocalService _roleLocalService;
-
-	@DeleteAfterTestRun
-	private Company _testCompany;
 
 }
