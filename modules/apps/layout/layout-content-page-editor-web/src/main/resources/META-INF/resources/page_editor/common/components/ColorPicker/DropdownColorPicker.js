@@ -32,13 +32,13 @@ export function DropdownColorPicker({
 	active,
 	colors,
 	fieldLabel = null,
+	inherited = false,
 	label = null,
 	onValueChange = () => {},
 	onSetActive,
 	showSelector = true,
 	small,
 	value = '#FFFFFF',
-	inherited = false,
 }) {
 	const dropdownContainerRef = useRef(null);
 	const triggerElementRef = useRef(null);
