@@ -211,7 +211,9 @@ public class SystemObjectRelatedObjectsTest {
 	}
 
 	@Test
-	public void testPostSystemObjectWithRelationshipName() throws Exception {
+	public void testPostSystemObjectWithObjectRelationshipName()
+		throws Exception {
+
 		String name = StringUtil.randomId();
 
 		_addObjectRelationship(
