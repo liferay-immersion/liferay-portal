@@ -113,7 +113,7 @@ public class GetContentDashboardItemVersionsResourceCommandTest {
 
 		Assert.assertEquals(_VIEW_VERSIONS_URL, viewVersionsURL);
 
-		_assertVersions(jsonObject, _DEFAULT_MAX_DISPLAY_VERSIONS);
+		_assertVersions(jsonObject, 10);
 	}
 
 	@Test
@@ -129,7 +129,6 @@ public class GetContentDashboardItemVersionsResourceCommandTest {
 			new Class<?>[] {ResourceRequest.class}, mockLiferayResourceRequest);
 
 		Assert.assertNotNull(jsonObject);
-
 		Assert.assertEquals(0, jsonObject.length());
 	}
 
@@ -188,8 +187,6 @@ public class GetContentDashboardItemVersionsResourceCommandTest {
 
 		return mockLiferayResourceRequest;
 	}
-
-	private static final int _DEFAULT_MAX_DISPLAY_VERSIONS = 10;
 
 	private static final int _VERSIONS_COUNT = 15;
 
