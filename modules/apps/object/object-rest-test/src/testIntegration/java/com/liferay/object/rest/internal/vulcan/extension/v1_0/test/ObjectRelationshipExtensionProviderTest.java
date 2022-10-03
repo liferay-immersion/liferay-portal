@@ -197,13 +197,11 @@ public class ObjectRelationshipExtensionProviderTest {
 		Assert.assertFalse(
 			_extensionProvider.isApplicableExtension(
 				TestPropsValues.getCompanyId(), null));
-
 		Assert.assertFalse(
 			_extensionProvider.isApplicableExtension(
 				TestPropsValues.getCompanyId(),
 				com.liferay.object.rest.dto.v1_0.ObjectEntry.class.getName() +
 					"#" + _objectDefinition.getName()));
-
 		Assert.assertTrue(
 			_extensionProvider.isApplicableExtension(
 				TestPropsValues.getCompanyId(), UserAccount.class.getName()));

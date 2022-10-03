@@ -108,6 +108,8 @@ public class SystemObjectRelatedObjectsTest {
 
 		_objectEntry = _addObjectEntry(_OBJECT_FIELD_VALUE);
 
+		_user = TestPropsValues.getUser();
+
 		_userSystemObjectDefinitionMetadata =
 			_systemObjectDefinitionMetadataTracker.
 				getSystemObjectDefinitionMetadata("User");
@@ -115,8 +117,6 @@ public class SystemObjectRelatedObjectsTest {
 		_userSystemObjectDefinition =
 			_objectDefinitionLocalService.fetchSystemObjectDefinition(
 				_userSystemObjectDefinitionMetadata.getName());
-
-		_user = TestPropsValues.getUser();
 	}
 
 	@After
@@ -126,6 +126,7 @@ public class SystemObjectRelatedObjectsTest {
 				deleteObjectRelationshipMappingTableValues(
 					objectRelationship.getObjectRelationshipId(),
 					_objectEntry.getPrimaryKey(), _user.getUserId());
+
 			ObjectRelationshipLocalServiceUtil.deleteObjectRelationship(
 				objectRelationship);
 		}
@@ -136,35 +137,34 @@ public class SystemObjectRelatedObjectsTest {
 
 	@Test
 	public void testGetManyToManySystemObjectRelatedObjects() throws Exception {
-		String relationshipName = StringUtil.randomId();
+		String name = StringUtil.randomId();
 
 		_addObjectRelationship(
-			relationshipName, _objectDefinition.getObjectDefinitionId(),
+			name, _objectDefinition.getObjectDefinitionId(),
 			_userSystemObjectDefinition.getObjectDefinitionId(),
 			_objectEntry.getPrimaryKey(), _user.getUserId(),
 			ObjectRelationshipConstants.TYPE_MANY_TO_MANY);
 
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject(
-			_invoke(_getQueryURL(relationshipName)));
+			_invoke(_getQueryURL(name)));
 
-		JSONArray jsonArray = jsonObject.getJSONArray(relationshipName);
+		JSONArray jsonArray = jsonObject.getJSONArray(name);
 
 		Assert.assertEquals(jsonArray.toString(), 1, jsonArray.length());
 		_assertEquals((JSONObject)jsonArray.get(0), _objectEntry);
 
-		relationshipName = StringUtil.randomId();
+		name = StringUtil.randomId();
 
 		_addObjectRelationship(
-			relationshipName,
-			_userSystemObjectDefinition.getObjectDefinitionId(),
+			name, _userSystemObjectDefinition.getObjectDefinitionId(),
 			_objectDefinition.getObjectDefinitionId(), _user.getUserId(),
 			_objectEntry.getPrimaryKey(),
 			ObjectRelationshipConstants.TYPE_MANY_TO_MANY);
 
 		jsonObject = JSONFactoryUtil.createJSONObject(
-			_invoke(_getQueryURL(relationshipName)));
+			_invoke(_getQueryURL(name)));
 
-		jsonArray = jsonObject.getJSONArray(relationshipName);
+		jsonArray = jsonObject.getJSONArray(name);
 
 		Assert.assertEquals(jsonArray.toString(), 1, jsonArray.length());
 		_assertEquals((JSONObject)jsonArray.get(0), _objectEntry);
@@ -172,45 +172,44 @@ public class SystemObjectRelatedObjectsTest {
 
 	@Test
 	public void testGetManyToOneSystemObjectRelatedObjects() throws Exception {
-		String relationshipName = StringUtil.randomId();
+		String name = StringUtil.randomId();
 
 		_addObjectRelationship(
-			relationshipName, _objectDefinition.getObjectDefinitionId(),
+			name, _objectDefinition.getObjectDefinitionId(),
 			_userSystemObjectDefinition.getObjectDefinitionId(),
 			_objectEntry.getPrimaryKey(), _user.getUserId(),
 			ObjectRelationshipConstants.TYPE_ONE_TO_MANY);
 
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject(
-			_invoke(_getQueryURL(relationshipName)));
+			_invoke(_getQueryURL(name)));
 
-		Assert.assertNull(jsonObject.get(relationshipName));
+		Assert.assertNull(jsonObject.get(name));
 	}
 
 	@Test
 	public void testGetNotFoundSystemObjectRelatedObjects() throws Exception {
-		String relationshipName = StringUtil.randomId();
+		String name = StringUtil.randomId();
 
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject(
-			_invoke(_getQueryURL(relationshipName)));
+			_invoke(_getQueryURL(name)));
 
-		Assert.assertNull(jsonObject.getJSONArray(relationshipName));
+		Assert.assertNull(jsonObject.getJSONArray(name));
 	}
 
 	@Test
 	public void testGetOneToManySystemObjectRelatedObjects() throws Exception {
-		String relationshipName = StringUtil.randomId();
+		String name = StringUtil.randomId();
 
 		_addObjectRelationship(
-			relationshipName,
-			_userSystemObjectDefinition.getObjectDefinitionId(),
+			name, _userSystemObjectDefinition.getObjectDefinitionId(),
 			_objectDefinition.getObjectDefinitionId(), _user.getUserId(),
 			_objectEntry.getPrimaryKey(),
 			ObjectRelationshipConstants.TYPE_ONE_TO_MANY);
 
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject(
-			_invoke(_getQueryURL(relationshipName)));
+			_invoke(_getQueryURL(name)));
 
-		JSONArray jsonArray = jsonObject.getJSONArray(relationshipName);
+		JSONArray jsonArray = jsonObject.getJSONArray(name);
 
 		Assert.assertEquals(jsonArray.toString(), 1, jsonArray.length());
 		_assertEquals((JSONObject)jsonArray.get(0), _objectEntry);
@@ -218,10 +217,10 @@ public class SystemObjectRelatedObjectsTest {
 
 	@Test
 	public void testPostSystemObjectWithRelationshipName() throws Exception {
-		String relationshipName = StringUtil.randomId();
+		String name = StringUtil.randomId();
 
 		_addObjectRelationship(
-			relationshipName, _objectDefinition.getObjectDefinitionId(),
+			name, _objectDefinition.getObjectDefinitionId(),
 			_userSystemObjectDefinition.getObjectDefinitionId(),
 			_objectEntry.getPrimaryKey(), _user.getUserId(),
 			ObjectRelationshipConstants.TYPE_ONE_TO_MANY);
@@ -235,7 +234,7 @@ public class SystemObjectRelatedObjectsTest {
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject(
 			userAccount.toString());
 
-		jsonObject.put(relationshipName, JSONFactoryUtil.createJSONArray());
+		jsonObject.put(name, JSONFactoryUtil.createJSONArray());
 
 		int httpCode = _invokeHttpCode(
 			jsonObject.toString(),
@@ -307,11 +306,10 @@ public class SystemObjectRelatedObjectsTest {
 		return options;
 	}
 
-	private String _getQueryURL(String relationshipName) {
+	private String _getQueryURL(String name) {
 		return StringBundler.concat(
 			_userSystemObjectDefinitionMetadata.getRESTContextPath(),
-			StringPool.SLASH, _user.getUserId(), "?nestedFields=",
-			relationshipName);
+			StringPool.SLASH, _user.getUserId(), "?nestedFields=", name);
 	}
 
 	private String _invoke(String endpoint) throws Exception {
