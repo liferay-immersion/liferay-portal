@@ -62,21 +62,15 @@ public class OpenAPIResourceImpl {
 		Class<? extends OpenAPIResource> clazz = _openAPIResource.getClass();
 
 		try {
-			Method method = clazz.getMethod(
-				"getOpenAPI", HttpServletRequest.class, Set.class, String.class,
-				UriInfo.class);
+			Method method = clazz.getMethod("getOpenAPI", HttpServletRequest.class, Set.class, String.class, UriInfo.class);
 
-			return (Response) method.invoke(
-				_openAPIResource, _httpServletRequest, _resourceClasses, type,
-				_uriInfo);
+			return (Response)method.invoke(_openAPIResource, _httpServletRequest, _resourceClasses, type, _uriInfo);
 		}
 		catch (NoSuchMethodException noSuchMethodException1) {
 			try {
-				Method method = clazz.getMethod(
-					"getOpenAPI", Set.class, String.class, UriInfo.class);
+				Method method = clazz.getMethod("getOpenAPI", Set.class, String.class, UriInfo.class);
 
-				return (Response) method.invoke(
-					_openAPIResource, _resourceClasses, type, _uriInfo);
+				return (Response)method.invoke(_openAPIResource, _resourceClasses, type, _uriInfo);
 			}
 			catch (NoSuchMethodException noSuchMethodException2) {
 				return _openAPIResource.getOpenAPI(_resourceClasses, type);
