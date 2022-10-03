@@ -113,15 +113,15 @@ public class DefaultCommerceOrderValidatorImpl
 					locale, "the-specified-quantity-is-not-allowed", null));
 		}
 
-		int multipleQuantity =
+		int multipleOrderQuantity =
 			cpDefinitionInventoryEngine.getMultipleOrderQuantity(cpInstance);
 
-		if ((quantity % multipleQuantity) != 0) {
+		if ((quantity % multipleOrderQuantity) != 0) {
 			return new CommerceOrderValidatorResult(
 				false,
 				_getLocalizedMessage(
 					locale, "the-specified-quantity-is-not-a-multiple-of-x",
-					new Object[] {multipleQuantity}));
+					new Object[] {multipleOrderQuantity}));
 		}
 
 		return new CommerceOrderValidatorResult(true);
