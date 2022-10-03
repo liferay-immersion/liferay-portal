@@ -202,7 +202,7 @@ const ModalImportObjectDefinition: React.FC<IProps> = ({
 							<Input
 								disabled
 								feedbackMessage={Liferay.Language.get(
-									'internal-key-to-refer-the-object-definition'
+									'internal-key-to-reference-the-object-definition'
 								)}
 								id="externalReferenceCode"
 								label={Liferay.Language.get(

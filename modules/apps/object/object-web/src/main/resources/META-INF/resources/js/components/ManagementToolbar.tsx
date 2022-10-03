@@ -102,7 +102,7 @@ export default function ManagementToolbar({
 							<span
 								className="ml-3 text-secondary"
 								title={Liferay.Language.get(
-									'internal-key-to-refer-the-object-definition'
+									'internal-key-to-reference-the-object-definition'
 								)}
 							>
 								<ClayIcon symbol="question-circle" />
