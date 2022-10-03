@@ -135,8 +135,10 @@ public class ObjectRelationshipExtensionProviderTest {
 			deleteObjectRelationshipMappingTableValues(
 				_objectRelationship.getObjectRelationshipId(),
 				_objectEntry.getPrimaryKey(), _user.getUserId());
+
 		ObjectRelationshipLocalServiceUtil.deleteObjectRelationship(
 			_objectRelationship);
+
 		_objectDefinitionLocalService.deleteObjectDefinition(
 			_objectDefinition.getObjectDefinitionId());
 	}
