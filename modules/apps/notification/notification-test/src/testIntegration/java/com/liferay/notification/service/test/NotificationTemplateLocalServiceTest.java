@@ -252,9 +252,6 @@ public class NotificationTemplateLocalServiceTest {
 	public void testSendNotificationTemplateToMultipleEmailAddresses()
 		throws Exception {
 
-		String to =
-			"abc@def.hij.com, br@test.com;caleb@able.test.com\ndavid@test.com";
-
 		NotificationTemplate notificationTemplate =
 			_notificationTemplateLocalService.addNotificationTemplate(
 				TestPropsValues.getUserId(), 0, "",
@@ -262,7 +259,10 @@ public class NotificationTemplateLocalServiceTest {
 				"test@liferay.com", Collections.singletonMap(LocaleUtil.US, ""),
 				RandomTestUtil.randomString(),
 				Collections.singletonMap(LocaleUtil.US, ""),
-				Collections.singletonMap(LocaleUtil.US, to),
+				Collections.singletonMap(
+					LocaleUtil.US,
+					"abc@def.hij.com, br@test.com;caleb@able.test.com\n" +
+						"david@test.com"),
 				Collections.emptyList());
 
 		_notificationTemplateLocalService.sendNotificationTemplate(
