@@ -197,7 +197,7 @@ public class ObjectDefinitionServiceImpl
 		_objectDefinitionModelResourcePermission.check(
 			getPermissionChecker(), objectDefinitionId, ActionKeys.UPDATE);
 
-		return _objectDefinitionLocalService.updateSystemObjectDefinition(
+		return objectDefinitionLocalService.updateSystemObjectDefinition(
 			externalReferenceCode, objectDefinitionId, titleObjectFieldId);
 	}
 
