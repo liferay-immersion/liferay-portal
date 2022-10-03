@@ -89,7 +89,6 @@ public class OnDemandAdminManagerImpl implements OnDemandAdminManager {
 				_portal.getPortalServerPort(secure), secure));
 
 		sb.append(_portal.getPathContext());
-
 		sb.append("?ticketKey=");
 
 		Ticket ticket = _onDemandAdminTicketGenerator.generate(
