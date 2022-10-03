@@ -82,13 +82,12 @@ public class ObjectRelationshipExtensionProvider
 			return Collections.emptyMap();
 		}
 
+		Map<String, Serializable> extendedProperties = new HashMap<>();
+
 		ObjectEntryManager objectEntryManager =
 			_objectEntryManagerTracker.getObjectEntryManager(
 				objectDefinition.getStorageType());
-
 		long primaryKey = getPrimaryKey(entity);
-
-		Map<String, Serializable> extendedProperties = new HashMap<>();
 
 		for (ObjectRelationship objectRelationship : objectRelationships) {
 			Page<ObjectEntry> relatedObjectEntriesPage =
@@ -139,18 +138,17 @@ public class ObjectRelationshipExtensionProvider
 				continue;
 			}
 
-			String relationshipName = objectRelationship.getName();
-
 			extendedPropertyDefinitions.put(
-				relationshipName,
+				objectRelationship.getName(),
 				new PropertyDefinition(
 					Collections.singleton(ObjectEntry.class), null,
 					StringUtil.removeFirst(
 						relatedObjectDefinition.getName(), "C_"),
 					StringBundler.concat(
-						"Information about the relationship ", relationshipName,
+						"Information about the object relationship ",
+						objectRelationship.getName(),
 						" can be embedded with \"nestedFields\"."),
-					relationshipName,
+					objectRelationship.getName(),
 					PropertyDefinition.PropertyType.MULTIPLE_ELEMENT,
 					new UnsupportedOperationPropertyValidator(), false));
 		}
@@ -190,15 +188,16 @@ public class ObjectRelationshipExtensionProvider
 	}
 
 	private List<ObjectRelationship> _getObjectRelationships(
-			List<String> nestedFieldNames, ObjectDefinition objectDefinition)
+			List<String> fieldNames, ObjectDefinition objectDefinition)
 		throws Exception {
 
 		List<ObjectRelationship> objectRelationships = new ArrayList<>();
 
-		for (String nestedFieldName : nestedFieldNames) {
+		for (String fieldName : fieldNames) {
 			ObjectRelationship objectRelationship =
-				_objectRelationshipLocalService.fetchObjectRelationshipByObjectDefinitionId(
-					objectDefinition.getObjectDefinitionId(), nestedFieldName);
+				_objectRelationshipLocalService.
+					fetchObjectRelationshipByObjectDefinitionId(
+						objectDefinition.getObjectDefinitionId(), fieldName);
 
 			if ((objectRelationship == null) ||
 				(!Objects.equals(
@@ -265,7 +264,7 @@ public class ObjectRelationshipExtensionProvider
 
 			throw new UnsupportedOperationException(
 				"The property " + propertyDefinition.getPropertyName() +
-					" can not be set");
+					" cannot be set");
 		}
 
 	}
