@@ -35,7 +35,7 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 /**
- * @author tototrinh
+ * @author To Trinh
  */
 @Component(immediate = true, service = PortalInstanceLifecycleListener.class)
 public class RedirectEntryPermissionPortalInstanceLifecycleListener

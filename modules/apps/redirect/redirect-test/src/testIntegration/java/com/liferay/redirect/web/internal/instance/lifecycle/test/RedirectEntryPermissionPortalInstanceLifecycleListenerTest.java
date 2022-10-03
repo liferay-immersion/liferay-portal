@@ -44,7 +44,7 @@ import org.osgi.service.component.runtime.dto.ComponentDescriptionDTO;
 import org.osgi.util.promise.Promise;
 
 /**
- * @author tototrinh
+ * @author To Trinh
  */
 @RunWith(Arquillian.class)
 public class RedirectEntryPermissionPortalInstanceLifecycleListenerTest {

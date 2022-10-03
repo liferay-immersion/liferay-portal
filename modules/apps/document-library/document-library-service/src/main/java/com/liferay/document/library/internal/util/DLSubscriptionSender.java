@@ -25,7 +25,7 @@ import com.liferay.portal.kernel.util.GroupSubscriptionCheckSubscriptionSender;
 import com.liferay.portal.kernel.util.ServiceProxyFactory;
 
 /**
- * @author tototrinh
+ * @author To Trinh
  */
 public class DLSubscriptionSender
 	extends GroupSubscriptionCheckSubscriptionSender {
