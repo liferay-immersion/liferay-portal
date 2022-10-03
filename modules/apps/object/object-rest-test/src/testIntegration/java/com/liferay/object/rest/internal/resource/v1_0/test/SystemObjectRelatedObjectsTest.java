@@ -146,7 +146,7 @@ public class SystemObjectRelatedObjectsTest {
 			ObjectRelationshipConstants.TYPE_MANY_TO_MANY);
 
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject(
-			_invoke(_getLocation(name)));
+			_invokeGet(_getLocation(name)));
 
 		JSONArray jsonArray = jsonObject.getJSONArray(name);
 
@@ -162,7 +162,7 @@ public class SystemObjectRelatedObjectsTest {
 			ObjectRelationshipConstants.TYPE_MANY_TO_MANY);
 
 		jsonObject = JSONFactoryUtil.createJSONObject(
-			_invoke(_getLocation(name)));
+			_invokeGet(_getLocation(name)));
 
 		jsonArray = jsonObject.getJSONArray(name);
 
@@ -181,7 +181,7 @@ public class SystemObjectRelatedObjectsTest {
 			ObjectRelationshipConstants.TYPE_ONE_TO_MANY);
 
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject(
-			_invoke(_getLocation(name)));
+			_invokeGet(_getLocation(name)));
 
 		Assert.assertNull(jsonObject.get(name));
 	}
@@ -191,7 +191,7 @@ public class SystemObjectRelatedObjectsTest {
 		String name = StringUtil.randomId();
 
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject(
-			_invoke(_getLocation(name)));
+			_invokeGet(_getLocation(name)));
 
 		Assert.assertNull(jsonObject.getJSONArray(name));
 	}
@@ -207,7 +207,7 @@ public class SystemObjectRelatedObjectsTest {
 			ObjectRelationshipConstants.TYPE_ONE_TO_MANY);
 
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject(
-			_invoke(_getLocation(name)));
+			_invokeGet(_getLocation(name)));
 
 		JSONArray jsonArray = jsonObject.getJSONArray(name);
 
@@ -236,7 +236,7 @@ public class SystemObjectRelatedObjectsTest {
 
 		jsonObject.put(name, JSONFactoryUtil.createJSONArray());
 
-		int httpCode = _invokeHttpCode(
+		int httpCode = _invokePost(
 			jsonObject.toString(),
 			_userSystemObjectDefinitionMetadata.getRESTContextPath());
 
@@ -313,13 +313,13 @@ public class SystemObjectRelatedObjectsTest {
 			StringPool.SLASH, _user.getUserId(), "?nestedFields=", name);
 	}
 
-	private String _invoke(String location) throws Exception {
+	private String _invokeGet(String location) throws Exception {
 		Http.Options options = _createOptions(null, Http.Method.GET, location);
 
 		return HttpUtil.URLtoString(options);
 	}
 
-	private int _invokeHttpCode(String body, String location) throws Exception {
+	private int _invokePost(String body, String location) throws Exception {
 		Http.Options options = _createOptions(body, Http.Method.POST, location);
 
 		HttpUtil.URLtoString(options);
