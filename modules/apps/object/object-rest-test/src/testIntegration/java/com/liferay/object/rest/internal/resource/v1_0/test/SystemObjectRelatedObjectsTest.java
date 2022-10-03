@@ -150,8 +150,7 @@ public class SystemObjectRelatedObjectsTest {
 
 		JSONArray jsonArray = jsonObject.getJSONArray(name);
 
-		Assert.assertEquals(jsonArray.toString(), 1, jsonArray.length());
-		_assertEquals((JSONObject)jsonArray.get(0), _objectEntry);
+		_assertEquals(jsonArray, _objectEntry);
 
 		name = StringUtil.randomId();
 
@@ -166,8 +165,7 @@ public class SystemObjectRelatedObjectsTest {
 
 		jsonArray = jsonObject.getJSONArray(name);
 
-		Assert.assertEquals(jsonArray.toString(), 1, jsonArray.length());
-		_assertEquals((JSONObject)jsonArray.get(0), _objectEntry);
+		_assertEquals(jsonArray, _objectEntry);
 	}
 
 	@Test
@@ -209,10 +207,7 @@ public class SystemObjectRelatedObjectsTest {
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject(
 			_invokeGet(_getLocation(name)));
 
-		JSONArray jsonArray = jsonObject.getJSONArray(name);
-
-		Assert.assertEquals(jsonArray.toString(), 1, jsonArray.length());
-		_assertEquals((JSONObject)jsonArray.get(0), _objectEntry);
+		_assertEquals(jsonObject.getJSONArray(name), _objectEntry);
 	}
 
 	@Test
@@ -278,7 +273,11 @@ public class SystemObjectRelatedObjectsTest {
 		return objectRelationship;
 	}
 
-	private void _assertEquals(JSONObject jsonObject, ObjectEntry objectEntry) {
+	private void _assertEquals(JSONArray jsonArray, ObjectEntry objectEntry) {
+		Assert.assertEquals(jsonArray.toString(), 1, jsonArray.length());
+
+		JSONObject jsonObject = (JSONObject)jsonArray.get(0);
+
 		Assert.assertEquals(
 			objectEntry.getObjectEntryId(), jsonObject.getLong("id"));
 	}
