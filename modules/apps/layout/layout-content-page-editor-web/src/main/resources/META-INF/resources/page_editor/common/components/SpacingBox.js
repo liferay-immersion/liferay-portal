@@ -277,6 +277,8 @@ function SpacingSelectorButton({
 										className="lfr-portal-tooltip text-3"
 										displayType="secondary"
 										onClick={() => {
+											setActive(false);
+
 											onChange(field.name, null, {
 												isReset: true,
 											});
