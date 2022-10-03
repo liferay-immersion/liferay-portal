@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.object.web.internal.info.permission;
+package com.liferay.object.web.internal.info.permission.provider;
 
 import com.liferay.info.permission.provider.InfoPermissionProvider;
 import com.liferay.object.model.ObjectDefinition;
