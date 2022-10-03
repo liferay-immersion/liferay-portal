@@ -146,7 +146,7 @@ public class SystemObjectRelatedObjectsTest {
 			ObjectRelationshipConstants.TYPE_MANY_TO_MANY);
 
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject(
-			_invoke(_getQueryURL(name)));
+			_invoke(_getLocation(name)));
 
 		JSONArray jsonArray = jsonObject.getJSONArray(name);
 
@@ -162,7 +162,7 @@ public class SystemObjectRelatedObjectsTest {
 			ObjectRelationshipConstants.TYPE_MANY_TO_MANY);
 
 		jsonObject = JSONFactoryUtil.createJSONObject(
-			_invoke(_getQueryURL(name)));
+			_invoke(_getLocation(name)));
 
 		jsonArray = jsonObject.getJSONArray(name);
 
@@ -181,7 +181,7 @@ public class SystemObjectRelatedObjectsTest {
 			ObjectRelationshipConstants.TYPE_ONE_TO_MANY);
 
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject(
-			_invoke(_getQueryURL(name)));
+			_invoke(_getLocation(name)));
 
 		Assert.assertNull(jsonObject.get(name));
 	}
@@ -191,7 +191,7 @@ public class SystemObjectRelatedObjectsTest {
 		String name = StringUtil.randomId();
 
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject(
-			_invoke(_getQueryURL(name)));
+			_invoke(_getLocation(name)));
 
 		Assert.assertNull(jsonObject.getJSONArray(name));
 	}
@@ -207,7 +207,7 @@ public class SystemObjectRelatedObjectsTest {
 			ObjectRelationshipConstants.TYPE_ONE_TO_MANY);
 
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject(
-			_invoke(_getQueryURL(name)));
+			_invoke(_getLocation(name)));
 
 		JSONArray jsonArray = jsonObject.getJSONArray(name);
 
@@ -284,7 +284,7 @@ public class SystemObjectRelatedObjectsTest {
 	}
 
 	private Http.Options _createOptions(
-		String body, String endpoint, Http.Method httpMethod) {
+		String body, String location, Http.Method httpMethod) {
 
 		Http.Options options = new Http.Options();
 
@@ -300,26 +300,27 @@ public class SystemObjectRelatedObjectsTest {
 				StandardCharsets.UTF_8.name());
 		}
 
-		options.setLocation("http://localhost:8080/o/" + endpoint);
+		options.setLocation(location);
 		options.setMethod(httpMethod);
 
 		return options;
 	}
 
-	private String _getQueryURL(String name) {
+	private String _getLocation(String name) {
 		return StringBundler.concat(
+			"http://localhost:8080/o/",
 			_userSystemObjectDefinitionMetadata.getRESTContextPath(),
 			StringPool.SLASH, _user.getUserId(), "?nestedFields=", name);
 	}
 
-	private String _invoke(String endpoint) throws Exception {
-		Http.Options options = _createOptions(null, endpoint, Http.Method.GET);
+	private String _invoke(String location) throws Exception {
+		Http.Options options = _createOptions(null, location, Http.Method.GET);
 
 		return HttpUtil.URLtoString(options);
 	}
 
-	private int _invokeHttpCode(String body, String endpoint) throws Exception {
-		Http.Options options = _createOptions(body, endpoint, Http.Method.POST);
+	private int _invokeHttpCode(String body, String location) throws Exception {
+		Http.Options options = _createOptions(body, location, Http.Method.POST);
 
 		HttpUtil.URLtoString(options);
 
