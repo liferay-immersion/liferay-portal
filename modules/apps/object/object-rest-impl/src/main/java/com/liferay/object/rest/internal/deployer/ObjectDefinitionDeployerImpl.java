@@ -150,61 +150,6 @@ public class ObjectDefinitionDeployerImpl implements ObjectDefinitionDeployer {
 				objectDefinition.getRESTContextPath(),
 				Arrays.asList(
 					_bundleContext.registerService(
-						ObjectEntryResource.class,
-						new PrototypeServiceFactory<ObjectEntryResource>() {
-
-							@Override
-							public ObjectEntryResource getService(
-								Bundle bundle,
-								ServiceRegistration<ObjectEntryResource>
-									serviceRegistration) {
-
-								return new ObjectEntryResourceImpl(
-									_filterPredicateFactory,
-									_objectDefinitionLocalService,
-									_objectEntryLocalService,
-									_objectEntryManagerTracker,
-									_objectFieldLocalService,
-									_objectRelationshipService,
-									_objectScopeProviderRegistry);
-							}
-
-							@Override
-							public void ungetService(
-								Bundle bundle,
-								ServiceRegistration<ObjectEntryResource>
-									serviceRegistration,
-								ObjectEntryResource objectEntryResource) {
-							}
-
-						},
-						HashMapDictionaryBuilder.<String, Object>put(
-							"api.version", "v1.0"
-						).put(
-							"batch.engine.entity.class.name",
-							ObjectEntry.class.getName() + "#" +
-								objectDefinition.getName()
-						).put(
-							"batch.engine.task.item.delegate", "true"
-						).put(
-							"batch.engine.task.item.delegate.name",
-							objectDefinition.getShortName()
-						).put(
-							"batch.planner.export.enabled", "true"
-						).put(
-							"batch.planner.import.enabled", "true"
-						).put(
-							"entity.class.name",
-							ObjectEntry.class.getName() + "#" +
-								objectDefinition.getName()
-						).put(
-							"osgi.jaxrs.application.select",
-							"(osgi.jaxrs.name=" + objectDefinition.getName() +
-								")"
-						).put(
-							"osgi.jaxrs.resource", "true"
-						).build()),
-					_bundleContext.registerService(
 						ContextProvider.class,
 						new ObjectDefinitionContextProvider(this, _portal),
 						HashMapDictionaryBuilder.<String, Object>put(
@@ -275,6 +220,61 @@ public class ObjectDefinitionDeployerImpl implements ObjectDefinitionDeployer {
 							"osgi.jaxrs.name",
 							objectDefinition.getName() +
 								"RequiredObjectRelationshipExceptionMapper"
+						).build()),
+					_bundleContext.registerService(
+						ObjectEntryResource.class,
+						new PrototypeServiceFactory<ObjectEntryResource>() {
+
+							@Override
+							public ObjectEntryResource getService(
+								Bundle bundle,
+								ServiceRegistration<ObjectEntryResource>
+									serviceRegistration) {
+
+								return new ObjectEntryResourceImpl(
+									_filterPredicateFactory,
+									_objectDefinitionLocalService,
+									_objectEntryLocalService,
+									_objectEntryManagerTracker,
+									_objectFieldLocalService,
+									_objectRelationshipService,
+									_objectScopeProviderRegistry);
+							}
+
+							@Override
+							public void ungetService(
+								Bundle bundle,
+								ServiceRegistration<ObjectEntryResource>
+									serviceRegistration,
+								ObjectEntryResource objectEntryResource) {
+							}
+
+						},
+						HashMapDictionaryBuilder.<String, Object>put(
+							"api.version", "v1.0"
+						).put(
+							"batch.engine.entity.class.name",
+							ObjectEntry.class.getName() + "#" +
+								objectDefinition.getName()
+						).put(
+							"batch.engine.task.item.delegate", "true"
+						).put(
+							"batch.engine.task.item.delegate.name",
+							objectDefinition.getShortName()
+						).put(
+							"batch.planner.export.enabled", "true"
+						).put(
+							"batch.planner.import.enabled", "true"
+						).put(
+							"entity.class.name",
+							ObjectEntry.class.getName() + "#" +
+								objectDefinition.getName()
+						).put(
+							"osgi.jaxrs.application.select",
+							"(osgi.jaxrs.name=" + objectDefinition.getName() +
+								")"
+						).put(
+							"osgi.jaxrs.resource", "true"
 						).build())));
 		}
 
