@@ -284,7 +284,7 @@ public class SystemObjectRelatedObjectsTest {
 	}
 
 	private Http.Options _createOptions(
-		String body, String location, Http.Method httpMethod) {
+		String body, Http.Method httpMethod, String location) {
 
 		Http.Options options = new Http.Options();
 
@@ -314,13 +314,13 @@ public class SystemObjectRelatedObjectsTest {
 	}
 
 	private String _invoke(String location) throws Exception {
-		Http.Options options = _createOptions(null, location, Http.Method.GET);
+		Http.Options options = _createOptions(null, Http.Method.GET, location);
 
 		return HttpUtil.URLtoString(options);
 	}
 
 	private int _invokeHttpCode(String body, String location) throws Exception {
-		Http.Options options = _createOptions(body, location, Http.Method.POST);
+		Http.Options options = _createOptions(body, Http.Method.POST, location);
 
 		HttpUtil.URLtoString(options);
 
