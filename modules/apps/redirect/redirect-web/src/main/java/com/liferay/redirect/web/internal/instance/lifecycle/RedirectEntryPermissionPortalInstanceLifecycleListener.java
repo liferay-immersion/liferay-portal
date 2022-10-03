@@ -43,7 +43,28 @@ public class RedirectEntryPermissionPortalInstanceLifecycleListener
 
 	@Override
 	public void portalInstanceRegistered(Company company) throws Exception {
-		_initUserPersonalSitePermissions(company.getCompanyId());
+		Role powerUserRole = _roleLocalService.fetchRole(
+			companyId, RoleConstants.POWER_USER);
+
+		if (powerUserRole == null) {
+			return;
+		}
+
+		Group userPersonalSiteGroup =
+			_groupLocalService.fetchUserPersonalSiteGroup(
+				company.getCompanyId());
+
+		if (userPersonalSiteGroup == null) {
+			return;
+		}
+
+		long userPersonalSiteGroupId = userPersonalSiteGroup.getGroupId();
+
+		_addResourcePermission(
+			company.getCompanyId(), RedirectEntry.class.getName(),
+			ResourceConstants.SCOPE_GROUP,
+			String.valueOf(userPersonalSiteGroupId), powerUserRole.getRoleId(),
+			ActionKeys.VIEW);
 	}
 
 	private void _addResourcePermission(
@@ -69,32 +90,6 @@ public class RedirectEntryPermissionPortalInstanceLifecycleListener
 		_resourcePermissionLocalService.setResourcePermissions(
 			companyId, name, scope, primKey, roleId,
 			new String[] {resourceAction.getActionId()});
-	}
-
-	private void _initUserPersonalSitePermissions(long companyId)
-		throws Exception {
-
-		Role powerUserRole = _roleLocalService.fetchRole(
-			companyId, RoleConstants.POWER_USER);
-
-		if (powerUserRole == null) {
-			return;
-		}
-
-		Group userPersonalSiteGroup =
-			_groupLocalService.fetchUserPersonalSiteGroup(companyId);
-
-		if (userPersonalSiteGroup == null) {
-			return;
-		}
-
-		long userPersonalSiteGroupId = userPersonalSiteGroup.getGroupId();
-
-		_addResourcePermission(
-			companyId, RedirectEntry.class.getName(),
-			ResourceConstants.SCOPE_GROUP,
-			String.valueOf(userPersonalSiteGroupId), powerUserRole.getRoleId(),
-			ActionKeys.VIEW);
 	}
 
 	@Reference
