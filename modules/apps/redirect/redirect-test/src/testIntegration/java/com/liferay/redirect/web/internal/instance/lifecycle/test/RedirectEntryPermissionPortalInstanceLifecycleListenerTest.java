@@ -135,7 +135,7 @@ public class RedirectEntryPermissionPortalInstanceLifecycleListenerTest {
 	private GroupLocalService _groupLocalService;
 
 	@Inject(
-		filter = "component.name=*.RedirectEntryPermissionPortalInstanceLifecycleListener"
+		filter = "component.name=com.liferay.redirect.web.internal.instance.lifecycle.RedirectEntryPermissionPortalInstanceLifecycleListener"
 	)
 	private PortalInstanceLifecycleListener _portalInstanceLifecycleListener;
 
