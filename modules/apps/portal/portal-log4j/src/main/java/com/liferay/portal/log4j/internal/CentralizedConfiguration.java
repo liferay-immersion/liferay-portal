@@ -93,12 +93,11 @@ public class CentralizedConfiguration extends AbstractConfiguration {
 	private void _aggregateAppenders(
 		AbstractConfiguration abstractConfiguration) {
 
+		CompanyLogRoutingAppender companyLogRoutingAppender = null;
 		Map<String, Appender> currentAppenders = getAppenders();
 
 		Map<String, Appender> newAppenders =
 			abstractConfiguration.getAppenders();
-
-		CompanyLogRoutingAppender companyLogRoutingAppender = null;
 
 		for (Appender newAppender : newAppenders.values()) {
 			newAppender.start();

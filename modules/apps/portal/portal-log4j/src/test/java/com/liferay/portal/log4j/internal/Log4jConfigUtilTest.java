@@ -263,7 +263,9 @@ public class Log4jConfigUtilTest {
 
 	@NewEnv(type = NewEnv.Type.CLASSLOADER)
 	@Test
-	public void testGetCompanyLogDirectoryWithDisabled() throws Exception {
+	public void testGetCompanyLogDirectoryWithCompanyLogDisabled()
+		throws Exception {
+
 		PropsTestUtil.setProps(PropsKeys.COMPANY_LOG_ENABLED, "false");
 
 		_testGetCompanyLogDirectory(false);
@@ -271,7 +273,9 @@ public class Log4jConfigUtilTest {
 
 	@NewEnv(type = NewEnv.Type.CLASSLOADER)
 	@Test
-	public void testGetCompanyLogDirectoryWithEnabled() throws Exception {
+	public void testGetCompanyLogDirectoryWithCompanyLogEnabled()
+		throws Exception {
+
 		PropsTestUtil.setProps(PropsKeys.COMPANY_LOG_ENABLED, "true");
 
 		_testGetCompanyLogDirectory(true);
