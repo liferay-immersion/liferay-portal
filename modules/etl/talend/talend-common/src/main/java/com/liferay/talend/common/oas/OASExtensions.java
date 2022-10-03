@@ -61,17 +61,14 @@ public class OASExtensions {
 		return false;
 	}
 
-	public boolean isObjectReferenceFieldName(String name) {
-		Matcher matcher = _objectReferenceFieldNamePattern.matcher(name);
+	public boolean isObjectDefinitionReferenceFieldName(String name) {
+		Matcher matcher = _objectDefinitionReferenceFieldNamePattern.matcher(
+			name);
 
-		if (matcher.matches()) {
-			return true;
-		}
-
-		return false;
+		return matcher.matches();
 	}
 
-	private static final Pattern _objectReferenceFieldNamePattern =
+	private static final Pattern _objectDefinitionReferenceFieldNamePattern =
 		Pattern.compile("r_.+_c_.+Id");
 
 }

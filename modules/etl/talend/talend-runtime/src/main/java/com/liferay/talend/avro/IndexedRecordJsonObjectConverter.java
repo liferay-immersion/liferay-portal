@@ -275,7 +275,7 @@ public class IndexedRecordJsonObjectConverter extends RejectHandler {
 	private boolean _isNestedFieldName(String fieldName) {
 		if ((!_oasExtensions.isI18nFieldNameNested(fieldName) &&
 			 _oasExtensions.isI18nFieldName(fieldName)) ||
-			_oasExtensions.isObjectReferenceFieldName(fieldName) ||
+			_oasExtensions.isObjectDefinitionReferenceFieldName(fieldName) ||
 			!fieldName.contains("_")) {
 
 			return false;

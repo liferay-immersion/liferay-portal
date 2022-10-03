@@ -80,29 +80,29 @@ public class OASExtensionTest {
 	}
 
 	@Test
-	public void testIsObjectReferenceFieldName() {
+	public void testIsObjectDefinitionReferenceFieldName() {
 		OASExtensions oasExtensions = new OASExtensions();
 
 		Assert.assertFalse(
-			oasExtensions.isObjectReferenceFieldName("_i18nest"));
+			oasExtensions.isObjectDefinitionReferenceFieldName("_i18nest"));
 		Assert.assertFalse(
-			oasExtensions.isObjectReferenceFieldName("nestedParent_attribute"));
-		Assert.assertFalse(oasExtensions.isObjectReferenceFieldName("test"));
+			oasExtensions.isObjectDefinitionReferenceFieldName("nestedParent_attribute"));
+		Assert.assertFalse(oasExtensions.isObjectDefinitionReferenceFieldName("test"));
 		Assert.assertFalse(
-			oasExtensions.isObjectReferenceFieldName("test_i18n"));
+			oasExtensions.isObjectDefinitionReferenceFieldName("test_i18n"));
 		Assert.assertFalse(
-			oasExtensions.isObjectReferenceFieldName(
+			oasExtensions.isObjectDefinitionReferenceFieldName(
 				"nestedParent_nestedParent2_test_i18n"));
 		Assert.assertFalse(
-			oasExtensions.isObjectReferenceFieldName("nestedParent_test_i18n"));
+			oasExtensions.isObjectDefinitionReferenceFieldName("nestedParent_test_i18n"));
 		Assert.assertFalse(
-			oasExtensions.isObjectReferenceFieldName("nestedParent_test_i1id"));
+			oasExtensions.isObjectDefinitionReferenceFieldName("nestedParent_test_i1id"));
 		Assert.assertFalse(
-			oasExtensions.isObjectReferenceFieldName("n_parent_c_estid"));
+			oasExtensions.isObjectDefinitionReferenceFieldName("n_parent_c_estid"));
 		Assert.assertFalse(
-			oasExtensions.isObjectReferenceFieldName("r_parent_c_test"));
+			oasExtensions.isObjectDefinitionReferenceFieldName("r_parent_c_test"));
 		Assert.assertTrue(
-			oasExtensions.isObjectReferenceFieldName("r_child_c_parentId"));
+			oasExtensions.isObjectDefinitionReferenceFieldName("r_child_c_parentId"));
 	}
 
 	private Class<? extends Exception> _getI18nFieldNameExceptionClass(
