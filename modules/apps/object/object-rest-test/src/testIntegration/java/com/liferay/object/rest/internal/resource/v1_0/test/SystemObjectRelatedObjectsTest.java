@@ -231,11 +231,11 @@ public class SystemObjectRelatedObjectsTest {
 
 		jsonObject.put(name, JSONFactoryUtil.createJSONArray());
 
-		int httpCode = _invokePost(
-			jsonObject.toString(),
-			_userSystemObjectDefinitionMetadata.getRESTContextPath());
-
-		Assert.assertEquals(HttpStatus.BAD_REQUEST.value(), httpCode);
+		Assert.assertEquals(
+			HttpStatus.BAD_REQUEST.value(),
+			_invokePost(
+				jsonObject.toString(),
+				_userSystemObjectDefinitionMetadata.getRESTContextPath()));
 	}
 
 	private ObjectEntry _addObjectEntry(String objectFieldValue)
