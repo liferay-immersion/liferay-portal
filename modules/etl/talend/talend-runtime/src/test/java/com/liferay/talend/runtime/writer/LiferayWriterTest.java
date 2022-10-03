@@ -93,15 +93,12 @@ public class LiferayWriterTest extends BaseTestCase {
 
 		JsonObject outputJsonObject = outputJsonValue.asJsonObject();
 
-		Assert.assertTrue(
-			"Output has name", outputJsonObject.containsKey("name"));
+		Assert.assertTrue(outputJsonObject.containsKey("name"));
 
 		JsonObject nameJsonObject = outputJsonObject.getJsonObject("name");
 
-		Assert.assertNotNull("name is json object", nameJsonObject);
-
-		Assert.assertTrue(
-			"Name has key hr_HR", nameJsonObject.containsKey("hr_HR"));
+		Assert.assertNotNull(nameJsonObject);
+		Assert.assertTrue(nameJsonObject.containsKey("hr_HR"));
 	}
 
 	@Test
