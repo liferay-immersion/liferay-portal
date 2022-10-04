@@ -180,19 +180,17 @@ public class AddressUtilTest {
 	private void _testGetCountryNameOptional(
 		Address address, String expectedName) {
 
-		Optional<String> countryNameOptional =
-			AddressUtil.getCountryNameOptional(address);
+		Optional<String> optional = AddressUtil.getCountryNameOptional(address);
 
-		Assert.assertEquals(expectedName, countryNameOptional.orElse(null));
+		Assert.assertEquals(expectedName, optional.orElse(null));
 	}
 
 	private void _testGetRegionNameOptional(
 		Address address, String expectedName) {
 
-		Optional<String> regionNameOptional = AddressUtil.getRegionNameOptional(
-			address);
+		Optional<String> optional = AddressUtil.getRegionNameOptional(address);
 
-		Assert.assertEquals(expectedName, regionNameOptional.orElse(null));
+		Assert.assertEquals(expectedName, optional.orElse(null));
 	}
 
 	private static Locale _locale;
