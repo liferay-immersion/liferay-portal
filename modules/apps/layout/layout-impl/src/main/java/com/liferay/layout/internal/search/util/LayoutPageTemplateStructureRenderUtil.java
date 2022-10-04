@@ -56,18 +56,18 @@ public class LayoutPageTemplateStructureRenderUtil {
 			return StringPool.BLANK;
 		}
 
-		StringBundler sb = new StringBundler();
-
 		LayoutStructure layoutStructure = LayoutStructure.of(data);
 
 		LayoutStructureItem layoutStructureItem =
 			layoutStructure.getLayoutStructureItem(
 				layoutStructure.getMainItemId());
 
+		StringBundler sb = new StringBundler();
+
 		_renderLayoutStructure(
-			sb, layoutStructureItem.getChildrenItemIds(),
+			layoutStructureItem.getChildrenItemIds(),
 			fragmentRendererController, httpServletRequest, httpServletResponse,
-			layoutStructure, locale, mode);
+			layoutStructure, locale, mode, sb);
 
 		return sb.toString();
 	}
@@ -97,11 +97,12 @@ public class LayoutPageTemplateStructureRenderUtil {
 	}
 
 	private static void _renderLayoutStructure(
-		StringBundler sb, List<String> childrenItemIds,
+		List<String> childrenItemIds,
 		FragmentRendererController fragmentRendererController,
 		HttpServletRequest httpServletRequest,
 		HttpServletResponse httpServletResponse,
-		LayoutStructure layoutStructure, Locale locale, String mode) {
+		LayoutStructure layoutStructure, Locale locale, String mode,
+		StringBundler sb) {
 
 		for (String childrenItemId : childrenItemIds) {
 			LayoutStructureItem layoutStructureItem =
@@ -153,9 +154,9 @@ public class LayoutPageTemplateStructureRenderUtil {
 			}
 
 			_renderLayoutStructure(
-				sb, layoutStructureItem.getChildrenItemIds(),
+				layoutStructureItem.getChildrenItemIds(),
 				fragmentRendererController, httpServletRequest,
-				httpServletResponse, layoutStructure, locale, mode);
+				httpServletResponse, layoutStructure, locale, mode, sb);
 		}
 	}
 
