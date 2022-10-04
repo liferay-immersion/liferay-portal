@@ -37,7 +37,6 @@ public class EqualsFunction
 	@Override
 	public Boolean apply(Object object1, Object object2) {
 		Object value1 = _getValue(object1);
-
 		Object value2 = _getValue(object2);
 
 		if (!Objects.equals(value1.getClass(), value2.getClass())) {
