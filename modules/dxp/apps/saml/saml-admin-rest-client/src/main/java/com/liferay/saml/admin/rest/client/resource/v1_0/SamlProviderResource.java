@@ -38,30 +38,22 @@ public interface SamlProviderResource {
 		return new Builder();
 	}
 
-	public SamlProvider getSamlProvider() throws Exception;
+	public SamlProvider getProvider() throws Exception;
 
-	public HttpInvoker.HttpResponse getSamlProviderHttpResponse()
+	public HttpInvoker.HttpResponse getProviderHttpResponse() throws Exception;
+
+	public SamlProvider patchProvider(SamlProvider samlProvider)
 		throws Exception;
 
-	public SamlProvider patchSamlProvider(SamlProvider samlProvider)
-		throws Exception;
-
-	public HttpInvoker.HttpResponse patchSamlProviderHttpResponse(
+	public HttpInvoker.HttpResponse patchProviderHttpResponse(
 			SamlProvider samlProvider)
 		throws Exception;
 
-	public SamlProvider postSamlProvider(SamlProvider samlProvider)
+	public SamlProvider postProvider(SamlProvider samlProvider)
 		throws Exception;
 
-	public HttpInvoker.HttpResponse postSamlProviderHttpResponse(
+	public HttpInvoker.HttpResponse postProviderHttpResponse(
 			SamlProvider samlProvider)
-		throws Exception;
-
-	public void postSamlProviderBatch(String callbackURL, Object object)
-		throws Exception;
-
-	public HttpInvoker.HttpResponse postSamlProviderBatchHttpResponse(
-			String callbackURL, Object object)
 		throws Exception;
 
 	public static class Builder {
@@ -143,9 +135,8 @@ public interface SamlProviderResource {
 	public static class SamlProviderResourceImpl
 		implements SamlProviderResource {
 
-		public SamlProvider getSamlProvider() throws Exception {
-			HttpInvoker.HttpResponse httpResponse =
-				getSamlProviderHttpResponse();
+		public SamlProvider getProvider() throws Exception {
+			HttpInvoker.HttpResponse httpResponse = getProviderHttpResponse();
 
 			String content = httpResponse.getContent();
 
@@ -184,7 +175,7 @@ public interface SamlProviderResource {
 			}
 		}
 
-		public HttpInvoker.HttpResponse getSamlProviderHttpResponse()
+		public HttpInvoker.HttpResponse getProviderHttpResponse()
 			throws Exception {
 
 			HttpInvoker httpInvoker = HttpInvoker.newHttpInvoker();
@@ -219,11 +210,11 @@ public interface SamlProviderResource {
 			return httpInvoker.invoke();
 		}
 
-		public SamlProvider patchSamlProvider(SamlProvider samlProvider)
+		public SamlProvider patchProvider(SamlProvider samlProvider)
 			throws Exception {
 
-			HttpInvoker.HttpResponse httpResponse =
-				patchSamlProviderHttpResponse(samlProvider);
+			HttpInvoker.HttpResponse httpResponse = patchProviderHttpResponse(
+				samlProvider);
 
 			String content = httpResponse.getContent();
 
@@ -262,7 +253,7 @@ public interface SamlProviderResource {
 			}
 		}
 
-		public HttpInvoker.HttpResponse patchSamlProviderHttpResponse(
+		public HttpInvoker.HttpResponse patchProviderHttpResponse(
 				SamlProvider samlProvider)
 			throws Exception {
 
@@ -300,11 +291,11 @@ public interface SamlProviderResource {
 			return httpInvoker.invoke();
 		}
 
-		public SamlProvider postSamlProvider(SamlProvider samlProvider)
+		public SamlProvider postProvider(SamlProvider samlProvider)
 			throws Exception {
 
-			HttpInvoker.HttpResponse httpResponse =
-				postSamlProviderHttpResponse(samlProvider);
+			HttpInvoker.HttpResponse httpResponse = postProviderHttpResponse(
+				samlProvider);
 
 			String content = httpResponse.getContent();
 
@@ -343,7 +334,7 @@ public interface SamlProviderResource {
 			}
 		}
 
-		public HttpInvoker.HttpResponse postSamlProviderHttpResponse(
+		public HttpInvoker.HttpResponse postProviderHttpResponse(
 				SamlProvider samlProvider)
 			throws Exception {
 
@@ -374,81 +365,6 @@ public interface SamlProviderResource {
 				_builder._scheme + "://" + _builder._host + ":" +
 					_builder._port + _builder._contextPath +
 						"/o/saml-admin/v1.0/provider");
-
-			httpInvoker.userNameAndPassword(
-				_builder._login + ":" + _builder._password);
-
-			return httpInvoker.invoke();
-		}
-
-		public void postSamlProviderBatch(String callbackURL, Object object)
-			throws Exception {
-
-			HttpInvoker.HttpResponse httpResponse =
-				postSamlProviderBatchHttpResponse(callbackURL, object);
-
-			String content = httpResponse.getContent();
-
-			if ((httpResponse.getStatusCode() / 100) != 2) {
-				_logger.log(
-					Level.WARNING,
-					"Unable to process HTTP response content: " + content);
-				_logger.log(
-					Level.WARNING,
-					"HTTP response message: " + httpResponse.getMessage());
-				_logger.log(
-					Level.WARNING,
-					"HTTP response status code: " +
-						httpResponse.getStatusCode());
-
-				throw new Problem.ProblemException(Problem.toDTO(content));
-			}
-			else {
-				_logger.fine("HTTP response content: " + content);
-				_logger.fine(
-					"HTTP response message: " + httpResponse.getMessage());
-				_logger.fine(
-					"HTTP response status code: " +
-						httpResponse.getStatusCode());
-			}
-		}
-
-		public HttpInvoker.HttpResponse postSamlProviderBatchHttpResponse(
-				String callbackURL, Object object)
-			throws Exception {
-
-			HttpInvoker httpInvoker = HttpInvoker.newHttpInvoker();
-
-			httpInvoker.body(object.toString(), "application/json");
-
-			if (_builder._locale != null) {
-				httpInvoker.header(
-					"Accept-Language", _builder._locale.toLanguageTag());
-			}
-
-			for (Map.Entry<String, String> entry :
-					_builder._headers.entrySet()) {
-
-				httpInvoker.header(entry.getKey(), entry.getValue());
-			}
-
-			for (Map.Entry<String, String> entry :
-					_builder._parameters.entrySet()) {
-
-				httpInvoker.parameter(entry.getKey(), entry.getValue());
-			}
-
-			httpInvoker.httpMethod(HttpInvoker.HttpMethod.POST);
-
-			if (callbackURL != null) {
-				httpInvoker.parameter(
-					"callbackURL", String.valueOf(callbackURL));
-			}
-
-			httpInvoker.path(
-				_builder._scheme + "://" + _builder._host + ":" +
-					_builder._port + _builder._contextPath +
-						"/o/saml-admin/v1.0/provider/batch");
 
 			httpInvoker.userNameAndPassword(
 				_builder._login + ":" + _builder._password);

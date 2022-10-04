@@ -22,7 +22,6 @@ import com.liferay.portal.kernel.service.RoleLocalService;
 import com.liferay.portal.odata.filter.ExpressionConvert;
 import com.liferay.portal.odata.filter.FilterParserProvider;
 import com.liferay.portal.vulcan.accept.language.AcceptLanguage;
-import com.liferay.portal.vulcan.batch.engine.resource.VulcanBatchEngineImportTaskResource;
 import com.liferay.saml.admin.rest.dto.v1_0.SamlProvider;
 
 import java.util.Collections;
@@ -35,7 +34,6 @@ import javax.annotation.Generated;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import org.osgi.annotation.versioning.ProviderType;
@@ -56,15 +54,12 @@ public interface SamlProviderResource {
 		return FactoryHolder.factory.create();
 	}
 
-	public SamlProvider getSamlProvider() throws Exception;
+	public SamlProvider getProvider() throws Exception;
 
-	public SamlProvider patchSamlProvider(SamlProvider samlProvider)
+	public SamlProvider patchProvider(SamlProvider samlProvider)
 		throws Exception;
 
-	public SamlProvider postSamlProvider(SamlProvider samlProvider)
-		throws Exception;
-
-	public Response postSamlProviderBatch(String callbackURL, Object object)
+	public SamlProvider postProvider(SamlProvider samlProvider)
 		throws Exception;
 
 	public default void setContextAcceptLanguage(
@@ -103,10 +98,6 @@ public interface SamlProviderResource {
 		ResourcePermissionLocalService resourcePermissionLocalService);
 
 	public void setRoleLocalService(RoleLocalService roleLocalService);
-
-	public void setVulcanBatchEngineImportTaskResource(
-		VulcanBatchEngineImportTaskResource
-			vulcanBatchEngineImportTaskResource);
 
 	public default Filter toFilter(String filterString) {
 		return toFilter(
