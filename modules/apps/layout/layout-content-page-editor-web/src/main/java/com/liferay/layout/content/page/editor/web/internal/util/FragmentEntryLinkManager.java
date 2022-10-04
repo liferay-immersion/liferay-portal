@@ -154,8 +154,12 @@ public class FragmentEntryLinkManager {
 											fragmentEntryLink.
 												getFragmentEntryLinkId());
 
-						return fragmentStyledLayoutStructureItem.
-							getFragmentEntryLinkCssClass(fragmentEntryLink);
+						if (fragmentStyledLayoutStructureItem != null) {
+							return fragmentStyledLayoutStructureItem.
+								getFragmentEntryLinkCssClass(fragmentEntryLink);
+						}
+
+						return null;
 					}
 				).put(
 					"defaultConfigurationValues",
@@ -222,8 +226,12 @@ public class FragmentEntryLinkManager {
 										fragmentEntryLink.
 											getFragmentEntryLinkId());
 
-					return fragmentStyledLayoutStructureItem.
-						getFragmentEntryLinkCssClass(fragmentEntryLink);
+					if (fragmentStyledLayoutStructureItem != null) {
+						return fragmentStyledLayoutStructureItem.
+							getFragmentEntryLinkCssClass(fragmentEntryLink);
+					}
+
+					return null;
 				}
 			).put(
 				"defaultConfigurationValues",
