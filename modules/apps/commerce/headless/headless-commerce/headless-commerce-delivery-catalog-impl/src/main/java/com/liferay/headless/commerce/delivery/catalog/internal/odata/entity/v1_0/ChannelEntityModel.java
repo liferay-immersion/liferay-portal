@@ -29,11 +29,10 @@ public class ChannelEntityModel implements EntityModel {
 
 	public ChannelEntityModel() {
 		_entityFieldsMap = EntityModel.toEntityFieldsMap(
-			new StringEntityField(
-				"name", locale -> Field.getSortableFieldName("name")),
 			new IdEntityField(
-				"siteGroupId", locale -> Field.SCOPE_GROUP_ID,
-				String::valueOf));
+				"siteGroupId", locale -> Field.SCOPE_GROUP_ID, String::valueOf),
+			new StringEntityField(
+				"name", locale -> Field.getSortableFieldName("name")));
 	}
 
 	@Override
