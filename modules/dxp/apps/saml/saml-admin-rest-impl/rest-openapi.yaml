@@ -74,7 +74,7 @@ paths:
         get:
             description:
                 Retrieves the SAML Provider configuration.
-            operationId: getSamlProvider
+            operationId: getProvider
             responses:
                 200:
                     content:
@@ -88,7 +88,7 @@ paths:
         patch:
             description:
                 Patch the SAML Provider configuration.
-            operationId: patchSamlProvider
+            operationId: patchProvider
             requestBody:
                 content:
                     application/json:
@@ -113,7 +113,7 @@ paths:
         post:
             description:
                 Creates a full SAML Provider configuration with peer connections.
-            operationId: postSamlProvider
+            operationId: postProvider
             requestBody:
                 content:
                     application/json:
