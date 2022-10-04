@@ -198,12 +198,12 @@ public class LayoutLocalizationUtil {
 	 * @param uuid the uuid
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the first matching layout localization
-	 * @throws NoSuchLocalizationException if a matching layout localization could not be found
+	 * @throws NoSuchLayoutLocalizationException if a matching layout localization could not be found
 	 */
 	public static LayoutLocalization findByUuid_First(
 			String uuid,
 			OrderByComparator<LayoutLocalization> orderByComparator)
-		throws com.liferay.layout.exception.NoSuchLocalizationException {
+		throws com.liferay.layout.exception.NoSuchLayoutLocalizationException {
 
 		return getPersistence().findByUuid_First(uuid, orderByComparator);
 	}
@@ -227,12 +227,12 @@ public class LayoutLocalizationUtil {
 	 * @param uuid the uuid
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the last matching layout localization
-	 * @throws NoSuchLocalizationException if a matching layout localization could not be found
+	 * @throws NoSuchLayoutLocalizationException if a matching layout localization could not be found
 	 */
 	public static LayoutLocalization findByUuid_Last(
 			String uuid,
 			OrderByComparator<LayoutLocalization> orderByComparator)
-		throws com.liferay.layout.exception.NoSuchLocalizationException {
+		throws com.liferay.layout.exception.NoSuchLayoutLocalizationException {
 
 		return getPersistence().findByUuid_Last(uuid, orderByComparator);
 	}
@@ -257,12 +257,12 @@ public class LayoutLocalizationUtil {
 	 * @param uuid the uuid
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the previous, current, and next layout localization
-	 * @throws NoSuchLocalizationException if a layout localization with the primary key could not be found
+	 * @throws NoSuchLayoutLocalizationException if a layout localization with the primary key could not be found
 	 */
 	public static LayoutLocalization[] findByUuid_PrevAndNext(
 			long layoutLocalizationId, String uuid,
 			OrderByComparator<LayoutLocalization> orderByComparator)
-		throws com.liferay.layout.exception.NoSuchLocalizationException {
+		throws com.liferay.layout.exception.NoSuchLayoutLocalizationException {
 
 		return getPersistence().findByUuid_PrevAndNext(
 			layoutLocalizationId, uuid, orderByComparator);
@@ -288,15 +288,15 @@ public class LayoutLocalizationUtil {
 	}
 
 	/**
-	 * Returns the layout localization where uuid = &#63; and groupId = &#63; or throws a <code>NoSuchLocalizationException</code> if it could not be found.
+	 * Returns the layout localization where uuid = &#63; and groupId = &#63; or throws a <code>NoSuchLayoutLocalizationException</code> if it could not be found.
 	 *
 	 * @param uuid the uuid
 	 * @param groupId the group ID
 	 * @return the matching layout localization
-	 * @throws NoSuchLocalizationException if a matching layout localization could not be found
+	 * @throws NoSuchLayoutLocalizationException if a matching layout localization could not be found
 	 */
 	public static LayoutLocalization findByUUID_G(String uuid, long groupId)
-		throws com.liferay.layout.exception.NoSuchLocalizationException {
+		throws com.liferay.layout.exception.NoSuchLayoutLocalizationException {
 
 		return getPersistence().findByUUID_G(uuid, groupId);
 	}
@@ -334,7 +334,7 @@ public class LayoutLocalizationUtil {
 	 * @return the layout localization that was removed
 	 */
 	public static LayoutLocalization removeByUUID_G(String uuid, long groupId)
-		throws com.liferay.layout.exception.NoSuchLocalizationException {
+		throws com.liferay.layout.exception.NoSuchLayoutLocalizationException {
 
 		return getPersistence().removeByUUID_G(uuid, groupId);
 	}
@@ -435,12 +435,12 @@ public class LayoutLocalizationUtil {
 	 * @param companyId the company ID
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the first matching layout localization
-	 * @throws NoSuchLocalizationException if a matching layout localization could not be found
+	 * @throws NoSuchLayoutLocalizationException if a matching layout localization could not be found
 	 */
 	public static LayoutLocalization findByUuid_C_First(
 			String uuid, long companyId,
 			OrderByComparator<LayoutLocalization> orderByComparator)
-		throws com.liferay.layout.exception.NoSuchLocalizationException {
+		throws com.liferay.layout.exception.NoSuchLayoutLocalizationException {
 
 		return getPersistence().findByUuid_C_First(
 			uuid, companyId, orderByComparator);
@@ -469,12 +469,12 @@ public class LayoutLocalizationUtil {
 	 * @param companyId the company ID
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the last matching layout localization
-	 * @throws NoSuchLocalizationException if a matching layout localization could not be found
+	 * @throws NoSuchLayoutLocalizationException if a matching layout localization could not be found
 	 */
 	public static LayoutLocalization findByUuid_C_Last(
 			String uuid, long companyId,
 			OrderByComparator<LayoutLocalization> orderByComparator)
-		throws com.liferay.layout.exception.NoSuchLocalizationException {
+		throws com.liferay.layout.exception.NoSuchLayoutLocalizationException {
 
 		return getPersistence().findByUuid_C_Last(
 			uuid, companyId, orderByComparator);
@@ -504,12 +504,12 @@ public class LayoutLocalizationUtil {
 	 * @param companyId the company ID
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the previous, current, and next layout localization
-	 * @throws NoSuchLocalizationException if a layout localization with the primary key could not be found
+	 * @throws NoSuchLayoutLocalizationException if a layout localization with the primary key could not be found
 	 */
 	public static LayoutLocalization[] findByUuid_C_PrevAndNext(
 			long layoutLocalizationId, String uuid, long companyId,
 			OrderByComparator<LayoutLocalization> orderByComparator)
-		throws com.liferay.layout.exception.NoSuchLocalizationException {
+		throws com.liferay.layout.exception.NoSuchLayoutLocalizationException {
 
 		return getPersistence().findByUuid_C_PrevAndNext(
 			layoutLocalizationId, uuid, companyId, orderByComparator);
@@ -613,11 +613,11 @@ public class LayoutLocalizationUtil {
 	 * @param plid the plid
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the first matching layout localization
-	 * @throws NoSuchLocalizationException if a matching layout localization could not be found
+	 * @throws NoSuchLayoutLocalizationException if a matching layout localization could not be found
 	 */
 	public static LayoutLocalization findByPlid_First(
 			long plid, OrderByComparator<LayoutLocalization> orderByComparator)
-		throws com.liferay.layout.exception.NoSuchLocalizationException {
+		throws com.liferay.layout.exception.NoSuchLayoutLocalizationException {
 
 		return getPersistence().findByPlid_First(plid, orderByComparator);
 	}
@@ -641,11 +641,11 @@ public class LayoutLocalizationUtil {
 	 * @param plid the plid
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the last matching layout localization
-	 * @throws NoSuchLocalizationException if a matching layout localization could not be found
+	 * @throws NoSuchLayoutLocalizationException if a matching layout localization could not be found
 	 */
 	public static LayoutLocalization findByPlid_Last(
 			long plid, OrderByComparator<LayoutLocalization> orderByComparator)
-		throws com.liferay.layout.exception.NoSuchLocalizationException {
+		throws com.liferay.layout.exception.NoSuchLayoutLocalizationException {
 
 		return getPersistence().findByPlid_Last(plid, orderByComparator);
 	}
@@ -670,12 +670,12 @@ public class LayoutLocalizationUtil {
 	 * @param plid the plid
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the previous, current, and next layout localization
-	 * @throws NoSuchLocalizationException if a layout localization with the primary key could not be found
+	 * @throws NoSuchLayoutLocalizationException if a layout localization with the primary key could not be found
 	 */
 	public static LayoutLocalization[] findByPlid_PrevAndNext(
 			long layoutLocalizationId, long plid,
 			OrderByComparator<LayoutLocalization> orderByComparator)
-		throws com.liferay.layout.exception.NoSuchLocalizationException {
+		throws com.liferay.layout.exception.NoSuchLayoutLocalizationException {
 
 		return getPersistence().findByPlid_PrevAndNext(
 			layoutLocalizationId, plid, orderByComparator);
@@ -701,15 +701,15 @@ public class LayoutLocalizationUtil {
 	}
 
 	/**
-	 * Returns the layout localization where languageId = &#63; and plid = &#63; or throws a <code>NoSuchLocalizationException</code> if it could not be found.
+	 * Returns the layout localization where languageId = &#63; and plid = &#63; or throws a <code>NoSuchLayoutLocalizationException</code> if it could not be found.
 	 *
 	 * @param languageId the language ID
 	 * @param plid the plid
 	 * @return the matching layout localization
-	 * @throws NoSuchLocalizationException if a matching layout localization could not be found
+	 * @throws NoSuchLayoutLocalizationException if a matching layout localization could not be found
 	 */
 	public static LayoutLocalization findByL_P(String languageId, long plid)
-		throws com.liferay.layout.exception.NoSuchLocalizationException {
+		throws com.liferay.layout.exception.NoSuchLayoutLocalizationException {
 
 		return getPersistence().findByL_P(languageId, plid);
 	}
@@ -747,7 +747,7 @@ public class LayoutLocalizationUtil {
 	 * @return the layout localization that was removed
 	 */
 	public static LayoutLocalization removeByL_P(String languageId, long plid)
-		throws com.liferay.layout.exception.NoSuchLocalizationException {
+		throws com.liferay.layout.exception.NoSuchLayoutLocalizationException {
 
 		return getPersistence().removeByL_P(languageId, plid);
 	}
@@ -764,17 +764,17 @@ public class LayoutLocalizationUtil {
 	}
 
 	/**
-	 * Returns the layout localization where groupId = &#63; and languageId = &#63; and plid = &#63; or throws a <code>NoSuchLocalizationException</code> if it could not be found.
+	 * Returns the layout localization where groupId = &#63; and languageId = &#63; and plid = &#63; or throws a <code>NoSuchLayoutLocalizationException</code> if it could not be found.
 	 *
 	 * @param groupId the group ID
 	 * @param languageId the language ID
 	 * @param plid the plid
 	 * @return the matching layout localization
-	 * @throws NoSuchLocalizationException if a matching layout localization could not be found
+	 * @throws NoSuchLayoutLocalizationException if a matching layout localization could not be found
 	 */
 	public static LayoutLocalization findByG_L_P(
 			long groupId, String languageId, long plid)
-		throws com.liferay.layout.exception.NoSuchLocalizationException {
+		throws com.liferay.layout.exception.NoSuchLayoutLocalizationException {
 
 		return getPersistence().findByG_L_P(groupId, languageId, plid);
 	}
@@ -819,7 +819,7 @@ public class LayoutLocalizationUtil {
 	 */
 	public static LayoutLocalization removeByG_L_P(
 			long groupId, String languageId, long plid)
-		throws com.liferay.layout.exception.NoSuchLocalizationException {
+		throws com.liferay.layout.exception.NoSuchLayoutLocalizationException {
 
 		return getPersistence().removeByG_L_P(groupId, languageId, plid);
 	}
@@ -871,10 +871,10 @@ public class LayoutLocalizationUtil {
 	 *
 	 * @param layoutLocalizationId the primary key of the layout localization
 	 * @return the layout localization that was removed
-	 * @throws NoSuchLocalizationException if a layout localization with the primary key could not be found
+	 * @throws NoSuchLayoutLocalizationException if a layout localization with the primary key could not be found
 	 */
 	public static LayoutLocalization remove(long layoutLocalizationId)
-		throws com.liferay.layout.exception.NoSuchLocalizationException {
+		throws com.liferay.layout.exception.NoSuchLayoutLocalizationException {
 
 		return getPersistence().remove(layoutLocalizationId);
 	}
@@ -886,14 +886,14 @@ public class LayoutLocalizationUtil {
 	}
 
 	/**
-	 * Returns the layout localization with the primary key or throws a <code>NoSuchLocalizationException</code> if it could not be found.
+	 * Returns the layout localization with the primary key or throws a <code>NoSuchLayoutLocalizationException</code> if it could not be found.
 	 *
 	 * @param layoutLocalizationId the primary key of the layout localization
 	 * @return the layout localization
-	 * @throws NoSuchLocalizationException if a layout localization with the primary key could not be found
+	 * @throws NoSuchLayoutLocalizationException if a layout localization with the primary key could not be found
 	 */
 	public static LayoutLocalization findByPrimaryKey(long layoutLocalizationId)
-		throws com.liferay.layout.exception.NoSuchLocalizationException {
+		throws com.liferay.layout.exception.NoSuchLayoutLocalizationException {
 
 		return getPersistence().findByPrimaryKey(layoutLocalizationId);
 	}

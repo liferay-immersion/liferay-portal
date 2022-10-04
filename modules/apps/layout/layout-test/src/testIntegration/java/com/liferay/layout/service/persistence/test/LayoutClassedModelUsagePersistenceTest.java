@@ -15,7 +15,7 @@
 package com.liferay.layout.service.persistence.test;
 
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
-import com.liferay.layout.exception.NoSuchClassedModelUsageException;
+import com.liferay.layout.exception.NoSuchLayoutClassedModelUsageException;
 import com.liferay.layout.model.LayoutClassedModelUsage;
 import com.liferay.layout.service.LayoutClassedModelUsageLocalServiceUtil;
 import com.liferay.layout.service.persistence.LayoutClassedModelUsagePersistence;
@@ -312,7 +312,7 @@ public class LayoutClassedModelUsagePersistenceTest {
 			existingLayoutClassedModelUsage, newLayoutClassedModelUsage);
 	}
 
-	@Test(expected = NoSuchClassedModelUsageException.class)
+	@Test(expected = NoSuchLayoutClassedModelUsageException.class)
 	public void testFindByPrimaryKeyMissing() throws Exception {
 		long pk = RandomTestUtil.nextLong();
 

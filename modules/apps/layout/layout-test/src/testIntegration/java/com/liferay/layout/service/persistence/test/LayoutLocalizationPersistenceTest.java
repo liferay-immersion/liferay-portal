@@ -15,7 +15,7 @@
 package com.liferay.layout.service.persistence.test;
 
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
-import com.liferay.layout.exception.NoSuchLocalizationException;
+import com.liferay.layout.exception.NoSuchLayoutLocalizationException;
 import com.liferay.layout.model.LayoutLocalization;
 import com.liferay.layout.service.LayoutLocalizationLocalServiceUtil;
 import com.liferay.layout.service.persistence.LayoutLocalizationPersistence;
@@ -257,7 +257,7 @@ public class LayoutLocalizationPersistenceTest {
 		Assert.assertEquals(existingLayoutLocalization, newLayoutLocalization);
 	}
 
-	@Test(expected = NoSuchLocalizationException.class)
+	@Test(expected = NoSuchLayoutLocalizationException.class)
 	public void testFindByPrimaryKeyMissing() throws Exception {
 		long pk = RandomTestUtil.nextLong();
 

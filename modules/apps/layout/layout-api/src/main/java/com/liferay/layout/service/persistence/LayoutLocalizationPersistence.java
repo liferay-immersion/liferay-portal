@@ -14,7 +14,7 @@
 
 package com.liferay.layout.service.persistence;
 
-import com.liferay.layout.exception.NoSuchLocalizationException;
+import com.liferay.layout.exception.NoSuchLayoutLocalizationException;
 import com.liferay.layout.model.LayoutLocalization;
 import com.liferay.portal.kernel.service.persistence.BasePersistence;
 import com.liferay.portal.kernel.service.persistence.change.tracking.CTPersistence;
@@ -110,13 +110,13 @@ public interface LayoutLocalizationPersistence
 	 * @param uuid the uuid
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the first matching layout localization
-	 * @throws NoSuchLocalizationException if a matching layout localization could not be found
+	 * @throws NoSuchLayoutLocalizationException if a matching layout localization could not be found
 	 */
 	public LayoutLocalization findByUuid_First(
 			String uuid,
 			com.liferay.portal.kernel.util.OrderByComparator<LayoutLocalization>
 				orderByComparator)
-		throws NoSuchLocalizationException;
+		throws NoSuchLayoutLocalizationException;
 
 	/**
 	 * Returns the first layout localization in the ordered set where uuid = &#63;.
@@ -136,13 +136,13 @@ public interface LayoutLocalizationPersistence
 	 * @param uuid the uuid
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the last matching layout localization
-	 * @throws NoSuchLocalizationException if a matching layout localization could not be found
+	 * @throws NoSuchLayoutLocalizationException if a matching layout localization could not be found
 	 */
 	public LayoutLocalization findByUuid_Last(
 			String uuid,
 			com.liferay.portal.kernel.util.OrderByComparator<LayoutLocalization>
 				orderByComparator)
-		throws NoSuchLocalizationException;
+		throws NoSuchLayoutLocalizationException;
 
 	/**
 	 * Returns the last layout localization in the ordered set where uuid = &#63;.
@@ -163,13 +163,13 @@ public interface LayoutLocalizationPersistence
 	 * @param uuid the uuid
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the previous, current, and next layout localization
-	 * @throws NoSuchLocalizationException if a layout localization with the primary key could not be found
+	 * @throws NoSuchLayoutLocalizationException if a layout localization with the primary key could not be found
 	 */
 	public LayoutLocalization[] findByUuid_PrevAndNext(
 			long layoutLocalizationId, String uuid,
 			com.liferay.portal.kernel.util.OrderByComparator<LayoutLocalization>
 				orderByComparator)
-		throws NoSuchLocalizationException;
+		throws NoSuchLayoutLocalizationException;
 
 	/**
 	 * Removes all the layout localizations where uuid = &#63; from the database.
@@ -187,15 +187,15 @@ public interface LayoutLocalizationPersistence
 	public int countByUuid(String uuid);
 
 	/**
-	 * Returns the layout localization where uuid = &#63; and groupId = &#63; or throws a <code>NoSuchLocalizationException</code> if it could not be found.
+	 * Returns the layout localization where uuid = &#63; and groupId = &#63; or throws a <code>NoSuchLayoutLocalizationException</code> if it could not be found.
 	 *
 	 * @param uuid the uuid
 	 * @param groupId the group ID
 	 * @return the matching layout localization
-	 * @throws NoSuchLocalizationException if a matching layout localization could not be found
+	 * @throws NoSuchLayoutLocalizationException if a matching layout localization could not be found
 	 */
 	public LayoutLocalization findByUUID_G(String uuid, long groupId)
-		throws NoSuchLocalizationException;
+		throws NoSuchLayoutLocalizationException;
 
 	/**
 	 * Returns the layout localization where uuid = &#63; and groupId = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
@@ -225,7 +225,7 @@ public interface LayoutLocalizationPersistence
 	 * @return the layout localization that was removed
 	 */
 	public LayoutLocalization removeByUUID_G(String uuid, long groupId)
-		throws NoSuchLocalizationException;
+		throws NoSuchLayoutLocalizationException;
 
 	/**
 	 * Returns the number of layout localizations where uuid = &#63; and groupId = &#63;.
@@ -309,13 +309,13 @@ public interface LayoutLocalizationPersistence
 	 * @param companyId the company ID
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the first matching layout localization
-	 * @throws NoSuchLocalizationException if a matching layout localization could not be found
+	 * @throws NoSuchLayoutLocalizationException if a matching layout localization could not be found
 	 */
 	public LayoutLocalization findByUuid_C_First(
 			String uuid, long companyId,
 			com.liferay.portal.kernel.util.OrderByComparator<LayoutLocalization>
 				orderByComparator)
-		throws NoSuchLocalizationException;
+		throws NoSuchLayoutLocalizationException;
 
 	/**
 	 * Returns the first layout localization in the ordered set where uuid = &#63; and companyId = &#63;.
@@ -337,13 +337,13 @@ public interface LayoutLocalizationPersistence
 	 * @param companyId the company ID
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the last matching layout localization
-	 * @throws NoSuchLocalizationException if a matching layout localization could not be found
+	 * @throws NoSuchLayoutLocalizationException if a matching layout localization could not be found
 	 */
 	public LayoutLocalization findByUuid_C_Last(
 			String uuid, long companyId,
 			com.liferay.portal.kernel.util.OrderByComparator<LayoutLocalization>
 				orderByComparator)
-		throws NoSuchLocalizationException;
+		throws NoSuchLayoutLocalizationException;
 
 	/**
 	 * Returns the last layout localization in the ordered set where uuid = &#63; and companyId = &#63;.
@@ -366,13 +366,13 @@ public interface LayoutLocalizationPersistence
 	 * @param companyId the company ID
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the previous, current, and next layout localization
-	 * @throws NoSuchLocalizationException if a layout localization with the primary key could not be found
+	 * @throws NoSuchLayoutLocalizationException if a layout localization with the primary key could not be found
 	 */
 	public LayoutLocalization[] findByUuid_C_PrevAndNext(
 			long layoutLocalizationId, String uuid, long companyId,
 			com.liferay.portal.kernel.util.OrderByComparator<LayoutLocalization>
 				orderByComparator)
-		throws NoSuchLocalizationException;
+		throws NoSuchLayoutLocalizationException;
 
 	/**
 	 * Removes all the layout localizations where uuid = &#63; and companyId = &#63; from the database.
@@ -458,13 +458,13 @@ public interface LayoutLocalizationPersistence
 	 * @param plid the plid
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the first matching layout localization
-	 * @throws NoSuchLocalizationException if a matching layout localization could not be found
+	 * @throws NoSuchLayoutLocalizationException if a matching layout localization could not be found
 	 */
 	public LayoutLocalization findByPlid_First(
 			long plid,
 			com.liferay.portal.kernel.util.OrderByComparator<LayoutLocalization>
 				orderByComparator)
-		throws NoSuchLocalizationException;
+		throws NoSuchLayoutLocalizationException;
 
 	/**
 	 * Returns the first layout localization in the ordered set where plid = &#63;.
@@ -484,13 +484,13 @@ public interface LayoutLocalizationPersistence
 	 * @param plid the plid
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the last matching layout localization
-	 * @throws NoSuchLocalizationException if a matching layout localization could not be found
+	 * @throws NoSuchLayoutLocalizationException if a matching layout localization could not be found
 	 */
 	public LayoutLocalization findByPlid_Last(
 			long plid,
 			com.liferay.portal.kernel.util.OrderByComparator<LayoutLocalization>
 				orderByComparator)
-		throws NoSuchLocalizationException;
+		throws NoSuchLayoutLocalizationException;
 
 	/**
 	 * Returns the last layout localization in the ordered set where plid = &#63;.
@@ -511,13 +511,13 @@ public interface LayoutLocalizationPersistence
 	 * @param plid the plid
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the previous, current, and next layout localization
-	 * @throws NoSuchLocalizationException if a layout localization with the primary key could not be found
+	 * @throws NoSuchLayoutLocalizationException if a layout localization with the primary key could not be found
 	 */
 	public LayoutLocalization[] findByPlid_PrevAndNext(
 			long layoutLocalizationId, long plid,
 			com.liferay.portal.kernel.util.OrderByComparator<LayoutLocalization>
 				orderByComparator)
-		throws NoSuchLocalizationException;
+		throws NoSuchLayoutLocalizationException;
 
 	/**
 	 * Removes all the layout localizations where plid = &#63; from the database.
@@ -535,15 +535,15 @@ public interface LayoutLocalizationPersistence
 	public int countByPlid(long plid);
 
 	/**
-	 * Returns the layout localization where languageId = &#63; and plid = &#63; or throws a <code>NoSuchLocalizationException</code> if it could not be found.
+	 * Returns the layout localization where languageId = &#63; and plid = &#63; or throws a <code>NoSuchLayoutLocalizationException</code> if it could not be found.
 	 *
 	 * @param languageId the language ID
 	 * @param plid the plid
 	 * @return the matching layout localization
-	 * @throws NoSuchLocalizationException if a matching layout localization could not be found
+	 * @throws NoSuchLayoutLocalizationException if a matching layout localization could not be found
 	 */
 	public LayoutLocalization findByL_P(String languageId, long plid)
-		throws NoSuchLocalizationException;
+		throws NoSuchLayoutLocalizationException;
 
 	/**
 	 * Returns the layout localization where languageId = &#63; and plid = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
@@ -573,7 +573,7 @@ public interface LayoutLocalizationPersistence
 	 * @return the layout localization that was removed
 	 */
 	public LayoutLocalization removeByL_P(String languageId, long plid)
-		throws NoSuchLocalizationException;
+		throws NoSuchLayoutLocalizationException;
 
 	/**
 	 * Returns the number of layout localizations where languageId = &#63; and plid = &#63;.
@@ -585,17 +585,17 @@ public interface LayoutLocalizationPersistence
 	public int countByL_P(String languageId, long plid);
 
 	/**
-	 * Returns the layout localization where groupId = &#63; and languageId = &#63; and plid = &#63; or throws a <code>NoSuchLocalizationException</code> if it could not be found.
+	 * Returns the layout localization where groupId = &#63; and languageId = &#63; and plid = &#63; or throws a <code>NoSuchLayoutLocalizationException</code> if it could not be found.
 	 *
 	 * @param groupId the group ID
 	 * @param languageId the language ID
 	 * @param plid the plid
 	 * @return the matching layout localization
-	 * @throws NoSuchLocalizationException if a matching layout localization could not be found
+	 * @throws NoSuchLayoutLocalizationException if a matching layout localization could not be found
 	 */
 	public LayoutLocalization findByG_L_P(
 			long groupId, String languageId, long plid)
-		throws NoSuchLocalizationException;
+		throws NoSuchLayoutLocalizationException;
 
 	/**
 	 * Returns the layout localization where groupId = &#63; and languageId = &#63; and plid = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
@@ -630,7 +630,7 @@ public interface LayoutLocalizationPersistence
 	 */
 	public LayoutLocalization removeByG_L_P(
 			long groupId, String languageId, long plid)
-		throws NoSuchLocalizationException;
+		throws NoSuchLayoutLocalizationException;
 
 	/**
 	 * Returns the number of layout localizations where groupId = &#63; and languageId = &#63; and plid = &#63;.
@@ -670,22 +670,22 @@ public interface LayoutLocalizationPersistence
 	 *
 	 * @param layoutLocalizationId the primary key of the layout localization
 	 * @return the layout localization that was removed
-	 * @throws NoSuchLocalizationException if a layout localization with the primary key could not be found
+	 * @throws NoSuchLayoutLocalizationException if a layout localization with the primary key could not be found
 	 */
 	public LayoutLocalization remove(long layoutLocalizationId)
-		throws NoSuchLocalizationException;
+		throws NoSuchLayoutLocalizationException;
 
 	public LayoutLocalization updateImpl(LayoutLocalization layoutLocalization);
 
 	/**
-	 * Returns the layout localization with the primary key or throws a <code>NoSuchLocalizationException</code> if it could not be found.
+	 * Returns the layout localization with the primary key or throws a <code>NoSuchLayoutLocalizationException</code> if it could not be found.
 	 *
 	 * @param layoutLocalizationId the primary key of the layout localization
 	 * @return the layout localization
-	 * @throws NoSuchLocalizationException if a layout localization with the primary key could not be found
+	 * @throws NoSuchLayoutLocalizationException if a layout localization with the primary key could not be found
 	 */
 	public LayoutLocalization findByPrimaryKey(long layoutLocalizationId)
-		throws NoSuchLocalizationException;
+		throws NoSuchLayoutLocalizationException;
 
 	/**
 	 * Returns the layout localization with the primary key or returns <code>null</code> if it could not be found.

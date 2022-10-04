@@ -11,7 +11,6 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
-
 package com.liferay.layout.exception;
 
 import com.liferay.portal.kernel.exception.NoSuchModelException;
@@ -19,20 +18,20 @@ import com.liferay.portal.kernel.exception.NoSuchModelException;
 /**
  * @author Brian Wing Shun Chan
  */
-public class NoSuchClassedModelUsageException extends NoSuchModelException {
+public class NoSuchLayoutLocalizationException extends NoSuchModelException {
 
-	public NoSuchClassedModelUsageException() {
+	public NoSuchLayoutLocalizationException() {
 	}
 
-	public NoSuchClassedModelUsageException(String msg) {
+	public NoSuchLayoutLocalizationException(String msg) {
 		super(msg);
 	}
 
-	public NoSuchClassedModelUsageException(String msg, Throwable throwable) {
+	public NoSuchLayoutLocalizationException(String msg, Throwable throwable) {
 		super(msg, throwable);
 	}
 
-	public NoSuchClassedModelUsageException(Throwable throwable) {
+	public NoSuchLayoutLocalizationException(Throwable throwable) {
 		super(throwable);
 	}
 
