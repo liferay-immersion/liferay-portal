@@ -25,7 +25,6 @@ import com.liferay.portal.kernel.service.LayoutLocalService;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceContextThreadLocal;
 
-import java.util.Date;
 import java.util.List;
 
 import org.osgi.service.component.annotations.Component;
@@ -64,8 +63,6 @@ public class LayoutLocalizationLocalServiceImpl
 
 		layoutLocalization.setCompanyId(companyId);
 
-		layoutLocalization.setCreateDate(new Date());
-		layoutLocalization.setModifiedDate(new Date());
 		layoutLocalization.setContent(content);
 		layoutLocalization.setLanguageId(languageId);
 		layoutLocalization.setPlid(plid);
@@ -110,7 +107,6 @@ public class LayoutLocalizationLocalServiceImpl
 				ServiceContextThreadLocal.getServiceContext());
 		}
 
-		layoutLocalization.setModifiedDate(new Date());
 		layoutLocalization.setContent(content);
 
 		return layoutLocalizationPersistence.update(layoutLocalization);
