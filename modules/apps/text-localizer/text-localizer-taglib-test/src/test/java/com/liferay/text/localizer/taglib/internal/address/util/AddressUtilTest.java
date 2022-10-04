@@ -54,7 +54,7 @@ public class AddressUtilTest {
 
 		LocaleThreadLocal.setThemeDisplayLocale(LocaleUtil.getDefault());
 
-		_localeStringHashMap = RandomTestUtil.randomLocaleStringMap(
+		_localeStringMap = RandomTestUtil.randomLocaleStringMap(
 			LocaleThreadLocal.getThemeDisplayLocale());
 	}
 
@@ -107,7 +107,7 @@ public class AddressUtilTest {
 
 						@Override
 						public String getTitle(Locale locale) {
-							return _localeStringHashMap.get(locale);
+							return _localeStringMap.get(locale);
 						}
 
 						@Override
@@ -119,7 +119,7 @@ public class AddressUtilTest {
 				}
 
 			},
-			_localeStringHashMap.get(LocaleUtil.getDefault()));
+			_localeStringMap.get(LocaleUtil.getDefault()));
 	}
 
 	@Test
@@ -161,7 +161,7 @@ public class AddressUtilTest {
 
 						@Override
 						public String getName() {
-							return _localeStringHashMap.get(
+							return _localeStringMap.get(
 								LocaleUtil.getDefault());
 						}
 
@@ -174,7 +174,7 @@ public class AddressUtilTest {
 				}
 
 			},
-			_localeStringHashMap.get(LocaleUtil.getDefault()));
+			_localeStringMap.get(LocaleUtil.getDefault()));
 	}
 
 	private void _testGetCountryNameOptional(
@@ -196,6 +196,6 @@ public class AddressUtilTest {
 	}
 
 	private static Locale _locale;
-	private static Map<Locale, String> _localeStringHashMap;
+	private static Map<Locale, String> _localeStringMap;
 
 }
