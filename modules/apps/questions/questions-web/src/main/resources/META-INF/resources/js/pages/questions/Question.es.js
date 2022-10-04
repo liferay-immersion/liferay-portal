@@ -348,7 +348,7 @@ export default withRouter(
 						>
 							<div>
 								{Liferay.Language.get(
-									'you-could-use-the-add-comment-to-continue-the-existing-thread-instead'
+									'you-can-add-a-comment-to-continue-the-existing-thread'
 								)}
 							</div>
 
