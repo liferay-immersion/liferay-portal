@@ -148,9 +148,6 @@ public class GetContentDashboardItemVersionsMVCResourceCommand
 			return JSONFactoryUtil.createJSONObject();
 		}
 
-		VersionableContentDashboardItem versionableContentDashboardItem =
-			(VersionableContentDashboardItem)contentDashboardItem;
-
 		HttpServletRequest httpServletRequest = _portal.getHttpServletRequest(
 			resourceRequest);
 
@@ -159,8 +156,10 @@ public class GetContentDashboardItemVersionsMVCResourceCommand
 				WebKeys.THEME_DISPLAY);
 
 		int displayVersions = ParamUtil.getInteger(
-			resourceRequest, "maxDisplayVersions",
-			_DEFAULT_MAX_DISPLAY_VERSIONS);
+			resourceRequest, "maxDisplayVersions", 10);
+
+		VersionableContentDashboardItem versionableContentDashboardItem =
+			(VersionableContentDashboardItem)contentDashboardItem;
 
 		List<ContentDashboardItemVersion> contentDashboardItemVersions =
 			versionableContentDashboardItem.getAllContentDashboardItemVersions(
@@ -185,8 +184,6 @@ public class GetContentDashboardItemVersionsMVCResourceCommand
 			}
 		);
 	}
-
-	private static final int _DEFAULT_MAX_DISPLAY_VERSIONS = 10;
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		GetContentDashboardItemVersionsMVCResourceCommand.class);
