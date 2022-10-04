@@ -302,11 +302,11 @@ public class EditCPInstanceMVCActionCommand extends BaseMVCActionCommand {
 	private CPInstance _updateCPInstance(ActionRequest actionRequest)
 		throws Exception {
 
+		String externalReferenceCode = ParamUtil.getString(
+			actionRequest, "externalReferenceCode");
 		long cpInstanceId = ParamUtil.getLong(actionRequest, "cpInstanceId");
 
 		String sku = ParamUtil.getString(actionRequest, "sku");
-		String externalReferenceCode = ParamUtil.getString(
-			actionRequest, "externalReferenceCode");
 		String gtin = ParamUtil.getString(actionRequest, "gtin");
 		String manufacturerPartNumber = ParamUtil.getString(
 			actionRequest, "manufacturerPartNumber");
