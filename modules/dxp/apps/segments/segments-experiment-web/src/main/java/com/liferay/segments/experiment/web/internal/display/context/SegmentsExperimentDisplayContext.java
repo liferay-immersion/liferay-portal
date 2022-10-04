@@ -74,25 +74,25 @@ import javax.servlet.http.HttpServletResponse;
 public class SegmentsExperimentDisplayContext {
 
 	public SegmentsExperimentDisplayContext(
-		LayoutLocalService layoutLocalService, Portal portal,
 		GroupLocalService groupLocalService,
 		HttpServletRequest httpServletRequest,
-		HttpServletResponse httpServletResponse, String pathToAssets,
+		HttpServletResponse httpServletResponse,
+		LayoutLocalService layoutLocalService, String pathToAssets,
+		Portal portal, SegmentsExperienceManager segmentsExperienceManager,
 		SegmentsExperienceService segmentsExperienceService,
 		SegmentsExperimentConfiguration segmentsExperimentConfiguration,
-		SegmentsExperienceManager segmentsExperienceManager,
 		SegmentsExperimentRelService segmentsExperimentRelService,
 		SegmentsExperimentService segmentsExperimentService) {
 
-		_layoutLocalService = layoutLocalService;
-		_portal = portal;
 		_groupLocalService = groupLocalService;
 		_httpServletRequest = httpServletRequest;
 		_httpServletResponse = httpServletResponse;
+		_layoutLocalService = layoutLocalService;
 		_pathToAssets = pathToAssets;
+		_portal = portal;
+		_segmentsExperienceManager = segmentsExperienceManager;
 		_segmentsExperienceService = segmentsExperienceService;
 		_segmentsExperimentConfiguration = segmentsExperimentConfiguration;
-		_segmentsExperienceManager = segmentsExperienceManager;
 		_segmentsExperimentRelService = segmentsExperimentRelService;
 		_segmentsExperimentService = segmentsExperimentService;
 

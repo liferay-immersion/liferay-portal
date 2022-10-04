@@ -343,14 +343,15 @@ public class SegmentsExperimentProductNavigationControlMenuEntry
 
 			SegmentsExperimentDisplayContext segmentsExperimentDisplayContext =
 				new SegmentsExperimentDisplayContext(
-					_layoutLocalService, _portal, _groupLocalService,
+					_groupLocalService,
 					(HttpServletRequest)pageContext.getRequest(),
 					(HttpServletResponse)pageContext.getResponse(),
-					_servletContext.getContextPath(),
-					_segmentsExperienceService,
-					_segmentsExperimentConfiguration,
+					_layoutLocalService, _servletContext.getContextPath(),
+					_portal,
 					new SegmentsExperienceManager(
 						_segmentsExperienceLocalService),
+					_segmentsExperienceService,
+					_segmentsExperimentConfiguration,
 					_segmentsExperimentRelService, _segmentsExperimentService);
 
 			_reactRenderer.renderReact(
