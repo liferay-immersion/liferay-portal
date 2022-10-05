@@ -93,9 +93,9 @@ public class JournalTransformerTest {
 
 		TemplateNode templateNode = nestedRepeatableFieldsTemplateNodes.get(0);
 
-		List<TemplateNode> children = templateNode.getChildren();
+		List<TemplateNode> childrenTemplateNodes = templateNode.getChildren();
 
-		TemplateNode firstChildTemplateNode = children.get(0);
+		TemplateNode firstChildTemplateNode = childrenTemplateNodes.get(0);
 
 		List<TemplateNode> firstChildTemplateNodeSiblings =
 			firstChildTemplateNode.getSiblings();
@@ -111,7 +111,6 @@ public class JournalTransformerTest {
 			firstChildTemplateNodeSiblings.size();
 
 		Assert.assertEquals(
-			"Compare sibling size after transform",
 			firstChildTemplateNodeSiblingsSize,
 			firstChildTemplateNodeSiblingsAfterTransformSize);
 
@@ -119,12 +118,15 @@ public class JournalTransformerTest {
 			nestedRepeatableFieldsTemplateNodes,
 			_getInitNestedRepeatableFieldsTemplateNode());
 
+		TemplateNode expectedNestedRepeatableFieldsTemplateNode =
+			_getExpectedNestedRepeatableFieldsTemplateNode();
+
 		TemplateNode backwardsCompatibilityTemplateNode =
 			backwardsCompatibilityTemplateNodes.get(0);
 
 		Assert.assertEquals(
-			backwardsCompatibilityTemplateNode.getSiblings(),
-			_getExpectedNestedRepeatableFieldsTemplateNode().getSiblings());
+			expectedNestedRepeatableFieldsTemplateNode.getSiblings(),
+			backwardsCompatibilityTemplateNode.getSiblings());
 	}
 
 	@Test
