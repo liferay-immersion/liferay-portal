@@ -116,7 +116,7 @@ public class AuditMessage implements Serializable {
 		_message = message;
 		_timestamp = (timestamp != null) ? timestamp : new Date();
 		_additionalInfoJSONObject =
-			(additionalInfoJSONObject != null) ? _additionalInfoJSONObject :
+			(additionalInfoJSONObject != null) ? additionalInfoJSONObject :
 				JSONFactoryUtil.createJSONObject();
 
 		AuditRequestThreadLocal auditRequestThreadLocal =
