@@ -80,18 +80,18 @@ public class RedirectPatternConfigurationProviderImpl
 			properties.put("patternStrings", new String[0]);
 		}
 		else {
-			String[] patternsArray = new String[patternStrings.size()];
+			String[] patternStringsArray = new String[patternStrings.size()];
 
 			int i = 0;
 
 			for (Map.Entry<String, String> entry : patternStrings.entrySet()) {
-				patternsArray[i] =
+				patternStringsArray[i] =
 					entry.getKey() + StringPool.SPACE + entry.getValue();
 
 				i++;
 			}
 
-			properties.put("patternStrings", patternsArray);
+			properties.put("patternStrings", patternStringsArray);
 		}
 
 		configuration.update(properties);

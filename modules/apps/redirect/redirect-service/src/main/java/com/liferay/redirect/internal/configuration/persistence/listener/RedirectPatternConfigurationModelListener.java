@@ -43,7 +43,8 @@ public class RedirectPatternConfigurationModelListener
 		throws ConfigurationModelListenerException {
 
 		try {
-			String[] patternStrings = (String[])properties.get("patterns");
+			String[] patternStrings = (String[])properties.get(
+				"patternStrings");
 
 			if (ArrayUtil.isEmpty(patternStrings)) {
 				return;
@@ -55,7 +56,7 @@ public class RedirectPatternConfigurationModelListener
 			_log.error(patternSyntaxException);
 
 			throw new ConfigurationModelListenerException(
-				Arrays.toString((String[])properties.get("patterns")) +
+				Arrays.toString((String[])properties.get("patternStrings")) +
 					" must contain regular expression/replacement pairs",
 				RedirectPatternConfiguration.class,
 				RedirectPatternConfigurationModelListener.class, properties);
