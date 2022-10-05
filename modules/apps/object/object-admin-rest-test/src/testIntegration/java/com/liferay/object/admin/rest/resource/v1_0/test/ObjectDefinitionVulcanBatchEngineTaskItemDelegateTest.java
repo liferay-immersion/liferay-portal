@@ -160,7 +160,7 @@ public class ObjectDefinitionVulcanBatchEngineTaskItemDelegateTest {
 	protected ObjectDefinition getTestObjectDefinition(String name) {
 		String sanitizedName = name.toLowerCase(LocaleUtil.getDefault());
 
-		ObjectDefinition objectDefinition = new ObjectDefinition() {
+		return new ObjectDefinition() {
 			{
 				accountEntryRestricted = false;
 				accountEntryRestrictedObjectFieldId = Long.valueOf(0);
@@ -199,19 +199,22 @@ public class ObjectDefinitionVulcanBatchEngineTaskItemDelegateTest {
 				restContextPath = StringUtil.toLowerCase(
 					RandomTestUtil.randomString());
 				scope = ObjectDefinitionConstants.SCOPE_COMPANY;
-				storageType = StringUtil.toLowerCase(
-					RandomTestUtil.randomString());
+
+				if (GetterUtil.getBoolean(
+						PropsUtil.get("feature.flag.LPS-135430"))) {
+
+					storageType = StringUtil.toLowerCase(
+						RandomTestUtil.randomString());
+				}
+				else {
+					storageType = StringPool.BLANK;					
+				}
+
 				system = RandomTestUtil.randomBoolean();
 				titleObjectFieldName = StringUtil.toLowerCase(
 					RandomTestUtil.randomString());
 			}
 		};
-
-		if (!GetterUtil.getBoolean(PropsUtil.get("feature.flag.LPS-135430"))) {
-			objectDefinition.setStorageType(StringPool.BLANK);
-		}
-
-		return objectDefinition;
 	}
 
 	@Inject
