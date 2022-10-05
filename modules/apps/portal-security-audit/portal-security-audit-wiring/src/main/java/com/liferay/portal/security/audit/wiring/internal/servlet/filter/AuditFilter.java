@@ -179,11 +179,11 @@ public class AuditFilter extends BaseFilter implements TryFilter {
 		if (authType.equals(CompanyConstants.AUTH_TYPE_EA)) {
 			return user.getEmailAddress();
 		}
-		else if (authType.equals(CompanyConstants.AUTH_TYPE_SN)) {
-			return user.getScreenName();
-		}
 		else if (authType.equals(CompanyConstants.AUTH_TYPE_ID)) {
 			return String.valueOf(user.getUserId());
+		}
+		else if (authType.equals(CompanyConstants.AUTH_TYPE_SN)) {
+			return user.getScreenName();
 		}
 
 		return StringPool.BLANK;
