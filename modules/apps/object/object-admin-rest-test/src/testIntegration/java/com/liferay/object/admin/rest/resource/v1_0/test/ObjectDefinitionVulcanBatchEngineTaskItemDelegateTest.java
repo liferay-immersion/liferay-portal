@@ -72,8 +72,7 @@ public class ObjectDefinitionVulcanBatchEngineTaskItemDelegateTest {
 	public void setUp() throws Exception {
 		_group = GroupTestUtil.addGroup();
 
-		_company = CompanyLocalServiceUtil.getCompany(
-			_group.getCompanyId());
+		_company = CompanyLocalServiceUtil.getCompany(_group.getCompanyId());
 
 		_objectDefinitionResource.setContextAcceptLanguage(
 			new AcceptLanguage() {
@@ -218,16 +217,17 @@ public class ObjectDefinitionVulcanBatchEngineTaskItemDelegateTest {
 		};
 	}
 
+	private Company _company;
+
 	@Inject
 	private PermissionCheckerFactory _defaultPermissionCheckerFactory;
+
+	private Group _group;
 
 	@Inject
 	private ObjectDefinitionLocalService _objectDefinitionLocalService;
 
 	@Inject
 	private ObjectDefinitionResource _objectDefinitionResource;
-
-	private Company _company;
-	private Group _group;
 
 }
