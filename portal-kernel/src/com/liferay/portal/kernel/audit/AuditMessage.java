@@ -145,7 +145,7 @@ public class AuditMessage implements Serializable {
 		_additionalInfoJSONObject = additionalInfoJSONObject;
 
 		if (_additionalInfoJSONObject == null) {
-			JSONFactoryUtil.createJSONObject();
+			_additionalInfoJSONObject = JSONFactoryUtil.createJSONObject();
 		}
 	}
 
