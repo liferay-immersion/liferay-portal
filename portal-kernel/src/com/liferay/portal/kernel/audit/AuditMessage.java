@@ -50,7 +50,7 @@ public class AuditMessage implements Serializable {
 
 		if (jsonObject.has(_CLIENT_IP)) {
 			_clientIP = jsonObject.getString(_CLIENT_IP);
-		}
+		}if tiny
 
 		_companyId = jsonObject.getLong(_COMPANY_ID);
 		_eventType = jsonObject.getString(_EVENT_TYPE);
@@ -114,6 +114,10 @@ public class AuditMessage implements Serializable {
 		_className = className;
 		_classPK = classPK;
 		_message = message;
+		_timestamp = (timestamp != null) ? timestamp : new Date();
+		_additionalInfoJSONObject =
+			(additionalInfoJSONObject != null) ? _additionalInfoJSONObject :
+				JSONFactoryUtil.createJSONObject();
 
 		AuditRequestThreadLocal auditRequestThreadLocal =
 			AuditRequestThreadLocal.getAuditThreadLocal();
@@ -124,15 +128,6 @@ public class AuditMessage implements Serializable {
 		_serverPort = auditRequestThreadLocal.getServerPort();
 		_sessionID = auditRequestThreadLocal.getSessionID();
 
-		_timestamp = timestamp;
-
-		if (_timestamp == null) {
-			_timestamp = new Date();
-		}
-
-		_additionalInfoJSONObject =
-			(additionalInfoJSONObject != null) ? _additionalInfoJSONObject :
-				JSONFactoryUtil.createJSONObject();
 		_userEmailAddress = auditRequestThreadLocal.getRealUserEmailAddress();
 
 		long realUserId = auditRequestThreadLocal.getRealUserId();
