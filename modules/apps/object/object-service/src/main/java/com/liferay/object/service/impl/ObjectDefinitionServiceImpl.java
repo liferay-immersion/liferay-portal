@@ -115,6 +115,22 @@ public class ObjectDefinitionServiceImpl
 	}
 
 	@Override
+	public ObjectDefinition getObjectDefinitionByExternalReferenceCode(
+			String externalReferenceCode, long companyId)
+		throws PortalException {
+
+		ObjectDefinition objectDefinition =
+			objectDefinitionLocalService.
+				getObjectDefinitionByExternalReferenceCode(
+					companyId, externalReferenceCode);
+
+		_objectDefinitionModelResourcePermission.check(
+			getPermissionChecker(), objectDefinition, ActionKeys.VIEW);
+
+		return objectDefinition;
+	}
+
+	@Override
 	public List<ObjectDefinition> getObjectDefinitions(int start, int end) {
 		return objectDefinitionLocalService.getObjectDefinitions(start, end);
 	}
