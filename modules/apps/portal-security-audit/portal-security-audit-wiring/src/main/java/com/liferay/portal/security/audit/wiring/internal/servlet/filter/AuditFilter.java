@@ -105,7 +105,7 @@ public class AuditFilter extends BaseFilter implements TryFilter {
 
 			emailAddress = user.getEmailAddress();
 
-			auditRequestThreadLocal.setRealUserEmail(emailAddress);
+			auditRequestThreadLocal.setRealUserEmailAddress(emailAddress);
 
 			auditRequestThreadLocal.setRealUserId(userId);
 			auditRequestThreadLocal.setRealUserLogin(userLogin);

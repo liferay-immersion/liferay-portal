@@ -123,7 +123,7 @@ public class AuditMessage implements Serializable {
 		_serverName = auditRequestThreadLocal.getServerName();
 		_serverPort = auditRequestThreadLocal.getServerPort();
 		_sessionID = auditRequestThreadLocal.getSessionID();
-		_userEmail = auditRequestThreadLocal.getRealUserEmail();
+		_userEmail = auditRequestThreadLocal.getRealUserEmailAddress();
 
 		_timestamp = timestamp;
 
