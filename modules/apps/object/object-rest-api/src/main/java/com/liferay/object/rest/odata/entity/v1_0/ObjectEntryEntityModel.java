@@ -42,14 +42,11 @@ public class ObjectEntryEntityModel implements EntityModel {
 
 	public ObjectEntryEntityModel(List<ObjectField> objectFields) {
 		_entityFieldsMap = HashMapBuilder.<String, EntityField>put(
-<<<<<<< HEAD
 			"createDate",
 			new DateTimeEntityField(
 				"createDate", locale -> Field.CREATE_DATE,
 				locale -> Field.CREATE_DATE)
 		).put(
-=======
->>>>>>> 7c124b6 (LPS-163011 Use the proper map to filterable fields, ES and Relational DB cannot be use the same EntityModel)
 			"creator", new StringEntityField("creator", locale -> "creator")
 		).put(
 			"creatorId",
