@@ -65,10 +65,11 @@ public class LoginPostAction extends Action {
 		User user = _portal.getUser(httpServletRequest);
 
 		InvokerFilterChain invokerFilterChain = new InvokerFilterChain(
-			(req, res) -> {
+			(servletRequest, servletResponse) -> {
 			});
 
-		invokerFilterChain.addFilter(_auditFilter);
+		invokerFilterChain.addFilter(_filter);
+
 		invokerFilterChain.doFilter(httpServletRequest, httpServletResponse);
 
 		AuditMessage auditMessage = new AuditMessage(
@@ -82,7 +83,7 @@ public class LoginPostAction extends Action {
 	@Reference(
 		target = "(component.name=com.liferay.portal.security.audit.wiring.internal.servlet.filter.AuditFilter)"
 	)
-	private Filter _auditFilter;
+	private Filter _filter;
 
 	@Reference
 	private AuditRouter _auditRouter;
