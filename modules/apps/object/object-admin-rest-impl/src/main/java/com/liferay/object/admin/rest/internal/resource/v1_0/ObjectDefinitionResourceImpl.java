@@ -115,7 +115,7 @@ public class ObjectDefinitionResourceImpl
 			com.liferay.object.model.ObjectDefinition
 				serviceBuilderObjectDefinition =
 					_objectDefinitionService.
-						fetchObjectDefinitionByExternalReferenceCode(
+						getObjectDefinitionByExternalReferenceCode(
 							objectDefinition.getExternalReferenceCode(),
 							contextCompany.getCompanyId());
 
