@@ -68,17 +68,19 @@ public class EditRedirectPatternsMVCActionCommand extends BaseMVCActionCommand {
 	private Map<String, String> _getPatternStrings(
 		ActionRequest actionRequest) {
 
-		Map<String, String> redirectPatterns = new LinkedHashMap<>();
+		Map<String, String> patternStrings = new LinkedHashMap<>();
 
 		Map<String, String[]> parameterMap = actionRequest.getParameterMap();
 
 		for (int i = 0; parameterMap.containsKey("pattern_" + i); i++) {
-			String pattern = null;
+			String patternString = null;
 
-			String[] patterns = parameterMap.get("pattern_" + i);
+			String[] patterStrings = parameterMap.get("pattern_" + i);
 
-			if ((patterns.length != 0) && Validator.isNotNull(patterns[0])) {
-				pattern = patterns[0];
+			if ((patterStrings.length != 0) &&
+				Validator.isNotNull(patterStrings[0])) {
+
+				patternString = patterStrings[0];
 			}
 
 			String destinationURL = null;
@@ -91,12 +93,12 @@ public class EditRedirectPatternsMVCActionCommand extends BaseMVCActionCommand {
 				destinationURL = destinationURLs[0];
 			}
 
-			if ((pattern != null) || (destinationURL != null)) {
-				redirectPatterns.put(pattern, destinationURL);
+			if ((patternString != null) || (destinationURL != null)) {
+				patternStrings.put(patternString, destinationURL);
 			}
 		}
 
-		return redirectPatterns;
+		return patternStrings;
 	}
 
 	@Reference
