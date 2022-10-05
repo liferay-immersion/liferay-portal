@@ -188,7 +188,6 @@ public class ObjectDefinitionVulcanBatchEngineTaskItemDelegateTest {
 						}
 					}
 				};
-
 				panelAppOrder = StringUtil.toLowerCase(
 					RandomTestUtil.randomString());
 				panelCategoryKey = StringUtil.toLowerCase(
