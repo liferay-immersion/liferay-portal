@@ -50,7 +50,7 @@ public class AuditMessage implements Serializable {
 
 		if (jsonObject.has(_CLIENT_IP)) {
 			_clientIP = jsonObject.getString(_CLIENT_IP);
-		}if tiny
+		}
 
 		_companyId = jsonObject.getLong(_COMPANY_ID);
 		_eventType = jsonObject.getString(_EVENT_TYPE);
