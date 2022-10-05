@@ -111,6 +111,28 @@ public class TemplateNode extends LinkedHashMap<String, Object> {
 		_siblingTemplateNodes.add(templateNode);
 	}
 
+	@Override
+	public Object clone() {
+		TemplateNode templateNode = new TemplateNode(
+			_themeDisplay, getName(), getData(), getType(), getAttributes());
+
+		for (Map.Entry<String, TemplateNode> entry :
+				_childTemplateNodes.entrySet()) {
+
+			templateNode.appendChild(entry.getValue());
+		}
+
+		for (TemplateNode node : _siblingTemplateNodes) {
+			templateNode.appendSibling(node);
+		}
+
+		templateNode.appendOptions(getOptions());
+
+		templateNode.appendOptionsMap(getOptionsMap());
+
+		return templateNode;
+	}
+
 	public String getAttribute(String name) {
 		Map<String, String> attributes = getAttributes();
 
