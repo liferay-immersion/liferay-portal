@@ -37,6 +37,6 @@ public interface RedirectPatternConfiguration {
 		description = "redirect-patterns",
 		name = "redirect-patterns-description", required = false
 	)
-	public String[] patterns();
+	public String[] patternStrings();
 
 }

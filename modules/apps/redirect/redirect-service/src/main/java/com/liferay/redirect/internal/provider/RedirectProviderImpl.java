@@ -130,7 +130,7 @@ public class RedirectProviderImpl
 
 		_patternStrings.put(
 			groupId,
-			PatternUtil.parse(redirectPatternConfiguration.patterns()));
+			PatternUtil.parse(redirectPatternConfiguration.patternStrings()));
 	}
 
 	protected void setPatternStrings(
