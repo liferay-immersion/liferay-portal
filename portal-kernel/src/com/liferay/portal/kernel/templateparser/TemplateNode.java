@@ -122,12 +122,11 @@ public class TemplateNode extends LinkedHashMap<String, Object> {
 			templateNode.appendChild(entry.getValue());
 		}
 
-		for (TemplateNode node : _siblingTemplateNodes) {
-			templateNode.appendSibling(node);
+		for (TemplateNode siblingTemplateNode : _siblingTemplateNodes) {
+			templateNode.appendSibling(siblingTemplateNode);
 		}
 
 		templateNode.appendOptions(getOptions());
-
 		templateNode.appendOptionsMap(getOptionsMap());
 
 		return templateNode;
