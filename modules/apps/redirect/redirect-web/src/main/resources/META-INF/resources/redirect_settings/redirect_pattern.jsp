@@ -34,7 +34,7 @@ RedirectPatternConfigurationDisplayContext redirectPatternConfigurationDisplayCo
 
 				<react:component
 					module="js/RedirectPatterns"
-					props="<%= redirectPatternConfigurationDisplayContext.getRedirectPatternsData() %>"
+					props="<%= redirectPatternConfigurationDisplayContext.getRedirectPatterns() %>"
 				/>
 			</div>
 		</clay:sheet-section>

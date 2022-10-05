@@ -14,7 +14,6 @@
 
 package com.liferay.redirect.web.internal.display.context;
 
-import com.liferay.portal.kernel.module.configuration.ConfigurationException;
 import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
 import com.liferay.portal.kernel.portlet.url.builder.PortletURLBuilder;
 import com.liferay.portal.kernel.util.HashMapBuilder;
@@ -59,9 +58,7 @@ public class RedirectPatternConfigurationDisplayContext {
 		).buildString();
 	}
 
-	public Map<String, Object> getRedirectPatternsMap()
-		throws ConfigurationException {
-
+	public Map<String, Object> getRedirectPatterns() {
 		return HashMapBuilder.<String, Object>put(
 			"patterns",
 			() -> {
