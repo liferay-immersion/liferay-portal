@@ -91,11 +91,12 @@ public class AuditFilter extends BaseFilter implements TryFilter {
 		auditRequestThreadLocal.setQueryString(
 			httpServletRequest.getQueryString());
 
+		String userEmailAddress = StringPool.BLANK;
+
 		HttpSession httpSession = httpServletRequest.getSession();
 
 		Long userId = (Long)httpSession.getAttribute(WebKeys.USER_ID);
 
-		String userEmailAddress = StringPool.BLANK;
 		String userLogin = StringPool.BLANK;
 
 		if (userId != null) {
