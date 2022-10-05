@@ -70,12 +70,10 @@ public class ObjectDefinitionVulcanBatchEngineTaskItemDelegateTest {
 
 	@Before
 	public void setUp() throws Exception {
-		_testGroup = GroupTestUtil.addGroup();
+		_group = GroupTestUtil.addGroup();
 
-		_testCompany = CompanyLocalServiceUtil.getCompany(
-			_testGroup.getCompanyId());
-
-		_objectDefinitionResource.setContextCompany(_testCompany);
+		_company = CompanyLocalServiceUtil.getCompany(
+			_group.getCompanyId());
 
 		_objectDefinitionResource.setContextAcceptLanguage(
 			new AcceptLanguage() {
@@ -96,15 +94,16 @@ public class ObjectDefinitionVulcanBatchEngineTaskItemDelegateTest {
 				}
 
 			});
+		_objectDefinitionResource.setContextCompany(_company);
 
 		PermissionThreadLocal.setPermissionChecker(
 			_defaultPermissionCheckerFactory.create(
-				UserTestUtil.getAdminUser(_testCompany.getCompanyId())));
+				UserTestUtil.getAdminUser(_company.getCompanyId())));
 	}
 
 	@After
 	public void tearDown() throws Exception {
-		GroupTestUtil.deleteGroup(_testGroup);
+		GroupTestUtil.deleteGroup(_group);
 	}
 
 	@Test
@@ -144,14 +143,14 @@ public class ObjectDefinitionVulcanBatchEngineTaskItemDelegateTest {
 		com.liferay.object.model.ObjectDefinition
 			serviceBuilderObjectDefinition =
 				_objectDefinitionLocalService.fetchObjectDefinition(
-					_testCompany.getCompanyId(), "C_Oapproved");
+					_company.getCompanyId(), "C_Oapproved");
 
 		Assert.assertNotNull(serviceBuilderObjectDefinition);
 		Assert.assertTrue(serviceBuilderObjectDefinition.getActive());
 
 		serviceBuilderObjectDefinition =
 			_objectDefinitionLocalService.fetchObjectDefinition(
-				_testCompany.getCompanyId(), "C_Odraft");
+				_company.getCompanyId(), "C_Odraft");
 
 		Assert.assertNotNull(serviceBuilderObjectDefinition);
 		Assert.assertFalse(serviceBuilderObjectDefinition.getActive());
@@ -228,7 +227,7 @@ public class ObjectDefinitionVulcanBatchEngineTaskItemDelegateTest {
 	@Inject
 	private ObjectDefinitionResource _objectDefinitionResource;
 
-	private Company _testCompany;
-	private Group _testGroup;
+	private Company _company;
+	private Group _group;
 
 }
