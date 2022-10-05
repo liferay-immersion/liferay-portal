@@ -42,27 +42,26 @@ public class ObjectEntryEntityModel implements EntityModel {
 
 	public ObjectEntryEntityModel(List<ObjectField> objectFields) {
 		_entityFieldsMap = HashMapBuilder.<String, EntityField>put(
-			"creator",
-			new StringEntityField("creator", locale -> Field.USER_NAME)
+			"createDate",
+			new DateTimeEntityField(
+				"createDate", locale -> Field.CREATE_DATE,
+				locale -> Field.CREATE_DATE)
+		).put(
+			"creator", new StringEntityField("creator", locale -> "creator")
 		).put(
 			"creatorId",
 			new IntegerEntityField("creatorId", locale -> Field.USER_ID)
-		).put(
-			"dateCreated",
-			new DateTimeEntityField(
-				"dateCreated", locale -> Field.CREATE_DATE,
-				locale -> Field.CREATE_DATE)
-		).put(
-			"dateModified",
-			new DateTimeEntityField(
-				"dateModified", locale -> "modifiedDate",
-				locale -> "modifiedDate")
 		).put(
 			"externalReferenceCode",
 			() -> new StringEntityField(
 				"externalReferenceCode", locale -> "externalReferenceCode")
 		).put(
 			"id", new IdEntityField("id", locale -> "id", String::valueOf)
+		).put(
+			"modifiedDate",
+			new DateTimeEntityField(
+				"modifiedDate", locale -> "modifiedDate",
+				locale -> "modifiedDate")
 		).put(
 			"objectDefinitionId",
 			new IntegerEntityField(
