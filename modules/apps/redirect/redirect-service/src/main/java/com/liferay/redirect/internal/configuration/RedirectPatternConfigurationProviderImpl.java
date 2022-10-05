@@ -76,23 +76,15 @@ public class RedirectPatternConfigurationProviderImpl
 			properties = configuration.getProperties();
 		}
 
-		_updatePatternsProperty(properties, patternStrings);
-
-		configuration.update(properties);
-	}
-
-	private void _updatePatternsProperty(
-		Dictionary<String, Object> properties, Map<String, String> patterns) {
-
-		if (patterns.isEmpty()) {
+		if (patternStrings.isEmpty()) {
 			properties.put("patterns", new String[0]);
 		}
 		else {
-			String[] patternsArray = new String[patterns.size()];
+			String[] patternsArray = new String[patternStrings.size()];
 
 			int i = 0;
 
-			for (Map.Entry<String, String> entry : patterns.entrySet()) {
+			for (Map.Entry<String, String> entry : patternStrings.entrySet()) {
 				patternsArray[i] =
 					entry.getKey() + StringPool.SPACE + entry.getValue();
 
@@ -101,6 +93,8 @@ public class RedirectPatternConfigurationProviderImpl
 
 			properties.put("patterns", patternsArray);
 		}
+
+		configuration.update(properties);
 	}
 
 	@Reference
