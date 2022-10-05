@@ -36,13 +36,12 @@ import java.util.List;
 public class KBArticleNavigationFragmentDisplayContext {
 
 	public KBArticleNavigationFragmentDisplayContext(
-		int maxNestingLevel,
 		InfoItemFriendlyURLProvider<KBArticle> infoItemFriendlyURLProvider,
-		KBArticle kbArticle) {
+		KBArticle kbArticle, int maxNestingLevel) {
 
-		_maxNestingLevel = maxNestingLevel;
 		_infoItemFriendlyURLProvider = infoItemFriendlyURLProvider;
 		_kbArticle = kbArticle;
+		_maxNestingLevel = maxNestingLevel;
 	}
 
 	public String getKBArticleCssClass(KBArticle kbArticle, int level)

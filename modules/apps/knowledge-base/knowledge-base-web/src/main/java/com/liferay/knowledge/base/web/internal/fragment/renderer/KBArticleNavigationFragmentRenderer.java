@@ -84,7 +84,7 @@ public class KBArticleNavigationFragmentRenderer implements FragmentRenderer {
 						),
 						JSONUtil.put(
 							"defaultValue",
-							String.valueOf(_DEFAULT_MAX_NESTING_LEVEL)
+							String.valueOf(_MAX_NESTING_LEVEL)
 						).put(
 							"label", "max-nesting-level"
 						).put(
@@ -152,8 +152,8 @@ public class KBArticleNavigationFragmentRenderer implements FragmentRenderer {
 			httpServletRequest.setAttribute(
 				KBArticleNavigationFragmentDisplayContext.class.getName(),
 				new KBArticleNavigationFragmentDisplayContext(
-					_getMaxNestingLevel(fragmentRendererContext),
-					_infoItemFriendlyURLProvider, kbArticle));
+					_infoItemFriendlyURLProvider, kbArticle,
+					_getMaxNestingLevel(fragmentRendererContext)));
 
 			RequestDispatcher requestDispatcher =
 				_servletContext.getRequestDispatcher("/navigation/view.jsp");
@@ -236,7 +236,7 @@ public class KBArticleNavigationFragmentRenderer implements FragmentRenderer {
 				getConfiguration(fragmentRendererContext),
 				fragmentEntryLink.getEditableValues(),
 				fragmentRendererContext.getLocale(), "maxNestingLevel"),
-			_DEFAULT_MAX_NESTING_LEVEL);
+			_MAX_NESTING_LEVEL);
 	}
 
 	private void _printPortletMessageInfo(
@@ -271,7 +271,7 @@ public class KBArticleNavigationFragmentRenderer implements FragmentRenderer {
 				).build()));
 	}
 
-	private static final int _DEFAULT_MAX_NESTING_LEVEL = 3;
+	private static final int _MAX_NESTING_LEVEL = 3;
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		KBArticleNavigationFragmentRenderer.class);
