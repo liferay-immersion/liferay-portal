@@ -95,19 +95,20 @@ public class AuditFilter extends BaseFilter implements TryFilter {
 
 		Long userId = (Long)httpSession.getAttribute(WebKeys.USER_ID);
 
-		String emailAddress = StringPool.BLANK;
+		String userEmailAddress = StringPool.BLANK;
 		String userLogin = StringPool.BLANK;
 
 		if (userId != null) {
 			User user = _userLocalService.getUser(userId);
 
-			userLogin = _getUserLogin(user);
+			userEmailAddress = user.getEmailAddress();
 
-			emailAddress = user.getEmailAddress();
-
-			auditRequestThreadLocal.setRealUserEmailAddress(emailAddress);
+			auditRequestThreadLocal.setRealUserEmailAddress(userEmailAddress);
 
 			auditRequestThreadLocal.setRealUserId(userId);
+
+			userLogin = _getUserLogin(user);
+
 			auditRequestThreadLocal.setRealUserLogin(userLogin);
 		}
 
@@ -138,8 +139,9 @@ public class AuditFilter extends BaseFilter implements TryFilter {
 		httpServletResponse.setHeader(HttpHeaders.X_REQUEST_ID, xRequestId);
 
 		_auditLogContext.setContext(
-			remoteAddr, _portal.getCompanyId(httpServletRequest), emailAddress,
-			httpServletRequest.getServerName(), userId, userLogin, xRequestId);
+			remoteAddr, _portal.getCompanyId(httpServletRequest),
+			httpServletRequest.getServerName(), userEmailAddress, userId,
+			userLogin, xRequestId);
 
 		return null;
 	}
@@ -258,8 +260,8 @@ public class AuditFilter extends BaseFilter implements TryFilter {
 		}
 
 		public void setContext(
-			String clientIP, long companyId, String emailAddress,
-			String serverName, Long userId, String userLogin,
+			String clientIP, long companyId, String serverName,
+			String userEmailAddress, Long userId, String userLogin,
 			String xRequestId) {
 
 			_contexts.set(
@@ -268,9 +270,9 @@ public class AuditFilter extends BaseFilter implements TryFilter {
 				).put(
 					"companyId", String.valueOf(companyId)
 				).put(
-					"emailAddress", emailAddress
-				).put(
 					"serverName", serverName
+				).put(
+					"userEmailAddress", userEmailAddress
 				).put(
 					"userId", (userId != null) ? String.valueOf(userId) : ""
 				).put(
