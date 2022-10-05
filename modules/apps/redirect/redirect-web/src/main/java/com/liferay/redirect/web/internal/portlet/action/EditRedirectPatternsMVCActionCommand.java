@@ -93,7 +93,7 @@ public class EditRedirectPatternsMVCActionCommand extends BaseMVCActionCommand {
 				destinationURL = destinationURLs[0];
 			}
 
-			if ((patternString != null) || (destinationURL != null)) {
+			if ((patternString != null) && (destinationURL != null)) {
 				patternStrings.put(patternString, destinationURL);
 			}
 		}
