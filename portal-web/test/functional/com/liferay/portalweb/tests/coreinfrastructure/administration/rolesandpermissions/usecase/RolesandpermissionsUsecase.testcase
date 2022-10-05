@@ -44,22 +44,6 @@ definition {
 		}
 	}
 
-	@description = "This is a use case for LPS-132482."
-	@priority = "5"
-	test AssertSelectAllCheckboxDisplayPorperlyUnderDefinePermissionsTab {
-		ApplicationsMenu.gotoPortlet(
-			category = "Users",
-			panel = "Control Panel",
-			portlet = "Roles");
-
-		RoleNavigator.gotoDefineRolePermissions(
-			permissionNavigationKey = "CONTROL_PANEL_USERS_USERS_AND_ORGANIZATIONS",
-			portlet = "Users and Organizations",
-			roleTitle = "Guest");
-
-		AssertElementPresent.assertVisible(locator1 = "RolesPermissions#CONTROL_PANEL_CUSTOM_OBJECTS_PERMISSIONS_APPLICATION_PERMISSION_ACTION_CHECKBOX");
-	}
-
 	@description = "This is a use case for LPS-133818. Able to add Site Administration permissions for specific site."
 	@priority = "4"
 	test CanAddSitePermissionForSpecificSite {
@@ -69,12 +53,9 @@ definition {
 			roleKey = "Roles Regrole Name",
 			roleTitle = "Roles Regrole Name");
 
-		ApplicationsMenu.gotoPortlet(
-			category = "Users",
-			panel = "Control Panel",
-			portlet = "Roles");
+		Role.openRolesAdmin();
 
-		Role.definePermissionsCP(
+		Role.definePermissionCmdCP(
 			permissionDefinitionKey = "SITE_ADMIN_CONTENT_DOCUMENTS_AND_MEDIA_GENERAL_PERMISSIONS_ACCESS_IN_SITE_ADMINISTRATION_CHECKBOX",
 			permissionDefinitionValue = "Access in Site and Asset Library Administration",
 			roleTitle = "Roles Regrole Name",
@@ -96,79 +77,6 @@ definition {
 			siteNameScope = "${siteName}");
 
 		AssertConsoleTextNotPresent(value1 = "javax.portlet.PortletException");
-	}
-
-	@priority = "4"
-	test CanRemoveSiteInScope {
-		property test.name.skip.portal.instance = "RolesandpermissionsUsecase#CanRemoveSiteInScope";
-
-		var siteName = TestCase.getSiteName(siteName = "${siteName}");
-
-		JSONRole.addRegularRole(
-			roleKey = "Remove Permission Scope",
-			roleTitle = "Remove Permission Scope");
-
-		ApplicationsMenu.gotoPortlet(
-			category = "Users",
-			panel = "Control Panel",
-			portlet = "Roles");
-
-		Role.definePermissionsCP(
-			permissionDefinitionKey = "SITE_ADMIN_APPLICATIONS_DOCUMENTS_AND_MEDIA_RESOURCE_PERMISSIONS_DOCUMENT_VIEW_CHECKBOX",
-			permissionDefinitionValue = "View",
-			roleTitle = "Remove Permission Scope",
-			siteNameScope = "${siteName}");
-
-		Role.viewPermissionCP(
-			permissionDefinitionValue = "View",
-			permissionNavigationValue = "Documents and Media > Document",
-			siteNameScope = "${siteName}");
-
-		ApplicationsMenu.gotoPortlet(
-			category = "Users",
-			panel = "Control Panel",
-			portlet = "Roles");
-
-		Role.definePermissionsCP(
-			permissionDefinitionKey = "SITE_ADMIN_APPLICATIONS_DOCUMENTS_AND_MEDIA_RESOURCE_PERMISSIONS_DOCUMENT_VIEW_CHECKBOX",
-			permissionDefinitionValue = "View",
-			removeSiteScope = "${siteName}",
-			roleTitle = "Remove Permission Scope");
-
-		Role.viewPermissionCP(
-			permissionDefinitionValue = "View",
-			permissionNavigationValue = "Documents and Media > Document",
-			siteNameScope = "All Sites and Asset Libraries");
-	}
-
-	@description = "This is a use case for LPS-116055."
-	@priority = "5"
-	test ChangeScope {
-		property test.name.skip.portal.instance = "RolesandpermissionsUsecase#ChangeScope";
-
-		var siteName = TestCase.getSiteName(siteName = "${siteName}");
-
-		JSONRole.addRegularRole(
-			roleKey = "Permission Scope",
-			roleTitle = "Permission Scope");
-
-		ApplicationsMenu.gotoPortlet(
-			category = "Users",
-			panel = "Control Panel",
-			portlet = "Roles");
-
-		Role.definePermissionsCP(
-			permissionDefinitionKey = "SITE_ADMIN_APPLICATIONS_DOCUMENTS_AND_MEDIA_RESOURCE_PERMISSIONS_DOCUMENT_VIEW_CHECKBOX",
-			permissionDefinitionValue = "View",
-			roleTitle = "Permission Scope",
-			siteNameScope = "${siteName}");
-
-		Role.viewPermissionCP(
-			permissionDefinitionValue = "View",
-			permissionNavigationValue = "Documents and Media > Document",
-			siteNameScope = "${siteName}");
-
-		AssertConsoleTextNotPresent(value1 = "java.lang.NumberFormatException");
 	}
 
 	@description = "This is a test for LPS-148855. The default site role shouldn't be inherited by Guest."
@@ -441,10 +349,13 @@ definition {
 			permissionNavigationValue = "Web Content > Web Content Article");
 
 		Role.viewPermissionCP(
-			assigneeName = "Site Name",
-			assigneeType = "Sites",
 			permissionDefinitionValue = "Update Discussion",
 			permissionNavigationValue = "Web Content > Web Content Article");
+
+		Role.viewAssignee(
+			assigneeName = "Site Name",
+			assigneeType = "Sites",
+			roleTitle = "Web Content Comment Reviewer");
 
 		Role.openRolesAdmin();
 
@@ -461,19 +372,13 @@ definition {
 
 		var siteName = TestCase.getSiteName(siteName = "${siteName}");
 
-		ApplicationsMenu.gotoPortlet(
-			category = "Users",
-			panel = "Control Panel",
-			portlet = "Roles");
+		Role.openRolesAdmin();
 
 		Role.add(roleTitle = "Group Scope Role Name");
 
-		ApplicationsMenu.gotoPortlet(
-			category = "Users",
-			panel = "Control Panel",
-			portlet = "Roles");
+		Role.openRolesAdmin();
 
-		Role.definePermissionsCP(
+		Role.definePermissionCmdCP(
 			permissionDefinitionKey = "SITE_ADMIN_APPLICATIONS_BOOKMARKS_RESOURCE_PERMISSIONS_BOOKMARKS_ENTRY_VIEW_CHECKBOX",
 			permissionDefinitionValue = "View",
 			roleTitle = "Group Scope Role Name",
@@ -1030,21 +935,15 @@ definition {
 	test SiteRoleBookmarksInlinePermissions {
 		var siteName = TestCase.getSiteName(siteName = "${siteName}");
 
-		ApplicationsMenu.gotoPortlet(
-			category = "Users",
-			panel = "Control Panel",
-			portlet = "Roles");
+		Role.openRolesAdmin();
 
 		RoleNavigator.gotoRoleType(roleType = "Site");
 
 		Role.add(roleTitle = "Roles Siterole Name");
 
-		ApplicationsMenu.gotoPortlet(
-			category = "Users",
-			panel = "Control Panel",
-			portlet = "Roles");
+		Role.openRolesAdmin();
 
-		Role.definePermissionsCP(
+		Role.definePermissionCmdCP(
 			permissionDefinitionKey = "SITE_ADMIN_APPLICATIONS_BOOKMARKS_RESOURCE_PERMISSIONS_BOOKMARKS_ENTRY_VIEW_CHECKBOX",
 			permissionDefinitionValue = "View",
 			roleTitle = "Roles Siterole Name",
@@ -1584,28 +1483,26 @@ definition {
 
 		Role.add(roleTitle = "Roles Regrole Name");
 
-		ApplicationsMenu.gotoPortlet(
-			category = "Users",
-			panel = "Control Panel",
-			portlet = "Roles");
+		Role.openRolesAdmin();
 
 		Role.definePermissionCP(
 			permissionDefinitionKey = "CONTROL_PANEL_USERS_USERS_AND_ORGANIZATIONS_GENERAL_PERMISSIONS_ACCESS_IN_CONTROL_PANEL_CHECKBOX",
 			permissionDefinitionValue = "Access in Control Panel",
+			permissionNavigationKey = "CONTROL_PANEL_USERS_USERS_AND_ORGANIZATIONS",
+			permissionNavigationValue = "Users and Organizations",
 			roleTitle = "Roles Regrole Name");
 
 		Role.viewPermissionCP(
 			permissionDefinitionValue = "View Control Panel Menu",
 			permissionNavigationValue = "Portal");
 
-		ApplicationsMenu.gotoPortlet(
-			category = "Users",
-			panel = "Control Panel",
-			portlet = "Roles");
+		Role.openRolesAdmin();
 
 		Role.definePermissionCP(
 			permissionDefinitionKey = "SITE_ADMIN_PAGES_SITE_PAGES_GENERAL_PERMISSIONS_ACCESS_IN_SITE_ADMINISTRATION_CHECKBOX",
 			permissionDefinitionValue = "Access in Site and Asset Library Administration",
+			permissionNavigationKey = "SITE_ADMIN_PAGES_SITE_PAGES",
+			permissionNavigationValue = "Pages",
 			roleTitle = "Roles Regrole Name");
 
 		Role.viewPermissionCP(
@@ -1613,66 +1510,34 @@ definition {
 			permissionNavigationValue = "Settings > Site");
 	}
 
-	@description = "This is a use case for LPS-97321. All subdirectories in Define Permissions should display."
-	@priority = "4"
-	test ViewDefinePermissionsSubdirectoriesDisplay {
-		var siteName = TestCase.getSiteName(siteName = "${siteName}");
-
-		JSONRole.addRegularRole(
-			roleKey = "User Permission",
-			roleTitle = "User Permission");
-
-		ApplicationsMenu.gotoPortlet(
-			category = "Users",
-			panel = "Control Panel",
-			portlet = "Roles");
-
-		Role.viewCP(roleTitle = "User Permission");
-
-		Navigator.gotoNavItem(navItem = "Define Permissions");
-
-		Role.viewPermissionSubdirectory(
-			navItem = "Control Panel",
-			subItemList = "General Permissions,Users,Sites,Configuration,Security,System,Marketplace,Accounts");
-
-		Role.viewPermissionSubdirectory(
-			navItem = "Site and Asset Library Administration",
-			subItemList = "Site Builder,Content & Data,Categorization,Recycle Bin,People,Configuration,Publishing,Applications");
-
-		Role.viewPermissionSubdirectory(
-			navItem = "User",
-			subItemList = "Notifications,My Submissions,My Workflow Tasks,Account Settings,My Organizations");
-
-		Role.viewPermissionSubdirectory(
-			navItem = "Applications Menu",
-			subItemList = "Content,Workflow,Communication");
-	}
-
 	@priority = "4"
 	test ViewDocumentsAndMediaAddRepositoryPermissionSiteMemberRole {
-		ApplicationsMenu.gotoPortlet(
-			category = "Users",
-			panel = "Control Panel",
-			portlet = "Roles");
+		Role.openRolesAdmin();
 
 		Role.definePermissionCP(
 			permissionDefinitionKey = "SITE_ADMIN_APPLICATIONS_DOCUMENTS_AND_MEDIA_RESOURCE_PERMISSIONS_DOCUMENTS_ADD_REPOSITORY_CHECKBOX",
 			permissionDefinitionValue = "Add Repository",
+			permissionNavigationKey = "SITE_ADMIN_APPLICATIONS_DOCUMENTS_AND_MEDIA",
+			permissionNavigationValue = "Documents and Media",
 			roleTitle = "Site Member",
 			roleType = "Site");
 
 		AssertTextNotPresent(value1 = "action.ADD_REPOSITORY");
 
-		ApplicationsMenu.gotoPortlet(
-			category = "Users",
-			panel = "Control Panel",
-			portlet = "Roles");
+		Role.openRolesAdmin();
 
 		Role.removePermissionCP(
 			permissionDefinitionKey = "SITE_ADMIN_APPLICATIONS_DOCUMENTS_AND_MEDIA_RESOURCE_PERMISSIONS_DOCUMENTS_ADD_REPOSITORY_CHECKBOX",
 			permissionDefinitionValue = "Add Repository",
 			roleTitle = "Site Member",
 			roleType = "Site");
+
+		var key_permissionDefinitionValue = "Add Repository";
+		var key_permissionNavigationValue = "SITE_ADMIN_APPLICATIONS_DOCUMENTS_AND_MEDIA_RESOURCE_PERMISSIONS_DOCUMENTS_ADD_REPOSITORY_CHECKBOX";
+
+		AssertElementNotPresent(locator1 = "RolesPermissionsSummary#PERMISSION_TABLE_PERMISSIONS");
+
+		AssertElementNotPresent(locator1 = "RolesPermissionsSummary#PERMISSION_TABLE_REMOVE");
 	}
 
 	@priority = "4"

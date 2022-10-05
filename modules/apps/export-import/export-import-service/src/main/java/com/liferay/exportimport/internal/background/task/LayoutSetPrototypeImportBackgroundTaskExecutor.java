@@ -17,9 +17,11 @@ package com.liferay.exportimport.internal.background.task;
 import com.liferay.exportimport.kernel.model.ExportImportConfiguration;
 import com.liferay.exportimport.kernel.service.ExportImportLocalServiceUtil;
 import com.liferay.exportimport.kernel.staging.MergeLayoutPrototypesThreadLocal;
+import com.liferay.layout.set.prototype.configuration.LayoutSetPrototypeConfiguration;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.backgroundtask.BackgroundTask;
 import com.liferay.portal.kernel.backgroundtask.BackgroundTaskExecutor;
+import com.liferay.portal.kernel.backgroundtask.BackgroundTaskManagerUtil;
 import com.liferay.portal.kernel.backgroundtask.BackgroundTaskResult;
 import com.liferay.portal.kernel.backgroundtask.constants.BackgroundTaskConstants;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -27,7 +29,10 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.LayoutSet;
 import com.liferay.portal.kernel.model.LayoutSetPrototype;
+import com.liferay.portal.kernel.module.configuration.ConfigurationException;
+import com.liferay.portal.kernel.module.configuration.ConfigurationProviderUtil;
 import com.liferay.portal.kernel.repository.model.FileEntry;
+import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
 import com.liferay.portal.kernel.service.LayoutSetLocalServiceUtil;
 import com.liferay.portal.kernel.service.LayoutSetPrototypeLocalServiceUtil;
 import com.liferay.portal.kernel.transaction.TransactionInvokerUtil;
@@ -77,6 +82,43 @@ public class LayoutSetPrototypeImportBackgroundTaskExecutor
 	@Override
 	public BackgroundTaskResult execute(BackgroundTask backgroundTask)
 		throws Exception {
+
+		if (isCancelPropagationImportTask()) {
+			List<BackgroundTask> newBackgroundTasks =
+				BackgroundTaskManagerUtil.getBackgroundTasks(
+					backgroundTask.getGroupId(),
+					LayoutSetPrototypeImportBackgroundTaskExecutor.class.
+						getName(),
+					BackgroundTaskConstants.STATUS_NEW);
+
+			List<BackgroundTask> queuedBackgroundTasks =
+				BackgroundTaskManagerUtil.getBackgroundTasks(
+					backgroundTask.getGroupId(),
+					LayoutSetPrototypeImportBackgroundTaskExecutor.class.
+						getName(),
+					BackgroundTaskConstants.STATUS_QUEUED);
+
+			if (!newBackgroundTasks.isEmpty() ||
+				!queuedBackgroundTasks.isEmpty()) {
+
+				if (_log.isDebugEnabled()) {
+					StringBundler sb = new StringBundler(7);
+
+					sb.append("Cancelling background task ");
+					sb.append(backgroundTask.getBackgroundTaskId());
+					sb.append(", found ");
+					sb.append(newBackgroundTasks.size());
+					sb.append(" new and ");
+					sb.append(queuedBackgroundTasks.size());
+					sb.append(" queued tasks");
+
+					_log.debug(sb.toString());
+				}
+
+				return new BackgroundTaskResult(
+					BackgroundTaskConstants.STATUS_CANCELLED);
+			}
+		}
 
 		ExportImportConfiguration exportImportConfiguration =
 			getExportImportConfiguration(backgroundTask);
@@ -143,6 +185,43 @@ public class LayoutSetPrototypeImportBackgroundTaskExecutor
 		}
 
 		return BackgroundTaskResult.SUCCESS;
+	}
+
+	protected boolean isCancelPropagationImportTask() {
+		try {
+			LayoutSetPrototypeConfiguration layoutSetPrototypeConfiguration =
+				_getLayoutSetPrototypeConfiguration();
+
+			if ((layoutSetPrototypeConfiguration != null) &&
+				layoutSetPrototypeConfiguration.cancelPropagationImportTask()) {
+
+				return true;
+			}
+
+			return false;
+		}
+		catch (Exception exception) {
+			_log.error(exception);
+		}
+
+		return false;
+	}
+
+	private LayoutSetPrototypeConfiguration
+		_getLayoutSetPrototypeConfiguration() {
+
+		try {
+			return ConfigurationProviderUtil.getCompanyConfiguration(
+				LayoutSetPrototypeConfiguration.class,
+				CompanyThreadLocal.getCompanyId());
+		}
+		catch (ConfigurationException configurationException) {
+			_log.error(
+				"Unable to load layout set configuration",
+				configurationException);
+		}
+
+		return null;
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(

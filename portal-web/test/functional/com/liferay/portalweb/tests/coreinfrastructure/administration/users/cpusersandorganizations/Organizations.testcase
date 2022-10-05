@@ -1294,16 +1294,13 @@ definition {
 	test OrganizationAdministratorActivate {
 		property testray.component.names = "Training";
 
-		ApplicationsMenu.gotoPortlet(
-			category = "Users",
-			panel = "Control Panel",
-			portlet = "Roles");
+		Role.openRolesAdmin();
 
 		Role.definePermissionCP(
 			permissionDefinitionKey = "CONTROL_PANEL_GENERAL_PERMISSIONS_GO_TO_CONTROL_PANEL_CHECKBOX",
 			permissionDefinitionValue = "View Control Panel Menu",
 			permissionNavigationKey = "CONTROL_PANEL_GENERAL_PERMISSIONS",
-			permissionNavigationValue = "General Permissions",
+			permissionNavigationValue = "Portal",
 			roleTitle = "Authenticated",
 			roleUser = "User");
 

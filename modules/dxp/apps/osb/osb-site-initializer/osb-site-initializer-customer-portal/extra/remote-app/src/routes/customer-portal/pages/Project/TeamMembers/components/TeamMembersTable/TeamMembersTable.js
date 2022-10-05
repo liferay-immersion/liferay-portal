@@ -49,6 +49,7 @@ const ALERT_TIMEOUT = 3000;
 const TeamMembersTable = ({project, provisioningServerAPI, sessionId}) => {
 	const {accountRoles} = useAccountRoles(project);
 	const {client} = useAppPropertiesContext();
+	const {importDate} = useAppPropertiesContext();
 
 	const {
 		isLoadingUserAccounts,
@@ -286,7 +287,9 @@ const TeamMembersTable = ({project, provisioningServerAPI, sessionId}) => {
 							),
 							status: (
 								<StatusColumnType
-									hasLoggedBefore={userAccount?.lastLoginDate}
+									createDate={userAccount?.dateCreated}
+									importDate={importDate}
+									lastLoginDate={userAccount?.lastLoginDate}
 								/>
 							),
 							supportSeat: (

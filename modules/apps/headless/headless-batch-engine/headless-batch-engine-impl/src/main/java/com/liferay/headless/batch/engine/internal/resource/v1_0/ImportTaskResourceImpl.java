@@ -114,7 +114,7 @@ public class ImportTaskResourceImpl extends BaseImportTaskResourceImpl {
 			BatchEngineTaskOperation.DELETE, _getBytes(object, contentType),
 			callbackURL, className, null,
 			_getBatchEngineTaskContentType(contentType), externalReferenceCode,
-			taskItemDelegateName, importStrategy, null, null);
+			null, importStrategy, taskItemDelegateName, null);
 	}
 
 	@Override

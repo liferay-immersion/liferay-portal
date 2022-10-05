@@ -1049,16 +1049,6 @@ definition {
 			position = "2");
 	}
 
-	@description = "LPS-147792 - Verify it is possible to rename a column label"
-	@ignore = "Test Stub"
-	@priority = "5"
-	test CanRenameColumnLabel {
-		property portal.acceptance = "true";
-
-		// TODO LPS-152066 CanRenameColumnLabel pending implementation
-
-	}
-
 	@description = "LPS-135394 - Verify it is possible to search for a column on the View Builder tab"
 	@priority = "4"
 	test CanSearchColumn {
@@ -1378,6 +1368,8 @@ definition {
 	@description = "LPS-147792 - Verify it is possible to see the column label as the alias on the view builder column list"
 	@priority = "5"
 	test CanSeeRenamedColumnOnViewBuilder {
+		property portal.acceptance = "true";
+
 		ObjectAdmin.addObjectViaAPI(
 			labelName = "Custom Object 152068",
 			objectName = "CustomObject152068",
@@ -1402,6 +1394,12 @@ definition {
 		CreateObject.editLabel(labelName = "Publishing House");
 
 		Button.clickEdit();
+
+		Button.clickSave();
+
+		ObjectCustomViews.goToViewsDetails(label = "Custom Views");
+
+		ObjectCustomViews.goToViewsBuilderTab();
 
 		ObjectCustomViews.assertColumnLabelPresent(columnLabel = "Publishing House");
 	}

@@ -12,28 +12,10 @@
  * details.
  */
 
-package com.liferay.layout.exception;
-
-import com.liferay.portal.kernel.exception.NoSuchModelException;
+package com.liferay.layout.model.impl;
 
 /**
  * @author Brian Wing Shun Chan
  */
-public class NoSuchClassedModelUsageException extends NoSuchModelException {
-
-	public NoSuchClassedModelUsageException() {
-	}
-
-	public NoSuchClassedModelUsageException(String msg) {
-		super(msg);
-	}
-
-	public NoSuchClassedModelUsageException(String msg, Throwable throwable) {
-		super(msg, throwable);
-	}
-
-	public NoSuchClassedModelUsageException(Throwable throwable) {
-		super(throwable);
-	}
-
+public class LayoutLocalizationImpl extends LayoutLocalizationBaseImpl {
 }

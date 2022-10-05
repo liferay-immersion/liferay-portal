@@ -14,10 +14,12 @@
 
 package com.liferay.portal.kernel.search;
 
+import com.liferay.petra.string.StringBundler;
+import com.liferay.petra.string.StringPool;
+import com.liferay.portal.kernel.messaging.DestinationNames;
 import com.liferay.portal.kernel.model.CompanyConstants;
 import com.liferay.portal.kernel.util.ServiceProxyFactory;
 
-import java.util.Collection;
 import java.util.Set;
 
 /**
@@ -25,16 +27,8 @@ import java.util.Set;
  */
 public class SearchEngineHelperUtil {
 
-	public static String getDefaultSearchEngineId() {
-		return _searchEngineHelper.getDefaultSearchEngineId();
-	}
-
 	public static String[] getEntryClassNames() {
 		return _searchEngineHelper.getEntryClassNames();
-	}
-
-	public static Collection<Long> getIndexedCompanyIds() {
-		return _searchEngineHelper.getIndexedCompanyIds();
 	}
 
 	public static SearchEngine getSearchEngine(String searchEngineId) {
@@ -45,34 +39,18 @@ public class SearchEngineHelperUtil {
 		return _searchEngineHelper;
 	}
 
-	public static String getSearchEngineId(Collection<Document> documents) {
-		return _searchEngineHelper.getSearchEngineId(documents);
-	}
-
-	public static String getSearchEngineId(Document document) {
-		return _searchEngineHelper.getSearchEngineId(document);
-	}
-
 	public static Set<String> getSearchEngineIds() {
 		return _searchEngineHelper.getSearchEngineIds();
 	}
 
-	public static SearchEngine getSearchEngineSilent(String searchEngineId) {
-		return _searchEngineHelper.getSearchEngineSilent(searchEngineId);
-	}
-
-	public static SearchPermissionChecker getSearchPermissionChecker() {
-		return _searchPermissionChecker;
-	}
-
 	public static String getSearchReaderDestinationName(String searchEngineId) {
-		return _searchEngineHelper.getSearchReaderDestinationName(
-			searchEngineId);
+		return StringBundler.concat(
+			DestinationNames.SEARCH_READER, StringPool.SLASH, searchEngineId);
 	}
 
 	public static String getSearchWriterDestinationName(String searchEngineId) {
-		return _searchEngineHelper.getSearchWriterDestinationName(
-			searchEngineId);
+		return StringBundler.concat(
+			DestinationNames.SEARCH_WRITER, StringPool.SLASH, searchEngineId);
 	}
 
 	public static void initialize(long companyId) {
@@ -83,16 +61,8 @@ public class SearchEngineHelperUtil {
 		_searchEngineHelper.removeCompany(companyId);
 	}
 
-	public static void removeCompany(long companyId, boolean force) {
-		_searchEngineHelper.removeCompany(companyId, force);
-	}
-
 	public static SearchEngine removeSearchEngine(String searchEngineId) {
 		return _searchEngineHelper.removeSearchEngine(searchEngineId);
-	}
-
-	public static void setDefaultSearchEngineId(String defaultSearchEngineId) {
-		_searchEngineHelper.setDefaultSearchEngineId(defaultSearchEngineId);
 	}
 
 	public static void setSearchEngine(
@@ -107,9 +77,5 @@ public class SearchEngineHelperUtil {
 		ServiceProxyFactory.newServiceTrackedInstance(
 			SearchEngineHelper.class, SearchEngineHelperUtil.class,
 			"_searchEngineHelper", false);
-	private static volatile SearchPermissionChecker _searchPermissionChecker =
-		ServiceProxyFactory.newServiceTrackedInstance(
-			SearchPermissionChecker.class, SearchEngineHelperUtil.class,
-			"_searchPermissionChecker", false);
 
 }

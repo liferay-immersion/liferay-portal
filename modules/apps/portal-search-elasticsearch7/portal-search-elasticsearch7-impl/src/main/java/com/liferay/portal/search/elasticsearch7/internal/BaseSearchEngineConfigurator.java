@@ -29,6 +29,7 @@ import com.liferay.portal.kernel.search.IndexWriter;
 import com.liferay.portal.kernel.search.SearchEngine;
 import com.liferay.portal.kernel.search.SearchEngineConfigurator;
 import com.liferay.portal.kernel.search.SearchEngineHelper;
+import com.liferay.portal.kernel.search.SearchEngineHelperUtil;
 import com.liferay.portal.kernel.search.SearchEngineProxyWrapper;
 import com.liferay.portal.kernel.search.messaging.BaseSearchEngineMessageListener;
 import com.liferay.portal.kernel.search.messaging.SearchReaderMessageListener;
@@ -39,7 +40,6 @@ import com.liferay.portal.kernel.util.MapUtil;
 import com.liferay.portal.kernel.util.PortalRunMode;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
-import com.liferay.portal.kernel.util.Validator;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -72,15 +72,6 @@ public abstract class BaseSearchEngineConfigurator
 		}
 
 		_searchEngineRegistrations.clear();
-
-		if (Validator.isNotNull(_originalSearchEngineId)) {
-			SearchEngineHelper searchEngineHelper = getSearchEngineHelper();
-
-			searchEngineHelper.setDefaultSearchEngineId(
-				_originalSearchEngineId);
-
-			_originalSearchEngineId = null;
-		}
 
 		for (DestinationServiceRegistrar destinationServiceRegistrar :
 				_destinationServiceRegistrars.values()) {
@@ -181,8 +172,6 @@ public abstract class BaseSearchEngineConfigurator
 
 	protected abstract BundleContext getBundleContext();
 
-	protected abstract String getDefaultSearchEngineId();
-
 	protected Destination getDestination(
 		ServiceRegistration<Destination> serviceRegistration) {
 
@@ -209,17 +198,6 @@ public abstract class BaseSearchEngineConfigurator
 
 		for (Map.Entry<String, SearchEngine> entry : entrySet) {
 			_initSearchEngine(entry.getKey(), entry.getValue());
-		}
-
-		String defaultSearchEngineId = getDefaultSearchEngineId();
-
-		if (Validator.isNotNull(defaultSearchEngineId)) {
-			SearchEngineHelper searchEngineHelper = getSearchEngineHelper();
-
-			_originalSearchEngineId =
-				searchEngineHelper.getDefaultSearchEngineId();
-
-			searchEngineHelper.setDefaultSearchEngineId(defaultSearchEngineId);
 		}
 
 		_searchEngines.clear();
@@ -333,10 +311,9 @@ public abstract class BaseSearchEngineConfigurator
 	private Destination _getSearchReaderDestination(
 		MessageBus messageBus, String searchEngineId, boolean createIfAbsent) {
 
-		SearchEngineHelper searchEngineHelper = getSearchEngineHelper();
-
 		String searchReaderDestinationName =
-			searchEngineHelper.getSearchReaderDestinationName(searchEngineId);
+			SearchEngineHelperUtil.getSearchReaderDestinationName(
+				searchEngineId);
 
 		Destination searchReaderDestination = messageBus.getDestination(
 			searchReaderDestinationName);
@@ -356,10 +333,9 @@ public abstract class BaseSearchEngineConfigurator
 	private Destination _getSearchWriterDestination(
 		MessageBus messageBus, String searchEngineId, boolean createIfAbsent) {
 
-		SearchEngineHelper searchEngineHelper = getSearchEngineHelper();
-
 		String searchWriterDestinationName =
-			searchEngineHelper.getSearchWriterDestinationName(searchEngineId);
+			SearchEngineHelperUtil.getSearchWriterDestinationName(
+				searchEngineId);
 
 		Destination searchWriterDestination = messageBus.getDestination(
 			searchWriterDestinationName);
@@ -400,8 +376,8 @@ public abstract class BaseSearchEngineConfigurator
 
 		SearchEngineHelper searchEngineHelper = getSearchEngineHelper();
 
-		SearchEngine originalSearchEngine =
-			searchEngineHelper.getSearchEngineSilent(searchEngineId);
+		SearchEngine originalSearchEngine = searchEngineHelper.getSearchEngine(
+			searchEngineId);
 
 		if (originalSearchEngine != null) {
 			searchEngineRegistration.setOverride(true);
@@ -522,7 +498,6 @@ public abstract class BaseSearchEngineConfigurator
 			new DestinationServiceRegistrarHelperImpl(this);
 	private final Map<String, DestinationServiceRegistrar>
 		_destinationServiceRegistrars = new ConcurrentHashMap<>();
-	private String _originalSearchEngineId;
 	private SearchDestinationHelper _searchDestinationHelper =
 		new SearchDestinationHelperImpl(this);
 	private final List<SearchEngineRegistration> _searchEngineRegistrations =

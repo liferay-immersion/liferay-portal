@@ -29,7 +29,6 @@ import com.liferay.portal.kernel.service.LayoutLocalService;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.util.OrderByComparator;
 
-import java.util.Date;
 import java.util.List;
 
 import org.osgi.service.component.annotations.Component;
@@ -79,8 +78,6 @@ public class LayoutClassedModelUsageLocalServiceImpl
 
 		layoutClassedModelUsage.setCompanyId(companyId);
 
-		layoutClassedModelUsage.setCreateDate(new Date());
-		layoutClassedModelUsage.setModifiedDate(new Date());
 		layoutClassedModelUsage.setClassNameId(classNameId);
 		layoutClassedModelUsage.setClassPK(classPK);
 		layoutClassedModelUsage.setContainerKey(containerKey);
