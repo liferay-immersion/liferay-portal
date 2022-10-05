@@ -80,6 +80,14 @@ public class ObjectDefinitionServiceUtil {
 		return getService().getObjectDefinition(objectDefinitionId);
 	}
 
+	public static ObjectDefinition getObjectDefinitionByExternalReferenceCode(
+			String externalReferenceCode, long companyId)
+		throws PortalException {
+
+		return getService().getObjectDefinitionByExternalReferenceCode(
+			externalReferenceCode, companyId);
+	}
+
 	public static List<ObjectDefinition> getObjectDefinitions(
 		int start, int end) {
 

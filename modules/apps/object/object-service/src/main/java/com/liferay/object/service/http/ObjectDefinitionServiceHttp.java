@@ -262,13 +262,56 @@ public class ObjectDefinitionServiceHttp {
 		}
 	}
 
+	public static com.liferay.object.model.ObjectDefinition
+			getObjectDefinitionByExternalReferenceCode(
+				HttpPrincipal httpPrincipal, String externalReferenceCode,
+				long companyId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		try {
+			MethodKey methodKey = new MethodKey(
+				ObjectDefinitionServiceUtil.class,
+				"getObjectDefinitionByExternalReferenceCode",
+				_getObjectDefinitionByExternalReferenceCodeParameterTypes5);
+
+			MethodHandler methodHandler = new MethodHandler(
+				methodKey, externalReferenceCode, companyId);
+
+			Object returnObj = null;
+
+			try {
+				returnObj = TunnelUtil.invoke(httpPrincipal, methodHandler);
+			}
+			catch (Exception exception) {
+				if (exception instanceof
+						com.liferay.portal.kernel.exception.PortalException) {
+
+					throw (com.liferay.portal.kernel.exception.PortalException)
+						exception;
+				}
+
+				throw new com.liferay.portal.kernel.exception.SystemException(
+					exception);
+			}
+
+			return (com.liferay.object.model.ObjectDefinition)returnObj;
+		}
+		catch (com.liferay.portal.kernel.exception.SystemException
+					systemException) {
+
+			_log.error(systemException, systemException);
+
+			throw systemException;
+		}
+	}
+
 	public static java.util.List<com.liferay.object.model.ObjectDefinition>
 		getObjectDefinitions(HttpPrincipal httpPrincipal, int start, int end) {
 
 		try {
 			MethodKey methodKey = new MethodKey(
 				ObjectDefinitionServiceUtil.class, "getObjectDefinitions",
-				_getObjectDefinitionsParameterTypes5);
+				_getObjectDefinitionsParameterTypes6);
 
 			MethodHandler methodHandler = new MethodHandler(
 				methodKey, start, end);
@@ -302,7 +345,7 @@ public class ObjectDefinitionServiceHttp {
 		try {
 			MethodKey methodKey = new MethodKey(
 				ObjectDefinitionServiceUtil.class, "getObjectDefinitions",
-				_getObjectDefinitionsParameterTypes6);
+				_getObjectDefinitionsParameterTypes7);
 
 			MethodHandler methodHandler = new MethodHandler(
 				methodKey, companyId, start, end);
@@ -335,7 +378,7 @@ public class ObjectDefinitionServiceHttp {
 		try {
 			MethodKey methodKey = new MethodKey(
 				ObjectDefinitionServiceUtil.class, "getObjectDefinitionsCount",
-				_getObjectDefinitionsCountParameterTypes7);
+				_getObjectDefinitionsCountParameterTypes8);
 
 			MethodHandler methodHandler = new MethodHandler(methodKey);
 
@@ -374,7 +417,7 @@ public class ObjectDefinitionServiceHttp {
 		try {
 			MethodKey methodKey = new MethodKey(
 				ObjectDefinitionServiceUtil.class, "getObjectDefinitionsCount",
-				_getObjectDefinitionsCountParameterTypes8);
+				_getObjectDefinitionsCountParameterTypes9);
 
 			MethodHandler methodHandler = new MethodHandler(
 				methodKey, companyId);
@@ -416,7 +459,7 @@ public class ObjectDefinitionServiceHttp {
 			MethodKey methodKey = new MethodKey(
 				ObjectDefinitionServiceUtil.class,
 				"publishCustomObjectDefinition",
-				_publishCustomObjectDefinitionParameterTypes9);
+				_publishCustomObjectDefinitionParameterTypes10);
 
 			MethodHandler methodHandler = new MethodHandler(
 				methodKey, objectDefinitionId);
@@ -468,7 +511,7 @@ public class ObjectDefinitionServiceHttp {
 			MethodKey methodKey = new MethodKey(
 				ObjectDefinitionServiceUtil.class,
 				"updateCustomObjectDefinition",
-				_updateCustomObjectDefinitionParameterTypes10);
+				_updateCustomObjectDefinitionParameterTypes11);
 
 			MethodHandler methodHandler = new MethodHandler(
 				methodKey, externalReferenceCode, objectDefinitionId,
@@ -516,7 +559,7 @@ public class ObjectDefinitionServiceHttp {
 			MethodKey methodKey = new MethodKey(
 				ObjectDefinitionServiceUtil.class,
 				"updateExternalReferenceCode",
-				_updateExternalReferenceCodeParameterTypes11);
+				_updateExternalReferenceCodeParameterTypes12);
 
 			MethodHandler methodHandler = new MethodHandler(
 				methodKey, objectDefinitionId, externalReferenceCode);
@@ -559,7 +602,7 @@ public class ObjectDefinitionServiceHttp {
 			MethodKey methodKey = new MethodKey(
 				ObjectDefinitionServiceUtil.class,
 				"updateSystemObjectDefinition",
-				_updateSystemObjectDefinitionParameterTypes12);
+				_updateSystemObjectDefinitionParameterTypes13);
 
 			MethodHandler methodHandler = new MethodHandler(
 				methodKey, externalReferenceCode, objectDefinitionId,
@@ -602,7 +645,7 @@ public class ObjectDefinitionServiceHttp {
 		try {
 			MethodKey methodKey = new MethodKey(
 				ObjectDefinitionServiceUtil.class, "updateTitleObjectFieldId",
-				_updateTitleObjectFieldIdParameterTypes13);
+				_updateTitleObjectFieldIdParameterTypes14);
 
 			MethodHandler methodHandler = new MethodHandler(
 				methodKey, objectDefinitionId, titleObjectFieldId);
@@ -653,34 +696,37 @@ public class ObjectDefinitionServiceHttp {
 			new Class[] {String.class, long.class};
 	private static final Class<?>[] _getObjectDefinitionParameterTypes4 =
 		new Class[] {long.class};
-	private static final Class<?>[] _getObjectDefinitionsParameterTypes5 =
-		new Class[] {int.class, int.class};
+	private static final Class<?>[]
+		_getObjectDefinitionByExternalReferenceCodeParameterTypes5 =
+			new Class[] {String.class, long.class};
 	private static final Class<?>[] _getObjectDefinitionsParameterTypes6 =
+		new Class[] {int.class, int.class};
+	private static final Class<?>[] _getObjectDefinitionsParameterTypes7 =
 		new Class[] {long.class, int.class, int.class};
-	private static final Class<?>[] _getObjectDefinitionsCountParameterTypes7 =
-		new Class[] {};
 	private static final Class<?>[] _getObjectDefinitionsCountParameterTypes8 =
+		new Class[] {};
+	private static final Class<?>[] _getObjectDefinitionsCountParameterTypes9 =
 		new Class[] {long.class};
 	private static final Class<?>[]
-		_publishCustomObjectDefinitionParameterTypes9 = new Class[] {
+		_publishCustomObjectDefinitionParameterTypes10 = new Class[] {
 			long.class
 		};
 	private static final Class<?>[]
-		_updateCustomObjectDefinitionParameterTypes10 = new Class[] {
+		_updateCustomObjectDefinitionParameterTypes11 = new Class[] {
 			String.class, long.class, long.class, long.class, long.class,
 			boolean.class, boolean.class, boolean.class, boolean.class,
 			boolean.class, java.util.Map.class, String.class, String.class,
 			String.class, boolean.class, java.util.Map.class, String.class
 		};
 	private static final Class<?>[]
-		_updateExternalReferenceCodeParameterTypes11 = new Class[] {
+		_updateExternalReferenceCodeParameterTypes12 = new Class[] {
 			long.class, String.class
 		};
 	private static final Class<?>[]
-		_updateSystemObjectDefinitionParameterTypes12 = new Class[] {
+		_updateSystemObjectDefinitionParameterTypes13 = new Class[] {
 			String.class, long.class, long.class
 		};
-	private static final Class<?>[] _updateTitleObjectFieldIdParameterTypes13 =
+	private static final Class<?>[] _updateTitleObjectFieldIdParameterTypes14 =
 		new Class[] {long.class, long.class};
 
 }
