@@ -132,7 +132,6 @@ public class JournalArticleAssetRendererTest {
 			urlViewInContext, "version");
 
 		Assert.assertNotNull(version);
-
 		Assert.assertEquals(
 			article.getVersion(), GetterUtil.getDouble(version),
 			GetterUtil.DEFAULT_DOUBLE);
