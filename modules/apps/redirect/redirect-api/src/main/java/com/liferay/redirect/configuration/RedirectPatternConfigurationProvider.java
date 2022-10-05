@@ -27,11 +27,11 @@ import org.osgi.annotation.versioning.ProviderType;
 @ProviderType
 public interface RedirectPatternConfigurationProvider {
 
-	public Map<Pattern, String> getRedirectPatterns(long groupId)
+	public Map<Pattern, String> getPatternStrings(long groupId)
 		throws ConfigurationException;
 
-	public void updateRedirectPatterns(
-			long groupId, Map<String, String> redirectPatterns)
+	public void updatePatternStrings(
+			long groupId, Map<String, String> patternStrings)
 		throws Exception;
 
 }

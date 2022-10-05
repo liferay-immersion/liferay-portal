@@ -59,7 +59,7 @@ public class RedirectProviderImplTest {
 
 	@Test
 	public void testControlPanelURLs() {
-		_setupPatterns(
+		_setupPatternStrings(
 			Collections.singletonMap(
 				Pattern.compile("^.*/control_panel/manage"), "xyz"));
 
@@ -75,7 +75,7 @@ public class RedirectProviderImplTest {
 
 	@Test
 	public void testEmptyPatterns() {
-		_setupPatterns(Collections.emptyMap());
+		_setupPatternStrings(Collections.emptyMap());
 
 		Assert.assertNull(
 			_getRedirectProviderRedirect(StringUtil.randomString()));
@@ -85,7 +85,7 @@ public class RedirectProviderImplTest {
 
 	@Test
 	public void testFirstReplacementPatternMatches() {
-		_setupPatterns(
+		_setupPatternStrings(
 			LinkedHashMapBuilder.put(
 				Pattern.compile("^a(b)c"), "u$1w"
 			).put(
@@ -102,7 +102,7 @@ public class RedirectProviderImplTest {
 
 	@Test
 	public void testFirstSimplePatternMatches() {
-		_setupPatterns(
+		_setupPatternStrings(
 			LinkedHashMapBuilder.put(
 				Pattern.compile("^abc"), "xyz"
 			).put(
@@ -119,7 +119,7 @@ public class RedirectProviderImplTest {
 
 	@Test
 	public void testLastReplacementPatternMatches() {
-		_setupPatterns(
+		_setupPatternStrings(
 			LinkedHashMapBuilder.put(
 				Pattern.compile("^uvw"), "xyz"
 			).put(
@@ -136,7 +136,7 @@ public class RedirectProviderImplTest {
 
 	@Test
 	public void testLastSimplePatternMatches() {
-		_setupPatterns(
+		_setupPatternStrings(
 			LinkedHashMapBuilder.put(
 				Pattern.compile("^u(v)w"), "x$1z"
 			).put(
@@ -153,7 +153,7 @@ public class RedirectProviderImplTest {
 
 	@Test
 	public void testRewritePatternSingleMatch() {
-		_setupPatterns(
+		_setupPatternStrings(
 			Collections.singletonMap(Pattern.compile("^a(b)c"), "x$1z"));
 
 		RedirectProvider.Redirect redirect = _getRedirectProviderRedirect(
@@ -166,7 +166,7 @@ public class RedirectProviderImplTest {
 
 	@Test
 	public void testRewritePatternSingleMismatch() {
-		_setupPatterns(
+		_setupPatternStrings(
 			Collections.singletonMap(Pattern.compile("^a(b)c"), "x$1z"));
 
 		Assert.assertNull(_getRedirectProviderRedirect("123"));
@@ -176,7 +176,7 @@ public class RedirectProviderImplTest {
 
 	@Test
 	public void testSimplePatternSingleMatch() {
-		_setupPatterns(
+		_setupPatternStrings(
 			Collections.singletonMap(Pattern.compile("^abc"), "xyz"));
 
 		RedirectProvider.Redirect redirect = _getRedirectProviderRedirect(
@@ -189,7 +189,7 @@ public class RedirectProviderImplTest {
 
 	@Test
 	public void testSimplePatternSingleMismatch() {
-		_setupPatterns(
+		_setupPatternStrings(
 			Collections.singletonMap(Pattern.compile("^abc"), "xyz"));
 
 		Assert.assertNull(_getRedirectProviderRedirect("123"));
@@ -204,10 +204,10 @@ public class RedirectProviderImplTest {
 			_GROUP_ID, friendlyURL, StringUtil.randomString());
 	}
 
-	private void _setupPatterns(Map<Pattern, String> patterns) {
-		_redirectProviderImpl.setGroupPatternStrings(
+	private void _setupPatternStrings(Map<Pattern, String> patternStrings) {
+		_redirectProviderImpl.setPatternStrings(
 			HashMapBuilder.put(
-				_GROUP_ID, patterns
+				_GROUP_ID, patternStrings
 			).build());
 	}
 

@@ -64,10 +64,10 @@ public class RedirectPatternConfigurationDisplayContext {
 
 		List<Map<String, Object>> patternsList = new ArrayList<>();
 
-		Map<Pattern, String> redirectPatterns =
-			_redirectPatternConfigurationProvider.getRedirectPatterns(_scopePK);
+		Map<Pattern, String> patternStrings =
+			_redirectPatternConfigurationProvider.getPatternStrings(_scopePK);
 
-		redirectPatterns.forEach(
+		patternStrings.forEach(
 			(pattern, destinationURL) -> patternsList.add(
 				HashMapBuilder.<String, Object>put(
 					"destinationURL", destinationURL

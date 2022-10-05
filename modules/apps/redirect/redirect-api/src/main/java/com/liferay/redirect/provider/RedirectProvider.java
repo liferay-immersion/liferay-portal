@@ -22,10 +22,10 @@ import java.util.regex.Pattern;
  */
 public interface RedirectProvider {
 
+	public Map<Pattern, String> getPatternStrings(long groupId);
+
 	public Redirect getRedirect(
 		long groupId, String friendlyURL, String fullURL);
-
-	public Map<Pattern, String> getRedirectPatterns(long groupId);
 
 	public interface Redirect {
 
