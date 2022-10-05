@@ -148,7 +148,7 @@ public class FriendlyURLServletTest {
 	}
 
 	@Test
-	public void testGetRedirectWithAccentedUpperCaseSourceURLRedirectEntry()
+	public void testGetRedirectWithUpperCaseAccentedSourceURLRedirectEntry()
 		throws Throwable {
 
 		Layout redirectionLayout = LayoutTestUtil.addTypePortletLayout(_group);
