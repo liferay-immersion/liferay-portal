@@ -131,7 +131,7 @@ public class AuditMessage implements Serializable {
 		}
 
 		_additionalInfoJSONObject =
-			(_additionalInfoJSONObject != null) _additionalInfoJSONObject :
+			(additionalInfoJSONObject != null) ? _additionalInfoJSONObject :
 				JSONFactoryUtil.createJSONObject();
 		_userEmailAddress = auditRequestThreadLocal.getRealUserEmailAddress();
 
@@ -273,7 +273,7 @@ public class AuditMessage implements Serializable {
 	}
 
 	public void setUserEmailAddress(String userEmailAddress) {
-		_userEmail = userEmailAddress;
+		_userEmailAddress = userEmailAddress;
 	}
 
 	public void setUserId(long userId) {

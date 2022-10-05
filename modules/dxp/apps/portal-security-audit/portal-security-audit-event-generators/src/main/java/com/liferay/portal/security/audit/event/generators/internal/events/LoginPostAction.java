@@ -80,13 +80,13 @@ public class LoginPostAction extends Action {
 		_auditRouter.route(auditMessage);
 	}
 
+	@Reference
+	private AuditRouter _auditRouter;
+
 	@Reference(
 		target = "(component.name=com.liferay.portal.security.audit.wiring.internal.servlet.filter.AuditFilter)"
 	)
 	private Filter _filter;
-
-	@Reference
-	private AuditRouter _auditRouter;
 
 	@Reference
 	private Portal _portal;
