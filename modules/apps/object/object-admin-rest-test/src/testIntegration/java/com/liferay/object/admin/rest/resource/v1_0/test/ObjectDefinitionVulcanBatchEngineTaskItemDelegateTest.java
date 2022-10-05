@@ -109,7 +109,7 @@ public class ObjectDefinitionVulcanBatchEngineTaskItemDelegateTest {
 
 	@Test
 	public void testCreate() throws Exception {
-		ObjectDefinition objectDefinition1 = getTestObjectDefinition(
+		ObjectDefinition objectDefinition1 = _createObjectDefinition(
 			"approved");
 
 		objectDefinition1.setStatus(
@@ -121,7 +121,7 @@ public class ObjectDefinitionVulcanBatchEngineTaskItemDelegateTest {
 				}
 			});
 
-		ObjectDefinition objectDefinition2 = getTestObjectDefinition("draft");
+		ObjectDefinition objectDefinition2 = _createObjectDefinition("draft");
 
 		objectDefinition2.setStatus(
 			new Status() {
@@ -157,7 +157,7 @@ public class ObjectDefinitionVulcanBatchEngineTaskItemDelegateTest {
 		Assert.assertFalse(serviceBuilderObjectDefinition.getActive());
 	}
 
-	protected ObjectDefinition getTestObjectDefinition(String name) {
+	private ObjectDefinition _createObjectDefinition(String name) {
 		String sanitizedName = name.toLowerCase(LocaleUtil.getDefault());
 
 		return new ObjectDefinition() {
@@ -174,20 +174,7 @@ public class ObjectDefinitionVulcanBatchEngineTaskItemDelegateTest {
 				id = RandomTestUtil.randomLong();
 				label = Collections.singletonMap("en_US", "O" + sanitizedName);
 				name = "O" + sanitizedName;
-				objectFields = new ObjectField[] {
-					new ObjectField() {
-						{
-							businessType = BusinessType.TEXT;
-							DBType = ObjectField.DBType.create("String");
-							indexed = false;
-							indexedAsKeyword = false;
-							label = Collections.singletonMap("en_US", "Column");
-							name = "column";
-							required = false;
-							system = false;
-						}
-					}
-				};
+				objectFields = new ObjectField[] {_createObjectField()};
 				panelAppOrder = StringUtil.toLowerCase(
 					RandomTestUtil.randomString());
 				panelCategoryKey = StringUtil.toLowerCase(
@@ -207,12 +194,27 @@ public class ObjectDefinitionVulcanBatchEngineTaskItemDelegateTest {
 						RandomTestUtil.randomString());
 				}
 				else {
-					storageType = StringPool.BLANK;					
+					storageType = StringPool.BLANK;
 				}
 
 				system = RandomTestUtil.randomBoolean();
 				titleObjectFieldName = StringUtil.toLowerCase(
 					RandomTestUtil.randomString());
+			}
+		};
+	}
+
+	private ObjectField _createObjectField() {
+		return new ObjectField() {
+			{
+				businessType = BusinessType.TEXT;
+				DBType = ObjectField.DBType.create("String");
+				indexed = false;
+				indexedAsKeyword = false;
+				label = Collections.singletonMap("en_US", "Column");
+				name = "column";
+				required = false;
+				system = false;
 			}
 		};
 	}
