@@ -59,24 +59,28 @@ public class RedirectPatternConfigurationDisplayContext {
 		).buildString();
 	}
 
-	public Map<String, Object> getRedirectPatternsData()
+	public Map<String, Object> getRedirectPatternsMap()
 		throws ConfigurationException {
 
-		List<Map<String, Object>> patternsList = new ArrayList<>();
-
-		Map<Pattern, String> patternStrings =
-			_redirectPatternConfigurationProvider.getPatternStrings(_scopePK);
-
-		patternStrings.forEach(
-			(pattern, destinationURL) -> patternsList.add(
-				HashMapBuilder.<String, Object>put(
-					"destinationURL", destinationURL
-				).put(
-					"pattern", pattern.toString()
-				).build()));
-
 		return HashMapBuilder.<String, Object>put(
-			"patternsList", patternsList
+			"patterns",
+			() -> {
+				List<Map<String, Object>> list = new ArrayList<>();
+
+				Map<Pattern, String> patternStrings =
+					_redirectPatternConfigurationProvider.getPatternStrings(
+						_scopePK);
+
+				patternStrings.forEach(
+					(pattern, destinationURL) -> list.add(
+						HashMapBuilder.<String, Object>put(
+							"destinationURL", destinationURL
+						).put(
+							"pattern", pattern.toString()
+						).build()));
+
+				return list;
+			}
 		).put(
 			"portletNamespace", _liferayPortletResponse.getNamespace()
 		).build();

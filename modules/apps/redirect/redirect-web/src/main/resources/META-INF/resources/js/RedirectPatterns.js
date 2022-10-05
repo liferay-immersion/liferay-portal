@@ -102,7 +102,7 @@ const PatternField = ({
 
 const RedirectPattern = ({
 	description = Liferay.Language.get('redirect-patterns-description'),
-	patternsList: initialPatternsList,
+	patterns: initialPatternsList,
 	portletNamespace,
 }) => {
 	const emptyRow = () => ({destinationURL: '', id: uuidv4(), pattern: ''});
@@ -146,7 +146,7 @@ const RedirectPattern = ({
 
 RedirectPattern.propTypes = {
 	description: PropTypes.string,
-	patternsList: PropTypes.arrayOf(
+	patterns: PropTypes.arrayOf(
 		PropTypes.shape({
 			destinationURL: PropTypes.string,
 			pattern: PropTypes.string,
