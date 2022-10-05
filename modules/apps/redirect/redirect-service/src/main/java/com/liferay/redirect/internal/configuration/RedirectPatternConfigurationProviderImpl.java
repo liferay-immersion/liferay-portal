@@ -77,7 +77,7 @@ public class RedirectPatternConfigurationProviderImpl
 		}
 
 		if (patternStrings.isEmpty()) {
-			properties.put("patterns", new String[0]);
+			properties.put("patternStrings", new String[0]);
 		}
 		else {
 			String[] patternsArray = new String[patternStrings.size()];
@@ -91,7 +91,7 @@ public class RedirectPatternConfigurationProviderImpl
 				i++;
 			}
 
-			properties.put("patterns", patternsArray);
+			properties.put("patternStrings", patternsArray);
 		}
 
 		configuration.update(properties);
