@@ -130,6 +130,12 @@ public class AuditMessage implements Serializable {
 			_timestamp = new Date();
 		}
 
+		_additionalInfoJSONObject = additionalInfoJSONObject;
+
+		if (_additionalInfoJSONObject == null) {
+			_additionalInfoJSONObject = JSONFactoryUtil.createJSONObject();
+		}
+
 		_userEmailAddress = auditRequestThreadLocal.getRealUserEmailAddress();
 
 		long realUserId = auditRequestThreadLocal.getRealUserId();
@@ -140,12 +146,6 @@ public class AuditMessage implements Serializable {
 		else if (realUserId > 0) {
 			_log.error(
 				"Impersonated actions should be audited on the real user's ID");
-		}
-
-		_additionalInfoJSONObject = additionalInfoJSONObject;
-
-		if (_additionalInfoJSONObject == null) {
-			_additionalInfoJSONObject = JSONFactoryUtil.createJSONObject();
 		}
 	}
 
