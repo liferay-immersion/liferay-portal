@@ -24,10 +24,12 @@ import com.liferay.object.service.ObjectDefinitionLocalService;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.model.Company;
 import com.liferay.portal.kernel.model.Group;
+import com.liferay.portal.kernel.security.permission.PermissionChecker;
 import com.liferay.portal.kernel.security.permission.PermissionCheckerFactory;
 import com.liferay.portal.kernel.security.permission.PermissionThreadLocal;
 import com.liferay.portal.kernel.service.CompanyLocalServiceUtil;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
+import com.liferay.portal.kernel.test.rule.DeleteAfterTestRun;
 import com.liferay.portal.kernel.test.util.GroupTestUtil;
 import com.liferay.portal.kernel.test.util.RandomTestUtil;
 import com.liferay.portal.kernel.test.util.UserTestUtil;
@@ -95,14 +97,17 @@ public class ObjectDefinitionVulcanBatchEngineTaskItemDelegateTest {
 			});
 		_objectDefinitionResource.setContextCompany(_company);
 
+		_originalPermissionChecker =
+			PermissionThreadLocal.getPermissionChecker();
+
 		PermissionThreadLocal.setPermissionChecker(
-			_defaultPermissionCheckerFactory.create(
+			_permissionCheckerFactory.create(
 				UserTestUtil.getAdminUser(_company.getCompanyId())));
 	}
 
 	@After
 	public void tearDown() throws Exception {
-		GroupTestUtil.deleteGroup(_group);
+		PermissionThreadLocal.setPermissionChecker(_originalPermissionChecker);
 	}
 
 	@Test
@@ -217,11 +222,10 @@ public class ObjectDefinitionVulcanBatchEngineTaskItemDelegateTest {
 		};
 	}
 
+	@DeleteAfterTestRun
 	private Company _company;
 
-	@Inject
-	private PermissionCheckerFactory _defaultPermissionCheckerFactory;
-
+	@DeleteAfterTestRun
 	private Group _group;
 
 	@Inject
@@ -229,5 +233,10 @@ public class ObjectDefinitionVulcanBatchEngineTaskItemDelegateTest {
 
 	@Inject
 	private ObjectDefinitionResource _objectDefinitionResource;
+
+	private PermissionChecker _originalPermissionChecker;
+
+	@Inject
+	private PermissionCheckerFactory _permissionCheckerFactory;
 
 }
