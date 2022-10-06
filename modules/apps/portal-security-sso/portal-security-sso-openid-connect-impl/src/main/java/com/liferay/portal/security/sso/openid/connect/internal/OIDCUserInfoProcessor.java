@@ -69,19 +69,19 @@ public class OIDCUserInfoProcessor {
 			return userId;
 		}
 
-		userId = _addUser(
+		User user = _addUser(
 			companyId, _getRoleIds(companyId, issuer), serviceContext,
 			userInfoJSON, userInfoMapperJSON);
 
-		_addAddress(serviceContext, userId, userInfoJSON, userInfoMapperJSON);
+		_addAddress(serviceContext, user, userInfoJSON, userInfoMapperJSON);
 
-		_addPhone(serviceContext, userId, userInfoJSON, userInfoMapperJSON);
+		_addPhone(serviceContext, user, userInfoJSON, userInfoMapperJSON);
 
-		return userId;
+		return user.getUserId();
 	}
 
 	private void _addAddress(
-			ServiceContext serviceContext, long userId, String userInfoJSON,
+			ServiceContext serviceContext, User user, String userInfoJSON,
 			String userInfoMapperJSON)
 		throws Exception {
 
@@ -98,91 +98,75 @@ public class OIDCUserInfoProcessor {
 		JSONObject userInfoJSONObject = _jsonFactory.createJSONObject(
 			userInfoJSON);
 
-		try {
-			ListType listType = _listTypeLocalService.getListType(
-				_getClaimString(
-					"addressType", addressMapperJSONObject, userInfoJSONObject),
+		ListType listType = _listTypeLocalService.getListType(
+			_getClaimString(
+				"addressType", addressMapperJSONObject, userInfoJSONObject),
+			Contact.class.getName() + ".address");
+
+		if (listType == null) {
+			List<ListType> listTypes = _listTypeLocalService.getListTypes(
 				Contact.class.getName() + ".address");
 
-			if (listType == null) {
+			listType = listTypes.get(0);
+		}
 
-				// Type is not a must by contract, but required by Liferay
+		Country country = null;
+		Region region = null;
 
-				List<ListType> listTypes = _listTypeLocalService.getListTypes(
-					Contact.class.getName() + ".address");
+		String claimString = _getClaimString(
+			"country", addressMapperJSONObject, userInfoJSONObject);
 
-				listType = listTypes.get(0);
+		if (Validator.isNotNull(claimString)) {
+			if ((claimString.charAt(0) >= '0') &&
+				(claimString.charAt(0) <= '9')) {
+
+				country = _countryLocalService.getCountryByNumber(
+					user.getCompanyId(), claimString);
+			}
+			else if (claimString.length() == 2) {
+				country = _countryLocalService.fetchCountryByA2(
+					user.getCompanyId(), StringUtil.toUpperCase(claimString));
+			}
+			else if (claimString.length() == 3) {
+				country = _countryLocalService.fetchCountryByA3(
+					user.getCompanyId(), StringUtil.toUpperCase(claimString));
+			}
+			else {
+				country = _countryLocalService.fetchCountryByName(
+					user.getCompanyId(), StringUtil.toLowerCase(claimString));
 			}
 
-			Country country = null;
+			String regionClaim = _getClaimString(
+				"region", addressMapperJSONObject, userInfoJSONObject);
 
-			Region region = null;
-
-			String countryClaim = _getClaimString(
-				"country", addressMapperJSONObject, userInfoJSONObject);
-
-			User user = _userLocalService.fetchUser(userId);
-
-			if (Validator.isNotNull(countryClaim)) {
-				if ((countryClaim.charAt(0) >= '0') &&
-					(countryClaim.charAt(0) <= '9')) {
-
-					country = _countryLocalService.getCountryByNumber(
-						user.getCompanyId(), countryClaim);
-				}
-				else if (countryClaim.length() == 2) {
-					country = _countryLocalService.fetchCountryByA2(
-						user.getCompanyId(),
-						StringUtil.toUpperCase(countryClaim));
-				}
-				else if (countryClaim.length() == 3) {
-					country = _countryLocalService.fetchCountryByA3(
-						user.getCompanyId(),
-						StringUtil.toUpperCase(countryClaim));
-				}
-				else {
-					country = _countryLocalService.fetchCountryByName(
-						user.getCompanyId(),
-						StringUtil.toLowerCase(countryClaim));
-				}
-
-				String regionClaim = _getClaimString(
-					"region", addressMapperJSONObject, userInfoJSONObject);
-
-				if ((country != null) && Validator.isNotNull(regionClaim)) {
-					region = _regionLocalService.fetchRegion(
-						country.getCountryId(),
-						StringUtil.toUpperCase(regionClaim));
-				}
+			if ((country != null) && Validator.isNotNull(regionClaim)) {
+				region = _regionLocalService.fetchRegion(
+					country.getCountryId(),
+					StringUtil.toUpperCase(regionClaim));
 			}
-
-			String streetClaim = _getClaimString(
-				"street", addressMapperJSONObject, userInfoJSONObject);
-
-			String[] streetParts = streetClaim.split("\n");
-
-			_addressLocalService.addAddress(
-				null, user.getUserId(), Contact.class.getName(),
-				user.getContactId(), null, null,
-				(streetParts.length > 0) ? streetParts[0] : null,
-				(streetParts.length > 1) ? streetParts[1] : null,
-				(streetParts.length > 2) ? streetParts[2] : null,
-				_getClaimString(
-					"city", addressMapperJSONObject, userInfoJSONObject),
-				_getClaimString(
-					"zip", addressMapperJSONObject, userInfoJSONObject),
-				(region == null) ? 0 : region.getRegionId(),
-				(country == null) ? 0 : country.getCountryId(),
-				listType.getListTypeId(), false, false, null, serviceContext);
 		}
-		catch (Exception exception) {
-			throw new Exception(
-				"Unable to add address for user: " + userId, exception);
-		}
+
+		String streetClaim = _getClaimString(
+			"street", addressMapperJSONObject, userInfoJSONObject);
+
+		String[] streetParts = streetClaim.split("\n");
+
+		_addressLocalService.addAddress(
+			null, user.getUserId(), Contact.class.getName(),
+			user.getContactId(), null, null,
+			(streetParts.length > 0) ? streetParts[0] : null,
+			(streetParts.length > 1) ? streetParts[1] : null,
+			(streetParts.length > 2) ? streetParts[2] : null,
+			_getClaimString(
+				"city", addressMapperJSONObject, userInfoJSONObject),
+			_getClaimString("zip", addressMapperJSONObject, userInfoJSONObject),
+			(region == null) ? 0 : region.getRegionId(),
+			(country == null) ? 0 : country.getCountryId(),
+			listType.getListTypeId(), false, false, null, serviceContext);
 	}
 
 	private void _addPhone(
-			ServiceContext serviceContext, long userId, String userInfoJSON,
+			ServiceContext serviceContext, User user, String userInfoJSON,
 			String userInfoMapperJSON)
 		throws Exception {
 
@@ -199,39 +183,25 @@ public class OIDCUserInfoProcessor {
 		JSONObject userInfoJSONObject = _jsonFactory.createJSONObject(
 			userInfoJSON);
 
-		try {
-			ListType contactPhoneListType = _listTypeLocalService.getListType(
-				_getClaimString(
-					"phoneType", phoneMapperJSONObject, userInfoJSONObject),
+		ListType listType = _listTypeLocalService.getListType(
+			_getClaimString(
+				"phoneType", phoneMapperJSONObject, userInfoJSONObject),
+			Contact.class.getName() + ".phone");
+
+		if (listType == null) {
+			List<ListType> listTypes = _listTypeLocalService.getListTypes(
 				Contact.class.getName() + ".phone");
 
-			if (contactPhoneListType == null) {
-
-				// Type is not a must by contract, but required by Liferay
-
-				List<ListType> contactPhoneListTypes =
-					_listTypeLocalService.getListTypes(
-						Contact.class.getName() + ".phone");
-
-				contactPhoneListType = contactPhoneListTypes.get(0);
-			}
-
-			User user = _userLocalService.fetchUser(userId);
-
-			_phoneLocalService.addPhone(
-				user.getUserId(), Contact.class.getName(), user.getContactId(),
-				_getClaimString(
-					"phone", phoneMapperJSONObject, userInfoJSONObject),
-				null, contactPhoneListType.getListTypeId(), false,
-				serviceContext);
+			listType = listTypes.get(0);
 		}
-		catch (Exception exception) {
-			throw new Exception(
-				"Unable to add phone for user: " + userId, exception);
-		}
+
+		_phoneLocalService.addPhone(
+			user.getUserId(), Contact.class.getName(), user.getContactId(),
+			_getClaimString("phone", phoneMapperJSONObject, userInfoJSONObject),
+			null, listType.getListTypeId(), false, serviceContext);
 	}
 
-	private long _addUser(
+	private User _addUser(
 			long companyId, long[] propertyRoleIds,
 			ServiceContext serviceContext, String userInfoJSON,
 			String userInfoMapperJSON)
@@ -307,9 +277,7 @@ public class OIDCUserInfoProcessor {
 			groupIds, organizationIds, roleIds, userGroupIds, sendEmail,
 			serviceContext);
 
-		user = _userLocalService.updatePasswordReset(user.getUserId(), false);
-
-		return user.getUserId();
+		return _userLocalService.updatePasswordReset(user.getUserId(), false);
 	}
 
 	private void _checkAddUser(long companyId, String emailAddress)
