@@ -330,7 +330,7 @@ public class ObjectDefinitionDeployerImpl implements ObjectDefinitionDeployer {
 			objectDefinition.getClassName());
 	}
 
-	private String _getGuestUnsupportedResourceActions(
+	private String _getPermissionsGuestUnsupported(
 		ObjectDefinition objectDefinition) {
 
 		if (objectDefinition.isEnableComments()) {
@@ -341,7 +341,7 @@ public class ObjectDefinitionDeployerImpl implements ObjectDefinitionDeployer {
 		return StringPool.BLANK;
 	}
 
-	private String _getResourceActions(ObjectDefinition objectDefinition) {
+	private String _getPermissionsSupports(ObjectDefinition objectDefinition) {
 		if (objectDefinition.isEnableComments()) {
 			return StringBundler.concat(
 				"<action-key>ADD_DISCUSSION</action-key>",
@@ -369,8 +369,8 @@ public class ObjectDefinitionDeployerImpl implements ObjectDefinitionDeployer {
 				},
 				new String[] {
 					objectDefinition.getClassName(),
-					_getGuestUnsupportedResourceActions(objectDefinition),
-					_getResourceActions(objectDefinition),
+					_getPermissionsGuestUnsupported(objectDefinition),
+					_getPermissionsSupports(objectDefinition),
 					objectDefinition.getPortletId(),
 					objectDefinition.getResourceName()
 				}));
