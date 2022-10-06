@@ -574,40 +574,40 @@ public class ObjectLayoutLocalServiceImpl
 						"Object layout box must have a type");
 				}
 
-				if (StringUtil.equals(
+				if (!StringUtil.equals(
 						objectLayoutBox.getType(),
 						ObjectLayoutBoxConstants.TYPE_CATEGORIZATION)) {
 
-					if (GetterUtil.getBoolean(
-							PropsUtil.get("feature.flag.LPS-158672")) &&
-						!objectDefinition.isEnableCategorization()) {
+					continue;
+				}
 
-						throw new ObjectLayoutBoxCategorizationTypeException(
-							"Categorization layout box must be enabled to be " +
-								"used");
-					}
+				if (GetterUtil.getBoolean(
+						PropsUtil.get("feature.flag.LPS-158672")) &&
+					!objectDefinition.isEnableCategorization()) {
 
-					if (!objectDefinition.isDefaultStorageType()) {
-						throw new ObjectLayoutBoxCategorizationTypeException(
-							"Categorization layout box only can be used in " +
-								"object definitions with default storage type");
-					}
+					throw new ObjectLayoutBoxCategorizationTypeException(
+						"Categorization layout box must be enabled to be used");
+				}
 
-					countObjectLayoutBoxCategorizationType++;
+				if (!objectDefinition.isDefaultStorageType()) {
+					throw new ObjectLayoutBoxCategorizationTypeException(
+						"Categorization layout box only can be used in " +
+							"object definitions with a default storage type");
+				}
 
-					if (countObjectLayoutBoxCategorizationType > 1) {
-						throw new ObjectLayoutBoxCategorizationTypeException(
-							"There can only be one categorization layout box " +
-								"per layout");
-					}
+				countObjectLayoutBoxCategorizationType++;
 
-					if (ListUtil.isNotEmpty(
-							objectLayoutBox.getObjectLayoutRows())) {
+				if (countObjectLayoutBoxCategorizationType > 1) {
+					throw new ObjectLayoutBoxCategorizationTypeException(
+						"There can only be one categorization layout box per " +
+							"layout");
+				}
 
-						throw new ObjectLayoutBoxCategorizationTypeException(
-							"Categorization layout box must not have layout " +
-								"rows");
-					}
+				if (ListUtil.isNotEmpty(
+						objectLayoutBox.getObjectLayoutRows())) {
+
+					throw new ObjectLayoutBoxCategorizationTypeException(
+						"Categorization layout box must not have layout rows");
 				}
 			}
 		}
