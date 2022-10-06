@@ -560,7 +560,6 @@ public class ObjectLayoutLocalServiceImpl
 		}
 
 		int countObjectLayoutBoxCategorizationType = 0;
-
 		ObjectDefinition objectDefinition =
 			_objectDefinitionPersistence.fetchByPrimaryKey(objectDefinitionId);
 
