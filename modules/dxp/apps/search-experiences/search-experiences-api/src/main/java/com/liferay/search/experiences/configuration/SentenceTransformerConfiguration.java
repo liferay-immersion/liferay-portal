@@ -47,10 +47,10 @@ public interface SentenceTransformerConfiguration {
 
 	@Meta.AD(
 		deflt = "http://localhost:8000",
-		description = "sentence-transformer-txtai-host-help",
-		name = "txtai-host", required = false
+		description = "sentence-transformer-txtai-host-address-help",
+		name = "txtai-host-address", required = false
 	)
-	public String txtAiHost();
+	public String txtaiHostAddress();
 
 	@Meta.AD(
 		deflt = "", description = "sentence-transformer-model-help",

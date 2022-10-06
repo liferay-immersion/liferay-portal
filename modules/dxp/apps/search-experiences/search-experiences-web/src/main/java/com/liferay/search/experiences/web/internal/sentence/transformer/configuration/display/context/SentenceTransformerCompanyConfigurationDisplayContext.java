@@ -82,8 +82,8 @@ public class SentenceTransformerCompanyConfigurationDisplayContext {
 		return _textTruncationStrategy;
 	}
 
-	public String getTxtAihost() {
-		return _txtAiHost;
+	public String getTxtaiHostAddress() {
+		return _txtaiHostAddress;
 	}
 
 	public boolean isEnabled() {
@@ -172,8 +172,8 @@ public class SentenceTransformerCompanyConfigurationDisplayContext {
 		_textTruncationStrategy = textTruncationStrategy;
 	}
 
-	public void setTxtAihost(String txtAihost) {
-		_txtAiHost = txtAihost;
+	public void setTxtaiHostAddress(String txtaiHostAddress) {
+		_txtaiHostAddress = txtaiHostAddress;
 	}
 
 	private List<String> _availableEmbeddingVectorDimensions;
@@ -193,6 +193,6 @@ public class SentenceTransformerCompanyConfigurationDisplayContext {
 	private int _modelTimeout;
 	private String _sentenceTransformProvider;
 	private String _textTruncationStrategy;
-	private String _txtAiHost;
+	private String _txtaiHostAddress;
 
 }

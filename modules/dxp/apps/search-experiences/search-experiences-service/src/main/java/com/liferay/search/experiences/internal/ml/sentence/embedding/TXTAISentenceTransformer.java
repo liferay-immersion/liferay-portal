@@ -64,7 +64,7 @@ public class TXTAISentenceTransformer
 	}
 
 	private Double[] _getEmbedding(String text) {
-		String host = _sentenceTransformerConfiguration.txtAiHost();
+		String host = _sentenceTransformerConfiguration.txtaiHostAddress();
 
 		if (!host.endsWith("/")) {
 			host += "/";

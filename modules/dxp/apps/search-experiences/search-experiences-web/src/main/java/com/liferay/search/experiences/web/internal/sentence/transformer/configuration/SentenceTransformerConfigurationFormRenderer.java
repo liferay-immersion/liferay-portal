@@ -108,7 +108,8 @@ public class SentenceTransformerConfigurationFormRenderer
 			"textTruncationStrategy",
 			ParamUtil.getString(httpServletRequest, "textTruncationStrategy")
 		).put(
-			"txtAihost", ParamUtil.getString(httpServletRequest, "txtAihost")
+			"txtaiHostAddress",
+			ParamUtil.getString(httpServletRequest, "txtaiHostAddress")
 		).build();
 	}
 
@@ -195,8 +196,9 @@ public class SentenceTransformerConfigurationFormRenderer
 			setTextTruncationStrategy(
 				_sentenceTransformerConfiguration.textTruncationStrategy());
 
-		sentenceTransformerCompanyConfigurationDisplayContext.setTxtAihost(
-			_sentenceTransformerConfiguration.txtAiHost());
+		sentenceTransformerCompanyConfigurationDisplayContext.
+			setTxtaiHostAddress(
+				_sentenceTransformerConfiguration.txtaiHostAddress());
 
 		httpServletRequest.setAttribute(
 			SentenceTransformerCompanyConfigurationDisplayContext.class.

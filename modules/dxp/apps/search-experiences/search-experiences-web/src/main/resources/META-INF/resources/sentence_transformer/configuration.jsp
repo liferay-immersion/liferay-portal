@@ -79,7 +79,7 @@ String currentSentenceTransformProvider = sentenceTransformerCompanyConfiguratio
 	</div>
 
 	<div class="options-container <%= !currentSentenceTransformProvider.equals("txtai") ? "hide" : StringPool.BLANK %>" id="<portlet:namespace />txtAiOptionsContainer">
-		<aui:input helpMessage="sentence-transformer-txtai-host-help" label="txtai-host" name="txtAihost" value="<%= sentenceTransformerCompanyConfigurationDisplayContext.getTxtAihost() %>" />
+		<aui:input helpMessage="sentence-transformer-txtai-host-address-help" label="txtai-host-address" name="txtaiHostAddress" value="<%= sentenceTransformerCompanyConfigurationDisplayContext.getTxtaiHostAddress() %>" />
 	</div>
 
 	<aui:select name="embeddingVectorDimensions" value="<%= sentenceTransformerCompanyConfigurationDisplayContext.getEmbeddingVectorDimensions() %>">
