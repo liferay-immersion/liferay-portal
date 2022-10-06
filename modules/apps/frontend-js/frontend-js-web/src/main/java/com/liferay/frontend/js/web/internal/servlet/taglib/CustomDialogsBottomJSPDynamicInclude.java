@@ -51,13 +51,13 @@ public class CustomDialogsBottomJSPDynamicInclude implements DynamicInclude {
 			HttpServletResponse httpServletResponse, String key)
 		throws IOException {
 
-		ThemeDisplay themeDisplay =
-			(ThemeDisplay)httpServletRequest.getAttribute(
-				WebKeys.THEME_DISPLAY);
-
-		Group group = themeDisplay.getScopeGroup();
-
 		try {
+			ThemeDisplay themeDisplay =
+				(ThemeDisplay)httpServletRequest.getAttribute(
+					WebKeys.THEME_DISPLAY);
+
+			Group group = themeDisplay.getScopeGroup();
+
 			CustomDialogsSettingsConfiguration
 				customDialogsSettingsConfiguration =
 					_configurationProvider.getGroupConfiguration(
@@ -70,7 +70,7 @@ public class CustomDialogsBottomJSPDynamicInclude implements DynamicInclude {
 				_portal.getPortletId(httpServletRequest),
 				new JSFragment(
 					StringBundler.concat(
-						"Liferay.CustomDialogs = { enabled: ",
+						"Liferay.CustomDialogs = {enabled: ",
 						String.valueOf(
 							customDialogsSettingsConfiguration.enabled()),
 						"};")));
