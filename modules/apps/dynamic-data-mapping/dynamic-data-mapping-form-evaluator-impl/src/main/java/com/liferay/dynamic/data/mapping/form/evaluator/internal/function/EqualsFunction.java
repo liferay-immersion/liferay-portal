@@ -39,7 +39,7 @@ public class EqualsFunction
 		Object value1 = _getValue(object1);
 		Object value2 = _getValue(object2);
 
-		if (!Objects.equals(value1.getClass(), value2.getClass())) {
+		if (!Objects.equals(_getClassName(value1), _getClassName(value2))) {
 			if (object1 instanceof BigDecimal) {
 				value1 = _convertValue(value2, value1);
 			}
@@ -68,6 +68,16 @@ public class EqualsFunction
 		}
 
 		return value2;
+	}
+
+	private String _getClassName(Object object) {
+		if (Objects.nonNull(object)) {
+			Class<?> classType = object.getClass();
+
+			return classType.getName();
+		}
+
+		return null;
 	}
 
 	private Object _getValue(Object object) {
