@@ -50,10 +50,9 @@ public class LayoutUtilityPageEntryVerticalCard extends BaseVerticalCard {
 		_renderRequest = renderRequest;
 		_renderResponse = renderResponse;
 
-		_httpServletRequest = PortalUtil.getHttpServletRequest(renderRequest);
-
 		_draftLayout = LayoutLocalServiceUtil.fetchDraftLayout(
 			_layoutUtilityPageEntry.getPlid());
+		_httpServletRequest = PortalUtil.getHttpServletRequest(renderRequest);
 	}
 
 	@Override
