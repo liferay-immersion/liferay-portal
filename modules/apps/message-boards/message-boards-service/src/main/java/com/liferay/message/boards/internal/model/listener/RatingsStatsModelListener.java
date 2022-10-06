@@ -48,7 +48,7 @@ public class RatingsStatsModelListener extends BaseModelListener<RatingsStats> {
 			indexer.reindex(mbMessage);
 		}
 		catch (SearchException searchException) {
-			throw new RuntimeException(searchException);
+			throw new ModelListenerException(searchException);
 		}
 	}
 
@@ -67,7 +67,7 @@ public class RatingsStatsModelListener extends BaseModelListener<RatingsStats> {
 			indexer.reindex(mbMessage);
 		}
 		catch (SearchException searchException) {
-			throw new RuntimeException(searchException);
+			throw new ModelListenerException(searchException);
 		}
 	}
 
