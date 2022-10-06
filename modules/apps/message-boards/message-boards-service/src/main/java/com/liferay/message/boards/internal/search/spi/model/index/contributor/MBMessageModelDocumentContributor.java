@@ -102,11 +102,10 @@ public class MBMessageModelDocumentContributor
 		}
 
 		document.addKeyword("parentMessageId", mbMessage.getParentMessageId());
+		document.addKeyword("threadId", mbMessage.getThreadId());
+		document.addKeywordSortable("urlSubject", mbMessage.getUrlSubject());
 
 		if (mbMessage.getMessageId() == mbMessage.getRootMessageId()) {
-			MBThread mbThread = mbThreadLocalService.fetchMBThread(
-				mbMessage.getThreadId());
-
 			document.addKeyword(
 				"answered",
 				Stream.of(
@@ -118,12 +117,14 @@ public class MBMessageModelDocumentContributor
 				).anyMatch(
 					MBMessage::isAnswer
 				));
-
 			document.addKeyword(
 				"childMessagesCount",
 				_mbMessageLocalService.getChildMessagesCount(
 					mbMessage.getMessageId(),
 					WorkflowConstants.STATUS_APPROVED));
+
+			MBThread mbThread = mbThreadLocalService.fetchMBThread(
+				mbMessage.getThreadId());
 
 			document.addKeyword("question", mbThread.isQuestion());
 
@@ -137,9 +138,6 @@ public class MBMessageModelDocumentContributor
 
 			document.addNumber("viewCount", mbThread.getViewCount());
 		}
-
-		document.addKeyword("threadId", mbMessage.getThreadId());
-		document.addKeywordSortable("urlSubject", mbMessage.getUrlSubject());
 
 		if (!mbMessage.isDiscussion()) {
 			return;
