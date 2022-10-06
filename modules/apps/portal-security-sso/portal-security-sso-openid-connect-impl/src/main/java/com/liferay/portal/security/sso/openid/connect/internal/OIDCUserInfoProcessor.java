@@ -113,50 +113,56 @@ public class OIDCUserInfoProcessor {
 		Country country = null;
 		Region region = null;
 
-		String claimString = _getClaimString(
+		String countryClaimString = _getClaimString(
 			"country", addressMapperJSONObject, userInfoJSONObject);
 
-		if (Validator.isNotNull(claimString)) {
-			if ((claimString.charAt(0) >= '0') &&
-				(claimString.charAt(0) <= '9')) {
+		if (Validator.isNotNull(countryClaimString)) {
+			if ((countryClaimString.charAt(0) >= '0') &&
+				(countryClaimString.charAt(0) <= '9')) {
 
 				country = _countryLocalService.getCountryByNumber(
-					user.getCompanyId(), claimString);
+					user.getCompanyId(), countryClaimString);
 			}
-			else if (claimString.length() == 2) {
+			else if (countryClaimString.length() == 2) {
 				country = _countryLocalService.fetchCountryByA2(
-					user.getCompanyId(), StringUtil.toUpperCase(claimString));
+					user.getCompanyId(),
+					StringUtil.toUpperCase(countryClaimString));
 			}
-			else if (claimString.length() == 3) {
+			else if (countryClaimString.length() == 3) {
 				country = _countryLocalService.fetchCountryByA3(
-					user.getCompanyId(), StringUtil.toUpperCase(claimString));
+					user.getCompanyId(),
+					StringUtil.toUpperCase(countryClaimString));
 			}
 			else {
 				country = _countryLocalService.fetchCountryByName(
-					user.getCompanyId(), StringUtil.toLowerCase(claimString));
+					user.getCompanyId(),
+					StringUtil.toLowerCase(countryClaimString));
 			}
 
-			String regionClaim = _getClaimString(
+			String regionClaimString = _getClaimString(
 				"region", addressMapperJSONObject, userInfoJSONObject);
 
-			if ((country != null) && Validator.isNotNull(regionClaim)) {
+			if ((country != null) && Validator.isNotNull(regionClaimString)) {
 				region = _regionLocalService.fetchRegion(
 					country.getCountryId(),
-					StringUtil.toUpperCase(regionClaim));
+					StringUtil.toUpperCase(regionClaimString));
 			}
 		}
 
-		String streetClaim = _getClaimString(
+		String streetClaimString = _getClaimString(
 			"street", addressMapperJSONObject, userInfoJSONObject);
 
-		String[] streetParts = streetClaim.split("\n");
+		String[] streetClaimStringParts = streetClaimString.split("\n");
 
 		_addressLocalService.addAddress(
 			null, user.getUserId(), Contact.class.getName(),
 			user.getContactId(), null, null,
-			(streetParts.length > 0) ? streetParts[0] : null,
-			(streetParts.length > 1) ? streetParts[1] : null,
-			(streetParts.length > 2) ? streetParts[2] : null,
+			(streetClaimStringParts.length > 0) ? streetClaimStringParts[0] :
+				null,
+			(streetClaimStringParts.length > 1) ? streetClaimStringParts[1] :
+				null,
+			(streetClaimStringParts.length > 2) ? streetClaimStringParts[2] :
+				null,
 			_getClaimString(
 				"city", addressMapperJSONObject, userInfoJSONObject),
 			_getClaimString("zip", addressMapperJSONObject, userInfoJSONObject),
