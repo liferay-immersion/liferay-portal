@@ -34,7 +34,7 @@ import org.osgi.service.component.annotations.Reference;
 	property = "frontend.data.set.name=" + CommerceAccountFDSNames.ACCOUNT_ENTRY_DEFAULT_USERS,
 	service = FDSView.class
 )
-public class AccountEntryDefaultUserBaseTableFDSView extends BaseTableFDSView {
+public class AccountEntryDefaultUsersTableFDSView extends BaseTableFDSView {
 
 	@Override
 	public FDSTableSchema getFDSTableSchema(Locale locale) {

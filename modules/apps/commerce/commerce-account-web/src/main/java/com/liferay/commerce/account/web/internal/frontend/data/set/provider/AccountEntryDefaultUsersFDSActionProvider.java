@@ -52,7 +52,7 @@ import org.osgi.service.component.annotations.ReferencePolicyOption;
 	property = "fds.data.provider.key=" + CommerceAccountFDSNames.ACCOUNT_ENTRY_DEFAULT_USERS,
 	service = FDSActionProvider.class
 )
-public class AccountEntryDefaultUserFDSActionProvider
+public class AccountEntryDefaultUsersFDSActionProvider
 	implements FDSActionProvider {
 
 	@Override

@@ -47,7 +47,7 @@ import org.osgi.service.component.annotations.Reference;
 	property = "fds.data.provider.key=" + CommerceAccountFDSNames.ACCOUNT_ENTRY_DEFAULT_USERS,
 	service = FDSDataProvider.class
 )
-public class AccountEntryDefaultUserDataSetDataProvider
+public class AccountEntryDefaultUsersDataSetDataProvider
 	implements FDSDataProvider<User> {
 
 	@Override
