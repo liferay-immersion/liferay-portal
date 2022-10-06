@@ -569,6 +569,13 @@ public class NotificationTemplateLocalServiceImpl
 			List<Long> attachmentObjectFieldIds)
 		throws PortalException {
 
+		if (!Objects.equals(
+				NotificationConstants.TYPE_USER_NOTIFICATION, type) &&
+			Validator.isNull(from)) {
+
+			throw new NotificationTemplateFromException("From is null");
+		}
+
 		if (Validator.isNull(name)) {
 			throw new NotificationTemplateNameException("Name is null");
 		}
@@ -606,13 +613,6 @@ public class NotificationTemplateLocalServiceImpl
 			}
 
 			type = NotificationConstants.TYPE_EMAIL;
-		}
-
-		if (!Objects.equals(
-				NotificationConstants.TYPE_USER_NOTIFICATION, type) &&
-			Validator.isNull(from)) {
-
-			throw new NotificationTemplateFromException("From is null");
 		}
 	}
 
