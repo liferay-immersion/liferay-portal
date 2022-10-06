@@ -22,14 +22,13 @@ import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
 import com.liferay.portal.kernel.language.Language;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.model.BaseModel;
 import com.liferay.portal.kernel.search.Document;
-import com.liferay.portal.kernel.search.DocumentContributor;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.kernel.xml.DocumentException;
 import com.liferay.portal.kernel.xml.Node;
 import com.liferay.portal.kernel.xml.SAXReaderUtil;
+import com.liferay.portal.search.spi.model.index.contributor.ModelDocumentContributor;
 import com.liferay.search.experiences.configuration.SentenceTransformerConfiguration;
 import com.liferay.search.experiences.internal.ml.sentence.embedding.SentenceEmbeddingRetriever;
 
@@ -49,18 +48,14 @@ import org.osgi.service.component.annotations.Reference;
 	configurationPid = "com.liferay.search.experiences.configuration.SentenceTransformerConfiguration",
 	enabled = false, immediate = true,
 	property = "indexer.class.name=com.liferay.journal.model.JournalArticle",
-	service = DocumentContributor.class
+	service = ModelDocumentContributor.class
 )
-public class JournalArticleSentenceEmbeddingDocumentContributor
+public class JournalArticleSentenceEmbeddingModelDocumentContributor
 	extends BaseSentenceEmbeddingModelDocumentContributor
-	implements DocumentContributor<JournalArticle> {
+	implements ModelDocumentContributor<JournalArticle> {
 
 	@Override
-	public void contribute(
-		Document document, BaseModel<JournalArticle> baseModel) {
-
-		JournalArticle journalArticle = (JournalArticle)baseModel;
-
+	public void contribute(Document document, JournalArticle journalArticle) {
 		if (!isAddSentenceEmbedding(JournalArticle.class) ||
 			(journalArticle.getStatus() != WorkflowConstants.STATUS_APPROVED)) {
 
@@ -118,7 +113,7 @@ public class JournalArticleSentenceEmbeddingDocumentContributor
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
-		JournalArticleSentenceEmbeddingDocumentContributor.class);
+		JournalArticleSentenceEmbeddingModelDocumentContributor.class);
 
 	@Reference
 	private JournalContent _journalContent;
