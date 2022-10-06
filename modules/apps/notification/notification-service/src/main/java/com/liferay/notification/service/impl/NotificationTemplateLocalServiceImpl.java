@@ -608,13 +608,10 @@ public class NotificationTemplateLocalServiceImpl
 			type = NotificationConstants.TYPE_EMAIL;
 		}
 
-		if (Objects.equals(
-				NotificationConstants.TYPE_USER_NOTIFICATION, type)) {
+		if (!Objects.equals(
+				NotificationConstants.TYPE_USER_NOTIFICATION, type) &&
+			Validator.isNull(from)) {
 
-			return;
-		}
-
-		if (Validator.isNull(from)) {
 			throw new NotificationTemplateFromException("From is null");
 		}
 	}
