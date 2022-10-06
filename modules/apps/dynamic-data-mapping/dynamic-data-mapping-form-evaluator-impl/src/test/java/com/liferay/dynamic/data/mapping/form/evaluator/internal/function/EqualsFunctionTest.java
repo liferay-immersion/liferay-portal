@@ -38,16 +38,15 @@ public class EqualsFunctionTest {
 		EqualsFunction equalsFunction = new EqualsFunction();
 
 		Assert.assertFalse(equalsFunction.apply("FORMS", "forms"));
-		Assert.assertFalse(equalsFunction.apply(null, "forms"));
 		Assert.assertFalse(equalsFunction.apply("forms&#39;", "forms'"));
-		Assert.assertFalse(equalsFunction.apply(null, new BigDecimal(1)));
 		Assert.assertFalse(
 			equalsFunction.apply(Double.valueOf(2), new BigDecimal(1)));
 		Assert.assertFalse(
 			equalsFunction.apply(Integer.valueOf(2), new BigDecimal(1)));
 		Assert.assertFalse(
 			equalsFunction.apply(Long.valueOf(2), new BigDecimal(1)));
-
+		Assert.assertFalse(equalsFunction.apply(null, "forms"));
+		Assert.assertFalse(equalsFunction.apply(null, new BigDecimal(1)));
 		Assert.assertTrue(equalsFunction.apply("1", new BigDecimal(1)));
 		Assert.assertTrue(equalsFunction.apply("forms", "forms"));
 		Assert.assertTrue(

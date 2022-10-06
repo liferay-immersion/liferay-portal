@@ -72,9 +72,9 @@ public class EqualsFunction
 
 	private String _getClassName(Object object) {
 		if (Objects.nonNull(object)) {
-			Class<?> classType = object.getClass();
+			Class<?> clazz = object.getClass();
 
-			return classType.getName();
+			return clazz.getName();
 		}
 
 		return null;
