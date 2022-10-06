@@ -569,6 +569,16 @@ public class NotificationTemplateLocalServiceImpl
 			List<Long> attachmentObjectFieldIds)
 		throws PortalException {
 
+		if (objectDefinitionId > 0) {
+			ObjectDefinition objectDefinition =
+				_objectDefinitionLocalService.fetchObjectDefinition(
+					objectDefinitionId);
+
+			if (objectDefinition == null) {
+				throw new NotificationTemplateObjectDefinitionIdException();
+			}
+		}
+
 		if (!Objects.equals(
 				NotificationConstants.TYPE_USER_NOTIFICATION, type) &&
 			Validator.isNull(from)) {
@@ -580,14 +590,14 @@ public class NotificationTemplateLocalServiceImpl
 			throw new NotificationTemplateNameException("Name is null");
 		}
 
-		if (objectDefinitionId > 0) {
-			ObjectDefinition objectDefinition =
-				_objectDefinitionLocalService.fetchObjectDefinition(
-					objectDefinitionId);
+		if (type == null) {
+			if (GetterUtil.getBoolean(
+					PropsUtil.get("feature.flag.LPS-162133"))) {
 
-			if (objectDefinition == null) {
-				throw new NotificationTemplateObjectDefinitionIdException();
+				throw new NotificationTemplateTypeException();
 			}
+
+			type = NotificationConstants.TYPE_EMAIL;
 		}
 
 		for (long attachmentObjectFieldId : attachmentObjectFieldIds) {
@@ -603,16 +613,6 @@ public class NotificationTemplateLocalServiceImpl
 
 				throw new NotificationTemplateAttachmentObjectFieldIdException();
 			}
-		}
-
-		if (type == null) {
-			if (GetterUtil.getBoolean(
-					PropsUtil.get("feature.flag.LPS-162133"))) {
-
-				throw new NotificationTemplateTypeException();
-			}
-
-			type = NotificationConstants.TYPE_EMAIL;
 		}
 	}
 
