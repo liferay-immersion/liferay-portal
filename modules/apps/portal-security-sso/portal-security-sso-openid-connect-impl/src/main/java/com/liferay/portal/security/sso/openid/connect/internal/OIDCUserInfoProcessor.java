@@ -70,8 +70,8 @@ public class OIDCUserInfoProcessor {
 		}
 
 		User user = _addUser(
-			companyId, _getRoleIds(companyId, issuer), serviceContext,
-			userInfoJSON, userInfoMapperJSON);
+			companyId, issuer, serviceContext, userInfoJSON,
+			userInfoMapperJSON);
 
 		_addAddress(serviceContext, user, userInfoJSON, userInfoMapperJSON);
 
@@ -207,9 +207,8 @@ public class OIDCUserInfoProcessor {
 	}
 
 	private User _addUser(
-			long companyId, long[] propertyRoleIds,
-			ServiceContext serviceContext, String userInfoJSON,
-			String userInfoMapperJSON)
+			long companyId, String issuer, ServiceContext serviceContext,
+			String userInfoJSON, String userInfoMapperJSON)
 		throws Exception {
 
 		JSONObject userInfoJSONObject = _jsonFactory.createJSONObject(
@@ -268,7 +267,7 @@ public class OIDCUserInfoProcessor {
 			userInfoMapperJSONObject.getJSONObject("users_roles"));
 
 		if ((roleIds == null) || (roleIds.length == 0)) {
-			roleIds = propertyRoleIds;
+			roleIds = _getRoleIds(companyId, issuer);
 		}
 
 		long[] userGroupIds = null;
@@ -344,11 +343,11 @@ public class OIDCUserInfoProcessor {
 		String fieldName, JSONObject mapperJSONObject,
 		JSONObject userInfoJSONObject) {
 
-		Object claim = _getClaimObject(
+		Object claimObject = _getClaimObject(
 			fieldName, mapperJSONObject, userInfoJSONObject);
 
-		if ((claim == null) || (claim instanceof JSONArray)) {
-			return (JSONArray)claim;
+		if ((claimObject == null) || (claimObject instanceof JSONArray)) {
+			return (JSONArray)claimObject;
 		}
 
 		return null;
@@ -358,19 +357,19 @@ public class OIDCUserInfoProcessor {
 		String fieldName, JSONObject mapperJSONObject,
 		JSONObject userInfoJSONObject) {
 
-		String mappedClaim = mapperJSONObject.getString(fieldName);
+		String value = mapperJSONObject.getString(fieldName);
 
-		String[] mappedClaimChain = mappedClaim.split("->");
+		String[] valueParts = value.split("->");
 
-		Object claim = userInfoJSONObject.get(mappedClaimChain[0]);
+		Object claimObject = userInfoJSONObject.get(valueParts[0]);
 
-		for (int i = 1; i < mappedClaimChain.length; ++i) {
-			JSONObject claimJSONObject = (JSONObject)claim;
+		for (int i = 1; i < valueParts.length; ++i) {
+			JSONObject claimJSONObject = (JSONObject)claimObject;
 
-			claim = claimJSONObject.get(mappedClaimChain[i]);
+			claimObject = claimJSONObject.get(valueParts[i]);
 		}
 
-		return claim;
+		return claimObject;
 	}
 
 	private String _getClaimString(
@@ -388,39 +387,20 @@ public class OIDCUserInfoProcessor {
 	}
 
 	private Locale _getLocale(
-		long companyId, JSONObject userInfoJSONObject,
-		JSONObject userMapperJSONObject) {
+			long companyId, JSONObject userInfoJSONObject,
+			JSONObject userMapperJSONObject)
+		throws Exception {
 
-		String languageId = null;
-
-		try {
-			languageId = _getClaimString(
-				"languageId", userMapperJSONObject, userInfoJSONObject);
-		}
-		catch (Exception exception) {
-			if (_log.isWarnEnabled()) {
-				_log.warn("Unable to get locale from userInfo", exception);
-			}
-		}
+		String languageId = _getClaimString(
+			"languageId", userMapperJSONObject, userInfoJSONObject);
 
 		if (Validator.isNotNull(languageId)) {
 			return new Locale(languageId);
 		}
 
-		try {
-			Company company = _companyLocalService.getCompany(companyId);
+		Company company = _companyLocalService.getCompany(companyId);
 
-			return company.getLocale();
-		}
-		catch (Exception exception) {
-			if (_log.isWarnEnabled()) {
-				_log.warn(
-					"Unable to get locale from company " + companyId,
-					exception);
-			}
-
-			return new Locale("en-us");
-		}
+		return company.getLocale();
 	}
 
 	private long[] _getRoleIds(
@@ -433,28 +413,19 @@ public class OIDCUserInfoProcessor {
 			return null;
 		}
 
-		try {
-			JSONArray rolesJSONArray = _getClaimJSONArray(
-				"roles", usersRolesMapperJSONObject, userInfoJSONObject);
+		JSONArray rolesJSONArray = _getClaimJSONArray(
+			"roles", usersRolesMapperJSONObject, userInfoJSONObject);
 
-			long[] roleIds = new long[rolesJSONArray.length()];
+		long[] roleIds = new long[rolesJSONArray.length()];
 
-			for (int i = 0; i < rolesJSONArray.length(); ++i) {
-				Role role = _roleLocalService.fetchRole(
-					companyId, (String)rolesJSONArray.get(i));
+		for (int i = 0; i < rolesJSONArray.length(); ++i) {
+			Role role = _roleLocalService.fetchRole(
+				companyId, (String)rolesJSONArray.get(i));
 
-				roleIds[i] = role.getRoleId();
-			}
-
-			return roleIds;
+			roleIds[i] = role.getRoleId();
 		}
-		catch (Exception exception) {
-			if (_log.isWarnEnabled()) {
-				_log.warn("Unable to assign roles " + exception);
-			}
 
-			return null;
-		}
+		return roleIds;
 	}
 
 	private long[] _getRoleIds(long companyId, String issuer) {
