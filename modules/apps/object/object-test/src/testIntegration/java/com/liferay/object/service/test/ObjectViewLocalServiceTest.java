@@ -602,6 +602,8 @@ public class ObjectViewLocalServiceTest {
 	}
 
 	private void _testAddObjectViewRelationshipFilterColumn() throws Exception {
+		String externalReferenceCode = RandomTestUtil.randomString();
+
 		ObjectDefinition objectDefinition1 =
 			ObjectDefinitionTestUtil.addObjectDefinition(
 				_objectDefinitionLocalService,
@@ -616,8 +618,6 @@ public class ObjectViewLocalServiceTest {
 
 		ObjectField objectField = _objectFieldLocalService.getObjectField(
 			objectRelationship.getObjectFieldId2());
-
-		String externalReferenceCode = RandomTestUtil.randomString();
 
 		try {
 			_objectViewLocalService.addObjectView(
