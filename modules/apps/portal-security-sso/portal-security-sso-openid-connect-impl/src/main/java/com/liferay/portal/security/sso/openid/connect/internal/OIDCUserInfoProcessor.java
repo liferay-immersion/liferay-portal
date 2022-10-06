@@ -61,7 +61,7 @@ public class OIDCUserInfoProcessor {
 			// TODO: Remove propertyRoleIds from signature once LXC migrates to
 			//  use UserInfoMapper Configuration.
 
-			userId = _userModelOIDCUserInfoMapper.generateUser(
+			userId = _userModelOIDCUserInfoMapper.addUser(
 				companyId, _getRoleIds(companyId, issuer), serviceContext,
 				userInfoJSON, userInfoMapperJSON);
 		}

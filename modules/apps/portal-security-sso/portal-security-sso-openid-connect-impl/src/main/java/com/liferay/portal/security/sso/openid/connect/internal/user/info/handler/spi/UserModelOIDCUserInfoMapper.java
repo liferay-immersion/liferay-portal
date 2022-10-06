@@ -46,7 +46,7 @@ import org.osgi.service.component.annotations.Reference;
 @Component(immediate = true, service = UserModelOIDCUserInfoMapper.class)
 public class UserModelOIDCUserInfoMapper {
 
-	public long generateUser(
+	public long addUser(
 			long companyId, long[] propertyRoleIds,
 			ServiceContext serviceContext, String userInfoJSON,
 			String userInfoMapperJSON)
