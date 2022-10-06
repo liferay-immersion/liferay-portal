@@ -24,7 +24,6 @@ import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.IndexerRegistryUtil;
 import com.liferay.portal.kernel.search.SearchException;
 import com.liferay.ratings.kernel.model.RatingsStats;
-import com.liferay.staging.model.listener.StagingModelListener;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -51,8 +50,6 @@ public class RatingsStatsModelListener extends BaseModelListener<RatingsStats> {
 		catch (SearchException searchException) {
 			throw new RuntimeException(searchException);
 		}
-
-		_stagingModelListener.onAfterCreate(ratingsStats);
 	}
 
 	@Override
@@ -79,8 +76,5 @@ public class RatingsStatsModelListener extends BaseModelListener<RatingsStats> {
 
 	@Reference
 	private MBThreadLocalService _mbThreadLocalService;
-
-	@Reference
-	private StagingModelListener<RatingsStats> _stagingModelListener;
 
 }
