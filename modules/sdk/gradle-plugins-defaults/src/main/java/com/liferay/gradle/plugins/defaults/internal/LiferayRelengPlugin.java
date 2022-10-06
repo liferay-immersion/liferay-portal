@@ -784,9 +784,9 @@ public class LiferayRelengPlugin implements Plugin<Project> {
 					return true;
 				}
 
-				if (LiferayRelengUtil.hasStaleUnstyledTheme(
+				if (LiferayRelengUtil.hasStalePortalDependencies(
 						project, recordArtifactTask.getOutputFile()) ||
-					LiferayRelengUtil.hasStalePortalDependencies(
+					LiferayRelengUtil.hasStaleUnstyledTheme(
 						project, recordArtifactTask.getOutputFile())) {
 
 					return true;
