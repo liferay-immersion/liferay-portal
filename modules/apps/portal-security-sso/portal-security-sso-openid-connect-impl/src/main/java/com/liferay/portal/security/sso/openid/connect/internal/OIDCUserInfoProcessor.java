@@ -342,11 +342,11 @@ public class OIDCUserInfoProcessor {
 	}
 
 	private JSONArray _getClaimJSONArray(
-		String fieldName, JSONObject mapperJSONObject,
+		String key, JSONObject mapperJSONObject,
 		JSONObject userInfoJSONObject) {
 
 		Object claimObject = _getClaimObject(
-			fieldName, mapperJSONObject, userInfoJSONObject);
+			key, mapperJSONObject, userInfoJSONObject);
 
 		if ((claimObject == null) || (claimObject instanceof JSONArray)) {
 			return (JSONArray)claimObject;
@@ -356,10 +356,10 @@ public class OIDCUserInfoProcessor {
 	}
 
 	private Object _getClaimObject(
-		String fieldName, JSONObject mapperJSONObject,
+		String key, JSONObject mapperJSONObject,
 		JSONObject userInfoJSONObject) {
 
-		String value = mapperJSONObject.getString(fieldName);
+		String value = mapperJSONObject.getString(key);
 
 		String[] valueParts = value.split("->");
 
@@ -375,11 +375,11 @@ public class OIDCUserInfoProcessor {
 	}
 
 	private String _getClaimString(
-		String fieldName, JSONObject mapperJSONObject,
+		String key, JSONObject mapperJSONObject,
 		JSONObject userInfoJSONObject) {
 
 		Object claimObject = _getClaimObject(
-			fieldName, mapperJSONObject, userInfoJSONObject);
+			key, mapperJSONObject, userInfoJSONObject);
 
 		if ((claimObject != null) && !(claimObject instanceof String)) {
 			throw new IllegalArgumentException("Claim is not a string");
