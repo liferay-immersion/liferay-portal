@@ -18,6 +18,7 @@ import com.liferay.message.boards.model.MBMessage;
 import com.liferay.message.boards.model.MBThread;
 import com.liferay.message.boards.service.MBMessageLocalService;
 import com.liferay.message.boards.service.MBThreadLocalService;
+import com.liferay.petra.reflect.ReflectionUtil;
 import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.IndexerRegistryUtil;
 import com.liferay.portal.kernel.search.SearchException;
@@ -54,7 +55,7 @@ public class MBThreadViewCountEntryModelListener
 			indexer.reindex(mbMessage);
 		}
 		catch (SearchException searchException) {
-			throw new RuntimeException(searchException);
+			ReflectionUtil.throwException(searchException);
 		}
 	}
 
