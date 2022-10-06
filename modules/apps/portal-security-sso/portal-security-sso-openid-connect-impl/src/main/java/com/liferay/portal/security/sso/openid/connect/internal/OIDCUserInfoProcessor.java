@@ -16,6 +16,9 @@ package com.liferay.portal.security.sso.openid.connect.internal;
 
 import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.exception.UserEmailAddressException;
+import com.liferay.portal.kernel.json.JSONArray;
+import com.liferay.portal.kernel.json.JSONFactory;
+import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Company;
@@ -41,16 +44,10 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.security.sso.openid.connect.OpenIdConnectServiceException;
 import com.liferay.portal.security.sso.openid.connect.internal.exception.StrangersNotAllowedException;
 
-import com.nimbusds.jose.util.JSONObjectUtils;
-import com.nimbusds.oauth2.sdk.ParseException;
-
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
-
-import net.minidev.json.JSONArray;
-import net.minidev.json.JSONObject;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -88,21 +85,22 @@ public class OIDCUserInfoProcessor {
 			String userInfoMapperJSON)
 		throws Exception {
 
-		JSONObject userInfoMapperJSONObject = JSONObjectUtils.parse(
+		JSONObject userInfoMapperJSONObject = _jsonFactory.createJSONObject(
 			userInfoMapperJSON);
 
-		JSONObject addressMapperJSONObject = JSONObjectUtils.getJSONObject(
-			userInfoMapperJSONObject, "address");
+		JSONObject addressMapperJSONObject =
+			userInfoMapperJSONObject.getJSONObject("address");
 
 		if (addressMapperJSONObject == null) {
 			return;
 		}
 
-		JSONObject userInfoJSONObject = JSONObjectUtils.parse(userInfoJSON);
+		JSONObject userInfoJSONObject = _jsonFactory.createJSONObject(
+			userInfoJSON);
 
 		try {
 			ListType contactAddressListType = _listTypeLocalService.getListType(
-				_getStringClaim(
+				_getClaimString(
 					"addressType", addressMapperJSONObject, userInfoJSONObject),
 				Contact.class.getName() + ".address");
 
@@ -121,7 +119,7 @@ public class OIDCUserInfoProcessor {
 
 			Region region = null;
 
-			String countryClaim = _getStringClaim(
+			String countryClaim = _getClaimString(
 				"country", addressMapperJSONObject, userInfoJSONObject);
 
 			User user = _userLocalService.fetchUser(userId);
@@ -149,7 +147,7 @@ public class OIDCUserInfoProcessor {
 						StringUtil.toLowerCase(countryClaim));
 				}
 
-				String regionClaim = _getStringClaim(
+				String regionClaim = _getClaimString(
 					"region", addressMapperJSONObject, userInfoJSONObject);
 
 				if ((country != null) && Validator.isNotNull(regionClaim)) {
@@ -159,7 +157,7 @@ public class OIDCUserInfoProcessor {
 				}
 			}
 
-			String streetClaim = _getStringClaim(
+			String streetClaim = _getClaimString(
 				"street", addressMapperJSONObject, userInfoJSONObject);
 
 			String[] streetParts = streetClaim.split("\n");
@@ -170,9 +168,9 @@ public class OIDCUserInfoProcessor {
 				(streetParts.length > 0) ? streetParts[0] : null,
 				(streetParts.length > 1) ? streetParts[1] : null,
 				(streetParts.length > 2) ? streetParts[2] : null,
-				_getStringClaim(
+				_getClaimString(
 					"city", addressMapperJSONObject, userInfoJSONObject),
-				_getStringClaim(
+				_getClaimString(
 					"zip", addressMapperJSONObject, userInfoJSONObject),
 				(region == null) ? 0 : region.getRegionId(),
 				(country == null) ? 0 : country.getCountryId(),
@@ -190,21 +188,22 @@ public class OIDCUserInfoProcessor {
 			String userInfoMapperJSON)
 		throws Exception {
 
-		JSONObject userInfoMapperJSONObject = JSONObjectUtils.parse(
+		JSONObject userInfoMapperJSONObject = _jsonFactory.createJSONObject(
 			userInfoMapperJSON);
 
-		JSONObject phoneMapperJSONObject = JSONObjectUtils.getJSONObject(
-			userInfoMapperJSONObject, "phone");
+		JSONObject phoneMapperJSONObject =
+			userInfoMapperJSONObject.getJSONObject("phone");
 
 		if (phoneMapperJSONObject == null) {
 			return;
 		}
 
-		JSONObject userInfoJSONObject = JSONObjectUtils.parse(userInfoJSON);
+		JSONObject userInfoJSONObject = _jsonFactory.createJSONObject(
+			userInfoJSON);
 
 		try {
 			ListType contactPhoneListType = _listTypeLocalService.getListType(
-				_getStringClaim(
+				_getClaimString(
 					"phoneType", phoneMapperJSONObject, userInfoJSONObject),
 				Contact.class.getName() + ".phone");
 
@@ -223,7 +222,7 @@ public class OIDCUserInfoProcessor {
 
 			_phoneLocalService.addPhone(
 				user.getUserId(), Contact.class.getName(), user.getContactId(),
-				_getStringClaim(
+				_getClaimString(
 					"phone", phoneMapperJSONObject, userInfoJSONObject),
 				null, contactPhoneListType.getListTypeId(), false,
 				serviceContext);
@@ -240,19 +239,20 @@ public class OIDCUserInfoProcessor {
 			String userInfoMapperJSON)
 		throws Exception {
 
-		JSONObject userInfoJSONObject = JSONObjectUtils.parse(userInfoJSON);
+		JSONObject userInfoJSONObject = _jsonFactory.createJSONObject(
+			userInfoJSON);
 
-		JSONObject userInfoMapperJSONObject = JSONObjectUtils.parse(
+		JSONObject userInfoMapperJSONObject = _jsonFactory.createJSONObject(
 			userInfoMapperJSON);
 
-		JSONObject userMapperJSONObject = JSONObjectUtils.getJSONObject(
-			userInfoMapperJSONObject, "user");
+		JSONObject userMapperJSONObject =
+			userInfoMapperJSONObject.getJSONObject("user");
 
-		String emailAddress = _getStringClaim(
+		String emailAddress = _getClaimString(
 			"emailAddress", userMapperJSONObject, userInfoJSONObject);
-		String firstName = _getStringClaim(
+		String firstName = _getClaimString(
 			"firstName", userMapperJSONObject, userInfoJSONObject);
-		String lastName = _getStringClaim(
+		String lastName = _getClaimString(
 			"lastName", userMapperJSONObject, userInfoJSONObject);
 
 		if (Validator.isNull(firstName) || Validator.isNull(lastName) ||
@@ -268,14 +268,14 @@ public class OIDCUserInfoProcessor {
 
 		_checkAddUser(companyId, emailAddress);
 
-		JSONObject contactMapperJSONObject = JSONObjectUtils.getJSONObject(
-			userInfoMapperJSONObject, "contact");
+		JSONObject contactMapperJSONObject =
+			userInfoMapperJSONObject.getJSONObject("contact");
 
 		long creatorUserId = 0;
 		boolean autoPassword = true;
 		String password1 = null;
 		String password2 = null;
-		String screenName = _getStringClaim(
+		String screenName = _getClaimString(
 			"screenName", userMapperJSONObject, userInfoJSONObject);
 		long prefixId = 0;
 		long suffixId = 0;
@@ -288,8 +288,7 @@ public class OIDCUserInfoProcessor {
 
 		long[] roleIds = _getRoleIds(
 			companyId, userInfoJSONObject,
-			JSONObjectUtils.getJSONObject(
-				userInfoMapperJSONObject, "users_roles"));
+			userInfoMapperJSONObject.getJSONObject("users_roles"));
 
 		if ((roleIds == null) || (roleIds.length == 0)) {
 			roleIds = propertyRoleIds;
@@ -300,12 +299,12 @@ public class OIDCUserInfoProcessor {
 			Validator.isNull(screenName), screenName, emailAddress,
 			_getLocale(companyId, userInfoJSONObject, userMapperJSONObject),
 			firstName,
-			_getStringClaim(
+			_getClaimString(
 				"middleName", userMapperJSONObject, userInfoJSONObject),
 			lastName, prefixId, suffixId,
 			_isMale(contactMapperJSONObject, userInfoJSONObject), birthday[1],
 			birthday[2], birthday[0],
-			_getStringClaim(
+			_getClaimString(
 				"jobTitle", userMapperJSONObject, userInfoJSONObject),
 			groupIds, organizationIds, roleIds, userGroupIds, sendEmail,
 			serviceContext);
@@ -344,7 +343,7 @@ public class OIDCUserInfoProcessor {
 		String birthdate;
 
 		try {
-			birthdate = _getStringClaim(
+			birthdate = _getClaimString(
 				"birthdate", contactMapperJSONObject, userInfoJSONObject);
 
 			if (Validator.isNull(birthdate)) {
@@ -371,14 +370,25 @@ public class OIDCUserInfoProcessor {
 		return birthday;
 	}
 
-	private Object _getClaim(
-			String fieldName, JSONObject mapperJSONObject,
-			JSONObject userInfoJSONObject)
-		throws ParseException {
+	private JSONArray _getClaimJSONArray(
+		String fieldName, JSONObject mapperJSONObject,
+		JSONObject userInfoJSONObject) {
 
-		String mappedClaim =
-			com.nimbusds.oauth2.sdk.util.JSONObjectUtils.getString(
-				mapperJSONObject, fieldName);
+		Object claim = _getClaimObject(
+			fieldName, mapperJSONObject, userInfoJSONObject);
+
+		if ((claim == null) || (claim instanceof JSONArray)) {
+			return (JSONArray)claim;
+		}
+
+		return null;
+	}
+
+	private Object _getClaimObject(
+		String fieldName, JSONObject mapperJSONObject,
+		JSONObject userInfoJSONObject) {
+
+		String mappedClaim = mapperJSONObject.getString(fieldName);
 
 		String[] mappedClaimChain = mappedClaim.split("->");
 
@@ -393,25 +403,18 @@ public class OIDCUserInfoProcessor {
 		return claim;
 	}
 
-	private JSONArray _getJSONArrayClaim(
+	private String _getClaimString(
 		String fieldName, JSONObject mapperJSONObject,
 		JSONObject userInfoJSONObject) {
 
-		try {
-			Object claim = _getClaim(
-				fieldName, mapperJSONObject, userInfoJSONObject);
+		Object claimObject = _getClaimObject(
+			fieldName, mapperJSONObject, userInfoJSONObject);
 
-			if ((claim == null) || (claim instanceof JSONArray)) {
-				return (JSONArray)claim;
-			}
-		}
-		catch (ParseException parseException) {
-			if (_log.isInfoEnabled()) {
-				_log.info(parseException);
-			}
+		if ((claimObject != null) && !(claimObject instanceof String)) {
+			throw new IllegalArgumentException("Claim is not a string");
 		}
 
-		return null;
+		return (String)claimObject;
 	}
 
 	private Locale _getLocale(
@@ -421,7 +424,7 @@ public class OIDCUserInfoProcessor {
 		String languageId = null;
 
 		try {
-			languageId = _getStringClaim(
+			languageId = _getClaimString(
 				"languageId", userMapperJSONObject, userInfoJSONObject);
 		}
 		catch (Exception exception) {
@@ -455,18 +458,18 @@ public class OIDCUserInfoProcessor {
 		JSONObject usersRolesMapperJSONObject) {
 
 		if ((usersRolesMapperJSONObject == null) ||
-			(usersRolesMapperJSONObject.size() < 1)) {
+			(usersRolesMapperJSONObject.length() < 1)) {
 
 			return null;
 		}
 
 		try {
-			JSONArray rolesJSONArray = _getJSONArrayClaim(
+			JSONArray rolesJSONArray = _getClaimJSONArray(
 				"roles", usersRolesMapperJSONObject, userInfoJSONObject);
 
-			long[] roleIds = new long[rolesJSONArray.size()];
+			long[] roleIds = new long[rolesJSONArray.length()];
 
-			for (int i = 0; i < rolesJSONArray.size(); ++i) {
+			for (int i = 0; i < rolesJSONArray.length(); ++i) {
 				Role role = _roleLocalService.fetchRole(
 					companyId, (String)rolesJSONArray.get(i));
 
@@ -518,44 +521,22 @@ public class OIDCUserInfoProcessor {
 		return null;
 	}
 
-	private String _getStringClaim(
-		String fieldName, JSONObject mapperJSONObject,
-		JSONObject userInfoJSONObject) {
-
-		try {
-			Object claim = _getClaim(
-				fieldName, mapperJSONObject, userInfoJSONObject);
-
-			if ((claim != null) && !(claim instanceof String)) {
-				throw new ParseException("Claim is not a string");
-			}
-
-			return (String)claim;
-		}
-		catch (ParseException parseException) {
-			if (_log.isInfoEnabled()) {
-				_log.info(parseException);
-			}
-		}
-
-		return null;
-	}
-
 	private long _getUserId(
 			long companyId, String userInfoJSON, String userInfoMapperJSON)
 		throws Exception {
 
-		JSONObject userInfoJSONObject = JSONObjectUtils.parse(userInfoJSON);
+		JSONObject userInfoJSONObject = _jsonFactory.createJSONObject(
+			userInfoJSON);
 
-		JSONObject userInfoMapperJSONObject = JSONObjectUtils.parse(
+		JSONObject userInfoMapperJSONObject = _jsonFactory.createJSONObject(
 			userInfoMapperJSON);
 
-		JSONObject userMapperJSONObject = JSONObjectUtils.getJSONObject(
-			userInfoMapperJSONObject, "user");
+		JSONObject userMapperJSONObject =
+			userInfoMapperJSONObject.getJSONObject("user");
 
 		User user = _userLocalService.fetchUserByEmailAddress(
 			companyId,
-			_getStringClaim(
+			_getClaimString(
 				"emailAddress", userMapperJSONObject, userInfoJSONObject));
 
 		if (user != null) {
@@ -569,7 +550,7 @@ public class OIDCUserInfoProcessor {
 		JSONObject contactMapperJSONObject, JSONObject userInfoJSONObject) {
 
 		try {
-			String gender = _getStringClaim(
+			String gender = _getClaimString(
 				"gender", contactMapperJSONObject, userInfoJSONObject);
 
 			if (Validator.isNull(gender) || gender.equals("male")) {
@@ -596,6 +577,9 @@ public class OIDCUserInfoProcessor {
 
 	@Reference
 	private CountryLocalService _countryLocalService;
+
+	@Reference
+	private JSONFactory _jsonFactory;
 
 	@Reference
 	private ListTypeLocalService _listTypeLocalService;
