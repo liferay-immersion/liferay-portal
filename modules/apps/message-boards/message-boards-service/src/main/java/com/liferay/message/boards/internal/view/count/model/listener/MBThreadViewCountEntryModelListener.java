@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.message.boards.internal.model.listener;
+package com.liferay.message.boards.internal.view.count.model.listener;
 
 import com.liferay.message.boards.model.MBMessage;
 import com.liferay.message.boards.model.MBThread;
