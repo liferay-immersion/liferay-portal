@@ -99,20 +99,19 @@ public class OIDCUserInfoProcessor {
 			userInfoJSON);
 
 		try {
-			ListType contactAddressListType = _listTypeLocalService.getListType(
+			ListType listType = _listTypeLocalService.getListType(
 				_getClaimString(
 					"addressType", addressMapperJSONObject, userInfoJSONObject),
 				Contact.class.getName() + ".address");
 
-			if (contactAddressListType == null) {
+			if (listType == null) {
 
 				// Type is not a must by contract, but required by Liferay
 
-				List<ListType> contactAddressListTypes =
-					_listTypeLocalService.getListTypes(
-						Contact.class.getName() + ".address");
+				List<ListType> listTypes = _listTypeLocalService.getListTypes(
+					Contact.class.getName() + ".address");
 
-				contactAddressListType = contactAddressListTypes.get(0);
+				listType = listTypes.get(0);
 			}
 
 			Country country = null;
@@ -174,8 +173,7 @@ public class OIDCUserInfoProcessor {
 					"zip", addressMapperJSONObject, userInfoJSONObject),
 				(region == null) ? 0 : region.getRegionId(),
 				(country == null) ? 0 : country.getCountryId(),
-				contactAddressListType.getListTypeId(), false, false, null,
-				serviceContext);
+				listType.getListTypeId(), false, false, null, serviceContext);
 		}
 		catch (Exception exception) {
 			throw new Exception(
