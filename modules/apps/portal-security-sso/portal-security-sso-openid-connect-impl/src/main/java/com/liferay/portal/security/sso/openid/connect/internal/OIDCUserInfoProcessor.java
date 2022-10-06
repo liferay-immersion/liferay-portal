@@ -211,14 +211,14 @@ public class OIDCUserInfoProcessor {
 			String userInfoJSON, String userInfoMapperJSON)
 		throws Exception {
 
-		JSONObject userInfoJSONObject = _jsonFactory.createJSONObject(
-			userInfoJSON);
-
 		JSONObject userInfoMapperJSONObject = _jsonFactory.createJSONObject(
 			userInfoMapperJSON);
 
 		JSONObject userMapperJSONObject =
 			userInfoMapperJSONObject.getJSONObject("user");
+
+		JSONObject userInfoJSONObject = _jsonFactory.createJSONObject(
+			userInfoJSON);
 
 		String emailAddress = _getClaimString(
 			"emailAddress", userMapperJSONObject, userInfoJSONObject);
@@ -246,9 +246,6 @@ public class OIDCUserInfoProcessor {
 
 		_checkAddUser(companyId, emailAddress);
 
-		JSONObject contactMapperJSONObject =
-			userInfoMapperJSONObject.getJSONObject("contact");
-
 		long creatorUserId = 0;
 		boolean autoPassword = true;
 		String password1 = null;
@@ -257,8 +254,13 @@ public class OIDCUserInfoProcessor {
 			"screenName", userMapperJSONObject, userInfoJSONObject);
 		long prefixId = 0;
 		long suffixId = 0;
+
+		JSONObject contactMapperJSONObject =
+			userInfoMapperJSONObject.getJSONObject("contact");
+
 		int[] birthday = _getBirthday(
 			contactMapperJSONObject, userInfoJSONObject);
+
 		long[] groupIds = null;
 		long[] organizationIds = null;
 
