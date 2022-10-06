@@ -44,7 +44,6 @@ import com.liferay.portal.kernel.security.permission.PermissionCheckerFactoryUti
 import com.liferay.portal.kernel.security.permission.PermissionThreadLocal;
 import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermission;
 import com.liferay.portal.kernel.service.UserService;
-import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Portal;
@@ -55,7 +54,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -275,7 +273,7 @@ public class CommerceAccountDisplayContext {
 		CommerceChannelAccountEntryRel commerceChannelAccountEntryRel =
 			fetchCommerceChannelAccountEntryRel();
 
-		Long[] commerceChannelIds = TransformUtil.transformToArray(
+		List<Long> commerceChannelIds = TransformUtil.transform(
 			_commerceChannelAccountEntryRelService.
 				getCommerceChannelAccountEntryRels(
 					_accountEntry.getAccountEntryId(), _type, QueryUtil.ALL_POS,
@@ -290,14 +288,13 @@ public class CommerceAccountDisplayContext {
 				}
 
 				return null;
-			},
-			Long.class);
+			});
 
 		return ListUtil.filter(
 			_commerceChannelService.getCommerceChannels(
 				_commerceAccountRelRequestHelper.getCompanyId()),
-			commerceChannel -> !ArrayUtil.contains(
-				commerceChannelIds, commerceChannel.getCommerceChannelId()));
+			commerceChannel -> !commerceChannelIds.contains(
+				commerceChannel.getCommerceChannelId()));
 	}
 
 	public String getModalTitle() {
