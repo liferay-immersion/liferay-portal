@@ -14,7 +14,6 @@
 
 package com.liferay.portal.security.sso.openid.connect.internal;
 
-import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.exception.UserEmailAddressException;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactory;
@@ -38,6 +37,7 @@ import com.liferay.portal.kernel.service.RegionLocalService;
 import com.liferay.portal.kernel.service.RoleLocalService;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.UserLocalService;
+import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.Props;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
@@ -139,13 +139,12 @@ public class OIDCUserInfoProcessor {
 					StringUtil.toLowerCase(countryClaimString));
 			}
 
-			String regionClaimString = _getClaimString(
+			String regionCode = _getClaimString(
 				"region", addressMapperJSONObject, userInfoJSONObject);
 
-			if ((country != null) && Validator.isNotNull(regionClaimString)) {
+			if ((country != null) && Validator.isNotNull(regionCode)) {
 				region = _regionLocalService.fetchRegion(
-					country.getCountryId(),
-					StringUtil.toUpperCase(regionClaimString));
+					country.getCountryId(), StringUtil.toUpperCase(regionCode));
 			}
 		}
 
@@ -224,20 +223,26 @@ public class OIDCUserInfoProcessor {
 
 		String emailAddress = _getClaimString(
 			"emailAddress", userMapperJSONObject, userInfoJSONObject);
+
+		if (Validator.isNull(emailAddress)) {
+			throw new OpenIdConnectServiceException.UserMappingException(
+				"Email address is null");
+		}
+
 		String firstName = _getClaimString(
 			"firstName", userMapperJSONObject, userInfoJSONObject);
+
+		if (Validator.isNull(firstName)) {
+			throw new OpenIdConnectServiceException.UserMappingException(
+				"First name is null");
+		}
+
 		String lastName = _getClaimString(
 			"lastName", userMapperJSONObject, userInfoJSONObject);
 
-		if (Validator.isNull(firstName) || Validator.isNull(lastName) ||
-			Validator.isNull(emailAddress)) {
-
+		if (Validator.isNull(lastName)) {
 			throw new OpenIdConnectServiceException.UserMappingException(
-				StringBundler.concat(
-					"Unable to map OpenId Connect user to the portal, missing ",
-					"or invalid profile information: {emailAddresss=",
-					emailAddress, ", firstName=", firstName, ", lastName=",
-					lastName, "}"));
+				"Last name is null");
 		}
 
 		_checkAddUser(companyId, emailAddress);
@@ -257,8 +262,6 @@ public class OIDCUserInfoProcessor {
 			contactMapperJSONObject, userInfoJSONObject);
 		long[] groupIds = null;
 		long[] organizationIds = null;
-		long[] userGroupIds = null;
-		boolean sendEmail = false;
 
 		long[] roleIds = _getRoleIds(
 			companyId, userInfoJSONObject,
@@ -267,6 +270,9 @@ public class OIDCUserInfoProcessor {
 		if ((roleIds == null) || (roleIds.length == 0)) {
 			roleIds = propertyRoleIds;
 		}
+
+		long[] userGroupIds = null;
+		boolean sendEmail = false;
 
 		User user = _userLocalService.addUser(
 			creatorUserId, companyId, autoPassword, password1, password2,
@@ -312,31 +318,23 @@ public class OIDCUserInfoProcessor {
 		birthday[1] = Calendar.JANUARY;
 		birthday[2] = 1;
 
-		String birthdate;
+		String birthdateClaimString = _getClaimString(
+			"birthdate", contactMapperJSONObject, userInfoJSONObject);
 
-		try {
-			birthdate = _getClaimString(
-				"birthdate", contactMapperJSONObject, userInfoJSONObject);
-
-			if (Validator.isNull(birthdate)) {
-				return birthday;
-			}
-
-			String[] birthdateParts = birthdate.split("-");
-
-			if (!birthdateParts[0].equals("0000")) {
-				birthday[0] = Integer.parseInt(birthdateParts[0]);
-			}
-
-			if (birthdateParts.length == 3) {
-				birthday[1] = Integer.parseInt(birthdateParts[1]) - 1;
-				birthday[2] = Integer.parseInt(birthdateParts[2]);
-			}
+		if (Validator.isNull(birthdateClaimString)) {
+			return birthday;
 		}
-		catch (Exception exception) {
-			if (_log.isWarnEnabled()) {
-				_log.warn("Unable to parse user birthday, use default value");
-			}
+
+		String[] birthdateClaimStringParts = birthdateClaimString.split("-");
+
+		if (!birthdateClaimStringParts[0].equals("0000")) {
+			birthday[0] = GetterUtil.getInteger(birthdateClaimStringParts[0]);
+		}
+
+		if (birthdateClaimStringParts.length == 3) {
+			birthday[1] =
+				GetterUtil.getInteger(birthdateClaimStringParts[1]) - 1;
+			birthday[2] = GetterUtil.getInteger(birthdateClaimStringParts[2]);
 		}
 
 		return birthday;
@@ -521,18 +519,11 @@ public class OIDCUserInfoProcessor {
 	private boolean _isMale(
 		JSONObject contactMapperJSONObject, JSONObject userInfoJSONObject) {
 
-		try {
-			String gender = _getClaimString(
-				"gender", contactMapperJSONObject, userInfoJSONObject);
+		String gender = _getClaimString(
+			"gender", contactMapperJSONObject, userInfoJSONObject);
 
-			if (Validator.isNull(gender) || gender.equals("male")) {
-				return true;
-			}
-		}
-		catch (Exception exception) {
-			if (_log.isWarnEnabled()) {
-				_log.warn("Unable to determine user gender " + exception);
-			}
+		if (Validator.isNull(gender) || gender.equals("male")) {
+			return true;
 		}
 
 		return false;
