@@ -34,7 +34,7 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 /**
- * @author Michael C. Han
+ * @author Arthur Chan
  */
 @Component(immediate = true, service = OIDCUserInfoProcessor.class)
 public class OIDCUserInfoProcessor {
@@ -51,7 +51,7 @@ public class OIDCUserInfoProcessor {
 			// TODO: Service tracker to find a suitable custom
 			// UserModelOIDCMapper(MUST), once which becomes SPI.
 
-			userId = _userModelOIDCUserInfoMapper.getUserIdByEmailAddress(
+			userId = _userModelOIDCUserInfoMapper.getUserId(
 				companyId, userInfoJSON, userInfoMapperJSON);
 
 			if (userId > 0) {
