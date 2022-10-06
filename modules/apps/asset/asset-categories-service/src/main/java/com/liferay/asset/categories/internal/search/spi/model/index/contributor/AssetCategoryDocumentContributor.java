@@ -69,7 +69,7 @@ public class AssetCategoryDocumentContributor
 
 		List<AssetCategory> filteredAssetCategories = new ArrayList<>();
 
-		_populateList(
+		_populate(
 			document, filteredAssetCategories, visibilityType,
 			assetCategory -> assetCategory);
 
@@ -129,7 +129,7 @@ public class AssetCategoryDocumentContributor
 
 		List<String> filteredAssetVocabularyCategoryStrings = new ArrayList<>();
 
-		_populateList(
+		_populate(
 			document, filteredAssetVocabularyCategoryStrings, visibilityType,
 			assetCategory ->
 				assetCategory.getVocabularyId() + StringPool.DASH +
@@ -140,7 +140,7 @@ public class AssetCategoryDocumentContributor
 			filteredAssetVocabularyCategoryStrings.toArray(new String[0]));
 	}
 
-	private <T> void _populateList(
+	private <T> void _populate(
 		Document document, List<T> list, int visibilityType,
 		Function<AssetCategory, T> function) {
 
