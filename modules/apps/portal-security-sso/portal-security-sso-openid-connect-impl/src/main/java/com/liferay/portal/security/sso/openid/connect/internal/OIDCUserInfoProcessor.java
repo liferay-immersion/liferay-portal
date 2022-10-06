@@ -98,20 +98,13 @@ public class OIDCUserInfoProcessor {
 		JSONObject userInfoJSONObject = _jsonFactory.createJSONObject(
 			userInfoJSON);
 
-		ListType listType = _listTypeLocalService.getListType(
-			_getClaimString(
-				"addressType", addressMapperJSONObject, userInfoJSONObject),
-			Contact.class.getName() + ".address");
+		String streetClaimString = _getClaimString(
+			"street", addressMapperJSONObject, userInfoJSONObject);
 
-		if (listType == null) {
-			List<ListType> listTypes = _listTypeLocalService.getListTypes(
-				Contact.class.getName() + ".address");
+		String[] streetClaimStringParts = streetClaimString.split("\n");
 
-			listType = listTypes.get(0);
-		}
-
-		Country country = null;
 		Region region = null;
+		Country country = null;
 
 		String countryClaimString = _getClaimString(
 			"country", addressMapperJSONObject, userInfoJSONObject);
@@ -148,10 +141,17 @@ public class OIDCUserInfoProcessor {
 			}
 		}
 
-		String streetClaimString = _getClaimString(
-			"street", addressMapperJSONObject, userInfoJSONObject);
+		ListType listType = _listTypeLocalService.getListType(
+			_getClaimString(
+				"addressType", addressMapperJSONObject, userInfoJSONObject),
+			Contact.class.getName() + ".address");
 
-		String[] streetClaimStringParts = streetClaimString.split("\n");
+		if (listType == null) {
+			List<ListType> listTypes = _listTypeLocalService.getListTypes(
+				Contact.class.getName() + ".address");
+
+			listType = listTypes.get(0);
+		}
 
 		_addressLocalService.addAddress(
 			null, user.getUserId(), Contact.class.getName(),
