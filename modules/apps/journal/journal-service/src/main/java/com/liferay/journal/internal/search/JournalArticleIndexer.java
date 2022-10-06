@@ -14,7 +14,7 @@
 
 package com.liferay.journal.internal.search;
 
-import com.liferay.dynamic.data.mapping.model.DDMStructure;
+import com.liferay.dynamic.data.mapping.kernel.DDMStructure;
 import com.liferay.journal.configuration.JournalServiceConfiguration;
 import com.liferay.journal.model.JournalArticle;
 import com.liferay.journal.model.JournalArticleResource;
@@ -57,6 +57,7 @@ import com.liferay.portal.search.spi.model.result.contributor.ModelVisibilityCon
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Stream;
 
 import javax.portlet.PortletRequest;
@@ -64,6 +65,9 @@ import javax.portlet.PortletResponse;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
+import org.osgi.service.component.annotations.ReferencePolicyOption;
 
 /**
  * @author Brian Wing Shun Chan
@@ -148,6 +152,19 @@ public class JournalArticleIndexer extends BaseIndexer<JournalArticle> {
 			});
 	}
 
+	@Reference(
+		cardinality = ReferenceCardinality.MULTIPLE,
+		policy = ReferencePolicy.DYNAMIC,
+		policyOption = ReferencePolicyOption.GREEDY,
+		service = ModelDocumentContributor.class,
+		target = "(indexer.class.name=com.liferay.journal.model.JournalArticle)"
+	)
+	protected void addModelDocumentContributor(
+		ModelDocumentContributor<JournalArticle> modelDocumentContributor) {
+
+		_modelDocumentContributors.add(modelDocumentContributor);
+	}
+
 	@Override
 	protected void doDelete(JournalArticle journalArticle) throws Exception {
 		_deleteDocument(journalArticle);
@@ -162,7 +179,9 @@ public class JournalArticleIndexer extends BaseIndexer<JournalArticle> {
 
 		Document document = getBaseModelDocument(CLASS_NAME, journalArticle);
 
-		_modelDocumentContributor.contribute(document, journalArticle);
+		_modelDocumentContributors.forEach(
+			modelDocumentContributor -> modelDocumentContributor.contribute(
+				document, journalArticle));
 
 		return document;
 	}
@@ -246,6 +265,12 @@ public class JournalArticleIndexer extends BaseIndexer<JournalArticle> {
 		}
 
 		return false;
+	}
+
+	protected void removeModelDocumentContributor(
+		ModelDocumentContributor<JournalArticle> modelDocumentContributor) {
+
+		_modelDocumentContributors.remove(modelDocumentContributor);
 	}
 
 	@Reference(
@@ -455,10 +480,8 @@ public class JournalArticleIndexer extends BaseIndexer<JournalArticle> {
 	)
 	private KeywordQueryContributor _keywordQueryContributor;
 
-	@Reference(
-		target = "(indexer.class.name=com.liferay.journal.model.JournalArticle)"
-	)
-	private ModelDocumentContributor<JournalArticle> _modelDocumentContributor;
+	private final List<ModelDocumentContributor<JournalArticle>>
+		_modelDocumentContributors = new CopyOnWriteArrayList<>();
 
 	@Reference(
 		target = "(indexer.class.name=com.liferay.journal.model.JournalArticle)"
