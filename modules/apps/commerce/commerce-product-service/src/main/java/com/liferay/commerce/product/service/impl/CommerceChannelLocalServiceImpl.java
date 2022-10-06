@@ -238,7 +238,7 @@ public class CommerceChannelLocalServiceImpl
 	}
 
 	@Override
-	public CommerceChannel fetchCommerceChannelByGroupId(long groupId)
+	public CommerceChannel fetchCommerceChannelByGroupClassPK(long groupId)
 		throws PortalException {
 
 		Group group = _groupLocalService.getGroup(groupId);

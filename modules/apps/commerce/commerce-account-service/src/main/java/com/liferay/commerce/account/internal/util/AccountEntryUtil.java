@@ -35,8 +35,8 @@ public class AccountEntryUtil {
 
 		if (group != null) {
 			CommerceChannel commerceChannel =
-				CommerceChannelLocalServiceUtil.fetchCommerceChannelByGroupId(
-					group.getGroupId());
+				CommerceChannelLocalServiceUtil.
+					fetchCommerceChannelByGroupClassPK(group.getGroupId());
 
 			if (commerceChannel != null) {
 				return commerceChannel.getCommerceChannelId();
