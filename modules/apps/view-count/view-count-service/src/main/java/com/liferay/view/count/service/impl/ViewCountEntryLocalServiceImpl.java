@@ -21,8 +21,6 @@ import com.liferay.petra.sql.dsl.Table;
 import com.liferay.portal.aop.AopService;
 import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
 import com.liferay.portal.kernel.change.tracking.CTAware;
-import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.increment.BufferedIncrement;
 import com.liferay.portal.kernel.increment.NumberIncrement;
 import com.liferay.portal.kernel.model.ClassName;
@@ -131,24 +129,23 @@ public class ViewCountEntryLocalServiceImpl
 				companyId, classNameId, classPK, increment);
 		}
 
-		try {
-			ClassName className = _classNameLocalService.getClassName(
-				classNameId);
+		ClassName className = _classNameLocalService.fetchClassName(
+			classNameId);
 
-			ViewCountEntryModelListener viewCountIncrementListener =
-				_serviceTrackerMap.getService(className.getValue());
-
-			if (viewCountIncrementListener == null) {
-				return;
-			}
-
-			viewCountIncrementListener.onAfterIncrement(
-				fetchViewCountEntry(
-					new ViewCountEntryPK(companyId, classNameId, classPK)));
+		if (className == null) {
+			return;
 		}
-		catch (PortalException portalException) {
-			throw new SystemException(portalException);
+
+		ViewCountEntryModelListener viewCountIncrementListener =
+			_serviceTrackerMap.getService(className.getValue());
+
+		if (viewCountIncrementListener == null) {
+			return;
 		}
+
+		viewCountIncrementListener.onAfterIncrement(
+			fetchViewCountEntry(
+				new ViewCountEntryPK(companyId, classNameId, classPK)));
 	}
 
 	@Override
