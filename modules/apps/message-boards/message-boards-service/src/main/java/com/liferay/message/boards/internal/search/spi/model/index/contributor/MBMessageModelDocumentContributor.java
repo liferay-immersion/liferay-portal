@@ -133,7 +133,7 @@ public class MBMessageModelDocumentContributor
 
 			if (ratingsStats != null) {
 				document.addNumber(
-					"ratingValueTotalScore", ratingsStats.getTotalScore());
+					"ratingsStatTotalScore", ratingsStats.getTotalScore());
 			}
 
 			document.addNumber("viewCount", mbThread.getViewCount());
