@@ -187,15 +187,13 @@ components:
                                                 query:
                                                     type: object
                                                 queryWeight:
-                                                    format: float
-                                                    type: number
+                                                    type: object
                                                 rescoreQueryWeight:
-                                                    format: float
-                                                    type: number
+                                                    type: object
                                                 scoreMode:
                                                     type: string
                                                 windowSize:
-                                                    type: integer
+                                                    type: object
                                             type: object
                                         type: array
                                 type: object
@@ -326,6 +324,10 @@ components:
         KeywordQueryContributor:
             properties:
                 className:
+                    type: string
+        MLModel:
+            properties:
+                modelId:
                     type: string
         ModelPrefilterContributor:
             properties:
@@ -604,6 +606,40 @@ paths:
                                     $ref: "#/components/schemas/KeywordQueryContributor"
                                 type: array
             tags: ["KeywordQueryContributor"]
+    /ml-models:
+        get:
+            operationId: getMLModelsPage
+            parameters:
+                - in: query
+                  name: limit
+                  schema:
+                      type: integer
+                - in: query
+                  name: pipelineTag
+                  schema:
+                      type: string
+                - in: query
+                  name: query
+                  schema:
+                      type: string
+                - in: query
+                  name: tag
+                  schema:
+                      type: string
+            responses:
+                200:
+                    content:
+                        application/json:
+                            schema:
+                                items:
+                                    $ref: "#/components/schemas/MLModel"
+                                type: array
+                        application/xml:
+                            schema:
+                                items:
+                                    $ref: "#/components/schemas/MLModel"
+                                type: array
+            tags: ["MLModel"]
     /model-prefilter-contributors:
         get:
             operationId: getModelPrefilterContributorsPage
