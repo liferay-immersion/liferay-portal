@@ -468,14 +468,14 @@ public class OIDCUserInfoProcessor {
 			long companyId, String userInfoJSON, String userInfoMapperJSON)
 		throws Exception {
 
-		JSONObject userInfoJSONObject = _jsonFactory.createJSONObject(
-			userInfoJSON);
-
 		JSONObject userInfoMapperJSONObject = _jsonFactory.createJSONObject(
 			userInfoMapperJSON);
 
 		JSONObject userMapperJSONObject =
 			userInfoMapperJSONObject.getJSONObject("user");
+
+		JSONObject userInfoJSONObject = _jsonFactory.createJSONObject(
+			userInfoJSON);
 
 		User user = _userLocalService.fetchUserByEmailAddress(
 			companyId,
