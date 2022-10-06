@@ -251,7 +251,7 @@ public interface CommerceChannelLocalService
 		long companyId, String externalReferenceCode);
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public CommerceChannel fetchCommerceChannelByGroupId(long groupId)
+	public CommerceChannel fetchCommerceChannelByGroupClassPK(long groupId)
 		throws PortalException;
 
 	/**

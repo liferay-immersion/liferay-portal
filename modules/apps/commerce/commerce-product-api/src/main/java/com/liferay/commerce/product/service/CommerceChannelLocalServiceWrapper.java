@@ -302,10 +302,10 @@ public class CommerceChannelLocalServiceWrapper
 	}
 
 	@Override
-	public CommerceChannel fetchCommerceChannelByGroupId(long groupId)
+	public CommerceChannel fetchCommerceChannelByGroupClassPK(long groupId)
 		throws com.liferay.portal.kernel.exception.PortalException {
 
-		return _commerceChannelLocalService.fetchCommerceChannelByGroupId(
+		return _commerceChannelLocalService.fetchCommerceChannelByGroupClassPK(
 			groupId);
 	}
 
