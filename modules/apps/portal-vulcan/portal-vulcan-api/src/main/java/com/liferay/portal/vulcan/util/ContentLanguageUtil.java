@@ -43,9 +43,11 @@ public class ContentLanguageUtil {
 			LocaleUtil.fromLanguageId(defaultLocaleId)
 		);
 
-		httpServletResponse.addHeader(
-			HttpHeaders.CONTENT_LANGUAGE,
-			LocaleUtil.toW3cLanguageId(contentLocale));
+		if (httpServletResponse != null) {
+			httpServletResponse.addHeader(
+				HttpHeaders.CONTENT_LANGUAGE,
+				LocaleUtil.toW3cLanguageId(contentLocale));
+		}
 	}
 
 }
