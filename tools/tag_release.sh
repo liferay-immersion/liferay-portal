@@ -33,12 +33,7 @@ function main {
 
 		cd ../liferay-portal-ee
 
-		if [ ${branch} != "master" ]
-		then
-			git fetch -f ../liferay-portal ${hash}:release-7.4.13.${release_info_version_trivial}
-		else
-			git fetch -f ../liferay-portal ${hash}
-		fi
+		git fetch -f ../liferay-portal ${hash}
 
 		push_tag 7.4.3.${release_info_version_trivial}-ga${release_info_version_trivial} ${hash}
 
