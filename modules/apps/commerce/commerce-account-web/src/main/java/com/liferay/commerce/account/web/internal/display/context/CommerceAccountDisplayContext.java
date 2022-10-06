@@ -272,7 +272,26 @@ public class CommerceAccountDisplayContext {
 	public List<CommerceChannel> getFilteredCommerceChannels()
 		throws PortalException {
 
-		Long[] commerceChannelIds = _getFilteredCommerceChannelIds();
+		CommerceChannelAccountEntryRel commerceChannelAccountEntryRel =
+			fetchCommerceChannelAccountEntryRel();
+
+		Long[] commerceChannelIds = TransformUtil.transformToArray(
+			_commerceChannelAccountEntryRelService.
+				getCommerceChannelAccountEntryRels(
+					_accountEntry.getAccountEntryId(), _type, QueryUtil.ALL_POS,
+					QueryUtil.ALL_POS, null),
+			commerceChannel -> {
+				if ((commerceChannelAccountEntryRel == null) ||
+					(commerceChannel.getCommerceChannelId() !=
+						commerceChannelAccountEntryRel.
+							getCommerceChannelId())) {
+
+					return commerceChannel.getCommerceChannelId();
+				}
+
+				return null;
+			},
+			Long.class);
 
 		return ListUtil.filter(
 			_commerceChannelService.getCommerceChannels(
@@ -350,29 +369,6 @@ public class CommerceAccountDisplayContext {
 		}
 
 		return false;
-	}
-
-	private Long[] _getFilteredCommerceChannelIds() throws PortalException {
-		CommerceChannelAccountEntryRel commerceChannelAccountEntryRel =
-			fetchCommerceChannelAccountEntryRel();
-
-		return TransformUtil.transformToArray(
-			_commerceChannelAccountEntryRelService.
-				getCommerceChannelAccountEntryRels(
-					_accountEntry.getAccountEntryId(), _type, QueryUtil.ALL_POS,
-					QueryUtil.ALL_POS, null),
-			commerceChannel -> {
-				if ((commerceChannelAccountEntryRel == null) ||
-					(commerceChannel.getCommerceChannelId() !=
-						commerceChannelAccountEntryRel.
-							getCommerceChannelId())) {
-
-					return commerceChannel.getCommerceChannelId();
-				}
-
-				return null;
-			},
-			Long.class);
 	}
 
 	private final AccountEntry _accountEntry;
