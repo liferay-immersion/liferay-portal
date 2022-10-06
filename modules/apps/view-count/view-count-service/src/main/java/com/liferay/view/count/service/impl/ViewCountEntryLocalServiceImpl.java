@@ -200,6 +200,7 @@ public class ViewCountEntryLocalServiceImpl
 		}
 
 		_disabledClassNameIds = disabledClassNameIds;
+
 		_enabled = viewCountConfiguration.enabled();
 	}
 
