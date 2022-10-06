@@ -76,15 +76,15 @@ public class OIDCUserInfoProcessor {
 			companyId, _getRoleIds(companyId, issuer), serviceContext,
 			userInfoJSON, userInfoMapperJSON);
 
-		_addAddress(userId, serviceContext, userInfoJSON, userInfoMapperJSON);
+		_addAddress(serviceContext, userId, userInfoJSON, userInfoMapperJSON);
 
-		_addPhone(userId, serviceContext, userInfoJSON, userInfoMapperJSON);
+		_addPhone(serviceContext, userId, userInfoJSON, userInfoMapperJSON);
 
 		return userId;
 	}
 
 	private void _addAddress(
-			long userId, ServiceContext serviceContext, String userInfoJSON,
+			ServiceContext serviceContext, long userId, String userInfoJSON,
 			String userInfoMapperJSON)
 		throws Exception {
 
@@ -186,7 +186,7 @@ public class OIDCUserInfoProcessor {
 	}
 
 	private void _addPhone(
-			long userId, ServiceContext serviceContext, String userInfoJSON,
+			ServiceContext serviceContext, long userId, String userInfoJSON,
 			String userInfoMapperJSON)
 		throws Exception {
 
