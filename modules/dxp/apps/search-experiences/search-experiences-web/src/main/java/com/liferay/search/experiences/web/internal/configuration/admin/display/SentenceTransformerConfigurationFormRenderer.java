@@ -124,7 +124,7 @@ public class SentenceTransformerConfigurationFormRenderer
 
 			writer.print(
 				"<div class=\"alert alert-info\">This feature is not " +
-					"available</div>");
+					"available.</div>");
 
 			return;
 		}
