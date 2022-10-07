@@ -62,10 +62,11 @@ public class TXTAISentenceTransformer
 	}
 
 	private Double[] _getEmbedding(String text) {
-		String host = _sentenceTransformerConfiguration.txtaiHostAddress();
+		String hostAddress =
+			_sentenceTransformerConfiguration.txtaiHostAddress();
 
-		if (!host.endsWith("/")) {
-			host += "/";
+		if (!hostAddress.endsWith("/")) {
+			hostAddress += "/";
 		}
 
 		try {
@@ -73,7 +74,7 @@ public class TXTAISentenceTransformer
 				_jsonFactory.createJSONArray(
 					_http.URLtoString(
 						StringBundler.concat(
-							host, "transform?text=",
+							hostAddress, "transform?text=",
 							URLCodec.encodeURL(text, false)))));
 
 			return list.toArray(new Double[0]);
