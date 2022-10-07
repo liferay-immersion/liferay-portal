@@ -79,7 +79,7 @@ public class SentenceTransformerWebCacheItem implements WebCacheItem {
 	@Override
 	public Double[] convert(String key) {
 		try {
-			return _sentenceEmbeddingRetriever.getEmbedding(_text);
+			return _sentenceEmbeddingRetriever.getSentenceEmbedding(_text);
 		}
 		catch (Exception exception) {
 			throw new InvalidWebCacheItemException(exception);
