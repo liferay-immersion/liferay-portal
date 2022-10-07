@@ -135,6 +135,10 @@ public class SentenceTransformerConfigurationFormRenderer
 				new SentenceTransformerCompanyConfigurationDisplayContext();
 
 		sentenceTransformerCompanyConfigurationDisplayContext.
+			setAssetEntryClassNames(
+				ListUtil.fromArray(
+					_sentenceTransformerConfiguration.assetEntryClassNames()));
+		sentenceTransformerCompanyConfigurationDisplayContext.
 			setAvailableEmbeddingVectorDimensions(
 				_getAvailableEmbeddingVectorDimensions());
 		sentenceTransformerCompanyConfigurationDisplayContext.
@@ -158,10 +162,6 @@ public class SentenceTransformerConfigurationFormRenderer
 			_sentenceTransformerConfiguration.enabled());
 		sentenceTransformerCompanyConfigurationDisplayContext.setEnableGPU(
 			_sentenceTransformerConfiguration.enableGPU());
-		sentenceTransformerCompanyConfigurationDisplayContext.
-			setAssetEntryClassNames(
-				ListUtil.fromArray(
-					_sentenceTransformerConfiguration.assetEntryClassNames()));
 		sentenceTransformerCompanyConfigurationDisplayContext.
 			setHuggingFaceAccessToken(
 				_sentenceTransformerConfiguration.huggingFaceAccessToken());
