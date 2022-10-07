@@ -330,7 +330,7 @@ public class OrganizationResourceImpl
 				organization.getComment(), false, _getAddresses(organization),
 				_getEmailAddresses(organization), _getOrgLabors(organization),
 				_getPhones(organization), _getWebsites(organization),
-				_getServiceContext(organization));
+				_createServiceContext(organization));
 
 		return _organizationResourceDTOConverter.toDTO(
 			_getDTOConverterContext(
@@ -425,7 +425,7 @@ public class OrganizationResourceImpl
 				organization.getComment(), false, null, group.isSite(),
 				_getAddresses(organization), _getEmailAddresses(organization),
 				_getOrgLabors(organization), _getPhones(organization),
-				_getWebsites(organization), _getServiceContext(organization)));
+				_getWebsites(organization), _createServiceContext(organization)));
 	}
 
 	@Override
@@ -466,7 +466,7 @@ public class OrganizationResourceImpl
 				organization.getComment(), false, null, site,
 				_getAddresses(organization), _getEmailAddresses(organization),
 				_getOrgLabors(organization), _getPhones(organization),
-				_getWebsites(organization), _getServiceContext(organization));
+				_getWebsites(organization), _createServiceContext(organization));
 
 		return _organizationResourceDTOConverter.toDTO(
 			_getDTOConverterContext(
@@ -741,7 +741,7 @@ public class OrganizationResourceImpl
 		return serviceBuilderOrganization.getOrganizationId();
 	}
 
-	private ServiceContext _getServiceContext(Organization organization)
+	private ServiceContext _createServiceContext(Organization organization)
 		throws Exception {
 
 		return ServiceContextRequestUtil.createServiceContext(
