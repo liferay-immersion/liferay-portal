@@ -15,7 +15,6 @@
 package com.liferay.search.experiences.rest.internal.resource.v1_0;
 
 import com.liferay.portal.kernel.json.JSONArray;
-import com.liferay.portal.kernel.json.JSONException;
 import com.liferay.portal.kernel.json.JSONFactory;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.log.Log;
@@ -27,8 +26,6 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.vulcan.pagination.Page;
 import com.liferay.search.experiences.rest.dto.v1_0.MLModel;
 import com.liferay.search.experiences.rest.resource.v1_0.MLModelResource;
-
-import java.io.IOException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,7 +56,7 @@ public class MLModelResourceImpl extends BaseMLModelResourceImpl {
 		return Page.of(_getMLodels(limit, pipelineTag, query, tag));
 	}
 
-	private String _getApiURL(
+	private String _getAPIURL(
 		Integer limit, String pipelineTag, String query, String tag) {
 
 		String apiURL = _HUGGING_FACE_MODELS_API_URL + "?";
@@ -86,17 +83,17 @@ public class MLModelResourceImpl extends BaseMLModelResourceImpl {
 	private List<MLModel> _getMLodels(
 		Integer limit, String pipelineTag, String query, String tag) {
 
-		List<MLModel> availableModels = new ArrayList<>();
+		List<MLModel> mlModels = new ArrayList<>();
 
 		try {
 			JSONArray jsonArray = _jsonFactory.createJSONArray(
-				_http.URLtoString(_getApiURL(limit, pipelineTag, query, tag)));
+				_http.URLtoString(_getAPIURL(limit, pipelineTag, query, tag)));
 
 			jsonArray.forEach(
-				item -> {
-					JSONObject jsonObject = (JSONObject)item;
+				object -> {
+					JSONObject jsonObject = (JSONObject)object;
 
-					availableModels.add(
+					mlModels.add(
 						new MLModel() {
 							{
 								modelId = jsonObject.getString("modelId");
@@ -104,11 +101,11 @@ public class MLModelResourceImpl extends BaseMLModelResourceImpl {
 						});
 				});
 		}
-		catch (IOException | JSONException exception) {
+		catch (Exception exception) {
 			_log.error(exception);
 		}
 
-		return availableModels;
+		return mlModels;
 	}
 
 	private static final String _HUGGING_FACE_MODELS_API_URL =

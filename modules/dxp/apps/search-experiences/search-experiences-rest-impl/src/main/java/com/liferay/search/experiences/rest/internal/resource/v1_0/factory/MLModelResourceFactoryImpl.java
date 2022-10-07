@@ -73,10 +73,10 @@ public class MLModelResourceFactoryImpl implements MLModelResource.Factory {
 			@Override
 			public MLModelResource build() {
 				if (_user == null) {
-					throw new IllegalArgumentException("User is not set");
+					throw new IllegalArgumentException("User is null");
 				}
 
-				return _mlModelResourceProxyProviderFunction.apply(
+				return _function.apply(
 					(proxy, method, arguments) -> _invoke(
 						method, arguments, _checkPermissions,
 						_httpServletRequest, _httpServletResponse,
@@ -146,7 +146,7 @@ public class MLModelResourceFactoryImpl implements MLModelResource.Factory {
 	}
 
 	private static Function<InvocationHandler, MLModelResource>
-		_getProxyProviderFunction() {
+		_getFunction() {
 
 		Class<?> proxyClass = ProxyUtil.getProxyClass(
 			MLModelResource.class.getClassLoader(), MLModelResource.class);
@@ -232,7 +232,7 @@ public class MLModelResourceFactoryImpl implements MLModelResource.Factory {
 	}
 
 	private static final Function<InvocationHandler, MLModelResource>
-		_mlModelResourceProxyProviderFunction = _getProxyProviderFunction();
+		_function = _getFunction();
 
 	@Reference
 	private CompanyLocalService _companyLocalService;
