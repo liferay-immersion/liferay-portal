@@ -30,8 +30,8 @@ public class SentenceTransformerCompanyConfigurationDisplayContext {
 		return _availableEntryClassNames;
 	}
 
-	public Map<String, String> getAvailableLanguages() {
-		return _availableLanguages;
+	public Map<String, String> getAvailableLanguageDisplayNames() {
+		return _availableLanguageDisplayNames;
 	}
 
 	public Map<String, String> getAvailableSentenceTranformProviders() {
@@ -107,8 +107,10 @@ public class SentenceTransformerCompanyConfigurationDisplayContext {
 		_availableEntryClassNames = availableEntryClassNames;
 	}
 
-	public void setAvailableLanguages(Map<String, String> availableLanguages) {
-		_availableLanguages = availableLanguages;
+	public void setAvailableLanguageDisplayNames(
+		Map<String, String> availableLanguageDisplayNames) {
+
+		_availableLanguageDisplayNames = availableLanguageDisplayNames;
 	}
 
 	public void setAvailableSentenceTranformProviders(
@@ -178,7 +180,7 @@ public class SentenceTransformerCompanyConfigurationDisplayContext {
 
 	private List<String> _availableEmbeddingVectorDimensions;
 	private Map<String, String> _availableEntryClassNames;
-	private Map<String, String> _availableLanguages;
+	private Map<String, String> _availableLanguageDisplayNames;
 	private Map<String, String> _availableSentenceTranformProviders;
 	private Map<String, String> _availableTextTruncationStrategies;
 	private int _cacheTimeout;

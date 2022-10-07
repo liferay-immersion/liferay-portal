@@ -142,7 +142,8 @@ public class SentenceTransformerConfigurationFormRenderer
 				_getAvailableEntryClassNames(httpServletRequest));
 
 		sentenceTransformerCompanyConfigurationDisplayContext.
-			setAvailableLanguages(_getAvailableLanguages(httpServletRequest));
+			setAvailableLanguageDisplayNames(
+				_getAvailableLanguageDisplayNames(httpServletRequest));
 
 		sentenceTransformerCompanyConfigurationDisplayContext.
 			setAvailableSentenceTranformProviders(
@@ -259,25 +260,25 @@ public class SentenceTransformerConfigurationFormRenderer
 			).build());
 	}
 
-	private Map<String, String> _getAvailableLanguages(
+	private Map<String, String> _getAvailableLanguageDisplayNames(
 		HttpServletRequest httpServletRequest) {
 
 		ThemeDisplay themeDisplay =
 			(ThemeDisplay)httpServletRequest.getAttribute(
 				WebKeys.THEME_DISPLAY);
 
-		Map<String, String> availableLanguages = new HashMap<>();
+		Map<String, String> availableLanguageDisplayNames = new HashMap<>();
 
 		for (Locale locale :
 				_language.getCompanyAvailableLocales(
 					themeDisplay.getCompanyId())) {
 
-			availableLanguages.put(
+			availableLanguageDisplayNames.put(
 				LocaleUtil.toLanguageId(locale),
 				locale.getDisplayName(themeDisplay.getLocale()));
 		}
 
-		return _sortByValue(availableLanguages);
+		return _sortByValue(availableLanguageDisplayNames);
 	}
 
 	private Map<String, String> _getAvailableSentenceTranformProviders(

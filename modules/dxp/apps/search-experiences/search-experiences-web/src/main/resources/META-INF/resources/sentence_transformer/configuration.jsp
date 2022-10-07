@@ -130,9 +130,9 @@ String currentSentenceTransformProvider = sentenceTransformerCompanyConfiguratio
 	<aui:select helpMessage="sentence-transformer-language-ids-help" multiple="<%= true %>" name="languageIds" required="<%= true %>">
 
 		<%
-		Map<String, String> availableLanguages = sentenceTransformerCompanyConfigurationDisplayContext.getAvailableLanguages();
+		Map<String, String> availableLanguageDisplayNames = sentenceTransformerCompanyConfigurationDisplayContext.getAvailableLanguageDisplayNames();
 
-		for (Entry<String, String> entry : availableLanguages.entrySet()) {
+		for (Entry<String, String> entry : availableLanguageDisplayNames.entrySet()) {
 			List<String> currentLanguageIds = sentenceTransformerCompanyConfigurationDisplayContext.getLanguageIds();
 		%>
 
