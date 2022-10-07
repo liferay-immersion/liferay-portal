@@ -85,8 +85,8 @@ public class SentenceTransformerConfigurationFormRenderer
 		).put(
 			"enableGPU", ParamUtil.getBoolean(httpServletRequest, "enableGPU")
 		).put(
-			"entryClassNames",
-			ParamUtil.getStringValues(httpServletRequest, "entryClassNames")
+			"assetEntryClassNames",
+			ParamUtil.getStringValues(httpServletRequest, "assetEntryClassNames")
 		).put(
 			"huggingFaceAccessToken",
 			ParamUtil.getString(httpServletRequest, "huggingFaceAccessToken")
@@ -160,7 +160,7 @@ public class SentenceTransformerConfigurationFormRenderer
 		sentenceTransformerCompanyConfigurationDisplayContext.
 			setEntryClassNames(
 				ListUtil.fromArray(
-					_sentenceTransformerConfiguration.entryClassNames()));
+					_sentenceTransformerConfiguration.assetEntryClassNames()));
 		sentenceTransformerCompanyConfigurationDisplayContext.
 			setHuggingFaceAccessToken(
 				_sentenceTransformerConfiguration.huggingFaceAccessToken());

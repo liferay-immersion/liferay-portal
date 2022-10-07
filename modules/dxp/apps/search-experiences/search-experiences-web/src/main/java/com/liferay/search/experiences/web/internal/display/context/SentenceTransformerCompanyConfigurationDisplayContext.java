@@ -51,7 +51,7 @@ public class SentenceTransformerCompanyConfigurationDisplayContext {
 	}
 
 	public List<String> getEntryClassNames() {
-		return _entryClassNames;
+		return _assetEntryClassNames;
 	}
 
 	public String getHuggingFaceAccessToken() {
@@ -142,8 +142,8 @@ public class SentenceTransformerCompanyConfigurationDisplayContext {
 		_enableGPU = useGPU;
 	}
 
-	public void setEntryClassNames(List<String> entryClassNames) {
-		_entryClassNames = entryClassNames;
+	public void setEntryClassNames(List<String> assetEntryClassNames) {
+		_assetEntryClassNames = assetEntryClassNames;
 	}
 
 	public void setHuggingFaceAccessToken(String huggingFaceAccessToken) {
@@ -187,7 +187,7 @@ public class SentenceTransformerCompanyConfigurationDisplayContext {
 	private int _embeddingVectorDimensions;
 	private boolean _enabled;
 	private boolean _enableGPU;
-	private List<String> _entryClassNames;
+	private List<String> _assetEntryClassNames;
 	private String _huggingFaceAccessToken;
 	private List<String> _languageIds;
 	private int _maxCharacterCount;

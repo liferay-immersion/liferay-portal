@@ -87,7 +87,7 @@ public abstract class BaseSentenceEmbeddingModelDocumentContributor {
 		if (GetterUtil.getBoolean(PropsUtil.get("feature.flag.LPS-163688")) &&
 			sentenceTransformerConfiguration.enabled() &&
 			ArrayUtil.contains(
-				sentenceTransformerConfiguration.entryClassNames(),
+				sentenceTransformerConfiguration.assetEntryClassNames(),
 				clazz.getName(), true)) {
 
 			return true;

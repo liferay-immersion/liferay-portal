@@ -100,7 +100,7 @@ public interface SentenceTransformerConfiguration {
 		description = "sentence-transformer-entry-class-names-help",
 		name = "sentence-transformer-entry-class-names", required = false
 	)
-	public String[] entryClassNames();
+	public String[] assetEntryClassNames();
 
 	@Meta.AD(
 		deflt = "en_US", description = "sentence-transformer-language-ids-help",
