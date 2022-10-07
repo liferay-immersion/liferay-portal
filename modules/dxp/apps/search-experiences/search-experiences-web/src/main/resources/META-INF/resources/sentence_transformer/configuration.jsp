@@ -27,14 +27,17 @@ page import="java.util.Map.Entry" %>
 
 <%
 SentenceTransformerCompanyConfigurationDisplayContext sentenceTransformerCompanyConfigurationDisplayContext = (SentenceTransformerCompanyConfigurationDisplayContext)request.getAttribute(SentenceTransformerCompanyConfigurationDisplayContext.class.getName());
-
-String currentSentenceTransformProvider = sentenceTransformerCompanyConfigurationDisplayContext.getSentenceTransformProvider();
 %>
 
 <aui:input name="enabled" type="checkbox" value="<%= sentenceTransformerCompanyConfigurationDisplayContext.isEnabled() %>" />
 
 <aui:fieldset label="transform-provider-settings">
-	<aui:select id="sentenceTransformProvider" name="sentenceTransformProvider" value="<%= currentSentenceTransformProvider %>">
+
+	<%
+	String sentenceTransformProvider = sentenceTransformerCompanyConfigurationDisplayContext.getSentenceTransformProvider();
+	%>
+
+	<aui:select id="sentenceTransformProvider" name="sentenceTransformProvider" value="<%= sentenceTransformProvider %>">
 
 		<%
 		Map<String, String> availableSentenceTransformProviders = sentenceTransformerCompanyConfigurationDisplayContext.getAvailableSentenceTranformProviders();
@@ -50,7 +53,7 @@ String currentSentenceTransformProvider = sentenceTransformerCompanyConfiguratio
 
 	</aui:select>
 
-	<div class="options-container <%= !currentSentenceTransformProvider.equals("huggingFace") ? "hide" : StringPool.BLANK %>" id="<portlet:namespace />huggingFaceOptionsContainer">
+	<div class="options-container <%= !sentenceTransformProvider.equals("huggingFace") ? "hide" : StringPool.BLANK %>" id="<portlet:namespace />huggingFaceOptionsContainer">
 		<aui:input name="huggingFaceAccessToken" value="<%= sentenceTransformerCompanyConfigurationDisplayContext.getHuggingFaceAccessToken() %>" />
 
 		<%--
@@ -68,17 +71,17 @@ String currentSentenceTransformProvider = sentenceTransformerCompanyConfiguratio
 		<aui:input name="enableGPU" type="checkbox" value="<%= sentenceTransformerCompanyConfigurationDisplayContext.isEnableGPU() %>" />
 	</div>
 
-	<div class="options-container <%= !currentSentenceTransformProvider.equals("txtai") ? "hide" : StringPool.BLANK %>" id="<portlet:namespace />txtAiOptionsContainer">
+	<div class="options-container <%= !sentenceTransformProvider.equals("txtai") ? "hide" : StringPool.BLANK %>" id="<portlet:namespace />txtAiOptionsContainer">
 		<aui:input helpMessage="sentence-transformer-txtai-host-address-help" label="txtai-host-address" name="txtaiHostAddress" value="<%= sentenceTransformerCompanyConfigurationDisplayContext.getTxtaiHostAddress() %>" />
 	</div>
 
 	<aui:select name="embeddingVectorDimensions" value="<%= sentenceTransformerCompanyConfigurationDisplayContext.getEmbeddingVectorDimensions() %>">
 
 		<%
-		for (String embeddingVectorDimensions : sentenceTransformerCompanyConfigurationDisplayContext.getAvailableEmbeddingVectorDimensions()) {
+		for (String availableEmbeddingVectorDimensions : sentenceTransformerCompanyConfigurationDisplayContext.getAvailableEmbeddingVectorDimensions()) {
 		%>
 
-			<aui:option label="<%= embeddingVectorDimensions %>" value="<%= embeddingVectorDimensions %>" />
+			<aui:option label="<%= availableEmbeddingVectorDimensions %>" value="<%= availableEmbeddingVectorDimensions %>" />
 
 		<%
 		}
@@ -110,7 +113,7 @@ String currentSentenceTransformProvider = sentenceTransformerCompanyConfiguratio
 
 	</aui:select>
 
-	<aui:select helpMessage="sentence-transformer-entry-class-names-help" multiple="<%= true %>" name="assetEntryClassNames" required="<%= true %>">
+	<aui:select helpMessage="sentence-transformer-asset-entry-class-names-help" multiple="<%= true %>" name="assetEntryClassNames" required="<%= true %>">
 
 		<%
 		Map<String, String> availableAssetEntryClassNames = sentenceTransformerCompanyConfigurationDisplayContext.getAvailableAssetEntryClassNames();
@@ -133,10 +136,10 @@ String currentSentenceTransformProvider = sentenceTransformerCompanyConfiguratio
 		Map<String, String> availableLanguageDisplayNames = sentenceTransformerCompanyConfigurationDisplayContext.getAvailableLanguageDisplayNames();
 
 		for (Entry<String, String> entry : availableLanguageDisplayNames.entrySet()) {
-			List<String> currentLanguageIds = sentenceTransformerCompanyConfigurationDisplayContext.getLanguageIds();
+			List<String> languageIds = sentenceTransformerCompanyConfigurationDisplayContext.getLanguageIds();
 		%>
 
-			<aui:option label="<%= entry.getValue() %>" selected="<%= currentLanguageIds.contains(entry.getKey()) %>" value="<%= entry.getKey() %>" />
+			<aui:option label="<%= entry.getValue() %>" selected="<%= languageIds.contains(entry.getKey()) %>" value="<%= entry.getKey() %>" />
 
 		<%
 		}

@@ -184,6 +184,7 @@ public class SentenceTransformerConfigurationFormRenderer
 		sentenceTransformerCompanyConfigurationDisplayContext.
 			setTxtaiHostAddress(
 				_sentenceTransformerConfiguration.txtaiHostAddress());
+
 		httpServletRequest.setAttribute(
 			SentenceTransformerCompanyConfigurationDisplayContext.class.
 				getName(),
@@ -199,16 +200,6 @@ public class SentenceTransformerConfigurationFormRenderer
 	protected void activate(Map<String, Object> properties) {
 		_sentenceTransformerConfiguration = ConfigurableUtil.createConfigurable(
 			SentenceTransformerConfiguration.class, properties);
-	}
-
-	private List<String> _getAvailableEmbeddingVectorDimensions() {
-		return new ArrayList<String>() {
-			{
-				add("384");
-				add("512");
-				add("768");
-			}
-		};
 	}
 
 	private Map<String, String> _getAvailableAssetEntryClassNames(
@@ -241,6 +232,16 @@ public class SentenceTransformerConfigurationFormRenderer
 					httpServletRequest,
 					"model.resource.com.liferay.wiki.model.WikiPage")
 			).build());
+	}
+
+	private List<String> _getAvailableEmbeddingVectorDimensions() {
+		return new ArrayList<String>() {
+			{
+				add("384");
+				add("512");
+				add("768");
+			}
+		};
 	}
 
 	private Map<String, String> _getAvailableLanguageDisplayNames(

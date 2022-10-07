@@ -22,12 +22,16 @@ import java.util.Map;
  */
 public class SentenceTransformerCompanyConfigurationDisplayContext {
 
-	public List<String> getAvailableEmbeddingVectorDimensions() {
-		return _availableEmbeddingVectorDimensions;
+	public List<String> getAssetEntryClassNames() {
+		return _assetEntryClassNames;
 	}
 
 	public Map<String, String> getAvailableAssetEntryClassNames() {
 		return _availableAssetEntryClassNames;
+	}
+
+	public List<String> getAvailableEmbeddingVectorDimensions() {
+		return _availableEmbeddingVectorDimensions;
 	}
 
 	public Map<String, String> getAvailableLanguageDisplayNames() {
@@ -48,10 +52,6 @@ public class SentenceTransformerCompanyConfigurationDisplayContext {
 
 	public int getEmbeddingVectorDimensions() {
 		return _embeddingVectorDimensions;
-	}
-
-	public List<String> getAssetEntryClassNames() {
-		return _assetEntryClassNames;
 	}
 
 	public String getHuggingFaceAccessToken() {
@@ -94,17 +94,21 @@ public class SentenceTransformerCompanyConfigurationDisplayContext {
 		return _enableGPU;
 	}
 
-	public void setAvailableEmbeddingVectorDimensions(
-		List<String> availableEmbeddingVectorDimensions) {
-
-		_availableEmbeddingVectorDimensions =
-			availableEmbeddingVectorDimensions;
+	public void setAssetEntryClassNames(List<String> assetEntryClassNames) {
+		_assetEntryClassNames = assetEntryClassNames;
 	}
 
 	public void setAvailableAssetEntryClassNames(
 		Map<String, String> availableAssetEntryClassNames) {
 
 		_availableAssetEntryClassNames = availableAssetEntryClassNames;
+	}
+
+	public void setAvailableEmbeddingVectorDimensions(
+		List<String> availableEmbeddingVectorDimensions) {
+
+		_availableEmbeddingVectorDimensions =
+			availableEmbeddingVectorDimensions;
 	}
 
 	public void setAvailableLanguageDisplayNames(
@@ -142,10 +146,6 @@ public class SentenceTransformerCompanyConfigurationDisplayContext {
 		_enableGPU = useGPU;
 	}
 
-	public void setAssetEntryClassNames(List<String> assetEntryClassNames) {
-		_assetEntryClassNames = assetEntryClassNames;
-	}
-
 	public void setHuggingFaceAccessToken(String huggingFaceAccessToken) {
 		_huggingFaceAccessToken = huggingFaceAccessToken;
 	}
@@ -178,8 +178,9 @@ public class SentenceTransformerCompanyConfigurationDisplayContext {
 		_txtaiHostAddress = txtaiHostAddress;
 	}
 
-	private List<String> _availableEmbeddingVectorDimensions;
+	private List<String> _assetEntryClassNames;
 	private Map<String, String> _availableAssetEntryClassNames;
+	private List<String> _availableEmbeddingVectorDimensions;
 	private Map<String, String> _availableLanguageDisplayNames;
 	private Map<String, String> _availableSentenceTranformProviders;
 	private Map<String, String> _availableTextTruncationStrategies;
@@ -187,7 +188,6 @@ public class SentenceTransformerCompanyConfigurationDisplayContext {
 	private int _embeddingVectorDimensions;
 	private boolean _enabled;
 	private boolean _enableGPU;
-	private List<String> _assetEntryClassNames;
 	private String _huggingFaceAccessToken;
 	private List<String> _languageIds;
 	private int _maxCharacterCount;
