@@ -14,17 +14,15 @@
 
 package com.liferay.search.experiences.internal.ml.sentence.embedding;
 
+import com.liferay.petra.reflect.ReflectionUtil;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
-import com.liferay.portal.kernel.json.JSONException;
 import com.liferay.portal.kernel.json.JSONFactory;
 import com.liferay.portal.kernel.json.JSONUtil;
 import com.liferay.portal.kernel.util.Http;
 import com.liferay.portal.kernel.util.URLCodec;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.search.experiences.configuration.SentenceTransformerConfiguration;
-
-import java.io.IOException;
 
 import java.util.List;
 import java.util.Map;
@@ -80,8 +78,8 @@ public class TXTAISentenceTransformer
 
 			return list.toArray(new Double[0]);
 		}
-		catch (IOException | JSONException exception) {
-			throw new RuntimeException(exception);
+		catch (Exception exception) {
+			return ReflectionUtil.throwException(exception);
 		}
 	}
 
