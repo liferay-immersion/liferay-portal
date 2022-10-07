@@ -71,12 +71,12 @@ public class CurrentAccountEntryManagerTest {
 
 	@Test
 	public void testGetCurrentAccountEntry() throws Exception {
-		AccountEntry accountEntry1 = _addAccountEntry("aaa");
+		AccountEntry accountEntry = _addAccountEntry("aaa");
 
 		_addAccountEntry("bbb");
 
 		Assert.assertEquals(
-			accountEntry1,
+			accountEntry,
 			_currentAccountEntryManager.getCurrentAccountEntry(
 				_group.getGroupId(), _user.getUserId()));
 	}
