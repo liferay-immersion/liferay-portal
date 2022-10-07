@@ -28,20 +28,6 @@ page import="java.util.Map.Entry" %>
 <%
 SentenceTransformerCompanyConfigurationDisplayContext sentenceTransformerCompanyConfigurationDisplayContext = (SentenceTransformerCompanyConfigurationDisplayContext)request.getAttribute(SentenceTransformerCompanyConfigurationDisplayContext.class.getName());
 
-List<String> availableEmbeddingVectorDimensions = sentenceTransformerCompanyConfigurationDisplayContext.getAvailableEmbeddingVectorDimensions();
-
-Map<String, String> availableEntryClassNames = sentenceTransformerCompanyConfigurationDisplayContext.getAvailableEntryClassNames();
-
-Map<String, String> availableLanguages = sentenceTransformerCompanyConfigurationDisplayContext.getAvailableLanguages();
-
-Map<String, String> availableSentenceTransformProviders = sentenceTransformerCompanyConfigurationDisplayContext.getAvailableSentenceTranformProviders();
-
-Map<String, String> availableTextTruncationStrategies = sentenceTransformerCompanyConfigurationDisplayContext.getAvailableTextTruncationStrategies();
-
-List<String> currentEntryClassNames = sentenceTransformerCompanyConfigurationDisplayContext.getEntryClassNames();
-
-List<String> currentLanguageIds = sentenceTransformerCompanyConfigurationDisplayContext.getLanguageIds();
-
 String currentSentenceTransformProvider = sentenceTransformerCompanyConfigurationDisplayContext.getSentenceTransformProvider();
 %>
 
@@ -51,6 +37,8 @@ String currentSentenceTransformProvider = sentenceTransformerCompanyConfiguratio
 	<aui:select id="sentenceTransformProvider" name="sentenceTransformProvider" value="<%= currentSentenceTransformProvider %>">
 
 		<%
+		Map<String, String> availableSentenceTransformProviders = sentenceTransformerCompanyConfigurationDisplayContext.getAvailableSentenceTranformProviders();
+
 		for (Entry<String, String> entry : availableSentenceTransformProviders.entrySet()) {
 		%>
 
@@ -65,16 +53,16 @@ String currentSentenceTransformProvider = sentenceTransformerCompanyConfiguratio
 	<div class="options-container <%= !currentSentenceTransformProvider.equals("huggingFace") ? "hide" : StringPool.BLANK %>" id="<portlet:namespace />huggingFaceOptionsContainer">
 		<aui:input name="huggingFaceAccessToken" value="<%= sentenceTransformerCompanyConfigurationDisplayContext.getHuggingFaceAccessToken() %>" />
 
-		<%-- TODO: use SXP REST endpoint to query ML models --%>
+		<%--
+		TODO Use REST to query ML models
+		--%>
 
 		<aui:input helpMessage="sentence-transformer-model-help" name="model" value='<%= (sentenceTransformerCompanyConfigurationDisplayContext.getModel() != null) ? sentenceTransformerCompanyConfigurationDisplayContext.getModel() : "facebook/contriever-msmarco" %>' />
-
 		<aui:input helpMessage="sentence-transformer-model-timeout-help" name="modelTimeout" value="<%= sentenceTransformerCompanyConfigurationDisplayContext.getModelTimeout() %>">
 			<aui:validator name="required" />
 			<aui:validator name="number" />
 			<aui:validator name="range">[0,60]</aui:validator>
 		</aui:input>
-
 		<aui:input name="enableGPU" type="checkbox" value="<%= sentenceTransformerCompanyConfigurationDisplayContext.isEnableGPU() %>" />
 	</div>
 
@@ -85,7 +73,7 @@ String currentSentenceTransformProvider = sentenceTransformerCompanyConfiguratio
 	<aui:select name="embeddingVectorDimensions" value="<%= sentenceTransformerCompanyConfigurationDisplayContext.getEmbeddingVectorDimensions() %>">
 
 		<%
-		for (String embeddingVectorDimensions : availableEmbeddingVectorDimensions) {
+		for (String embeddingVectorDimensions : sentenceTransformerCompanyConfigurationDisplayContext.getAvailableEmbeddingVectorDimensions()) {
 		%>
 
 			<aui:option label="<%= embeddingVectorDimensions %>" value="<%= embeddingVectorDimensions %>" />
@@ -107,6 +95,8 @@ String currentSentenceTransformProvider = sentenceTransformerCompanyConfiguratio
 	<aui:select helpMessage="sentence-transformer-text-truncation-strategy-help" name="textTruncationStrategy" value="<%= sentenceTransformerCompanyConfigurationDisplayContext.getTextTruncationStrategy() %>">
 
 		<%
+		Map<String, String> availableTextTruncationStrategies = sentenceTransformerCompanyConfigurationDisplayContext.getAvailableTextTruncationStrategies();
+
 		for (Entry<String, String> entry : availableTextTruncationStrategies.entrySet()) {
 		%>
 
@@ -121,7 +111,10 @@ String currentSentenceTransformProvider = sentenceTransformerCompanyConfiguratio
 	<aui:select helpMessage="sentence-transformer-entry-class-names-help" multiple="<%= true %>" name="entryClassNames" required="<%= true %>">
 
 		<%
+		Map<String, String> availableEntryClassNames = sentenceTransformerCompanyConfigurationDisplayContext.getAvailableEntryClassNames();
+
 		for (Entry<String, String> entry : availableEntryClassNames.entrySet()) {
+			List<String> currentEntryClassNames = sentenceTransformerCompanyConfigurationDisplayContext.getEntryClassNames();
 		%>
 
 			<aui:option label="<%= entry.getValue() %>" selected="<%= currentEntryClassNames.contains(entry.getKey()) %>" value="<%= entry.getKey() %>" />
@@ -135,7 +128,10 @@ String currentSentenceTransformProvider = sentenceTransformerCompanyConfiguratio
 	<aui:select helpMessage="sentence-transformer-language-ids-help" multiple="<%= true %>" name="languageIds" required="<%= true %>">
 
 		<%
+		Map<String, String> availableLanguages = sentenceTransformerCompanyConfigurationDisplayContext.getAvailableLanguages();
+
 		for (Entry<String, String> entry : availableLanguages.entrySet()) {
+			List<String> currentLanguageIds = sentenceTransformerCompanyConfigurationDisplayContext.getLanguageIds();
 		%>
 
 			<aui:option label="<%= entry.getValue() %>" selected="<%= currentLanguageIds.contains(entry.getKey()) %>" value="<%= entry.getKey() %>" />
