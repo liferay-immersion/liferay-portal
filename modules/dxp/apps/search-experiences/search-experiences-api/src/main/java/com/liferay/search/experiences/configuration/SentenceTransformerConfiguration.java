@@ -98,7 +98,7 @@ public interface SentenceTransformerConfiguration {
 	@Meta.AD(
 		deflt = "com.liferay.blogs.model.BlogsEntry|com.liferay.journal.model.JournalArticle|com.liferay.knowledge.base.model.KBArticle|com.liferay.wiki.model.WikiPage",
 		description = "sentence-transformer-entry-class-names-help",
-		name = "entry-class-names", required = false
+		name = "sentence-transformer-entry-class-names", required = false
 	)
 	public String[] entryClassNames();
 
