@@ -102,14 +102,14 @@ public abstract class BaseSentenceEmbeddingModelDocumentContributor {
 	private void _addSentenceEmbeddingField(
 		Document document, String languageId, Double[] sentenceEmbedding) {
 
-		Field embeddingField = new Field(_getFieldName(languageId));
+		Field field = new Field(_getFieldName(languageId));
 
-		embeddingField.setValues(ArrayUtil.toStringArray(sentenceEmbedding));
-		embeddingField.setNumeric(true);
-		embeddingField.setNumericClass(Double.class);
-		embeddingField.setTokenized(false);
+		field.setNumeric(true);
+		field.setNumericClass(Double.class);
+		field.setTokenized(false);
+		field.setValues(ArrayUtil.toStringArray(sentenceEmbedding));
 
-		document.add(embeddingField);
+		document.add(field);
 	}
 
 	private String _getFieldName(String languageId) {
