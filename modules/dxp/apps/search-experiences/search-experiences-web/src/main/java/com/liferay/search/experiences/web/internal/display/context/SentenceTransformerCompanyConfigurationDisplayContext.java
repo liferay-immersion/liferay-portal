@@ -12,7 +12,7 @@
  *
  */
 
-package com.liferay.search.experiences.web.internal.sentence.transformer.configuration.display.context;
+package com.liferay.search.experiences.web.internal.display.context;
 
 import java.util.List;
 import java.util.Map;

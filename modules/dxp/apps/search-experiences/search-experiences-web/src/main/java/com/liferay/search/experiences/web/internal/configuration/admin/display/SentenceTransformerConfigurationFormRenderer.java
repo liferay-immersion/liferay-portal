@@ -12,7 +12,7 @@
  *
  */
 
-package com.liferay.search.experiences.web.internal.sentence.transformer.configuration;
+package com.liferay.search.experiences.web.internal.configuration.admin.display;
 
 import com.liferay.configuration.admin.display.ConfigurationFormRenderer;
 import com.liferay.frontend.taglib.servlet.taglib.util.JSPRenderer;
@@ -30,7 +30,7 @@ import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.search.experiences.configuration.SentenceTransformerConfiguration;
-import com.liferay.search.experiences.web.internal.sentence.transformer.configuration.display.context.SentenceTransformerCompanyConfigurationDisplayContext;
+import com.liferay.search.experiences.web.internal.display.context.SentenceTransformerCompanyConfigurationDisplayContext;
 
 import java.io.IOException;
 import java.io.PrintWriter;

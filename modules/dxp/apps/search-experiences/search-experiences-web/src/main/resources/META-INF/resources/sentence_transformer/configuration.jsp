@@ -19,7 +19,7 @@
 <%@ taglib uri="http://liferay.com/tld/aui" prefix="aui" %>
 
 <%@ page import="com.liferay.petra.string.StringPool" %><%@
-page import="com.liferay.search.experiences.web.internal.sentence.transformer.configuration.display.context.SentenceTransformerCompanyConfigurationDisplayContext" %>
+page import="com.liferay.search.experiences.web.internal.display.context.SentenceTransformerCompanyConfigurationDisplayContext" %>
 
 <%@ page import="java.util.List" %><%@
 page import="java.util.Map" %><%@
@@ -58,11 +58,13 @@ String currentSentenceTransformProvider = sentenceTransformerCompanyConfiguratio
 		--%>
 
 		<aui:input helpMessage="sentence-transformer-model-help" name="model" value='<%= (sentenceTransformerCompanyConfigurationDisplayContext.getModel() != null) ? sentenceTransformerCompanyConfigurationDisplayContext.getModel() : "facebook/contriever-msmarco" %>' />
+
 		<aui:input helpMessage="sentence-transformer-model-timeout-help" name="modelTimeout" value="<%= sentenceTransformerCompanyConfigurationDisplayContext.getModelTimeout() %>">
 			<aui:validator name="required" />
 			<aui:validator name="number" />
 			<aui:validator name="range">[0,60]</aui:validator>
 		</aui:input>
+
 		<aui:input name="enableGPU" type="checkbox" value="<%= sentenceTransformerCompanyConfigurationDisplayContext.isEnableGPU() %>" />
 	</div>
 
