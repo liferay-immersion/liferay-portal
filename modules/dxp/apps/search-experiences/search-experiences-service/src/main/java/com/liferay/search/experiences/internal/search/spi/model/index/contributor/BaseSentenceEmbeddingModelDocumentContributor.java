@@ -114,10 +114,9 @@ public abstract class BaseSentenceEmbeddingModelDocumentContributor {
 
 	private String _getFieldName(String languageId) {
 		return StringBundler.concat(
-			"text_embedding", StringPool.UNDERLINE,
-			sentenceTransformerConfiguration.embeddingVectorDimensions() +
-				StringPool.UNDERLINE,
-			languageId);
+			"text_embedding_",
+			sentenceTransformerConfiguration.embeddingVectorDimensions(),
+			StringPool.UNDERLINE, languageId);
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
