@@ -59,7 +59,7 @@ public class MLModelResourceImpl extends BaseMLModelResourceImpl {
 	private String _getAPIURL(
 		Integer limit, String pipelineTag, String query, String tag) {
 
-		String apiURL = _HUGGING_FACE_MODELS_API_URL + "?";
+		String apiURL = "https://huggingface.co/api/models?";
 
 		if (limit != null) {
 			apiURL += "limit=" + limit;
@@ -107,9 +107,6 @@ public class MLModelResourceImpl extends BaseMLModelResourceImpl {
 
 		return mlModels;
 	}
-
-	private static final String _HUGGING_FACE_MODELS_API_URL =
-		"https://huggingface.co/api/models";
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		MLModelResourceImpl.class);
