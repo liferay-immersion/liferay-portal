@@ -74,6 +74,10 @@ public class SentenceTransformerConfigurationFormRenderer
 		HttpServletRequest httpServletRequest) {
 
 		return HashMapBuilder.<String, Object>put(
+			"assetEntryClassNames",
+			ParamUtil.getStringValues(
+				httpServletRequest, "assetEntryClassNames")
+		).put(
 			"cacheTimeout",
 			ParamUtil.getInteger(httpServletRequest, "cacheTimeout")
 		).put(
@@ -84,9 +88,6 @@ public class SentenceTransformerConfigurationFormRenderer
 			"enabled", ParamUtil.getBoolean(httpServletRequest, "enabled")
 		).put(
 			"enableGPU", ParamUtil.getBoolean(httpServletRequest, "enableGPU")
-		).put(
-			"assetEntryClassNames",
-			ParamUtil.getStringValues(httpServletRequest, "assetEntryClassNames")
 		).put(
 			"huggingFaceAccessToken",
 			ParamUtil.getString(httpServletRequest, "huggingFaceAccessToken")
