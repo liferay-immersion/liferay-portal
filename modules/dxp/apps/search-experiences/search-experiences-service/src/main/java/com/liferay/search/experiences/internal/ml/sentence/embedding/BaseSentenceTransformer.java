@@ -27,8 +27,7 @@ public abstract class BaseSentenceTransformer {
 	protected String getInput(
 		int maxCharacterCount, String text, String truncationStrategy) {
 
-		text = HtmlUtil.stripHtml(text);
-		text = StringUtil.trim(text);
+		text = StringUtil.trim(HtmlUtil.stripHtml(text));
 
 		if (maxCharacterCount <= 0) {
 			maxCharacterCount = 50;
