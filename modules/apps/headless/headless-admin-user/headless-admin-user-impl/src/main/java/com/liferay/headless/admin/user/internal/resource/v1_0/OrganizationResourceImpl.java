@@ -425,7 +425,8 @@ public class OrganizationResourceImpl
 				organization.getComment(), false, null, group.isSite(),
 				_getAddresses(organization), _getEmailAddresses(organization),
 				_getOrgLabors(organization), _getPhones(organization),
-				_getWebsites(organization), _createServiceContext(organization)));
+				_getWebsites(organization),
+				_createServiceContext(organization)));
 	}
 
 	@Override
@@ -466,7 +467,8 @@ public class OrganizationResourceImpl
 				organization.getComment(), false, null, site,
 				_getAddresses(organization), _getEmailAddresses(organization),
 				_getOrgLabors(organization), _getPhones(organization),
-				_getWebsites(organization), _createServiceContext(organization));
+				_getWebsites(organization),
+				_createServiceContext(organization));
 
 		return _organizationResourceDTOConverter.toDTO(
 			_getDTOConverterContext(
@@ -524,6 +526,17 @@ public class OrganizationResourceImpl
 		if (organization.getServices() != null) {
 			existingOrganization.setServices(organization.getServices());
 		}
+	}
+
+	private ServiceContext _createServiceContext(Organization organization)
+		throws Exception {
+
+		return ServiceContextRequestUtil.createServiceContext(
+			CustomFieldsUtil.toMap(
+				com.liferay.portal.kernel.model.Organization.class.getName(),
+				contextCompany.getCompanyId(), organization.getCustomFields(),
+				contextAcceptLanguage.getPreferredLocale()),
+			contextCompany.getGroupId(), contextHttpServletRequest, null);
 	}
 
 	private List<Address> _getAddresses(Organization organization) {
@@ -739,17 +752,6 @@ public class OrganizationResourceImpl
 		}
 
 		return serviceBuilderOrganization.getOrganizationId();
-	}
-
-	private ServiceContext _createServiceContext(Organization organization)
-		throws Exception {
-
-		return ServiceContextRequestUtil.createServiceContext(
-			CustomFieldsUtil.toMap(
-				com.liferay.portal.kernel.model.Organization.class.getName(),
-				contextCompany.getCompanyId(), organization.getCustomFields(),
-				contextAcceptLanguage.getPreferredLocale()),
-			contextCompany.getGroupId(), contextHttpServletRequest, null);
 	}
 
 	private List<Website> _getWebsites(Organization organization) {
