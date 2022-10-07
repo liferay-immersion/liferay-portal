@@ -139,11 +139,11 @@ public class SentenceTransformerConfigurationFormRenderer
 				ListUtil.fromArray(
 					_sentenceTransformerConfiguration.assetEntryClassNames()));
 		sentenceTransformerCompanyConfigurationDisplayContext.
-			setAvailableEmbeddingVectorDimensions(
-				_getAvailableEmbeddingVectorDimensions());
-		sentenceTransformerCompanyConfigurationDisplayContext.
 			setAvailableAssetEntryClassNames(
 				_getAvailableAssetEntryClassNames(httpServletRequest));
+		sentenceTransformerCompanyConfigurationDisplayContext.
+			setAvailableEmbeddingVectorDimensions(
+				_getAvailableEmbeddingVectorDimensions());
 		sentenceTransformerCompanyConfigurationDisplayContext.
 			setAvailableLanguageDisplayNames(
 				_getAvailableLanguageDisplayNames(httpServletRequest));
