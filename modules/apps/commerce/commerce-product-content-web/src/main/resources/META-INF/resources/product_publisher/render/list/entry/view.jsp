@@ -20,12 +20,6 @@
 CPContentHelper cpContentHelper = (CPContentHelper)request.getAttribute(CPContentWebKeys.CP_CONTENT_HELPER);
 
 CPCatalogEntry cpCatalogEntry = cpContentHelper.getCPCatalogEntry(request);
-
-CPSku cpSku = cpContentHelper.getDefaultCPSku(cpCatalogEntry);
-
-String productDetailURL = cpContentHelper.getFriendlyURL(cpCatalogEntry, themeDisplay);
-
-String cpDefinitionCDNURL = cpContentHelper.getCPDefinitionCDNURL(cpCatalogEntry.getCPDefinitionId(), request);
 %>
 
 <div class="cp-renderer">
@@ -33,7 +27,17 @@ String cpDefinitionCDNURL = cpContentHelper.getCPDefinitionCDNURL(cpCatalogEntry
 
 	<div class="card d-flex flex-column product-card">
 		<div class="card-item-first position-relative">
+
+			<%
+			String productDetailURL = cpContentHelper.getFriendlyURL(cpCatalogEntry, themeDisplay);
+			%>
+
 			<a href="<%= productDetailURL %>">
+
+				<%
+				String cpDefinitionCDNURL = cpContentHelper.getCPDefinitionCDNURL(cpCatalogEntry.getCPDefinitionId(), request);
+				%>
+
 				<c:choose>
 					<c:when test="<%= Validator.isNotNull(cpDefinitionCDNURL) %>">
 						<img class="img-fluid product-card-picture" src="<%= cpDefinitionCDNURL %>" />
@@ -56,6 +60,11 @@ String cpDefinitionCDNURL = cpContentHelper.getCPDefinitionCDNURL(cpCatalogEntry
 
 		<div class="card-body d-flex flex-column justify-content-between py-2">
 			<div class="cp-information">
+
+				<%
+				CPSku cpSku = cpContentHelper.getDefaultCPSku(cpCatalogEntry);
+				%>
+
 				<p class="card-subtitle" title="<%= (cpSku == null) ? StringPool.BLANK : cpSku.getSku() %>">
 					<span class="text-truncate-inline">
 						<span class="text-truncate"><%= (cpSku == null) ? StringPool.BLANK : cpSku.getSku() %></span>
