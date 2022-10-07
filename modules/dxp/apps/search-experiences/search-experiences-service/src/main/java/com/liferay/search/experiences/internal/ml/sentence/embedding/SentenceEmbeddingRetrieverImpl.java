@@ -40,7 +40,7 @@ public class SentenceEmbeddingRetrieverImpl
 	implements SentenceEmbeddingRetriever {
 
 	@Override
-	public Double[] getEmbedding(String text) {
+	public Double[] getSentenceEmbedding(String text) {
 		if (!GetterUtil.getBoolean(PropsUtil.get("feature.flag.LPS-163688"))) {
 			return new Double[0];
 		}
@@ -53,7 +53,7 @@ public class SentenceEmbeddingRetrieverImpl
 			return new Double[0];
 		}
 
-		return sentenceTransformer.getEmbedding(text);
+		return sentenceTransformer.getSentenceEmbedding(text);
 	}
 
 	@Activate

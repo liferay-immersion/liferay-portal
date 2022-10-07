@@ -53,8 +53,8 @@ public class KBArticleSentenceEmbeddingModelDocumentContributor
 
 		addSentenceEmbeddingForAvailableLanguages(
 			kbArticle.getCompanyId(), document,
-			getEmbedding(
-				_sentenceEmbeddingRetriever::getEmbedding,
+			getSentenceEmbedding(
+				_sentenceEmbeddingRetriever::getSentenceEmbedding,
 				StringBundler.concat(
 					kbArticle.getTitle(), StringPool.BLANK,
 					kbArticle.getContent())));

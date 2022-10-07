@@ -70,7 +70,7 @@ public abstract class BaseSentenceEmbeddingModelDocumentContributor {
 		}
 	}
 
-	protected Double[] getEmbedding(
+	protected Double[] getSentenceEmbedding(
 		Function<String, Double[]> function, String text) {
 
 		try {

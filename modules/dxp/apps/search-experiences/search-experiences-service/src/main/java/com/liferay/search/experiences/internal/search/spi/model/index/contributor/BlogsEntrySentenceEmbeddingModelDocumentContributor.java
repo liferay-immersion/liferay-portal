@@ -53,8 +53,8 @@ public class BlogsEntrySentenceEmbeddingModelDocumentContributor
 
 		addSentenceEmbeddingForAvailableLanguages(
 			blogsEntry.getCompanyId(), document,
-			getEmbedding(
-				_sentenceEmbeddingRetriever::getEmbedding,
+			getSentenceEmbedding(
+				_sentenceEmbeddingRetriever::getSentenceEmbedding,
 				StringBundler.concat(
 					blogsEntry.getTitle(), StringPool.BLANK,
 					blogsEntry.getContent())));

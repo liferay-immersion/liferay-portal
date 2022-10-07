@@ -51,7 +51,7 @@ import org.osgi.service.component.annotations.Reference;
 public class HuggingFaceSentenceTransformer
 	extends BaseSentenceTransformer implements SentenceTransformer {
 
-	public Double[] getEmbedding(String text) {
+	public Double[] getSentenceEmbedding(String text) {
 		String input = getInput(
 			_sentenceTransformerConfiguration.maxCharacterCount(), text,
 			_sentenceTransformerConfiguration.textTruncationStrategy());
@@ -60,7 +60,7 @@ public class HuggingFaceSentenceTransformer
 			return new Double[0];
 		}
 
-		return _getEmbedding(input);
+		return _getSentenceEmbedding(input);
 	}
 
 	@Activate
@@ -69,7 +69,7 @@ public class HuggingFaceSentenceTransformer
 			SentenceTransformerConfiguration.class, properties);
 	}
 
-	private Double[] _getEmbedding(String text) {
+	private Double[] _getSentenceEmbedding(String text) {
 		try {
 			Http.Options options = new Http.Options();
 

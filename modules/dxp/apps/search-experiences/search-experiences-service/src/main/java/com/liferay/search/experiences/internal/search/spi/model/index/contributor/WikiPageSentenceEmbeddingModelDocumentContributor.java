@@ -50,8 +50,8 @@ public class WikiPageSentenceEmbeddingModelDocumentContributor
 
 		addSentenceEmbeddingForAvailableLanguages(
 			wikiPage.getCompanyId(), document,
-			getEmbedding(
-				_sentenceEmbeddingRetriever::getEmbedding,
+			getSentenceEmbedding(
+				_sentenceEmbeddingRetriever::getSentenceEmbedding,
 				StringBundler.concat(
 					wikiPage.getTitle(), StringPool.BLANK,
 					wikiPage.getContent())));

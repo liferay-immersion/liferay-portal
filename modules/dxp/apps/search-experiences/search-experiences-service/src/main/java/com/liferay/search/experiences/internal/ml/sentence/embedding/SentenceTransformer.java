@@ -19,6 +19,6 @@ package com.liferay.search.experiences.internal.ml.sentence.embedding;
  */
 public interface SentenceTransformer {
 
-	public Double[] getEmbedding(String text);
+	public Double[] getSentenceEmbedding(String text);
 
 }

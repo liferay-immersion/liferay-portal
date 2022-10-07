@@ -51,8 +51,8 @@ public class MBMessageSentenceEmbeddingModelDocumentContributor
 
 		addSentenceEmbeddingForAvailableLanguages(
 			mbMessage.getCompanyId(), document,
-			getEmbedding(
-				_sentenceEmbeddingRetriever::getEmbedding,
+			getSentenceEmbedding(
+				_sentenceEmbeddingRetriever::getSentenceEmbedding,
 				mbMessage.getBody()));
 	}
 

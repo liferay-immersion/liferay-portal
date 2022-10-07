@@ -77,8 +77,8 @@ public class JournalArticleSentenceEmbeddingModelDocumentContributor
 
 			addSentenceEmbedding(
 				document, languageId,
-				getEmbedding(
-					_sentenceEmbeddingRetriever::getEmbedding,
+				getSentenceEmbedding(
+					_sentenceEmbeddingRetriever::getSentenceEmbedding,
 					StringBundler.concat(
 						journalArticle.getTitle(languageId, true),
 						StringPool.BLANK,
