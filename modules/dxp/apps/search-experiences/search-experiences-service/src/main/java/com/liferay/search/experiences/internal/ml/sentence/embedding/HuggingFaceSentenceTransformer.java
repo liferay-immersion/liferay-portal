@@ -14,11 +14,11 @@
 
 package com.liferay.search.experiences.internal.ml.sentence.embedding;
 
+import com.liferay.petra.reflect.ReflectionUtil;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
 import com.liferay.portal.kernel.json.JSONArray;
-import com.liferay.portal.kernel.json.JSONException;
 import com.liferay.portal.kernel.json.JSONFactory;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.json.JSONUtil;
@@ -81,7 +81,6 @@ public class HuggingFaceSentenceTransformer
 					HttpURLConnection.HTTP_UNAVAILABLE) {
 
 				options.addHeader("x-wait-for-model", "true");
-
 				options.setTimeout(
 					_sentenceTransformerConfiguration.modelTimeout() * 1000);
 
@@ -93,8 +92,8 @@ public class HuggingFaceSentenceTransformer
 
 			return list.toArray(new Double[0]);
 		}
-		catch (IOException | JSONException exception) {
-			throw new RuntimeException(exception);
+		catch (Exception exception) {
+			return ReflectionUtil.throwException(exception);
 		}
 	}
 
