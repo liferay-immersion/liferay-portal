@@ -159,6 +159,7 @@ String currentSentenceTransformProvider = sentenceTransformerCompanyConfiguratio
 				A.one(
 					'#<portlet:namespace />huggingFaceOptionsContainer'
 				).toggleClass('hide');
+
 				A.one('#<portlet:namespace />txtAiOptionsContainer').toggleClass(
 					'hide'
 				);
