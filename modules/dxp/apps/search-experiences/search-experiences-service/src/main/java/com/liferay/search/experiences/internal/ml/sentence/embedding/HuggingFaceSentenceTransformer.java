@@ -69,34 +69,6 @@ public class HuggingFaceSentenceTransformer
 			SentenceTransformerConfiguration.class, properties);
 	}
 
-	private Double[] _getSentenceEmbedding(String text) {
-		try {
-			Http.Options options = new Http.Options();
-
-			String responseJSON = _getResponseJSON(options, text);
-
-			Http.Response response = options.getResponse();
-
-			if (response.getResponseCode() ==
-					HttpURLConnection.HTTP_UNAVAILABLE) {
-
-				options.addHeader("x-wait-for-model", "true");
-				options.setTimeout(
-					_sentenceTransformerConfiguration.modelTimeout() * 1000);
-
-				responseJSON = _getResponseJSON(options, text);
-			}
-
-			List<Double> list = JSONUtil.toDoubleList(
-				_getJSONArray(_jsonFactory.createJSONArray(responseJSON)));
-
-			return list.toArray(new Double[0]);
-		}
-		catch (Exception exception) {
-			return ReflectionUtil.throwException(exception);
-		}
-	}
-
 	private JSONArray _getJSONArray(JSONArray jsonArray1) {
 		JSONArray jsonArray2 = jsonArray1.getJSONArray(0);
 
@@ -134,6 +106,34 @@ public class HuggingFaceSentenceTransformer
 		options.setPost(true);
 
 		return _http.URLtoString(options);
+	}
+
+	private Double[] _getSentenceEmbedding(String text) {
+		try {
+			Http.Options options = new Http.Options();
+
+			String responseJSON = _getResponseJSON(options, text);
+
+			Http.Response response = options.getResponse();
+
+			if (response.getResponseCode() ==
+					HttpURLConnection.HTTP_UNAVAILABLE) {
+
+				options.addHeader("x-wait-for-model", "true");
+				options.setTimeout(
+					_sentenceTransformerConfiguration.modelTimeout() * 1000);
+
+				responseJSON = _getResponseJSON(options, text);
+			}
+
+			List<Double> list = JSONUtil.toDoubleList(
+				_getJSONArray(_jsonFactory.createJSONArray(responseJSON)));
+
+			return list.toArray(new Double[0]);
+		}
+		catch (Exception exception) {
+			return ReflectionUtil.throwException(exception);
+		}
 	}
 
 	@Reference
