@@ -113,10 +113,10 @@ String currentSentenceTransformProvider = sentenceTransformerCompanyConfiguratio
 	<aui:select helpMessage="sentence-transformer-entry-class-names-help" multiple="<%= true %>" name="assetEntryClassNames" required="<%= true %>">
 
 		<%
-		Map<String, String> availableEntryClassNames = sentenceTransformerCompanyConfigurationDisplayContext.getAvailableEntryClassNames();
+		Map<String, String> availableAssetEntryClassNames = sentenceTransformerCompanyConfigurationDisplayContext.getAvailableAssetEntryClassNames();
 
-		for (Entry<String, String> entry : availableEntryClassNames.entrySet()) {
-			List<String> assetEntryClassNames = sentenceTransformerCompanyConfigurationDisplayContext.getEntryClassNames();
+		for (Entry<String, String> entry : availableAssetEntryClassNames.entrySet()) {
+			List<String> assetEntryClassNames = sentenceTransformerCompanyConfigurationDisplayContext.getAssetEntryClassNames();
 		%>
 
 			<aui:option label="<%= entry.getValue() %>" selected="<%= assetEntryClassNames.contains(entry.getKey()) %>" value="<%= entry.getKey() %>" />

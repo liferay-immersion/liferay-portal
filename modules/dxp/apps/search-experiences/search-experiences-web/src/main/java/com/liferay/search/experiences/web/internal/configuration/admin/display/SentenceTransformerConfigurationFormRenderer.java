@@ -137,8 +137,8 @@ public class SentenceTransformerConfigurationFormRenderer
 			setAvailableEmbeddingVectorDimensions(
 				_getAvailableEmbeddingVectorDimensions());
 		sentenceTransformerCompanyConfigurationDisplayContext.
-			setAvailableEntryClassNames(
-				_getAvailableEntryClassNames(httpServletRequest));
+			setAvailableAssetEntryClassNames(
+				_getAvailableAssetEntryClassNames(httpServletRequest));
 		sentenceTransformerCompanyConfigurationDisplayContext.
 			setAvailableLanguageDisplayNames(
 				_getAvailableLanguageDisplayNames(httpServletRequest));
@@ -158,7 +158,7 @@ public class SentenceTransformerConfigurationFormRenderer
 		sentenceTransformerCompanyConfigurationDisplayContext.setEnableGPU(
 			_sentenceTransformerConfiguration.enableGPU());
 		sentenceTransformerCompanyConfigurationDisplayContext.
-			setEntryClassNames(
+			setAssetEntryClassNames(
 				ListUtil.fromArray(
 					_sentenceTransformerConfiguration.assetEntryClassNames()));
 		sentenceTransformerCompanyConfigurationDisplayContext.
@@ -210,7 +210,7 @@ public class SentenceTransformerConfigurationFormRenderer
 		};
 	}
 
-	private Map<String, String> _getAvailableEntryClassNames(
+	private Map<String, String> _getAvailableAssetEntryClassNames(
 		HttpServletRequest httpServletRequest) {
 
 		return _sortByValue(

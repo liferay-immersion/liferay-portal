@@ -26,8 +26,8 @@ public class SentenceTransformerCompanyConfigurationDisplayContext {
 		return _availableEmbeddingVectorDimensions;
 	}
 
-	public Map<String, String> getAvailableEntryClassNames() {
-		return _availableEntryClassNames;
+	public Map<String, String> getAvailableAssetEntryClassNames() {
+		return _availableAssetEntryClassNames;
 	}
 
 	public Map<String, String> getAvailableLanguageDisplayNames() {
@@ -50,7 +50,7 @@ public class SentenceTransformerCompanyConfigurationDisplayContext {
 		return _embeddingVectorDimensions;
 	}
 
-	public List<String> getEntryClassNames() {
+	public List<String> getAssetEntryClassNames() {
 		return _assetEntryClassNames;
 	}
 
@@ -101,10 +101,10 @@ public class SentenceTransformerCompanyConfigurationDisplayContext {
 			availableEmbeddingVectorDimensions;
 	}
 
-	public void setAvailableEntryClassNames(
-		Map<String, String> availableEntryClassNames) {
+	public void setAvailableAssetEntryClassNames(
+		Map<String, String> availableAssetEntryClassNames) {
 
-		_availableEntryClassNames = availableEntryClassNames;
+		_availableAssetEntryClassNames = availableAssetEntryClassNames;
 	}
 
 	public void setAvailableLanguageDisplayNames(
@@ -142,7 +142,7 @@ public class SentenceTransformerCompanyConfigurationDisplayContext {
 		_enableGPU = useGPU;
 	}
 
-	public void setEntryClassNames(List<String> assetEntryClassNames) {
+	public void setAssetEntryClassNames(List<String> assetEntryClassNames) {
 		_assetEntryClassNames = assetEntryClassNames;
 	}
 
@@ -179,7 +179,7 @@ public class SentenceTransformerCompanyConfigurationDisplayContext {
 	}
 
 	private List<String> _availableEmbeddingVectorDimensions;
-	private Map<String, String> _availableEntryClassNames;
+	private Map<String, String> _availableAssetEntryClassNames;
 	private Map<String, String> _availableLanguageDisplayNames;
 	private Map<String, String> _availableSentenceTranformProviders;
 	private Map<String, String> _availableTextTruncationStrategies;
