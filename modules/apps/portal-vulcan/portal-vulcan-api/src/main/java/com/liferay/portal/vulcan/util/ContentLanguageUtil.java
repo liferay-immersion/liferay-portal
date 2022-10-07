@@ -32,22 +32,24 @@ public class ContentLanguageUtil {
 		String[] availableLocaleIds, String defaultLocaleId,
 		HttpServletResponse httpServletResponse, Locale requestedLocale) {
 
-		if (httpServletResponse != null) {
-			Locale contentLocale = Stream.of(
-				availableLocaleIds
-			).map(
-				LocaleUtil::fromLanguageId
-			).filter(
-				locale -> LocaleUtil.equals(locale, requestedLocale)
-			).findFirst(
-			).orElse(
-				LocaleUtil.fromLanguageId(defaultLocaleId)
-			);
-
-			httpServletResponse.addHeader(
-				HttpHeaders.CONTENT_LANGUAGE,
-				LocaleUtil.toW3cLanguageId(contentLocale));
+		if (httpServletResponse == null) {
+			return;
 		}
+
+		Locale contentLocale = Stream.of(
+			availableLocaleIds
+		).map(
+			LocaleUtil::fromLanguageId
+		).filter(
+			locale -> LocaleUtil.equals(locale, requestedLocale)
+		).findFirst(
+		).orElse(
+			LocaleUtil.fromLanguageId(defaultLocaleId)
+		);
+
+		httpServletResponse.addHeader(
+			HttpHeaders.CONTENT_LANGUAGE,
+			LocaleUtil.toW3cLanguageId(contentLocale));
 	}
 
 }
