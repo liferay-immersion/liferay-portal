@@ -73,7 +73,7 @@ public class HuggingFaceSentenceTransformer
 		try {
 			Http.Options options = new Http.Options();
 
-			String responseJSON = _getResponse(options, text);
+			String responseJSON = _getResponseJSON(options, text);
 
 			Http.Response response = options.getResponse();
 
@@ -84,7 +84,7 @@ public class HuggingFaceSentenceTransformer
 				options.setTimeout(
 					_sentenceTransformerConfiguration.modelTimeout() * 1000);
 
-				responseJSON = _getResponse(options, text);
+				responseJSON = _getResponseJSON(options, text);
 			}
 
 			List<Double> list = JSONUtil.toDoubleList(
@@ -107,7 +107,7 @@ public class HuggingFaceSentenceTransformer
 		return jsonArray1;
 	}
 
-	private String _getResponse(Http.Options options, String text)
+	private String _getResponseJSON(Http.Options options, String text)
 		throws IOException {
 
 		JSONObject jsonObject = JSONUtil.put("inputs", text);
@@ -129,15 +129,12 @@ public class HuggingFaceSentenceTransformer
 			jsonObject.toString(), ContentTypes.APPLICATION_JSON,
 			StringPool.UTF8);
 		options.setLocation(
-			_HUGGING_FACE_INFERENCE_API_ROOT +
+			"https://api-inference.huggingface.co/models/" +
 				_sentenceTransformerConfiguration.model());
 		options.setPost(true);
 
 		return _http.URLtoString(options);
 	}
-
-	private static final String _HUGGING_FACE_INFERENCE_API_ROOT =
-		"https://api-inference.huggingface.co/models/";
 
 	@Reference
 	private Http _http;
