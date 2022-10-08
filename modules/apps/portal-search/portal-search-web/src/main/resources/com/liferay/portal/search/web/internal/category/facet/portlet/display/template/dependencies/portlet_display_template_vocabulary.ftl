@@ -2,10 +2,10 @@
 	cssClassTreeItem = ""
 	frequency = 0
 	id = ""
-	isFrequencyVisible = true
-	isSelectable = false
-	isSelected = false
+	frequencyVisible = true
 	name = ""
+	selectable = false
+	selected = false
 	termDisplayContexts = ""
 >
 	<li class="treeview-item" role="none">
@@ -45,12 +45,12 @@
 							</span>
 						</#if>
 
-						<#if isSelectable>
+						<#if selectable>
 							<span class="autofit-col autofit-col-expand">
 								<div class="custom-checkbox custom-control">
 									<label>
 										<input
-											${isSelected?then("checked", "")}
+											${selected?then("checked", "")}
 											class="custom-control-input facet-term"
 											data-term-id=${id}
 											disabled
@@ -62,7 +62,7 @@
 											<span class="custom-control-label-text">
 												${name}
 
-												<#if isFrequencyVisible>
+												<#if frequencyVisible>
 													(${frequency})
 												</#if>
 											</span>
@@ -80,7 +80,7 @@
 										<span class="text-truncate">
 											${name}
 
-											<#if isFrequencyVisible>
+											<#if frequencyVisible>
 												(${frequency})
 											</#if>
 										</span>
@@ -101,10 +101,10 @@
 							cssClassTreeItem="tree-item-category"
 							frequency=termDisplayContext.getFrequency()
 							id=termDisplayContext.getAssetCategoryId()
-							isFrequencyVisible=termDisplayContext.isFrequencyVisible()
-							isSelectable=true
-							isSelected=termDisplayContext.isSelected()
+							frequencyVisible=termDisplayContext.isFrequencyVisible()
 							name=htmlUtil.escape(termDisplayContext.getDisplayName())
+							selectable=true
+							selected=termDisplayContext.isSelected()
 						/>
 					</#list>
 				</ul>
@@ -135,7 +135,7 @@
 					<@treeview_item
 						cssClassTreeItem="tree-item-vocabulary"
 						id=vocabularyName + vocabularyName?index
-						isFrequencyVisible=false
+						frequencyVisible=false
 						name="${(vocabularyNames?size == 1)?then('', htmlUtil.escape(vocabularyName))}"
 						termDisplayContexts=assetCategoriesSearchFacetDisplayContext.getTermDisplayContexts(vocabularyName)
 					/>
