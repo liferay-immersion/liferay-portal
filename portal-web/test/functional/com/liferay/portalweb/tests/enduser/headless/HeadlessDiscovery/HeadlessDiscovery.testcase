@@ -1,7 +1,7 @@
 @component-name = "portal-headless-frontend-infrastructure"
 definition {
 
-	property testray.main.component.name = "Headless";
+	property testray.main.component.name = "Headless Frontend Infrastructure";
 
 	setUp {
 		TestCase.setUpPortalInstance();
