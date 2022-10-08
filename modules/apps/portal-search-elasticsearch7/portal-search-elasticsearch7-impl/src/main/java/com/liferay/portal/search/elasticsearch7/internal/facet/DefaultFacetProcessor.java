@@ -51,6 +51,13 @@ public class DefaultFacetProcessor
 
 		JSONObject dataJSONObject = facetConfiguration.getData();
 
+		String include = dataJSONObject.getString("include", null);
+
+		if (include != null) {
+			termsAggregationBuilder.includeExclude(
+				new IncludeExclude(include, null));
+		}
+
 		int minDocCount = dataJSONObject.getInt("frequencyThreshold");
 
 		if (minDocCount > 0) {
@@ -63,13 +70,6 @@ public class DefaultFacetProcessor
 
 		if (size > 0) {
 			termsAggregationBuilder.size(size);
-		}
-
-		String include = dataJSONObject.getString("include", null);
-
-		if (include != null) {
-			termsAggregationBuilder.includeExclude(
-				new IncludeExclude(include, null));
 		}
 
 		return Optional.of(termsAggregationBuilder);
