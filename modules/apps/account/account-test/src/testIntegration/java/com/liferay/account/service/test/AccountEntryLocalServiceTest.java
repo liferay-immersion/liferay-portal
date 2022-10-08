@@ -1109,9 +1109,9 @@ public class AccountEntryLocalServiceTest {
 		AccountEntry accountEntry = AccountEntryTestUtil.addAccountEntry(
 			_accountEntryLocalService);
 
+		long mvccVersion = accountEntry.getMvccVersion();
 		boolean expectedRestrictMembership =
 			!accountEntry.isRestrictMembership();
-		long mvccVersion = accountEntry.getMvccVersion();
 
 		accountEntry = _accountEntryLocalService.updateRestrictMembership(
 			accountEntry.getAccountEntryId(), expectedRestrictMembership);
