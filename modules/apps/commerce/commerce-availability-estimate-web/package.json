@@ -1,7 +1,4 @@
 {
-	"dependencies": {
-		"frontend-js-web": "*"
-	},
 	"name": "@liferay/commerce-availability-estimate-web",
 	"scripts": {
 		"build": "liferay-npm-scripts build",

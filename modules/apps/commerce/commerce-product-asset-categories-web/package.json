@@ -1,7 +1,5 @@
 {
 	"dependencies": {
-		"@liferay/frontend-icons-web": "*",
-		"frontend-js-web": "*"
 	},
 	"name": "@liferay/commerce-product-asset-categories-web",
 	"scripts": {

@@ -1,7 +1,4 @@
 {
-	"dependencies": {
-		"frontend-js-web": "*"
-	},
 	"name": "@liferay/client-extension-web",
 	"private": true,
 	"scripts": {

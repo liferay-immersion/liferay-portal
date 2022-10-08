@@ -1,7 +1,5 @@
 {
 	"dependencies": {
-		"@liferay/map-common": "*",
-		"frontend-js-web": "*"
 	},
 	"name": "@liferay/map-google-maps",
 	"private": true,

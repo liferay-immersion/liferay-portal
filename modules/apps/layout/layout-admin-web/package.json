@@ -1,6 +1,5 @@
 {
 	"dependencies": {
-		"@liferay/frontend-icons-web": "*",
 		"frontend-js-web": "*"
 	},
 	"name": "layout-admin-web",

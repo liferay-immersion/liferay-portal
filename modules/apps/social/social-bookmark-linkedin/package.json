@@ -1,6 +1,5 @@
 {
 	"dependencies": {
-		"social-bookmarks-taglib": "*"
 	},
 	"name": "@liferay/social-bookmark-linkedin",
 	"scripts": {

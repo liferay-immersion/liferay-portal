@@ -1,6 +1,5 @@
 {
 	"dependencies": {
-		"frontend-js-web": "*"
 	},
 	"name": "roles-admin-web",
 	"scripts": {

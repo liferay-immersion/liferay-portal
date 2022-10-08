@@ -1,6 +1,5 @@
 {
 	"dependencies": {
-		"frontend-js-web": "*",
 		"moment": "^2.22.2",
 		"react-transition-group": "4.4.1"
 	},

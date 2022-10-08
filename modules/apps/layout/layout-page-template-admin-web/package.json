@@ -1,7 +1,5 @@
 {
 	"dependencies": {
-		"@liferay/frontend-icons-web": "*",
-		"frontend-js-web": "*"
 	},
 	"name": "layout-template-admin-web",
 	"scripts": {

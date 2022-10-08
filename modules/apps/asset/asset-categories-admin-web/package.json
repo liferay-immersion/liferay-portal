@@ -1,6 +1,5 @@
 {
 	"dependencies": {
-		"frontend-js-web": "*"
 	},
 	"name": "asset-categories-admin-web",
 	"scripts": {

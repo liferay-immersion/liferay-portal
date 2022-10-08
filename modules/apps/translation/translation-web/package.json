@@ -1,6 +1,5 @@
 {
 	"dependencies": {
-		"frontend-js-web": "*"
 	},
 	"name": "translation-web",
 	"scripts": {

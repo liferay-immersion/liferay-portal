@@ -1,6 +1,5 @@
 {
 	"dependencies": {
-		"@liferay/frontend-js-react-web": "*"
 	},
 	"main": "index.js",
 	"name": "portal-template-react-renderer-impl",
