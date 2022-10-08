@@ -53,9 +53,7 @@ definition {
 
 	@summary = "This calls the JSON WS API to delete a Depot entry"
 	macro deleteDepot {
-		var depotId = JSONGroupAPI._getDepotIdByName(
-			depotName = "${depotName}",
-			noSelenium = "${noSelenium}");
+		var depotId = JSONGroupAPI._getDepotIdByName(depotName = "${depotName}");
 		var portalURL = JSONCompany.getPortalURL();
 
 		var curl = '''

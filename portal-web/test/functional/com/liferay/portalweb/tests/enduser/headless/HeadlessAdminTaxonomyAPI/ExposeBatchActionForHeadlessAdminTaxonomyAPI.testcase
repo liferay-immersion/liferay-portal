@@ -10,9 +10,7 @@ definition {
 	}
 
 	tearDown {
-		JSONDepot.deleteDepot(
-			depotName = "Test Depot Name",
-			noSelenium = "true");
+		JSONDepot.deleteDepot(depotName = "Test Depot Name");
 	}
 
 	@disable-webdriver = "true"
