@@ -102,7 +102,7 @@ public class LayoutPageTemplateEntryLocalServiceImpl
 		Company company = _companyLocalService.getCompany(
 			layoutPrototype.getCompanyId());
 
-		return addLayoutPageTemplateEntry(
+		return _addLayoutPageTemplateEntry(
 			company.getGroupId(), layoutPrototype);
 	}
 
@@ -114,7 +114,7 @@ public class LayoutPageTemplateEntryLocalServiceImpl
 		Company company = _companyLocalService.getCompany(
 			layoutPrototype.getCompanyId());
 
-		return addLayoutPageTemplateEntry(
+		return _addLayoutPageTemplateEntry(
 			company.getGroupId(), layoutPrototype);
 	}
 
@@ -131,7 +131,7 @@ public class LayoutPageTemplateEntryLocalServiceImpl
 
 		User user = _userLocalService.getUser(userId);
 
-		validate(groupId, name, type);
+		_validate(groupId, name, type);
 
 		long layoutPageTemplateEntryId = counterLocalService.increment();
 
@@ -226,7 +226,7 @@ public class LayoutPageTemplateEntryLocalServiceImpl
 
 		// Layout page template entry
 
-		validate(classNameId, classTypeId, groupId, serviceContext.getLocale());
+		_validate(classNameId, classTypeId, groupId, serviceContext.getLocale());
 
 		LayoutPageTemplateEntry layoutPageTemplateEntry =
 			addLayoutPageTemplateEntry(
@@ -616,7 +616,7 @@ public class LayoutPageTemplateEntryLocalServiceImpl
 				layoutPageTemplateEntryId);
 
 		if (!Objects.equals(layoutPageTemplateEntry.getName(), name)) {
-			validate(
+			_validate(
 				layoutPageTemplateEntry.getGroupId(), name,
 				layoutPageTemplateEntry.getType());
 		}
@@ -645,7 +645,7 @@ public class LayoutPageTemplateEntryLocalServiceImpl
 			return layoutPageTemplateEntry;
 		}
 
-		validate(
+		_validate(
 			layoutPageTemplateEntry.getGroupId(), name,
 			layoutPageTemplateEntry.getType());
 
@@ -719,7 +719,7 @@ public class LayoutPageTemplateEntryLocalServiceImpl
 			updateLayoutPageTemplateEntry(layoutPageTemplateEntry);
 	}
 
-	protected LayoutPageTemplateEntry addLayoutPageTemplateEntry(
+	private LayoutPageTemplateEntry _addLayoutPageTemplateEntry(
 			long groupId, LayoutPrototype layoutPrototype)
 		throws PortalException {
 
@@ -746,7 +746,7 @@ public class LayoutPageTemplateEntryLocalServiceImpl
 			new ServiceContext());
 	}
 
-	protected void validate(
+	private void _validate(
 			long classNameId, long classTypeId, long groupId, Locale locale)
 		throws PortalException {
 
@@ -792,7 +792,7 @@ public class LayoutPageTemplateEntryLocalServiceImpl
 		}
 	}
 
-	protected void validate(long groupId, String name, int type)
+	private void _validate(long groupId, String name, int type)
 		throws PortalException {
 
 		if (Validator.isNull(name)) {
