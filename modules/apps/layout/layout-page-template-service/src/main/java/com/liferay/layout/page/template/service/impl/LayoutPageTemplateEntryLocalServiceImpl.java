@@ -227,7 +227,7 @@ public class LayoutPageTemplateEntryLocalServiceImpl
 		// Layout page template entry
 
 		_validate(
-			classNameId, classTypeId, groupId, serviceContext.getLocale());
+			classNameId, classTypeId, groupId);
 
 		LayoutPageTemplateEntry layoutPageTemplateEntry =
 			addLayoutPageTemplateEntry(
@@ -923,7 +923,7 @@ public class LayoutPageTemplateEntryLocalServiceImpl
 	}
 
 	private void _validate(
-			long classNameId, long classTypeId, long groupId, Locale locale)
+			long classNameId, long classTypeId, long groupId)
 		throws PortalException {
 
 		String className = StringPool.BLANK;
