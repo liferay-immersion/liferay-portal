@@ -226,7 +226,8 @@ public class LayoutPageTemplateEntryLocalServiceImpl
 
 		// Layout page template entry
 
-		_validate(classNameId, classTypeId, groupId, serviceContext.getLocale());
+		_validate(
+			classNameId, classTypeId, groupId, serviceContext.getLocale());
 
 		LayoutPageTemplateEntry layoutPageTemplateEntry =
 			addLayoutPageTemplateEntry(
@@ -719,114 +720,6 @@ public class LayoutPageTemplateEntryLocalServiceImpl
 			updateLayoutPageTemplateEntry(layoutPageTemplateEntry);
 	}
 
-	private LayoutPageTemplateEntry _addLayoutPageTemplateEntry(
-			long groupId, LayoutPrototype layoutPrototype)
-		throws PortalException {
-
-		String nameXML = layoutPrototype.getName();
-
-		Map<Locale, String> nameMap = _localization.getLocalizationMap(nameXML);
-
-		Locale defaultLocale = LocaleUtil.fromLanguageId(
-			_localization.getDefaultLanguageId(nameXML));
-
-		Layout layout = layoutPrototype.getLayout();
-
-		int status = WorkflowConstants.STATUS_APPROVED;
-
-		if (!layoutPrototype.isActive()) {
-			status = WorkflowConstants.STATUS_INACTIVE;
-		}
-
-		return addLayoutPageTemplateEntry(
-			layoutPrototype.getUserId(), groupId, 0, 0, 0,
-			nameMap.get(defaultLocale),
-			LayoutPageTemplateEntryTypeConstants.TYPE_WIDGET_PAGE, 0, false,
-			layoutPrototype.getLayoutPrototypeId(), layout.getPlid(), 0, status,
-			new ServiceContext());
-	}
-
-	private void _validate(
-			long classNameId, long classTypeId, long groupId, Locale locale)
-		throws PortalException {
-
-		String className = StringPool.BLANK;
-
-		try {
-			className = _portal.getClassName(classNameId);
-		}
-		catch (RuntimeException runtimeException) {
-			if (_log.isDebugEnabled()) {
-				_log.debug(runtimeException);
-			}
-
-			throw new NoSuchClassNameException(
-				"Class name does not exist for class name ID " + classNameId);
-		}
-
-		InfoItemFormProvider<?> infoItemFormProvider =
-			_infoItemServiceTracker.getFirstInfoItemService(
-				InfoItemFormProvider.class, className);
-
-		if (infoItemFormProvider == null) {
-			throw new PortalException(
-				"No item form provider is registered for class name ID " +
-					classNameId);
-		}
-
-		InfoItemFormVariationsProvider<?> infoItemFormVariationsProvider =
-			_infoItemServiceTracker.getFirstInfoItemService(
-				InfoItemFormVariationsProvider.class, className);
-
-		if (infoItemFormVariationsProvider == null) {
-			return;
-		}
-
-		InfoItemFormVariation infoItemFormVariation =
-			infoItemFormVariationsProvider.getInfoItemFormVariation(
-				groupId, String.valueOf(classTypeId));
-
-		if (infoItemFormVariation == null) {
-			throw new NoSuchClassTypeException(
-				"Class type does not exist for class name ID " + classNameId);
-		}
-	}
-
-	private void _validate(long groupId, String name, int type)
-		throws PortalException {
-
-		if (Validator.isNull(name)) {
-			throw new LayoutPageTemplateEntryNameException.MustNotBeNull(
-				groupId);
-		}
-
-		LayoutPageTemplateEntryValidator.validateNameCharacters(name);
-
-		int nameMaxLength = ModelHintsUtil.getMaxLength(
-			LayoutPageTemplateEntry.class.getName(), "name");
-
-		if (name.length() > nameMaxLength) {
-			throw new LayoutPageTemplateEntryNameException.
-				MustNotExceedMaximumSize(nameMaxLength);
-		}
-
-		if (Objects.equals(name, "Blank") &&
-			(type == LayoutPageTemplateEntryTypeConstants.TYPE_MASTER_LAYOUT)) {
-
-			throw new LayoutPageTemplateEntryNameException.MustNotBeDuplicate(
-				groupId, name);
-		}
-
-		LayoutPageTemplateEntry layoutPageTemplateEntry =
-			layoutPageTemplateEntryPersistence.fetchByG_N_T(
-				groupId, name, type);
-
-		if (layoutPageTemplateEntry != null) {
-			throw new LayoutPageTemplateEntryNameException.MustNotBeDuplicate(
-				groupId, name);
-		}
-	}
-
 	private Layout _addLayout(
 			long userId, long groupId, String name, int type,
 			long masterLayoutPlid, int status, ServiceContext serviceContext)
@@ -909,6 +802,33 @@ public class LayoutPageTemplateEntryLocalServiceImpl
 		}
 
 		return layout;
+	}
+
+	private LayoutPageTemplateEntry _addLayoutPageTemplateEntry(
+			long groupId, LayoutPrototype layoutPrototype)
+		throws PortalException {
+
+		String nameXML = layoutPrototype.getName();
+
+		Map<Locale, String> nameMap = _localization.getLocalizationMap(nameXML);
+
+		Locale defaultLocale = LocaleUtil.fromLanguageId(
+			_localization.getDefaultLanguageId(nameXML));
+
+		Layout layout = layoutPrototype.getLayout();
+
+		int status = WorkflowConstants.STATUS_APPROVED;
+
+		if (!layoutPrototype.isActive()) {
+			status = WorkflowConstants.STATUS_INACTIVE;
+		}
+
+		return addLayoutPageTemplateEntry(
+			layoutPrototype.getUserId(), groupId, 0, 0, 0,
+			nameMap.get(defaultLocale),
+			LayoutPageTemplateEntryTypeConstants.TYPE_WIDGET_PAGE, 0, false,
+			layoutPrototype.getLayoutPrototypeId(), layout.getPlid(), 0, status,
+			new ServiceContext());
 	}
 
 	private long _copyPreviewFileEntryId(
@@ -1000,6 +920,87 @@ public class LayoutPageTemplateEntryLocalServiceImpl
 		}
 
 		return name;
+	}
+
+	private void _validate(
+			long classNameId, long classTypeId, long groupId, Locale locale)
+		throws PortalException {
+
+		String className = StringPool.BLANK;
+
+		try {
+			className = _portal.getClassName(classNameId);
+		}
+		catch (RuntimeException runtimeException) {
+			if (_log.isDebugEnabled()) {
+				_log.debug(runtimeException);
+			}
+
+			throw new NoSuchClassNameException(
+				"Class name does not exist for class name ID " + classNameId);
+		}
+
+		InfoItemFormProvider<?> infoItemFormProvider =
+			_infoItemServiceTracker.getFirstInfoItemService(
+				InfoItemFormProvider.class, className);
+
+		if (infoItemFormProvider == null) {
+			throw new PortalException(
+				"No item form provider is registered for class name ID " +
+					classNameId);
+		}
+
+		InfoItemFormVariationsProvider<?> infoItemFormVariationsProvider =
+			_infoItemServiceTracker.getFirstInfoItemService(
+				InfoItemFormVariationsProvider.class, className);
+
+		if (infoItemFormVariationsProvider == null) {
+			return;
+		}
+
+		InfoItemFormVariation infoItemFormVariation =
+			infoItemFormVariationsProvider.getInfoItemFormVariation(
+				groupId, String.valueOf(classTypeId));
+
+		if (infoItemFormVariation == null) {
+			throw new NoSuchClassTypeException(
+				"Class type does not exist for class name ID " + classNameId);
+		}
+	}
+
+	private void _validate(long groupId, String name, int type)
+		throws PortalException {
+
+		if (Validator.isNull(name)) {
+			throw new LayoutPageTemplateEntryNameException.MustNotBeNull(
+				groupId);
+		}
+
+		LayoutPageTemplateEntryValidator.validateNameCharacters(name);
+
+		int nameMaxLength = ModelHintsUtil.getMaxLength(
+			LayoutPageTemplateEntry.class.getName(), "name");
+
+		if (name.length() > nameMaxLength) {
+			throw new LayoutPageTemplateEntryNameException.
+				MustNotExceedMaximumSize(nameMaxLength);
+		}
+
+		if (Objects.equals(name, "Blank") &&
+			(type == LayoutPageTemplateEntryTypeConstants.TYPE_MASTER_LAYOUT)) {
+
+			throw new LayoutPageTemplateEntryNameException.MustNotBeDuplicate(
+				groupId, name);
+		}
+
+		LayoutPageTemplateEntry layoutPageTemplateEntry =
+			layoutPageTemplateEntryPersistence.fetchByG_N_T(
+				groupId, name, type);
+
+		if (layoutPageTemplateEntry != null) {
+			throw new LayoutPageTemplateEntryNameException.MustNotBeDuplicate(
+				groupId, name);
+		}
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
