@@ -112,7 +112,7 @@ else if (metadataField.equals("view-count")) {
 
 			<div class="asset-user-info">
 				<c:choose>
-					<c:when test="<%= Validator.isNotNull(assetRendererUser) %>">
+					<c:when test="<%= assetRendererUser != null %>">
 						<span class="user-info"><%= HtmlUtil.escape(assetRendererUser.getFullName()) %></span>
 					</c:when>
 					<c:otherwise>
