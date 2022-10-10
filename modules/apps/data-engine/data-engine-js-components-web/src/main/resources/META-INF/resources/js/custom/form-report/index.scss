@@ -68,7 +68,7 @@
 		}
 
 		.report-cards-shortcut {
-			display: none;
+			display: block;
 		}
 
 		@media (min-width: 1280px) {
@@ -92,7 +92,7 @@
 	@media screen and (max-width: 808px) {
 		.lfr-de__form-report {
 			.report-cards-shortcut {
-				display: none;
+				display: block;
 			}
 		}
 	}
