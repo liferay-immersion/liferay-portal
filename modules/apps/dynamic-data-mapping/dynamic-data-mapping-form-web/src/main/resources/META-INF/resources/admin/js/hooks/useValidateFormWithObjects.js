@@ -75,7 +75,10 @@ export function useValidateFormWithObjects() {
 				}
 			});
 
-			if (hasObjectDefinitionId && isStorageTypeObject) {
+			if (
+				(hasObjectDefinitionId && isStorageTypeObject) ||
+				!!objectFields[0]
+			) {
 				const formFields = getFields(pages);
 				const unmappedFormFields = getUnmappedFormFields(formFields);
 				const unmappedRequiredObjectFields = getUnmappedRequiredObjectFields(
