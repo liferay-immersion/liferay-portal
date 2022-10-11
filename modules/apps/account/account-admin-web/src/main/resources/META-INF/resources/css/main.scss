@@ -45,6 +45,21 @@
 			}
 		}
 
+		.toggler-header-collapsed {
+			.collapse-icon-open {
+				display: block;
+			}
+		}
+
+		.toggler-header-expanded {
+			.collapse-icon-closed {
+				display: block;
+			}
+			.collapse-icon-open {
+				display: none;
+			}
+		}
+
 		.toggler-header-expanded {
 			.icon-caret-right {
 				display: none;
