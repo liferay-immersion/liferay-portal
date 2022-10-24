@@ -55,7 +55,7 @@ import org.osgi.service.component.annotations.Reference;
 /**
  * @author Jürgen Kappler
  */
-@Component(immediate = true, service = ItemSelectorView.class)
+@Component(service = ItemSelectorView.class)
 public class LayoutPageTemplateCollectionsItemSelectorView
 	implements ItemSelectorView
 		<LayoutPageTemplateCollectionItemSelectorCriterion> {

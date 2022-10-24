@@ -27,7 +27,6 @@ import org.osgi.service.component.annotations.Component;
  * @author Pavel Savinov
  */
 @Component(
-	immediate = true,
 	property = {
 		"javax.portlet.name=" + LayoutAdminPortletKeys.GROUP_PAGES,
 		"mvc.command.name=/layout_admin/add_layout"
