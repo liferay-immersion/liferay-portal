@@ -797,7 +797,9 @@ public class ObjectEntryLocalServiceImpl
 
 		Expression<?>[] selectExpressions = ArrayUtil.append(
 			_getSelectExpressions(dynamicObjectDefinitionTable),
-			_getSelectExpressions(extensionDynamicObjectDefinitionTable));
+			ArrayUtil.remove(
+				_getSelectExpressions(extensionDynamicObjectDefinitionTable),
+				extensionDynamicObjectDefinitionTable.getPrimaryKeyColumn()));
 
 		List<Object[]> rows = _list(
 			DSLQueryFactoryUtil.select(
@@ -837,7 +839,9 @@ public class ObjectEntryLocalServiceImpl
 
 		Expression<?>[] selectExpressions = ArrayUtil.append(
 			_getSelectExpressions(dynamicObjectDefinitionTable),
-			_getSelectExpressions(extensionDynamicObjectDefinitionTable),
+			ArrayUtil.remove(
+				_getSelectExpressions(extensionDynamicObjectDefinitionTable),
+				extensionDynamicObjectDefinitionTable.getPrimaryKeyColumn()),
 			_EXPRESSIONS);
 
 		List<Object[]> rows = _list(
