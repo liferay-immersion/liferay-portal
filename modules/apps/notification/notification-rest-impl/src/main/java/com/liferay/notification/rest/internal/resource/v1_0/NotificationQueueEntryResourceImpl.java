@@ -17,7 +17,7 @@ package com.liferay.notification.rest.internal.resource.v1_0;
 import com.liferay.notification.constants.NotificationConstants;
 import com.liferay.notification.constants.NotificationQueueEntryConstants;
 import com.liferay.notification.handler.NotificationHandler;
-import com.liferay.notification.handler.NotificationHandlerServiceTracker;
+import com.liferay.notification.handler.NotificationHandlerTracker;
 import com.liferay.notification.rest.dto.v1_0.NotificationQueueEntry;
 import com.liferay.notification.rest.resource.v1_0.NotificationQueueEntryResource;
 import com.liferay.notification.service.NotificationQueueEntryService;
@@ -172,8 +172,7 @@ public class NotificationQueueEntryResourceImpl
 	}
 
 	@Reference
-	private NotificationHandlerServiceTracker
-		_notificationHandlerServiceTracker;
+	private NotificationHandlerTracker _notificationHandlerServiceTracker;
 
 	@Reference
 	private NotificationQueueEntryService _notificationQueueEntryService;

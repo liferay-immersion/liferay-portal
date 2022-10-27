@@ -15,7 +15,7 @@
 package com.liferay.notification.internal.handler;
 
 import com.liferay.notification.handler.NotificationHandler;
-import com.liferay.notification.handler.NotificationHandlerServiceTracker;
+import com.liferay.notification.handler.NotificationHandlerTracker;
 import com.liferay.osgi.service.tracker.collections.map.ServiceTrackerMap;
 import com.liferay.osgi.service.tracker.collections.map.ServiceTrackerMapFactory;
 
@@ -27,9 +27,9 @@ import org.osgi.service.component.annotations.Deactivate;
 /**
  * @author Feliphe Marinho
  */
-@Component(service = NotificationHandlerServiceTracker.class)
-public class NotificationHandlerServiceTrackerImpl
-	implements NotificationHandlerServiceTracker {
+@Component(service = NotificationHandlerTracker.class)
+public class NotificationHandlerTrackerImpl
+	implements NotificationHandlerTracker {
 
 	@Override
 	public NotificationHandler getNotificationHandlerByClassName(
