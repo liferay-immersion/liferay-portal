@@ -48,10 +48,6 @@ public class NotificationTemplateObjectActionExecutorImpl
 			JSONObject payloadJSONObject, long userId)
 		throws Exception {
 
-		ObjectDefinition objectDefinition =
-			_objectDefinitionLocalService.fetchObjectDefinition(
-				payloadJSONObject.getLong("objectDefinitionId"));
-
 		NotificationTemplate notificationTemplate =
 			_notificationTemplateLocalService.getNotificationTemplate(
 				GetterUtil.getLong(
@@ -62,6 +58,10 @@ public class NotificationTemplateObjectActionExecutorImpl
 				notificationTemplate.getType());
 
 		NotificationContext notificationContext = new NotificationContext();
+
+		ObjectDefinition objectDefinition =
+			_objectDefinitionLocalService.fetchObjectDefinition(
+				payloadJSONObject.getLong("objectDefinitionId"));
 
 		notificationContext.setClassName(objectDefinition.getClassName());
 
