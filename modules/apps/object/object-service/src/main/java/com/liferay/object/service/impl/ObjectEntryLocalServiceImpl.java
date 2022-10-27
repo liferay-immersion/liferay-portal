@@ -2378,12 +2378,12 @@ public class ObjectEntryLocalServiceImpl
 				continue;
 			}
 
+			Map<String, Object> objectFieldSettingMap = new HashMap<>();
+
 			List<ObjectFieldSetting> objectFieldSettings =
 				_objectFieldSettingLocalService.
 					getObjectFieldObjectFieldSettings(
 						objectField.getObjectFieldId());
-
-			Map<String, Object> objectFieldSettingMap = new HashMap<>();
 
 			for (ObjectFieldSetting objectFieldSetting : objectFieldSettings) {
 				objectFieldSettingMap.put(
