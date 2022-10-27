@@ -14,20 +14,15 @@
 
 package com.liferay.object.internal.action.executor;
 
-import com.liferay.oauth.client.LocalOAuthClient;
-import com.liferay.oauth2.provider.model.OAuth2Application;
-import com.liferay.oauth2.provider.service.OAuth2ApplicationLocalService;
 import com.liferay.object.action.executor.ObjectActionExecutor;
 import com.liferay.object.constants.ObjectActionExecutorConstants;
 import com.liferay.object.internal.configuration.FunctionObjectActionExecutorImplConfiguration;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
+import com.liferay.portal.catapult.PortalCatapult;
 import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.service.CompanyLocalService;
-import com.liferay.portal.kernel.servlet.HttpHeaders;
-import com.liferay.portal.kernel.util.ContentTypes;
-import com.liferay.portal.kernel.util.Http;
 import com.liferay.portal.kernel.util.UnicodeProperties;
 
 import java.util.Map;
@@ -53,20 +48,13 @@ public class FunctionObjectActionExecutorImpl implements ObjectActionExecutor {
 			JSONObject payloadJSONObject, long userId)
 		throws Exception {
 
-		Http.Options options = new Http.Options();
-
-		options.addHeader(
-			HttpHeaders.CONTENT_TYPE, ContentTypes.APPLICATION_JSON);
-		options.setBody(
-			payloadJSONObject.toString(), ContentTypes.APPLICATION_JSON,
-			StringPool.UTF8);
-		options.setLocation(_location);
-		options.setMethod(Http.Method.POST);
-		options.setTimeout(_timeout);
-
-		_authorize(options, userId);
-
-		_http.URLtoByteArray(options);
+		_portalCatapult.launch(
+			_companyId,
+			_functionObjectActionExecutorImplConfiguration.
+				oAuth2ApplicationExternalReferenceCode(),
+			payloadJSONObject,
+			_functionObjectActionExecutorImplConfiguration.resourcePath(),
+			userId);
 	}
 
 	@Override
@@ -76,84 +64,27 @@ public class FunctionObjectActionExecutorImpl implements ObjectActionExecutor {
 
 	@Activate
 	protected void activate(Map<String, Object> properties) throws Exception {
+		_companyId = ConfigurableUtil.getCompanyId(
+			_companyLocalService, properties);
+		_functionObjectActionExecutorImplConfiguration =
+			ConfigurableUtil.createConfigurable(
+				FunctionObjectActionExecutorImplConfiguration.class,
+				properties);
 		_key = StringBundler.concat(
 			ObjectActionExecutorConstants.KEY_FUNCTION, StringPool.POUND,
 			ConfigurableUtil.getExternalReferenceCode(properties));
-
-		FunctionObjectActionExecutorImplConfiguration
-			functionObjectActionExecutorImplConfiguration =
-				ConfigurableUtil.createConfigurable(
-					FunctionObjectActionExecutorImplConfiguration.class,
-					properties);
-
-		_oAuth2Application =
-			_oAuth2ApplicationLocalService.
-				getOAuth2ApplicationByExternalReferenceCode(
-					ConfigurableUtil.getCompanyId(
-						_companyLocalService, properties),
-					functionObjectActionExecutorImplConfiguration.
-						oAuth2ApplicationExternalReferenceCode());
-
-		_location = _getLocation(
-			functionObjectActionExecutorImplConfiguration, _oAuth2Application);
-
-		_timeout = functionObjectActionExecutorImplConfiguration.timeout();
 	}
 
-	private void _authorize(Http.Options options, long userId)
-		throws Exception {
-
-		_localOAuthClient.consumeAccessToken(
-			accessToken -> options.addHeader(
-				"Authorization", "Bearer ".concat(accessToken)),
-			_oAuth2Application, userId);
-	}
-
-	private String _getLocation(
-		FunctionObjectActionExecutorImplConfiguration
-			functionObjectActionExecutorImplConfiguration,
-		OAuth2Application oAuth2Application) {
-
-		// TODO Abstract this out
-
-		String resourcePath =
-			functionObjectActionExecutorImplConfiguration.resourcePath();
-
-		if (resourcePath.contains(Http.PROTOCOL_DELIMITER)) {
-			return resourcePath;
-		}
-
-		String homePageURL = oAuth2Application.getHomePageURL();
-
-		if (homePageURL.endsWith(StringPool.SLASH)) {
-			homePageURL = homePageURL.substring(0, homePageURL.length() - 1);
-		}
-
-		if (resourcePath.startsWith(StringPool.SLASH)) {
-			resourcePath = resourcePath.substring(1);
-		}
-
-		return StringBundler.concat(
-			homePageURL, StringPool.SLASH, resourcePath);
-	}
+	private long _companyId;
 
 	@Reference
 	private CompanyLocalService _companyLocalService;
 
-	@Reference
-	private Http _http;
-
+	private FunctionObjectActionExecutorImplConfiguration
+		_functionObjectActionExecutorImplConfiguration;
 	private String _key;
 
 	@Reference
-	private LocalOAuthClient _localOAuthClient;
-
-	private String _location;
-	private OAuth2Application _oAuth2Application;
-
-	@Reference
-	private OAuth2ApplicationLocalService _oAuth2ApplicationLocalService;
-
-	private int _timeout;
+	private PortalCatapult _portalCatapult;
 
 }

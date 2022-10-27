@@ -31,7 +31,4 @@ public interface FunctionActionExecutorImplConfiguration {
 	@Meta.AD
 	public String resourcePath();
 
-	@Meta.AD(deflt = "0", required = false)
-	public int timeout();
-
 }

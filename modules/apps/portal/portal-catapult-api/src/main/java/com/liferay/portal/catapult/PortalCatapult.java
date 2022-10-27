@@ -12,23 +12,23 @@
  * details.
  */
 
-package com.liferay.object.internal.configuration;
+package com.liferay.portal.catapult;
 
-import aQute.bnd.annotation.metatype.Meta;
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.json.JSONObject;
+
+import org.osgi.annotation.versioning.ProviderType;
 
 /**
+ * @author Brian Wing Shun Chan
  * @author Raymond Augé
  */
-@Meta.OCD(
-	factory = true,
-	id = "com.liferay.object.internal.configuration.FunctionObjectActionExecutorImplConfiguration"
-)
-public interface FunctionObjectActionExecutorImplConfiguration {
+@ProviderType
+public interface PortalCatapult {
 
-	@Meta.AD
-	public String oAuth2ApplicationExternalReferenceCode();
-
-	@Meta.AD
-	public String resourcePath();
+	public byte[] launch(
+			long companyId, String oAuth2ApplicationExternalReferenceCode,
+			JSONObject payloadJSONObject, String resourcePath, long userId)
+		throws PortalException;
 
 }
