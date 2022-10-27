@@ -255,20 +255,22 @@ public class NotificationTemplateLocalServiceImpl
 		NotificationType notificationType =
 			_notificationTypeServiceTracker.getNotificationType(type);
 
-		if (notificationType != null) {
-			NotificationContext notificationContext = new NotificationContext();
-
-			notificationContext.setObjectDefinitionId(objectDefinitionId);
-			notificationContext.setAttachmentObjectFieldIds(
-				attachmentObjectFieldIds);
-			notificationContext.setAttributes(
-				HashMapBuilder.<String, Serializable>put(
-					"from", from
-				).build());
-			notificationContext.setNotificationTemplateName(name);
-
-			notificationType.validateNotificationTemplate(notificationContext);
+		if (notificationType == null) {
+			return;
 		}
+
+		NotificationContext notificationContext = new NotificationContext();
+
+		notificationContext.setAttachmentObjectFieldIds(
+			attachmentObjectFieldIds);
+		notificationContext.setAttributes(
+			HashMapBuilder.<String, Serializable>put(
+				"from", from
+			).build());
+		notificationContext.setObjectDefinitionId(objectDefinitionId);
+		notificationContext.setNotificationTemplateName(name);
+
+		notificationType.validateNotificationTemplate(notificationContext);
 	}
 
 	@Reference
