@@ -275,8 +275,7 @@ public class ClientExtensionProjectConfigurator
 	protected static final String NAME = "client.extension";
 
 	private TaskProvider<Zip> _baseConfigureClientExtensionProject(
-		Project project,
-		TaskProvider<Copy> assembleClientExtensionTaskProvider,
+		Project project, TaskProvider<Copy> assembleClientExtensionTaskProvider,
 		TaskProvider<Zip> buildClientExtensionZipTaskProvider,
 		TaskProvider<CreateClientExtensionConfigTask>
 			createClientExtensionConfigTaskProvider) {
@@ -303,8 +302,7 @@ public class ClientExtensionProjectConfigurator
 		_configureTaskDeploy(project);
 
 		_configureClientExtensionTasks(
-			project,
-			assembleClientExtensionTaskProvider,
+			project, assembleClientExtensionTaskProvider,
 			buildClientExtensionZipTaskProvider,
 			createClientExtensionConfigTaskProvider);
 
@@ -368,8 +366,7 @@ public class ClientExtensionProjectConfigurator
 	}
 
 	private void _configureClientExtensionTasks(
-		Project project,
-		TaskProvider<Copy> assembleClientExtensionTaskProvider,
+		Project project, TaskProvider<Copy> assembleClientExtensionTaskProvider,
 		TaskProvider<Zip> buildClientExtensionZipTaskProvider,
 		TaskProvider<CreateClientExtensionConfigTask>
 			createClientExtensionConfigTaskProvider) {
