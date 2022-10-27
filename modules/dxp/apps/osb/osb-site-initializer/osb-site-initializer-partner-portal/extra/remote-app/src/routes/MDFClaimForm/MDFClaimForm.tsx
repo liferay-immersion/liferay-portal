@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 /**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
@@ -40,6 +39,7 @@ const getInitialFormValues = (
 		name: activity.name,
 		selected: false,
 		totalCost: 0,
+		typeOfActivity: activity.typeActivity.name,
 	})),
 	r_mdfRequestToMdfClaims_c_mdfRequestId: mdfRequestId,
 	totalClaimAmount: 0,

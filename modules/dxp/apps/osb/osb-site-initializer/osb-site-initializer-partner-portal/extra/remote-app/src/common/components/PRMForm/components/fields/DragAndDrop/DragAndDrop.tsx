@@ -14,10 +14,13 @@ import {FormikContextType} from 'formik';
 import {useDropzone} from 'react-dropzone';
 
 import MDFClaim from '../../../../../interfaces/mdfClaim';
+import MDFRequestActivity from '../../../../../interfaces/mdfRequestActivity';
 import PRMFormFieldProps from '../common/interfaces/prmFormFieldProps';
 import PRMFormFieldStateProps from '../common/interfaces/prmFormFieldStateProps';
 
 interface IProps {
+	currentActivity: MDFRequestActivity;
+	currentActivityIndex: number;
 	onAccept: (value: File[]) => void;
 }
 
@@ -31,7 +34,7 @@ const DragAndDrop = ({
 	PRMFormFieldStateProps<File[]> &
 	Pick<FormikContextType<MDFClaim>, 'setFieldValue'> &
 	IProps) => {
-	const {acceptedFiles, getInputProps, getRootProps, open} = useDropzone({
+	const {getInputProps, getRootProps, open} = useDropzone({
 		noClick: true,
 		noKeyboard: true,
 		onDrop: (acceptedFiles) => {
@@ -40,9 +43,9 @@ const DragAndDrop = ({
 	});
 
 	return (
-		<div className="mb-3">
+		<div className="d-flex flex-column">
 			{label && (
-				<label className="font-weight-semi-bold ml-0">
+				<label className="font-weight-semi-bold">
 					{label}
 
 					{required && <span className="text-danger">*</span>}
@@ -52,7 +55,7 @@ const DragAndDrop = ({
 			<div
 				{...getRootProps({
 					className:
-						'bg-white d-flex text-dark align-items-center justify-content-center rounded flex-column border-neutral-4 border',
+						'bg-white d-flex align-items-center rounded flex-column border-neutral-4 border',
 				})}
 			>
 				<ClayInput
@@ -62,31 +65,21 @@ const DragAndDrop = ({
 					})}
 				/>
 
-				<p className="font-weight-bold text-neutral-10 text-paragraph">
-					{description}
-				</p>
+				<div className="align-items-center d-flex flex-column p-3">
+					<p className="font-weight-bold text-neutral-10 text-paragraph">
+						{description}
+					</p>
 
-				<p className="text-neutral-7">
-					Only files with the following extensions wil be accepted:
-					doc, docx.jpeg, jpg, pdf, tif, tiff
-				</p>
+					<p className="text-neutral-7 w-75">
+						Only files with the following extensions wil be
+						accepted: doc, docx.jpeg, jpg, pdf, tif, tiff
+					</p>
 
-				<p className="font-weight-bold text-neutral-7">OR</p>
+					<p className="font-weight-bold text-neutral-7">Or</p>
 
-				<button className="btn btn-secondary" onClick={open}>
-					Select Files
-				</button>
-
-				<div className="mt-3 overflow-auto" style={{height: '12rem'}}>
-					<h5>Files</h5>
-
-					{acceptedFiles?.map((file, index) => (
-						<li key={index}>
-							File: {file.name} Type: {file.type}
-							Size:&nbsp;
-							{file.size} bytes
-						</li>
-					))}
+					<button className="btn btn-secondary" onClick={open}>
+						Select Files
+					</button>
 				</div>
 			</div>
 		</div>
