@@ -32,9 +32,7 @@ public class NotificationHandlerTrackerImpl
 	implements NotificationHandlerTracker {
 
 	@Override
-	public NotificationHandler getNotificationHandlerByClassName(
-		String className) {
-
+	public NotificationHandler getNotificationHandler(String className) {
 		return _serviceTrackerMap.getService(className);
 	}
 

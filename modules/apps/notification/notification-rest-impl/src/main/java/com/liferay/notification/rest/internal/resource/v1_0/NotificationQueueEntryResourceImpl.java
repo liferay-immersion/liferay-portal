@@ -109,10 +109,9 @@ public class NotificationQueueEntryResourceImpl
 		throws PortalException {
 
 		NotificationHandler notificationHandler =
-			_notificationHandlerServiceTracker.
-				getNotificationHandlerByClassName(
-					_portal.getClassName(
-						serviceBuilderNotificationQueueEntry.getClassNameId()));
+			_notificationHandlerServiceTracker.getNotificationHandler(
+				_portal.getClassName(
+					serviceBuilderNotificationQueueEntry.getClassNameId()));
 
 		return new NotificationQueueEntry() {
 			{

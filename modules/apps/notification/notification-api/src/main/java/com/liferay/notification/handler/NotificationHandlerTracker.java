@@ -19,7 +19,6 @@ package com.liferay.notification.handler;
  */
 public interface NotificationHandlerTracker {
 
-	public NotificationHandler getNotificationHandlerByClassName(
-		String className);
+	public NotificationHandler getNotificationHandler(String className);
 
 }
