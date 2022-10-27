@@ -132,9 +132,8 @@ public class EmailNotificationType extends BaseNotificationType {
 		if (Validator.isNull(to)) {
 			to = _formatContent(
 				notificationTemplate.getTo(siteDefaultLocale),
-				siteDefaultLocale,
-				NotificationTermContributorConstants.RECIPIENT,
-				notificationContext);
+				siteDefaultLocale, notificationContext,
+				NotificationTermContributorConstants.RECIPIENT);
 		}
 
 		EmailAddressValidator emailAddressValidator =
@@ -283,8 +282,8 @@ public class EmailNotificationType extends BaseNotificationType {
 
 		content = _formatContent(
 			content,
-			(Locale)notificationContext.getAttributeValue("userLocale"), null,
-			notificationContext);
+			(Locale)notificationContext.getAttributeValue("userLocale"),
+			notificationContext, null);
 
 		if (Validator.isNull(content)) {
 			content = contentMap.get(
@@ -295,7 +294,7 @@ public class EmailNotificationType extends BaseNotificationType {
 				content,
 				(Locale)notificationContext.getAttributeValue(
 					"siteDefaultLocale"),
-				null, notificationContext);
+				notificationContext, null);
 		}
 
 		return content;
@@ -303,8 +302,8 @@ public class EmailNotificationType extends BaseNotificationType {
 
 	private String _formatContent(
 			String content, Locale locale,
-			String notificationTermContributorKey,
-			NotificationContext notificationContext)
+			NotificationContext notificationContext,
+			String notificationTermContributorKey)
 		throws PortalException {
 
 		if (Validator.isNull(content)) {
@@ -313,7 +312,7 @@ public class EmailNotificationType extends BaseNotificationType {
 
 		List<String> termNames = new ArrayList<>();
 
-		Matcher matcher = _pattern.matcher(content);
+		Matcher matcher = _termNamePattern.matcher(content);
 
 		while (matcher.find()) {
 			termNames.add(matcher.group());
@@ -354,15 +353,15 @@ public class EmailNotificationType extends BaseNotificationType {
 
 		content = _formatContent(
 			content,
-			(Locale)notificationContext.getAttributeValue("userLocale"), null,
-			notificationContext);
+			(Locale)notificationContext.getAttributeValue("userLocale"),
+			notificationContext, null);
 
 		if (Validator.isNull(content)) {
 			return _formatContent(
 				content,
 				(Locale)notificationContext.getAttributeValue(
 					"siteDefaultLocale"),
-				null, notificationContext);
+				notificationContext, null);
 		}
 
 		return content;
@@ -385,9 +384,8 @@ public class EmailNotificationType extends BaseNotificationType {
 		}
 
 		return _formatContent(
-			StringUtil.merge(emailAddresses), locale,
-			NotificationTermContributorConstants.RECIPIENT,
-			notificationContext);
+			StringUtil.merge(emailAddresses), locale, notificationContext,
+			NotificationTermContributorConstants.RECIPIENT);
 	}
 
 	private List<Long> _getFileEntryIds(
@@ -478,7 +476,7 @@ public class EmailNotificationType extends BaseNotificationType {
 	private static final Pattern _emailAddressPattern = Pattern.compile(
 		"[\\w!#$%&'*+/=?^_`{|}~-]+(?:\\.[\\w!#$%&'*+/=?^_`{|}~-]+)*@" +
 			"(?:\\w(?:[\\w-]*\\w)?\\.)+(\\w(?:[\\w-]*\\w))");
-	private static final Pattern _pattern = Pattern.compile(
+	private static final Pattern _termNamePattern = Pattern.compile(
 		"\\[%[^\\[%]+%\\]", Pattern.CASE_INSENSITIVE);
 
 	@Reference
