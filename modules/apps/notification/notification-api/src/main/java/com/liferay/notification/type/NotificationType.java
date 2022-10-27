@@ -14,6 +14,7 @@
 
 package com.liferay.notification.type;
 
+import com.liferay.notification.context.NotificationContext;
 import com.liferay.portal.kernel.exception.PortalException;
 
 /**

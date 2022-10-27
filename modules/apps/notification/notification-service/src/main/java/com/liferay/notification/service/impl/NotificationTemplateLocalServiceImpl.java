@@ -15,6 +15,7 @@
 package com.liferay.notification.service.impl;
 
 import com.liferay.notification.constants.NotificationConstants;
+import com.liferay.notification.context.NotificationContext;
 import com.liferay.notification.model.NotificationQueueEntry;
 import com.liferay.notification.model.NotificationTemplate;
 import com.liferay.notification.model.NotificationTemplateAttachment;
@@ -22,7 +23,6 @@ import com.liferay.notification.service.NotificationTemplateAttachmentLocalServi
 import com.liferay.notification.service.base.NotificationTemplateLocalServiceBaseImpl;
 import com.liferay.notification.service.persistence.NotificationQueueEntryPersistence;
 import com.liferay.notification.service.persistence.NotificationTemplateAttachmentPersistence;
-import com.liferay.notification.type.NotificationContext;
 import com.liferay.notification.type.NotificationType;
 import com.liferay.notification.type.NotificationTypeServiceTracker;
 import com.liferay.portal.aop.AopService;

@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.notification.type;
+package com.liferay.notification.context;
 
 import java.io.Serializable;
 
