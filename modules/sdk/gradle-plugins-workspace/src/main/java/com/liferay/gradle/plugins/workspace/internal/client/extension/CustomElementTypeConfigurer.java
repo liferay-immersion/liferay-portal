@@ -115,7 +115,7 @@ public class CustomElementTypeConfigurer
 		}
 		catch (Exception exception) {
 			throw new GradleException(
-				"Unable to parse node version", exception);
+				"Unable to parse Node version", exception);
 		}
 
 		String npmVersion = nodeExtension.getNpmVersion();
@@ -130,7 +130,7 @@ public class CustomElementTypeConfigurer
 			}
 		}
 		catch (Exception exception) {
-			throw new GradleException("Unable to parse npm version", exception);
+			throw new GradleException("Unable to parse NPM version", exception);
 		}
 	}
 

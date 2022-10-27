@@ -61,9 +61,9 @@ public class ClientExtension {
 				"https://$[conf:ext.lxc.liferay.com.mainDomain]");
 		}
 
-		Set<Map.Entry<String, Object>> entrySet = _typeSettings.entrySet();
+		Set<Map.Entry<String, Object>> set = _typeSettings.entrySet();
 
-		Stream<Map.Entry<String, Object>> stream = entrySet.stream();
+		Stream<Map.Entry<String, Object>> stream = set.stream();
 
 		List<String> typeSettings = stream.peek(
 			entry -> {
@@ -76,9 +76,8 @@ public class ClientExtension {
 				Object value = entry.getValue();
 
 				if (value instanceof List) {
-					List<?> listValue = (List<?>)value;
-
-					value = StringUtil.merge(listValue, StringPool.NEW_LINE);
+					value = StringUtil.merge(
+						(List<?>)value, StringPool.NEW_LINE);
 				}
 
 				return StringBundler.concat(entry.getKey(), "=", value);

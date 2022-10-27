@@ -128,9 +128,9 @@ public class ClientExtensionProjectConfigurator
 				project, BUILD_CLIENT_EXTENSION_ZIP_TASK_NAME, Zip.class);
 
 		_baseConfigureClientExtensionProject(
-			project, createClientExtensionConfigTaskProvider,
-			assembleClientExtensionTaskProvider,
-			buildClientExtensionZipTaskProvider);
+			project, assembleClientExtensionTaskProvider,
+			buildClientExtensionZipTaskProvider,
+			createClientExtensionConfigTaskProvider);
 
 		File clientExtensionFile = project.file(_CLIENT_EXTENSION_YAML);
 
@@ -276,10 +276,10 @@ public class ClientExtensionProjectConfigurator
 
 	private TaskProvider<Zip> _baseConfigureClientExtensionProject(
 		Project project,
-		TaskProvider<CreateClientExtensionConfigTask>
-			createClientExtensionConfigTaskProvider,
 		TaskProvider<Copy> assembleClientExtensionTaskProvider,
-		TaskProvider<Zip> buildClientExtensionZipTaskProvider) {
+		TaskProvider<Zip> buildClientExtensionZipTaskProvider,
+		TaskProvider<CreateClientExtensionConfigTask>
+			createClientExtensionConfigTaskProvider) {
 
 		if (isDefaultRepositoryEnabled()) {
 			GradleUtil.addDefaultRepositories(project);
@@ -303,9 +303,10 @@ public class ClientExtensionProjectConfigurator
 		_configureTaskDeploy(project);
 
 		_configureClientExtensionTasks(
-			project, createClientExtensionConfigTaskProvider,
+			project,
 			assembleClientExtensionTaskProvider,
-			buildClientExtensionZipTaskProvider);
+			buildClientExtensionZipTaskProvider,
+			createClientExtensionConfigTaskProvider);
 
 		addTaskDockerDeploy(
 			project, buildClientExtensionZipTaskProvider,
@@ -340,11 +341,8 @@ public class ClientExtensionProjectConfigurator
 					JsonNode includeJsonNode = copyJsonNode.get("include");
 					JsonNode intoJsonNode = copyJsonNode.get("into");
 
-					String from =
-						(fromJsonNode != null) ? fromJsonNode.asText() : ".";
-
 					copy.from(
-						from,
+						(fromJsonNode != null) ? fromJsonNode.asText() : ".",
 						copySpec -> {
 							if (includeJsonNode instanceof ArrayNode) {
 								ArrayNode arrayNode =
@@ -369,13 +367,12 @@ public class ClientExtensionProjectConfigurator
 				}));
 	}
 
-	@SuppressWarnings("serial")
 	private void _configureClientExtensionTasks(
 		Project project,
-		TaskProvider<CreateClientExtensionConfigTask>
-			createClientExtensionConfigTaskProvider,
 		TaskProvider<Copy> assembleClientExtensionTaskProvider,
-		TaskProvider<Zip> buildClientExtensionZipTaskProvider) {
+		TaskProvider<Zip> buildClientExtensionZipTaskProvider,
+		TaskProvider<CreateClientExtensionConfigTask>
+			createClientExtensionConfigTaskProvider) {
 
 		createClientExtensionConfigTaskProvider.configure(
 			createClientExtensionConfigTask -> {
@@ -403,7 +400,6 @@ public class ClientExtensionProjectConfigurator
 					},
 					new Closure<Void>(copy) {
 
-						@SuppressWarnings("unused")
 						public void doCall(CopySpec copySpec) {
 							copySpec.from(project.file("assets"));
 							copySpec.include("**/*");
@@ -471,7 +467,6 @@ public class ClientExtensionProjectConfigurator
 			});
 	}
 
-	@SuppressWarnings("serial")
 	private void _configureRootTaskDistBundle(
 		Project project,
 		TaskProvider<Zip> buildClientExtensionZipTaskProvider) {
@@ -489,7 +484,6 @@ public class ClientExtensionProjectConfigurator
 			"osgi/client-extensions",
 			new Closure<Void>(project) {
 
-				@SuppressWarnings("unused")
 				public void doCall(CopySpec copySpec) {
 					Project project = assembleTask.getProject();
 

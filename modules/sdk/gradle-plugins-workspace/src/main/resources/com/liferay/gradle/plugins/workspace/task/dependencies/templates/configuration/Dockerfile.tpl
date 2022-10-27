@@ -1,8 +1,8 @@
 FROM alpine:latest
 
-COPY rootCA.pem .
-COPY job.sh /src/job.sh
 COPY *.data.batch-engine.json /src
+COPY job.sh /src/job.sh
+COPY rootCA.pem .
 
 RUN \
 	apk add --no-cache bash curl jq tree && \
