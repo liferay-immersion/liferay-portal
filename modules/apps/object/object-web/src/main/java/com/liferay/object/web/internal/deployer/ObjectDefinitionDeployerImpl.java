@@ -131,7 +131,6 @@ public class ObjectDefinitionDeployerImpl implements ObjectDefinitionDeployer {
 				_objectRelationshipLocalService, _objectScopeProviderRegistry,
 				_restContextPathResolverRegistry,
 				_templateInfoItemFieldSetProvider, _userLocalService);
-
 		InfoPermissionProvider infoPermissionProvider =
 			new ObjectEntryInfoPermissionProvider(
 				objectDefinition, _portletLocalService, _portletPermission);
