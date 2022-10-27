@@ -46,7 +46,7 @@ public class LocalOAuthClientImpl implements LocalOAuthClient {
 		Consumer<String> accessTokenConsumer,
 		OAuth2Application oAuth2Application, long userId) {
 
-		ServerAccessToken serverAccessToken = _requestTokens(
+		ServerAccessToken serverAccessToken = _getServerAccessToken(
 			oAuth2Application, userId);
 
 		accessTokenConsumer.accept(serverAccessToken.getTokenKey());
@@ -57,7 +57,7 @@ public class LocalOAuthClientImpl implements LocalOAuthClient {
 		OAuth2Application oAuth2Application, long userId) {
 
 		try {
-			ServerAccessToken serverAccessToken = _requestTokens(
+			ServerAccessToken serverAccessToken = _getServerAccessToken(
 				oAuth2Application, userId);
 
 			return JSONUtil.put(
@@ -83,7 +83,7 @@ public class LocalOAuthClientImpl implements LocalOAuthClient {
 		}
 	}
 
-	private ServerAccessToken _requestTokens(
+	private ServerAccessToken _getServerAccessToken(
 		OAuth2Application oAuth2Application, long userId) {
 
 		AccessTokenRegistration accessTokenRegistration =
