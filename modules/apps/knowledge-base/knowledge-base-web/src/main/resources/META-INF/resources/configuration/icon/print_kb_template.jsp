@@ -27,13 +27,13 @@ KBTemplate kbTemplate = (KBTemplate)liferayPortletRequest.getAttribute(KBWebKeys
 </portlet:renderURL>
 
 <liferay-util:buffer
-	var="onClickFn"
+	var="onClickBuffer"
 >
 	window.open('<%= printURL %>', '', 'directories=no,height=640,location=no, menubar=no,resizable=yes,scrollbars=yes,status=0, toolbar=0,width=680');
 </liferay-util:buffer>
 
 <liferay-ui:icon
 	message="print"
-	onClick="<%= onClickFn %>"
+	onClick="<%= onClickBuffer %>"
 	url="javascript:void(0);"
 />

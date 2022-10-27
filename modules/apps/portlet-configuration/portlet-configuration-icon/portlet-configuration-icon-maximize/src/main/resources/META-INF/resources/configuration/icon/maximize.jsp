@@ -17,7 +17,7 @@
 <%@ include file="/configuration/icon/init.jsp" %>
 
 <liferay-util:buffer
-	var="onClickFn"
+	var="onClickBuffer"
 >
 	submitForm(document.hrefFm, '<%= HtmlUtil.escapeJS(portletDisplay.getURLMax()) %>');
 </liferay-util:buffer>
@@ -25,6 +25,6 @@
 <liferay-ui:icon
 	cssClass="portlet-maximize portlet-maximize-icon"
 	message="maximize"
-	onClick="<%= onClickFn %>"
+	onClick="<%= onClickBuffer %>"
 	url="javascript:void(0);"
 />

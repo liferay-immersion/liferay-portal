@@ -17,7 +17,7 @@
 <%@ include file="/init.jsp" %>
 
 <liferay-util:buffer
-	var="onClickFn"
+	var="onClickBuffer"
 >
 	Liferay.Portlet.openModal({
 		namespace: '<portlet:namespace />',
@@ -39,6 +39,6 @@
 
 <liferay-ui:icon
 	message="configuration"
-	onClick="<%= onClickFn %>"
+	onClick="<%= onClickBuffer %>"
 	url="javascript:void(0);"
 />

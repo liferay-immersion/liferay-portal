@@ -29,7 +29,7 @@ TrashHandler trashHandler = trashDisplayContext.getTrashHandler();
 </portlet:renderURL>
 
 <liferay-util:buffer
-	var="onClickFn"
+	var="onClickBuffer"
 >
 	<portlet:namespace />restoreDialog('<%= restoreTrashURL %>');
 </liferay-util:buffer>
@@ -37,6 +37,6 @@ TrashHandler trashHandler = trashDisplayContext.getTrashHandler();
 <liferay-ui:icon
 	iconCssClass="restore"
 	message="restore"
-	onClick="<%= onClickFn %>"
+	onClick="<%= onClickBuffer %>"
 	url="javascript:void(0);"
 />

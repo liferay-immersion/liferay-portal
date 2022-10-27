@@ -17,7 +17,7 @@
 <%@ include file="/init.jsp" %>
 
 <liferay-util:buffer
-	var="onClickFn"
+	var="onClickBuffer"
 >
 	Liferay.Portlet.openModal({
 		iframeBodyCssClass: '',
@@ -36,6 +36,6 @@
 	cssClass="portlet-export-import portlet-export-import-icon"
 	iconCssClass="order-arrow"
 	message="export-import"
-	onClick="<%= onClickFn %>"
+	onClick="<%= onClickBuffer %>"
 	url="javascript:void(0);"
 />

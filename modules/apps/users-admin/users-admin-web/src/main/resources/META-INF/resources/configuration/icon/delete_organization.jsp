@@ -27,13 +27,13 @@ if (Validator.isNull(backURL)) {
 %>
 
 <liferay-util:buffer
-	var="onClickFn"
+	var="onClickBuffer"
 >
 	<portlet:namespace />deleteOrganization('<%= organization.getOrganizationId() %>', '<%= HtmlUtil.escapeJS(backURL) %>');
 </liferay-util:buffer>
 
 <liferay-ui:icon
 	message="delete"
-	onClick="<%= onClickFn %>"
+	onClick="<%= onClickBuffer %>"
 	url="javascript:void(0);"
 />

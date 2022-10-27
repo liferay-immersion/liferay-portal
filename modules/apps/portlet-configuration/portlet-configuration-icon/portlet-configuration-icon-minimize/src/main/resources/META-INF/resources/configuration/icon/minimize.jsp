@@ -17,7 +17,7 @@
 <%@ include file="/configuration/icon/init.jsp" %>
 
 <liferay-util:buffer
-	var="onClickFn"
+	var="onClickBuffer"
 >
 	Liferay.Portlet.minimize('#p_p_id_<%= portletDisplay.getId() %>_', this);
 </liferay-util:buffer>
@@ -25,6 +25,6 @@
 <liferay-ui:icon
 	iconCssClass="portlet-minimize portlet-minimize-icon"
 	message='<%= portletDisplay.isStateMin() ? "restore" : "minimize" %>'
-	onClick="<%= onClickFn %>"
+	onClick="<%= onClickBuffer %>"
 	url="javascript:void(0);"
 />

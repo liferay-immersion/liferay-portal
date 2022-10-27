@@ -17,13 +17,13 @@
 <%@ include file="/init.jsp" %>
 
 <liferay-util:buffer
-	var="onClickFn"
+	var="onClickBuffer"
 >
 	Liferay.fire('<portlet:namespace />duplicateDefinition');
 </liferay-util:buffer>
 
 <liferay-ui:icon
 	message="duplicate"
-	onClick="<%= onClickFn %>"
+	onClick="<%= onClickBuffer %>"
 	url="javascript:void(0);"
 />

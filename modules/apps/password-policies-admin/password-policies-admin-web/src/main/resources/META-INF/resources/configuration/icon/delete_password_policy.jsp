@@ -17,13 +17,13 @@
 <%@ include file="/init.jsp" %>
 
 <liferay-util:buffer
-	var="onClickFn"
+	var="onClickBuffer"
 >
 	<portlet:namespace />deletePasswordPolicy('<%= ParamUtil.getLong(request, "passwordPolicyId") %>');
 </liferay-util:buffer>
 
 <liferay-ui:icon
 	message="delete"
-	onClick="<%= onClickFn %>"
+	onClick="<%= onClickBuffer %>"
 	url="javascript:void(0);"
 />

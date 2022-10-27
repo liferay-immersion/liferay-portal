@@ -21,13 +21,13 @@ UserGroup userGroup = ActionUtil.getUserGroup(renderRequest);
 %>
 
 <liferay-util:buffer
-	var="onClickFn"
+	var="onClickBuffer"
 >
 	<portlet:namespace />doDeleteUserGroup('<%= UserGroup.class.getName() %>', '<%= userGroup.getUserGroupId() %>');
 </liferay-util:buffer>
 
 <liferay-ui:icon
 	message="delete"
-	onClick="<%= onClickFn %>"
+	onClick="<%= onClickBuffer %>"
 	url="javascript:void(0);"
 />

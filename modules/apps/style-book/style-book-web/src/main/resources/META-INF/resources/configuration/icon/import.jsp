@@ -17,7 +17,7 @@
 <%@ include file="/init.jsp" %>
 
 <liferay-util:buffer
-	var="onClickFn"
+	var="onClickBuffer"
 >
 	Liferay.Util.openModal({
 		onClose: function(event) {
@@ -39,6 +39,6 @@
 <liferay-ui:icon
 	iconCssClass="download"
 	message="import"
-	onClick="<%= onClickFn %>"
+	onClick="<%= onClickBuffer %>"
 	url="javascript:void(0);"
 />

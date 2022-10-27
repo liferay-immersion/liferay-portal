@@ -17,7 +17,7 @@
 <%@ include file="/configuration/icon/init.jsp" %>
 
 <liferay-util:buffer
-	var="onClickFn"
+	var="onClickBuffer"
 >
 	Liferay.Portlet.close('#p_p_id_<%= portletDisplay.getId() %>_');
 </liferay-util:buffer>
@@ -25,6 +25,6 @@
 <liferay-ui:icon
 	iconCssClass="item-remove portlet-close portlet-close-icon"
 	message="remove"
-	onClick="<%= onClickFn %>"
+	onClick="<%= onClickBuffer %>"
 	url="javascript:void(0);"
 />
