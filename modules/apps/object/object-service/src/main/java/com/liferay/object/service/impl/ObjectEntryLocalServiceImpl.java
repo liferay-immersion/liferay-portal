@@ -2586,11 +2586,14 @@ public class ObjectEntryLocalServiceImpl
 				objectField.getBusinessType(),
 				ObjectFieldConstants.BUSINESS_TYPE_MULTISELECT_PICKLIST)) {
 
-			String stringValue = String.valueOf(value);
+			String valueString = String.valueOf(value);
+
+			// Remove the first [ and the last ] in [1, 2, 3]
+
+			valueString = valueString.substring(1, stringValue.length() - 1);
 
 			_setColumn(
-				preparedStatement, index, column.getSQLType(),
-				stringValue.substring(1, stringValue.length() - 1));
+				preparedStatement, index, column.getSQLType(), valueString);
 		}
 		else {
 			_setColumn(preparedStatement, index, column.getSQLType(), value);
