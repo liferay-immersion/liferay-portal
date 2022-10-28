@@ -381,20 +381,6 @@ public class AccountEntryUserRelLocalServiceImpl
 		return false;
 	}
 
-	/**
-	 * Invites users to the account by email address. If the email address is
-	 * associated with a registered user, the user will be added to the account
-	 * immediately. Otherwise, an email will be sent to the user to sign up.
-	 * The user will be added to the account upon registration.
-	 *
-	 * @param accountEntryId the primary key of the account
-	 * @param accountRoleIds the primary keys of the account roles that will be
-	 *                          assigned to the user
-	 * @param emailAddress the invited user's email address
-	 * @param inviter the user that makes the invitation request
-	 * @param serviceContext the service context to be applied. Can set the
-	 *                       request used to send the invitation email
-	 */
 	public void inviteUser(
 			long accountEntryId, long[] accountRoleIds, String emailAddress,
 			User inviter, ServiceContext serviceContext)
@@ -572,7 +558,7 @@ public class AccountEntryUserRelLocalServiceImpl
 				"com/liferay/account/dependencies" +
 					"/account_entry_invite_user_subject.tmpl");
 
-			MailTemplate subjectTemplate =
+			MailTemplate subjectMailTemplate =
 				MailTemplateFactoryUtil.createMailTemplate(subject, false);
 
 			String body = StringUtil.read(
@@ -580,16 +566,16 @@ public class AccountEntryUserRelLocalServiceImpl
 				"com/liferay/account/dependencies" +
 					"/account_entry_invite_user_body.tmpl");
 
-			MailTemplate bodyTemplate =
+			MailTemplate bodyMailTemplate =
 				MailTemplateFactoryUtil.createMailTemplate(body, true);
 
 			MailMessage mailMessage = new MailMessage(
 				new InternetAddress(
 					inviter.getEmailAddress(), inviter.getFullName()),
 				new InternetAddress(emailAddress),
-				subjectTemplate.renderAsString(
+				subjectMailTemplate.renderAsString(
 					inviter.getLocale(), mailTemplateContext),
-				bodyTemplate.renderAsString(
+				bodyMailTemplate.renderAsString(
 					inviter.getLocale(), mailTemplateContext),
 				true);
 

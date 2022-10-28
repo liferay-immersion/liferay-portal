@@ -39,8 +39,6 @@ if (Validator.isNull(redirect)) {
 
 portletDisplay.setShowBackIcon(true);
 portletDisplay.setURLBack(backURL);
-
-InvitedAccountUserDisplayContext invitedAccountUserDisplayContext = (InvitedAccountUserDisplayContext)request.getAttribute(WebKeys.PORTLET_DISPLAY_CONTEXT);
 %>
 
 <portlet:actionURL name="/account_admin/create_account_user" var="createAccountUsersURL" />
@@ -51,6 +49,11 @@ InvitedAccountUserDisplayContext invitedAccountUserDisplayContext = (InvitedAcco
 >
 	<liferay-frontend:edit-form-body>
 		<aui:input name="redirect" type="hidden" value="<%= redirect %>" />
+
+		<%
+		InvitedAccountUserDisplayContext invitedAccountUserDisplayContext = (InvitedAccountUserDisplayContext)request.getAttribute(WebKeys.PORTLET_DISPLAY_CONTEXT);
+		%>
+
 		<aui:input name="ticketKey" type="hidden" value="<%= invitedAccountUserDisplayContext.getTicketKey() %>" />
 
 		<h2 class="sheet-title">
