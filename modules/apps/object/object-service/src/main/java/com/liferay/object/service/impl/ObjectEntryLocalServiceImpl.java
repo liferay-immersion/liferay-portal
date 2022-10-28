@@ -2588,7 +2588,8 @@ public class ObjectEntryLocalServiceImpl
 
 			String valueString = String.valueOf(value);
 
-			// Remove the first [ and the last ] in [1, 2, 3]
+			// Remove the first [ and the last ] in
+			// "[pickListEntryKey1, pickListEntryKey2, pickListEntryKey3]"
 
 			valueString = valueString.substring(1, stringValue.length() - 1);
 
