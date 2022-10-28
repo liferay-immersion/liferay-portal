@@ -151,7 +151,7 @@ export default function propsTransformer({
 									.catch(() => {
 										openToast({
 											message: Liferay.Language.get(
-												'please-enter-email-addresses-with-valid-domains-only'
+												'please-enter-only-email-addresses-with-valid-domains'
 											),
 											title: Liferay.Language.get(
 												'error'
