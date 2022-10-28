@@ -54,6 +54,7 @@ import com.liferay.portal.kernel.service.WorkflowDefinitionLinkLocalService;
 import com.liferay.portal.kernel.service.permission.PortletPermission;
 import com.liferay.portal.kernel.service.permission.PortletPermissionUtil;
 import com.liferay.portal.kernel.servlet.SessionMessages;
+import com.liferay.portal.kernel.test.util.RandomTestUtil;
 import com.liferay.portal.kernel.theme.PortletDisplay;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.Constants;
@@ -604,9 +605,9 @@ public class DDMFormDisplayContextTest {
 
 	@Test
 	public void testGetLimitToOneSubmissionPerUserMap() throws Exception {
-		String limitToOneSubmissionPerUserBody =
-			"You cannot submit more than once.";
-		String limitToOneSubmissionPerUserHeader = "Limit reached";
+		String limitToOneSubmissionPerUserBody = RandomTestUtil.randomString();
+		String limitToOneSubmissionPerUserHeader =
+			RandomTestUtil.randomString();
 
 		DDMFormInstanceSettings ddmFormInstanceSettings = Mockito.mock(
 			DDMFormInstanceSettings.class);
