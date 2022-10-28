@@ -167,17 +167,14 @@ public class ResourceBundleUtil {
 
 		if (ArrayUtil.isNotEmpty(arguments)) {
 			MessageFormat messageFormat = new MessageFormat(
-				_escapePattern(value), resourceBundle.getLocale());
+				StringUtil.replace(
+					value, CharPool.APOSTROPHE, StringPool.DOUBLE_APOSTROPHE),
+				resourceBundle.getLocale());
 
 			value = messageFormat.format(arguments);
 		}
 
 		return value;
-	}
-
-	private static String _escapePattern(String pattern) {
-		return StringUtil.replace(
-			pattern, CharPool.APOSTROPHE, StringPool.DOUBLE_APOSTROPHE);
 	}
 
 	private static ResourceBundle _getBundle(
