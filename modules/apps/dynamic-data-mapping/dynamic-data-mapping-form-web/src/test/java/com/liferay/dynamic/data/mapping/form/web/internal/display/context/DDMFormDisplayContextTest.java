@@ -605,14 +605,12 @@ public class DDMFormDisplayContextTest {
 
 	@Test
 	public void testGetLimitToOneSubmissionPerUserMap() throws Exception {
-		String limitToOneSubmissionPerUserBody = RandomTestUtil.randomString();
-		String limitToOneSubmissionPerUserHeader =
-			RandomTestUtil.randomString();
-
 		DDMFormInstanceSettings ddmFormInstanceSettings = Mockito.mock(
 			DDMFormInstanceSettings.class);
 
 		_mockDDMFormInstance(ddmFormInstanceSettings);
+
+		String limitToOneSubmissionPerUserBody = RandomTestUtil.randomString();
 
 		Mockito.when(
 			ddmFormInstanceSettings.limitToOneSubmissionPerUserBody()
@@ -621,6 +619,9 @@ public class DDMFormDisplayContextTest {
 				_DEFAULT_LANGUAGE_ID, limitToOneSubmissionPerUserBody
 			).toString()
 		);
+
+		String limitToOneSubmissionPerUserHeader =
+			RandomTestUtil.randomString();
 
 		Mockito.when(
 			ddmFormInstanceSettings.limitToOneSubmissionPerUserHeader()
