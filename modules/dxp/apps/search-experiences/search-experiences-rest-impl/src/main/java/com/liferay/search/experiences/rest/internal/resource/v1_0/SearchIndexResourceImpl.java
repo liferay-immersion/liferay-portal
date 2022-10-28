@@ -23,9 +23,6 @@ import com.liferay.portal.vulcan.pagination.Page;
 import com.liferay.search.experiences.rest.dto.v1_0.SearchIndex;
 import com.liferay.search.experiences.rest.resource.v1_0.SearchIndexResource;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ServiceScope;
@@ -40,39 +37,25 @@ import org.osgi.service.component.annotations.ServiceScope;
 )
 public class SearchIndexResourceImpl extends BaseSearchIndexResourceImpl {
 
-	public List<SearchIndex> getSearchIndexes() {
-		List<SearchIndex> searchIndexes = new ArrayList<>();
-
+	@Override
+	public Page<SearchIndex> getSearchIndexesPage() throws Exception {
 		String prefix =
 			_indexNameBuilder.getIndexName(contextCompany.getCompanyId()) +
 				StringPool.DASH;
 
-		GetIndexIndexRequest getIndexIndexRequest = new GetIndexIndexRequest(
-			prefix + StringPool.STAR);
-
 		GetIndexIndexResponse getIndexIndexResponse =
-			_searchEngineAdapter.execute(getIndexIndexRequest);
+			_searchEngineAdapter.execute(
+				new GetIndexIndexRequest(prefix + StringPool.STAR));
 
-		for (String indexName : getIndexIndexResponse.getIndexNames()) {
-			searchIndexes.add(
-				new SearchIndex() {
+		return Page.of(
+			transformToList(
+				getIndexIndexResponse.getIndexNames(),
+				indexName -> new SearchIndex() {
 					{
 						external = false;
-						name = _removePrefix(indexName, prefix);
+						name = indexName.substring(prefix.length());
 					}
-				});
-		}
-
-		return searchIndexes;
-	}
-
-	@Override
-	public Page<SearchIndex> getSearchIndexesPage() throws Exception {
-		return Page.of(getSearchIndexes());
-	}
-
-	private String _removePrefix(String indexName, String prefix) {
-		return indexName.substring(prefix.length());
+				}));
 	}
 
 	@Reference
