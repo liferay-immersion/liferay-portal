@@ -76,7 +76,7 @@ public class TXTAISentenceTransformer
 				return list.toArray(new Double[0]);
 			}
 
-			throw new RuntimeException(responseJSON);
+			throw new IllegalArgumentException(responseJSON);
 		}
 		catch (Exception exception) {
 			return ReflectionUtil.throwException(exception);
