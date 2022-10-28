@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.notification.internal.upgrade.v1_3_0;
+package com.liferay.notification.internal.upgrade.v2_1_0;
 
 import com.liferay.portal.kernel.upgrade.UpgradeProcess;
 import com.liferay.portal.kernel.upgrade.UpgradeProcessFactory;
