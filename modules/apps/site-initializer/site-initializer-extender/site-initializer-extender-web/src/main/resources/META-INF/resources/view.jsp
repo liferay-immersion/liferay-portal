@@ -31,7 +31,7 @@ UnicodeProperties unicodeProperties = group.getTypeSettingsProperties();
 		<aui:form action="<%= synchronizeSiteInitializerActionURL %>" method="post" name="fm">
 			<clay:sheet-header>
 				<div class="sheet-title">
-					<liferay-ui:message key="javax.portlet.title.com_liferay_site_initializer_extender_web_SiteInitializerPortlet" />
+					<%= portletDisplay.getTitle() %>
 				</div>
 			</clay:sheet-header>
 
