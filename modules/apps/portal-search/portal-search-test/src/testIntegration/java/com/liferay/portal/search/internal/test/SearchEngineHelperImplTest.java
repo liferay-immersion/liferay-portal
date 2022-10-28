@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.portal.search.engine.swapping.test;
+package com.liferay.portal.search.internal.test;
 
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.portal.kernel.model.CompanyConstants;
@@ -57,7 +57,7 @@ import org.osgi.service.component.runtime.dto.ComponentConfigurationDTO;
  * @author Shuyang Zhou
  */
 @RunWith(Arquillian.class)
-public class SearchEngineSwappingTest {
+public class SearchEngineHelperImplTest {
 
 	@ClassRule
 	@Rule
@@ -65,8 +65,9 @@ public class SearchEngineSwappingTest {
 		new LiferayIntegrationTestRule();
 
 	@Test
-	public void testSearchEngineSwapping() throws Exception {
-		Bundle bundle = FrameworkUtil.getBundle(SearchEngineSwappingTest.class);
+	public void testGetSearchEngine() throws Exception {
+		Bundle bundle = FrameworkUtil.getBundle(
+			SearchEngineHelperImplTest.class);
 
 		BundleContext bundleContext = bundle.getBundleContext();
 
