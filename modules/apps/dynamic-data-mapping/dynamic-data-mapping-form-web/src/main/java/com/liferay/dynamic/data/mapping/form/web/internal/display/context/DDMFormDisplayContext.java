@@ -440,9 +440,9 @@ public class DDMFormDisplayContext {
 	public Map<String, String> getLimitToOneSubmissionPerUserMap()
 		throws PortalException {
 
-		DDMFormInstance formInstance = getFormInstance();
+		DDMFormInstance ddmFormInstance = getFormInstance();
 
-		if (formInstance == null) {
+		if (ddmFormInstance == null) {
 			return HashMapBuilder.put(
 				"limitToOneSubmissionPerUserBody", StringPool.BLANK
 			).put(
@@ -450,11 +450,12 @@ public class DDMFormDisplayContext {
 			).build();
 		}
 
-		DDMFormInstanceSettings settingsModel = formInstance.getSettingsModel();
+		DDMFormInstanceSettings ddmFormInstanceSettings = 
+			ddmFormInstance.getSettingsModel();
 
 		JSONObject limitToOneSubmissionPerUserBodyJSONObject =
 			_jsonFactory.createJSONObject(
-				settingsModel.limitToOneSubmissionPerUserBody());
+				ddmFormInstanceSettings.limitToOneSubmissionPerUserBody());
 
 		String limitToOneSubmissionPerUserBody =
 			limitToOneSubmissionPerUserBodyJSONObject.getString(
@@ -462,7 +463,7 @@ public class DDMFormDisplayContext {
 
 		JSONObject limitToOneSubmissionPerUserHeaderJSONObject =
 			_jsonFactory.createJSONObject(
-				settingsModel.limitToOneSubmissionPerUserHeader());
+				ddmFormInstanceSettings.limitToOneSubmissionPerUserHeader());
 
 		String limitToOneSubmissionPerUserHeader =
 			limitToOneSubmissionPerUserHeaderJSONObject.getString(
@@ -646,13 +647,13 @@ public class DDMFormDisplayContext {
 			_autosaveEnabled = Boolean.FALSE;
 		}
 		else {
-			DDMFormInstance formInstance = getFormInstance();
+			DDMFormInstance ddmFormInstance = getFormInstance();
 
-			DDMFormInstanceSettings formInstanceSettings =
-				formInstance.getSettingsModel();
+			DDMFormInstanceSettings ddmFormInstanceSettings =
+				ddmFormInstance.getSettingsModel();
 
 			_autosaveEnabled =
-				formInstanceSettings.autosaveEnabled() &&
+				ddmFormInstanceSettings.autosaveEnabled() &&
 				(getAutosaveInterval() > 0);
 		}
 

@@ -603,7 +603,7 @@ public class DDMFormDisplayContextTest {
 	}
 
 	@Test
-	public void testSubmissionLimitReachedCustomMessage() throws Exception {
+	public void testGetLimitToOneSubmissionPerUserMap() throws Exception {
 		String limitToOneSubmissionPerUserBody =
 			"You cannot submit more than once.";
 		String limitToOneSubmissionPerUserHeader = "Limit reached";
