@@ -16,12 +16,6 @@
 
 <%@ include file="/init.jsp" %>
 
-<%
-Group group = themeDisplay.getScopeGroup();
-
-UnicodeProperties unicodeProperties = group.getTypeSettingsProperties();
-%>
-
 <clay:container-fluid>
 	<clay:sheet
 		cssClass="custom-sheet"
@@ -37,6 +31,13 @@ UnicodeProperties unicodeProperties = group.getTypeSettingsProperties();
 
 			<div class="sheet-section">
 				<div class="alert alert-info">
+
+					<%
+					Group group = themeDisplay.getScopeGroup();
+
+					UnicodeProperties unicodeProperties = group.getTypeSettingsProperties();
+					%>
+
 					<liferay-ui:message arguments='<%= unicodeProperties.get("siteInitializerKey") %>' key="site-initializer-extender-synchronize-help-x" />
 				</div>
 			</div>
