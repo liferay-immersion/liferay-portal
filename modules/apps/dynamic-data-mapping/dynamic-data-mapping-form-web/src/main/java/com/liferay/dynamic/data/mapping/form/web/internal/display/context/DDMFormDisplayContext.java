@@ -450,7 +450,7 @@ public class DDMFormDisplayContext {
 			).build();
 		}
 
-		DDMFormInstanceSettings ddmFormInstanceSettings = 
+		DDMFormInstanceSettings ddmFormInstanceSettings =
 			ddmFormInstance.getSettingsModel();
 
 		JSONObject limitToOneSubmissionPerUserBodyJSONObject =

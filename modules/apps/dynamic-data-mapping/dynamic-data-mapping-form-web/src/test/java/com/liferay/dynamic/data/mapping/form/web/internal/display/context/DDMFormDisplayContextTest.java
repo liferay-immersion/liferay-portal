@@ -341,6 +341,50 @@ public class DDMFormDisplayContextTest {
 	}
 
 	@Test
+	public void testGetLimitToOneSubmissionPerUserMap() throws Exception {
+		DDMFormInstanceSettings ddmFormInstanceSettings = Mockito.mock(
+			DDMFormInstanceSettings.class);
+
+		_mockDDMFormInstance(ddmFormInstanceSettings);
+
+		String limitToOneSubmissionPerUserBody = RandomTestUtil.randomString();
+
+		Mockito.when(
+			ddmFormInstanceSettings.limitToOneSubmissionPerUserBody()
+		).thenReturn(
+			JSONUtil.put(
+				_DEFAULT_LANGUAGE_ID, limitToOneSubmissionPerUserBody
+			).toString()
+		);
+
+		String limitToOneSubmissionPerUserHeader =
+			RandomTestUtil.randomString();
+
+		Mockito.when(
+			ddmFormInstanceSettings.limitToOneSubmissionPerUserHeader()
+		).thenReturn(
+			JSONUtil.put(
+				_DEFAULT_LANGUAGE_ID, limitToOneSubmissionPerUserHeader
+			).toString()
+		);
+
+		DDMFormDisplayContext ddmFormDisplayContext =
+			_createDDMFormDisplayContext(_mockRenderRequest());
+
+		Map<String, String> limitToOneSubmissionPerUserMap =
+			ddmFormDisplayContext.getLimitToOneSubmissionPerUserMap();
+
+		Assert.assertEquals(
+			limitToOneSubmissionPerUserBody,
+			limitToOneSubmissionPerUserMap.get(
+				"limitToOneSubmissionPerUserBody"));
+		Assert.assertEquals(
+			limitToOneSubmissionPerUserHeader,
+			limitToOneSubmissionPerUserMap.get(
+				"limitToOneSubmissionPerUserHeader"));
+	}
+
+	@Test
 	public void testGetLocale() throws PortalException {
 		DDMFormDisplayContext ddmFormDisplayContext =
 			_createDDMFormDisplayContext();
@@ -601,50 +645,6 @@ public class DDMFormDisplayContextTest {
 			_createDDMFormDisplayContext(mockRenderRequest);
 
 		Assert.assertFalse(ddmFormDisplayContext.isShowSuccessPage());
-	}
-
-	@Test
-	public void testGetLimitToOneSubmissionPerUserMap() throws Exception {
-		DDMFormInstanceSettings ddmFormInstanceSettings = Mockito.mock(
-			DDMFormInstanceSettings.class);
-
-		_mockDDMFormInstance(ddmFormInstanceSettings);
-
-		String limitToOneSubmissionPerUserBody = RandomTestUtil.randomString();
-
-		Mockito.when(
-			ddmFormInstanceSettings.limitToOneSubmissionPerUserBody()
-		).thenReturn(
-			JSONUtil.put(
-				_DEFAULT_LANGUAGE_ID, limitToOneSubmissionPerUserBody
-			).toString()
-		);
-
-		String limitToOneSubmissionPerUserHeader =
-			RandomTestUtil.randomString();
-
-		Mockito.when(
-			ddmFormInstanceSettings.limitToOneSubmissionPerUserHeader()
-		).thenReturn(
-			JSONUtil.put(
-				_DEFAULT_LANGUAGE_ID, limitToOneSubmissionPerUserHeader
-			).toString()
-		);
-
-		DDMFormDisplayContext ddmFormDisplayContext =
-			_createDDMFormDisplayContext(_mockRenderRequest());
-
-		Map<String, String> limitToOneSubmissionPerUserMap =
-			ddmFormDisplayContext.getLimitToOneSubmissionPerUserMap();
-
-		Assert.assertEquals(
-			limitToOneSubmissionPerUserBody,
-			limitToOneSubmissionPerUserMap.get(
-				"limitToOneSubmissionPerUserBody"));
-		Assert.assertEquals(
-			limitToOneSubmissionPerUserHeader,
-			limitToOneSubmissionPerUserMap.get(
-				"limitToOneSubmissionPerUserHeader"));
 	}
 
 	@Test
