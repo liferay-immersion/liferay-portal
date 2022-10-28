@@ -88,6 +88,17 @@ renderResponse.setTitle(LanguageUtil.get(request, "create-account"));
 		<liferay-ui:message arguments="<%= String.valueOf(upe.minLength) %>" key="that-password-is-too-short" translateArguments="<%= false %>" />
 	</liferay-ui:error>
 
+	<liferay-ui:error exception="<%= UserPasswordException.MustComplyWithModelListeners.class %>" message="that-password-is-invalid-please-enter-a-different-password" />
+
+	<liferay-ui:error exception="<%= UserPasswordException.MustComplyWithRegex.class %>">
+
+		<%
+		UserPasswordException.MustComplyWithRegex upe = (UserPasswordException.MustComplyWithRegex)errorException;
+		%>
+
+		<liferay-ui:message arguments="<%= HtmlUtil.escape(upe.regex) %>" key="that-password-does-not-comply-with-the-regular-expression" translateArguments="<%= false %>" />
+	</liferay-ui:error>
+
 	<liferay-ui:error exception="<%= UserPasswordException.MustHaveMoreNumbers.class %>">
 
 		<%
@@ -113,17 +124,6 @@ renderResponse.setTitle(LanguageUtil.get(request, "create-account"));
 		%>
 
 		<liferay-ui:message arguments="<%= String.valueOf(upe.minUppercase) %>" key="that-password-must-contain-at-least-x-uppercase-characters" translateArguments="<%= false %>" />
-	</liferay-ui:error>
-
-	<liferay-ui:error exception="<%= UserPasswordException.MustComplyWithModelListeners.class %>" message="that-password-is-invalid-please-enter-a-different-password" />
-
-	<liferay-ui:error exception="<%= UserPasswordException.MustComplyWithRegex.class %>">
-
-		<%
-		UserPasswordException.MustComplyWithRegex upe = (UserPasswordException.MustComplyWithRegex)errorException;
-		%>
-
-		<liferay-ui:message arguments="<%= HtmlUtil.escape(upe.regex) %>" key="that-password-does-not-comply-with-the-regular-expression" translateArguments="<%= false %>" />
 	</liferay-ui:error>
 
 	<liferay-ui:error exception="<%= UserPasswordException.MustMatch.class %>" message="the-passwords-you-entered-do-not-match" />
