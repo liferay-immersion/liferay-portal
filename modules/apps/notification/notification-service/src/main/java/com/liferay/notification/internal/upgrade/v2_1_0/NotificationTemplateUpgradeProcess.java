@@ -25,7 +25,7 @@ public class NotificationTemplateUpgradeProcess extends UpgradeProcess {
 
 	@Override
 	protected void doUpgrade() throws Exception {
-		runSQL("UPDATE NotificationTemplate SET type_ = 'email'");
+		runSQL("update NotificationTemplate set type_ = 'email'");
 	}
 
 	@Override

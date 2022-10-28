@@ -25,7 +25,7 @@ public class NotificationQueueEntryUpgradeProcess extends UpgradeProcess {
 
 	@Override
 	protected void doUpgrade() throws Exception {
-		runSQL("UPDATE NotificationQueueEntry SET type_ = 'email'");
+		runSQL("update NotificationQueueEntry set type_ = 'email'");
 	}
 
 	@Override
