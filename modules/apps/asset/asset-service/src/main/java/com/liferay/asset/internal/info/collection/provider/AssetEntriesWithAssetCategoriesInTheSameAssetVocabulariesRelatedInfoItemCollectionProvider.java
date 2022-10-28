@@ -221,9 +221,6 @@ public class
 
 		AssetEntryQuery assetEntryQuery = new AssetEntryQuery();
 
-		ServiceContext serviceContext =
-			ServiceContextThreadLocal.getServiceContext();
-
 		assetEntryQuery.setAnyCategoryIds(
 			_getAssetCategories(assetEntryAssetCategories));
 		assetEntryQuery.setClassNameIds(_getClassNameIds(collectionQuery));
@@ -235,8 +232,12 @@ public class
 			assetEntryQuery.setEnd(pagination.getEnd());
 		}
 
+		ServiceContext serviceContext =
+			ServiceContextThreadLocal.getServiceContext();
+
 		assetEntryQuery.setGroupIds(
 			new long[] {serviceContext.getScopeGroupId()});
+
 		assetEntryQuery.setOrderByCol1(Field.MODIFIED_DATE);
 		assetEntryQuery.setOrderByType1("DESC");
 

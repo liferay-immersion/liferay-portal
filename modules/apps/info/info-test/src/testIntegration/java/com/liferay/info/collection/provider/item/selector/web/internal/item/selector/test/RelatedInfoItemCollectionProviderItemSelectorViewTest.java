@@ -77,7 +77,6 @@ public class RelatedInfoItemCollectionProviderItemSelectorViewTest {
 			Assert.assertEquals(
 				relatedInfoItemCollectionProviders.toString(), 1,
 				relatedInfoItemCollectionProviders.size());
-
 			Assert.assertTrue(
 				relatedInfoItemCollectionProviders.contains(
 					testInfoItemCollectionProvider));
@@ -125,7 +124,6 @@ public class RelatedInfoItemCollectionProviderItemSelectorViewTest {
 		relatedInfoItemCollectionProviderItemSelectorCriterion.
 			setDesiredItemSelectorReturnTypes(
 				new InfoListProviderItemSelectorReturnType());
-
 		relatedInfoItemCollectionProviderItemSelectorCriterion.
 			setSourceItemTypes(Arrays.asList(TestItem.class.getName()));
 

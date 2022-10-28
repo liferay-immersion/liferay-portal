@@ -323,9 +323,9 @@ public class
 		Locale locale = LocaleUtil.getSiteDefault();
 
 		themeDisplay.setLanguageId(LocaleUtil.toLanguageId(locale));
-		themeDisplay.setLocale(locale);
 
 		themeDisplay.setLayout(LayoutTestUtil.addTypeContentLayout(_group));
+		themeDisplay.setLocale(locale);
 		themeDisplay.setRealUser(TestPropsValues.getUser());
 		themeDisplay.setScopeGroupId(_group.getGroupId());
 		themeDisplay.setSiteGroupId(_group.getGroupId());
