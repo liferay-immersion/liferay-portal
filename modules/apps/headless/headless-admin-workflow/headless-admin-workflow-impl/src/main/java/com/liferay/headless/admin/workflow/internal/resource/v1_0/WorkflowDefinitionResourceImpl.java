@@ -225,12 +225,11 @@ public class WorkflowDefinitionResourceImpl
 	private WorkflowDefinition _toWorkflowDefinition(
 			UnsafeSupplier
 				<com.liferay.portal.kernel.workflow.WorkflowDefinition,
-				 Exception> workflowDefinitionUnsafeSupplier)
+				 Exception> unsafeSupplier)
 		throws Exception {
 
 		try {
-			return _toWorkflowDefinition(
-				workflowDefinitionUnsafeSupplier.get());
+			return _toWorkflowDefinition(unsafeSupplier.get());
 		}
 		catch (Exception exception) {
 			Throwable throwable = exception.getCause();
