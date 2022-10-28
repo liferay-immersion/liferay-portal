@@ -2591,7 +2591,7 @@ public class ObjectEntryLocalServiceImpl
 			// Remove the first [ and the last ] in
 			// "[pickListEntryKey1, pickListEntryKey2, pickListEntryKey3]"
 
-			valueString = valueString.substring(1, stringValue.length() - 1);
+			valueString = valueString.substring(1, valueString.length() - 1);
 
 			_setColumn(
 				preparedStatement, index, column.getSQLType(), valueString);
