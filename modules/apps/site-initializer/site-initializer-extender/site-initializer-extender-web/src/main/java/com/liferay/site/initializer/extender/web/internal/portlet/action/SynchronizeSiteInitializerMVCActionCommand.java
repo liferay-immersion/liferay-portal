@@ -40,12 +40,12 @@ import org.osgi.service.component.annotations.Reference;
 @Component(
 	immediate = true,
 	property = {
-		"javax.portlet.name=" + SiteInitializerExtenderPortletKeys.SITE_INITIALIZER_EXTENDER,
-		"mvc.command.name=/site_initializer_extender/synchronize_site_initializer_extender"
+		"javax.portlet.name=" + SiteInitializerExtenderPortletKeys.SITE_INITIALIZER,
+		"mvc.command.name=/site_initializer/synchronize_site_initializer"
 	},
 	service = MVCActionCommand.class
 )
-public class SynchronizeSiteInitializerExtenderMVCActionCommand
+public class SynchronizeSiteInitializerMVCActionCommand
 	extends BaseMVCActionCommand {
 
 	@Override

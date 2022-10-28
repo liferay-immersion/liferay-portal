@@ -26,12 +26,12 @@ UnicodeProperties unicodeProperties = group.getTypeSettingsProperties();
 	<clay:sheet
 		cssClass="custom-sheet"
 	>
-		<portlet:actionURL name="/site_initializer_extender/synchronize_site_initializer_extender" var="synchronizeSiteInitializerExtenderActionURL" />
+		<portlet:actionURL name="/site_initializer/synchronize_site_initializer" var="synchronizeSiteInitializerActionURL" />
 
-		<aui:form action="<%= synchronizeSiteInitializerExtenderActionURL %>" method="post" name="fm">
+		<aui:form action="<%= synchronizeSiteInitializerActionURL %>" method="post" name="fm">
 			<clay:sheet-header>
 				<div class="sheet-title">
-					<liferay-ui:message key="javax.portlet.title.com_liferay_site_initializer_extender_web_SiteInitializerExtenderPortlet" />
+					<liferay-ui:message key="javax.portlet.title.com_liferay_site_initializer_extender_web_SiteInitializerPortlet" />
 				</div>
 			</clay:sheet-header>
 

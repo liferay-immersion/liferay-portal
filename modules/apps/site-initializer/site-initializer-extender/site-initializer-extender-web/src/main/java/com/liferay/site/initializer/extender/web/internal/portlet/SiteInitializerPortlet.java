@@ -39,12 +39,12 @@ import org.osgi.service.component.annotations.Component;
 		"javax.portlet.expiration-cache=0",
 		"javax.portlet.init-param.template-path=/META-INF/resources/",
 		"javax.portlet.init-param.view-template=/view.jsp",
-		"javax.portlet.name=" + SiteInitializerExtenderPortletKeys.SITE_INITIALIZER_EXTENDER,
+		"javax.portlet.name=" + SiteInitializerExtenderPortletKeys.SITE_INITIALIZER,
 		"javax.portlet.resource-bundle=content.Language",
 		"javax.portlet.security-role-ref=power-user,user",
 		"javax.portlet.version=3.0"
 	},
 	service = Portlet.class
 )
-public class SiteInitializerExtenderPortlet extends MVCPortlet {
+public class SiteInitializerPortlet extends MVCPortlet {
 }

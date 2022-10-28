@@ -19,8 +19,7 @@ package com.liferay.site.initializer.extender.web.internal.constants;
  */
 public class SiteInitializerExtenderPortletKeys {
 
-	public static final String SITE_INITIALIZER_EXTENDER =
-		"com_liferay_site_initializer_extender_web_" +
-			"SiteInitializerExtenderPortlet";
+	public static final String SITE_INITIALIZER =
+		"com_liferay_site_initializer_extender_web_SiteInitializerPortlet";
 
 }

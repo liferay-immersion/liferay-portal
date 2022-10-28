@@ -43,7 +43,7 @@ import org.osgi.service.component.annotations.Reference;
 	},
 	service = PanelApp.class
 )
-public class SiteInitializerExtenderPanelApp extends BasePanelApp {
+public class SiteInitializerPanelApp extends BasePanelApp {
 
 	@Override
 	public Portlet getPortlet() {
@@ -52,7 +52,7 @@ public class SiteInitializerExtenderPanelApp extends BasePanelApp {
 
 	@Override
 	public String getPortletId() {
-		return SiteInitializerExtenderPortletKeys.SITE_INITIALIZER_EXTENDER;
+		return SiteInitializerExtenderPortletKeys.SITE_INITIALIZER;
 	}
 
 	@Override
@@ -82,7 +82,7 @@ public class SiteInitializerExtenderPanelApp extends BasePanelApp {
 	}
 
 	@Reference(
-		target = "(javax.portlet.name=" + SiteInitializerExtenderPortletKeys.SITE_INITIALIZER_EXTENDER + ")"
+		target = "(javax.portlet.name=" + SiteInitializerExtenderPortletKeys.SITE_INITIALIZER + ")"
 	)
 	private Portlet _portlet;
 
