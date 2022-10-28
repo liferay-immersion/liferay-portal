@@ -1,6 +1,6 @@
 Bundle-Name: Liferay Commerce Cart Content Web
 Bundle-SymbolicName: com.liferay.commerce.cart.content.web
-Bundle-Version: 4.0.35
+Bundle-Version: 4.0.36
 Require-Capability:\
 	soy;\
 		filter:="(type=commerce-cart-taglib)"
