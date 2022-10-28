@@ -70,7 +70,7 @@
 						},
 						{
 							"defaultValue": "cosineSimilarity",
-							"helpText": "Vector function to measure similarity between search keywords and target document text embeddings. Check model documentation for suitability.",
+							"helpText": "Vector functions measure similarity between search keywords and target document text embeddings. Check model documentation for suitability.",
 							"label": "Vector Field Function",
 							"name": "vector_field_function",
 							"type": "select",
