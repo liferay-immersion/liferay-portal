@@ -14,13 +14,10 @@ import {FormikContextType} from 'formik';
 import {useDropzone} from 'react-dropzone';
 
 import MDFClaim from '../../../../../interfaces/mdfClaim';
-import MDFRequestActivity from '../../../../../interfaces/mdfRequestActivity';
 import PRMFormFieldProps from '../common/interfaces/prmFormFieldProps';
 import PRMFormFieldStateProps from '../common/interfaces/prmFormFieldStateProps';
 
 interface IProps {
-	currentActivity: MDFRequestActivity;
-	currentActivityIndex: number;
 	onAccept: (value: File[]) => void;
 }
 

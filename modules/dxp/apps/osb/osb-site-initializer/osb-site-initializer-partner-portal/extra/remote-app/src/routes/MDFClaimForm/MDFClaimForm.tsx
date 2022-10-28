@@ -39,7 +39,6 @@ const getInitialFormValues = (
 		name: activity.name,
 		selected: false,
 		totalCost: 0,
-		typeOfActivity: activity.typeActivity.name,
 	})),
 	r_mdfRequestToMdfClaims_c_mdfRequestId: mdfRequestId,
 	totalClaimAmount: 0,

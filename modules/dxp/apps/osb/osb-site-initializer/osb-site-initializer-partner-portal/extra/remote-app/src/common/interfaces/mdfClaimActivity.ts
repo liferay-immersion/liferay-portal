@@ -20,5 +20,4 @@ export default interface MDFClaimActivity extends Partial<LiferayObject> {
 	name: string;
 	selected: boolean;
 	totalCost: number;
-	typeOfActivity?: string;
 }
