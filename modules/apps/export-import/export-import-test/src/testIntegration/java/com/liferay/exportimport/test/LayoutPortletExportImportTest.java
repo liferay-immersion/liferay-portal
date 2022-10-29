@@ -73,13 +73,12 @@ public class LayoutPortletExportImportTest extends BaseExportImportTestCase {
 		Role ownerRole = _roleLocalService.getRole(
 			companyId, RoleConstants.OWNER);
 
-		_initModelResource(
+		_addResources(
 			companyId, companyGroup.getGroupId(), DLConstants.RESOURCE_NAME);
-		_initModelResource(
-			companyId, group.getGroupId(), DLConstants.RESOURCE_NAME);
+		_addResources(companyId, group.getGroupId(), DLConstants.RESOURCE_NAME);
 
-		ResourcePermission originalCompanyGroupDLModelResourcePermission =
-			_getModelResourcePermission(
+		ResourcePermission originalCompanyGroupResourcePermission =
+			_getResourcePermission(
 				companyId, companyGroup.getGroupId(), DLConstants.RESOURCE_NAME,
 				ownerRole.getRoleId());
 
@@ -90,12 +89,15 @@ public class LayoutPortletExportImportTest extends BaseExportImportTestCase {
 					"lfrScopeType", new String[] {"company"}
 				).build());
 
-			ResourcePermission groupDLModelResourcePermission =
-				_getModelResourcePermission(
-					companyId, group.getGroupId(), DLConstants.RESOURCE_NAME,
-					ownerRole.getRoleId());
+			ResourcePermission groupResourcePermission = _getResourcePermission(
+				companyId, group.getGroupId(), DLConstants.RESOURCE_NAME,
+				ownerRole.getRoleId());
 
-			_removePermissions(groupDLModelResourcePermission);
+			groupResourcePermission.setActionIds(0);
+			groupResourcePermission.setViewActionId(false);
+
+			_resourcePermissionLocalService.updateResourcePermission(
+				groupResourcePermission);
 
 			exportLayouts(
 				new long[] {layout.getLayoutId()},
@@ -114,38 +116,35 @@ public class LayoutPortletExportImportTest extends BaseExportImportTestCase {
 					new String[] {Boolean.TRUE.toString()}
 				).build());
 
-			ResourcePermission companyGroupDLModelResourcePermission =
-				_getModelResourcePermission(
+			ResourcePermission companyGroupResourcePermission =
+				_getResourcePermission(
 					companyId, companyGroup.getGroupId(),
 					DLConstants.RESOURCE_NAME, ownerRole.getRoleId());
 
 			Assert.assertEquals(
-				"Permissions on the Company Site should not be changed by an " +
-					"import of another site.",
-				originalCompanyGroupDLModelResourcePermission.getActionIds(),
-				companyGroupDLModelResourcePermission.getActionIds());
+				originalCompanyGroupResourcePermission.getActionIds(),
+				companyGroupResourcePermission.getActionIds());
 			Assert.assertEquals(
-				"Permissions on the Company Site should not be changed by an " +
-					"import of another site.",
-				originalCompanyGroupDLModelResourcePermission.isViewActionId(),
-				companyGroupDLModelResourcePermission.isViewActionId());
+				originalCompanyGroupResourcePermission.isViewActionId(),
+				companyGroupResourcePermission.isViewActionId());
 		}
 		finally {
-			_restoreModelResourcePermission(
-				originalCompanyGroupDLModelResourcePermission);
+			ResourcePermission resourcePermission =
+				_resourcePermissionLocalService.getResourcePermission(
+					originalCompanyGroupResourcePermission.
+						getResourcePermissionId());
+
+			resourcePermission.setActionIds(
+				originalCompanyGroupResourcePermission.getActionIds());
+			resourcePermission.setViewActionId(
+				originalCompanyGroupResourcePermission.isViewActionId());
+
+			_resourcePermissionLocalService.updateResourcePermission(
+				resourcePermission);
 		}
 	}
 
-	private ResourcePermission _getModelResourcePermission(
-			long companyId, long groupId, String name, long roleId)
-		throws PortalException {
-
-		return _resourcePermissionLocalService.getResourcePermission(
-			companyId, name, ResourceConstants.SCOPE_INDIVIDUAL,
-			String.valueOf(groupId), roleId);
-	}
-
-	private void _initModelResource(long companyId, long groupId, String name)
+	private void _addResources(long companyId, long groupId, String name)
 		throws Exception {
 
 		String primaryKey = String.valueOf(groupId);
@@ -161,31 +160,13 @@ public class LayoutPortletExportImportTest extends BaseExportImportTestCase {
 			companyId, groupId, 0, name, primaryKey, false, true, true);
 	}
 
-	private ResourcePermission _removePermissions(
-		ResourcePermission resourcePermission) {
-
-		resourcePermission.setActionIds(0);
-		resourcePermission.setViewActionId(false);
-
-		return _resourcePermissionLocalService.updateResourcePermission(
-			resourcePermission);
-	}
-
-	private void _restoreModelResourcePermission(
-			ResourcePermission originalResourcePermission)
+	private ResourcePermission _getResourcePermission(
+			long companyId, long groupId, String name, long roleId)
 		throws PortalException {
 
-		ResourcePermission resourcePermission =
-			_resourcePermissionLocalService.getResourcePermission(
-				originalResourcePermission.getResourcePermissionId());
-
-		resourcePermission.setActionIds(
-			originalResourcePermission.getActionIds());
-		resourcePermission.setViewActionId(
-			originalResourcePermission.isViewActionId());
-
-		_resourcePermissionLocalService.updateResourcePermission(
-			resourcePermission);
+		return _resourcePermissionLocalService.getResourcePermission(
+			companyId, name, ResourceConstants.SCOPE_INDIVIDUAL,
+			String.valueOf(groupId), roleId);
 	}
 
 	@Inject
