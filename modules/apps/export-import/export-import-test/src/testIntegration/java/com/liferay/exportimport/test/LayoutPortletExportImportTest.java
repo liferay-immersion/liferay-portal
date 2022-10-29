@@ -70,12 +70,14 @@ public class LayoutPortletExportImportTest extends BaseExportImportTestCase {
 		long companyId = TestPropsValues.getCompanyId();
 
 		Group companyGroup = _groupLocalService.getCompanyGroup(companyId);
-		Role ownerRole = _roleLocalService.getRole(
-			companyId, RoleConstants.OWNER);
 
 		_addResources(
 			companyId, companyGroup.getGroupId(), DLConstants.RESOURCE_NAME);
+
 		_addResources(companyId, group.getGroupId(), DLConstants.RESOURCE_NAME);
+
+		Role ownerRole = _roleLocalService.getRole(
+			companyId, RoleConstants.OWNER);
 
 		ResourcePermission originalCompanyGroupResourcePermission =
 			_getResourcePermission(
