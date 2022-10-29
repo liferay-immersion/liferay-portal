@@ -80,7 +80,6 @@ public class CompleteTaskMVCActionCommandTest {
 			mockActionRequest, new MockActionResponse());
 
 		Assert.assertNotNull(httpServletRequest);
-
 		Assert.assertNotNull(
 			httpServletRequest.getAttribute(
 				JavaConstants.JAVAX_PORTLET_RESPONSE));
@@ -114,7 +113,6 @@ public class CompleteTaskMVCActionCommandTest {
 			mockActionRequest, mockActionResponse);
 
 		Assert.assertNotNull(httpServletRequest);
-
 		Assert.assertNotNull(
 			httpServletRequest.getAttribute(
 				JavaConstants.JAVAX_PORTLET_RESPONSE));
