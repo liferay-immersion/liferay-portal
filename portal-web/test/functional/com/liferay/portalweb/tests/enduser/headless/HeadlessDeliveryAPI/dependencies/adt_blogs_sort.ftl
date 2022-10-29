@@ -12,16 +12,10 @@
 							<div class="autofit-col autofit-col-expand">
 								<div class="autofit-row">
 									<div class="autofit-col autofit-col-expand">
-										<#assign
-											viewEntryURL = themeDisplay.getPathMain() +
-											"/blogs/find_entry?p_l_id=" + themeDisplay.getPlid() +
-											"&entryId=" + curBlogEntry.id
-										/>
-
 										<h3 class="title">
 											<a
 												class="title-link"
-												href="${viewEntryURL}">${htmlUtil.escape(curBlogEntry.headline)}
+												href="${themeDisplay.getPathMain() + "/blogs/find_entry?p_l_id=" + themeDisplay.getPlid() + "&entryId=" + curBlogEntry.id}">${htmlUtil.escape(curBlogEntry.headline)}
 											</a>
 										</h3>
 									</div>
