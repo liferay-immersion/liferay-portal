@@ -950,26 +950,26 @@ public class UserODataRetrieverTest {
 		_user1 = _addUser(firstName, _group1);
 		_user2 = _addUser(firstName, _group1);
 
-		_userGroup = UserGroupTestUtil.addUserGroup(
-			_companyGuestGroup.getGroupId());
-
-		_userLocalService.addUserGroupUser(_userGroup.getUserGroupId(), _user2);
-
 		_team = _addTeam();
 
 		_userLocalService.addTeamUser(_team.getTeamId(), _user1);
 
+		_userGroup = UserGroupTestUtil.addUserGroup(
+			_companyGuestGroup.getGroupId());
+
 		_userGroupLocalService.addTeamUserGroups(
 			_team.getTeamId(), new long[] {_userGroup.getUserGroupId()});
+
+		_userLocalService.addUserGroupUser(_userGroup.getUserGroupId(), _user2);
 
 		String filterString = String.format(
 			"(firstName eq '%s') and (teamIds eq '%s')", firstName,
 			_team.getTeamId());
 
-		int count = _oDataRetriever.getResultsCount(
-			_group1.getCompanyId(), filterString, LocaleUtil.getDefault());
-
-		Assert.assertEquals(2, count);
+		Assert.assertEquals(
+			2,
+			_oDataRetriever.getResultsCount(
+				_group1.getCompanyId(), filterString, LocaleUtil.getDefault()));
 
 		List<User> results = _oDataRetriever.getResults(
 			_group1.getCompanyId(), filterString, LocaleUtil.getDefault(), 0,
@@ -981,17 +981,17 @@ public class UserODataRetrieverTest {
 		_userGroupLocalService.unsetTeamUserGroups(
 			_team.getTeamId(), new long[] {_userGroup.getUserGroupId()});
 
-		int newCount = _oDataRetriever.getResultsCount(
-			_group1.getCompanyId(), filterString, LocaleUtil.getDefault());
+		Assert.assertEquals(
+			1,
+			_oDataRetriever.getResultsCount(
+				_group1.getCompanyId(), filterString, LocaleUtil.getDefault()));
 
-		Assert.assertEquals(1, newCount);
-
-		List<User> newResults = _oDataRetriever.getResults(
+		results = _oDataRetriever.getResults(
 			_group1.getCompanyId(), filterString, LocaleUtil.getDefault(), 0,
 			2);
 
-		Assert.assertTrue(newResults.contains(_user1));
-		Assert.assertFalse(newResults.contains(_user2));
+		Assert.assertTrue(results.contains(_user1));
+		Assert.assertFalse(results.contains(_user2));
 	}
 
 	@Test
