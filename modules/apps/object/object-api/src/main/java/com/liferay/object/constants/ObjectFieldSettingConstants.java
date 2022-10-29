@@ -27,6 +27,6 @@ public class ObjectFieldSettingConstants {
 	public static final String NAME_OBJECT_RELATIONSHIP_ERC_FIELD_NAME =
 		"objectRelationshipERCFieldName";
 
-    public static final String NAME_STATE_FLOW = "stateFlow";
+	public static final String NAME_STATE_FLOW = "stateFlow";
 
 }

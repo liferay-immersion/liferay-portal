@@ -73,7 +73,8 @@ public class RelationshipObjectFieldBusinessType
 	public Set<String> getRequiredObjectFieldSettingsNames() {
 		return SetUtil.fromArray(
 			ObjectFieldSettingConstants.NAME_OBJECT_DEFINITION_1_SHORT_NAME,
-			ObjectFieldSettingConstants.NAME_OBJECT_RELATIONSHIP_ERC_FIELD_NAME);
+			ObjectFieldSettingConstants.
+				NAME_OBJECT_RELATIONSHIP_ERC_FIELD_NAME);
 	}
 
 	@Override

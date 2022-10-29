@@ -37,14 +37,13 @@ public class ObjectFieldSettingUpgradeProcess extends UpgradeProcess {
 
 	@Override
 	protected void doUpgrade() throws Exception {
-		try (PreparedStatement preparedStatement1 =
-				connection.prepareStatement(
-					StringBundler.concat(
-						"select ObjectField.objectFieldId, ",
-						"ObjectField.companyId, ObjectField.userId, ",
-						"ObjectField.userName, ObjectField.name from ",
-						"ObjectField where ObjectField.relationshipType = '",
-						ObjectRelationshipConstants.TYPE_ONE_TO_MANY, "'"));
+		try (PreparedStatement preparedStatement1 = connection.prepareStatement(
+				StringBundler.concat(
+					"select ObjectField.objectFieldId, ObjectField.companyId, ",
+					"ObjectField.userId, ObjectField.userName, ",
+					"ObjectField.name from ObjectField where ",
+					"ObjectField.relationshipType = '",
+					ObjectRelationshipConstants.TYPE_ONE_TO_MANY, "'"));
 			PreparedStatement preparedStatement2 =
 				AutoBatchPreparedStatementUtil.concurrentAutoBatch(
 					connection,
@@ -58,8 +57,7 @@ public class ObjectFieldSettingUpgradeProcess extends UpgradeProcess {
 			while (resultSet.next()) {
 				preparedStatement2.setString(1, _portalUUID.generate());
 				preparedStatement2.setLong(2, increment());
-				preparedStatement2.setLong(
-					3, resultSet.getLong("companyId"));
+				preparedStatement2.setLong(3, resultSet.getLong("companyId"));
 				preparedStatement2.setLong(4, resultSet.getLong("userId"));
 				preparedStatement2.setString(
 					5, resultSet.getString("userName"));
