@@ -1,6 +1,5 @@
 <#assign
-	siteId = themeDisplay.getSiteGroupId()
-	blogEntries = restClient.get("/headless-delivery/v1.0/sites/"+siteId+"/blog-postings?sort=dateCreated:desc&filter=creatorId+ne+0").items
+	blogEntries = restClient.get("/headless-delivery/v1.0/sites/"+themeDisplay.getSiteGroupId()+"/blog-postings?sort=dateCreated:desc&filter=creatorId+ne+0").items
 />
 
 <div class="widget-mode-simple">
