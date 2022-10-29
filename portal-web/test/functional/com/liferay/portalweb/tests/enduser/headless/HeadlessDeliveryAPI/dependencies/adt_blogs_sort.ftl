@@ -2,7 +2,7 @@
 	<div class="container">
 		<div class="col-md-8 mx-auto">
 			<#assign
-				blogEntries = restClient.get("/headless-delivery/v1.0/sites/" + themeDisplay.getSiteGroupId() + "/blog-postings?sort=dateCreated:desc&filter=creatorId+ne+0").items
+				blogEntries = restClient.get("/headless-delivery/v1.0/sites/" + themeDisplay.getSiteGroupId() + "/blog-postings?filter=creatorId+ne+0&sort=dateCreated:desc").items
 			/>
 
 			<#if blogEntries?has_content>
