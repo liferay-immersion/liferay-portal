@@ -40,7 +40,7 @@ import java.util.Objects;
  */
 public class ObjectEntryValuesUtil {
 
-	public static Object getObjectFieldValue(
+	public static Object getValue(
 			ObjectDefinitionLocalService objectDefinitionLocalService,
 			ObjectEntryLocalService objectEntryLocalService,
 			ObjectField objectField,

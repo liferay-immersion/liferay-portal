@@ -133,7 +133,7 @@ public class ObjectEntryExtensionProvider extends BaseObjectExtensionProvider {
 					_objectFieldLocalService.getObjectFields(
 						objectDefinition.getObjectDefinitionId(), false)) {
 
-				Object value = ObjectEntryValuesUtil.getObjectFieldValue(
+				Object value = ObjectEntryValuesUtil.getValue(
 					objectDefinitionLocalService, _objectEntryLocalService,
 					objectField, _objectRelationshipLocalService,
 					_systemObjectDefinitionMetadataTracker, userId,

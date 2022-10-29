@@ -960,7 +960,7 @@ public class DefaultObjectEntryManagerImpl
 				_objectFieldLocalService.getObjectFields(
 					objectDefinition.getObjectDefinitionId())) {
 
-			Object value = ObjectEntryValuesUtil.getObjectFieldValue(
+			Object value = ObjectEntryValuesUtil.getValue(
 				_objectDefinitionLocalService, _objectEntryLocalService,
 				objectField, _objectRelationshipLocalService,
 				_systemObjectDefinitionMetadataTracker, userId, properties);
