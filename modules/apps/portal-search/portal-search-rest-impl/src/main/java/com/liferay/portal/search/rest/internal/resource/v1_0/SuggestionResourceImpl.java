@@ -178,15 +178,14 @@ public class SuggestionResourceImpl extends BaseSuggestionResourceImpl {
 		searchContext.setAttribute(
 			"search.suggestions.destination.friendly.url",
 			destinationFriendlyURL);
+		searchContext.setAttribute(
+			"search.suggestions.keywords.parameter.name",
+			keywordsParameterName);
 		searchContext.setCompanyId(contextCompany.getCompanyId());
 
 		if (!StringUtil.equals(scope, "everything")) {
 			searchContext.setGroupIds(new long[] {groupId});
 		}
-
-		searchContext.setAttribute(
-			"search.suggestions.keywords.parameter.name",
-			keywordsParameterName);
 
 		searchContext.setKeywords(search);
 		searchContext.setLocale(contextAcceptLanguage.getPreferredLocale());
