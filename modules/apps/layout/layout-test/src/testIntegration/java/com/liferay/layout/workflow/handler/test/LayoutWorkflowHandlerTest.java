@@ -483,6 +483,10 @@ public class LayoutWorkflowHandlerTest {
 		MockHttpServletRequest mockHttpServletRequest =
 			new MockHttpServletRequest();
 
+		mockHttpServletRequest.setAttribute(
+			JavaConstants.JAVAX_PORTLET_RESPONSE,
+			new MockLiferayPortletRenderResponse());
+
 		Company company = _companyLocalService.getCompany(
 			_group.getCompanyId());
 		Layout layout = LayoutTestUtil.addTypePortletLayout(_group);
@@ -492,9 +496,6 @@ public class LayoutWorkflowHandlerTest {
 
 		themeDisplay.setRequest(mockHttpServletRequest);
 
-		mockHttpServletRequest.setAttribute(
-			JavaConstants.JAVAX_PORTLET_RESPONSE,
-			new MockLiferayPortletRenderResponse());
 		mockHttpServletRequest.setAttribute(
 			WebKeys.THEME_DISPLAY, themeDisplay);
 
