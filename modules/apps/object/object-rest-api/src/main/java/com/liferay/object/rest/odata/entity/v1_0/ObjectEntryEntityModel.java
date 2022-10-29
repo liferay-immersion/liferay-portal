@@ -90,7 +90,7 @@ public class ObjectEntryEntityModel implements EntityModel {
 					objectField.getRelationshipType(),
 					ObjectRelationshipConstants.TYPE_ONE_TO_MANY)) {
 
-				_getEntityField(
+				_getEntityFieldOptional(
 					objectField
 				).ifPresent(
 					entityField -> _entityFieldsMap.putIfAbsent(
@@ -140,7 +140,9 @@ public class ObjectEntryEntityModel implements EntityModel {
 		return _entityFieldsMap;
 	}
 
-	private Optional<EntityField> _getEntityField(ObjectField objectField) {
+	private Optional<EntityField> _getEntityFieldOptional(
+		ObjectField objectField) {
+
 		if (objectField.compareBusinessType(
 				ObjectFieldConstants.BUSINESS_TYPE_AGGREGATION) ||
 			objectField.compareBusinessType(
