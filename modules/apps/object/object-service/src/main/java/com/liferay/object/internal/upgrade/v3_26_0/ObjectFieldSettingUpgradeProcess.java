@@ -37,7 +37,7 @@ public class ObjectFieldSettingUpgradeProcess extends UpgradeProcess {
 
 	@Override
 	protected void doUpgrade() throws Exception {
-		try (PreparedStatement selectPreparedStatement =
+		try (PreparedStatement preparedStatement1 =
 				connection.prepareStatement(
 					StringBundler.concat(
 						"select ObjectField.objectFieldId, ",
@@ -45,7 +45,7 @@ public class ObjectFieldSettingUpgradeProcess extends UpgradeProcess {
 						"ObjectField.userName, ObjectField.name from ",
 						"ObjectField where ObjectField.relationshipType = '",
 						ObjectRelationshipConstants.TYPE_ONE_TO_MANY, "'"));
-			PreparedStatement insertPreparedStatement =
+			PreparedStatement preparedStatement2 =
 				AutoBatchPreparedStatementUtil.concurrentAutoBatch(
 					connection,
 					StringBundler.concat(
@@ -53,37 +53,37 @@ public class ObjectFieldSettingUpgradeProcess extends UpgradeProcess {
 						"objectFieldSettingId, companyId, userId, userName, ",
 						"createDate, modifiedDate, objectFieldId, name, ",
 						"value) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"));
-			ResultSet resultSet = selectPreparedStatement.executeQuery()) {
+			ResultSet resultSet = preparedStatement1.executeQuery()) {
 
 			while (resultSet.next()) {
-				insertPreparedStatement.setString(1, _portalUUID.generate());
-				insertPreparedStatement.setLong(2, increment());
-				insertPreparedStatement.setLong(
+				preparedStatement2.setString(1, _portalUUID.generate());
+				preparedStatement2.setLong(2, increment());
+				preparedStatement2.setLong(
 					3, resultSet.getLong("companyId"));
-				insertPreparedStatement.setLong(4, resultSet.getLong("userId"));
-				insertPreparedStatement.setString(
+				preparedStatement2.setLong(4, resultSet.getLong("userId"));
+				preparedStatement2.setString(
 					5, resultSet.getString("userName"));
 
 				Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 
-				insertPreparedStatement.setTimestamp(6, timestamp);
-				insertPreparedStatement.setTimestamp(7, timestamp);
+				preparedStatement2.setTimestamp(6, timestamp);
+				preparedStatement2.setTimestamp(7, timestamp);
 
-				insertPreparedStatement.setLong(
+				preparedStatement2.setLong(
 					8, resultSet.getLong("objectFieldId"));
-				insertPreparedStatement.setString(
+				preparedStatement2.setString(
 					9,
 					ObjectFieldSettingConstants.
 						OBJECT_RELATIONSHIP_ERC_FIELD_NAME);
-				insertPreparedStatement.setString(
+				preparedStatement2.setString(
 					10,
 					StringUtil.replaceLast(
 						resultSet.getString("name"), "Id", "ERC"));
 
-				insertPreparedStatement.addBatch();
+				preparedStatement2.addBatch();
 			}
 
-			insertPreparedStatement.executeBatch();
+			preparedStatement2.executeBatch();
 		}
 	}
 
