@@ -74,7 +74,7 @@ public class ObjectFieldSettingUpgradeProcess extends UpgradeProcess {
 				preparedStatement2.setString(
 					9,
 					ObjectFieldSettingConstants.
-						OBJECT_RELATIONSHIP_ERC_FIELD_NAME);
+						NAME_OBJECT_RELATIONSHIP_ERC_FIELD_NAME);
 				preparedStatement2.setString(
 					10,
 					StringUtil.replaceLast(

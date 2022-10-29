@@ -106,7 +106,7 @@ public class ObjectEntryExtensionProvider extends BaseObjectExtensionProvider {
 					ObjectFieldSettingValueUtil.getObjectFieldSettingValue(
 						objectField,
 						ObjectFieldSettingConstants.
-							OBJECT_RELATIONSHIP_ERC_FIELD_NAME);
+							NAME_OBJECT_RELATIONSHIP_ERC_FIELD_NAME);
 
 				extendedPropertyDefinitions.put(
 					objectRelationshipERCFieldName,

@@ -1345,7 +1345,7 @@ public class ObjectEntryLocalServiceImpl
 				ObjectFieldSettingValueUtil.getObjectFieldSettingValue(
 					objectField,
 					ObjectFieldSettingConstants.
-						OBJECT_RELATIONSHIP_ERC_FIELD_NAME);
+						NAME_OBJECT_RELATIONSHIP_ERC_FIELD_NAME);
 
 			if (objectDefinition.isSystem()) {
 				SystemObjectDefinitionMetadata systemObjectDefinitionMetadata =

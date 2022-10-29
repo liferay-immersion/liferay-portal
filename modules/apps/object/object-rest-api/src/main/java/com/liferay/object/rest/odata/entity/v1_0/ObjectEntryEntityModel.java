@@ -115,7 +115,7 @@ public class ObjectEntryEntityModel implements EntityModel {
 					ObjectFieldSettingValueUtil.getObjectFieldSettingValue(
 						objectField,
 						ObjectFieldSettingConstants.
-							OBJECT_RELATIONSHIP_ERC_FIELD_NAME);
+							NAME_OBJECT_RELATIONSHIP_ERC_FIELD_NAME);
 
 				_entityFieldsMap.put(
 					objectRelationshipERCFieldName,
