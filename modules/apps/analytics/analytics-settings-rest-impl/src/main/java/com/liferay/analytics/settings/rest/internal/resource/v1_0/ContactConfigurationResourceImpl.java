@@ -14,17 +14,11 @@
 
 package com.liferay.analytics.settings.rest.internal.resource.v1_0;
 
-import com.liferay.account.service.AccountGroupLocalService;
 import com.liferay.analytics.settings.configuration.AnalyticsConfiguration;
 import com.liferay.analytics.settings.rest.dto.v1_0.ContactConfiguration;
 import com.liferay.analytics.settings.rest.internal.client.AnalyticsCloudClient;
-import com.liferay.analytics.settings.rest.internal.dto.v1_0.converter.ContactAccountGroupDTOConverter;
-import com.liferay.analytics.settings.rest.internal.dto.v1_0.converter.ContactOrganizationDTOConverter;
-import com.liferay.analytics.settings.rest.internal.dto.v1_0.converter.ContactUserGroupDTOConverter;
 import com.liferay.analytics.settings.rest.internal.manager.AnalyticsSettingsManager;
 import com.liferay.analytics.settings.rest.resource.v1_0.ContactConfigurationResource;
-import com.liferay.portal.kernel.service.OrganizationLocalService;
-import com.liferay.portal.kernel.service.UserGroupLocalService;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 
@@ -109,27 +103,9 @@ public class ContactConfigurationResourceImpl
 	}
 
 	@Reference
-	private AccountGroupLocalService _accountGroupLocalService;
-
-	@Reference
 	private AnalyticsCloudClient _analyticsCloudClient;
 
 	@Reference
 	private AnalyticsSettingsManager _analyticsSettingsManager;
-
-	@Reference
-	private ContactAccountGroupDTOConverter _contactAccountGroupDTOConverter;
-
-	@Reference
-	private ContactOrganizationDTOConverter _contactOrganizationDTOConverter;
-
-	@Reference
-	private ContactUserGroupDTOConverter _contactUserGroupDTOConverter;
-
-	@Reference
-	private OrganizationLocalService _organizationLocalService;
-
-	@Reference
-	private UserGroupLocalService _userGroupLocalService;
 
 }

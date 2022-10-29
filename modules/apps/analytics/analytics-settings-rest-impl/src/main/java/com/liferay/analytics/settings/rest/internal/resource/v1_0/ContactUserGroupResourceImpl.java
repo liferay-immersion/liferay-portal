@@ -14,19 +14,14 @@
 
 package com.liferay.analytics.settings.rest.internal.resource.v1_0;
 
-import com.liferay.account.service.AccountGroupLocalService;
 import com.liferay.analytics.settings.configuration.AnalyticsConfiguration;
 import com.liferay.analytics.settings.rest.dto.v1_0.ContactUserGroup;
-import com.liferay.analytics.settings.rest.internal.client.AnalyticsCloudClient;
-import com.liferay.analytics.settings.rest.internal.dto.v1_0.converter.ContactAccountGroupDTOConverter;
-import com.liferay.analytics.settings.rest.internal.dto.v1_0.converter.ContactOrganizationDTOConverter;
 import com.liferay.analytics.settings.rest.internal.dto.v1_0.converter.ContactUserGroupDTOConverter;
 import com.liferay.analytics.settings.rest.internal.dto.v1_0.converter.ContactUserGroupDTOConverterContext;
 import com.liferay.analytics.settings.rest.internal.manager.AnalyticsSettingsManager;
 import com.liferay.analytics.settings.rest.resource.v1_0.ContactUserGroupResource;
 import com.liferay.portal.kernel.model.UserGroupTable;
 import com.liferay.portal.kernel.search.Sort;
-import com.liferay.portal.kernel.service.OrganizationLocalService;
 import com.liferay.portal.kernel.service.UserGroupLocalService;
 import com.liferay.portal.kernel.util.LinkedHashMapBuilder;
 import com.liferay.portal.kernel.util.OrderByComparatorFactoryUtil;
@@ -90,25 +85,10 @@ public class ContactUserGroupResourceImpl
 	}
 
 	@Reference
-	private AccountGroupLocalService _accountGroupLocalService;
-
-	@Reference
-	private AnalyticsCloudClient _analyticsCloudClient;
-
-	@Reference
 	private AnalyticsSettingsManager _analyticsSettingsManager;
 
 	@Reference
-	private ContactAccountGroupDTOConverter _contactAccountGroupDTOConverter;
-
-	@Reference
-	private ContactOrganizationDTOConverter _contactOrganizationDTOConverter;
-
-	@Reference
 	private ContactUserGroupDTOConverter _contactUserGroupDTOConverter;
-
-	@Reference
-	private OrganizationLocalService _organizationLocalService;
 
 	@Reference
 	private UserGroupLocalService _userGroupLocalService;

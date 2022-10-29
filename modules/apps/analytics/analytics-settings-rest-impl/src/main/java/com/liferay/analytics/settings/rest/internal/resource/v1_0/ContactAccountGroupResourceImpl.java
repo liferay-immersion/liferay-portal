@@ -19,17 +19,12 @@ import com.liferay.account.model.AccountGroupTable;
 import com.liferay.account.service.AccountGroupLocalService;
 import com.liferay.analytics.settings.configuration.AnalyticsConfiguration;
 import com.liferay.analytics.settings.rest.dto.v1_0.ContactAccountGroup;
-import com.liferay.analytics.settings.rest.internal.client.AnalyticsCloudClient;
 import com.liferay.analytics.settings.rest.internal.dto.v1_0.converter.ContactAccountGroupDTOConverter;
 import com.liferay.analytics.settings.rest.internal.dto.v1_0.converter.ContactAccountGroupDTOConverterContext;
-import com.liferay.analytics.settings.rest.internal.dto.v1_0.converter.ContactOrganizationDTOConverter;
-import com.liferay.analytics.settings.rest.internal.dto.v1_0.converter.ContactUserGroupDTOConverter;
 import com.liferay.analytics.settings.rest.internal.manager.AnalyticsSettingsManager;
 import com.liferay.analytics.settings.rest.resource.v1_0.ContactAccountGroupResource;
 import com.liferay.portal.kernel.search.BaseModelSearchResult;
 import com.liferay.portal.kernel.search.Sort;
-import com.liferay.portal.kernel.service.OrganizationLocalService;
-import com.liferay.portal.kernel.service.UserGroupLocalService;
 import com.liferay.portal.kernel.util.LinkedHashMapBuilder;
 import com.liferay.portal.kernel.util.OrderByComparatorFactoryUtil;
 import com.liferay.portal.vulcan.pagination.Page;
@@ -91,24 +86,9 @@ public class ContactAccountGroupResourceImpl
 	private AccountGroupLocalService _accountGroupLocalService;
 
 	@Reference
-	private AnalyticsCloudClient _analyticsCloudClient;
-
-	@Reference
 	private AnalyticsSettingsManager _analyticsSettingsManager;
 
 	@Reference
 	private ContactAccountGroupDTOConverter _contactAccountGroupDTOConverter;
-
-	@Reference
-	private ContactOrganizationDTOConverter _contactOrganizationDTOConverter;
-
-	@Reference
-	private ContactUserGroupDTOConverter _contactUserGroupDTOConverter;
-
-	@Reference
-	private OrganizationLocalService _organizationLocalService;
-
-	@Reference
-	private UserGroupLocalService _userGroupLocalService;
 
 }
