@@ -19,7 +19,6 @@ import com.liferay.dispatch.rest.dto.v1_0.DispatchTrigger;
 import com.liferay.dispatch.rest.internal.dto.v1_0.util.DispatchTriggerUtil;
 import com.liferay.dispatch.rest.resource.v1_0.DispatchTriggerResource;
 import com.liferay.dispatch.service.DispatchTriggerService;
-import com.liferay.petra.function.transform.TransformUtil;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.json.JSONUtil;
 import com.liferay.portal.kernel.messaging.Destination;
@@ -45,7 +44,7 @@ public class DispatchTriggerResourceImpl
 
 	public Page<DispatchTrigger> getDispatchTriggersPage() throws Exception {
 		return Page.of(
-			TransformUtil.transform(
+			transform(
 				_dispatchTriggerService.getDispatchTriggers(
 					QueryUtil.ALL_POS, QueryUtil.ALL_POS),
 				dispatchTrigger -> DispatchTriggerUtil.toDispatchTrigger(
