@@ -54,12 +54,12 @@ renderResponse.setTitle((oAuthClientEntry == null) ? LanguageUtil.get(request, "
 					<liferay-ui:message arguments="<%= HtmlUtil.escape(((OAuthClientEntryInfoJSONException)errorException).getMessage()) %>" key="oauth-client-invalid-info-json-x" />
 				</liferay-ui:error>
 
-				<liferay-ui:error exception="<%= OAuthClientEntryUserInfoMapperJSONException.class %>">
-					<liferay-ui:message arguments="<%= HtmlUtil.escape(((OAuthClientEntryUserInfoMapperJSONException)errorException).getMessage()) %>" key="oauth-client-invalid-user-info-mapper-json-x" />
-				</liferay-ui:error>
-
 				<liferay-ui:error exception="<%= OAuthClientEntryTokenRequestParametersJSONException.class %>">
 					<liferay-ui:message arguments="<%= HtmlUtil.escape(((OAuthClientEntryTokenRequestParametersJSONException)errorException).getMessage()) %>" key="oauth-client-invalid-token-request-parameters-json-x" />
+				</liferay-ui:error>
+
+				<liferay-ui:error exception="<%= OAuthClientEntryUserInfoMapperJSONException.class %>">
+					<liferay-ui:message arguments="<%= HtmlUtil.escape(((OAuthClientEntryUserInfoMapperJSONException)errorException).getMessage()) %>" key="oauth-client-invalid-user-info-mapper-json-x" />
 				</liferay-ui:error>
 
 				<h3 class="sheet-subtitle"><liferay-ui:message key="oauth-client-configurations" /></h3>
