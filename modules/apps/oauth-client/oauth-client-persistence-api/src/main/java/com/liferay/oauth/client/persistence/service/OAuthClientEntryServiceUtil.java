@@ -41,12 +41,12 @@ public class OAuthClientEntryServiceUtil {
 	public static OAuthClientEntry addOAuthClientEntry(
 			long userId, String authRequestParametersJSON,
 			String authServerWellKnownURI, String infoJSON,
-			String tokenRequestParametersJSON, String userInfoMapperJSON)
+			String oidcUserInfoMapperJSON, String tokenRequestParametersJSON)
 		throws PortalException {
 
 		return getService().addOAuthClientEntry(
 			userId, authRequestParametersJSON, authServerWellKnownURI, infoJSON,
-			tokenRequestParametersJSON, userInfoMapperJSON);
+			oidcUserInfoMapperJSON, tokenRequestParametersJSON);
 	}
 
 	public static OAuthClientEntry deleteOAuthClientEntry(
@@ -117,13 +117,13 @@ public class OAuthClientEntryServiceUtil {
 	public static OAuthClientEntry updateOAuthClientEntry(
 			long oAuthClientEntryId, String authRequestParametersJSON,
 			String authServerWellKnownURI, String infoJSON,
-			String tokenRequestParametersJSON, String userInfoMapperJSON)
+			String oidcUserInfoMapperJSON, String tokenRequestParametersJSON)
 		throws PortalException {
 
 		return getService().updateOAuthClientEntry(
 			oAuthClientEntryId, authRequestParametersJSON,
-			authServerWellKnownURI, infoJSON, tokenRequestParametersJSON,
-			userInfoMapperJSON);
+			authServerWellKnownURI, infoJSON, oidcUserInfoMapperJSON,
+			tokenRequestParametersJSON);
 	}
 
 	public static OAuthClientEntryService getService() {

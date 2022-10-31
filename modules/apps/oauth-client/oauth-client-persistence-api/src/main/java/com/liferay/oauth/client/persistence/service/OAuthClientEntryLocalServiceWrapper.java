@@ -42,12 +42,13 @@ public class OAuthClientEntryLocalServiceWrapper
 			addOAuthClientEntry(
 				long userId, String authRequestParametersJSON,
 				String authServerWellKnownURI, String infoJSON,
-				String tokenRequestParametersJSON, String userInfoMapperJSON)
+				String oidcUserInfoMapperJSON,
+				String tokenRequestParametersJSON)
 		throws com.liferay.portal.kernel.exception.PortalException {
 
 		return _oAuthClientEntryLocalService.addOAuthClientEntry(
 			userId, authRequestParametersJSON, authServerWellKnownURI, infoJSON,
-			tokenRequestParametersJSON, userInfoMapperJSON);
+			oidcUserInfoMapperJSON, tokenRequestParametersJSON);
 	}
 
 	/**
@@ -404,13 +405,14 @@ public class OAuthClientEntryLocalServiceWrapper
 			updateOAuthClientEntry(
 				long oAuthClientEntryId, String authRequestParametersJSON,
 				String authServerWellKnownURI, String infoJSON,
-				String tokenRequestParametersJSON, String userInfoMapperJSON)
+				String oidcUserInfoMapperJSON,
+				String tokenRequestParametersJSON)
 		throws com.liferay.portal.kernel.exception.PortalException {
 
 		return _oAuthClientEntryLocalService.updateOAuthClientEntry(
 			oAuthClientEntryId, authRequestParametersJSON,
-			authServerWellKnownURI, infoJSON, tokenRequestParametersJSON,
-			userInfoMapperJSON);
+			authServerWellKnownURI, infoJSON, oidcUserInfoMapperJSON,
+			tokenRequestParametersJSON);
 	}
 
 	/**

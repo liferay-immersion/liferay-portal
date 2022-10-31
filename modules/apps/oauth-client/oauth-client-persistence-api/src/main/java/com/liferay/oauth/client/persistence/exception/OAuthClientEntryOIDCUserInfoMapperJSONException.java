@@ -19,23 +19,25 @@ import com.liferay.portal.kernel.exception.PortalException;
 /**
  * @author Brian Wing Shun Chan
  */
-public class OAuthClientEntryUserInfoMapperJSONException
+public class OAuthClientEntryOIDCUserInfoMapperJSONException
 	extends PortalException {
 
-	public OAuthClientEntryUserInfoMapperJSONException() {
+	public OAuthClientEntryOIDCUserInfoMapperJSONException() {
 	}
 
-	public OAuthClientEntryUserInfoMapperJSONException(String msg) {
+	public OAuthClientEntryOIDCUserInfoMapperJSONException(String msg) {
 		super(msg);
 	}
 
-	public OAuthClientEntryUserInfoMapperJSONException(
+	public OAuthClientEntryOIDCUserInfoMapperJSONException(
 		String msg, Throwable throwable) {
 
 		super(msg, throwable);
 	}
 
-	public OAuthClientEntryUserInfoMapperJSONException(Throwable throwable) {
+	public OAuthClientEntryOIDCUserInfoMapperJSONException(
+		Throwable throwable) {
+
 		super(throwable);
 	}
 
