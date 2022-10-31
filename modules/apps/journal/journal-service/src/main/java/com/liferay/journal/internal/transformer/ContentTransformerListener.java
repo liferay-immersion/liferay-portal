@@ -47,7 +47,6 @@ import org.osgi.service.component.annotations.Modified;
  */
 @Component(
 	configurationPid = "com.liferay.journal.configuration.JournalServiceConfiguration",
-	immediate = true,
 	property = "javax.portlet.name=" + JournalPortletKeys.JOURNAL,
 	service = TransformerListener.class
 )
