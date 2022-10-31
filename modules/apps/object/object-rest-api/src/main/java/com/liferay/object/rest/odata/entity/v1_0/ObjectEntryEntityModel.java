@@ -152,35 +152,28 @@ public class ObjectEntryEntityModel implements EntityModel {
 		}
 		else if (Objects.equals(
 					objectField.getBusinessType(),
-					ObjectFieldConstants.BUSINESS_TYPE_ATTACHMENT) ||
-				 Objects.equals(
-					 objectField.getDBType(),
-					 ObjectFieldConstants.DB_TYPE_CLOB) ||
-				 Objects.equals(
-					 objectField.getDBType(),
-					 ObjectFieldConstants.DB_TYPE_STRING)) {
-
-			if (Objects.equals(
-					objectField.getBusinessType(),
-					ObjectFieldConstants.BUSINESS_TYPE_MULTISELECT_PICKLIST)) {
-
-				return Optional.of(
-					new CollectionEntityField(
-						new StringEntityField(
-							objectField.getName(),
-							locale -> objectField.getName())));
-			}
+					ObjectFieldConstants.BUSINESS_TYPE_ATTACHMENT)) {
 
 			return Optional.of(
 				new StringEntityField(
 					objectField.getName(), locale -> objectField.getName()));
 		}
 		else if (Objects.equals(
-					objectField.getDBType(),
-					ObjectFieldConstants.DB_TYPE_BIG_DECIMAL) ||
-				 Objects.equals(
-					 objectField.getDBType(),
-					 ObjectFieldConstants.DB_TYPE_DOUBLE)) {
+					objectField.getBusinessType(),
+					ObjectFieldConstants.BUSINESS_TYPE_MULTISELECT_PICKLIST)) {
+
+			return Optional.of(
+				new CollectionEntityField(
+					new StringEntityField(
+						objectField.getName(),
+						locale -> objectField.getName())));
+		}
+
+		if (Objects.equals(
+				objectField.getDBType(),
+				ObjectFieldConstants.DB_TYPE_BIG_DECIMAL) ||
+			Objects.equals(
+				objectField.getDBType(), ObjectFieldConstants.DB_TYPE_DOUBLE)) {
 
 			return Optional.of(
 				new DoubleEntityField(
@@ -192,6 +185,17 @@ public class ObjectEntryEntityModel implements EntityModel {
 
 			return Optional.of(
 				new BooleanEntityField(
+					objectField.getName(), locale -> objectField.getName()));
+		}
+		else if (Objects.equals(
+					objectField.getDBType(),
+					ObjectFieldConstants.DB_TYPE_CLOB) ||
+				 Objects.equals(
+					 objectField.getDBType(),
+					 ObjectFieldConstants.DB_TYPE_STRING)) {
+
+			return Optional.of(
+				new StringEntityField(
 					objectField.getName(), locale -> objectField.getName()));
 		}
 		else if (Objects.equals(
