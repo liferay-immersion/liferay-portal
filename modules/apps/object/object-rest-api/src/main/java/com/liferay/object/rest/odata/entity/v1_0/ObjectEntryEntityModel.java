@@ -38,7 +38,6 @@ import com.liferay.portal.odata.entity.StringEntityField;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 
 /**
  * @author Javier de Arcos
@@ -90,12 +89,12 @@ public class ObjectEntryEntityModel implements EntityModel {
 					objectField.getRelationshipType(),
 					ObjectRelationshipConstants.TYPE_ONE_TO_MANY)) {
 
-				_getEntityFieldOptional(
-					objectField
-				).ifPresent(
-					entityField -> _entityFieldsMap.putIfAbsent(
-						objectField.getName(), entityField)
-				);
+				EntityField entityField = _getEntityField(objectField);
+
+				if (entityField != null) {
+					_entityFieldsMap.putIfAbsent(
+						objectField.getName(), entityField);
+				}
 
 				continue;
 			}
@@ -140,33 +139,28 @@ public class ObjectEntryEntityModel implements EntityModel {
 		return _entityFieldsMap;
 	}
 
-	private Optional<EntityField> _getEntityFieldOptional(
-		ObjectField objectField) {
-
+	private EntityField _getEntityField(ObjectField objectField) {
 		if (objectField.compareBusinessType(
 				ObjectFieldConstants.BUSINESS_TYPE_AGGREGATION) ||
 			objectField.compareBusinessType(
 				ObjectFieldConstants.BUSINESS_TYPE_FORMULA)) {
 
-			return Optional.empty();
+			return null;
 		}
 		else if (Objects.equals(
 					objectField.getBusinessType(),
 					ObjectFieldConstants.BUSINESS_TYPE_ATTACHMENT)) {
 
-			return Optional.of(
-				new StringEntityField(
-					objectField.getName(), locale -> objectField.getName()));
+			return new StringEntityField(
+				objectField.getName(), locale -> objectField.getName());
 		}
 		else if (Objects.equals(
 					objectField.getBusinessType(),
 					ObjectFieldConstants.BUSINESS_TYPE_MULTISELECT_PICKLIST)) {
 
-			return Optional.of(
-				new CollectionEntityField(
-					new StringEntityField(
-						objectField.getName(),
-						locale -> objectField.getName())));
+			return new CollectionEntityField(
+				new StringEntityField(
+					objectField.getName(), locale -> objectField.getName()));
 		}
 
 		if (Objects.equals(
@@ -175,17 +169,15 @@ public class ObjectEntryEntityModel implements EntityModel {
 			Objects.equals(
 				objectField.getDBType(), ObjectFieldConstants.DB_TYPE_DOUBLE)) {
 
-			return Optional.of(
-				new DoubleEntityField(
-					objectField.getName(), locale -> objectField.getName()));
+			return new DoubleEntityField(
+				objectField.getName(), locale -> objectField.getName());
 		}
 		else if (Objects.equals(
 					objectField.getDBType(),
 					ObjectFieldConstants.DB_TYPE_BOOLEAN)) {
 
-			return Optional.of(
-				new BooleanEntityField(
-					objectField.getName(), locale -> objectField.getName()));
+			return new BooleanEntityField(
+				objectField.getName(), locale -> objectField.getName());
 		}
 		else if (Objects.equals(
 					objectField.getDBType(),
@@ -194,18 +186,16 @@ public class ObjectEntryEntityModel implements EntityModel {
 					 objectField.getDBType(),
 					 ObjectFieldConstants.DB_TYPE_STRING)) {
 
-			return Optional.of(
-				new StringEntityField(
-					objectField.getName(), locale -> objectField.getName()));
+			return new StringEntityField(
+				objectField.getName(), locale -> objectField.getName());
 		}
 		else if (Objects.equals(
 					objectField.getDBType(),
 					ObjectFieldConstants.DB_TYPE_DATE)) {
 
-			return Optional.of(
-				new DateEntityField(
-					objectField.getName(), locale -> objectField.getName(),
-					locale -> objectField.getName()));
+			return new DateEntityField(
+				objectField.getName(), locale -> objectField.getName(),
+				locale -> objectField.getName());
 		}
 		else if (Objects.equals(
 					objectField.getDBType(),
@@ -214,12 +204,11 @@ public class ObjectEntryEntityModel implements EntityModel {
 					 objectField.getDBType(),
 					 ObjectFieldConstants.DB_TYPE_LONG)) {
 
-			return Optional.of(
-				new IntegerEntityField(
-					objectField.getName(), locale -> objectField.getName()));
+			return new IntegerEntityField(
+				objectField.getName(), locale -> objectField.getName());
 		}
 
-		return Optional.empty();
+		return null;
 	}
 
 	private final Map<String, EntityField> _entityFieldsMap;
