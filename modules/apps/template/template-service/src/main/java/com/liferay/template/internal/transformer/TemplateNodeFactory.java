@@ -28,7 +28,7 @@ import org.osgi.service.component.annotations.Reference;
 /**
  * @author Lourdes Fernández Besada
  */
-@Component(immediate = true, service = TemplateNodeFactory.class)
+@Component(service = TemplateNodeFactory.class)
 public class TemplateNodeFactory {
 
 	public TemplateNode createTemplateNode(
