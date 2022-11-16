@@ -15,7 +15,6 @@
 package com.liferay.portal.search.internal;
 
 import com.liferay.osgi.service.tracker.collections.list.ServiceTrackerList;
-import com.liferay.osgi.service.tracker.collections.list.ServiceTrackerListFactory;
 import com.liferay.petra.executor.PortalExecutorManager;
 import com.liferay.petra.lang.SafeCloseable;
 import com.liferay.petra.string.StringBundler;
@@ -46,11 +45,23 @@ public class SearchEngineInitializer implements Runnable {
 
 	public SearchEngineInitializer(
 		BundleContext bundleContext, long companyId,
-		PortalExecutorManager portalExecutorManager) {
+		ServiceTrackerList<Indexer<?>> indexers,
+		PortalExecutorManager portalExecutorManager,
+		ServiceTrackerList<Indexer<?>> systemIndexers) {
 
 		_bundleContext = bundleContext;
 		_companyId = companyId;
+		_indexers = indexers;
 		_portalExecutorManager = portalExecutorManager;
+		_systemIndexers = systemIndexers;
+	}
+
+	public ServiceTrackerList<Indexer<?>> getIndexers() {
+		if (_companyId == CompanyConstants.SYSTEM) {
+			return _systemIndexers;
+		}
+
+		return _indexers;
 	}
 
 	public void halt() {
@@ -136,18 +147,7 @@ public class SearchEngineInitializer implements Runnable {
 				BackgroundTaskThreadLocal.getBackgroundTaskId();
 			List<FutureTask<Void>> futureTasks = new ArrayList<>();
 
-			if (_companyId == CompanyConstants.SYSTEM) {
-				_indexers = ServiceTrackerListFactory.open(
-					_bundleContext, (Class<Indexer<?>>)(Class<?>)Indexer.class,
-					"(system.index=true)");
-			}
-			else {
-				_indexers = ServiceTrackerListFactory.open(
-					_bundleContext, (Class<Indexer<?>>)(Class<?>)Indexer.class,
-					"(!(system.index=true))");
-			}
-
-			for (Indexer<?> indexer : _indexers) {
+			for (Indexer<?> indexer : getIndexers()) {
 				FutureTask<Void> futureTask = new FutureTask<>(
 					new Callable<Void>() {
 
@@ -170,8 +170,6 @@ public class SearchEngineInitializer implements Runnable {
 
 				futureTasks.add(futureTask);
 			}
-
-			_indexers.close();
 
 			for (FutureTask<Void> futureTask : futureTasks) {
 				futureTask.get();
@@ -200,7 +198,8 @@ public class SearchEngineInitializer implements Runnable {
 	private final BundleContext _bundleContext;
 	private final long _companyId;
 	private boolean _finished;
-	private ServiceTrackerList<Indexer<?>> _indexers;
+	private final ServiceTrackerList<Indexer<?>> _indexers;
 	private final PortalExecutorManager _portalExecutorManager;
+	private final ServiceTrackerList<Indexer<?>> _systemIndexers;
 
 }

@@ -14,34 +14,54 @@
 
 package com.liferay.portal.search.internal.background.task;
 
+import com.liferay.osgi.service.tracker.collections.list.ServiceTrackerList;
+import com.liferay.osgi.service.tracker.collections.list.ServiceTrackerListFactory;
 import com.liferay.petra.executor.PortalExecutorManager;
 import com.liferay.portal.kernel.backgroundtask.BackgroundTaskExecutor;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.background.task.ReindexBackgroundTaskConstants;
 import com.liferay.portal.kernel.search.background.task.ReindexStatusMessageSenderUtil;
 import com.liferay.portal.search.internal.SearchEngineInitializer;
 
 import org.osgi.framework.BundleContext;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Deactivate;
+import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Andrew Betts
  */
+@Component(
+	immediate = true,
+	property = "background.task.executor.class.name=com.liferay.portal.search.internal.background.task.ReindexPortalBackgroundTaskExecutor",
+	service = BackgroundTaskExecutor.class
+)
 public class ReindexPortalBackgroundTaskExecutor
 	extends BaseReindexBackgroundTaskExecutor {
 
-	public ReindexPortalBackgroundTaskExecutor(
-		BundleContext bundleContext,
-		PortalExecutorManager portalExecutorManager) {
-
-		_bundleContext = bundleContext;
-		_portalExecutorManager = portalExecutorManager;
-	}
-
 	@Override
 	public BackgroundTaskExecutor clone() {
-		return new ReindexPortalBackgroundTaskExecutor(
-			_bundleContext, _portalExecutorManager);
+		return this;
+	}
+
+	@Activate
+	protected void activate(BundleContext bundleContext) {
+		_indexers = ServiceTrackerListFactory.open(
+			bundleContext, (Class<Indexer<?>>)(Class<?>)Indexer.class,
+			"(!(system.index=true))");
+
+		_systemIndexers = ServiceTrackerListFactory.open(
+			bundleContext, (Class<Indexer<?>>)(Class<?>)Indexer.class,
+			"(system.index=true)");
+	}
+
+	@Deactivate
+	protected void deactivate() {
+		_indexers.close();
+		_systemIndexers.close();
 	}
 
 	@Override
@@ -60,7 +80,8 @@ public class ReindexPortalBackgroundTaskExecutor
 			try {
 				SearchEngineInitializer searchEngineInitializer =
 					new SearchEngineInitializer(
-						_bundleContext, companyId, _portalExecutorManager);
+						_bundleContext, companyId, _indexers,
+						_portalExecutorManager, _systemIndexers);
 
 				searchEngineInitializer.reindex();
 			}
@@ -82,7 +103,12 @@ public class ReindexPortalBackgroundTaskExecutor
 	private static final Log _log = LogFactoryUtil.getLog(
 		ReindexPortalBackgroundTaskExecutor.class);
 
-	private final BundleContext _bundleContext;
-	private final PortalExecutorManager _portalExecutorManager;
+	private BundleContext _bundleContext;
+	private ServiceTrackerList<Indexer<?>> _indexers;
+
+	@Reference
+	private PortalExecutorManager _portalExecutorManager;
+
+	private ServiceTrackerList<Indexer<?>> _systemIndexers;
 
 }
